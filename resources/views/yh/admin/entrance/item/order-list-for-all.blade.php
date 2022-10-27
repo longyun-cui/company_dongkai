@@ -1,0 +1,1382 @@
+@extends(env('TEMPLATE_YH_ADMIN').'layout.layout')
+
+
+@section('head_title')
+    @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
+    {{ $title_text or '任务列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+@endsection
+
+
+
+
+@section('header','')
+@section('description')订单列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('breadcrumb')
+    <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
+@endsection
+@section('content')
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-info main-list-body">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+
+                <h3 class="box-title">订单列表</h3>
+
+                <div class="caption pull-right">
+                    <i class="icon-pin font-blue"></i>
+                    <span class="caption-subject font-blue sbold uppercase"></span>
+                    <a href="{{ url('/item/order-create') }}">
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加订单</button>
+                    </a>
+                </div>
+
+                <div class="pull-right _none">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="box-body datatable-body item-main-body" id="item-main-body">
+
+                <div class="row col-md-12 datatable-search-row">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="标题" />
+
+                        <select class="form-control form-filter" name="staff" style="width:96px;">
+                            <option value ="-1">选择员工</option>
+                            @foreach($staff_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->true_name }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-control form-filter" name="client" style="width:96px;">
+                            <option value ="-1">选择客户</option>
+                            @foreach($client_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->username }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-control form-filter" name="car" style="width:96px;">
+                            <option value ="-1">选择车辆</option>
+                            @foreach($car_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->name }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-control form-filter" name="order-status" style="width:96px;">
+                            <option value ="-1">订单状态</option>
+                            <option value ="0">未发布</option>
+                            <option value ="1">待发车</option>
+                            <option value ="9">进行中</option>
+                            <option value ="81">已到达</option>
+                            <option value ="100">已结束</option>
+                        </select>
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
+                            <i class="fa fa-circle-o-notch"></i> 重置
+                        </button>
+
+                    </div>
+                </div>
+
+                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
+                    <thead>
+                        <tr role='row' class='heading'>
+                            <th>ID</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+            <div class="box-footer">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
+                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
+                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
+                        <div class="input-group">
+                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
+                            <select name="bulk-operate-status" class="form-control form-filter">
+                                <option value ="-1">请选择操作类型</option>
+                                <option value ="启用">启用</option>
+                                <option value ="禁用">禁用</option>
+                                <option value ="删除">删除</option>
+                                <option value ="彻底删除">彻底删除</option>
+                            </select>
+                            <span class="input-group-addon btn btn-default" id="operate-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
+                            <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-9">
+                        <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-body">
+    <div class="col-md-8 col-md-offset-2" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PORTLET-->
+                <div class="box- box-info- form-container">
+
+                    <div class="box-header with-border" style="margin:16px 0;">
+                        <h3 class="box-title">内容详情</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+
+                    <form action="" method="post" class="form-horizontal form-bordered" id="form-edit-modal">
+                        <div class="box-body">
+
+                            {{ csrf_field() }}
+                            <input type="hidden" name="operate" value="work-order" readonly>
+                            <input type="hidden" name="id" value="0" readonly>
+
+                            {{--标题--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">标题</label>
+                                <div class="col-md-8 ">
+                                    <div><b class="item-detail-title"></b></div>
+                                </div>
+                            </div>
+                            {{--内容--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">内容</label>
+                                <div class="col-md-8 ">
+                                    <div class="item-detail-content"></div>
+                                </div>
+                            </div>
+                            {{--附件--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">附件</label>
+                                <div class="col-md-8 ">
+                                    <div class="item-detail-attachment"></div>
+                                </div>
+                            </div>
+                            {{--说明--}}
+                            <div class="form-group _none">
+                                <label class="control-label col-md-2">说明</label>
+                                <div class="col-md-8 control-label" style="text-align:left;">
+                                    <span class="">这是一段说明。</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <div class="box-footer">
+                        <div class="row _none">
+                            <div class="col-md-8 col-md-offset-2">
+                                <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
+                                <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PORTLET-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{--行程记录--}}
+<div class="modal fade modal-main-body" id="modal-travel-body">
+    <div class="col-md-8 col-md-offset-2" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PORTLET-->
+                <div class="box- box-info- form-container">
+
+                    <div class="box-header with-border" style="margin:16px 0;">
+                        <h3 class="box-title">行程记录</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+
+                    <form action="" method="post" class="form-horizontal form-bordered" id="form-travel-set-modal">
+                        <div class="box-body">
+
+                            {{ csrf_field() }}
+                            <input type="hidden" name="operate" value="order-travel-set" readonly>
+                            <input type="hidden" name="order_id" value="0" readonly>
+
+                            {{--应出发时间--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">应出发时间</label>
+                                <div class="col-md-8 ">
+                                    <div><b class="item-travel-should-departure-time"></b></div>
+                                </div>
+                            </div>
+                            {{--应出发时间--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">应到达时间</label>
+                                <div class="col-md-8 ">
+                                    <div class="item-travel-should-arrival-time"></div>
+                                </div>
+                            </div>
+                            {{--实际出发时间--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">实际出发时间</label>
+                                <div class="col-md-8 ">
+                                    <div class="item-travel-actual-departure-time"></div>
+                                </div>
+                            </div>
+                            {{--经停到达时间--}}
+                            <div class="form-group item-travel-stopover-container">
+                                <label class="control-label col-md-2">经停到达时间</label>
+                                <div class="col-md-8 ">
+                                    <div class="item-travel-stopover-arrival-time"></div>
+                                </div>
+                            </div>
+                            {{--经停出发时间--}}
+                            <div class="form-group item-travel-stopover-container">
+                                <label class="control-label col-md-2">经停出发时间</label>
+                                <div class="col-md-8 ">
+                                    <div class="item-travel-stopover-departure-time"></div>
+                                </div>
+                            </div>
+                            {{--实际到达时间--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">实际到达时间</label>
+                                <div class="col-md-8 ">
+                                    <div class="item-travel-actual-arrival-time"></div>
+                                </div>
+                            </div>
+                            {{--说明--}}
+                            <div class="form-group _none">
+                                <label class="control-label col-md-2">说明</label>
+                                <div class="col-md-8 control-label" style="text-align:left;">
+                                    <span class="">这是一段说明。</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <div class="box-footer">
+                        <div class="row _none">
+                            <div class="col-md-8 col-md-offset-2">
+                                <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
+                                <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PORTLET-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{--设置行程时间--}}
+<div class="modal fade modal-main-body" id="modal-travel-set-body">
+    <div class="col-md-4 col-md-offset-4" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PORTLET-->
+                <div class="box- box-info- form-container">
+
+                    <div class="box-header with-border" style="margin:16px 0;">
+                        <h3 class="box-title">设置行程时间</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+
+                    <form action="" method="post" class="form-horizontal form-bordered " id="modal-travel-set-form">
+                        <div class="box-body">
+
+                            {{ csrf_field() }}
+                            <input type="hidden" name="travel-set-operate" value="item-order-travel-set" readonly>
+                            <input type="hidden" name="travel-set-order-id" value="0" readonly>
+                            <input type="hidden" name="travel-set-object-type" value="0" readonly>
+
+
+
+                            {{--订单ID--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">订单ID</label>
+                                <div class="col-md-8 control-label" style="text-align:left;">
+                                    <span class="travel-set-order-id"></span>
+                                </div>
+                            </div>
+                            {{--设置对象--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">设置对象</label>
+                                <div class="col-md-8 control-label" style="text-align:left;">
+                                    <span class="travel-set-object-title"></span>
+                                </div>
+                            </div>
+                            {{--选择时间--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">选择时间</label>
+                                <div class="col-md-8 ">
+                                    <input type="text" class="form-control form-filter form_datetime" name="travel-set-time" />
+                                </div>
+                            </div>
+                            {{--备注--}}
+                            <div class="form-group _none">
+                                <label class="control-label col-md-2">备注</label>
+                                <div class="col-md-8 ">
+                                    {{--<input type="text" class="form-control" name="description" placeholder="描述" value="">--}}
+                                    <textarea class="form-control" name="travel-set-description" rows="3" cols="100%"></textarea>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <button type="button" class="btn btn-success" id="item-travel-set-submit"><i class="fa fa-check"></i> 提交</button>
+                                <button type="button" class="btn btn-default" id="item-travel-set-cancel">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PORTLET-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{--财务记录--}}
+<div class="modal fade modal-main-body" id="modal-finance-body">
+    <div class="col-md-8 col-md-offset-2" id="edit-ctn-" style="background:#fff;">
+        <div class="box box-info- form-container datatable-body item-main-body" id="item-content-body">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">内容列表</h3>
+                <div class="caption">
+                    <i class="icon-pin font-blue"></i>
+                    <span class="caption-subject font-blue sbold uppercase"></span>
+                    <a href="javascript:void(0);">
+                        <button type="button" class="btn btn-success pull-right item-finance-create-show"><i class="fa fa-plus"></i> 添加记录</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="box-body datatable-body item-main-body" id="item-main-body">
+
+                <div class="row col-md-12 datatable-search-row">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="标题" />
+
+                        <select class="form-control form-filter" name="finished" style="width:96px;">
+                            <option value ="-1">选择</option>
+                            <option value ="1">收入</option>
+                            <option value ="11">支出</option>
+                        </select>
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
+                            <i class="fa fa-circle-o-notch"></i> 重置
+                        </button>
+
+                    </div>
+                </div>
+
+                <table class='table table-striped table-bordered' id='datatable_ajax_inner'>
+                    <thead>
+                    <tr role='row' class='heading'>
+                        <th>选择</th>
+                        <th>序号</th>
+                        <th>ID</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <!-- datatable end -->
+            </div>
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-4 col-sm-8 col-xs-12">
+                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
+                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
+                        <div class="input-group">
+                            <span class="input-group-addon"><input type="checkbox" id="check-all"></span>
+                            <input type="text" class="form-control" name="bulk-detect-rank" id="bulk-detect-rank" placeholder="指定排名">
+                            <span class="input-group-addon btn btn-default" id="set-rank-bulk-submit"><i class="fa fa-check"></i>提交</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+{{--添加财务记录--}}
+<div class="modal fade modal-main-body" id="modal-finance-create-body">
+    <div class="col-md-4 col-md-offset-4" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PORTLET-->
+                <div class="box- box-info- form-container">
+
+                    <div class="box-header with-border" style="margin:16px 0;">
+                        <h3 class="box-title">添加财务记录</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+
+                    <form action="" method="post" class="form-horizontal form-bordered " id="modal-finance-create-form">
+                        <div class="box-body">
+
+                            {{ csrf_field() }}
+                            <input type="hidden" name="finance-create-operate" value="finance-create-record" readonly>
+                            <input type="hidden" name="finance-create-order-id" value="0" readonly>
+
+
+
+                            {{--订单ID--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">订单ID</label>
+                                <div class="col-md-8 control-label" style="text-align:left;">
+                                    <span class="finance-create-order-id"></span>
+                                </div>
+                            </div>
+                            {{--关键词--}}
+                            <div class="form-group _none">
+                                <label class="control-label col-md-2">关键词</label>
+                                <div class="col-md-8 control-label" style="text-align:left;">
+                                    <span class="finance-create-order-title"></span>
+                                </div>
+                            </div>
+                            {{--交易类型--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">交易类型</label>
+                                <div class="col-md-8 control-label" style="text-align:left;">
+                                    <button type="button" class="btn radio">
+                                        <label>
+                                                <input type="radio" name="finance-create-type" value=1 checked="checked"> 收入
+                                        </label>
+                                    </button>
+                                    <button type="button" class="btn radio">
+                                        <label>
+                                                <input type="radio" name="finance-create-type" value=21> 支出
+                                        </label>
+                                    </button>
+                                </div>
+                            </div>
+                            {{--交易日期--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">交易日期</label>
+                                <div class="col-md-8 ">
+                                    <input type="text" class="form-control form-filter form_date" name="finance-create-transaction-date" />
+                                </div>
+                            </div>
+                            {{--费用--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">费用</label>
+                                <div class="col-md-8 ">
+                                    <input type="text" class="form-control" name="finance-create-transaction-amount" placeholder="费用" value="">
+                                </div>
+                            </div>
+                            {{--费用说明--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2">费用说明</label>
+                                <div class="col-md-8 ">
+                                    <input type="text" class="form-control" name="finance-create-transaction-title" placeholder="费用说明" value="">
+                                </div>
+                            </div>
+                            {{--支付方式--}}
+                            <div class="form-group income-show-">
+                                <label class="control-label col-md-2">支付方式</label>
+                                <div class="col-md-8 ">
+                                    <input type="text" class="form-control" name="finance-create-transaction-type" placeholder="支付方式" value="">
+                                </div>
+                            </div>
+                            {{--交易账号--}}
+                            <div class="form-group income-show-">
+                                <label class="control-label col-md-2">交易账号</label>
+                                <div class="col-md-8 ">
+                                    <input type="text" class="form-control" name="finance-create-transaction-account" placeholder="交易账号" value="">
+                                </div>
+                            </div>
+                            {{--收款账号--}}
+                            <div class="form-group income-show-">
+                                <label class="control-label col-md-2">交易单号</label>
+                                <div class="col-md-8 ">
+                                    <input type="text" class="form-control" name="finance-create-transaction-order" placeholder="收款账号" value="">
+                                </div>
+                            </div>
+                            {{--备注--}}
+                            <div class="form-group _none">
+                                <label class="control-label col-md-2">备注</label>
+                                <div class="col-md-8 ">
+                                    {{--<input type="text" class="form-control" name="description" placeholder="描述" value="">--}}
+                                    <textarea class="form-control" name="finance-create-transaction-description" rows="3" cols="100%"></textarea>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <button type="button" class="btn btn-success" id="item-finance-create-submit"><i class="fa fa-check"></i> 提交</button>
+                                <button type="button" class="btn btn-default" id="item-finance-create-cancel">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PORTLET-->
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+
+
+
+@section('custom-script')
+<script>
+    var TableDatatablesAjax = function () {
+        var datatableAjax = function () {
+
+            var dt = $('#datatable_ajax');
+            var ajax_datatable = dt.DataTable({
+//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[50, 100, 200], ["50", "100", "200"]],
+                "processing": true,
+                "serverSide": true,
+                "searching": false,
+                "ajax": {
+                    'url': "{{ url('/item/order-list-for-all') }}",
+                    "type": 'POST',
+                    "dataType" : 'json',
+                    "data": function (d) {
+                        d._token = $('meta[name="_token"]').attr('content');
+                        d.keyword = $('input[name="keyword"]').val();
+                        d.website = $('input[name="website"]').val();
+                        d.staff = $('select[name="staff"]').val();
+                        d.client = $('select[name="client"]').val();
+                        d.car = $('select[name="car"]').val();
+//                        d.nickname 	= $('input[name="nickname"]').val();
+//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
+//                        d.certificate_state = $('select[name="certificate_state"]').val();
+//                        d.admin_name = $('input[name="admin_name"]').val();
+//
+//                        d.created_at_from = $('input[name="created_at_from"]').val();
+//                        d.created_at_to = $('input[name="created_at_to"]').val();
+//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
+//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
+
+                    },
+                },
+                "pagingType": "simple_numbers",
+                "order": [],
+                "orderCellsTop": true,
+                "columns": [
+//                    {
+//                        "width": "32px",
+//                        "title": "选择",
+//                        "data": "id",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+//                        }
+//                    },
+//                    {
+//                        "width": "32px",
+//                        "title": "序号",
+//                        "data": null,
+//                        "targets": 0,
+//                        "orderable": false
+//                    },
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "ID",
+                        "data": "id",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "160px",
+                        "title": "状态",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.is_published == 0)
+                            {
+                                return '<small class="btn-xs bg-teal">未发布</small>';
+                            }
+
+                            var $travel_status_html = '';
+                            var $travel_result_html = '';
+                            var $travel_result_time = '';
+
+                            if(row.travel_status == "待发车")
+                            {
+                                $travel_status_html = '<small class="btn-xs bg-teal">待发车</small>';
+                            }
+                            else if(row.travel_status == "进行中")
+                            {
+                                $travel_status_html = '<small class="btn-xs bg-blue">进行中</small>';
+                            }
+                            else if(row.travel_status == "已完成")
+                            {
+                                $travel_status_html = '<small class="btn-xs bg-olive">已完成</small>';
+                            }
+
+
+                            if(row.travel_result == "正常")
+                            {
+                                $travel_result_html = '<small class="btn-xs bg-olive">正常</small>';
+                            }
+                            else if(row.travel_result == "超时")
+                            {
+                                $travel_result_html = '<small class="btn-xs bg-red">超时</small><br>';
+                                $travel_result_time = '<small class="btn-xs bg-gray">'+row.travel_result_time+'</small>';
+                            }
+                            else if(row.travel_result == "已超时")
+                            {
+                                $travel_result_html = '<small class="btn-xs btn-danger">已超时</small>';
+                            }
+
+                            return $travel_status_html + $travel_result_html + $travel_result_time;
+
+                        }
+                    },
+                    {
+                        "width": "32px",
+                        "title": "订单<br>金额",
+                        "data": "amount",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "32px",
+                        "title": "收入<br>金额",
+                        "data": "income_total",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "32px",
+                        "title": "支出<br>金额",
+                        "data": "expenditure_total",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-left",
+                        "width": "64px",
+                        "title": "客户",
+                        "data": "client_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.client_er == null ? '未知' : '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "text-left font-12px",
+                        "width": "80px",
+                        "title": "车辆",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var car_html = '';
+                            if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
+                            var trailer_html = '';
+                            if(row.trailer_er != null) trailer_html = '<a href="javascript:void(0);">'+row.trailer_er.name+'</a>';
+                            return car_html + '<br>' + trailer_html;
+                        }
+                    },
+                    {
+                        "className": "text-left",
+                        "width": "120px",
+                        "title": "行程",
+                        "data": "departure_place",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data == null ? '--' : data;
+                            var $stopover_html = '';
+                            if(row.stopover_place) $stopover_html = '--' + row.stopover_place;
+                            return row.departure_place + $stopover_html + '--' + row.destination_place;
+                        }
+                    },
+//                    {
+//                        "className": "text-left",
+//                        "width": "64px",
+//                        "title": "目的地",
+//                        "data": "destination_place",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            return data == null ? '--' : data;
+//                        }
+//                    },
+//                    {
+//                        "className": "text-left",
+//                        "width": "64px",
+//                        "title": "经停地",
+//                        "data": "stopover_place",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            return data == null ? '--' : data;
+//                        }
+//                    },
+                    {
+                        "className": "font-12px",
+                        "width": "108px",
+                        "title": "限定<br>时间",
+                        "data": 'id',
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $departure_time = new Date(row.should_departure_time*1000);
+                            var $departure_year = $departure_time.getFullYear();
+                            var $departure_month = ('00'+($departure_time.getMonth()+1)).slice(-2);
+                            var $departure_day = ('00'+($departure_time.getDate())).slice(-2);
+                            var $departure_hour = ('00'+$departure_time.getHours()).slice(-2);
+                            var $departure_minute = ('00'+$departure_time.getMinutes()).slice(-2);
+                            var $departure_second = ('00'+$departure_time.getSeconds()).slice(-2);
+
+                            var $departure_time_html = '<a href="javascript:void(0);">'+$departure_year+'-'+$departure_month+'-'+$departure_day+'&nbsp;'+$departure_hour+':'+$departure_minute+'</a>'+'<br>';
+
+
+                            var $arrival_time = new Date(row.should_arrival_time*1000);
+                            var $arrival_year = $arrival_time.getFullYear();
+                            var $arrival_month = ('00'+($arrival_time.getMonth()+1)).slice(-2);
+                            var $arrival_day = ('00'+($arrival_time.getDate())).slice(-2);
+                            var $arrival_hour = ('00'+$arrival_time.getHours()).slice(-2);
+                            var $arrival_minute = ('00'+$arrival_time.getMinutes()).slice(-2);
+                            var $arrival_second = ('00'+$arrival_time.getSeconds()).slice(-2);
+
+                            var $arrival_time_html = '<a href="javascript:void(0);">'+$arrival_year+'-'+$arrival_month+'-'+$arrival_day+'&nbsp;'+$arrival_hour+':'+$arrival_minute+'</a>'+'<br>';
+
+                            return $departure_time_html + $arrival_time_html;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "160px",
+                        "title": "实际<br>时间",
+                        "data": 'id',
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $actual_departure_time_html = '';
+                            var $stopover_arrival_time_html = '';
+                            var $stopover_departure_time_html = '';
+                            var $actual_arrival_time_html = '';
+
+                            if(row.actual_departure_time)
+                            {
+                                var $actual_departure_time = new Date(row.actual_departure_time*1000);
+                                var $actual_departure_year = $actual_departure_time.getFullYear();
+                                var $actual_departure_month = ('00'+($actual_departure_time.getMonth()+1)).slice(-2);
+                                var $actual_departure_day = ('00'+($actual_departure_time.getDate())).slice(-2);
+                                var $actual_departure_hour = ('00'+$actual_departure_time.getHours()).slice(-2);
+                                var $actual_departure_minute = ('00'+$actual_departure_time.getMinutes()).slice(-2);
+                                var $actual_departure_second = ('00'+$actual_departure_time.getSeconds()).slice(-2);
+
+                                $actual_departure_time_html = '<a href="javascript:void(0);">'+$actual_departure_year+'-'+$actual_departure_month+'-'+$actual_departure_day+'&nbsp;'+$actual_departure_hour+':'+$actual_departure_minute+'</a>'+'<br>';
+                            }
+
+
+                            if(row.stopover_arrival_time)
+                            {
+                                var $stopover_arrival_time = new Date(row.stopover_arrival_time*1000);
+                                var $stopover_arrival_year = $stopover_arrival_time.getFullYear();
+                                var $stopover_arrival_month = ('00'+($stopover_arrival_time.getMonth()+1)).slice(-2);
+                                var $stopover_arrival_day = ('00'+($stopover_arrival_time.getDate())).slice(-2);
+                                var $stopover_arrival_hour = ('00'+$stopover_arrival_time.getHours()).slice(-2);
+                                var $stopover_arrival_minute = ('00'+$stopover_arrival_time.getMinutes()).slice(-2);
+                                var $stopover_arrival_second = ('00'+$stopover_arrival_time.getSeconds()).slice(-2);
+
+                                $stopover_arrival_time_html = '<a href="javascript:void(0);">'+'经停-到达 '+$stopover_arrival_year+'-'+$stopover_arrival_month+'-'+$stopover_arrival_day+'&nbsp;'+$stopover_arrival_hour+':'+$stopover_arrival_minute+'</a>'+'<br>';
+                            }
+
+
+                            if(row.stopover_departure_time)
+                            {
+                                var $stopover_departure_time = new Date(row.stopover_departure_time*1000);
+                                var $stopover_departure_year = $stopover_departure_time.getFullYear();
+                                var $stopover_departure_month = ('00'+($stopover_departure_time.getMonth()+1)).slice(-2);
+                                var $stopover_departure_day = ('00'+($stopover_departure_time.getDate())).slice(-2);
+                                var $stopover_departure_hour = ('00'+$stopover_departure_time.getHours()).slice(-2);
+                                var $stopover_departure_minute = ('00'+$stopover_departure_time.getMinutes()).slice(-2);
+                                var $stopover_departure_second = ('00'+$stopover_departure_time.getSeconds()).slice(-2);
+
+                                $stopover_departure_time_html = '<a href="javascript:void(0);">'+'经停-出发 '+$stopover_departure_year+'-'+$stopover_departure_month+'-'+$stopover_departure_day+'&nbsp;'+$stopover_departure_hour+':'+$stopover_departure_minute+'</a>'+'<br>';
+                            }
+
+
+                            if(row.actual_arrival_time)
+                            {
+                                var $actual_arrival_time = new Date(row.actual_arrival_time*1000);
+                                var $actual_arrival_year = $actual_arrival_time.getFullYear();
+                                var $actual_arrival_month = ('00'+($actual_arrival_time.getMonth()+1)).slice(-2);
+                                var $actual_arrival_day = ('00'+($actual_arrival_time.getDate())).slice(-2);
+                                var $actual_arrival_hour = ('00'+$actual_arrival_time.getHours()).slice(-2);
+                                var $actual_arrival_minute = ('00'+$actual_arrival_time.getMinutes()).slice(-2);
+                                var $actual_arrival_second = ('00'+$actual_arrival_time.getSeconds()).slice(-2);
+
+                                $actual_arrival_time_html = '<a href="javascript:void(0);">'+$actual_arrival_year+'-'+$actual_arrival_month+'-'+$actual_arrival_day+'&nbsp;'+$actual_arrival_hour+':'+$actual_arrival_minute+'</a>'+'<br>';
+                            }
+
+                            return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;
+                        }
+                    },
+//                    {
+//                        "className": "text-left",
+//                        "width": "64px",
+//                        "title": "拥有者",
+//                        "data": "owner_id",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            return row.owner == null ? '未知' : '<a target="_blank" href="/user/'+row.owner.id+'">'+row.owner.username+'</a>';
+//                        }
+//                    },
+                    {
+                        "className": "text-left",
+                        "width": "64px",
+                        "title": "创建人",
+                        "data": "creator_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "108px",
+                        "title": "创建<br>时间",
+                        "data": 'created_at',
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+//                            return $year+'-'+$month+'-'+$day;
+                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                        }
+                    },
+//                    {
+//                        "className": "font-12px",
+//                        "width": "108px",
+//                        "title": "修改时间",
+//                        "data": 'updated_at',
+//                        "orderable": true,
+//                        render: function(data, type, row, meta) {
+////                            return data;
+//                            var $date = new Date(data*1000);
+//                            var $year = $date.getFullYear();
+//                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+//                            var $day = ('00'+($date.getDate())).slice(-2);
+//                            var $hour = ('00'+$date.getHours()).slice(-2);
+//                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+//                            var $second = ('00'+$date.getSeconds()).slice(-2);
+////                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+////                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+//                        }
+//                    },
+//                    {
+//                        "width": "60px",
+//                        "title": "完成",
+//                        "data": "is_completed",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            if(data == 0)
+//                            {
+//                                return '<small class="btn-xs bg-teal">待完成</small>';
+//                            }
+//                            else if(data == 1)
+//                            {
+//                                if(row.item_result == 0) return '<small class="btn-xs bg-olive">已完成</small>';
+//                                else if(row.item_result == 1) return '<small class="btn-xs bg-olive">通话</small>';
+//                                else if(row.item_result == 19) return '<small class="btn-xs bg-purple">加微信</small>';
+//                                else if(row.item_result == 71) return '<small class="btn-xs bg-yellow">未接</small>';
+//                                else if(row.item_result == 72) return '<small class="btn-xs bg-yellow">拒接</small>';
+//                                else if(row.item_result == 51) return '<small class="btn-xs bg-yellow">打错了</small>';
+//                                else if(row.item_result == 99) return '<small class="btn-xs bg-yellow">空号</small>';
+//                                else return "有误";
+//                            }
+//                            else
+//                            {
+//                            }
+//                        }
+//                    },
+                    {
+                        "width": "240px",
+                        "title": "操作",
+                        "data": 'id',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            var $html_travel = '';
+                            var $html_finance = '';
+
+                            if(row.item_status == 1)
+                            {
+                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                            }
+                            else
+                            {
+                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                            }
+
+//                            if(row.is_me == 1 && row.item_active == 0)
+                            if(row.is_published == 0)
+                            {
+                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
+                                $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
+                            }
+                            else
+                            {
+                                $html_publish = '<a class="btn btn-xs btn-default disabled">发布</a>';
+                                $html_publish = '';
+                                $html_edit = '<a class="btn btn-xs btn-default disabled">编辑</a>';
+                                $html_edit = '';
+                                $html_travel = '<a class="btn btn-xs bg-olive item-travel-show" data-id="'+data+'">行程管理</a>';
+                                $html_finance = '<a class="btn btn-xs bg-orange item-finance-show" data-id="'+data+'">财务管理</a>';
+                            }
+
+                            if(row.deleted_at == null)
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
+                            }
+                            else
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
+                            }
+
+                            var html =
+//                                    $html_able+
+//                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
+                                    $html_edit+
+                                    $html_publish+
+                                    $html_travel+
+                                    $html_finance+
+//                                    $html_delete+
+//                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
+                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">详情</a>'+
+//                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
+                                    '';
+                            return html;
+
+                        }
+                    }
+                ],
+                "drawCallback": function (settings) {
+
+//                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+//                    this.api().column(1).nodes().each(function(cell, i) {
+//                        cell.innerHTML =  startIndex + i + 1;
+//                    });
+
+                    ajax_datatable.$('.tooltips').tooltip({placement: 'top', html: true});
+                    $("a.verify").click(function(event){
+                        event.preventDefault();
+                        var node = $(this);
+                        var tr = node.closest('tr');
+                        var nickname = tr.find('span.nickname').text();
+                        var cert_name = tr.find('span.certificate_type_name').text();
+                        var action = node.attr('data-action');
+                        var certificate_id = node.attr('data-id');
+                        var action_name = node.text();
+
+                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
+                        layer.open({
+                            'title': '警告',
+                            content: tpl
+                                .replace('@action_name', action_name)
+                                .replace('@nickname', nickname)
+                                .replace('@certificate_type_name', cert_name),
+                            btn: ['Yes', 'No'],
+                            yes: function(index) {
+                                layer.close(index);
+                                $.post(
+                                    '/admin/medsci/certificate/user/verify',
+                                    {
+                                        action: action,
+                                        id: certificate_id,
+                                        _token: '{{ csrf_token() }}'
+                                    },
+                                    function(json){
+                                        if(json['response_code'] == 'success') {
+                                            layer.msg('操作成功!', {time: 3500});
+                                            ajax_datatable.ajax.reload();
+                                        } else {
+                                            layer.alert(json['response_data'], {time: 10000});
+                                        }
+                                    }, 'json');
+                            }
+                        });
+                    });
+                },
+                "language": { url: '/common/dataTableI18n' },
+            });
+
+
+            dt.on('click', '.filter-submit', function () {
+                ajax_datatable.ajax.reload();
+            });
+
+            dt.on('click', '.filter-cancel', function () {
+                $('textarea.form-filter, select.form-filter, input.form-filter', dt).each(function () {
+                    $(this).val("");
+                });
+
+                $('select.form-filter').selectpicker('refresh');
+
+                ajax_datatable.ajax.reload();
+            });
+
+        };
+        return {
+            init: datatableAjax
+        }
+    }();
+    $(function () {
+        TableDatatablesAjax.init();
+    });
+</script>
+
+
+<script>
+    var TableDatatablesAjax_inner = function ($id) {
+        var datatableAjax_inner = function ($id) {
+
+            var dt = $('#datatable_ajax_inner');
+            dt.DataTable().destroy();
+            var ajax_datatable_inner = dt.DataTable({
+                "retrieve": true,
+                "destroy": true,
+//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[20, 50, 200], ["20", "50", "200"]],
+                "bAutoWidth": false,
+                "processing": true,
+                "serverSide": true,
+                "searching": false,
+                "ajax": {
+                    'url': "/item/order-finance-record?id="+$id,
+                    "type": 'POST',
+                    "dataType" : 'json',
+                    "data": function (d) {
+                        d._token = $('meta[name="_token"]').attr('content');
+                        d.searchengine = $('select[name="searchengine"]').val();
+                        d.keyword = $('input[name="keyword"]').val();
+                        d.website = $('input[name="website"]').val();
+                        d.keywordstatus = $('select[name="keywordstatus"]').val();
+                        d.rank = $('select[name="inner_rank"]').val();
+//                        d.nickname 	= $('input[name="nickname"]').val();
+//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
+//                        d.certificate_state = $('select[name="certificate_state"]').val();
+//                        d.admin_name = $('input[name="admin_name"]').val();
+//
+//                        d.created_at_from = $('input[name="created_at_from"]').val();
+//                        d.created_at_to = $('input[name="created_at_to"]').val();
+//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
+//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
+
+                    },
+                },
+                "pagingType": "simple_numbers",
+                "order": [],
+                "orderCellsTop": true,
+                "columns": [
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "序号",
+                        "data": null,
+                        "targets": 0,
+                        "orderable": false
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "选择",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<label><input type="checkbox" name="bulk-detect-record-id" class="minimal" value="'+data+'"></label>';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "ID",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "类型",
+                        "data": "item_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.item_type == 1) return '<small class="btn-xs bg-olive">收入</small>';
+                            else if(row.item_type == 21) return '<small class="btn-xs bg-orange">支出</small>';
+                            else return '有误';
+                        }
+                    },
+                    {
+                        "title": "费用说明",
+                        "data": "title",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "金额",
+                        "data": "transaction_amount",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            if((data > 0) && (data <= 10)) return '<samll class="text-red">'+data+'</samll>';
+                            else return data;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "支付方式",
+                        "data": "transaction_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "交易时间",
+                        "data": "transaction_time",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                        }
+                    },
+                    {
+                        "title": "创建时间",
+                        "data": "created_at",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+//                            return $year+'-'+$month+'-'+$day;
+                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                        }
+                    },
+                    {
+                        "title": "操作",
+                        'data': 'id',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            var $date = row.transaction_date.trim().split(" ")[0];
+                            var html =
+//                                '<a class="btn btn-xs item-enable-submit" data-id="'+value+'">启用</a>'+
+//                                '<a class="btn btn-xs item-disable-submit" data-id="'+value+'">禁用</a>'+
+//                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
+//                                '<a class="btn btn-xs item-statistics-submit" data-id="'+value+'">流量统计</a>'+
+                                    {{--'<a class="btn btn-xs" href="/item/edit?id='+value+'">编辑</a>'+--}}
+                                //                                '<a class="btn btn-xs item-edit-submit" data-id="'+value+'">编辑</a>'+
+                                '<a class="btn btn-xs item-set-rank-show" data-id="'+data+
+//                                '" data-name="'+row.keyword+'" data-rank="'+row.rank+'" data-date="'+$date+
+                                '">修改</a>';
+                            return html;
+                        }
+                    }
+                ],
+                "drawCallback": function (settings) {
+
+                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+                    this.api().column(0).nodes().each(function(cell, i) {
+                        cell.innerHTML =  startIndex + i + 1;
+                    });
+
+                    ajax_datatable_inner.$('.tooltips').tooltip({placement: 'top', html: true});
+                    $("a.verify").click(function(event){
+                        event.preventDefault();
+                        var node = $(this);
+                        var tr = node.closest('tr');
+                        var nickname = tr.find('span.nickname').text();
+                        var cert_name = tr.find('span.certificate_type_name').text();
+                        var action = node.attr('data-action');
+                        var certificate_id = node.attr('data-id');
+                        var action_name = node.text();
+
+                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
+                        layer.open({
+                            'title': '警告',
+                            content: tpl
+                                .replace('@action_name', action_name)
+                                .replace('@nickname', nickname)
+                                .replace('@certificate_type_name', cert_name),
+                            btn: ['Yes', 'No'],
+                            yes: function(index) {
+                                layer.close(index);
+                                $.post(
+                                    '/admin/medsci/certificate/user/verify',
+                                    {
+                                        action: action,
+                                        id: certificate_id,
+                                        _token: '{{csrf_token()}}'
+                                    },
+                                    function(json){
+                                        if(json['response_code'] == 'success') {
+                                            layer.msg('操作成功!', {time: 3500});
+                                            ajax_datatable.ajax.reload();
+                                        } else {
+                                            layer.alert(json['response_data'], {time: 10000});
+                                        }
+                                    }, 'json');
+                            }
+                        });
+                    });
+
+//                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+//                        checkboxClass: 'icheckbox_minimal-blue',
+//                        radioClass   : 'iradio_minimal-blue'
+//                    });
+                },
+                "language": { url: '/common/dataTableI18n' },
+            });
+
+
+            dt.on('click', '.filter-submit', function () {
+                ajax_datatable_inner.ajax.reload();
+            });
+
+            dt.on('click', '.filter-cancel', function () {
+                $('textarea.form-filter, input.form-filter, select.form-filter', dt).each(function () {
+                    $(this).val("");
+                });
+
+//                $('select.form-filter').selectpicker('refresh');
+                $('select.form-filter option').attr("selected",false);
+                $('select.form-filter').find('option:eq(0)').attr('selected', true);
+
+                ajax_datatable_inner.ajax.reload();
+            });
+
+
+//            dt.on('click', '#all_checked', function () {
+////                layer.msg(this.checked);
+//                $('input[name="detect-record"]').prop('checked',this.checked);//checked为true时为默认显示的状态
+//            });
+
+
+        };
+        return {
+            init: datatableAjax_inner
+        }
+    }();
+    //    $(function () {
+    //        TableDatatablesAjax_inner.init();
+    //    });
+</script>
+@include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script-for-finance')
+@endsection
