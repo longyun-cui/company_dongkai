@@ -78,16 +78,20 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/user/client-create', $controller.'@operate_user_client_create');
     Route::match(['get','post'], '/user/client-edit', $controller.'@operate_user_client_edit');
     // 删除 & 恢复
-    Route::post('/item/client-delete', $controller.'@operate_user_client_delete');
-    Route::post('/item/client-restore', $controller.'@operate_user_client_restore');
-    Route::post('/item/client-delete-permanently', $controller.'@operate_user_client_delete_permanently');
+    Route::post('/user/client-admin-delete', $controller.'@operate_user_client_admin_delete');
+    Route::post('/user/client-admin-restore', $controller.'@operate_user_client_admin_restore');
+    Route::post('/user/client-admin-delete-permanently', $controller.'@operate_user_client_admin_delete_permanently');
     // 启用 & 禁用
-    Route::post('/item/client-enable', $controller.'@operate_user_client_enable');
-    Route::post('/item/client-disable', $controller.'@operate_user_client_disable');
+    Route::post('/user/client-admin-enable', $controller.'@operate_user_client_admin_enable');
+    Route::post('/user/client-admin-disable', $controller.'@operate_user_client_admin_disable');
 
     // 列表
     Route::match(['get','post'], '/user/client-list', $controller.'@view_user_client_list');
     Route::match(['get','post'], '/user/client-list-for-all', $controller.'@view_user_client_list_for_all');
+
+
+
+
 
 
 
@@ -99,16 +103,20 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/car-create', $controller.'@operate_item_car_create');
     Route::match(['get','post'], '/item/car-edit', $controller.'@operate_item_car_edit');
     // 删除 & 恢复
-    Route::post('/item/car-delete', $controller.'@operate_item_car_delete');
-    Route::post('/item/car-restore', $controller.'@operate_item_car_restore');
-    Route::post('/item/car-delete-permanently', $controller.'@operate_item_car_delete_permanently');
+    Route::post('/item/car-admin-delete', $controller.'@operate_item_car_admin_delete');
+    Route::post('/item/car-admin-restore', $controller.'@operate_item_car_admin_restore');
+    Route::post('/item/car-admin-delete-permanently', $controller.'@operate_item_car_admin_delete_permanently');
     // 启用 & 禁用
-    Route::post('/item/car-enable', $controller.'@operate_item_car_enable');
-    Route::post('/item/car-disable', $controller.'@operate_item_car_disable');
+    Route::post('/item/car-admin-enable', $controller.'@operate_item_car_admin_enable');
+    Route::post('/item/car-admin-disable', $controller.'@operate_item_car_admin_disable');
 
     // 列表
     Route::match(['get','post'], '/item/car-list', $controller.'@view_item_car_list');
     Route::match(['get','post'], '/item/car-list-for-all', $controller.'@view_item_car_list_for_all');
+
+
+
+
 
 
 
@@ -125,6 +133,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/order-edit', $controller.'@operate_item_order_edit');
     // 获取
     Route::match(['get','post'], '/item/order-get', $controller.'@operate_item_order_get');
+    Route::match(['get','post'], '/item/order-get-html', $controller.'@operate_item_order_get_html');
     // 删除 & 恢复
     Route::post('/item/order-delete', $controller.'@operate_item_order_delete');
     Route::post('/item/order-restore', $controller.'@operate_item_order_restore');
@@ -141,12 +150,16 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/order-list', $controller.'@view_item_order_list');
     Route::match(['get','post'], '/item/order-list-for-all', $controller.'@view_item_order_list_for_all');
 
+    // 订单-基本信息
+    Route::post('/item/order-info-set', $controller.'@operate_item_order_info_set');
+    // 订单-行程信息
+    Route::post('/item/order-travel-set', $controller.'@operate_item_order_travel_set');
+    // 订单-财务信息
     Route::match(['get','post'], '/item/order-finance-record', $controller.'@view_item_order_finance_record');
-
     Route::post('/item/order-finance-record-create', $controller.'@operate_item_order_finance_record_create');
     Route::post('/item/order-finance-record-edit', $controller.'@operate_item_order_finance_record_edit');
-
-    Route::post('/item/order-travel-set', $controller.'@operate_item_order_travel_set');
+    // 订单-财务信息
+    Route::match(['get','post'], '/item/order-modify-record', $controller.'@view_item_order_modify_record');
 
 
 

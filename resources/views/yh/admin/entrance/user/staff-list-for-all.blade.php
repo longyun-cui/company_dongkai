@@ -2,7 +2,8 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif{{ $title_text or '员工列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
+    {{ $title_text or '员工列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 

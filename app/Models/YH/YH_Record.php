@@ -3,35 +3,25 @@ namespace App\Models\YH;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use DB;
-
-class YH_Order extends Model
+class YH_Record extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "yh_order";
+    protected $table = "yh_record";
     protected $fillable = [
-        'active', 'status', 'item_active', 'item_status', 'item_result',
-        'item_category', 'item_type', 'item_form', 'category', 'type', 'form', 'sort',
-        'owner_active', 'is_show', 'is_published', 'is_completed',
-        'owner_id', 'creator_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+        'active', 'status', 'record_active', 'record_status',
+        'record_category', 'record_type', 'record_module', 'category', 'type', 'sort',
+        'operate_category', 'operate_type',
+        'owner_active',
+        'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
-        'item_id', 'menu_id',
+        'item_id', 'order_id',
+        'column', 'before', 'after',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'amount',
-        'client_id',
-        'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type', 'outside_car', 'outside_trailer',
-        'departure_place', 'destination_place', 'stopover_place',
-        'assign_time',
-        'should_departure_time', 'should_arrival_time',
-        'actual_departure_time', 'actual_arrival_time',
-        'stopover_departure_time', 'stopover_arrival_time',
-        'subordinate_company', 'receipt_status', 'receipt_address', 'GPS', 'fixed_route', 'temporary_route', 'order_number', 'payee_name', 'arrange_people', 'car_supply', 'car_managerial_people', 'driver', 'copilot', 'weight',
-        'company', 'fund', 'mobile', 'city', 'address',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'time_point', 'time_type', 'start_time', 'end_time',
+        'time_point', 'time_type', 'start_time', 'end_time', 'address',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at', 'completed_at'
+        'published_at'
     ];
     protected $dateFormat = 'U';
 
@@ -67,27 +57,6 @@ class YH_Order extends Model
     function user()
     {
         return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
-    }
-    // 客户
-    function client_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Client','client_id','id');
-    }
-
-    // 车辆
-    function car_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Car','car_id','id');
-    }
-    // 车挂
-    function trailer_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Car','trailer_id','id');
-    }
-    // 车厢
-    function container_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Car','container_id','id');
     }
 
 
@@ -157,18 +126,4 @@ class YH_Order extends Model
     {
         return $this->morphToMany('App\Models\Tag', 'taggable');
     }
-
-
-
-
-    /**
-     * 自定义更新
-     */
-//    public function update_batch_in($setColumn,$setValue,$whereColumn,$whereValue)
-//    {
-//        $sql ="UPDATE ".$this->table." SET ".$setColumn." = ".$setValue." WHERE ".$whereColumn." = ".$whereValue;
-//        return DB::update(DB::raw($sql);
-//    }
-    
-    
 }

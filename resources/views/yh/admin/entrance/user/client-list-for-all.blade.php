@@ -2,14 +2,15 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local'])){{ $local or '【l】' }}@endif{{ $title_text or '全部客户' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
+    {{ $title_text or '全部客户' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')全部客户 - 管理员后台系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')全部客户 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/admin') }}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -71,9 +72,6 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            {{--<th></th>--}}
-                            {{--<th></th>--}}
-                            <th></th>
                             <th></th>
                             <th></th>
                             <th>操作</th>
@@ -95,66 +93,6 @@
             </div>
         </div>
         <!-- END PORTLET-->
-    </div>
-</div>
-
-
-<div class="modal fade" id="modal-password-body">
-    <div class="col-md-8 col-md-offset-2" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
-
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PORTLET-->
-                <div class="box- box-info- form-container">
-
-                    <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">修改【<span class="user-name"></span>】的密码</h3>
-                        <div class="box-tools pull-right">
-                        </div>
-                    </div>
-
-                    <form action="" method="post" class="form-horizontal form-bordered" id="form-password-admin-change-modal">
-                        <div class="box-body">
-
-                            {{ csrf_field() }}
-                            <input type="hidden" name="operate" value="staff-password-admin-change" readonly>
-                            <input type="hidden" name="user_id" value="0" readonly>
-
-                            {{--类别--}}
-
-
-                            {{--用户ID--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">新密码</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <input type="password" class="form-control form-filter" name="user-password" value="">
-                                    6-20位英文、数字、下划线构成
-                                </div>
-                            </div>
-                            {{--用户名--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">确认密码</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <input type="password" class="form-control form-filter" name="user-password-confirm" value="">
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </form>
-
-                    <div class="box-footer">
-                        <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
-                                <button type="button" class="btn btn-success" id="item-password-admin-change-submit"><i class="fa fa-check"></i> 提交</button>
-                                <button type="button" class="btn btn-default" id="item-password-admin-change-cancel">取消</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END PORTLET-->
-            </div>
-        </div>
     </div>
 </div>
 @endsection
@@ -198,6 +136,7 @@
                 "orderCellsTop": true,
                 "columns": [
                     {
+                        "className": "font-12px",
                         "width": "48px",
                         "title": "ID",
                         "data": "id",
@@ -206,30 +145,31 @@
                             return data;
                         }
                     },
-                    {
-                        "width": "80px",
-                        "title": "用户类型",
-                        "data": 'user_category',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return 'admin';
-                            else if(data == 1) return '<small class="btn-xs bg-primary">个人用户</small>';
-                            else if(data == 9) return '<small class="btn-xs bg-olive">轻博</small>';
-                            else if(data == 11)  // 员工
-                            {
-                                if(row.user_type == 0) return '<small class="btn-xs bg-purple">管理员</small>';
-                                else if(row.user_type == 11) return '<small class="btn-xs bg-purple">总经理</small>';
-                                else if(row.user_type == 21) return '<small class="btn-xs bg-purple">HR经理</small>';
-                                else if(row.user_type == 22) return '<small class="btn-xs bg-purple">HR</small>';
-                                else if(row.user_type == 41) return '<small class="btn-xs bg-purple">销售主管</small>';
-                                else if(row.user_type == 61) return '<small class="btn-xs bg-purple">销售组长</small>';
-                                else if(row.user_type == 88) return '<small class="btn-xs bg-purple">销售员</small>';
-                                else return '<small class="btn-xs bg-purple">组织</small>';
-                            }
-                            else if(data == 88) return '<small class="btn-xs bg-purple">赞助商</small>';
-                            else return "有误";
-                        }
-                    },
+//                    {
+//                        "className": "font-12px",
+//                        "width": "80px",
+//                        "title": "用户类型",
+//                        "data": 'user_category',
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            if(data == 0) return 'admin';
+//                            else if(data == 1) return '<small class="btn-xs bg-primary">个人用户</small>';
+//                            else if(data == 9) return '<small class="btn-xs bg-olive">轻博</small>';
+//                            else if(data == 11)  // 员工
+//                            {
+//                                if(row.user_type == 0) return '<small class="btn-xs bg-purple">管理员</small>';
+//                                else if(row.user_type == 11) return '<small class="btn-xs bg-purple">总经理</small>';
+//                                else if(row.user_type == 21) return '<small class="btn-xs bg-purple">HR经理</small>';
+//                                else if(row.user_type == 22) return '<small class="btn-xs bg-purple">HR</small>';
+//                                else if(row.user_type == 41) return '<small class="btn-xs bg-purple">销售主管</small>';
+//                                else if(row.user_type == 61) return '<small class="btn-xs bg-purple">销售组长</small>';
+//                                else if(row.user_type == 88) return '<small class="btn-xs bg-purple">销售员</small>';
+//                                else return '<small class="btn-xs bg-purple">组织</small>';
+//                            }
+//                            else if(data == 88) return '<small class="btn-xs bg-purple">赞助商</small>';
+//                            else return "有误";
+//                        }
+//                    },
                     {
                         "className": "text-left",
                         "width": "200px",
@@ -353,7 +293,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "96px",
+                        "width": "120px",
                         "title": "创建时间",
                         "data": 'created_at',
                         "orderable": true,
@@ -372,8 +312,8 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
-                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day;
+                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     },
@@ -400,7 +340,7 @@
                         }
                     },
                     {
-                        "width": "240px",
+                        "width": "180px",
                         "title": "操作",
                         "data": "id",
                         "orderable": false,
@@ -438,9 +378,9 @@
 //                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
 //                                '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
                                 $html_edit+
-                                $html_delete+
+//                                $html_delete+
 //                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
-                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
+//                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
                                 '';
                             return html;
                         }

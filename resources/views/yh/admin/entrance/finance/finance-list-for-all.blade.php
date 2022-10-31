@@ -26,8 +26,8 @@
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/car-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加车辆</button>
+                    <a href="{{ url('/item/finance-create') }}">
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加财务记录</button>
                     </a>
                 </div>
 
@@ -48,7 +48,7 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="标题" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="order_id" placeholder="订单ID" />
 
                         {{--<select class="form-control form-filter" name="owner" style="width:96px;">--}}
                             {{--<option value ="-1">选择员工</option>--}}
@@ -154,6 +154,7 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
+                        d.order_id = $('input[name="order_id"]').val();
                         d.keyword = $('input[name="keyword"]').val();
                         d.owner = $('select[name="owner"]').val();
                         d.finished = $('select[name="finished"]').val();
@@ -201,7 +202,7 @@
                         }
                     },
                     {
-                        "width": "64px",
+                        "width": "48px",
                         "title": "类型",
                         "data": 'item_type',
                         "orderable": false,
@@ -212,10 +213,19 @@
                         }
                     },
                     {
+                        "width": "48px",
+                        "title": "订单ID",
+                        "data": "order_id",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "className": "text-left",
                         "width": "120px",
-                        "title": "订单",
-                        "data": "client_id",
+                        "title": "订单行程",
+                        "data": "order_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.order_er == null)
@@ -329,28 +339,28 @@
 ////                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 //                        }
 //                    },
-                    {
-                        "width": "60px",
-                        "title": "状态",
-                        "data": "item_status",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(row.item_status == 1)
-                            {
-                                return '<small class="btn-xs btn-success">启用</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
-                            }
-                        }
-                    },
+//                    {
+//                        "width": "60px",
+//                        "title": "状态",
+//                        "data": "item_status",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+////                            return data;
+//                            if(row.deleted_at != null)
+//                            {
+//                                return '<small class="btn-xs bg-black">已删除</small>';
+//                            }
+//
+//                            if(row.item_status == 1)
+//                            {
+//                                return '<small class="btn-xs btn-success">启用</small>';
+//                            }
+//                            else
+//                            {
+//                                return '<small class="btn-xs btn-danger">禁用</small>';
+//                            }
+//                        }
+//                    },
                     {
                         "width": "144px",
                         "title": "操作",
@@ -386,11 +396,11 @@
                             }
 
                             var html =
-                                    $html_able+
+//                                    $html_able+
 //                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
-                                    '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
+//                                    '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
 //                                    $html_publish+
-                                    $html_delete+
+//                                    $html_delete+
 //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
                                     '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
 //                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+

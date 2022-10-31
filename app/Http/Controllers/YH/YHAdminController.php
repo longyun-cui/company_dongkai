@@ -172,7 +172,6 @@ class YHAdminController extends Controller
     }
 
 
-
     // 【用户-员工管理】管理员-删除（）
     public function operate_user_staff_admin_delete()
     {
@@ -188,7 +187,6 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_user_staff_admin_delete_permanently(request()->all());
     }
-
 
 
     // 【用户-员工管理】启用
@@ -230,6 +228,9 @@ class YHAdminController extends Controller
 
 
 
+    /*
+     * 客户管理
+     */
     // 【客户管理】添加
     public function operate_user_client_create()
     {
@@ -243,13 +244,25 @@ class YHAdminController extends Controller
         else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
     }
 
-    // 【员工管理】【全部用户】返回-列表-视图
+
+    // 【客户管理】启用
+    public function operate_user_client_admin_enable()
+    {
+        return $this->repo->operate_user_client_admin_enable(request()->all());
+    }
+    // 【客户管理】禁用
+    public function operate_user_client_admin_disable()
+    {
+        return $this->repo->operate_user_client_admin_disable(request()->all());
+    }
+
+
+    // 【客户管理】返回-列表-视图
     public function view_user_client_list_for_all()
     {
         if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
     }
-
 
 
 
@@ -517,6 +530,18 @@ class YHAdminController extends Controller
     }
 
 
+    // 【车辆管理】启用
+    public function operate_item_car_admin_enable()
+    {
+        return $this->repo->operate_item_car_admin_enable(request()->all());
+    }
+    // 【车辆管理】禁用
+    public function operate_item_car_admin_disable()
+    {
+        return $this->repo->operate_item_car_admin_disable(request()->all());
+    }
+
+
 
 
 
@@ -531,13 +556,6 @@ class YHAdminController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_order_list_for_all_datatable(request()->all());
-    }
-
-    // 【订单管理-财务往来记录】返回-列表-视图（全部任务）
-    public function view_item_order_finance_record()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_finance_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_order_finance_record_datatable(request()->all());
     }
 
 
@@ -577,6 +595,11 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_item_order_get(request()->all());
     }
+    // 【订单管理】获取-详情
+    public function operate_item_order_get_html()
+    {
+        return $this->repo->operate_item_order_get_html(request()->all());
+    }
 
 
     // 【订单管理】获取-详情
@@ -593,6 +616,28 @@ class YHAdminController extends Controller
     }
 
 
+    // 【订单管理】修改-基本信息
+    public function operate_item_order_info_set()
+    {
+        return $this->repo->operate_item_order_info_set(request()->all());
+    }
+
+    // 【订单管理】添加-行程记录
+    public function operate_item_order_travel_set()
+    {
+        return $this->repo->operate_item_order_travel_set(request()->all());
+    }
+
+
+
+
+    // 【订单管理-财务往来记录】返回-列表-视图（全部任务）
+    public function view_item_order_finance_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_order_finance_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_order_finance_record_datatable(request()->all());
+    }
+
     // 【订单管理】添加-财务记录
     public function operate_item_order_finance_record_create()
     {
@@ -605,10 +650,13 @@ class YHAdminController extends Controller
     }
 
 
-    // 【订单管理】添加-财务记录
-    public function operate_item_order_travel_set()
+
+
+    // 【订单管理-修改记录】返回-列表-视图（全部任务）
+    public function view_item_order_modify_record()
     {
-        return $this->repo->operate_item_order_travel_set(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_order_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_order_modify_record_datatable(request()->all());
     }
 
 

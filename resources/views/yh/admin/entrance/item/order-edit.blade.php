@@ -58,18 +58,17 @@
                     </div>
                 </div>
 
-                {{--车辆类型--}}
+                {{--车辆所属--}}
                 <div class="form-group form-category">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 车辆类型</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 车辆所属</label>
                     <div class="col-md-8">
                         <div class="btn-group">
 
-                            @if(in_array($me->user_type, [0,1]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 11))
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
                                 <button type="button" class="btn">
                                     <span class="radio">
                                         <label>
-                                            <input type="radio" name="user_type" value="11" checked="checked"> 自有
+                                            <input type="radio" name="car_owner_type" value="1" checked="checked"> 自有
                                             {{--<input type="radio" name="user_type" value=11--}}
                                             {{--@if($operate == 'edit' && $data->user_type == 11) checked="checked" @endif--}}
                                             {{--> 总经理--}}
@@ -77,46 +76,42 @@
                                     </span>
                                 </button>
                             @endif
-                            @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 21))
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 21))
                                 <button type="button" class="btn">
                                     <span class="radio">
                                         <label>
-                                            @if($operate == 'edit' && $data->user_type == 21)
-                                                <input type="radio" name="user_type" value=21 checked="checked"> 外请
+                                            @if($operate == 'edit' && $data->car_owner_type == 21)
+                                                <input type="radio" name="car_owner_type" value=21 checked="checked"> 外请
                                             @else
-                                                <input type="radio" name="user_type" value=21> 外请
+                                                <input type="radio" name="car_owner_type" value=21> 外请
                                             @endif
                                         </label>
                                     </span>
                                 </button>
                             @endif
-                            @endif
 
-                            @if(in_array($me->user_type, [0,1,11,21]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 22))
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 41))
                                 <button type="button" class="btn">
                                     <span class="radio">
                                         <label>
-                                            @if($operate == 'edit' && $data->user_type == 22)
-                                                <input type="radio" name="user_type" value=22 checked="checked"> 外配
+                                            @if($operate == 'edit' && $data->car_owner_type == 41)
+                                                <input type="radio" name="car_owner_type" value=41 checked="checked"> 外配
                                             @else
-                                                <input type="radio" name="user_type" value=22> 外配
+                                                <input type="radio" name="car_owner_type" value=41> 外配
                                             @endif
                                         </label>
                                     </span>
                                 </button>
-                            @endif
                             @endif
 
                         </div>
                     </div>
                 </div>
 
-                {{--选择自有车辆--}}
-                <div class="form-group">
+                {{--自有车辆--}}
+                @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
+                <div class="form-group inside-car">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 自有车辆</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
@@ -139,13 +134,33 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
-                {{--选择自有车辆--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择车挂</label>
+                {{--外请或外派车辆--}}
+                @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 41)))
+                <div class="form-group outside-car" @if($operate == 'create') style="display:none;" @endif>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 外部车辆</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="trailer_id1" id="select2-trailer">
-                            <option data-id="0" value="0">选择车挂</option>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="outside_car" placeholder="外部车车牌" value="{{ $data->outside_car or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="outside_trailer" placeholder="外部车挂" value="{{ $data->outside_trailer or '' }}">
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                {{--箱型--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择箱型</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="container_type" id="select2-container">
+                            <option value="0">选择</option>
+                            <option value="9.6">9.6</option>
+                            <option value="12.5">12.5</option>
+                            <option value="15">15</option>
+                            <option value="16.5">16.5</option>
                         </select>
                     </div>
                 </div>
@@ -199,20 +214,112 @@
                     </div>
                 </div>
 
-                {{--经停地--}}
+
+
+
+                {{--所属公司--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">经停地</label>
+                    <label class="control-label col-md-2">所属公司</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="stopover_place1" placeholder="经停地" value="{{ $data->stopover or '' }}">
+                        <input type="text" class="form-control" name="subordinate_company" placeholder="所属公司" value="{{ $data->subordinate_company or '' }}">
                     </div>
                 </div>
-                {{--经停地--}}
+                {{--回单状态--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">经停地</label>
+                    <label class="control-label col-md-2">回单状态</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="stopover_place2" placeholder="经停地" value="{{ $data->stopover or '' }}">
+                        <input type="text" class="form-control" name="receipt_status" placeholder="回单状态" value="{{ $data->receipt_status or '' }}">
                     </div>
                 </div>
+                {{--回单地址--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">回单地址</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="receipt_address" placeholder="回单地址" value="{{ $data->receipt_address or '' }}">
+                    </div>
+                </div>
+                {{--GPS--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">GPS</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="GPS" placeholder="GPS" value="{{ $data->GPS or '' }}">
+                    </div>
+                </div>
+                {{--固定线路--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">固定线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="fixed_route" placeholder="固定线路" value="{{ $data->fixed_route or '' }}">
+                    </div>
+                </div>
+                {{--临时线路--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">临时线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="temporary_route" placeholder="临时线路" value="{{ $data->temporary_route or '' }}">
+                    </div>
+                </div>
+
+
+                {{--单号--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">单号</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="order_number" placeholder="单号" value="{{ $data->order_number or '' }}">
+                    </div>
+                </div>
+                {{--收款人--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">收款人</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="payee_name" placeholder="收款人" value="{{ $data->payee_name or '' }}">
+                    </div>
+                </div>
+                {{--安排人--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">安排人</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="arrange_people" placeholder="安排人" value="{{ $data->arrange_people or '' }}">
+                    </div>
+                </div>
+                {{--车货源--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">车货源</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="car_supply" placeholder="车货源" value="{{ $data->car_supply or '' }}">
+                    </div>
+                </div>
+                {{--车辆管理人--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">车辆管理人</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="car_managerial_people" placeholder="车辆管理人" value="{{ $data->car_managerial_people or '' }}">
+                    </div>
+                </div>
+                {{--主驾--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">主驾</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="driver" placeholder="主驾" value="{{ $data->driver or '' }}">
+                    </div>
+                </div>
+                {{--副驾--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">副驾</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="copilot" placeholder="副驾" value="{{ $data->copilot or '' }}">
+                    </div>
+                </div>
+                {{--车辆管理人--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">重量</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="weight" placeholder="重量" value="{{ $data->weight or '' }}">
+                    </div>
+                </div>
+
+
+
 
                 {{--描述--}}
                 <div class="form-group _none">
@@ -319,8 +426,8 @@
         });
 
 
-        // 【选择时间】
-        $("#form-edit-item").on('click', "input[name=time_type]", function() {
+        // 【选择车辆所属】
+        $("#form-edit-item").on('click', "input[name=car_owner_type]", function() {
             // checkbox
 //            if($(this).is(':checked')) {
 //                $('.time-show').show();
@@ -330,9 +437,11 @@
             // radio
             var $value = $(this).val();
             if($value == 1) {
-                $('.time-show').show();
+                $('.inside-car').show();
+                $('.outside-car').hide();
             } else {
-                $('.time-show').hide();
+                $('.outside-car').show();
+                $('.inside-car').hide();
             }
         });
 

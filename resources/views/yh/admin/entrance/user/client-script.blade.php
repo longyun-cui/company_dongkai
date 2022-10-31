@@ -48,106 +48,6 @@
 
 
 
-        // 显示【修改密码】
-        $("#item-main-body").on('click', ".item-password-admin-change-show", function() {
-            var $that = $(this);
-            $('input[name=user_id]').val($that.attr('data-id'));
-            $('#modal-password-body .user-name').html($that.attr('data-name'));
-            $('input[name=user-password]').val('');
-            $('input[name=user-password-confirm]').val('');
-            $('#modal-password-body').modal('show');
-        });
-        // 【修改密码】取消
-        $("#modal-password-body").on('click', "#item-password-admin-change-cancel", function() {
-            $('input[name=user_id]').val('');
-            $('#modal-password-body .user-name').html('');
-            $('input[name=user-password]').val('');
-            $('input[name=user-password-confirm]').val('');
-            $('#modal-password-body').modal('hide');
-        });
-        // 【修改密码】提交
-        $("#modal-password-body").on('click', "#item-password-admin-change-submit", function() {
-            var $that = $(this);
-            layer.msg('确定"修改"么', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-                    var options = {
-                        url: "{{ url('/user/staff-password-admin-change') }}",
-                        type: "post",
-                        dataType: "json",
-                        // target: "#div2",
-                        success: function (data) {
-                            if(!data.success) layer.msg(data.msg);
-                            else
-                            {
-                                layer.msg(data.msg);
-                                $('#modal-password-body').modal('hide');
-                            }
-                        }
-                    };
-                    $("#form-password-admin-change-modal").ajaxSubmit(options);
-                }
-            });
-        });
-        // 【重置密码】提交
-        $("#item-main-body").on('click', ".item-password-admin-reset-submit", function() {
-            var $that = $(this);
-            layer.msg('确定"重置"么', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-                    $.post(
-                        "{{ url('/user/staff-password-admin-reset') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "staff-password-admin-reset",
-                            user_id: $that.attr('data-id')
-                        },
-                        function(data){
-                            if(!data.success) layer.msg(data.msg);
-                            else
-                            {
-                                layer.msg('重置成功！');
-                            }
-                        },
-                        'json'
-                    );
-                }
-            });
-        });
-
-
-
-
-        // 【登录】
-        $("#item-main-body").on('click', ".item-login-submit", function() {
-            var $that = $(this);
-            $.post(
-                "{{ url('/admin/user/user-login') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    user_id: $that.attr('data-id')
-                },
-                function(data){
-                    if(!data.success) layer.msg(data.msg);
-                    else
-                    {
-                        console.log(data);
-//                        window.open('/');
-                        var temp_window=window.open();
-                        if(data.data.env == 'test') temp_window.location = "{{ env('DOMAIN_TEST_DEFAULT') }}";
-                        else temp_window.location = "{{ env('DOMAIN_DEFAULT') }}";
-
-                    }
-                },
-                'json'
-            );
-        });
-
-
-
-
         // 【删除】
         $("#item-main-body").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
@@ -156,10 +56,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/staff-admin-delete') }}",
+                        "{{ url('/user/client-admin-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "staff-admin-delete",
+                            operate: "client-admin-delete",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -183,10 +83,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/staff-admin-restore') }}",
+                        "{{ url('/user/client-admin-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "staff-admin-restore",
+                            operate: "client-admin-restore",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -210,10 +110,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/staff-admin-delete-permanently') }}",
+                        "{{ url('/user/client-admin-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "staff-admin-delete-permanently",
+                            operate: "client-admin-delete-permanently",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -241,10 +141,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/staff-admin-enable') }}",
+                        "{{ url('/user/client-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "staff-admin-enable",
+                            operate: "client-admin-enable",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -268,10 +168,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/staff-admin-disable') }}",
+                        "{{ url('/user/client-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "staff-admin-disable",
+                            operate: "client-admin-disable",
                             user_id: $that.attr('data-id')
                         },
                         function(data){

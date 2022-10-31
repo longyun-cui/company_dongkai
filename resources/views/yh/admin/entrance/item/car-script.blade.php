@@ -37,7 +37,7 @@
         // 【数据分析】
         $("#item-main-body").on('click', ".item-statistic-submit", function() {
             var $that = $(this);
-            window.open("/statistic/statistic-item?id="+$that.attr('data-id'));
+            window.open("/item/car-statistic?id="+$that.attr('data-id'));
 //            window.location.href = "/admin/statistic/statistic-item?id="+$that.attr('data-id');
         });
 
@@ -149,7 +149,7 @@
 
 
 
-        // 内容【获取详情】
+        // 【获取详情】
         $("#item-main-body").on('click', ".item-detail-show", function() {
             var $that = $(this);
             var $data = new Object();
@@ -157,7 +157,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/item/task-get') }}",
+                url: "{{ url('/item/car-get') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -185,7 +185,7 @@
 
         });
 
-        // 内容【管理员-删除】
+        // 【管理员-删除】
         $("#item-main-body").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
             layer.msg('确定要"删除"么？', {
@@ -193,10 +193,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-delete') }}",
+                        "{{ url('/item/car-admin-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-delete",
+                            operate: "car-admin-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -213,7 +213,7 @@
             });
         });
 
-        // 内容【管理员-恢复】
+        // 【管理员-恢复】
         $("#item-main-body").on('click', ".item-admin-restore-submit", function() {
             var $that = $(this);
             layer.msg('确定要"恢复"么？', {
@@ -221,10 +221,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-restore') }}",
+                        "{{ url('/item/car-admin-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-restore",
+                            operate: "car-admin-restore",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -241,7 +241,7 @@
             });
         });
 
-        // 内容【管理员-永久删除】
+        // 【管理员-永久删除】
         $("#item-main-body").on('click', ".item-admin-delete-permanently-submit", function() {
             var $that = $(this);
             layer.msg('确定要"永久删除"么？', {
@@ -249,10 +249,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-delete-permanently') }}",
+                        "{{ url('/item/car-admin-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-delete-permanently",
+                            operate: "car-admin-delete-permanently",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -269,7 +269,7 @@
             });
         });
 
-        // 内容【推送】
+        // 【发布】
         $("#item-main-body").on('click', ".item-publish-submit", function() {
             var $that = $(this);
             layer.msg('确定要"发布"么？', {
@@ -306,10 +306,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-enable') }}",
+                        "{{ url('/item/car-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-enable",
+                            operate: "car-admin-enable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -333,10 +333,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-disable') }}",
+                        "{{ url('/item/car-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-disable",
+                            operate: "car-admin-disable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){

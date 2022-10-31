@@ -48,7 +48,7 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="标题" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="id" placeholder="ID" />
 
                         <select class="form-control form-filter" name="staff" style="width:96px;">
                             <option value ="-1">选择员工</option>
@@ -107,6 +107,7 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -152,7 +153,8 @@
 </div>
 
 
-<div class="modal fade" id="modal-body">
+{{--显示-基本信息--}}
+<div class="modal fade modal-main-body" id="modal-info-detail-body">
     <div class="col-md-8 col-md-offset-2" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
 
         <div class="row">
@@ -161,39 +163,182 @@
                 <div class="box- box-info- form-container">
 
                     <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">内容详情</h3>
+                        <h3 class="box-title">订单【<span class="info-detail-title"></span>】详情</h3>
                         <div class="box-tools pull-right">
                         </div>
                     </div>
 
                     <form action="" method="post" class="form-horizontal form-bordered" id="form-edit-modal">
-                        <div class="box-body">
+                        <div class="box-body  info-body">
 
                             {{ csrf_field() }}
                             <input type="hidden" name="operate" value="work-order" readonly>
                             <input type="hidden" name="id" value="0" readonly>
 
-                            {{--标题--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">标题</label>
+                            {{--客户--}}
+                            <div class="form-group item-detail-client">
+                                <label class="control-label col-md-2">客户</label>
                                 <div class="col-md-8 ">
-                                    <div><b class="item-detail-title"></b></div>
+                                    <span class="item-detail-text"></span>
                                 </div>
+                                <label class="col-md-2"></label>
                             </div>
-                            {{--内容--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">内容</label>
+                            {{--金额--}}
+                            <div class="form-group item-detail-amount">
+                                <label class="control-label col-md-2">金额</label>
                                 <div class="col-md-8 ">
-                                    <div class="item-detail-content"></div>
+                                    <span class="item-detail-text">333</span>
                                 </div>
+                                <div class="col-md-2 item-detail-operate" data-operate=""></div>
                             </div>
-                            {{--附件--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">附件</label>
+                            {{--车辆类型--}}
+                            <div class="form-group item-detail-car_owner_type">
+                                <label class="control-label col-md-2">车辆所属</label>
                                 <div class="col-md-8 ">
-                                    <div class="item-detail-attachment"></div>
+                                    <span class="item-detail-text"></span>
                                 </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="car_owner_type"></div>
                             </div>
+                            {{--车牌--}}
+                            <div class="form-group item-detail-car">
+                                <label class="control-label col-md-2">车牌</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                            </div>
+                            {{--车挂--}}
+                            <div class="form-group item-detail-trailer">
+                                <label class="control-label col-md-2">车挂</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                            </div>
+                            {{--箱型--}}
+                            <div class="form-group item-detail-container_type">
+                                <label class="control-label col-md-2">箱型</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="container_type"></div>
+                            </div>
+                            {{--所属公司--}}
+                            <div class="form-group item-detail-subordinate_company">
+                                <label class="control-label col-md-2">所属公司</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="subordinate_company"></div>
+                            </div>
+                            {{--回单状态--}}
+                            <div class="form-group item-detail-receipt_status">
+                                <label class="control-label col-md-2">回单状态</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="receipt_status"></div>
+                            </div>
+                            {{--回单地址--}}
+                            <div class="form-group item-detail-receipt_address">
+                                <label class="control-label col-md-2">回单地址</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="receipt_address"></div>
+                            </div>
+                            {{--GPS--}}
+                            <div class="form-group item-detail-GPS">
+                                <label class="control-label col-md-2">GPS</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="GPS"></div>
+                            </div>
+                            {{--固定线路--}}
+                            <div class="form-group item-detail-fixed_route">
+                                <label class="control-label col-md-2">固定线路</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="fixed_route"></div>
+                            </div>
+                            {{--临时线路--}}
+                            <div class="form-group item-detail-temporary_route">
+                                <label class="control-label col-md-2">临时线路</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="temporary_route"></div>
+                            </div>
+                            {{--单号--}}
+                            <div class="form-group item-detail-order_number">
+                                <label class="control-label col-md-2">单号</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="order_number"></div>
+                            </div>
+                            {{--收款人--}}
+                            <div class="form-group item-detail-payee_name">
+                                <label class="control-label col-md-2">收款人</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="payee_name"></div>
+                            </div>
+                            {{--安排人--}}
+                            <div class="form-group item-detail-arrange_people">
+                                <label class="control-label col-md-2">安排人</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="arrange_people"></div>
+                            </div>
+                            {{--车货源--}}
+                            <div class="form-group item-detail-car_supply">
+                                <label class="control-label col-md-2">车货源</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="car_supply"></div>
+                            </div>
+                            {{--车辆管理人--}}
+                            <div class="form-group item-detail-car_managerial_people">
+                                <label class="control-label col-md-2">车辆管理人</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="car_managerial_people"></div>
+                            </div>
+                            {{--主驾--}}
+                            <div class="form-group item-detail-driver">
+                                <label class="control-label col-md-2">主驾</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="driver"></div>
+                            </div>
+                            {{--副驾--}}
+                            <div class="form-group item-detail-copilot">
+                                <label class="control-label col-md-2">副驾</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="copilot"></div>
+                            </div>
+                            {{--重量--}}
+                            <div class="form-group item-detail-weight">
+                                <label class="control-label col-md-2">重量</label>
+                                <div class="col-md-8 ">
+                                    <span class="item-detail-text"></span>
+                                </div>
+                                <div class="col-md-2 item-detail-operate" data-operate="weight"></div>
+                            </div>
+
+
+
+
                             {{--说明--}}
                             <div class="form-group _none">
                                 <label class="control-label col-md-2">说明</label>
@@ -205,11 +350,65 @@
                         </div>
                     </form>
 
-                    <div class="box-footer">
+                    <div class="box-footer _none">
                         <div class="row _none">
                             <div class="col-md-8 col-md-offset-2">
                                 <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
                                 <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PORTLET-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{--修改-基本信息--}}
+<div class="modal fade modal-main-body" id="modal-info-set-body">
+    <div class="col-md-4 col-md-offset-4" id="info-edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PORTLET-->
+                <div class="box- box-info- form-container">
+
+                    <div class="box-header with-border" style="margin:16px 0;">
+                        <h3 class="box-title">修改订单【<span class="info-set-title"></span>】</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+
+                    <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-set-form">
+                        <div class="box-body">
+
+                            {{ csrf_field() }}
+                            <input type="hidden" name="info-set-operate" value="item-order-info-set" readonly>
+                            <input type="hidden" name="info-set-order-id" value="0" readonly>
+                            <input type="hidden" name="info-set-operate-type" value="add" readonly>
+                            <input type="hidden" name="info-set-column-key" value="" readonly>
+
+
+
+                            {{--支付方式--}}
+                            <div class="form-group">
+                                <label class="control-label col-md-2 info-set-column-name"></label>
+                                <div class="col-md-8 ">
+                                    <input type="text" class="form-control" name="info-set-column-value" placeholder="" value="">
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+
+                    <div class="box-footer">
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <button type="button" class="btn btn-success" id="item-info-set-submit"><i class="fa fa-check"></i> 提交</button>
+                                <button type="button" class="btn btn-default" id="item-info-set-cancel">取消</button>
                             </div>
                         </div>
                     </div>
@@ -393,7 +592,7 @@
         <div class="box box-info- form-container datatable-body item-main-body" id="item-content-body">
 
             <div class="box-header with-border" style="margin:16px 0;">
-                <h3 class="box-title">内容列表</h3>
+                <h3 class="box-title">财务记录</h3>
                 <div class="caption">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
@@ -565,7 +764,7 @@
                                 </div>
                             </div>
                             {{--备注--}}
-                            <div class="form-group _none">
+                            <div class="form-group">
                                 <label class="control-label col-md-2">备注</label>
                                 <div class="col-md-8 ">
                                     {{--<input type="text" class="form-control" name="description" placeholder="描述" value="">--}}
@@ -591,6 +790,87 @@
         </div>
     </div>
 </div>
+
+
+{{--修改记录--}}
+<div class="modal fade modal-main-body" id="modal-modify-body">
+    <div class="col-md-8 col-md-offset-2" id="edit-ctn-" style="background:#fff;">
+        <div class="box box-info- form-container datatable-body item-main-body" id="item-content-body-">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">修改记录</h3>
+                <div class="caption">
+                    <i class="icon-pin font-blue"></i>
+                    <span class="caption-subject font-blue sbold uppercase"></span>
+                    <a href="javascript:void(0);">
+                        <button type="button" class="btn btn-success pull-right item-finance-create-show"><i class="fa fa-plus"></i> 添加记录</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="box-body datatable-body item-main-body" id="item-main-body">
+
+                <div class="row col-md-12 datatable-search-row">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="标题" />
+
+                        <select class="form-control form-filter" name="finished" style="width:96px;">
+                            <option value ="-1">选择</option>
+                            <option value ="1">收入</option>
+                            <option value ="11">支出</option>
+                        </select>
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
+                            <i class="fa fa-circle-o-notch"></i> 重置
+                        </button>
+
+                    </div>
+                </div>
+
+                <table class='table table-striped table-bordered' id='datatable_ajax_inner_record'>
+                    <thead>
+                    <tr role='row' class='heading'>
+                        <th>选择</th>
+                        <th>序号</th>
+                        <th>ID</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <!-- datatable end -->
+            </div>
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-4 col-sm-8 col-xs-12">
+                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
+                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
+                        <div class="input-group">
+                            <span class="input-group-addon"><input type="checkbox" id="check-all"></span>
+                            <input type="text" class="form-control" name="bulk-detect-rank" id="bulk-detect-rank" placeholder="指定排名">
+                            <span class="input-group-addon btn btn-default" id="set-rank-bulk-submit"><i class="fa fa-check"></i>提交</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
 @endsection
 
 
@@ -614,6 +894,7 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
+                        d.id = $('input[name="id"]').val();
                         d.keyword = $('input[name="keyword"]').val();
                         d.website = $('input[name="website"]').val();
                         d.staff = $('select[name="staff"]').val();
@@ -662,7 +943,7 @@
                         }
                     },
                     {
-                        "width": "160px",
+                        "width": "120px",
                         "title": "状态",
                         "data": "id",
                         "orderable": false,
@@ -753,6 +1034,28 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "48px",
+                        "title": "车辆<br>所属",
+                        "data": "car_owner_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 1)
+                            {
+                                return '<small class="btn-xs bg-green">自有</small>';
+                            }
+                            else if(data == 21)
+                            {
+                                return '<small class="btn-xs bg-blue">外请</small>';
+                            }
+                            else if(data == 41)
+                            {
+                                return '<small class="btn-xs bg-purple">外配</small>';
+                            }
+                            else return "有误";
+                        }
+                    },
+                    {
                         "className": "text-left font-12px",
                         "width": "80px",
                         "title": "车辆",
@@ -760,9 +1063,17 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             var car_html = '';
-                            if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
                             var trailer_html = '';
-                            if(row.trailer_er != null) trailer_html = '<a href="javascript:void(0);">'+row.trailer_er.name+'</a>';
+                            if(row.car_owner_type == 1)
+                            {
+                                if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
+                                if(row.trailer_er != null) trailer_html = '<a href="javascript:void(0);">'+row.trailer_er.name+'</a>';
+                            }
+                            else
+                            {
+                                car_html = '<a href="javascript:void(0);">'+row.outside_car+'</a>';
+                                trailer_html = '<a href="javascript:void(0);">'+row.outside_trailer+'</a>';
+                            }
                             return car_html + '<br>' + trailer_html;
                         }
                     },
@@ -989,14 +1300,16 @@
 //                        }
 //                    },
                     {
-                        "width": "240px",
+                        "width": "280px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
+                            var $html_detail = '';
                             var $html_travel = '';
                             var $html_finance = '';
+                            var $html_record = '';
 
                             if(row.item_status == 1)
                             {
@@ -1019,8 +1332,10 @@
                                 $html_publish = '';
                                 $html_edit = '<a class="btn btn-xs btn-default disabled">编辑</a>';
                                 $html_edit = '';
+                                $html_detail = '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>';
                                 $html_travel = '<a class="btn btn-xs bg-olive item-travel-show" data-id="'+data+'">行程管理</a>';
                                 $html_finance = '<a class="btn btn-xs bg-orange item-finance-show" data-id="'+data+'">财务管理</a>';
+                                $html_record = '<a class="btn btn-xs bg-purple item-record-show" data-id="'+data+'">修改记录</a>';
                             }
 
                             if(row.deleted_at == null)
@@ -1037,11 +1352,12 @@
 //                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
                                     $html_edit+
                                     $html_publish+
+                                    $html_detail+
                                     $html_travel+
                                     $html_finance+
 //                                    $html_delete+
 //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">详情</a>'+
+                                    $html_record+
 //                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
                                     '';
                             return html;
@@ -1377,6 +1693,275 @@
     //        TableDatatablesAjax_inner.init();
     //    });
 </script>
+
+
+<script>
+    var TableDatatablesAjax_inner_record = function ($id) {
+        var datatableAjax_inner_record = function ($id) {
+
+            var dt = $('#datatable_ajax_inner_record');
+            dt.DataTable().destroy();
+            var ajax_datatable_inner_record = dt.DataTable({
+                "retrieve": true,
+                "destroy": true,
+//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[20, 50, 200], ["20", "50", "200"]],
+                "bAutoWidth": false,
+                "processing": true,
+                "serverSide": true,
+                "searching": false,
+                "ajax": {
+                    'url': "/item/order-modify-record?id="+$id,
+                    "type": 'POST',
+                    "dataType" : 'json',
+                    "data": function (d) {
+                        d._token = $('meta[name="_token"]').attr('content');
+                        d.searchengine = $('select[name="searchengine"]').val();
+                        d.keyword = $('input[name="keyword"]').val();
+                        d.website = $('input[name="website"]').val();
+                        d.keywordstatus = $('select[name="keywordstatus"]').val();
+                        d.rank = $('select[name="inner_rank"]').val();
+//                        d.nickname 	= $('input[name="nickname"]').val();
+//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
+//                        d.certificate_state = $('select[name="certificate_state"]').val();
+//                        d.admin_name = $('input[name="admin_name"]').val();
+//
+//                        d.created_at_from = $('input[name="created_at_from"]').val();
+//                        d.created_at_to = $('input[name="created_at_to"]').val();
+//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
+//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
+
+                    },
+                },
+                "pagingType": "simple_numbers",
+                "order": [],
+                "orderCellsTop": true,
+                "columns": [
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "序号",
+                        "data": null,
+                        "targets": 0,
+                        "orderable": false
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "选择",
+                        "data": "id",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            return '<label><input type="checkbox" name="bulk-detect-record-id" class="minimal" value="'+data+'"></label>';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "ID",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "32px",
+                        "title": "类型",
+                        "data": "operate_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.operate_type == 1) return '<small class="btn-xs bg-olive">添加</small>';
+                            else if(row.operate_type == 11) return '<small class="btn-xs bg-orange">修改</small>';
+                            else return '有误';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "40px",
+                        "title": "修改属性",
+                        "data": "column",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            if(data == "amount") return '金额';
+                            else if(data == "container_type") return '箱型';
+                            else if(data == "subordinate_company") return '所属公司';
+                            else if(data == "receipt_status") return '回单状态';
+                            else if(data == "receipt_address") return '回单地址';
+                            else if(data == "GPS") return 'GPS';
+                            else if(data == "fixed_route") return '固定路线';
+                            else if(data == "temporary_route") return '临时路线';
+                            else if(data == "order_number") return '单号';
+                            else if(data == "payee_name") return '收款人';
+                            else if(data == "arrange_people") return '安排人';
+                            else if(data == "car_supply") return '车货源';
+                            else if(data == "car_managerial_people") return '车辆管理员';
+                            else if(data == "driver") return '主驾';
+                            else if(data == "copilot") return '副驾';
+                            else if(data == "weight") return '重量';
+                            else return '有误';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "48px",
+                        "title": "修改前",
+                        "data": "before",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "48px",
+                        "title": "修改后",
+                        "data": "after",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "48px",
+                        "title": "操作人",
+                        "data": "creator_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "title": "时间",
+                        "data": "created_at",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+//                            return $year+'-'+$month+'-'+$day;
+                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                        }
+                    },
+                    {
+                        "title": "操作",
+                        'data': 'id',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            var $date = row.transaction_date.trim().split(" ")[0];
+                            var html =
+//                                '<a class="btn btn-xs item-enable-submit" data-id="'+value+'">启用</a>'+
+//                                '<a class="btn btn-xs item-disable-submit" data-id="'+value+'">禁用</a>'+
+//                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
+//                                '<a class="btn btn-xs item-statistics-submit" data-id="'+value+'">流量统计</a>'+
+                                    {{--'<a class="btn btn-xs" href="/item/edit?id='+value+'">编辑</a>'+--}}
+                                //                                '<a class="btn btn-xs item-edit-submit" data-id="'+value+'">编辑</a>'+
+                                '<a class="btn btn-xs item-set-rank-show" data-id="'+data+
+                                //                                '" data-name="'+row.keyword+'" data-rank="'+row.rank+'" data-date="'+$date+
+                                '">修改</a>';
+                            return html;
+                        }
+                    }
+                ],
+                "drawCallback": function (settings) {
+
+                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+                    this.api().column(0).nodes().each(function(cell, i) {
+                        cell.innerHTML =  startIndex + i + 1;
+                    });
+
+                    ajax_datatable_inner_record.$('.tooltips').tooltip({placement: 'top', html: true});
+                    $("a.verify").click(function(event){
+                        event.preventDefault();
+                        var node = $(this);
+                        var tr = node.closest('tr');
+                        var nickname = tr.find('span.nickname').text();
+                        var cert_name = tr.find('span.certificate_type_name').text();
+                        var action = node.attr('data-action');
+                        var certificate_id = node.attr('data-id');
+                        var action_name = node.text();
+
+                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
+                        layer.open({
+                            'title': '警告',
+                            content: tpl
+                                .replace('@action_name', action_name)
+                                .replace('@nickname', nickname)
+                                .replace('@certificate_type_name', cert_name),
+                            btn: ['Yes', 'No'],
+                            yes: function(index) {
+                                layer.close(index);
+                                $.post(
+                                    '/admin/medsci/certificate/user/verify',
+                                    {
+                                        action: action,
+                                        id: certificate_id,
+                                        _token: '{{csrf_token()}}'
+                                    },
+                                    function(json){
+                                        if(json['response_code'] == 'success') {
+                                            layer.msg('操作成功!', {time: 3500});
+                                            ajax_datatable.ajax.reload();
+                                        } else {
+                                            layer.alert(json['response_data'], {time: 10000});
+                                        }
+                                    }, 'json');
+                            }
+                        });
+                    });
+
+//                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+//                        checkboxClass: 'icheckbox_minimal-blue',
+//                        radioClass   : 'iradio_minimal-blue'
+//                    });
+                },
+                "language": { url: '/common/dataTableI18n' },
+            });
+
+
+            dt.on('click', '.filter-submit', function () {
+                ajax_datatable_inner_record.ajax.reload();
+            });
+
+            dt.on('click', '.filter-cancel', function () {
+                $('textarea.form-filter, input.form-filter, select.form-filter', dt).each(function () {
+                    $(this).val("");
+                });
+
+//                $('select.form-filter').selectpicker('refresh');
+                $('select.form-filter option').attr("selected",false);
+                $('select.form-filter').find('option:eq(0)').attr('selected', true);
+
+                ajax_datatable_inner_record.ajax.reload();
+            });
+
+
+//            dt.on('click', '#all_checked', function () {
+////                layer.msg(this.checked);
+//                $('input[name="detect-record"]').prop('checked',this.checked);//checked为true时为默认显示的状态
+//            });
+
+
+        };
+        return {
+            init: datatableAjax_inner_record
+        }
+    }();
+    //    $(function () {
+    //        TableDatatablesAjax_inner_record.init();
+    //    });
+</script>
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script-for-info')
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script-for-finance')
 @endsection

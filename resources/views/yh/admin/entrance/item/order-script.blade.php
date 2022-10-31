@@ -157,11 +157,11 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/item/task-get') }}",
+                url: "{{ url('/item/order-get-html') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
-                    id: $that.attr('data-id')
+                    order_id: $that.attr('data-id')
                 },
                 success:function(data){
                     if(!data.success) layer.msg(data.msg);
@@ -171,17 +171,23 @@
                     }
                 }
             });
+
             $('input[name=id]').val($that.attr('data-id'));
-            $('.item-user-id').html($that.attr('data-user-id'));
-            $('.item-username').html($that.attr('data-username'));
-            $('.item-title').html($data.title);
-            $('.item-content').html($data.content);
-            if($data.attachment_name)
-            {
-                var $attachment_html = $data.attachment_name+'&nbsp&nbsp&nbsp&nbsp'+'<a href="/all/download-item-attachment?item-id='+$data.id+'">下载</a>';
-                $('.item-attachment').html($attachment_html);
-            }
-            $('#modal-body').modal('show');
+            $('input[name=info-set-order-id]').val($that.attr('data-id'));
+            $('.info-detail-title').html($that.attr('data-id'));
+            $('.info-set-title').html($that.attr('data-id'));
+//            $('.item-user-id').html($that.attr('data-user-id'));
+//            $('.item-username').html($that.attr('data-username'));
+//            $('.item-title').html($data.title);
+//            $('.item-content').html($data.content);
+//            if($data.attachment_name)
+//            {
+//                var $attachment_html = $data.attachment_name+'&nbsp&nbsp&nbsp&nbsp'+'<a href="/all/download-item-attachment?item-id='+$data.id+'">下载</a>';
+//                $('.item-attachment').html($attachment_html);
+//            }
+
+            $('.info-body').html($data.html);
+            $('#modal-info-detail-body').modal('show');
 
         });
 
@@ -525,11 +531,30 @@
 
 
 
+
+        // 【修改记录】
+        $(".item-main-body").on('click', ".item-record-show", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('#set-rank-bulk-submit').attr('data-keyword-id',$id);
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_inner_record.init($id);
+
+            $('#modal-modify-body').modal('show');
+        });
+
+
+
+
         $('.form_datetime').datetimepicker({
             locale: moment.locale('zh-cn'),
             format:"YYYY-MM-DD HH:mm"
         });
-
 
 
         $(".form_date").datepicker({

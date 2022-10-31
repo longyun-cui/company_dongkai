@@ -2,6 +2,7 @@
 namespace App\Repositories\YH;
 
 use App\Models\YH\YH_Finance;
+use App\Models\YH\YH_Record;
 use App\Models\YH\YH_User;
 use App\Models\YH\YH_UserExt;
 use App\Models\YH\YH_Client;
@@ -382,7 +383,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_category,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -443,7 +444,7 @@ class YHAdminRepository {
 
 //                    $result = upload_storage($post_data["portrait"]);
 //                    $result = upload_storage($post_data["portrait"], null, null, 'assign');
-                    $result = upload_img_storage($post_data["portrait"],'portrait_for_user_by_user_'.$mine->id,'zy/unique/portrait_for_user','');
+                    $result = upload_img_storage($post_data["portrait"],'portrait_for_user_by_user_'.$mine->id,'yh/unique/portrait_for_user','');
                     if($result["result"])
                     {
                         $mine->portrait_img = $result["local"];
@@ -455,7 +456,7 @@ class YHAdminRepository {
                 {
                     if($operate == 'create')
                     {
-                        $portrait_path = "zy/unique/portrait_for_user/".date('Y-m-d');
+                        $portrait_path = "yh/unique/portrait_for_user/".date('Y-m-d');
                         if (!is_dir(storage_resource_path($portrait_path)))
                         {
                             mkdir(storage_resource_path($portrait_path), 0777, true);
@@ -908,7 +909,7 @@ class YHAdminRepository {
         $query = YH_User::select('*')
             ->with(['creator'])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,41,42,61,81,88]);
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,42,61,81,82,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
 //            ->with('ep','parent','fund')
 //            ->withCount([
@@ -1075,7 +1076,7 @@ class YHAdminRepository {
             'list_link'=>$list_link,
         ]);
     }
-    // 【客户管理管理】返回-编辑-视图
+    // 【客户管理】返回-编辑-视图
     public function view_user_client_edit()
     {
         $this->get_me();
@@ -1127,7 +1128,7 @@ class YHAdminRepository {
             else return view(env('TEMPLATE_YH_ADMIN').'errors.404');
         }
     }
-    // 【客户管理管理】保存数据
+    // 【客户管理】保存数据
     public function operate_user_client_save($post_data)
     {
 //        dd($post_data);
@@ -1148,7 +1149,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_category,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -1192,6 +1193,110 @@ class YHAdminRepository {
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【客户管理】管理员-启用
+    public function operate_user_client_admin_enable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'client-admin-enable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = YH_Client::find($id);
+        if(!$user) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->user_status = 1;
+            $user->timestamps = false;
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--client--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【客户管理】管理员-禁用
+    public function operate_user_client_admin_disable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'client-admin-disable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = YH_Client::find($id);
+        if(!$user) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->user_status = 9;
+            $user->timestamps = false;
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--client--fail");
+
+            DB::commit();
+            return response_success([]);
         }
         catch (Exception $e)
         {
@@ -1634,7 +1739,7 @@ class YHAdminRepository {
                         unlink(storage_resource_path($mine_cover_pic));
                     }
 
-                    $result = upload_img_storage($post_data["cover"],'','zy/common');
+                    $result = upload_img_storage($post_data["cover"],'','yh/common');
                     if($result["result"])
                     {
                         $mine->cover_pic = $result["local"];
@@ -2519,7 +2624,7 @@ class YHAdminRepository {
 
 //            $result = upload_storage($post_data["attachment"]);
 //            $result = upload_storage($post_data["attachment"], null, null, 'assign');
-            $result = upload_file_storage($post_data["attachment"],null,'zy/unique/attachment','');
+            $result = upload_file_storage($post_data["attachment"],null,'yh/unique/attachment','');
             if($result["result"])
             {
 //                $mine->attachment_name = $result["name"];
@@ -3198,7 +3303,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_category,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -3242,6 +3347,110 @@ class YHAdminRepository {
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【车辆管理】管理员-启用
+    public function operate_item_car_admin_enable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'car-admin-enable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Car::find($id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 1;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--car--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【车辆管理】管理员-禁用
+    public function operate_item_car_admin_disable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'car-admin-disable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Car::find($id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 9;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--car--fail");
+
+            DB::commit();
+            return response_success([]);
         }
         catch (Exception $e)
         {
@@ -3361,7 +3570,7 @@ class YHAdminRepository {
         if(empty($post_data['keyword']))
         {
             $list =YH_Client::select(['id','username as text'])
-                ->where(['user_category'=>11])
+                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
@@ -3369,7 +3578,7 @@ class YHAdminRepository {
         {
             $keyword = "%{$post_data['keyword']}%";
             $list =YH_Client::select(['id','username as text'])->where('username','like',"%$keyword%")
-                ->where(['user_category'=>11])
+                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
@@ -3378,23 +3587,10 @@ class YHAdminRepository {
     //
     public function operate_order_select2_car($post_data)
     {
-//        $type = $post_data['type'];
-//        if($type == 0) $district_type = 0;
-//        else if($type == 1) $district_type = 0;
-//        else if($type == 2) $district_type = 1;
-//        else if($type == 3) $district_type = 2;
-//        else if($type == 4) $district_type = 3;
-//        else if($type == 21) $district_type = 4;
-//        else if($type == 31) $district_type = 21;
-//        else if($type == 41) $district_type = 31;
-//        else $district_type = 0;
-//        if(!is_numeric($type)) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
-//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
-
         if(empty($post_data['keyword']))
         {
             $list =YH_Car::select(['id','name as text'])
-                ->where(['item_type'=>1])
+                ->where(['item_status'=>1, 'item_type'=>1])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
@@ -3402,7 +3598,7 @@ class YHAdminRepository {
         {
             $keyword = "%{$post_data['keyword']}%";
             $list =YH_Car::select(['id','username as text'])->where('name','like',"%$keyword%")
-                ->where(['item_type'=>1])
+                ->where(['item_status'=>1, 'item_type'=>1])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
@@ -3414,7 +3610,7 @@ class YHAdminRepository {
         if(empty($post_data['keyword']))
         {
             $list =YH_Car::select(['id','name as text'])
-                ->where(['item_type'=>21])
+                ->where(['item_status'=>1, 'item_type'=>21])
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
         }
@@ -3422,12 +3618,33 @@ class YHAdminRepository {
         {
             $keyword = "%{$post_data['keyword']}%";
             $list =YH_Car::select(['id','name as text'])->where('name','like',"%$keyword%")
-                ->where(['v'=>21])
+                ->where(['item_status'=>1, 'item_type'=>21])
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
         }
         return $list;
     }
+    //
+    public function operate_order_select2_container($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $list =YH_Car::select(['id','name as text'])
+                ->where(['item_status'=>1, 'item_type'=>31])
+//                ->whereIn('item_type',[41,61,88])
+                ->get()->toArray();
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $list =YH_Car::select(['id','name as text'])->where('name','like',"%$keyword%")
+                ->where(['item_status'=>1, 'item_type'=>31])
+//                ->whereIn('item_type',[41,61,88])
+                ->get()->toArray();
+        }
+        return $list;
+    }
+
 
     // 【订单管理】返回-添加-视图
     public function view_item_order_create()
@@ -3456,6 +3673,7 @@ class YHAdminRepository {
     public function view_item_order_edit()
     {
         $this->get_me();
+        $me = $this->me;
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit';
@@ -3487,7 +3705,7 @@ class YHAdminRepository {
             $mine = YH_Order::with(['client_er','car_er','trailer_er'])->find($id);
             if($mine)
             {
-//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+
                 $mine->custom = json_decode($mine->custom);
                 $mine->custom2 = json_decode($mine->custom2);
                 $mine->custom3 = json_decode($mine->custom3);
@@ -3520,7 +3738,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_category,[0,1,11,81,88])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -3537,6 +3755,8 @@ class YHAdminRepository {
         {
             $mine = YH_Order::find($operate_id);
             if(!$mine) return response_error([],"该订单不存在，刷新页面重试！");
+
+            if(!in_array($me->user_type,[82,88]) && $mine->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
         }
         else return response_error([],"参数有误！");
 
@@ -3618,7 +3838,7 @@ class YHAdminRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = YH_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
         if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
 
         $this->get_me();
@@ -3645,6 +3865,80 @@ class YHAdminRepository {
         }
 
         return response_success($item,"");
+
+    }
+
+    public function operate_item_order_get_html($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        if($item->car_owner_type == 1)
+        {
+            $item->car_owner_type_name = "自有";
+            $item->car = $item->car_er->name;
+            $item->trailer = $item->trailer_er->name;
+        }
+        else if($item->car_owner_type == 21)
+        {
+            $item->car_owner_type_name = "外请";
+            $item->car = $item->outside_car;
+            $item->trailer = $item->outside_trailer;
+        }
+        else if($item->car_owner_type == 41)
+        {
+            $item->car_owner_type_name = "外派";
+            $item->car = $item->outside_car;
+            $item->trailer = $item->outside_trailer;
+        }
+
+        $item->should_departure_time_html = date("Y-m-d H:i", $item->should_departure_time);
+        $item->should_arrival_time_html = date("Y-m-d H:i", $item->should_arrival_time);
+
+        $item->is_actual_departure = $item->actual_departure_time ? 1 : 0;
+        if($item->is_actual_departure) $item->actual_departure_time_html = date("Y-m-d H:i", $item->actual_departure_time);
+
+        $item->is_actual_arrival = $item->actual_arrival_time ? 1 : 0;
+        if($item->is_actual_arrival) $item->actual_arrival_time_html = date("Y-m-d H:i", $item->actual_arrival_time);
+
+        $item->is_stopover = $item->stopover_place ? 1 : 0;
+        if($item->is_stopover)
+        {
+            $item->is_stopover_arrival = $item->stopover_arrival_time ? 1 : 0;
+            if($item->is_stopover_arrival) $item->stopover_arrival_time_html = date("Y-m-d H:i", $item->stopover_arrival_time);
+
+            $item->is_stopover_departure = $item->stopover_departure_time ? 1 : 0;
+            if($item->is_stopover_departure) $item->stopover_departure_time_html = date("Y-m-d H:i", $item->stopover_departure_time);
+        }
+
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-info-html';
+        $html = view($view_blade)->with(['data'=>$item])->__toString();
+
+        return response_success(['html'=>$html],"");
 
     }
 
@@ -3678,7 +3972,8 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[82,88]) && $item->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -3768,7 +4063,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,88])->get();
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $car_list = YH_Car::select('id','name')->whereIn('item_type',[1,21])->get();
 
@@ -3798,6 +4093,8 @@ class YHAdminRepository {
 //            ->where(['userstatus'=>'正常','status'=>1])
 //            ->whereIn('usergroup',['Agent','Agent2']);
 
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
         if(!empty($post_data['staff']))
@@ -3913,13 +4210,15 @@ class YHAdminRepository {
     }
 
 
+
+
     // 【订单管理-财务往来记录】返回-列表-视图
     public function view_item_order_finance_record($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,88])->get();
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_order_list_for_all'] = 'active menu-open';
@@ -3972,7 +4271,7 @@ class YHAdminRepository {
     }
 
 
-    // 【订单管理】保存数据
+    // 【订单管理】添加-财务数据-保存数据
     public function operate_item_order_finance_record_create($post_data)
     {
 //        dd($post_data);
@@ -3997,7 +4296,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_category,[0,1,11,81,88])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
 
 
 //        $operate = $post_data["operate"];
@@ -4082,7 +4381,95 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】设置行程时间
+    // 【订单管理】设置-基本信息
+    public function operate_item_order_info_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-info-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+        if($column_key == "amount")
+        {
+             if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
+        }
+        else
+        {
+            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_category"] = 11;
+
+                if($operate_type == "add") $record_data["operate_type"] = 1;
+                else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                $record_data["column"] = $column_key;
+                $record_data["before"] = $before;
+                $record_data["after"] = $column_value;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if($bool_1)
+                {
+                }
+                else throw new Exception("insert--record--fail");
+
+            }
+            DB::commit();
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【订单管理】设置-行程时间
     public function operate_item_order_travel_set($post_data)
     {
         $messages = [
@@ -4185,6 +4572,71 @@ class YHAdminRepository {
 
 
 
+    // 【订单管理-财务往来记录】返回-列表-视图
+    public function view_item_order_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_order_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【订单管理-财务往来记录】返回-列表-数据
+    public function get_item_order_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Record::select('*')
+            ->with(['creator','owner'])
+            ->where(['order_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -4208,7 +4660,9 @@ class YHAdminRepository {
         $query = YH_Finance::select('*')
             ->with(['creator','owner','order_er']);
 
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
 
 
         if(!empty($post_data['item_type']))
