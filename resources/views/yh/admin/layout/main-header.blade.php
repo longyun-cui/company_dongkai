@@ -166,7 +166,7 @@
                             <img src="/AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                         @endif
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">{{ $me->username }}</span>
+                        <span class="hidden-xs">{{ $me->true_name }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->

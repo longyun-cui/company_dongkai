@@ -90,11 +90,11 @@
                     </div>
                 </div>
 
+                <div class="tableArea">
                 <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                             <th>ID</th>
-                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -113,6 +113,7 @@
                     <tbody>
                     </tbody>
                 </table>
+                </div>
 
             </div>
 
@@ -876,6 +877,36 @@
 
 
 
+@section('custom-style')
+<style>
+    .tableArea .dataTables_wrapper {
+        position: relative;
+        clear: both;
+        zoom: 1;
+        overflow-x: auto;
+    }
+    .tableArea .row {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+     }
+    .tableArea .col-sm-12,.tableArea .col-md-12,.tableArea .col-ls-12,.tableArea .col-sm-6,.tableArea .col-md-6,.tableArea .col-ls-6 {
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .tableArea table {
+        min-width: 1400px;
+    }
+</style>
+@endsection
+
+
+
+
 @section('custom-script')
 <script>
     var TableDatatablesAjax = function () {
@@ -934,7 +965,7 @@
 //                    },
                     {
                         "className": "font-12px",
-                        "width": "32px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -997,7 +1028,7 @@
                         }
                     },
                     {
-                        "width": "32px",
+                        "width": "50px",
                         "title": "订单<br>金额",
                         "data": "amount",
                         "orderable": true,
@@ -1006,7 +1037,7 @@
                         }
                     },
                     {
-                        "width": "32px",
+                        "width": "50px",
                         "title": "收入<br>金额",
                         "data": "income_total",
                         "orderable": true,
@@ -1015,7 +1046,7 @@
                         }
                     },
                     {
-                        "width": "32px",
+                        "width": "50px",
                         "title": "支出<br>金额",
                         "data": "expenditure_total",
                         "orderable": true,
@@ -1025,7 +1056,7 @@
                     },
                     {
                         "className": "text-left",
-                        "width": "64px",
+                        "width": "80px",
                         "title": "客户",
                         "data": "client_id",
                         "orderable": false,
@@ -1035,7 +1066,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "48px",
+                        "width": "60px",
                         "title": "车辆<br>所属",
                         "data": "car_owner_type",
                         "orderable": false,
@@ -1112,10 +1143,10 @@
 //                    },
                     {
                         "className": "font-12px",
-                        "width": "108px",
+                        "width": "120px",
                         "title": "限定<br>时间",
                         "data": 'id',
-                        "orderable": true,
+                        "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $departure_time = new Date(row.should_departure_time*1000);
@@ -1144,10 +1175,10 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "160px",
+                        "width": "180px",
                         "title": "实际<br>时间",
                         "data": 'id',
-                        "orderable": true,
+                        "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $actual_departure_time_html = '';
@@ -1224,8 +1255,8 @@
 //                        }
 //                    },
                     {
-                        "className": "text-left",
-                        "width": "64px",
+                        "className": "text-center",
+                        "width": "60px",
                         "title": "创建人",
                         "data": "creator_id",
                         "orderable": false,
@@ -1235,7 +1266,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "108px",
+                        "width": "100px",
                         "title": "创建<br>时间",
                         "data": 'created_at',
                         "orderable": true,
@@ -1248,8 +1279,8 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
-//                            return $year+'-'+$month+'-'+$day;
-                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     },
