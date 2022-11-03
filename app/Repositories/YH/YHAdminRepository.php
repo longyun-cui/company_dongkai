@@ -3597,7 +3597,7 @@ class YHAdminRepository {
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Car::select(['id','username as text'])->where('name','like',"%$keyword%")
+            $list =YH_Car::select(['id','name as text'])->where('name','like',"%$keyword%")
                 ->where(['item_status'=>1, 'item_type'=>1])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
