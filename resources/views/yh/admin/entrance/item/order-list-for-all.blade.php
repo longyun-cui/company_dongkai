@@ -1061,7 +1061,18 @@
                         "data": "client_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.client_er == null ? '未知' : '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
+//                            return row.client_er == null ? '未知' : '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
+                            if(row.client_er == null) return '未知';
+                            else {
+                                if(row.client_er.short_name)
+                                {
+                                    return '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
+                                }
+                                else
+                                {
+                                    return '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.username+'</a>';
+                                }
+                            }
                         }
                     },
                     {
