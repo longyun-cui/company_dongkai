@@ -64,17 +64,9 @@
 
 
                 <!-- datatable start -->
-                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
+                <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
-                            <th>ID</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,7 +129,7 @@
                 "columns": [
                     {
                         "className": "font-12px",
-                        "width": "48px",
+                        "width": "60px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -177,97 +169,39 @@
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a target="_blank" href="/user/'+data+'">'+row.username+'</a>';
+                            return '<a href="javascript:void(0);">'+row.username+'</a>';
                         }
                     },
                     {
                         "className": "text-left",
                         "width": "80px",
-                        "title": "客户简称",
-                        "data": "id",
+                        "title": "简称",
+                        "data": "short_name",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a target="_blank" href="/user/'+data+'">'+row.short_name+'</a>';
+                            return data;
                         }
                     },
                     {
                         "className": "text-left",
-                        "width": "96px",
-                        "title": "手机号",
+                        "width": "100px",
+                        "title": "所属公司",
+                        "data": "company",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-left",
+                        "width": "100px",
+                        "title": "手机",
                         "data": "mobile",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
-//                    {
-//                        "className": "text-left",
-//                        "width":"128px",
-//                        "title": "负责人",
-//                        "data": "id",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            if(row.principal) {
-//                                return '<a target="_blank" href="/user/'+data+'">'+row.principal.username+'</a>';
-//                            }
-//                            else return '--';
-//                        }
-//                    },
-//                    {
-//                        "width":"72px",
-//                        "title": "成员数",
-//                        "data": "id",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            if(row.member_count && row.member_count > 0)
-//                            {
-//                                return '<a target="_blank" href="/admin/user/member?user-id='+data+'">'+row.member_count+'</a>';
-//                            }
-//                            else return '--';
-//                        }
-//                    },
-//                    {
-//                        "width":"72px",
-//                        "title": "粉丝数",
-//                        "data": "fund_total",
-//                        "orderable": true,
-//                        render: function(data, type, row, meta) {
-//                            if(row.fans_count && row.fans_count > 0)
-//                            {
-//                                return '<a target="_blank" href="/admin/user/fans?user-id='+data+'">'+row.fans_count+'</a>';
-//                            }
-//                            else return '--';
-//                        }
-//                    },
-//                    {
-//                        "width": "40px",
-//                        "title": "浏览",
-//                        "data": "visit_num",
-//                        "orderable": true,
-//                        render: function(data, type, row, meta) {
-//                            return data;
-//                        }
-//                    },
-//                    {
-//                        "width": "40px",
-//                        "title": "分享",
-//                        "data": "share_num",
-//                        "orderable": true,
-//                        render: function(data, type, row, meta) {
-//                            return data;
-//                        }
-//                    },
-//                    {
-//                        "data": 'menu_id',
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-////                            return row.menu == null ? '未分类' : row.menu.title;
-//                            if(row.menu == null) return '<small class="label btn-info">未分类</small>';
-//                            else {
-//                                return '<a href="/org-admin/item/menu?id='+row.menu.encode_id+'">'+row.menu.title+'</a>';
-//                            }
-//                        }
-//                    },
 //                    {
 //                        "data": 'id',
 //                        "orderable": false,
@@ -282,7 +216,7 @@
 //                    },
                     {
                         "className": "font-12px",
-                        "width": "64px",
+                        "width": "80px",
                         "title": "创建人",
                         "data": "creator_id",
                         "orderable": false,

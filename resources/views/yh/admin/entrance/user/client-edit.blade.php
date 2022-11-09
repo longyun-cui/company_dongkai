@@ -2,7 +2,8 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local']))[l]@endif A.{{ $title_text or '编辑客户' }} - 管理员后台系统 - {{ config('info.info.short_name') }}
+    @if(in_array(env('APP_ENV'),['local']))L.@endif
+    {{ $title_text or '编辑客户' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -52,9 +53,16 @@
                         <input type="text" class="form-control" name="short_name" placeholder="客户简称" value="{{ $data->short_name or '' }}">
                     </div>
                 </div>
+                {{--所属公司--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">所属公司</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="company" placeholder="所属公司" value="{{ $data->company or '' }}">
+                    </div>
+                </div>
                 {{--手机--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 登录手机</label>
+                <div class="form-group">
+                    <label class="control-label col-md-2">手机</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="mobile" placeholder="手机" value="{{ $data->mobile or '' }}">
                     </div>
