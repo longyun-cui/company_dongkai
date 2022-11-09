@@ -846,7 +846,7 @@
 @section('custom-style')
 <style>
     .tableArea table {
-        min-width: 3200px;
+        min-width: 4000px;
     }
 </style>
 @endsection
@@ -1596,7 +1596,43 @@
                         }
                     },
                     {
-                        "className": "font-12px",
+                        "width": "80px",
+                        "title": "重量",
+                        "data": "weight",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "GPS",
+                        "data": "GPS",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "100px",
+                        "title": "回单状态",
+                        "data": "receipt_status",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "100px",
+                        "title": "回单地址",
+                        "data": "receipt_address",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
                         "width": "120px",
                         "title": "创建时间",
                         "data": 'created_at',
