@@ -166,6 +166,31 @@
                 </div>
                 @endif
 
+                {{--主驾--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">主驾</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="driver_name" placeholder="姓名" value="{{ $data->driver_name or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="driver_phone" placeholder="电话" value="{{ $data->driver_phone or '' }}">
+                        </div>
+                    </div>
+                </div>
+                {{--副驾--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">副驾</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="copilot_name" placeholder="姓名" value="{{ $data->copilot_name or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="copilot_phone" placeholder="电话" value="{{ $data->copilot_phone or '' }}">
+                        </div>
+                    </div>
+                </div>
+
                 {{--箱型--}}
                 <div class="form-group outside-car _none">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择箱型</label>
@@ -253,35 +278,6 @@
                     </div>
                 </div>
                 @endif
-
-                {{--主驾--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">主驾</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="driver_name" placeholder="主驾" value="{{ $data->driver_name or '' }}">
-                    </div>
-                </div>
-                {{--副驾--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">副驾</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="copilot_name" placeholder="副驾" value="{{ $data->copilot_name or '' }}">
-                    </div>
-                </div>
-                {{--主驾电话--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">主驾电话</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="driver_phone" placeholder="主驾电话" value="{{ $data->driver_phone or '' }}">
-                    </div>
-                </div>
-                {{--副驾电话--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">副驾电话</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="copilot_phone" placeholder="副驾电话" value="{{ $data->copilot_phone or '' }}">
-                    </div>
-                </div>
 
 
                 {{--派车时间--}}

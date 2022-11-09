@@ -1148,6 +1148,33 @@
                         }
                     },
                     {
+                        "width": "120px",
+                        "title": "线路",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.fixed_route) return row.fixed_route;
+                            else
+                            {
+                                if(row.temporary_route) return row.fixed_route;
+                                else return '';
+                            }
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "行程",
+                        "data": "departure_place",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data == null ? '--' : data;
+                            var $stopover_html = '';
+                            if(row.stopover_place) $stopover_html = '--' + row.stopover_place;
+                            return row.departure_place + $stopover_html + '--' + row.destination_place;
+                        }
+                    },
+                    {
                         "className": "text-center",
                         "width": "60px",
                         "title": "所属",
@@ -1341,19 +1368,6 @@
                             return reurn_html;
                         }
                     },
-                    {
-                        "className": "text-left",
-                        "width": "120px",
-                        "title": "行程",
-                        "data": "departure_place",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data == null ? '--' : data;
-                            var $stopover_html = '';
-                            if(row.stopover_place) $stopover_html = '--' + row.stopover_place;
-                            return row.departure_place + $stopover_html + '--' + row.destination_place;
-                        }
-                    },
 //                    {
 //                        "className": "text-left",
 //                        "width": "64px",
@@ -1444,6 +1458,35 @@
                     },
                     {
                         "className": "font-12px",
+                        "width": "120px",
+                        "title": "实际到达时间",
+                        "data": 'actual_arrival_time',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $actual_departure_time_html = '';
+                            var $stopover_arrival_time_html = '';
+                            var $stopover_departure_time_html = '';
+                            var $actual_arrival_time_html = '';
+
+                            if(data)
+                            {
+                                var $actual_arrival_time = new Date(data*1000);
+                                var $actual_arrival_year = $actual_arrival_time.getFullYear();
+                                var $actual_arrival_month = ('00'+($actual_arrival_time.getMonth()+1)).slice(-2);
+                                var $actual_arrival_day = ('00'+($actual_arrival_time.getDate())).slice(-2);
+                                var $actual_arrival_hour = ('00'+$actual_arrival_time.getHours()).slice(-2);
+                                var $actual_arrival_minute = ('00'+$actual_arrival_time.getMinutes()).slice(-2);
+                                var $actual_arrival_second = ('00'+$actual_arrival_time.getSeconds()).slice(-2);
+
+                                $actual_arrival_time_html = '<a href="javascript:void(0);">'+$actual_arrival_year+'-'+$actual_arrival_month+'-'+$actual_arrival_day+'&nbsp;'+$actual_arrival_hour+':'+$actual_arrival_minute+'</a>'+'<br>';
+                            }
+
+                            return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
                         "width": "180px",
                         "title": "经停时间",
                         "data": 'id',
@@ -1478,35 +1521,6 @@
                                 var $stopover_departure_second = ('00'+$stopover_departure_time.getSeconds()).slice(-2);
 
                                 $stopover_departure_time_html = '<a href="javascript:void(0);">'+'经停-出发 '+$stopover_departure_year+'-'+$stopover_departure_month+'-'+$stopover_departure_day+'&nbsp;'+$stopover_departure_hour+':'+$stopover_departure_minute+'</a>'+'<br>';
-                            }
-
-                            return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;
-                        }
-                    },
-                    {
-                        "className": "font-12px",
-                        "width": "120px",
-                        "title": "实际到达时间",
-                        "data": 'actual_arrival_time',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            var $actual_departure_time_html = '';
-                            var $stopover_arrival_time_html = '';
-                            var $stopover_departure_time_html = '';
-                            var $actual_arrival_time_html = '';
-
-                            if(data)
-                            {
-                                var $actual_arrival_time = new Date(data*1000);
-                                var $actual_arrival_year = $actual_arrival_time.getFullYear();
-                                var $actual_arrival_month = ('00'+($actual_arrival_time.getMonth()+1)).slice(-2);
-                                var $actual_arrival_day = ('00'+($actual_arrival_time.getDate())).slice(-2);
-                                var $actual_arrival_hour = ('00'+$actual_arrival_time.getHours()).slice(-2);
-                                var $actual_arrival_minute = ('00'+$actual_arrival_time.getMinutes()).slice(-2);
-                                var $actual_arrival_second = ('00'+$actual_arrival_time.getSeconds()).slice(-2);
-
-                                $actual_arrival_time_html = '<a href="javascript:void(0);">'+$actual_arrival_year+'-'+$actual_arrival_month+'-'+$actual_arrival_day+'&nbsp;'+$actual_arrival_hour+':'+$actual_arrival_minute+'</a>'+'<br>';
                             }
 
                             return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;

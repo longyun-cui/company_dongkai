@@ -4172,8 +4172,12 @@ class YHAdminRepository {
                 {
                     $list[$k]->travel_status = "待发车";
 
-                    if(time() <= $v->should_departure_time) $list[$k]->travel_result = "等待出发";
-                    else $list[$k]->travel_result = "发车超时";
+                    if($v->should_departure_time)
+                    {
+                        if(time() <= $v->should_departure_time) $list[$k]->travel_result = "等待出发";
+                        else $list[$k]->travel_result = "发车超时";
+                    }
+                    else $list[$k]->travel_result = "等待出发";
                 }
                 else
                 {
@@ -4188,30 +4192,30 @@ class YHAdminRepository {
                     {
                         $list[$k]->travel_status = "已完成";
 
-                        if($v->actual_arrival_time <= $v->should_arrival_time)
+
+                        if($v->should_arrival_time)
                         {
-                            $list[$k]->travel_result = "正常";
+                            if($v->actual_arrival_time <= $v->should_arrival_time)
+                            {
+                                $list[$k]->travel_result = "正常";
+                            }
+                            else
+                            {
+                                $time_subtract = $v->actual_arrival_time - $v->should_arrival_time;
+
+                                $date=floor($time_subtract/86400);
+                                $hour=floor($time_subtract%86400/3600);
+                                $minute=ceil($time_subtract%86400%60);
+                                $second=floor($time_subtract%86400%60);
+                                $result = $date."天".$hour."小时".$minute."分钟";
+                                $list[$k]->travel_result_time = $result;
+                            }
                         }
                         else
                         {
-                            $list[$k]->travel_result = "超时";
-
-
-
-                            $time_subtract = $v->actual_arrival_time - $v->should_arrival_time;
-
-
-                            $date=floor($time_subtract/86400);
-                            $hour=floor($time_subtract%86400/3600);
-                            $minute=ceil($time_subtract%86400%60);
-                            $second=floor($time_subtract%86400%60);
-                            $result = $date."天".$hour."小时".$minute."分钟";
-                            $list[$k]->travel_result_time = $result;
-
-
-
-
+                            $list[$k]->travel_result = "正常";
                         }
+
                     }
 
                 }
