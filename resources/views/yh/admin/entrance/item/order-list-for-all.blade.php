@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="tableArea">
-                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
+                <table class='table table-striped- table-bordered- table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
@@ -615,16 +615,6 @@
                 <table class='table table-striped table-bordered' id='datatable_ajax_inner'>
                     <thead>
                     <tr role='row' class='heading'>
-                        <th>选择</th>
-                        <th>序号</th>
-                        <th>ID</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -821,16 +811,6 @@
                 <table class='table table-striped table-bordered' id='datatable_ajax_inner_record'>
                     <thead>
                     <tr role='row' class='heading'>
-                        <th>选择</th>
-                        <th>序号</th>
-                        <th>ID</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -1071,7 +1051,7 @@
                     },
                     {
                         "className": "text-left",
-                        "width": "80px",
+                        "width": "100px",
                         "title": "客户",
                         "data": "client_id",
                         "orderable": false,
@@ -1405,7 +1385,15 @@
                             var $departure_minute = ('00'+$departure_time.getMinutes()).slice(-2);
                             var $departure_second = ('00'+$departure_time.getSeconds()).slice(-2);
 
-                            return '<a href="javascript:void(0);">'+$departure_year+'-'+$departure_month+'-'+$departure_day+'&nbsp;'+$departure_hour+':'+$departure_minute+'</a>'+'<br>';
+                            var $currentYear = new Date().getFullYear();
+                            if($departure_year == $currentYear)
+                            {
+                                return '<a href="javascript:void(0);">'+$departure_month+'-'+$departure_day+'&nbsp;'+$departure_hour+':'+$departure_minute+'</a>'+'<br>';
+                            }
+                            else
+                            {
+                                return '<a href="javascript:void(0);">'+$departure_year+'-'+$departure_month+'-'+$departure_day+'&nbsp;'+$departure_hour+':'+$departure_minute+'</a>'+'<br>';
+                            }
                         }
                     },
                     {
@@ -1425,7 +1413,16 @@
                             var $arrival_minute = ('00'+$arrival_time.getMinutes()).slice(-2);
                             var $arrival_second = ('00'+$arrival_time.getSeconds()).slice(-2);
 
-                            return '<a href="javascript:void(0);">'+$arrival_year+'-'+$arrival_month+'-'+$arrival_day+'&nbsp;'+$arrival_hour+':'+$arrival_minute+'</a>'+'<br>';
+                            var $currentYear = new Date().getFullYear();
+                            if($arrival_year == $currentYear)
+                            {
+                                return '<a href="javascript:void(0);">'+$arrival_month+'-'+$arrival_day+'&nbsp;'+$arrival_hour+':'+$arrival_minute+'</a>'+'<br>';
+                            }
+                            else
+                            {
+                                return '<a href="javascript:void(0);">'+$arrival_year+'-'+$arrival_month+'-'+$arrival_day+'&nbsp;'+$arrival_hour+':'+$arrival_minute+'</a>'+'<br>';
+                            }
+
                         }
                     },
                     {
@@ -1435,25 +1432,26 @@
                         "data": 'actual_departure_time',
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            var $actual_departure_time_html = '';
-                            var $stopover_arrival_time_html = '';
-                            var $stopover_departure_time_html = '';
-                            var $actual_arrival_time_html = '';
+                            if(!data) return '';
 
-                            if(data)
+                            var $actual_departure_time = new Date(data*1000);
+                            var $actual_departure_year = $actual_departure_time.getFullYear();
+                            var $actual_departure_month = ('00'+($actual_departure_time.getMonth()+1)).slice(-2);
+                            var $actual_departure_day = ('00'+($actual_departure_time.getDate())).slice(-2);
+                            var $actual_departure_hour = ('00'+$actual_departure_time.getHours()).slice(-2);
+                            var $actual_departure_minute = ('00'+$actual_departure_time.getMinutes()).slice(-2);
+                            var $actual_departure_second = ('00'+$actual_departure_time.getSeconds()).slice(-2);
+
+
+                            var $currentYear = new Date().getFullYear();
+                            if($actual_departure_year == $currentYear)
                             {
-                                var $actual_departure_time = new Date(data*1000);
-                                var $actual_departure_year = $actual_departure_time.getFullYear();
-                                var $actual_departure_month = ('00'+($actual_departure_time.getMonth()+1)).slice(-2);
-                                var $actual_departure_day = ('00'+($actual_departure_time.getDate())).slice(-2);
-                                var $actual_departure_hour = ('00'+$actual_departure_time.getHours()).slice(-2);
-                                var $actual_departure_minute = ('00'+$actual_departure_time.getMinutes()).slice(-2);
-                                var $actual_departure_second = ('00'+$actual_departure_time.getSeconds()).slice(-2);
-
-                                $actual_departure_time_html = '<a href="javascript:void(0);">'+$actual_departure_year+'-'+$actual_departure_month+'-'+$actual_departure_day+'&nbsp;'+$actual_departure_hour+':'+$actual_departure_minute+'</a>'+'<br>';
+                                return '<a href="javascript:void(0);">'+$actual_departure_month+'-'+$actual_departure_day+'&nbsp;'+$actual_departure_hour+':'+$actual_departure_minute+'</a>';
                             }
-
-                            return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;
+                            else
+                            {
+                                return '<a href="javascript:void(0);">'+$actual_departure_year+'-'+$actual_departure_month+'-'+$actual_departure_day+'&nbsp;'+$actual_departure_hour+':'+$actual_departure_minute+'</a>';
+                            }
                         }
                     },
                     {
@@ -1463,26 +1461,25 @@
                         "data": 'actual_arrival_time',
                         "orderable": false,
                         render: function(data, type, row, meta) {
-//                            return data;
-                            var $actual_departure_time_html = '';
-                            var $stopover_arrival_time_html = '';
-                            var $stopover_departure_time_html = '';
-                            var $actual_arrival_time_html = '';
+                            if(!data) return '';
 
-                            if(data)
+                            var $actual_arrival_time = new Date(data*1000);
+                            var $actual_arrival_year = $actual_arrival_time.getFullYear();
+                            var $actual_arrival_month = ('00'+($actual_arrival_time.getMonth()+1)).slice(-2);
+                            var $actual_arrival_day = ('00'+($actual_arrival_time.getDate())).slice(-2);
+                            var $actual_arrival_hour = ('00'+$actual_arrival_time.getHours()).slice(-2);
+                            var $actual_arrival_minute = ('00'+$actual_arrival_time.getMinutes()).slice(-2);
+                            var $actual_arrival_second = ('00'+$actual_arrival_time.getSeconds()).slice(-2);
+
+                            var $currentYear = new Date().getFullYear();
+                            if($actual_arrival_year == $currentYear)
                             {
-                                var $actual_arrival_time = new Date(data*1000);
-                                var $actual_arrival_year = $actual_arrival_time.getFullYear();
-                                var $actual_arrival_month = ('00'+($actual_arrival_time.getMonth()+1)).slice(-2);
-                                var $actual_arrival_day = ('00'+($actual_arrival_time.getDate())).slice(-2);
-                                var $actual_arrival_hour = ('00'+$actual_arrival_time.getHours()).slice(-2);
-                                var $actual_arrival_minute = ('00'+$actual_arrival_time.getMinutes()).slice(-2);
-                                var $actual_arrival_second = ('00'+$actual_arrival_time.getSeconds()).slice(-2);
-
-                                $actual_arrival_time_html = '<a href="javascript:void(0);">'+$actual_arrival_year+'-'+$actual_arrival_month+'-'+$actual_arrival_day+'&nbsp;'+$actual_arrival_hour+':'+$actual_arrival_minute+'</a>'+'<br>';
+                                return '<a href="javascript:void(0);">'+$actual_arrival_month+'-'+$actual_arrival_day+'&nbsp;'+$actual_arrival_hour+':'+$actual_arrival_minute+'</a>';
                             }
-
-                            return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;
+                            else
+                            {
+                                return '<a href="javascript:void(0);">'+$actual_arrival_year+'-'+$actual_arrival_month+'-'+$actual_arrival_day+'&nbsp;'+$actual_arrival_hour+':'+$actual_arrival_minute+'</a>';
+                            }
                         }
                     },
                     {
@@ -1497,6 +1494,8 @@
                             var $stopover_departure_time_html = '';
                             var $actual_arrival_time_html = '';
 
+                            var $currentYear = new Date().getFullYear();
+
                             if(row.stopover_arrival_time)
                             {
                                 var $stopover_arrival_time = new Date(row.stopover_arrival_time*1000);
@@ -1507,7 +1506,14 @@
                                 var $stopover_arrival_minute = ('00'+$stopover_arrival_time.getMinutes()).slice(-2);
                                 var $stopover_arrival_second = ('00'+$stopover_arrival_time.getSeconds()).slice(-2);
 
-                                $stopover_arrival_time_html = '<a href="javascript:void(0);">'+'经停-到达 '+$stopover_arrival_year+'-'+$stopover_arrival_month+'-'+$stopover_arrival_day+'&nbsp;'+$stopover_arrival_hour+':'+$stopover_arrival_minute+'</a>'+'<br>';
+                                if($stopover_arrival_year == $currentYear)
+                                {
+                                    $stopover_arrival_time_html = '<a href="javascript:void(0);">'+'(到达)'+'&nbsp;&nbsp;'+$stopover_arrival_month+'-'+$stopover_arrival_day+'&nbsp;'+$stopover_arrival_hour+':'+$stopover_arrival_minute+'</a>'+'<br>';
+                                }
+                                else
+                                {
+                                    $stopover_arrival_time_html = '<a href="javascript:void(0);">'+'(到达)'+'&nbsp;&nbsp;&nbsp;'+$stopover_arrival_year+'-'+$stopover_arrival_month+'-'+$stopover_arrival_day+'&nbsp;'+$stopover_arrival_hour+':'+$stopover_arrival_minute+'</a>'+'<br>';
+                                }
                             }
 
                             if(row.stopover_departure_time)
@@ -1520,7 +1526,14 @@
                                 var $stopover_departure_minute = ('00'+$stopover_departure_time.getMinutes()).slice(-2);
                                 var $stopover_departure_second = ('00'+$stopover_departure_time.getSeconds()).slice(-2);
 
-                                $stopover_departure_time_html = '<a href="javascript:void(0);">'+'经停-出发 '+$stopover_departure_year+'-'+$stopover_departure_month+'-'+$stopover_departure_day+'&nbsp;'+$stopover_departure_hour+':'+$stopover_departure_minute+'</a>'+'<br>';
+                                if($stopover_arrival_year == $currentYear)
+                                {
+                                    $stopover_departure_time_html = '<a href="javascript:void(0);">'+'(出发)'+'&nbsp;&nbsp;'+$stopover_departure_month+'-'+$stopover_departure_day+'&nbsp;'+$stopover_departure_hour+':'+$stopover_departure_minute+'</a>'+'<br>';
+                                }
+                                else
+                                {
+                                    $stopover_departure_time_html = '<a href="javascript:void(0);">'+'(出发)'+'&nbsp;&nbsp;'+$stopover_departure_year+'-'+$stopover_departure_month+'-'+$stopover_departure_day+'&nbsp;'+$stopover_departure_hour+':'+$stopover_departure_minute+'</a>'+'<br>';
+                                }
                             }
 
                             return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;
