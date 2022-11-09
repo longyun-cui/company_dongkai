@@ -152,6 +152,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
     // 订单-基本信息
     Route::post('/item/order-info-set', $controller.'@operate_item_order_info_set');
+    Route::post('/item/order-info-time-set', $controller.'@operate_item_order_info_time_set');
     // 订单-行程信息
     Route::post('/item/order-travel-set', $controller.'@operate_item_order_travel_set');
     // 订单-财务信息

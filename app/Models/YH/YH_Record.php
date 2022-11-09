@@ -16,7 +16,7 @@ class YH_Record extends Model
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
         'item_id', 'order_id',
-        'column', 'before', 'after',
+        'column_type', 'column', 'before', 'after',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'time_point', 'time_type', 'start_time', 'end_time', 'address',

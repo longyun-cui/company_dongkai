@@ -191,6 +191,7 @@
 
         });
 
+
         // 内容【管理员-删除】
         $(".item-main-body").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
@@ -366,6 +367,10 @@
 
 
 
+
+
+
+
         // 【行程管理】
         $(".item-main-body").on('click', ".item-travel-show", function() {
             var that = $(this);
@@ -465,7 +470,7 @@
                 $("body").addClass("modal-open");
             });
         });
-        // 【添加财务记录】提交
+        // 【设置行程时间】提交
         $(".modal-main-body").on('click', "#item-travel-set-submit", function() {
             var that = $(this);
             layer.msg('确定"添加"么？', {
@@ -543,6 +548,8 @@
             $('.finance-create-order-id').html($id);
             $('.finance-create-order-title').html($keyword);
 
+//            $('#datatable_ajax_inner_record').empty();
+//            $('#datatable_ajax_inner_record').DataTable().destroy();
             TableDatatablesAjax_inner_record.init($id);
 
             $('#modal-modify-body').modal('show');
@@ -565,6 +572,139 @@
         });
 
 
+
+
+        // 显示【修改属性】
+        $(".item-main-body").on('dblclick', ".order-info-set-text", function() {
+            var $that = $(this);
+            $('.info-set-title').html($that.attr("data-id"));
+            $('.info-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-set-column-value]').val($that.attr("data-value"));
+            $('input[name=info-set-operate-type]').val($that.attr('data-operate-type'));
+
+            $('#modal-info-set-body').modal('show');
+        });
+        // 显示【修改时间】
+        $(".item-main-body").on('dblclick', ".order-info-set-time", function() {
+            var $that = $(this);
+            $('.info-time-set-title').html($that.attr("data-id"));
+            $('.info-time-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-time-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-time-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-time-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            if($that.attr('data-time-type') == "datetime") $('input[name=info-time-set-column-value]').removeClass("form_date").addClass("form_datetime");
+            else if($that.attr('data-time-type') == "date") $('input[name=info-time-set-column-value]').removeClass("form_datetime").addClass("form_date");
+            $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
+
+            $('#modal-info-time-set-body').modal('show');
+        });
+        // 【修改时间】提交
+        $(".modal-main-body").on('click', "#item-info-time-set-submit", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-time-set-column-key"]').val();
+            var $column_value = $('input[name="info-time-set-column-value"]').val();
+            var $time_type = $('input[name="info-time-set-column-value"]').attr('data-time-type');
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-info-time-set') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: $('input[name="info-time-set-operate"]').val(),
+                            order_id: $('input[name="info-time-set-order-id"]').val(),
+                            operate_type: $('input[name="info-time-set-operate-type"]').val(),
+                            column_key: $column_key,
+                            column_value: $column_value,
+                            time_type: $time_type,
+                        },
+                        function(data){
+                            if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                            else
+                            {
+                                layer.close(index);
+                                $('#modal-info-time-set-body').modal('hide');
+//                                $("#modal-info-time-set-body").on("hidden.bs.modal", function () {
+//                                    $("body").addClass("modal-open");
+//                                });
+
+                                $('#datatable_ajax').DataTable().ajax.reload();
+
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+
+//        $(".modal-main-body").off('click').on('click', 'input[data-time-type="datetime"]', function(){
+//            $(this).datetimepicker({
+//                locale: moment.locale('zh-cn'),
+//                format:"YYYY-MM-DD HH:mm"
+//            });
+//        });
+//        $(".modal-main-body").off('click').on('click', 'input[data-time-type="date"]', function(){
+//            $(this).datetimepicker({
+//                locale: moment.locale('zh-cn'),
+//                format:"YYYY-MM-DD"
+//            });
+//        });
+//        $(".modal-main-body").off('click').on('click', '.form_datetime', function(){
+//            $(this).datetimepicker({
+//                locale: moment.locale('zh-cn'),
+//                format:"YYYY-MM-DD HH:mm"
+//            });
+//        });
+//        $(".modal-main-body").off('click').on('click', '.form_date', function(){
+//            $(this).datetimepicker({
+//                locale: moment.locale('zh-cn'),
+//                format:"YYYY-MM-DD"
+//            });
+//        });
+        $(".modal-main-body").on('click', '.time_picker', function(){
+//            $(this).blur();
+            var $that = $(this);
+            if($that.attr('data-time-type') == 'date')
+            {
+//                layer.msg($that.attr('data-time-type'));
+                $(this).datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format:"YYYY-MM-DD"
+                });
+            }
+            else
+            {
+//                layer.msg($that.attr('data-time-type'));
+                $(this).datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format:"YYYY-MM-DD HH:mm"
+                });
+            }
+        });
+
+//        $('.time_picker[data-time-type="datetime"]').datetimepicker({
+//            locale: moment.locale('zh-cn'),
+//            format:"YYYY-MM-DD HH:mm"
+//        });
+//        $('.time_picker[data-time-type="date"]').datetimepicker({
+//            locale: moment.locale('zh-cn'),
+//            format:"YYYY-MM-DD"
+//        });
+//        $('input.time_picker[data-time-type="datetime"]').datetimepicker({
+//            locale: moment.locale('zh-cn'),
+//            format:"YYYY-MM-DD HH:mm"
+//        });
+//        $('input.time_picker[data-time-type="date"]').datetimepicker({
+//            locale: moment.locale('zh-cn'),
+//            format:"YYYY-MM-DD"
+//        });
 
 
     });

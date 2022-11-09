@@ -112,6 +112,7 @@
                                     <option value="12.5" @if($operate == 'edit' && $data->trailer_length == '12.5')selected="selected"@endif>12.5</option>
                                     <option value="15" @if($operate == 'edit' && $data->trailer_length == '15')selected="selected"@endif>15</option>
                                     <option value="16.5" @if($operate == 'edit' && $data->trailer_length == '16.5')selected="selected"@endif>16.5</option>
+                                    <option value="17.5" @if($operate == 'edit' && $data->trailer_length == '17.5')selected="selected"@endif>17.5</option>
                                 </select>
                             </div>
                         </div>
@@ -168,6 +169,141 @@
                                 <input type="text" class="form-control" name="linkman_phone" placeholder="手机" value="{{ $data->linkman_phone or '' }}">
                             </div>
                         </div>
+                        {{--车辆类型--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">车辆类型</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="car_type" placeholder="车辆类型" value="{{ $data->car_type or '' }}">
+                            </div>
+                        </div>
+                        {{--所有人--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">所有人</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="car_owner" placeholder="所有人" value="{{ $data->car_owner or '' }}">
+                            </div>
+                        </div>
+                        {{--住址--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">住址</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="address" placeholder="住址" value="{{ $data->address or '' }}">
+                            </div>
+                        </div>
+                        {{--使用性质--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">使用性质</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="car_function" placeholder="使用性质" value="{{ $data->car_function or '' }}">
+                            </div>
+                        </div>
+                        {{--品牌--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">品牌</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="car_brand" placeholder="品牌" value="{{ $data->car_brand or '' }}">
+                            </div>
+                        </div>
+                        {{--车辆识别代码--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">车辆识别代码</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="car_identification_number" placeholder="车辆识别代码" value="{{ $data->car_identification_number or '' }}">
+                            </div>
+                        </div>
+                        {{--发动机号--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">发动机号</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="engine_number" placeholder="发动机号" value="{{ $data->engine_number or '' }}">
+                            </div>
+                        </div>
+                        {{--车头轴距--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">车头轴距</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="locomotive_wheelbase" placeholder="车头轴距" value="{{ $data->locomotive_wheelbase or '' }}">
+                            </div>
+                        </div>
+                        {{--主油厢--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">主油厢</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="main_fuel_tank" placeholder="主油厢" value="{{ $data->main_fuel_tank or '' }}">
+                            </div>
+                        </div>
+                        {{--副油厢--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">副油厢</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="auxiliary_fuel_tank" placeholder="副油厢" value="{{ $data->auxiliary_fuel_tank or '' }}">
+                            </div>
+                        </div>
+                        {{--总质量--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">总质量</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="total_mass" placeholder="总质量" value="{{ $data->total_mass or '' }}">
+                            </div>
+                        </div>
+                        {{--整备质量--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">整备质量</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="curb_weight" placeholder="整备质量" value="{{ $data->curb_weight or '' }}">
+                            </div>
+                        </div>
+                        {{--核定载质量--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">核定载重质量</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="load_weight" placeholder="核定载重质量" value="{{ $data->load_weight or '' }}">
+                            </div>
+                        </div>
+                        {{--准牵引总质量--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">准牵引总质量</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="traction_mass" placeholder="准牵引总质量" value="{{ $data->traction_mass or '' }}">
+                            </div>
+                        </div>
+                        {{--外廓尺寸--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">外廓尺寸</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="overall_size" placeholder="外廓尺寸" value="{{ $data->overall_size or '' }}">
+                            </div>
+                        </div>
+                        {{--购买日期--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">购买日期</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control date_picker" name="purchase_date" placeholder="购买日期" value="{{ $data->purchase_date or '' }}">
+                            </div>
+                        </div>
+                        {{--注册日期--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">注册日期</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control date_picker" name="registration_date" placeholder="注册日期" value="{{ $data->registration_date or '' }}">
+                            </div>
+                        </div>
+                        {{--发证日期--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">发证日期</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control date_picker" name="issue_date" placeholder="发证日期" value="{{ $data->issue_date or '' }}">
+                            </div>
+                        </div>
+                        {{--检验有效期--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">检验有效期</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control date_picker" name="inspection_validity" placeholder="检验有效期" value="{{ $data->inspection_validity or '' }}">
+                            </div>
+                        </div>
+
+
                         {{--描述--}}
                         <div class="form-group">
                             <label class="control-label col-md-2">描述</label>
@@ -271,6 +407,11 @@
             $("#multiple-images").fileinput({
                 allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
                 showUpload: false
+            });
+
+            $('.date_picker').datetimepicker({
+                locale: moment.locale('zh-cn'),
+                format:"YYYY-MM-DD"
             });
 
             // 添加or编辑

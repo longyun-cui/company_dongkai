@@ -4190,8 +4190,10 @@ class YHAdminRepository {
                     }
                     else
                     {
-                        $list[$k]->travel_status = "已完成";
+                        $list[$k]->travel_status = "已到达";
 
+                        if($v->amount <= $v->income_total) $list[$k]->travel_status = "已收账";
+                        else $list[$k]->travel_status = "待收账";
 
                         if($v->should_arrival_time)
                         {
@@ -4464,6 +4466,115 @@ class YHAdminRepository {
                 $record_data["column"] = $column_key;
                 $record_data["before"] = $before;
                 $record_data["after"] = $column_value;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if($bool_1)
+                {
+                }
+                else throw new Exception("insert--record--fail");
+
+            }
+            DB::commit();
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【订单管理】设置-基本信息
+    public function operate_item_order_info_time_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-info-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+        $time_type = $post_data["time_type"];
+
+        $before = $item->$column_key;
+
+
+        if($column_key == "should_departure_time" && $item->should_arrival_time)
+        {
+            if(strtotime($column_value) >= $item->should_arrival_time) return response_error([],"出发时间不能超过到达时间！");
+        }
+        if($column_key == "should_arrival_time" && $item->should_departure_time)
+        {
+            if(strtotime($column_value) <= $item->should_departure_time)  return response_error([],"到达时间不能在出发时间之前！");
+        }
+
+        if($column_key == "actual_departure_time")
+        {
+            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
+            if($item->actual_arrival_time)
+            {
+                if(strtotime($column_value) >= $item->actual_arrival_time) return response_error([],"出发时间不能超过到达时间！");
+            }
+        }
+        if($column_key == "actual_arrival_time")
+        {
+            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
+            if($item->actual_departure_time)
+            {
+                if(strtotime($column_value) <= $item->actual_departure_time)  return response_error([],"到达时间不能在出发时间之前！");
+            }
+            else return response_error([],"请先填写出发时间！");
+        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = strtotime($column_value);
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_category"] = 11;
+
+                if($operate_type == "add") $record_data["operate_type"] = 1;
+                else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                $record_data["column_type"] = $time_type;
+                $record_data["column"] = $column_key;
+                $record_data["before"] = $before;
+                $record_data["after"] = strtotime($column_value);
 
                 $bool_1 = $record->fill($record_data)->save();
                 if($bool_1)

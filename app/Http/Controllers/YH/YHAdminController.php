@@ -621,6 +621,11 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_item_order_info_set(request()->all());
     }
+    // 【订单管理】修改-行程信息
+    public function operate_item_order_info_time_set()
+    {
+        return $this->repo->operate_item_order_info_time_set(request()->all());
+    }
 
     // 【订单管理】添加-行程记录
     public function operate_item_order_travel_set()

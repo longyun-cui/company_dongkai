@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="tableArea">
-                <table class='table table-striped table-bordered table-hover main-table' id='datatable_ajax'>
+                <table class='table table-striped- table-bordered table-hover main-table' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
@@ -128,8 +128,8 @@
 
 @section('custom-style')
     <style>
-        .tableArea table,main-table {
-            min-width: 1200px;
+        .tableArea .main-table {
+            min-width: 3000px;
         }
     </style>
 @endsection
@@ -289,7 +289,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "80px",
                         "title": "司机",
                         "data": "linkman_name",
@@ -299,7 +299,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "120px",
                         "title": "电话",
                         "data": "linkman_phone",
@@ -308,16 +308,186 @@
                             return data;
                         }
                     },
-//                    {
-//                        "className": "text-left",
-//                        "width": "64px",
-//                        "title": "拥有者",
-//                        "data": "owner_id",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            return row.owner == null ? '未知' : '<a target="_blank" href="/user/'+row.owner.id+'">'+row.owner.username+'</a>';
-//                        }
-//                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "车辆类型",
+                        "data": "car_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "所有人",
+                        "data": "car_owner",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "使用性质",
+                        "data": "car_function",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "品牌",
+                        "data": "car_brand",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "100px",
+                        "title": "车辆识别代码",
+                        "data": "car_identification_number",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "发动机号",
+                        "data": "engine_number",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "车头轴距",
+                        "data": "locomotive_wheelbase",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "主油箱",
+                        "data": "main_fuel_tank",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "副油箱",
+                        "data": "auxiliary_fuel_tank",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "总质量",
+                        "data": "total_mass",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "整备质量",
+                        "data": "curb_weight",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "核定载重质量",
+                        "data": "load_weight",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "准牵引总质量",
+                        "data": "traction_mass",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "外廓尺寸",
+                        "data": "overall_size",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "购买日期",
+                        "data": "purchase_date",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "注册日期",
+                        "data": "registration_date",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "发证日期",
+                        "data": "issue_date",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "检验有效期",
+                        "data": "inspection_validity",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
                     {
                         "className": "text-center",
                         "width": "60px",
