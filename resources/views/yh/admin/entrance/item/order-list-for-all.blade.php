@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="tableArea">
-                <table class='table table-striped- table-bordered- table-hover' id='datatable_ajax'>
+                <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
@@ -845,9 +845,8 @@
 
 @section('custom-style')
 <style>
-
     .tableArea table {
-        min-width: 2800px;
+        min-width: 3200px;
     }
 </style>
 @endsection
@@ -912,8 +911,8 @@
 //                        "orderable": false
 //                    },
                     {
-                        "className": "font-12px",
-                        "width": "50px",
+                        "className": "",
+                        "width": "40px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -922,6 +921,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "60px",
                         "title": "订单状态",
                         "data": "id",
@@ -976,6 +976,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "120px",
                         "title": "状态",
                         "data": "id",
@@ -1369,7 +1370,7 @@
 //                        }
 //                    },
                     {
-                        "className": "font-12px",
+                        "className": "order-info-time-edit should_departure_time",
                         "width": "120px",
                         "title": "应出发时间",
                         "data": 'should_departure_time',
@@ -1549,6 +1550,51 @@
 //                            return row.owner == null ? '未知' : '<a target="_blank" href="/user/'+row.owner.id+'">'+row.owner.username+'</a>';
 //                        }
 //                    },
+                    {
+                        "width": "120px",
+                        "title": "单号",
+                        "data": "order_number",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "收款人",
+                        "data": "payee_name",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "车货源",
+                        "data": "car_supply",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "安排人",
+                        "data": "arrange_people",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "车辆负责人",
+                        "data": "car_managerial_people",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
                     {
                         "className": "font-12px",
                         "width": "120px",
