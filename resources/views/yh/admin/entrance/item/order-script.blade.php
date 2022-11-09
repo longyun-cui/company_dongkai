@@ -172,7 +172,7 @@
                 }
             });
 
-            $('input[name=id]').val($that.attr('data-id'));
+//            $('input[name=id]').val($that.attr('data-id'));
             $('input[name=info-set-order-id]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));

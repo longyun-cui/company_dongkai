@@ -60,7 +60,7 @@
 
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
                 <a href="{{ url('/user/staff-list-for-all') }}">
-                    <i class="fa fa-user text-red"></i>
+                    <i class="fa fa-user text-blue"></i>
                     <span>员工列表</span>
                 </a>
             </li>
@@ -83,35 +83,25 @@
 
 
 
-            <li class="header">客户管理</li>
+
+            <li class="header">业务管理</li>
 
             <li class="treeview {{ $menu_active_of_client_list_for_all or '' }}">
                 <a href="{{ url('/user/client-list-for-all')}}">
-                    <i class="fa fa-list text-red"></i>
+                    <i class="fa fa-user text-green"></i>
                     <span>客户列表</span>
                 </a>
             </li>
-
-
-
-
-            <li class="header">车辆管理</li>
-
             <li class="treeview {{ $menu_active_of_car_list_for_all or '' }}">
                 <a href="{{ url('/item/car-list-for-all')}}">
-                    <i class="fa fa-truck text-red"></i>
+                    <i class="fa fa-truck text-green"></i>
                     <span>车辆列表</span>
                 </a>
             </li>
 
-
-
-
-            <li class="header">订单管理</li>
-
             <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
                 <a href="{{ url('/item/order-list-for-all')}}">
-                    <i class="fa fa-file-text text-red"></i>
+                    <i class="fa fa-file-text text-green"></i>
                     <span>订单列表</span>
                 </a>
             </li>

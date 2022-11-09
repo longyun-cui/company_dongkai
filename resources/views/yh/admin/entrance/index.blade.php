@@ -2,14 +2,15 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local']))[l]@endif A.{{ $head_title or '首页' }} - 管理员后台系统 - {{ config('info.info.short_name') }}
+    @if(in_array(env('APP_ENV'),['local']))L.@endif
+    {{ $head_title or '首页' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','Admin')
-@section('description')管理员后台系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>

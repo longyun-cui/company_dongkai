@@ -3,7 +3,7 @@
 
 @section('head_title')
     @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
-    {{ $title_text or '任务列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '订单列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -94,20 +94,6 @@
                 <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
-                            <th>ID</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -879,27 +865,9 @@
 
 @section('custom-style')
 <style>
-    .tableArea .dataTables_wrapper {
-        position: relative;
-        clear: both;
-        zoom: 1;
-        overflow-x: auto;
-    }
-    .tableArea .row {
-        margin-left: 0;
-        margin-right: 0;
-        padding-left: 0;
-        padding-right: 0;
-     }
-    .tableArea .col-sm-12,.tableArea .col-md-12,.tableArea .col-ls-12,.tableArea .col-sm-6,.tableArea .col-md-6,.tableArea .col-ls-6 {
-        padding-left: 0;
-        padding-right: 0;
-        margin-left: 0;
-        margin-right: 0;
-    }
 
     .tableArea table {
-        min-width: 1400px;
+        min-width: 2800px;
     }
 </style>
 @endsection
@@ -974,8 +942,8 @@
                         }
                     },
                     {
-                        "width": "120px",
-                        "title": "状态",
+                        "width": "60px",
+                        "title": "订单状态",
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -994,10 +962,10 @@
                             var $travel_status_html = '';
                             var $travel_result_html = '';
                             var $travel_result_time = '';
-
+//
                             if(row.travel_status == "待发车")
                             {
-                                $travel_status_html = '<small class="btn-xs bg-teal">待发车</small>';
+                                $travel_status_html = '<small class="btn-xs bg-aqua">待发车</small>';
                             }
                             else if(row.travel_status == "进行中")
                             {
@@ -1007,6 +975,49 @@
                             {
                                 $travel_status_html = '<small class="btn-xs bg-olive">已完成</small>';
                             }
+//
+//
+//                            if(row.travel_result == "正常")
+//                            {
+//                                $travel_result_html = '<small class="btn-xs bg-olive">正常</small>';
+//                            }
+//                            else if(row.travel_result == "超时")
+//                            {
+//                                $travel_result_html = '<small class="btn-xs bg-red">超时</small><br>';
+//                                $travel_result_time = '<small class="btn-xs bg-gray">'+row.travel_result_time+'</small>';
+//                            }
+//                            else if(row.travel_result == "已超时")
+//                            {
+//                                $travel_result_html = '<small class="btn-xs btn-danger">已超时</small>';
+//                            }
+//
+                            return $travel_status_html + $travel_result_html + $travel_result_time;
+
+                        }
+                    },
+                    {
+                        "width": "120px",
+                        "title": "状态",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+
+                            if(row.deleted_at != null)
+                            {
+                                return '';
+                            }
+
+                            if(row.is_published == 0)
+                            {
+                                return '';
+                            }
+
+
+                            var $travel_status_html = '';
+                            var $travel_result_html = '';
+                            var $travel_result_time = '';
+
 
 
                             if(row.travel_result == "正常")
@@ -1018,9 +1029,9 @@
                                 $travel_result_html = '<small class="btn-xs bg-red">超时</small><br>';
                                 $travel_result_time = '<small class="btn-xs bg-gray">'+row.travel_result_time+'</small>';
                             }
-                            else if(row.travel_result == "已超时")
+                            else if(row.travel_result == "发车超时")
                             {
-                                $travel_result_html = '<small class="btn-xs btn-danger">已超时</small>';
+                                $travel_result_html = '<small class="btn-xs btn-danger">发车超时</small>';
                             }
 
                             return $travel_status_html + $travel_result_html + $travel_result_time;
@@ -1028,30 +1039,34 @@
                         }
                     },
                     {
-                        "width": "50px",
-                        "title": "订单<br>金额",
-                        "data": "amount",
-                        "orderable": true,
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "创建人",
+                        "data": "creator_id",
+                        "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
                         }
                     },
                     {
-                        "width": "50px",
-                        "title": "收入<br>金额",
-                        "data": "income_total",
-                        "orderable": true,
+                        "className": "",
+                        "width": "100px",
+                        "title": "派车日期",
+                        "data": 'assign_time',
+                        "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "width": "50px",
-                        "title": "支出<br>金额",
-                        "data": "expenditure_total",
-                        "orderable": true,
-                        render: function(data, type, row, meta) {
-                            return data;
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day;
+                            else return $year+'-'+$month+'-'+$day;
                         }
                     },
                     {
@@ -1076,9 +1091,66 @@
                         }
                     },
                     {
+                        "width": "50px",
+                        "title": "订单",
+                        "data": "amount",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "50px",
+                        "title": "收入",
+                        "data": "income_total",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "50px",
+                        "title": "支出",
+                        "data": "expenditure_total",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "需求类型",
+                        "data": "order_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 1)
+                            {
+                                return '<small class="btn-xs bg-green">自有</small>';
+                            }
+                            else if(data == 11)
+                            {
+                                return '<small class="btn-xs bg-blue">调车</small>';
+                            }
+                            else if(data == 21)
+                            {
+                                return '<small class="btn-xs bg-purple">配货</small>';
+                            }
+                            else if(data == 31)
+                            {
+                                return '<small class="btn-xs bg-orange">合同单项</small>';
+                            }
+                            else if(data == 41)
+                            {
+                                return '<small class="btn-xs bg-red">合同双向</small>';
+                            }
+                            else return "";
+                        }
+                    },
+                    {
                         "className": "text-center",
                         "width": "60px",
-                        "title": "车辆<br>所属",
+                        "title": "所属",
                         "data": "car_owner_type",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -1109,14 +1181,164 @@
                             if(row.car_owner_type == 1)
                             {
                                 if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
+//                                if(row.trailer_er != null) trailer_html = '<a href="javascript:void(0);">'+row.trailer_er.name+'</a>';
+                            }
+                            else
+                            {
+                                if(row.outside_car) car_html = '<a href="javascript:void(0);">'+row.outside_car+'</a>';
+//                                trailer_html = '<a href="javascript:void(0);">'+row.outside_trailer+'</a>';
+                            }
+                            return car_html + '<br>' + trailer_html;
+                        }
+                    },
+                    {
+                        "className": "text-left",
+                        "width": "80px",
+                        "title": "车挂",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var trailer_html = '';
+                            if(row.car_owner_type == 1)
+                            {
                                 if(row.trailer_er != null) trailer_html = '<a href="javascript:void(0);">'+row.trailer_er.name+'</a>';
                             }
                             else
                             {
-                                car_html = '<a href="javascript:void(0);">'+row.outside_car+'</a>';
-                                trailer_html = '<a href="javascript:void(0);">'+row.outside_trailer+'</a>';
+                                if(row.outside_trailer) trailer_html = '<a href="javascript:void(0);">'+row.outside_trailer+'</a>';
                             }
-                            return car_html + '<br>' + trailer_html;
+                            return trailer_html;
+                        }
+                    },
+                    {
+                        "width": "60px",
+                        "title": "主驾",
+                        "data": "driver_name",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "100px",
+                        "title": "主驾电话",
+                        "data": "driver_phone",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "60px",
+                        "title": "副驾",
+                        "data": "copilot_name",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "100px",
+                        "title": "副驾电话",
+                        "data": "copilot_phone",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "类型",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var reurn_html = '';
+                            if(row.car_owner_type == 1)
+                            {
+                                if(row.trailer_er != null && row.trailer_er.trailer_type) reurn_html = row.trailer_er.trailer_type;
+                            }
+                            else
+                            {
+                                if(row.trailer_type) reurn_html = row.trailer_type;
+                            }
+                            return reurn_html;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "尺寸",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var reurn_html = '';
+                            if(row.car_owner_type == 1)
+                            {
+                                if(row.trailer_er != null && row.trailer_er.trailer_length) reurn_html = row.trailer_er.trailer_length;
+                            }
+                            else
+                            {
+                                if(row.trailer_length) reurn_html = row.trailer_length;
+                            }
+                            return reurn_html;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "容积",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var reurn_html = '';
+                            if(row.car_owner_type == 1)
+                            {
+                                if(row.trailer_er != null && row.trailer_er.trailer_volume) reurn_html = row.trailer_er.trailer_volume;
+                            }
+                            else
+                            {
+                                if(row.trailer_volume) reurn_html = row.trailer_volume;
+                            }
+                            return reurn_html;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "重量",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var reurn_html = '';
+                            if(row.car_owner_type == 1)
+                            {
+                                if(row.trailer_er != null && row.trailer_er.trailer_weight) reurn_html = row.trailer_er.trailer_weight;
+                            }
+                            else
+                            {
+                                if(row.trailer_weight) reurn_html = row.trailer_weight;
+                            }
+                            return reurn_html;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "轴数",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var reurn_html = '';
+                            if(row.car_owner_type == 1)
+                            {
+                                if(row.trailer_er != null && row.trailer_er.trailer_axis_count) reurn_html = row.trailer_er.trailer_axis_count;
+                            }
+                            else
+                            {
+                                if(row.trailer_axis_count) reurn_html = row.trailer_axis_count;
+                            }
+                            return reurn_html;
                         }
                     },
                     {
@@ -1155,12 +1377,13 @@
                     {
                         "className": "font-12px",
                         "width": "120px",
-                        "title": "限定<br>时间",
-                        "data": 'id',
+                        "title": "应出发时间",
+                        "data": 'should_departure_time',
                         "orderable": false,
                         render: function(data, type, row, meta) {
-//                            return data;
-                            var $departure_time = new Date(row.should_departure_time*1000);
+                            if(!data) return '';
+
+                            var $departure_time = new Date(data*1000);
                             var $departure_year = $departure_time.getFullYear();
                             var $departure_month = ('00'+($departure_time.getMonth()+1)).slice(-2);
                             var $departure_day = ('00'+($departure_time.getDate())).slice(-2);
@@ -1168,10 +1391,19 @@
                             var $departure_minute = ('00'+$departure_time.getMinutes()).slice(-2);
                             var $departure_second = ('00'+$departure_time.getSeconds()).slice(-2);
 
-                            var $departure_time_html = '<a href="javascript:void(0);">'+$departure_year+'-'+$departure_month+'-'+$departure_day+'&nbsp;'+$departure_hour+':'+$departure_minute+'</a>'+'<br>';
+                            return '<a href="javascript:void(0);">'+$departure_year+'-'+$departure_month+'-'+$departure_day+'&nbsp;'+$departure_hour+':'+$departure_minute+'</a>'+'<br>';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "120px",
+                        "title": "应到达时间",
+                        "data": 'should_arrival_time',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
 
-
-                            var $arrival_time = new Date(row.should_arrival_time*1000);
+                            var $arrival_time = new Date(data*1000);
                             var $arrival_year = $arrival_time.getFullYear();
                             var $arrival_month = ('00'+($arrival_time.getMonth()+1)).slice(-2);
                             var $arrival_day = ('00'+($arrival_time.getDate())).slice(-2);
@@ -1179,27 +1411,24 @@
                             var $arrival_minute = ('00'+$arrival_time.getMinutes()).slice(-2);
                             var $arrival_second = ('00'+$arrival_time.getSeconds()).slice(-2);
 
-                            var $arrival_time_html = '<a href="javascript:void(0);">'+$arrival_year+'-'+$arrival_month+'-'+$arrival_day+'&nbsp;'+$arrival_hour+':'+$arrival_minute+'</a>'+'<br>';
-
-                            return $departure_time_html + $arrival_time_html;
+                            return '<a href="javascript:void(0);">'+$arrival_year+'-'+$arrival_month+'-'+$arrival_day+'&nbsp;'+$arrival_hour+':'+$arrival_minute+'</a>'+'<br>';
                         }
                     },
                     {
                         "className": "font-12px",
-                        "width": "180px",
-                        "title": "实际<br>时间",
-                        "data": 'id',
+                        "width": "120px",
+                        "title": "实际出发时间",
+                        "data": 'actual_departure_time',
                         "orderable": false,
                         render: function(data, type, row, meta) {
-//                            return data;
                             var $actual_departure_time_html = '';
                             var $stopover_arrival_time_html = '';
                             var $stopover_departure_time_html = '';
                             var $actual_arrival_time_html = '';
 
-                            if(row.actual_departure_time)
+                            if(data)
                             {
-                                var $actual_departure_time = new Date(row.actual_departure_time*1000);
+                                var $actual_departure_time = new Date(data*1000);
                                 var $actual_departure_year = $actual_departure_time.getFullYear();
                                 var $actual_departure_month = ('00'+($actual_departure_time.getMonth()+1)).slice(-2);
                                 var $actual_departure_day = ('00'+($actual_departure_time.getDate())).slice(-2);
@@ -1210,6 +1439,20 @@
                                 $actual_departure_time_html = '<a href="javascript:void(0);">'+$actual_departure_year+'-'+$actual_departure_month+'-'+$actual_departure_day+'&nbsp;'+$actual_departure_hour+':'+$actual_departure_minute+'</a>'+'<br>';
                             }
 
+                            return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "180px",
+                        "title": "经停时间",
+                        "data": 'id',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $actual_departure_time_html = '';
+                            var $stopover_arrival_time_html = '';
+                            var $stopover_departure_time_html = '';
+                            var $actual_arrival_time_html = '';
 
                             if(row.stopover_arrival_time)
                             {
@@ -1224,7 +1467,6 @@
                                 $stopover_arrival_time_html = '<a href="javascript:void(0);">'+'经停-到达 '+$stopover_arrival_year+'-'+$stopover_arrival_month+'-'+$stopover_arrival_day+'&nbsp;'+$stopover_arrival_hour+':'+$stopover_arrival_minute+'</a>'+'<br>';
                             }
 
-
                             if(row.stopover_departure_time)
                             {
                                 var $stopover_departure_time = new Date(row.stopover_departure_time*1000);
@@ -1238,10 +1480,25 @@
                                 $stopover_departure_time_html = '<a href="javascript:void(0);">'+'经停-出发 '+$stopover_departure_year+'-'+$stopover_departure_month+'-'+$stopover_departure_day+'&nbsp;'+$stopover_departure_hour+':'+$stopover_departure_minute+'</a>'+'<br>';
                             }
 
+                            return $actual_departure_time_html + $stopover_arrival_time_html + $stopover_departure_time_html + $actual_arrival_time_html;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "120px",
+                        "title": "实际到达时间",
+                        "data": 'actual_arrival_time',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $actual_departure_time_html = '';
+                            var $stopover_arrival_time_html = '';
+                            var $stopover_departure_time_html = '';
+                            var $actual_arrival_time_html = '';
 
-                            if(row.actual_arrival_time)
+                            if(data)
                             {
-                                var $actual_arrival_time = new Date(row.actual_arrival_time*1000);
+                                var $actual_arrival_time = new Date(data*1000);
                                 var $actual_arrival_year = $actual_arrival_time.getFullYear();
                                 var $actual_arrival_month = ('00'+($actual_arrival_time.getMonth()+1)).slice(-2);
                                 var $actual_arrival_day = ('00'+($actual_arrival_time.getDate())).slice(-2);
@@ -1266,19 +1523,9 @@
 //                        }
 //                    },
                     {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "创建人",
-                        "data": "creator_id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
-                        }
-                    },
-                    {
                         "className": "font-12px",
-                        "width": "100px",
-                        "title": "创建<br>时间",
+                        "width": "120px",
+                        "title": "创建时间",
                         "data": 'created_at',
                         "orderable": true,
                         render: function(data, type, row, meta) {
@@ -1290,9 +1537,13 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
-                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
                     },
 //                    {

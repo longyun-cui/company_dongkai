@@ -48,7 +48,7 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="标题" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="name" placeholder="车牌" />
 
                         {{--<select class="form-control form-filter" name="owner" style="width:96px;">--}}
                             {{--<option value ="-1">选择员工</option>--}}
@@ -73,26 +73,16 @@
                     </div>
                 </div>
 
-                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
+                <div class="tableArea">
+                <table class='table table-striped table-bordered table-hover main-table' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
-                            <th>ID</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
+                </div>
 
             </div>
 
@@ -136,6 +126,17 @@
 
 
 
+@section('custom-style')
+    <style>
+        .tableArea table,main-table {
+            min-width: 1200px;
+        }
+    </style>
+@endsection
+
+
+
+
 @section('custom-script')
 <script>
     var TableDatatablesAjax = function () {
@@ -144,7 +145,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50, 100, 200], ["50", "100", "200"]],
+                "aLengthMenu": [[100, 200, -1], ["100", "200", "全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -154,9 +155,12 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
+                        d.name = $('input[name="name"]').val();
+                        d.title = $('input[name="title"]').val();
                         d.keyword = $('input[name="keyword"]').val();
                         d.website = $('input[name="website"]').val();
                         d.owner = $('select[name="owner"]').val();
+                        d.status = $('select[name="status"]').val();
                         d.finished = $('select[name="finished"]').val();
 //                        d.nickname 	= $('input[name="nickname"]').val();
 //                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
@@ -174,25 +178,25 @@
                 "order": [],
                 "orderCellsTop": true,
                 "columns": [
-                    {
-                        "width": "32px",
-                        "title": "选择",
-                        "data": "id",
-                        'orderable': false,
-                        render: function(data, type, row, meta) {
-                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
-                        }
-                    },
-                    {
-                        "width": "32px",
-                        "title": "序号",
-                        "data": null,
-                        "targets": 0,
-                        'orderable': false
-                    },
+//                    {
+//                        "width": "40px",
+//                        "title": "选择",
+//                        "data": "id",
+//                        'orderable': false,
+//                        render: function(data, type, row, meta) {
+//                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+//                        }
+//                    },
+//                    {
+//                        "width": "40px",
+//                        "title": "序号",
+//                        "data": null,
+//                        "targets": 0,
+//                        'orderable': false
+//                    },
                     {
                         "className": "font-12px",
-                        "width": "32px",
+                        "width": "40px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -201,8 +205,8 @@
                         }
                     },
                     {
-                        "width": "80px",
-                        "title": "车辆类型",
+                        "width": "60px",
+                        "title": "类型",
                         "data": 'item_type',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -213,7 +217,7 @@
                     },
                     {
                         "className": "text-left",
-                        "width": "80px",
+                        "width": "100px",
                         "title": "车牌号",
                         "data": "name",
                         "orderable": false,
@@ -222,8 +226,9 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "80px",
-                        "title": "车辆状态",
+                        "title": "工作状态",
                         "data": 'car_status',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -233,8 +238,59 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "类型",
+                        "data": "trailer_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "尺寸",
+                        "data": "trailer_length",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "容积",
+                        "data": "trailer_volume",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "载重",
+                        "data": "trailer_weight",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "40px",
+                        "title": "轴数",
+                        "data": "trailer_axis_count",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return "";
+                        }
+                    },
+                    {
                         "className": "text-left",
-                        "width": "120px",
+                        "width": "80px",
                         "title": "司机",
                         "data": "linkman_name",
                         "orderable": false,
@@ -263,8 +319,8 @@
 //                        }
 //                    },
                     {
-                        "className": "text-left",
-                        "width": "64px",
+                        "className": "text-center",
+                        "width": "60px",
                         "title": "创建者",
                         "data": "creator_id",
                         "orderable": false,
@@ -274,10 +330,10 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "96px",
+                        "width": "120px",
                         "title": "创建时间",
                         "data": 'created_at',
-                        "orderable": true,
+                        "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $date = new Date(data*1000);
@@ -335,7 +391,7 @@
                         }
                     },
                     {
-                        "width": "144px",
+                        "width": "160px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
@@ -385,10 +441,10 @@
                 ],
                 "drawCallback": function (settings) {
 
-                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
-                    this.api().column(1).nodes().each(function(cell, i) {
-                        cell.innerHTML =  startIndex + i + 1;
-                    });
+//                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+//                    this.api().column(1).nodes().each(function(cell, i) {
+//                        cell.innerHTML =  startIndex + i + 1;
+//                    });
 
                     ajax_datatable.$('.tooltips').tooltip({placement: 'top', html: true});
                     $("a.verify").click(function(event){

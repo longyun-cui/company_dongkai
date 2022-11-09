@@ -3312,7 +3312,6 @@ class YHAdminRepository {
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
             $mine = new YH_Car;
-            $post_data["user_category"] = 11;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
         }
@@ -3322,6 +3321,7 @@ class YHAdminRepository {
             if(!$mine) return response_error([],"该用户不存在，刷新页面重试！");
         }
         else return response_error([],"参数有误！");
+
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -3338,6 +3338,13 @@ class YHAdminRepository {
             unset($mine_data['operate_id']);
             unset($mine_data['category']);
             unset($mine_data['type']);
+
+            if(in_array($mine_data["trailer_type"],["0","-1"])) unset($mine_data['trailer_type']);
+            if(in_array($mine_data["trailer_length"],["0","-1"])) unset($mine_data['trailer_length']);
+            if(in_array($mine_data["trailer_volume"],["0","-1"])) unset($mine_data['trailer_volume']);
+            if(in_array($mine_data["trailer_weight"],["0","-1"])) unset($mine_data['trailer_weight']);
+            if(in_array($mine_data["trailer_axis_count"],["0","-1"])) unset($mine_data['trailer_axis_count']);
+
 
             $bool = $mine->fill($mine_data)->save();
             if($bool)
@@ -3738,7 +3745,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,81,82,88])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -3756,7 +3763,7 @@ class YHAdminRepository {
             $mine = YH_Order::find($operate_id);
             if(!$mine) return response_error([],"该订单不存在，刷新页面重试！");
 
-            if(!in_array($me->user_type,[82,88]) && $mine->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+            if(in_array($me->user_type,[82,88]) && $mine->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
         }
         else return response_error([],"参数有误！");
 
@@ -3795,6 +3802,12 @@ class YHAdminRepository {
             unset($mine_data['operate_id']);
             unset($mine_data['operate_category']);
             unset($mine_data['operate_type']);
+
+            if(!empty($mine_data["trailer_type"]) && in_array($mine_data["trailer_type"],["0","-1"])) unset($mine_data['trailer_type']);
+            if(!empty($mine_data["trailer_length"]) && in_array($mine_data["trailer_length"],["0","-1"])) unset($mine_data['trailer_length']);
+            if(!empty($mine_data["trailer_volume"]) && in_array($mine_data["trailer_volume"],["0","-1"])) unset($mine_data['trailer_volume']);
+            if(!empty($mine_data["trailer_weight"]) && in_array($mine_data["trailer_weight"],["0","-1"])) unset($mine_data['trailer_weight']);
+            if(!empty($mine_data["trailer_axis_count"]) && in_array($mine_data["trailer_axis_count"],["0","-1"])) unset($mine_data['trailer_axis_count']);
 
             $bool = $mine->fill($mine_data)->save();
             if($bool)
@@ -3943,8 +3956,6 @@ class YHAdminRepository {
     }
 
 
-
-
     // 【订单管理】发布
     public function operate_item_order_publish($post_data)
     {
@@ -3972,8 +3983,8 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
-        if(!in_array($me->user_type,[82,88]) && $item->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->user_type,[0,1,9,11,81,82,88])) return response_error([],"你没有操作权限！");
+        if(in_array($me->user_type,[82,88]) && $item->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -4055,6 +4066,8 @@ class YHAdminRepository {
         }
 
     }
+
+
 
 
     // 【订单管理】返回-列表-视图
@@ -4160,7 +4173,7 @@ class YHAdminRepository {
                     $list[$k]->travel_status = "待发车";
 
                     if(time() <= $v->should_departure_time) $list[$k]->travel_result = "等待出发";
-                    else $list[$k]->travel_result = "已超时";
+                    else $list[$k]->travel_result = "发车超时";
                 }
                 else
                 {
@@ -4193,7 +4206,7 @@ class YHAdminRepository {
                             $minute=ceil($time_subtract%86400%60);
                             $second=floor($time_subtract%86400%60);
                             $result = $date."天".$hour."小时".$minute."分钟";
-                            $list[$k]->travel_result_time = "超时".$result;
+                            $list[$k]->travel_result_time = $result;
 
 
 
