@@ -642,25 +642,25 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="标题" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="finance-title" placeholder="费用说明" />
 
-                        <select class="form-control form-filter" name="finished" style="width:96px;">
+                        <select class="form-control form-filter" name="finance-item_type" style="width:96px;">
                             <option value ="-1">选择</option>
                             <option value ="1">收入</option>
                             <option value ="11">支出</option>
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
+                        <button type="button" class="form-control btn btn-flat btn-success finance-filter-submit" id="finance-filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
+                        <button type="button" class="form-control btn btn-flat btn-default finance-filter-cancel">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
                     </div>
                 </div>
 
-                <table class='table table-striped table-bordered' id='datatable_ajax_inner'>
+                <table class='table table-striped table-bordered' id='datatable_ajax_finance'>
                     <thead>
                         <tr role='row' class='heading'>
                             <th></th>
@@ -854,17 +854,17 @@
                             <option value ="11">支出</option>
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
+                        <button type="button" class="form-control btn btn-flat btn-success modify-filter-submit" id="modify-filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
+                        <button type="button" class="form-control btn btn-flat btn-default modify-filter-cancel">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
                     </div>
                 </div>
 
-                <table class='table table-striped table-bordered' id='datatable_ajax_inner_record'>
+                <table class='table table-striped table-bordered' id='datatable_ajax_record'>
                     <thead>
                         <tr role='row' class='heading'>
                             <th></th>
@@ -910,7 +910,7 @@
 @section('custom-style')
 <style>
     .tableArea table {
-        min-width: 4000px;
+        min-width: 4400px;
     }
 </style>
 @endsection
@@ -1230,29 +1230,162 @@
                     },
                     {
                         "width": "50px",
-                        "title": "订单",
+                        "title": "运价",
                         "data": "amount",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('order-info-set-text');
+                            $(nTd).attr('data-id',row.id).attr('data-key','amount').attr('data-value',data);
+                            $(nTd).attr('data-name','运价');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
                     {
                         "width": "50px",
-                        "title": "收入",
+                        "title": "油卡",
+                        "data": "oil_card_amount",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('order-info-set-text');
+                            $(nTd).attr('data-id',row.id).attr('data-key','oil_card_amount').attr('data-value',data);
+                            $(nTd).attr('data-name','油卡');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "50px",
+                        "title": "开票额",
+                        "data": "invoice_amount",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('order-info-set-text');
+                            $(nTd).attr('data-id',row.id).attr('data-key','invoice_amount').attr('data-value',data);
+                            $(nTd).attr('data-name','开票额');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "50px",
+                        "title": "票点",
+                        "data": "invoice_point",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('order-info-set-text');
+                            $(nTd).attr('data-id',row.id).attr('data-key','invoice_point').attr('data-value',data);
+                            $(nTd).attr('data-name','票点');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "50px",
+                        "title": "信息费",
+                        "data": "information_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('order-info-set-text');
+                            $(nTd).attr('data-id',row.id).attr('data-key','information_fee').attr('data-value',data);
+                            $(nTd).attr('data-name','信息费');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "50px",
+                        "title": "客管费",
+                        "data": "customer_management_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('order-info-set-text');
+                            $(nTd).attr('data-id',row.id).attr('data-key','customer_management_fee').attr('data-value',data);
+                            $(nTd).attr('data-name','客户管理费');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "60px",
+                        "title": "时效扣款",
+                        "data": "time_limitation_deduction",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('order-info-set-text');
+                            $(nTd).attr('data-id',row.id).attr('data-key','time_limitation_deduction').attr('data-value',data);
+                            $(nTd).attr('data-name','时效扣款');
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "50px",
+                        "title": "已收款",
                         "data": "income_total",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('item-finance-income-show');
+                            $(nTd).attr('data-id',row.id).attr('data-type','income');
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
                     {
                         "width": "50px",
-                        "title": "支出",
+                        "title": "已支出",
                         "data": "expenditure_total",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('item-finance-expenditure-show');
+                            $(nTd).attr('data-id',row.id).attr('data-type','expenditure');
+                        },
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "className": "_bold",
+                        "width": "50px",
+                        "title": "欠款",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $receivable = parseInt(row.amount) - parseInt(row.time_limitation_deduction) - parseInt(row.income_total);
+                            return $receivable;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "50px",
+                        "title": "应收款",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) + ((row.invoice_amount * row.invoice_point) / 100) - parseInt(row.information_fee) - parseInt(row.customer_management_fee) - parseInt(row.time_limitation_deduction);
+                            return $receivable;
                         }
                     },
                     {
@@ -2211,12 +2344,12 @@
 
 
 <script>
-    var TableDatatablesAjax_inner = function ($id) {
-        var datatableAjax_inner = function ($id) {
+    var TableDatatablesAjax_finance = function ($id) {
+        var datatableAjax_finance = function ($id,$type) {
 
-            var dt = $('#datatable_ajax_inner');
-//            dt.DataTable().destroy();
-            var ajax_datatable_inner = dt.DataTable({
+            var dt_finance = $('#datatable_ajax_finance');
+            dt_finance.DataTable().destroy();
+            var ajax_datatable_finance = dt_finance.DataTable({
                 "retrieve": true,
                 "destroy": true,
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
@@ -2226,16 +2359,14 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "/item/order-finance-record?id="+$id,
+                    'url': "/item/order-finance-record?id="+$id+"&type="+$type,
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.searchengine = $('select[name="searchengine"]').val();
+                        d.title = $('input[name="finance-title"]').val();
                         d.keyword = $('input[name="keyword"]').val();
-                        d.website = $('input[name="website"]').val();
-                        d.keywordstatus = $('select[name="keywordstatus"]').val();
-                        d.rank = $('select[name="inner_rank"]').val();
+                        d.item_type = $('select[name="finance-item_type"]').val();
 //                        d.nickname 	= $('input[name="nickname"]').val();
 //                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
 //                        d.certificate_state = $('select[name="certificate_state"]').val();
@@ -2390,7 +2521,7 @@
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
 
-                    ajax_datatable_inner.$('.tooltips').tooltip({placement: 'top', html: true});
+                    ajax_datatable_finance.$('.tooltips').tooltip({placement: 'top', html: true});
                     $("a.verify").click(function(event){
                         event.preventDefault();
                         var node = $(this);
@@ -2439,12 +2570,12 @@
             });
 
 
-            dt.on('click', '.filter-submit', function () {
-                ajax_datatable_inner.ajax.reload();
+            dt_finance.on('click', '.finance-filter-submit', function () {
+                ajax_datatable_finance.ajax.reload();
             });
 
-            dt.on('click', '.filter-cancel', function () {
-                $('textarea.form-filter, input.form-filter, select.form-filter', dt).each(function () {
+            dt_finance.on('click', '.finance-filter-cancel', function () {
+                $('textarea.form-filter, input.form-filter, select.form-filter', dt_finance).each(function () {
                     $(this).val("");
                 });
 
@@ -2452,11 +2583,11 @@
                 $('select.form-filter option').attr("selected",false);
                 $('select.form-filter').find('option:eq(0)').attr('selected', true);
 
-                ajax_datatable_inner.ajax.reload();
+                ajax_datatable_finance.ajax.reload();
             });
 
 
-//            dt.on('click', '#all_checked', function () {
+//            dt_finance.on('click', '#all_checked', function () {
 ////                layer.msg(this.checked);
 //                $('input[name="detect-record"]').prop('checked',this.checked);//checked为true时为默认显示的状态
 //            });
@@ -2464,22 +2595,22 @@
 
         };
         return {
-            init: datatableAjax_inner
+            init: datatableAjax_finance
         }
     }();
     //    $(function () {
-    //        TableDatatablesAjax_inner.init();
+    //        TableDatatablesAjax_finance.init();
     //    });
 </script>
 
 
 <script>
-    var TableDatatablesAjax_inner_record = function ($id) {
-        var datatableAjax_inner_record = function ($id) {
+    var TableDatatablesAjax_record = function ($id) {
+        var datatableAjax_record = function ($id) {
 
-            var dt_record = $('#datatable_ajax_inner_record');
+            var dt_record = $('#datatable_ajax_record');
             dt_record.DataTable().destroy();
-            var ajax_datatable_inner_record = dt_record.DataTable({
+            var ajax_datatable_record = dt_record.DataTable({
                 "retrieve": true,
                 "destroy": true,
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
@@ -2702,7 +2833,7 @@
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
 
-                    ajax_datatable_inner_record.$('.tooltips').tooltip({placement: 'top', html: true});
+                    ajax_datatable_record.$('.tooltips').tooltip({placement: 'top', html: true});
                     $("a.verify").click(function(event){
                         event.preventDefault();
                         var node = $(this);
@@ -2751,11 +2882,11 @@
             });
 
 
-            dt_record.on('click', '.filter-submit', function () {
-                ajax_datatable_inner_record.ajax.reload();
+            dt_record.on('click', '.modify-filter-submit', function () {
+                ajax_datatable_record.ajax.reload();
             });
 
-            dt_record.on('click', '.filter-cancel', function () {
+            dt_record.on('click', '.modify-filter-cancel', function () {
                 $('textarea.form-filter, input.form-filter, select.form-filter', dt).each(function () {
                     $(this).val("");
                 });
@@ -2764,7 +2895,7 @@
                 $('select.form-filter option').attr("selected",false);
                 $('select.form-filter').find('option:eq(0)').attr('selected', true);
 
-                ajax_datatable_inner_record.ajax.reload();
+                ajax_datatable_record.ajax.reload();
             });
 
 
@@ -2776,11 +2907,11 @@
 
         };
         return {
-            init: datatableAjax_inner_record
+            init: datatableAjax_record
         }
     }();
 //        $(function () {
-//            TableDatatablesAjax_inner_record.init();
+//            TableDatatablesAjax_record.init();
 //        });
 </script>
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script')

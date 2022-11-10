@@ -524,12 +524,39 @@
             var $id = that.attr("data-id");
             var $keyword = that.attr("data-keyword");
 
-            $('#set-rank-bulk-submit').attr('data-keyword-id',$id);
             $('input[name="finance-create-order-id"]').val($id);
             $('.finance-create-order-id').html($id);
             $('.finance-create-order-title').html($keyword);
 
-            TableDatatablesAjax_inner.init($id);
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-finance-body').modal('show');
+        });
+        // 【财务-收入-记录】
+        $(".item-main-body").on('dblclick', ".item-finance-income-show", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id,"income");
+
+            $('#modal-finance-body').modal('show');
+        });
+        // 【财务-支出-记录】
+        $(".item-main-body").on('dblclick', ".item-finance-expenditure-show", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id,"expenditure");
 
             $('#modal-finance-body').modal('show');
         });
@@ -548,9 +575,9 @@
             $('.finance-create-order-id').html($id);
             $('.finance-create-order-title').html($keyword);
 
-//            $('#datatable_ajax_inner_record').empty();
-//            $('#datatable_ajax_inner_record').DataTable().destroy();
-            TableDatatablesAjax_inner_record.init($id);
+//            $('#datatable_ajax_record').empty();
+//            $('#datatable_ajax_record').DataTable().destroy();
+            TableDatatablesAjax_record.init($id);
 
             $('#modal-modify-body').modal('show');
         });

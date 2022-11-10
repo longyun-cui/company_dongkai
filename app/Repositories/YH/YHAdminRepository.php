@@ -4255,7 +4255,28 @@ class YHAdminRepository {
             ->with(['creator','owner'])
             ->where(['order_id'=>$id]);
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        if(!empty($post_data['type']))
+        {
+            if($post_data['type'] == "income")
+            {
+                $query->where('item_type', 1);
+            }
+            else if($post_data['type'] == "expenditure")
+            {
+                $query->where('item_type', 21);
+            }
+        }
+
+        if(!empty($post_data['item_type']))
+        {
+            if(in_array($post_data['item_type'],[1,21]))
+            {
+                $query->where('item_type', $post_data['item_type']);
+            }
+        }
 
         $total = $query->count();
 

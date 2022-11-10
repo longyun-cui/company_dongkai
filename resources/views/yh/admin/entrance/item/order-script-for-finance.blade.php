@@ -1,6 +1,30 @@
 <script>
     $(function() {
 
+        // 【搜索】
+        $(".item-main-body").on('click', ".finance-filter-submit", function() {
+            $('#datatable_ajax_finance').DataTable().ajax.reload();
+        });
+        // 【重置】
+        $(".item-main-body").on('click', ".finance-filter-cancel", function() {
+            $('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+
+//            $('select.form-filter').selectpicker('refresh');
+            $('select.form-filter option').attr("selected",false);
+            $('select.form-filter').find('option:eq(0)').attr('selected', true);
+
+            $('#datatable_ajax_finance').DataTable().ajax.reload();
+        });
+        // 【查询】回车
+//        $(".item-main-body").on('keyup', ".item-search-keyup", function(event) {
+//            if(event.keyCode ==13)
+//            {
+//                $("#filter-submit").click();
+//            }
+//        });
+
 
         // 【编辑】
         $(".item-main-body").on('click', ".item-finance-edit-link", function() {
