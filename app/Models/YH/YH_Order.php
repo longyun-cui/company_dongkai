@@ -35,7 +35,7 @@ class YH_Order extends Model
         'stopover_2_departure_time', 'stopover_2_arrival_time',
         'subordinate_company', 'receipt_status', 'receipt_address', 'GPS', 'fixed_route', 'temporary_route', 'order_number', 'payee_name', 'arrange_people', 'car_supply', 'car_managerial_people',
         'driver', 'copilot', 'driver_name', 'copilot_name', 'driver_phone', 'copilot_phone', 'weight',
-        'travlled_distance',
+        'travel_distance',
         'company', 'fund', 'mobile', 'city', 'address',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'time_point', 'time_type', 'start_time', 'end_time',

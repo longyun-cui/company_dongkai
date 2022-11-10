@@ -4192,9 +4192,52 @@ class YHAdminRepository {
                     {
                         $list[$k]->travel_status = "已到达";
 
-                        if($v->amount <= $v->income_total) $list[$k]->travel_status = "已收账";
-                        else $list[$k]->travel_status = "待收账";
 
+                        $journey_time = $v->actual_arrival_time - $v->actual_departure_time;
+                        $journey_day=floor($journey_time/86400);
+                        $journey_hour=floor($journey_time%86400/3600);
+                        $journey_minute=ceil($journey_time%86400%3600/60);
+                        $journey_second=floor($journey_time%86400%3600%60/60);
+                        if($journey_day == 0)
+                        {
+                            if($journey_hour == 0) $journey_result = $journey_minute."分钟";
+                            else $journey_result = $journey_hour."小时".$journey_minute."分钟";
+                        }
+                        else
+                        {
+                            $journey_result = $journey_day."天".$journey_hour."小时".$journey_minute."分钟";
+                        }
+                        $list[$k]->travel_journey_time = $journey_result;
+
+                        // 发车超时
+                        if($v->should_departure_time)
+                        {
+                            if($v->actual_departure_time <= $v->should_departure_time)
+                            {
+                                $list[$k]->travel_result = "正常";
+                            }
+                            else
+                            {
+                                $departure_subtract = $v->actual_departure_time - $v->should_departure_time;
+
+                                $departure_subtract_day=floor($departure_subtract/86400);
+                                $departure_subtract_hour=floor($departure_subtract%86400/3600);
+                                $departure_subtract_minute=ceil($departure_subtract%86400%3600/60);
+                                $departure_subtract_second=floor($departure_subtract%86400%3600%60/60);
+                                if($departure_subtract_day == 0)
+                                {
+                                    if($departure_subtract_hour == 0) $departure_subtract_result = $departure_subtract_minute."分钟";
+                                    else $departure_subtract_result = $departure_subtract_hour."小时".$departure_subtract_minute."分钟";
+                                }
+                                else
+                                {
+                                    $departure_subtract_result = $departure_subtract_day."天".$departure_subtract_hour."小时".$departure_subtract_minute."分钟";
+                                }
+                                $list[$k]->travel_departure_overtime_time = $departure_subtract_result;
+                            }
+                        }
+
+                        // 到达超时
                         if($v->should_arrival_time)
                         {
                             if($v->actual_arrival_time <= $v->should_arrival_time)
@@ -4203,20 +4246,28 @@ class YHAdminRepository {
                             }
                             else
                             {
-                                $time_subtract = $v->actual_arrival_time - $v->should_arrival_time;
+                                $arrival_subtract = $v->actual_arrival_time - $v->should_arrival_time;
 
-                                $date=floor($time_subtract/86400);
-                                $hour=floor($time_subtract%86400/3600);
-                                $minute=ceil($time_subtract%86400%60);
-                                $second=floor($time_subtract%86400%60);
-                                $result = $date."天".$hour."小时".$minute."分钟";
-                                $list[$k]->travel_result_time = $result;
+                                $arrival_subtract_day=floor($arrival_subtract/86400);
+                                $arrival_subtract_hour=floor($arrival_subtract%86400/3600);
+                                $arrival_subtract_minute=ceil($arrival_subtract%86400%3600/60);
+                                $arrival_subtract_second=floor($arrival_subtract%86400%3600%60/60);
+                                if($arrival_subtract_day == 0)
+                                {
+                                    if($arrival_subtract_hour == 0) $arrival_subtract_result = $arrival_subtract_minute."分钟";
+                                    else $arrival_subtract_result = $arrival_subtract_hour."小时".$arrival_subtract_minute."分钟";
+                                }
+                                else
+                                {
+                                    $arrival_subtract_result = $arrival_subtract_day."天".$arrival_subtract_hour."小时".$arrival_subtract_minute."分钟";
+                                }
+                                $list[$k]->travel_arrival_overtime_time = $arrival_subtract_result;
                             }
                         }
-                        else
-                        {
-                            $list[$k]->travel_result = "正常";
-                        }
+
+
+                        if($v->amount <= $v->income_total) $list[$k]->travel_result = "已收款";
+                        else $list[$k]->travel_result = "待收款";
 
                     }
 
