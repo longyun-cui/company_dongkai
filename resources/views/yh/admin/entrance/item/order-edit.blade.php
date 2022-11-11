@@ -59,7 +59,7 @@
                 </div>
 
                 {{--需求类型--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 需求类型</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="order_type">
@@ -73,9 +73,9 @@
                     </div>
                 </div>
 
-                {{--车辆所属--}}
+                {{--需求类型--}}
                 <div class="form-group form-category">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 车辆所属</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 需求类型</label>
                     <div class="col-md-8">
                         <div class="btn-group">
 
@@ -97,9 +97,9 @@
                                     <span class="radio">
                                         <label>
                                             @if($operate == 'edit' && $data->car_owner_type == 21)
-                                                <input type="radio" name="car_owner_type" value=21 checked="checked"> 外请
+                                                <input type="radio" name="car_owner_type" value=21 checked="checked"> 外请（调车）
                                             @else
-                                                <input type="radio" name="car_owner_type" value=21> 外请
+                                                <input type="radio" name="car_owner_type" value=21> 外请（调车）
                                             @endif
                                         </label>
                                     </span>
@@ -111,9 +111,9 @@
                                     <span class="radio">
                                         <label>
                                             @if($operate == 'edit' && $data->car_owner_type == 41)
-                                                <input type="radio" name="car_owner_type" value=41 checked="checked"> 外配
+                                                <input type="radio" name="car_owner_type" value=41 checked="checked"> 外配（配货）
                                             @else
-                                                <input type="radio" name="car_owner_type" value=41> 外配
+                                                <input type="radio" name="car_owner_type" value=41> 外配（配货）
                                             @endif
                                         </label>
                                     </span>
@@ -329,6 +329,29 @@
                     </div>
                 </div>
 
+                {{--线路--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="route" placeholder="线路" value="{{ $data->route or '' }}">
+                    </div>
+                </div>
+
+                {{--固定线路--}}
+                <div class="form-group _none">
+                    <label class="control-label col-md-2">固定线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="fixed_route" placeholder="固定线路" value="{{ $data->fixed_route or '' }}">
+                    </div>
+                </div>
+                {{--临时线路--}}
+                <div class="form-group _none">
+                    <label class="control-label col-md-2">临时线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="temporary_route" placeholder="临时线路" value="{{ $data->temporary_route or '' }}">
+                    </div>
+                </div>
+
 
 
 
@@ -358,20 +381,6 @@
                     <label class="control-label col-md-2">GPS</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="GPS" placeholder="GPS" value="{{ $data->GPS or '' }}">
-                    </div>
-                </div>
-                {{--固定线路--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">固定线路</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="fixed_route" placeholder="固定线路" value="{{ $data->fixed_route or '' }}">
-                    </div>
-                </div>
-                {{--临时线路--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">临时线路</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="temporary_route" placeholder="临时线路" value="{{ $data->temporary_route or '' }}">
                     </div>
                 </div>
 
@@ -537,7 +546,7 @@
 //            }
             // radio
             var $value = $(this).val();
-            if($value == 1) {
+            if($value == 1 || $value == 41) {
                 $('.inside-car').show();
                 $('.outside-car').hide();
             } else {

@@ -3956,6 +3956,77 @@ class YHAdminRepository {
     }
 
 
+    // 【订单管理】删除
+    public function operate_item_order_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-delete') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+//        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"用户类型错误！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+        if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            if($item->is_published == 0 && $item->creator_id == $me->id)
+            {
+                $item_copy = $item;
+
+                $item->timestamps = false;
+//                $bool = $item->forceDelete();  // 永久删除
+                $bool = $item->delete();  // 普通删除
+                if(!$bool) throw new Exception("item--delete--fail");
+                DB::commit();
+
+                $this->delete_the_item_files($item_copy);
+            }
+            else
+            {
+                $item->timestamps = false;
+//                $bool = $item->delete();  // 普通删除
+                $bool = $item->forceDelete();  // 永久删除
+                if(!$bool) throw new Exception("item--delete--fail");
+                DB::commit();
+            }
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
     // 【订单管理】发布
     public function operate_item_order_publish($post_data)
     {
@@ -3974,7 +4045,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-publish') return response_error([],"参数[operate]有误！");
+        if($operate != 'order-publish') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -4026,11 +4097,11 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-complete') return response_error([],"参数[operate]有误！");
+        if($operate != 'order-complete') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DEF_Item::withTrashed()->find($id);
+        $item = YH_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -4106,6 +4177,8 @@ class YHAdminRepository {
 //            ->where(['userstatus'=>'正常','status'=>1])
 //            ->whereIn('usergroup',['Agent','Agent2']);
 
+        if($me->user_type == 88) $query->where('creator_id', $me->id);
+
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
@@ -4154,7 +4227,7 @@ class YHAdminRepository {
         else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+        else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)
         {
@@ -4369,14 +4442,20 @@ class YHAdminRepository {
         $messages = [
             'operate.required' => 'operate.required.',
             'order_id.required' => 'order_id.required.',
-            'transaction_type.required' => 'transaction_type.required.',
-            'transaction_amount.required' => 'transaction_amount.required.',
+            'transaction_date.required' => '请选择交易日期！',
+            'transaction_title.required' => '请填写费用类型！',
+            'transaction_type.required' => '请填写支付方式！',
+            'transaction_amount.required' => '请填写金额！',
+            'transaction_account.required' => '请填写交易账号！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'order_id' => 'required',
+            'transaction_date' => 'required',
+            'transaction_title' => 'required',
             'transaction_type' => 'required',
             'transaction_amount' => 'required',
+            'transaction_account' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -4412,19 +4491,19 @@ class YHAdminRepository {
         DB::beginTransaction();
         try
         {
-
             $FinanceRecord = new YH_Finance;
 
             $FinanceRecord_data['creator_id'] = $me->id;
             $FinanceRecord_data['item_category'] = 11;
             $FinanceRecord_data['item_type'] = $record_type;
             $FinanceRecord_data['order_id'] = $post_data["order_id"];
-            $FinanceRecord_data['transaction_amount'] = $post_data["transaction_amount"];
+            $FinanceRecord_data['transaction_time'] = $transaction_date_timestamp;
             $FinanceRecord_data['transaction_type'] = $post_data["transaction_type"];
+            $FinanceRecord_data['transaction_amount'] = $post_data["transaction_amount"];
             $FinanceRecord_data['transaction_account'] = $post_data["transaction_account"];
             $FinanceRecord_data['transaction_order'] = $post_data["transaction_order"];
-            $FinanceRecord_data['transaction_time'] = $transaction_date_timestamp;
             $FinanceRecord_data['title'] = $post_data["transaction_title"];
+            $FinanceRecord_data['description'] = $post_data["transaction_description"];
 
             $mine_data = $post_data;
 
@@ -4472,7 +4551,11 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】设置-基本信息
+
+
+
+
+    // 【订单管理-修改信息】设置-基本信息
     public function operate_item_order_info_set($post_data)
     {
         $messages = [
@@ -4560,7 +4643,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】设置-基本信息
+    // 【订单管理-修改信息】设置-基本信息
     public function operate_item_order_info_time_set($post_data)
     {
         $messages = [
@@ -4669,7 +4752,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】设置-行程时间
+    // 【订单管理-修改信息】设置-行程时间
     public function operate_item_order_travel_set($post_data)
     {
         $messages = [
@@ -4772,7 +4855,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理-财务往来记录】返回-列表-视图
+    // 【订单管理-修改记录】返回-列表-视图
     public function view_item_order_modify_record($post_data)
     {
         $this->get_me();
@@ -4785,7 +4868,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【订单管理-财务往来记录】返回-列表-数据
+    // 【订单管理-修改记录】返回-列表-数据
     public function get_item_order_modify_record_datatable($post_data)
     {
         $this->get_me();

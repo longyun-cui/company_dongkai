@@ -192,7 +192,65 @@
         });
 
 
-        // 内容【管理员-删除】
+        // 【删除】
+        $(".item-main-body").on('click', ".item-delete-submit", function() {
+            var $that = $(this);
+            layer.msg('确定要"删除"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-delete') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-delete",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+        // 【发布】
+        $(".item-main-body").on('click', ".item-publish-submit", function() {
+            var $that = $(this);
+            layer.msg('确定要"发布"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-publish') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-publish",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+
+
+        // 【管理员-删除】
         $(".item-main-body").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
             layer.msg('确定要"删除"么？', {
@@ -220,7 +278,7 @@
             });
         });
 
-        // 内容【管理员-恢复】
+        // 【管理员-恢复】
         $(".item-main-body").on('click', ".item-admin-restore-submit", function() {
             var $that = $(this);
             layer.msg('确定要"恢复"么？', {
@@ -248,7 +306,7 @@
             });
         });
 
-        // 内容【管理员-永久删除】
+        // 【管理员-永久删除】
         $(".item-main-body").on('click', ".item-admin-delete-permanently-submit", function() {
             var $that = $(this);
             layer.msg('确定要"永久删除"么？', {
@@ -276,36 +334,8 @@
             });
         });
 
-        // 【发布】
-        $(".item-main-body").on('click', ".item-publish-submit", function() {
-            var $that = $(this);
-            layer.msg('确定要"发布"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-                    $.post(
-                        "{{ url('/item/order-publish') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "item-publish",
-                            item_id: $that.attr('data-id')
-                        },
-                        function(data){
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-                            else
-                            {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
-                            }
-                        },
-                        'json'
-                    );
-                }
-            });
-        });
 
-
-        // 【启用】
+        // 【管理员-启用】
         $(".item-main-body").on('click', ".item-admin-enable-submit", function() {
             var $that = $(this);
             layer.msg('确定"启用"？', {
@@ -332,7 +362,7 @@
                 }
             });
         });
-        // 【禁用】
+        // 【管理员-禁用】
         $(".item-main-body").on('click', ".item-admin-disable-submit", function() {
             var $that = $(this);
             layer.msg('确定"禁用"？', {
@@ -585,12 +615,20 @@
 
 
 
+        $('.time_picker').datetimepicker({
+            locale: moment.locale('zh-cn'),
+            format:"YYYY-MM-DD HH:mm"
+        });
+        $('.date_picker').datetimepicker({
+            locale: moment.locale('zh-cn'),
+            format:"YYYY-MM-DD"
+        });
+
+
         $('.form_datetime').datetimepicker({
             locale: moment.locale('zh-cn'),
             format:"YYYY-MM-DD HH:mm"
         });
-
-
         $(".form_date").datepicker({
             language: 'zh-CN',
             format: 'yyyy-mm-dd',
@@ -618,12 +656,22 @@
             var $that = $(this);
             $('.info-time-set-title').html($that.attr("data-id"));
             $('.info-time-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
             $('input[name=info-time-set-order-id]').val($that.attr("data-id"));
             $('input[name=info-time-set-column-key]').val($that.attr("data-key"));
-            $('input[name=info-time-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
-            if($that.attr('data-time-type') == "datetime") $('input[name=info-time-set-column-value]').removeClass("form_date").addClass("form_datetime");
-            else if($that.attr('data-time-type') == "date") $('input[name=info-time-set-column-value]').removeClass("form_datetime").addClass("form_date");
-            $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
+            $('input[name=info-time-set-time-type]').val($that.attr('data-time-type'));
+            if($that.attr('data-time-type') == "datetime")
+            {
+                $('input[name=info-time-set-column-value]').show();
+                $('input[name=info-date-set-column-value]').hide();
+                $('input[name=info-time-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            }
+            else if($that.attr('data-time-type') == "date")
+            {
+                $('input[name=info-time-set-column-value]').hide();
+                $('input[name=info-date-set-column-value]').show();
+                $('input[name=info-date-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            }
 
             $('#modal-info-time-set-body').modal('show');
         });
@@ -631,8 +679,16 @@
         $(".modal-main-body").on('click', "#item-info-time-set-submit", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-time-set-column-key"]').val();
-            var $column_value = $('input[name="info-time-set-column-value"]').val();
-            var $time_type = $('input[name="info-time-set-column-value"]').attr('data-time-type');
+            var $time_type = $('input[name="info-time-set-time-type"]').val();
+            var $column_value = '';
+            if($time_type == "datetime")
+            {
+                $column_value = $('input[name="info-time-set-column-value"]').val();
+            }
+            else if($time_type == "date")
+            {
+                $column_value = $('input[name="info-date-set-column-value"]').val();
+            }
             layer.msg('确定"提交"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
@@ -646,7 +702,7 @@
                             operate_type: $('input[name="info-time-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
-                            time_type: $time_type,
+                            time_type: $time_type
                         },
                         function(data){
                             if(!data.success) layer.msg(data.msg);
@@ -668,70 +724,6 @@
                 }
             });
         });
-
-
-
-//        $(".modal-main-body").off('click').on('click', 'input[data-time-type="datetime"]', function(){
-//            $(this).datetimepicker({
-//                locale: moment.locale('zh-cn'),
-//                format:"YYYY-MM-DD HH:mm"
-//            });
-//        });
-//        $(".modal-main-body").off('click').on('click', 'input[data-time-type="date"]', function(){
-//            $(this).datetimepicker({
-//                locale: moment.locale('zh-cn'),
-//                format:"YYYY-MM-DD"
-//            });
-//        });
-//        $(".modal-main-body").off('click').on('click', '.form_datetime', function(){
-//            $(this).datetimepicker({
-//                locale: moment.locale('zh-cn'),
-//                format:"YYYY-MM-DD HH:mm"
-//            });
-//        });
-//        $(".modal-main-body").off('click').on('click', '.form_date', function(){
-//            $(this).datetimepicker({
-//                locale: moment.locale('zh-cn'),
-//                format:"YYYY-MM-DD"
-//            });
-//        });
-        $(".modal-main-body").on('click', '.time_picker', function(){
-//            $(this).blur();
-            var $that = $(this);
-            if($that.attr('data-time-type') == 'date')
-            {
-//                layer.msg($that.attr('data-time-type'));
-                $(this).datetimepicker({
-                    locale: moment.locale('zh-cn'),
-                    format:"YYYY-MM-DD"
-                });
-            }
-            else
-            {
-//                layer.msg($that.attr('data-time-type'));
-                $(this).datetimepicker({
-                    locale: moment.locale('zh-cn'),
-                    format:"YYYY-MM-DD HH:mm"
-                });
-            }
-        });
-
-//        $('.time_picker[data-time-type="datetime"]').datetimepicker({
-//            locale: moment.locale('zh-cn'),
-//            format:"YYYY-MM-DD HH:mm"
-//        });
-//        $('.time_picker[data-time-type="date"]').datetimepicker({
-//            locale: moment.locale('zh-cn'),
-//            format:"YYYY-MM-DD"
-//        });
-//        $('input.time_picker[data-time-type="datetime"]').datetimepicker({
-//            locale: moment.locale('zh-cn'),
-//            format:"YYYY-MM-DD HH:mm"
-//        });
-//        $('input.time_picker[data-time-type="date"]').datetimepicker({
-//            locale: moment.locale('zh-cn'),
-//            format:"YYYY-MM-DD"
-//        });
 
 
     });

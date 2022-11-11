@@ -96,7 +96,7 @@
         // 【添加财务记录】提交
         $(".modal-main-body").on('click', "#item-finance-create-submit", function() {
             var that = $(this);
-            layer.msg('确定"添加"么？', {
+            layer.msg('确定"提交"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -113,7 +113,7 @@
                             transaction_account: $('input[name="finance-create-transaction-account"]').val(),
                             transaction_order: $('input[name="finance-create-transaction-order"]').val(),
                             transaction_title: $('input[name="finance-create-transaction-title"]').val(),
-                            transaction_description: $('input[name="finance-create-transaction-description"]').val()
+                            transaction_description: $('textarea[name="finance-create-transaction-description"]').val(),
                         },
                         function(data){
                             if(!data.success) layer.msg(data.msg);
@@ -126,11 +126,10 @@
                                     $("body").addClass("modal-open");
                                 });
 
-                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
-//                                TableDatatablesAjax_inner.init($keyword_id);
+//                                TableDatatablesAjax_finance.init($('input[name="finance-create-order-id"]').val());
 
                                 $('#datatable_ajax').DataTable().ajax.reload();
-                                $('#datatable_ajax_inner').DataTable().ajax.reload();
+                                $('#datatable_ajax_finance').DataTable().ajax.reload();
                             }
                         },
                         'json'
