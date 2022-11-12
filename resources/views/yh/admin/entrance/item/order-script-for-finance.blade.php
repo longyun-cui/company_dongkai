@@ -2,32 +2,33 @@
     $(function() {
 
         // 【搜索】
-        $(".item-main-body").on('click', ".finance-filter-submit", function() {
+        $("#datatable-for-finance-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax_finance').DataTable().ajax.reload();
         });
         // 【重置】
-        $(".item-main-body").on('click', ".finance-filter-cancel", function() {
-            $('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-finance-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-finance-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
-
 //            $('select.form-filter').selectpicker('refresh');
-            $('select.form-filter option').attr("selected",false);
-            $('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-finance-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-finance-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax_finance').DataTable().ajax.reload();
         });
         // 【查询】回车
-//        $(".item-main-body").on('keyup', ".item-search-keyup", function(event) {
-//            if(event.keyCode ==13)
-//            {
-//                $("#filter-submit").click();
-//            }
-//        });
+        $("#datatable-for-finance-list").on('keyup', ".filter-keyup", function(event) {
+            if(event.keyCode ==13)
+            {
+                $("#datatable-for-finance-list").find(".filter-submit").click();
+            }
+        });
 
 
-        // 【编辑】
-        $(".item-main-body").on('click', ".item-finance-edit-link", function() {
+
+
+        // 【编辑】跳转
+        $(".main-content").on('click', ".item-finance-edit-link", function() {
             var $that = $(this);
             window.location.href = "/item/order-finance-edit?id="+$that.attr('data-id');
         });
@@ -36,7 +37,7 @@
 
 
         // 【选择类别】
-        $("#modal-finance-create-form").on('click', "input[name=finance-create-type]", function() {
+        $("#modal-form-for-finance-create").on('click', "input[name=finance-create-type]", function() {
 
             var $value = $(this).val();
 
@@ -70,16 +71,16 @@
 
 
         // 显示【添加财务记录】
-        $(".item-main-body").on('click', ".item-finance-create-show", function() {
+        $(".main-content").on('click', ".modal-show-for-finance-create", function() {
             var that = $(this);
 
-            $('#modal-finance-create-body').modal({show: true,backdrop: 'static'});
+            $('#modal-body-for-finance-create').modal({show: true,backdrop: 'static'});
             $('.modal-backdrop').each(function() {
                 $(this).attr('id', 'id_' + Math.random());
             });
         });
         // 【添加财务记录】取消
-        $(".modal-main-body").on('click', "#item-finance-create-cancel", function() {
+        $(".main-content").on('click', "#item-cancel-for-finance-create", function() {
             var that = $(this);
             $('input[name=detect-set-id]').val(0);
             $('.detect-set-keyword').html('');
@@ -88,13 +89,12 @@
             $('.detect-set-original-rank').html('');
             $('input[name=detect-set-rank]').val('');
 
-            $('#modal-finance-create-body').modal('hide');
-            $("#modal-finance-create-body").on("hidden.bs.modal", function () {
+            $('#modal-body-for-finance-create').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
         // 【添加财务记录】提交
-        $(".modal-main-body").on('click', "#item-finance-create-submit", function() {
+        $(".main-content").on('click', "#item-submit-for-finance-create", function() {
             var that = $(this);
             layer.msg('确定"提交"么？', {
                 time: 0
@@ -121,8 +121,7 @@
                             else
                             {
                                 layer.close(index);
-                                $('#modal-finance-create-body').modal('hide');
-                                $("#modal-finance-create-body").on("hidden.bs.modal", function () {
+                                $('#modal-body-for-finance-create').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
                                 });
 

@@ -2,47 +2,35 @@
     $(function() {
 
         // 【搜索】
-        $(".item-main-body").on('click', ".filter-submit", function() {
+        $("#datatable-for-order-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $(".item-main-body").on('click', ".filter-cancel", function() {
-            $('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-order-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $('select.form-filter option').attr("selected",false);
-            $('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $(".item-main-body").on('keyup', ".item-search-keyup", function(event) {
+        $("#datatable-for-order-list").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#filter-submit").click();
+                $("#datatable-for-order-list").find(".filter-submit").click();
             }
         });
 
 
 
 
-        // 【下载二维码】
-        $(".item-main-body").on('click', ".item-download-qr-code-submit", function() {
-            var $that = $(this);
-            window.open("/download/qr-code?type=item&id="+$that.attr('data-id'));
-        });
-
-        // 【数据分析】
-        $(".item-main-body").on('click', ".item-statistic-submit", function() {
-            var $that = $(this);
-            window.open("/statistic/statistic-item?id="+$that.attr('data-id'));
-//            window.location.href = "/admin/statistic/statistic-item?id="+$that.attr('data-id');
-        });
 
         // 【编辑】
-        $(".item-main-body").on('click', ".item-edit-link", function() {
+        $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);
             window.location.href = "/item/order-edit?id="+$that.attr('data-id');
         });
@@ -50,107 +38,11 @@
 
 
 
-        /*
-            // 批量操作
-         */
-        // 【批量操作】全选or反选
-        $(".main-list-body").on('click', '#check-review-all', function () {
-            $('input[name="bulk-id"]').prop('checked',this.checked);//checked为true时为默认显示的状态
-        });
-
-        // 【批量操作】
-        $(".main-list-body").on('click', '#operate-bulk-submit', function() {
-            var $checked = [];
-            $('input[name="bulk-id"]:checked').each(function() {
-                $checked.push($(this).val());
-            });
-
-            if($checked.length == 0)
-            {
-                layer.msg("请先选择操作对象！");
-                return false;
-            }
-
-//            var $operate_set = new Array("启用","禁用","删除","彻底删除");
-            var $operate_set = ["启用","禁用","删除","彻底删除"];
-            var $operate_result = $('select[name="bulk-operate-status"]').val();
-            if($.inArray($operate_result, $operate_set) == -1)
-            {
-                layer.msg("请选择操作类型！");
-                return false;
-            }
-
-
-            layer.msg('确定"批量操作"么', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-
-                    $.post(
-                        "{{ url('/item/task-admin-operate-bulk') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "operate-bulk",
-                            bulk_item_id: $checked,
-                            bulk_item_operate:$('select[name="bulk-operate-status"]').val()
-                        },
-                        function(data){
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-                            else
-                            {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
-                                $("#check-review-all").prop('checked',false);
-                            }
-                        },
-                        'json'
-                    );
-
-                }
-            });
-
-        });
-
-        // 【批量删除】
-        $(".main-list-body").on('click', '#delete-bulk-submit', function() {
-            var $checked = [];
-            $('input[name="bulk-id"]:checked').each(function() {
-                $checked.push($(this).val());
-            });
-
-            layer.msg('确定"批量删除"么', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-
-                    $.post(
-                        "{{ url('/item/task-admin-delete-bulk') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-delete-bulk",
-                            bulk_item_id: $checked
-                        },
-                        function(data){
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-                            else
-                            {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
-                            }
-                        },
-                        'json'
-                    );
-
-                }
-            });
-
-        });
-
 
 
 
         // 内容【获取详情】
-        $(".item-main-body").on('click', ".item-detail-show", function() {
+        $(".main-content").on('click', ".item-modal-show-for-detail", function() {
             var $that = $(this);
             var $data = new Object();
             $.ajax({
@@ -176,24 +68,16 @@
             $('input[name=info-set-order-id]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));
-//            $('.item-user-id').html($that.attr('data-user-id'));
-//            $('.item-username').html($that.attr('data-username'));
-//            $('.item-title').html($data.title);
-//            $('.item-content').html($data.content);
-//            if($data.attachment_name)
-//            {
-//                var $attachment_html = $data.attachment_name+'&nbsp&nbsp&nbsp&nbsp'+'<a href="/all/download-item-attachment?item-id='+$data.id+'">下载</a>';
-//                $('.item-attachment').html($attachment_html);
-//            }
 
             $('.info-body').html($data.html);
-            $('#modal-info-detail-body').modal('show');
+
+            $('#modal-body-for-info-detail').modal('show');
 
         });
 
 
         // 【删除】
-        $(".item-main-body").on('click', ".item-delete-submit", function() {
+        $(".main-content").on('click', ".item-delete-submit", function() {
             var $that = $(this);
             layer.msg('确定要"删除"么？', {
                 time: 0
@@ -220,7 +104,7 @@
             });
         });
         // 【发布】
-        $(".item-main-body").on('click', ".item-publish-submit", function() {
+        $(".main-content").on('click', ".item-publish-submit", function() {
             var $that = $(this);
             layer.msg('确定要"发布"么？', {
                 time: 0
@@ -251,7 +135,7 @@
 
 
         // 【管理员-删除】
-        $(".item-main-body").on('click', ".item-admin-delete-submit", function() {
+        $(".main-content").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
             layer.msg('确定要"删除"么？', {
                 time: 0
@@ -277,9 +161,8 @@
                 }
             });
         });
-
         // 【管理员-恢复】
-        $(".item-main-body").on('click', ".item-admin-restore-submit", function() {
+        $(".main-content").on('click', ".item-admin-restore-submit", function() {
             var $that = $(this);
             layer.msg('确定要"恢复"么？', {
                 time: 0
@@ -305,9 +188,8 @@
                 }
             });
         });
-
         // 【管理员-永久删除】
-        $(".item-main-body").on('click', ".item-admin-delete-permanently-submit", function() {
+        $(".main-content").on('click', ".item-admin-delete-permanently-submit", function() {
             var $that = $(this);
             layer.msg('确定要"永久删除"么？', {
                 time: 0
@@ -336,7 +218,7 @@
 
 
         // 【管理员-启用】
-        $(".item-main-body").on('click', ".item-admin-enable-submit", function() {
+        $(".main-content").on('click', ".item-admin-enable-submit", function() {
             var $that = $(this);
             layer.msg('确定"启用"？', {
                 time: 0
@@ -363,7 +245,7 @@
             });
         });
         // 【管理员-禁用】
-        $(".item-main-body").on('click', ".item-admin-disable-submit", function() {
+        $(".main-content").on('click', ".item-admin-disable-submit", function() {
             var $that = $(this);
             layer.msg('确定"禁用"？', {
                 time: 0
@@ -402,7 +284,7 @@
 
 
         // 【行程管理】
-        $(".item-main-body").on('click', ".item-travel-show", function() {
+        $(".main-content").on('click', ".item-modal-show-for-travel", function() {
             var that = $(this);
             var $that = $(this);
             var $data = new Object();
@@ -470,11 +352,11 @@
             $('input[name="travel-set-order-id"]').val($order_id);
             $('.travel-set-order-id').html($order_id);
 
-            $('#modal-travel-body').modal('show');
+            $('#modal-body-for-travel-detail').modal('show');
         });
 
         // 显示【设置行程时间】
-        $(".modal-main-body").on('click', ".item-travel-time-set-show", function() {
+        $(".main-content").on('click', ".item-travel-time-set-show", function() {
             var $that = $(this);
 
             $object_type = $that.attr('data-type');
@@ -485,23 +367,22 @@
 
             $('input[name="travel-set-object-type"]').val($object_type);
 
-            $('#modal-travel-set-body').modal({show: true,backdrop: 'static'});
+            $('#modal-body-for-travel-set').modal({show: true,backdrop: 'static'});
             $('.modal-backdrop').each(function() {
                 $(this).attr('id', 'id_' + Math.random());
             });
         });
         // 【设置行程时间】取消
-        $(".modal-main-body").on('click', "#item-travel-set-cancel", function() {
+        $(".main-content").on('click', "#item-cancel-for-travel-set", function() {
             var that = $(this);
             $('input[name="travel-set-object-type"]').val('');
 
-            $('#modal-travel-set-body').modal('hide');
-            $("#modal-travel-set-body").on("hidden.bs.modal", function () {
+            $('#modal-body-for-travel-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
         // 【设置行程时间】提交
-        $(".modal-main-body").on('click', "#item-travel-set-submit", function() {
+        $(".main-content").on('click', "#item-submit-for-travel-set", function() {
             var that = $(this);
             layer.msg('确定"添加"么？', {
                 time: 0
@@ -522,8 +403,7 @@
                             else
                             {
                                 layer.close(index);
-                                $('#modal-travel-set-body').modal('hide');
-                                $("#modal-travel-set-body").on("hidden.bs.modal", function () {
+                                $('#modal-body-for-travel-set').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
                                 });
 
@@ -543,13 +423,13 @@
 
 
 
-        // 【财务记录】
-        $(".item-main-body").on('click', ".item-data-finance-link", function() {
+        // 【财务记录】跳转
+        $(".main-content").on('click', ".item-data-finance-link", function() {
             var that = $(this);
             window.open("/admin/business/keyword-detect-record?id="+that.attr('data-id'));
         });
-        // 【财务记录】
-        $(".item-main-body").on('click', ".item-finance-show", function() {
+        // 显示【财务记录】
+        $(".main-content").on('click', ".item-modal-show-for-finance", function() {
             var that = $(this);
             var $id = that.attr("data-id");
             var $keyword = that.attr("data-keyword");
@@ -560,10 +440,10 @@
 
             TableDatatablesAjax_finance.init($id);
 
-            $('#modal-finance-body').modal('show');
+            $('#modal-body-for-finance-list').modal('show');
         });
-        // 【财务-收入-记录】
-        $(".item-main-body").on('dblclick', ".item-finance-income-show", function() {
+        // 显示【财务-收入-记录】
+        $(".main-content").on('dblclick', ".item-show-for-finance-income", function() {
             var that = $(this);
             var $id = that.attr("data-id");
             var $keyword = that.attr("data-keyword");
@@ -574,10 +454,10 @@
 
             TableDatatablesAjax_finance.init($id,"income");
 
-            $('#modal-finance-body').modal('show');
+            $('#modal-body-for-finance-list').modal('show');
         });
-        // 【财务-支出-记录】
-        $(".item-main-body").on('dblclick', ".item-finance-expenditure-show", function() {
+        // 显示【财务-支出-记录】
+        $(".main-content").on('dblclick', ".item-show-for-finance-expenditure", function() {
             var that = $(this);
             var $id = that.attr("data-id");
             var $keyword = that.attr("data-keyword");
@@ -588,59 +468,27 @@
 
             TableDatatablesAjax_finance.init($id,"expenditure");
 
-            $('#modal-finance-body').modal('show');
+            $('#modal-body-for-finance-list').modal('show');
         });
 
 
 
 
-        // 【修改记录】
-        $(".item-main-body").on('click', ".item-record-show", function() {
+        // 显示【修改记录】
+        $(".main-content").on('click', ".item-modal-show-for-modify", function() {
             var that = $(this);
             var $id = that.attr("data-id");
-            var $keyword = that.attr("data-keyword");
 
-            $('#set-rank-bulk-submit').attr('data-keyword-id',$id);
-            $('input[name="finance-create-order-id"]').val($id);
-            $('.finance-create-order-id').html($id);
-            $('.finance-create-order-title').html($keyword);
-
-//            $('#datatable_ajax_record').empty();
-//            $('#datatable_ajax_record').DataTable().destroy();
             TableDatatablesAjax_record.init($id);
 
-            $('#modal-modify-body').modal('show');
+            $('#modal-body-for-modify-list').modal('show');
         });
 
 
 
 
-        $('.time_picker').datetimepicker({
-            locale: moment.locale('zh-cn'),
-            format:"YYYY-MM-DD HH:mm"
-        });
-        $('.date_picker').datetimepicker({
-            locale: moment.locale('zh-cn'),
-            format:"YYYY-MM-DD"
-        });
-
-
-        $('.form_datetime').datetimepicker({
-            locale: moment.locale('zh-cn'),
-            format:"YYYY-MM-DD HH:mm"
-        });
-        $(".form_date").datepicker({
-            language: 'zh-CN',
-            format: 'yyyy-mm-dd',
-            todayHighlight: true,
-            autoclose: true
-        });
-
-
-
-
-        // 显示【修改属性】
-        $(".item-main-body").on('dblclick', ".order-info-set-text", function() {
+        // 显示【修改文本属性】
+        $(".main-content").on('dblclick', ".modal-show-for-info-text-set", function() {
             var $that = $(this);
             $('.info-set-title').html($that.attr("data-id"));
             $('.info-set-column-name').html($that.attr("data-name"));
@@ -649,10 +497,66 @@
             $('input[name=info-set-column-value]').val($that.attr("data-value"));
             $('input[name=info-set-operate-type]').val($that.attr('data-operate-type'));
 
-            $('#modal-info-set-body').modal('show');
+            $('#modal-body-for-info-text-set').modal('show');
         });
+        // 【修改属性】取消
+        $(".main-content").on('click', "#item-cancel-for-info-text-set", function() {
+            var that = $(this);
+
+            $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【修改属性】提交
+        $(".main-content").on('click', "#item-submit-for-info-text-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-set-column-key"]').val();
+            var $column_value = $('input[name="info-set-column-value"]').val();
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-info-set') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: $('input[name="info-set-operate"]').val(),
+                            order_id: $('input[name="info-set-order-id"]').val(),
+                            operate_type: $('input[name="info-set-operate-type"]').val(),
+                            column_key: $column_key,
+                            column_value: $column_value,
+                        },
+                        function(data){
+                            if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                            else
+                            {
+                                layer.close(index);
+                                $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
+                                    $("body").addClass("modal-open");
+                                });
+
+//                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
+////                                TableDatatablesAjax_inner.init($keyword_id);
+
+                                $('#datatable_ajax').DataTable().ajax.reload();
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload();
+
+                                $set_column = $('.item-detail-operate[data-key='+$column_key+']');
+                                $set_column.attr('data-value',$column_value);
+                                $set_column.html('<a href="javascript:void(0);" data-type="edit">修改</a>');
+                                $set_column.parents('.form-group').find('.item-detail-text').html($column_value);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
         // 显示【修改时间】
-        $(".item-main-body").on('dblclick', ".order-info-set-time", function() {
+        $(".main-content").on('dblclick', ".modal-show-for-info-time-set", function() {
             var $that = $(this);
             $('.info-time-set-title').html($that.attr("data-id"));
             $('.info-time-set-column-name').html($that.attr("data-name"));
@@ -673,10 +577,18 @@
                 $('input[name=info-date-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
             }
 
-            $('#modal-info-time-set-body').modal('show');
+            $('#modal-body-for-info-time-set').modal('show');
+        });
+        // 【修改时间】取消
+        $(".main-content").on('click', "#item-cancel-for-info-time-set", function() {
+            var that = $(this);
+
+            $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
         });
         // 【修改时间】提交
-        $(".modal-main-body").on('click', "#item-info-time-set-submit", function() {
+        $(".main-content").on('click', "#item-submit-for-info-time-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-time-set-column-key"]').val();
             var $time_type = $('input[name="info-time-set-time-type"]').val();
@@ -710,10 +622,9 @@
                             else
                             {
                                 layer.close(index);
-                                $('#modal-info-time-set-body').modal('hide');
-//                                $("#modal-info-time-set-body").on("hidden.bs.modal", function () {
-//                                    $("body").addClass("modal-open");
-//                                });
+                                $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
+                                    $("body").addClass("modal-open");
+                                });
 
                                 $('#datatable_ajax').DataTable().ajax.reload();
 
@@ -723,6 +634,30 @@
                     );
                 }
             });
+        });
+
+
+
+
+        $('.time_picker').datetimepicker({
+            locale: moment.locale('zh-cn'),
+            format:"YYYY-MM-DD HH:mm"
+        });
+        $('.date_picker').datetimepicker({
+            locale: moment.locale('zh-cn'),
+            format:"YYYY-MM-DD"
+        });
+
+
+        $('.form_datetime').datetimepicker({
+            locale: moment.locale('zh-cn'),
+            format:"YYYY-MM-DD HH:mm"
+        });
+        $(".form_date").datepicker({
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd',
+            todayHighlight: true,
+            autoclose: true
         });
 
 

@@ -43,28 +43,28 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="item-main-body">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-order-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="id" placeholder="ID" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" />
 
-                        <select class="form-control form-filter" name="staff" style="width:96px;">
+                        <select class="form-control form-filter" name="order-staff" style="width:96px;">
                             <option value ="-1">选择员工</option>
                             @foreach($staff_list as $v)
                                 <option value ="{{ $v->id }}">{{ $v->true_name }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="client" style="width:96px;">
+                        <select class="form-control form-filter" name="order-client" style="width:96px;">
                             <option value ="-1">选择客户</option>
                             @foreach($client_list as $v)
                                 <option value ="{{ $v->id }}">{{ $v->username }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="car" style="width:96px;">
+                        <select class="form-control form-filter" name="order-car" style="width:96px;">
                             <option value ="-1">选择车辆</option>
                             @foreach($car_list as $v)
                                 <option value ="{{ $v->id }}">{{ $v->name }}</option>
@@ -73,17 +73,17 @@
 
                         <select class="form-control form-filter" name="order-status" style="width:96px;">
                             <option value ="-1">订单状态</option>
-                            <option value ="0">未发布</option>
-                            <option value ="1">待发车</option>
-                            <option value ="9">进行中</option>
-                            <option value ="81">已到达</option>
-                            <option value ="100">已结束</option>
+                            <option value ="未发布">未发布</option>
+                            <option value ="待发车">待发车</option>
+                            <option value ="进行中">进行中</option>
+                            <option value ="已到达">已到达</option>
+                            {{--<option value ="已结束">已结束</option>--}}
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-order">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -143,318 +143,303 @@
 
 
 {{--显示-基本信息--}}
-<div class="modal fade modal-main-body" id="modal-info-detail-body">
-    <div class="col-md-8 col-md-offset-2" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+<div class="modal fade modal-main-body" id="modal-body-for-info-detail">
+    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:64px;margin-bottom:64px;background:#fff;">
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PORTLET-->
-                <div class="box- box-info- form-container">
+        <div class="box- box-info- form-container">
 
-                    <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">订单【<span class="info-detail-title"></span>】详情</h3>
-                        <div class="box-tools pull-right">
+            <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">订单【<span class="info-detail-title"></span>】详情</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered" id="form-edit-modal">
+                <div class="box-body  info-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="operate" value="work-order" readonly>
+                    <input type="hidden" name="id" value="0" readonly>
+
+                    {{--客户--}}
+                    <div class="form-group item-detail-client">
+                        <label class="control-label col-md-2">客户</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <label class="col-md-2"></label>
+                    </div>
+                    {{--金额--}}
+                    <div class="form-group item-detail-amount">
+                        <label class="control-label col-md-2">金额</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text">333</span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--车辆类型--}}
+                    <div class="form-group item-detail-car_owner_type">
+                        <label class="control-label col-md-2">车辆所属</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="car_owner_type"></div>
+                    </div>
+                    {{--车牌--}}
+                    <div class="form-group item-detail-car">
+                        <label class="control-label col-md-2">车牌</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--车挂--}}
+                    <div class="form-group item-detail-trailer">
+                        <label class="control-label col-md-2">车挂</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--箱型--}}
+                    <div class="form-group item-detail-container_type">
+                        <label class="control-label col-md-2">箱型</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="container_type"></div>
+                    </div>
+                    {{--所属公司--}}
+                    <div class="form-group item-detail-subordinate_company">
+                        <label class="control-label col-md-2">所属公司</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="subordinate_company"></div>
+                    </div>
+                    {{--回单状态--}}
+                    <div class="form-group item-detail-receipt_status">
+                        <label class="control-label col-md-2">回单状态</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="receipt_status"></div>
+                    </div>
+                    {{--回单地址--}}
+                    <div class="form-group item-detail-receipt_address">
+                        <label class="control-label col-md-2">回单地址</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="receipt_address"></div>
+                    </div>
+                    {{--GPS--}}
+                    <div class="form-group item-detail-GPS">
+                        <label class="control-label col-md-2">GPS</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="GPS"></div>
+                    </div>
+                    {{--固定线路--}}
+                    <div class="form-group item-detail-fixed_route">
+                        <label class="control-label col-md-2">固定线路</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="fixed_route"></div>
+                    </div>
+                    {{--临时线路--}}
+                    <div class="form-group item-detail-temporary_route">
+                        <label class="control-label col-md-2">临时线路</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="temporary_route"></div>
+                    </div>
+                    {{--单号--}}
+                    <div class="form-group item-detail-order_number">
+                        <label class="control-label col-md-2">单号</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="order_number"></div>
+                    </div>
+                    {{--收款人--}}
+                    <div class="form-group item-detail-payee_name">
+                        <label class="control-label col-md-2">收款人</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="payee_name"></div>
+                    </div>
+                    {{--安排人--}}
+                    <div class="form-group item-detail-arrange_people">
+                        <label class="control-label col-md-2">安排人</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="arrange_people"></div>
+                    </div>
+                    {{--车货源--}}
+                    <div class="form-group item-detail-car_supply">
+                        <label class="control-label col-md-2">车货源</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="car_supply"></div>
+                    </div>
+                    {{--车辆管理人--}}
+                    <div class="form-group item-detail-car_managerial_people">
+                        <label class="control-label col-md-2">车辆管理人</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="car_managerial_people"></div>
+                    </div>
+                    {{--主驾--}}
+                    <div class="form-group item-detail-driver">
+                        <label class="control-label col-md-2">主驾</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="driver"></div>
+                    </div>
+                    {{--副驾--}}
+                    <div class="form-group item-detail-copilot">
+                        <label class="control-label col-md-2">副驾</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="copilot"></div>
+                    </div>
+                    {{--重量--}}
+                    <div class="form-group item-detail-weight">
+                        <label class="control-label col-md-2">重量</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="weight"></div>
+                    </div>
+
+
+
+
+                    {{--说明--}}
+                    <div class="form-group _none">
+                        <label class="control-label col-md-2">说明</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="">这是一段说明。</span>
                         </div>
                     </div>
 
-                    <form action="" method="post" class="form-horizontal form-bordered" id="form-edit-modal">
-                        <div class="box-body  info-body">
+                </div>
+            </form>
 
-                            {{ csrf_field() }}
-                            <input type="hidden" name="operate" value="work-order" readonly>
-                            <input type="hidden" name="id" value="0" readonly>
-
-                            {{--客户--}}
-                            <div class="form-group item-detail-client">
-                                <label class="control-label col-md-2">客户</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <label class="col-md-2"></label>
-                            </div>
-                            {{--金额--}}
-                            <div class="form-group item-detail-amount">
-                                <label class="control-label col-md-2">金额</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text">333</span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate=""></div>
-                            </div>
-                            {{--车辆类型--}}
-                            <div class="form-group item-detail-car_owner_type">
-                                <label class="control-label col-md-2">车辆所属</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="car_owner_type"></div>
-                            </div>
-                            {{--车牌--}}
-                            <div class="form-group item-detail-car">
-                                <label class="control-label col-md-2">车牌</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate=""></div>
-                            </div>
-                            {{--车挂--}}
-                            <div class="form-group item-detail-trailer">
-                                <label class="control-label col-md-2">车挂</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate=""></div>
-                            </div>
-                            {{--箱型--}}
-                            <div class="form-group item-detail-container_type">
-                                <label class="control-label col-md-2">箱型</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="container_type"></div>
-                            </div>
-                            {{--所属公司--}}
-                            <div class="form-group item-detail-subordinate_company">
-                                <label class="control-label col-md-2">所属公司</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="subordinate_company"></div>
-                            </div>
-                            {{--回单状态--}}
-                            <div class="form-group item-detail-receipt_status">
-                                <label class="control-label col-md-2">回单状态</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="receipt_status"></div>
-                            </div>
-                            {{--回单地址--}}
-                            <div class="form-group item-detail-receipt_address">
-                                <label class="control-label col-md-2">回单地址</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="receipt_address"></div>
-                            </div>
-                            {{--GPS--}}
-                            <div class="form-group item-detail-GPS">
-                                <label class="control-label col-md-2">GPS</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="GPS"></div>
-                            </div>
-                            {{--固定线路--}}
-                            <div class="form-group item-detail-fixed_route">
-                                <label class="control-label col-md-2">固定线路</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="fixed_route"></div>
-                            </div>
-                            {{--临时线路--}}
-                            <div class="form-group item-detail-temporary_route">
-                                <label class="control-label col-md-2">临时线路</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="temporary_route"></div>
-                            </div>
-                            {{--单号--}}
-                            <div class="form-group item-detail-order_number">
-                                <label class="control-label col-md-2">单号</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="order_number"></div>
-                            </div>
-                            {{--收款人--}}
-                            <div class="form-group item-detail-payee_name">
-                                <label class="control-label col-md-2">收款人</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="payee_name"></div>
-                            </div>
-                            {{--安排人--}}
-                            <div class="form-group item-detail-arrange_people">
-                                <label class="control-label col-md-2">安排人</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="arrange_people"></div>
-                            </div>
-                            {{--车货源--}}
-                            <div class="form-group item-detail-car_supply">
-                                <label class="control-label col-md-2">车货源</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="car_supply"></div>
-                            </div>
-                            {{--车辆管理人--}}
-                            <div class="form-group item-detail-car_managerial_people">
-                                <label class="control-label col-md-2">车辆管理人</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="car_managerial_people"></div>
-                            </div>
-                            {{--主驾--}}
-                            <div class="form-group item-detail-driver">
-                                <label class="control-label col-md-2">主驾</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="driver"></div>
-                            </div>
-                            {{--副驾--}}
-                            <div class="form-group item-detail-copilot">
-                                <label class="control-label col-md-2">副驾</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="copilot"></div>
-                            </div>
-                            {{--重量--}}
-                            <div class="form-group item-detail-weight">
-                                <label class="control-label col-md-2">重量</label>
-                                <div class="col-md-8 ">
-                                    <span class="item-detail-text"></span>
-                                </div>
-                                <div class="col-md-2 item-detail-operate" data-operate="weight"></div>
-                            </div>
-
-
-
-
-                            {{--说明--}}
-                            <div class="form-group _none">
-                                <label class="control-label col-md-2">说明</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <span class="">这是一段说明。</span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </form>
-
-                    <div class="box-footer _none">
-                        <div class="row _none">
-                            <div class="col-md-8 col-md-offset-2">
-                                <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
-                                <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
-                            </div>
-                        </div>
+            <div class="box-footer _none">
+                <div class="row _none">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
                     </div>
                 </div>
-                <!-- END PORTLET-->
             </div>
         </div>
+
     </div>
 </div>
 
 
 {{--修改-基本信息--}}
-<div class="modal fade modal-main-body" id="modal-info-set-body">
-    <div class="col-md-6 col-md-offset-3" id="info-edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+<div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PORTLET-->
-                <div class="box- box-info- form-container">
+        <div class="box- box-info- form-container">
 
-                    <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">修改订单【<span class="info-set-title"></span>】</h3>
-                        <div class="box-tools pull-right">
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改订单【<span class="info-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="info-set-operate" value="item-order-info-set" readonly>
+                    <input type="hidden" name="info-set-order-id" value="0" readonly>
+                    <input type="hidden" name="info-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="info-set-column-key" value="" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 info-set-column-name"></label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="info-set-column-value" autocomplete="off" placeholder="" value="">
                         </div>
                     </div>
 
-                    <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-set-form">
-                        <div class="box-body">
 
-                            {{ csrf_field() }}
-                            <input type="hidden" name="info-set-operate" value="item-order-info-set" readonly>
-                            <input type="hidden" name="info-set-order-id" value="0" readonly>
-                            <input type="hidden" name="info-set-operate-type" value="add" readonly>
-                            <input type="hidden" name="info-set-column-key" value="" readonly>
+                </div>
+            </form>
 
-
-                            <div class="form-group">
-                                <label class="control-label col-md-2 info-set-column-name"></label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control" name="info-set-column-value" autocomplete="off" placeholder="" value="">
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </form>
-
-                    <div class="box-footer">
-                        <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
-                                <button type="button" class="btn btn-success" id="item-info-set-submit"><i class="fa fa-check"></i> 提交</button>
-                                <button type="button" class="btn btn-default" id="item-info-set-cancel">取消</button>
-                            </div>
-                        </div>
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-text-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-text-set">取消</button>
                     </div>
                 </div>
-                <!-- END PORTLET-->
             </div>
         </div>
+
     </div>
 </div>
 {{--修改-时间信息--}}
-<div class="modal fade modal-main-body" id="modal-info-time-set-body">
-    <div class="col-md-6 col-md-offset-3" id="info-time-edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+<div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PORTLET-->
-                <div class="box- box-info- form-container">
+        <div class="box- box-info- form-container">
 
-                    <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">修改订单【<span class="info-time-set-title"></span>】</h3>
-                        <div class="box-tools pull-right">
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改订单【<span class="info-time-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-time-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="info-time-set-operate" value="item-order-info-set" readonly>
+                    <input type="hidden" name="info-time-set-order-id" value="0" readonly>
+                    <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="info-time-set-column-key" value="" readonly>
+                    <input type="hidden" name="info-time-set-time-type" value="" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 info-time-set-column-name"></label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime">
+                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date">
                         </div>
                     </div>
 
-                    <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-time-set-form">
-                        <div class="box-body">
 
-                            {{ csrf_field() }}
-                            <input type="hidden" name="info-time-set-operate" value="item-order-info-set" readonly>
-                            <input type="hidden" name="info-time-set-order-id" value="0" readonly>
-                            <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
-                            <input type="hidden" name="info-time-set-column-key" value="" readonly>
-                            <input type="hidden" name="info-time-set-time-type" value="" readonly>
+                </div>
+            </form>
 
-
-                            <div class="form-group">
-                                <label class="control-label col-md-2 info-time-set-column-name"></label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime">
-                                    <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date">
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </form>
-
-                    <div class="box-footer">
-                        <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
-                                <button type="button" class="btn btn-success" id="item-info-time-set-submit"><i class="fa fa-check"></i> 提交</button>
-                                <button type="button" class="btn btn-default" id="item-info-time-set-cancel">取消</button>
-                            </div>
-                        </div>
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-time-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-time-set">取消</button>
                     </div>
                 </div>
-                <!-- END PORTLET-->
             </div>
         </div>
+
     </div>
 </div>
 
@@ -462,205 +447,197 @@
 
 
 {{--行程记录--}}
-<div class="modal fade modal-main-body" id="modal-travel-body">
-    <div class="col-md-8 col-md-offset-2" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+<div class="modal fade modal-main-body" id="modal-body-for-travel-detail">
+    <div class="col-md-8 col-md-offset-2 margin-top-32px margin-bottom-64px bg-white">
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PORTLET-->
-                <div class="box- box-info- form-container">
+        <div class="box- box-info- form-container">
 
-                    <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">行程记录</h3>
-                        <div class="box-tools pull-right">
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">行程记录</h3>
+                <div class="box-tools- pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered" id="modal-form-for-travel-detail">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="operate" value="order-travel-set" readonly>
+                    <input type="hidden" name="order_id" value="0" readonly>
+
+                    {{--应出发时间--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">应出发时间</label>
+                        <div class="col-md-8 ">
+                            <div><span class="item-travel-should-departure-time"></span></div>
+                        </div>
+                    </div>
+                    {{--应出发时间--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">应到达时间</label>
+                        <div class="col-md-8 ">
+                            <div class="item-travel-should-arrival-time"></div>
+                        </div>
+                    </div>
+                    {{--实际出发时间--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">实际出发时间</label>
+                        <div class="col-md-8 ">
+                            <div class="item-travel-actual-departure-time"></div>
+                        </div>
+                    </div>
+                    {{--经停到达时间--}}
+                    <div class="form-group item-travel-stopover-container">
+                        <label class="control-label col-md-2">经停到达时间</label>
+                        <div class="col-md-8 ">
+                            <div class="item-travel-stopover-arrival-time"></div>
+                        </div>
+                    </div>
+                    {{--经停出发时间--}}
+                    <div class="form-group item-travel-stopover-container">
+                        <label class="control-label col-md-2">经停出发时间</label>
+                        <div class="col-md-8 ">
+                            <div class="item-travel-stopover-departure-time"></div>
+                        </div>
+                    </div>
+                    {{--实际到达时间--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">实际到达时间</label>
+                        <div class="col-md-8 ">
+                            <div class="item-travel-actual-arrival-time"></div>
+                        </div>
+                    </div>
+                    {{--说明--}}
+                    <div class="form-group _none">
+                        <label class="control-label col-md-2">说明</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="">这是一段说明。</span>
                         </div>
                     </div>
 
-                    <form action="" method="post" class="form-horizontal form-bordered" id="form-travel-set-modal">
-                        <div class="box-body">
+                </div>
+            </form>
 
-                            {{ csrf_field() }}
-                            <input type="hidden" name="operate" value="order-travel-set" readonly>
-                            <input type="hidden" name="order_id" value="0" readonly>
-
-                            {{--应出发时间--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">应出发时间</label>
-                                <div class="col-md-8 ">
-                                    <div><b class="item-travel-should-departure-time"></b></div>
-                                </div>
-                            </div>
-                            {{--应出发时间--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">应到达时间</label>
-                                <div class="col-md-8 ">
-                                    <div class="item-travel-should-arrival-time"></div>
-                                </div>
-                            </div>
-                            {{--实际出发时间--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">实际出发时间</label>
-                                <div class="col-md-8 ">
-                                    <div class="item-travel-actual-departure-time"></div>
-                                </div>
-                            </div>
-                            {{--经停到达时间--}}
-                            <div class="form-group item-travel-stopover-container">
-                                <label class="control-label col-md-2">经停到达时间</label>
-                                <div class="col-md-8 ">
-                                    <div class="item-travel-stopover-arrival-time"></div>
-                                </div>
-                            </div>
-                            {{--经停出发时间--}}
-                            <div class="form-group item-travel-stopover-container">
-                                <label class="control-label col-md-2">经停出发时间</label>
-                                <div class="col-md-8 ">
-                                    <div class="item-travel-stopover-departure-time"></div>
-                                </div>
-                            </div>
-                            {{--实际到达时间--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">实际到达时间</label>
-                                <div class="col-md-8 ">
-                                    <div class="item-travel-actual-arrival-time"></div>
-                                </div>
-                            </div>
-                            {{--说明--}}
-                            <div class="form-group _none">
-                                <label class="control-label col-md-2">说明</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <span class="">这是一段说明。</span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </form>
-
-                    <div class="box-footer">
-                        <div class="row _none">
-                            <div class="col-md-8 col-md-offset-2">
-                                <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
-                                <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
-                            </div>
-                        </div>
+            <div class="box-footer">
+                <div class="row _none">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
                     </div>
                 </div>
-                <!-- END PORTLET-->
             </div>
         </div>
+
     </div>
 </div>
 
 {{--设置行程时间--}}
-<div class="modal fade modal-main-body" id="modal-travel-set-body">
-    <div class="col-md-4 col-md-offset-4" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+<div class="modal fade modal-main-body" id="modal-body-for-travel-set">
+    <div class="col-md-4 col-md-offset-4 margin-top-64px margin-bottom-64px bg-white">
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PORTLET-->
-                <div class="box- box-info- form-container">
+            <div class="box- box-info- form-container">
 
-                    <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">设置行程时间</h3>
-                        <div class="box-tools pull-right">
-                        </div>
+                <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                    <h3 class="box-title">设置行程时间</h3>
+                    <div class="box-tools pull-right">
                     </div>
+                </div>
 
-                    <form action="" method="post" class="form-horizontal form-bordered " id="modal-travel-set-form">
-                        <div class="box-body">
+                <form action="" method="post" class="form-horizontal form-bordered " id="modal-form-for-travel-set">
+                    <div class="box-body">
 
-                            {{ csrf_field() }}
-                            <input type="hidden" name="travel-set-operate" value="item-order-travel-set" readonly>
-                            <input type="hidden" name="travel-set-order-id" value="0" readonly>
-                            <input type="hidden" name="travel-set-object-type" value="0" readonly>
+                        {{ csrf_field() }}
+                        <input type="hidden" name="travel-set-operate" value="item-order-travel-set" readonly>
+                        <input type="hidden" name="travel-set-order-id" value="0" readonly>
+                        <input type="hidden" name="travel-set-object-type" value="0" readonly>
 
 
 
-                            {{--订单ID--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">订单ID</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <span class="travel-set-order-id"></span>
-                                </div>
+                        {{--订单ID--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">订单ID</label>
+                            <div class="col-md-8 control-label" style="text-align:left;">
+                                <span class="travel-set-order-id"></span>
                             </div>
-                            {{--设置对象--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">设置对象</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <span class="travel-set-object-title"></span>
-                                </div>
-                            </div>
-                            {{--选择时间--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">选择时间</label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control form-filter form_datetime" name="travel-set-time" />
-                                </div>
-                            </div>
-                            {{--备注--}}
-                            <div class="form-group _none">
-                                <label class="control-label col-md-2">备注</label>
-                                <div class="col-md-8 ">
-                                    {{--<input type="text" class="form-control" name="description" placeholder="描述" value="">--}}
-                                    <textarea class="form-control" name="travel-set-description" rows="3" cols="100%"></textarea>
-                                </div>
-                            </div>
-
-
                         </div>
-                    </form>
-
-                    <div class="box-footer">
-                        <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
-                                <button type="button" class="btn btn-success" id="item-travel-set-submit"><i class="fa fa-check"></i> 提交</button>
-                                <button type="button" class="btn btn-default" id="item-travel-set-cancel">取消</button>
+                        {{--设置对象--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">设置对象</label>
+                            <div class="col-md-8 control-label" style="text-align:left;">
+                                <span class="travel-set-object-title"></span>
                             </div>
+                        </div>
+                        {{--选择时间--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">选择时间</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control form-filter form_datetime" name="travel-set-time" />
+                            </div>
+                        </div>
+                        {{--备注--}}
+                        <div class="form-group _none">
+                            <label class="control-label col-md-2">备注</label>
+                            <div class="col-md-8 ">
+                                {{--<input type="text" class="form-control" name="description" placeholder="描述" value="">--}}
+                                <textarea class="form-control" name="travel-set-description" rows="3" cols="100%"></textarea>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <button type="button" class="btn btn-success" id="item-submit-for-travel-set"><i class="fa fa-check"></i> 提交</button>
+                            <button type="button" class="btn btn-default" id="item-cancel-for-travel-set">取消</button>
                         </div>
                     </div>
                 </div>
-                <!-- END PORTLET-->
             </div>
-        </div>
+
     </div>
 </div>
 
 
 
 
-{{--财务记录--}}
-<div class="modal fade modal-main-body" id="modal-finance-body">
-    <div class="col-md-8 col-md-offset-2" id="edit-ctn-" style="background:#fff;">
-        <div class="box box-info- form-container datatable-body item-main-body" id="item-content-body">
+{{--财务列表--}}
+<div class="modal fade modal-main-body" id="modal-body-for-finance-list">
+    <div class="col-md-8 col-md-offset-2 margin-top-32px margin-bottom-64px bg-white">
 
-            <div class="box-header with-border" style="margin:16px 0;">
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
                 <h3 class="box-title">财务记录</h3>
-                <div class="caption">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
+
+                <div class="box-tools- pull-right">
                     <a href="javascript:void(0);">
-                        <button type="button" class="btn btn-success pull-right item-finance-create-show"><i class="fa fa-plus"></i> 添加记录</button>
+                        <button type="button" class="btn btn-success pull-right modal-show-for-finance-create">
+                            <i class="fa fa-plus"></i> 添加记录
+                        </button>
                     </a>
                 </div>
             </div>
 
-            <div class="box-body datatable-body item-main-body" id="item-main-body">
+            <div class="box-body datatable-body" id="datatable-for-finance-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="finance-title" placeholder="费用类型" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="finance-title" placeholder="费用类型" />
 
                         <select class="form-control form-filter" name="finance-item_type" style="width:96px;">
                             <option value ="-1">选择</option>
                             <option value ="1">收入</option>
-                            <option value ="11">支出</option>
+                            <option value ="21">支出</option>
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success finance-filter-submit" id="finance-filter-submit">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default finance-filter-cancel">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-finance">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -705,170 +682,163 @@
 
         </div>
 
-
     </div>
 </div>
 
 {{--添加财务记录--}}
-<div class="modal fade modal-main-body" id="modal-finance-create-body">
-    <div class="col-md-4 col-md-offset-4" id="edit-ctn" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+<div class="modal fade modal-main-body" id="modal-body-for-finance-create">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- BEGIN PORTLET-->
-                <div class="box- box-info- form-container">
+        <div class="box- box-info- form-container">
 
-                    <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">添加财务记录</h3>
-                        <div class="box-tools pull-right">
+            <div class="box-header with-border margin-top-16px">
+                <h3 class="box-title">添加财务记录</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-form-for-finance-create">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="finance-create-operate" value="finance-create-record" readonly>
+                    <input type="hidden" name="finance-create-order-id" value="0" readonly>
+
+
+
+                    {{--订单ID--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">订单ID</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="finance-create-order-id"></span>
+                        </div>
+                    </div>
+                    {{--关键词--}}
+                    <div class="form-group _none">
+                        <label class="control-label col-md-2">关键词</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="finance-create-order-title"></span>
+                        </div>
+                    </div>
+                    {{--交易类型--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">交易类型</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <button type="button" class="btn radio">
+                                <label>
+                                        <input type="radio" name="finance-create-type" value=1 checked="checked"> 收入
+                                </label>
+                            </button>
+                            <button type="button" class="btn radio">
+                                <label>
+                                        <input type="radio" name="finance-create-type" value=21> 支出
+                                </label>
+                            </button>
+                        </div>
+                    </div>
+                    {{--交易日期--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">交易日期</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control form-filter form_date" name="finance-create-transaction-date" />
+                        </div>
+                    </div>
+                    {{--费用说明--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">费用类型</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-title" placeholder="费用类型" value="">
+                        </div>
+                    </div>
+                    {{--金额--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">金额</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-amount" placeholder="金额" value="">
+                        </div>
+                    </div>
+                    {{--支付方式--}}
+                    <div class="form-group income-show-">
+                        <label class="control-label col-md-2">支付方式</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-type" placeholder="支付方式" value="">
+                        </div>
+                    </div>
+                    {{--交易账号--}}
+                    <div class="form-group income-show-">
+                        <label class="control-label col-md-2">交易账号</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-account" placeholder="交易账号" value="">
+                        </div>
+                    </div>
+                    {{--收款账号--}}
+                    <div class="form-group income-show-">
+                        <label class="control-label col-md-2">交易单号</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-order" placeholder="交易单号" value="">
+                        </div>
+                    </div>
+                    {{--备注--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">备注</label>
+                        <div class="col-md-8 ">
+                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="">--}}
+                            <textarea class="form-control" name="finance-create-transaction-description" rows="3" cols="100%"></textarea>
                         </div>
                     </div>
 
-                    <form action="" method="post" class="form-horizontal form-bordered " id="modal-finance-create-form">
-                        <div class="box-body">
 
-                            {{ csrf_field() }}
-                            <input type="hidden" name="finance-create-operate" value="finance-create-record" readonly>
-                            <input type="hidden" name="finance-create-order-id" value="0" readonly>
+                </div>
+            </form>
 
-
-
-                            {{--订单ID--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">订单ID</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <span class="finance-create-order-id"></span>
-                                </div>
-                            </div>
-                            {{--关键词--}}
-                            <div class="form-group _none">
-                                <label class="control-label col-md-2">关键词</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <span class="finance-create-order-title"></span>
-                                </div>
-                            </div>
-                            {{--交易类型--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">交易类型</label>
-                                <div class="col-md-8 control-label" style="text-align:left;">
-                                    <button type="button" class="btn radio">
-                                        <label>
-                                                <input type="radio" name="finance-create-type" value=1 checked="checked"> 收入
-                                        </label>
-                                    </button>
-                                    <button type="button" class="btn radio">
-                                        <label>
-                                                <input type="radio" name="finance-create-type" value=21> 支出
-                                        </label>
-                                    </button>
-                                </div>
-                            </div>
-                            {{--交易日期--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">交易日期</label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control form-filter form_date" name="finance-create-transaction-date" />
-                                </div>
-                            </div>
-                            {{--费用说明--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">费用类型</label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control" name="finance-create-transaction-title" placeholder="费用类型" value="">
-                                </div>
-                            </div>
-                            {{--金额--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">金额</label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control" name="finance-create-transaction-amount" placeholder="金额" value="">
-                                </div>
-                            </div>
-                            {{--支付方式--}}
-                            <div class="form-group income-show-">
-                                <label class="control-label col-md-2">支付方式</label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control" name="finance-create-transaction-type" placeholder="支付方式" value="">
-                                </div>
-                            </div>
-                            {{--交易账号--}}
-                            <div class="form-group income-show-">
-                                <label class="control-label col-md-2">交易账号</label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control" name="finance-create-transaction-account" placeholder="交易账号" value="">
-                                </div>
-                            </div>
-                            {{--收款账号--}}
-                            <div class="form-group income-show-">
-                                <label class="control-label col-md-2">交易单号</label>
-                                <div class="col-md-8 ">
-                                    <input type="text" class="form-control" name="finance-create-transaction-order" placeholder="交易单号" value="">
-                                </div>
-                            </div>
-                            {{--备注--}}
-                            <div class="form-group">
-                                <label class="control-label col-md-2">备注</label>
-                                <div class="col-md-8 ">
-                                    {{--<input type="text" class="form-control" name="description" placeholder="描述" value="">--}}
-                                    <textarea class="form-control" name="finance-create-transaction-description" rows="3" cols="100%"></textarea>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </form>
-
-                    <div class="box-footer">
-                        <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
-                                <button type="button" class="btn btn-success" id="item-finance-create-submit"><i class="fa fa-check"></i> 提交</button>
-                                <button type="button" class="btn btn-default" id="item-finance-create-cancel">取消</button>
-                            </div>
-                        </div>
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-finance-create"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-finance-create">取消</button>
                     </div>
                 </div>
-                <!-- END PORTLET-->
             </div>
         </div>
+
     </div>
 </div>
 
 
 
 
-{{--修改记录--}}
-<div class="modal fade modal-main-body" id="modal-modify-body">
-    <div class="col-md-8 col-md-offset-2" id="edit-ctn-" style="background:#fff;">
-        <div class="box box-info- form-container datatable-body item-main-body" id="item-content-body-">
+{{--修改列表--}}
+<div class="modal fade modal-main-body" id="modal-body-for-modify-list">
+    <div class="col-md-8 col-md-offset-2 margin-top-32px margin-bottom-64px bg-white">
 
-            <div class="box-header with-border" style="margin:16px 0;">
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
                 <h3 class="box-title">修改记录</h3>
-                <div class="caption">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
+                <div class="box-tools pull-right caption _none">
                     <a href="javascript:void(0);">
-                        <button type="button" class="btn btn-success pull-right item-finance-create-show"><i class="fa fa-plus"></i> 添加记录</button>
+                        <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加记录</button>
                     </a>
                 </div>
             </div>
 
-            <div class="box-body datatable-body item-main-body" id="item-main-body">
+            <div class="box-body datatable-body" id="datatable-for-modify-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="keyword" placeholder="关键词" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="modify-keyword" placeholder="关键词" />
 
-                        <select class="form-control form-filter" name="attribute" style="width:96px;">
+                        <select class="form-control form-filter" name="modify-attribute" style="width:96px;">
                             <option value ="-1">选择属性</option>
                             <option value ="amount">金额</option>
                             <option value ="11">支出</option>
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success modify-filter-submit" id="modify-filter-submit">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-modify">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default modify-filter-cancel">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-modify">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -878,7 +848,6 @@
                 <table class='table table-striped table-bordered' id='datatable_ajax_record'>
                     <thead>
                         <tr role='row' class='heading'>
-                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -909,7 +878,6 @@
             </div>
 
         </div>
-
 
     </div>
 </div>
@@ -947,16 +915,14 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="id"]').val();
-                        d.keyword = $('input[name="keyword"]').val();
-                        d.website = $('input[name="website"]').val();
-                        d.staff = $('select[name="staff"]').val();
-                        d.client = $('select[name="client"]').val();
-                        d.car = $('select[name="car"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
+                        d.id = $('input[name="order-id"]').val();
+                        d.name = $('input[name="order-name"]').val();
+                        d.title = $('input[name="order-title"]').val();
+                        d.keyword = $('input[name="order-keyword"]').val();
+                        d.staff = $('select[name="order-staff"]').val();
+                        d.client = $('select[name="order-client"]').val();
+                        d.car = $('select[name="order-car"]').val();
+                        d.status = $('select[name="order-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -1030,10 +996,10 @@
                                 $html_publish = '';
                                 $html_edit = '<a class="btn btn-xs btn-default disabled">编辑</a>';
                                 $html_edit = '';
-                                $html_detail = '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">详情</a>';
-                                $html_travel = '<a class="btn btn-xs bg-olive item-travel-show" data-id="'+data+'">行程</a>';
-                                $html_finance = '<a class="btn btn-xs bg-orange item-finance-show" data-id="'+data+'">财务</a>';
-                                $html_record = '<a class="btn btn-xs bg-purple item-record-show" data-id="'+data+'">记录</a>';
+                                $html_detail = '<a class="btn btn-xs bg-primary item-modal-show-for-detail" data-id="'+data+'">详情</a>';
+                                $html_travel = '<a class="btn btn-xs bg-olive item-modal-show-for-travel" data-id="'+data+'">行程</a>';
+                                $html_finance = '<a class="btn btn-xs bg-orange item-modal-show-for-finance" data-id="'+data+'">财务</a>';
+                                $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
                             }
 
 //                            if(row.deleted_at == null)
@@ -1244,7 +1210,7 @@
                                     $assign_time_value = $year+'-'+$month+'-'+$day;
                                 }
 
-                                $(nTd).addClass('order-info-set-time');
+                                $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','assign_time').attr('data-value',$assign_time_value);
                                 $(nTd).attr('data-name','派车日期');
                                 $(nTd).attr('data-time-type','date');
@@ -1276,7 +1242,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','amount').attr('data-value',data);
                                 $(nTd).attr('data-name','运价');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1295,7 +1261,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','oil_card_amount').attr('data-value',data);
                                 $(nTd).attr('data-name','油卡');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1314,7 +1280,7 @@
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
 //                            {
-//                                $(nTd).addClass('order-info-set-text');
+//                                $(nTd).addClass('modal-show-for-info-text-set');
 //                                $(nTd).attr('data-id',row.id).attr('data-key','invoice_amount').attr('data-value',data);
 //                                $(nTd).attr('data-name','开票额');
 //                                if(data) $(nTd).attr('data-operate-type','edit');
@@ -1333,7 +1299,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','invoice_point').attr('data-value',data);
                                 $(nTd).attr('data-name','票点');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1352,7 +1318,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','information_fee').attr('data-value',data);
                                 $(nTd).attr('data-name','信息费');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1371,7 +1337,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','customer_management_fee').attr('data-value',data);
                                 $(nTd).attr('data-name','客户管理费');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1390,7 +1356,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','time_limitation_deduction').attr('data-value',data);
                                 $(nTd).attr('data-name','时效扣款');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1451,7 +1417,7 @@
                             if(row.is_published != 0)
                             {
                                 $(nTd).addClass('color-blue');
-                                $(nTd).addClass('item-finance-income-show');
+                                $(nTd).addClass('item-show-for-finance-income');
                                 $(nTd).attr('data-id',row.id).attr('data-type','income');
                             }
                         },
@@ -1469,7 +1435,7 @@
                             if(row.is_published != 0)
                             {
                                 $(nTd).addClass('color-purple');
-                                $(nTd).addClass('item-finance-expenditure-show');
+                                $(nTd).addClass('item-show-for-finance-expenditure');
                                 $(nTd).attr('data-id',row.id).attr('data-type','expenditure');
                             }
                         },
@@ -1546,7 +1512,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','route').attr('data-value',data);
                                 $(nTd).attr('data-name','线路');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1565,7 +1531,7 @@
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
 //                            {
-//                                $(nTd).addClass('order-info-set-text');
+//                                $(nTd).addClass('modal-show-for-info-text-set');
 //                                $(nTd).attr('data-id',row.id).attr('data-key','fixed_route').attr('data-value',data);
 //                                $(nTd).attr('data-name','固定线路');
 //                                if(data) $(nTd).attr('data-operate-type','edit');
@@ -1584,7 +1550,7 @@
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
 //                            {
-//                                $(nTd).addClass('order-info-set-text');
+//                                $(nTd).addClass('modal-show-for-info-text-set');
 //                                $(nTd).attr('data-id',row.id).attr('data-key','temporary_route').attr('data-value',data);
 //                                $(nTd).attr('data-name','临时线路');
 //                                if(data) $(nTd).attr('data-operate-type','edit');
@@ -1631,7 +1597,7 @@
                         }
                     },
                     {
-                        "className": "text-left font-12px",
+                        "className": "text-center",
                         "width": "80px",
                         "title": "车辆",
                         "data": "id",
@@ -1641,7 +1607,7 @@
                             {
                                 if(row.car_owner_type > 1)
                                 {
-                                    $(nTd).addClass('order-info-set-text');
+                                    $(nTd).addClass('modal-show-for-info-text-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','outside_car').attr('data-value',row.outside_car);
                                     $(nTd).attr('data-name','车辆');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
@@ -1663,7 +1629,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "80px",
                         "title": "车挂",
                         "data": "id",
@@ -1673,7 +1639,7 @@
                             {
                                 if(row.car_owner_type > 1)
                                 {
-                                    $(nTd).addClass('order-info-set-text');
+                                    $(nTd).addClass('modal-show-for-info-text-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','outside_trailer').attr('data-value',row.outside_trailer);
                                     $(nTd).attr('data-name','车挂');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
@@ -1695,6 +1661,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "60px",
                         "title": "主驾",
                         "data": "driver_name",
@@ -1702,7 +1669,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名').attr('data-key','driver_name').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1713,6 +1680,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "100px",
                         "title": "主驾电话",
                         "data": "driver_phone",
@@ -1720,7 +1688,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','主驾电话').attr('data-key','driver_phone').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1731,6 +1699,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "60px",
                         "title": "副驾",
                         "data": "copilot_name",
@@ -1738,7 +1707,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','副驾姓名').attr('data-key','copilot_name').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1749,6 +1718,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "100px",
                         "title": "副驾电话",
                         "data": "copilot_phone",
@@ -1756,7 +1726,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','副驾电话').attr('data-key','copilot_phone').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1767,6 +1737,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "className": "text-center",
                         "width": "40px",
                         "title": "类型",
@@ -1777,7 +1748,7 @@
                             {
                                 if(row.car_owner_type > 1)
                                 {
-                                    $(nTd).addClass('order-info-set-text');
+                                    $(nTd).addClass('modal-show-for-info-text-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','trailer_type').attr('data-value',row.trailer_type);
                                     $(nTd).attr('data-name','车挂类型');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
@@ -1809,7 +1780,7 @@
                             {
                                 if(row.car_owner_type > 1)
                                 {
-                                    $(nTd).addClass('order-info-set-text');
+                                    $(nTd).addClass('modal-show-for-info-text-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','trailer_length').attr('data-value',row.trailer_length);
                                     $(nTd).attr('data-name','车挂尺寸');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
@@ -1841,7 +1812,7 @@
                             {
                                 if(row.car_owner_type > 1)
                                 {
-                                    $(nTd).addClass('order-info-set-text');
+                                    $(nTd).addClass('modal-show-for-info-text-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','trailer_volume').attr('data-value',row.trailer_volume);
                                     $(nTd).attr('data-name','车挂容积');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
@@ -1873,7 +1844,7 @@
                             {
                                 if(row.car_owner_type > 1)
                                 {
-                                    $(nTd).addClass('order-info-set-text');
+                                    $(nTd).addClass('modal-show-for-info-text-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','trailer_weight').attr('data-value',row.trailer_weight);
                                     $(nTd).attr('data-name','车挂载重');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
@@ -1905,7 +1876,7 @@
                             {
                                 if(row.car_owner_type > 1)
                                 {
-                                    $(nTd).addClass('order-info-set-text');
+                                    $(nTd).addClass('modal-show-for-info-text-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','trailer_axis_count').attr('data-value',row.trailer_axis_count);
                                     $(nTd).attr('data-name','车挂轴数');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
@@ -1927,7 +1898,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "60px",
                         "title": "出发地",
                         "data": "departure_place",
@@ -1935,7 +1906,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','departure_place').attr('data-value',data);
                                 $(nTd).attr('data-name','出发地');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1947,7 +1918,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "60px",
                         "title": "目的地",
                         "data": "destination_place",
@@ -1955,7 +1926,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','destination_place').attr('data-value',data);
                                 $(nTd).attr('data-name','目的地');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1967,7 +1938,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "60px",
                         "title": "经停地",
                         "data": "stopover_place",
@@ -1975,7 +1946,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','stopover_place').attr('data-value',data);
                                 $(nTd).attr('data-name','经停地');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2007,7 +1978,7 @@
                                     $time_value = $year+'-'+$month+'-'+$day+' '+$hour+':'+$minute;
                                 }
 
-                                $(nTd).addClass('order-info-set-time');
+                                $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','should_departure_time').attr('data-value',$time_value);
                                 $(nTd).attr('data-name','应出发时间');
                                 $(nTd).attr('data-time-type','datetime');
@@ -2058,7 +2029,7 @@
                                     $time_value = $year+'-'+$month+'-'+$day+' '+$hour+':'+$minute;
                                 }
 
-                                $(nTd).addClass('order-info-set-time');
+                                $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','should_arrival_time').attr('data-value',$time_value);
                                 $(nTd).attr('data-name','应到达时间');
                                 $(nTd).attr('data-time-type','datetime');
@@ -2110,7 +2081,7 @@
                                     $time_value = $year+'-'+$month+'-'+$day+' '+$hour+':'+$minute;
                                 }
 
-                                $(nTd).addClass('order-info-set-time');
+                                $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','actual_departure_time').attr('data-value',$time_value);
                                 $(nTd).attr('data-name','实际出发时间');
                                 $(nTd).attr('data-time-type','datetime');
@@ -2161,7 +2132,7 @@
                                     $time_value = $year+'-'+$month+'-'+$day+' '+$hour+':'+$minute;
                                 }
 
-                                $(nTd).addClass('order-info-set-time');
+                                $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','stopover_arrival_time').attr('data-value',$time_value);
                                 $(nTd).attr('data-name','经停到达时间');
                                 $(nTd).attr('data-time-type','datetime');
@@ -2213,7 +2184,7 @@
                                     $time_value = $year+'-'+$month+'-'+$day+' '+$hour+':'+$minute;
                                 }
 
-                                $(nTd).addClass('order-info-set-time');
+                                $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','stopover_departure_time').attr('data-value',$time_value);
                                 $(nTd).attr('data-name','经停出发时间');
                                 $(nTd).attr('data-time-type','datetime');
@@ -2265,7 +2236,7 @@
                                     $time_value = $year+'-'+$month+'-'+$day+' '+$hour+':'+$minute;
                                 }
 
-                                $(nTd).addClass('order-info-set-time');
+                                $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','actual_arrival_time').attr('data-value',$time_value);
                                 $(nTd).attr('data-name','实际到达时间');
                                 $(nTd).attr('data-time-type','datetime');
@@ -2298,70 +2269,6 @@
                             }
                         }
                     },
-//                    {
-//                        "className": "font-12px",
-//                        "width": "180px",
-//                        "title": "行程时间",
-//                        "data": 'id',
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            var $should_departure_time_html = '';
-//                            var $should_arrival_time_html = '';
-//                            var $actual_departure_time_html = '';
-//                            var $stopover_arrival_time_html = '';
-//                            var $stopover_departure_time_html = '';
-//                            var $actual_arrival_time_html = '';
-//
-//                            var $currentYear = new Date().getFullYear();
-//
-//
-//                            // 经停到达时间
-//                            if(row.stopover_arrival_time)
-//                            {
-//                                var $stopover_arrival_time = new Date(row.stopover_arrival_time*1000);
-//                                var $stopover_arrival_year = $stopover_arrival_time.getFullYear();
-//                                var $stopover_arrival_month = ('00'+($stopover_arrival_time.getMonth()+1)).slice(-2);
-//                                var $stopover_arrival_day = ('00'+($stopover_arrival_time.getDate())).slice(-2);
-//                                var $stopover_arrival_hour = ('00'+$stopover_arrival_time.getHours()).slice(-2);
-//                                var $stopover_arrival_minute = ('00'+$stopover_arrival_time.getMinutes()).slice(-2);
-//                                var $stopover_arrival_second = ('00'+$stopover_arrival_time.getSeconds()).slice(-2);
-//
-//                                if($stopover_arrival_year == $currentYear)
-//                                {
-//                                    $stopover_arrival_time_html = '<a href="javascript:void(0);">'+'(到达)'+'&nbsp;&nbsp;'+$stopover_arrival_month+'-'+$stopover_arrival_day+'&nbsp;'+$stopover_arrival_hour+':'+$stopover_arrival_minute+'</a>'+'<br>';
-//                                }
-//                                else
-//                                {
-//                                    $stopover_arrival_time_html = '<a href="javascript:void(0);">'+'(到达)'+'&nbsp;&nbsp;&nbsp;'+$stopover_arrival_year+'-'+$stopover_arrival_month+'-'+$stopover_arrival_day+'&nbsp;'+$stopover_arrival_hour+':'+$stopover_arrival_minute+'</a>'+'<br>';
-//                                }
-//                            }
-//
-//                            // 经停出发时间
-//                            if(row.stopover_departure_time)
-//                            {
-//                                var $stopover_departure_time = new Date(row.stopover_departure_time*1000);
-//                                var $stopover_departure_year = $stopover_departure_time.getFullYear();
-//                                var $stopover_departure_month = ('00'+($stopover_departure_time.getMonth()+1)).slice(-2);
-//                                var $stopover_departure_day = ('00'+($stopover_departure_time.getDate())).slice(-2);
-//                                var $stopover_departure_hour = ('00'+$stopover_departure_time.getHours()).slice(-2);
-//                                var $stopover_departure_minute = ('00'+$stopover_departure_time.getMinutes()).slice(-2);
-//                                var $stopover_departure_second = ('00'+$stopover_departure_time.getSeconds()).slice(-2);
-//
-//                                if($stopover_arrival_year == $currentYear)
-//                                {
-//                                    $stopover_departure_time_html = '<a href="javascript:void(0);">'+'(出发)'+'&nbsp;&nbsp;'+$stopover_departure_month+'-'+$stopover_departure_day+'&nbsp;'+$stopover_departure_hour+':'+$stopover_departure_minute+'</a>'+'<br>';
-//                                }
-//                                else
-//                                {
-//                                    $stopover_departure_time_html = '<a href="javascript:void(0);">'+'(出发)'+'&nbsp;&nbsp;'+$stopover_departure_year+'-'+$stopover_departure_month+'-'+$stopover_departure_day+'&nbsp;'+$stopover_departure_hour+':'+$stopover_departure_minute+'</a>'+'<br>';
-//                                }
-//                            }
-//
-//                            return $should_departure_time_html + $should_arrival_time_html +
-//                                $actual_departure_time_html + $stopover_arrival_time_html +
-//                                $stopover_departure_time_html + $actual_arrival_time_html;
-//                        }
-//                    },
                     {
                         "width": "120px",
                         "title": "单号",
@@ -2370,7 +2277,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','单号').attr('data-key','order_number').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2388,7 +2295,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','收款人').attr('data-key','payee_name').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2399,14 +2306,14 @@
                         }
                     },
                     {
-                        "width": "80px",
+                        "width": "100px",
                         "title": "车货源",
                         "data": "car_supply",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','车货源').attr('data-key','car_supply').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2424,7 +2331,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','安排人').attr('data-key','arrange_people').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2442,7 +2349,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','车辆负责人').attr('data-key','car_managerial_people').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2460,7 +2367,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','重量').attr('data-key','weight').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2478,7 +2385,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','GPS').attr('data-key','GPS').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2496,7 +2403,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','回单状态').attr('data-key','receipt_status').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2514,7 +2421,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                $(nTd).addClass('order-info-set-text');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','回单地址').attr('data-key','receipt_address').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2647,13 +2554,10 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
+                        d.name = $('input[name="finance-name"]').val();
                         d.title = $('input[name="finance-title"]').val();
-                        d.keyword = $('input[name="keyword"]').val();
+                        d.keyword = $('input[name="finance-keyword"]').val();
                         d.item_type = $('select[name="finance-item_type"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -2956,15 +2860,10 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.searchengine = $('select[name="searchengine"]').val();
-                        d.keyword = $('input[name="keyword"]').val();
-                        d.website = $('input[name="website"]').val();
-                        d.keywordstatus = $('select[name="keywordstatus"]').val();
-                        d.rank = $('select[name="inner_rank"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
+                        d.name = $('input[name="modify-name"]').val();
+                        d.title = $('input[name="modify-title"]').val();
+                        d.keyword = $('input[name="modify-keyword"]').val();
+                        d.status = $('select[name="modify-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -2997,7 +2896,7 @@
 //                    },
                     {
                         "className": "font-12px",
-                        "width": "32px",
+                        "width": "40px",
                         "title": "ID",
                         "data": "id",
                         "orderable": false,
@@ -3007,7 +2906,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "32px",
+                        "width": "60px",
                         "title": "类型",
                         "data": "operate_type",
                         "orderable": false,
@@ -3020,7 +2919,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "40px",
+                        "width": "60px",
                         "title": "修改属性",
                         "data": "column",
                         "orderable": false,
@@ -3073,7 +2972,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "48px",
+                        "width": "120px",
                         "title": "修改前",
                         "data": "before",
                         "orderable": false,
@@ -3090,8 +2989,17 @@
                                     var $minute = ('00'+$date.getMinutes()).slice(-2);
                                     var $second = ('00'+$date.getSeconds()).slice(-2);
 
-                                    if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                                    else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                    var $currentYear = new Date().getFullYear();
+                                    if($year == $currentYear)
+                                    {
+                                        if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $month+'-'+$day;
+                                    }
+                                    else
+                                    {
+                                        if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                    }
                                 }
                                 else return '';
                             }
@@ -3100,7 +3008,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "48px",
+                        "width": "120px",
                         "title": "修改后",
                         "data": "after",
                         "orderable": false,
@@ -3115,15 +3023,25 @@
                                 var $minute = ('00'+$date.getMinutes()).slice(-2);
                                 var $second = ('00'+$date.getSeconds()).slice(-2);
 
-                                if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                                else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear)
+                                {
+                                    if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                    else if(row.column_type == 'date') return $month+'-'+$day;
+                                }
+                                else
+                                {
+                                    if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                    else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                }
+
                             }
                             return data;
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "48px",
+                        "width": "60px",
                         "title": "操作人",
                         "data": "creator_id",
                         "orderable": false,
@@ -3132,7 +3050,8 @@
                         }
                     },
                     {
-                        "className": "font-12px",
+                        "className": "",
+                        "width": "120px",
                         "title": "操作时间",
                         "data": "created_at",
                         "orderable": false,
@@ -3145,25 +3064,14 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
+
 //                            return $year+'-'+$month+'-'+$day;
-                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-                        }
-                    },
-                    {
-                        "title": "操作",
-                        'data': 'id',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            var $date = row.transaction_date.trim().split(" ")[0];
-                            var html = '';
-//                                '<a class="btn btn-xs item-enable-submit" data-id="'+value+'">启用</a>'+
-//                                '<a class="btn btn-xs item-disable-submit" data-id="'+value+'">禁用</a>'+
-//                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
-//                                '<a class="btn btn-xs item-statistics-submit" data-id="'+value+'">流量统计</a>'+
-                                    {{--'<a class="btn btn-xs" href="/item/edit?id='+value+'">编辑</a>'+--}}
-                                //                                '<a class="btn btn-xs item-edit-submit" data-id="'+value+'">编辑</a>'+
-                            return html;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                         }
                     }
                 ],

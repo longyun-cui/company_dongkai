@@ -3912,20 +3912,22 @@ class YHAdminRepository {
         if($item->car_owner_type == 1)
         {
             $item->car_owner_type_name = "自有";
-            $item->car = $item->car_er->name;
-            $item->trailer = $item->trailer_er->name;
+            $item->car = $item->car_er ? $item->car_er->name : '';
+            $item->trailer = $item->trailer_er ? $item->trailer_er->name : '';
         }
         else if($item->car_owner_type == 21)
         {
-            $item->car_owner_type_name = "外请";
+            $item->car_owner_type_name = "外请·调车";
             $item->car = $item->outside_car;
             $item->trailer = $item->outside_trailer;
         }
         else if($item->car_owner_type == 41)
         {
-            $item->car_owner_type_name = "外派";
-            $item->car = $item->outside_car;
-            $item->trailer = $item->outside_trailer;
+            $item->car_owner_type_name = "外配·配货";
+            $item->car = $item->car_er ? $item->car_er->name : '';
+            $item->trailer = $item->trailer_er ? $item->trailer_er->name : '';
+//            $item->car = $item->outside_car;
+//            $item->trailer = $item->outside_trailer;
         }
 
         $item->should_departure_time_html = date("Y-m-d H:i", $item->should_departure_time);
@@ -4205,6 +4207,20 @@ class YHAdminRepository {
             {
 
                 $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car'])->orWhere('trailer_id', $post_data['car']); } );
+            }
+        }
+
+
+        if(!empty($post_data['status']))
+        {
+            $order_status = $post_data['status'];
+            if(in_array($order_status,["未发布","待发车","进行中","已到达"]))
+            {
+                if($order_status == "未发布") $query->where('is_published', 0);
+                else if($order_status == "待发车") $query->where('is_published', 1)->whereNull('actual_departure_time');
+                else if($order_status == "进行中") $query->where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                else if($order_status == "已到达") $query->where('is_published', 1)->whereNotNull('actual_arrival_time');
+
             }
         }
 
@@ -4680,15 +4696,18 @@ class YHAdminRepository {
         $before = $item->$column_key;
 
 
+        // 应出发时间
         if($column_key == "should_departure_time" && $item->should_arrival_time)
         {
-            if(strtotime($column_value) >= $item->should_arrival_time) return response_error([],"出发时间不能超过到达时间！");
+            if(strtotime($column_value) >= $item->should_arrival_time) return response_error([],"应出发时间不能超过应到达时间！");
         }
+        // 应到达时间
         if($column_key == "should_arrival_time" && $item->should_departure_time)
         {
-            if(strtotime($column_value) <= $item->should_departure_time)  return response_error([],"到达时间不能在出发时间之前！");
+            if(strtotime($column_value) <= $item->should_departure_time)  return response_error([],"应到达时间不能在应出发时间之前！");
         }
 
+        // 实际出发时间
         if($column_key == "actual_departure_time")
         {
             if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
@@ -4697,6 +4716,7 @@ class YHAdminRepository {
                 if(strtotime($column_value) >= $item->actual_arrival_time) return response_error([],"出发时间不能超过到达时间！");
             }
         }
+        // 实际到达时间
         if($column_key == "actual_arrival_time")
         {
             if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
@@ -4705,6 +4725,29 @@ class YHAdminRepository {
                 if(strtotime($column_value) <= $item->actual_departure_time)  return response_error([],"到达时间不能在出发时间之前！");
             }
             else return response_error([],"请先填写出发时间！");
+        }
+
+        // 经停到达时间
+        if($column_key == "stopover_arrival_time")
+        {
+            if(!$item->stopover_place) return response_error([],"没有经停点！");
+            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
+            if($item->actual_departure_time)
+            {
+                if(strtotime($column_value) <= $item->actual_departure_time) return response_error([],"经停点-到达时间不能在（实际）出发时间之前！");
+            }
+            else return response_error([],"请先填写（实际）出发时间！");
+        }
+        // 经停出发时间
+        if($column_key == "stopover_departure_time")
+        {
+            if(!$item->stopover_place) return response_error([],"没有经停点！");
+            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
+            if($item->stopover_arrival_time)
+            {
+                if(strtotime($column_value) <= $item->stopover_arrival_time) return response_error([],"（经停点）出发时间不能在（经停点）到达时间之前！");
+            }
+            else return response_error([],"请先填写（经停点）到达时间！");
         }
 
 
