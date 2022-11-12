@@ -117,18 +117,18 @@
                     <span>全部记录</span>
                 </a>
             </li>
-            <li class="treeview {{ $menu_active_of_finance_list_for_income or '' }}">
-                <a href="{{ url('/finance/finance-list-for-income')}}">
-                    <i class="fa fa-list text-red"></i>
-                    <span>支出记录</span>
-                </a>
-            </li>
-            <li class="treeview {{ $menu_active_of_finance_list_for_expense or '' }}">
-                <a href="{{ url('/finance/finance-list-for-expense')}}">
-                    <i class="fa fa-list text-red"></i>
-                    <span>收入记录</span>
-                </a>
-            </li>
+            {{--<li class="treeview {{ $menu_active_of_finance_list_for_income or '' }}">--}}
+                {{--<a href="{{ url('/finance/finance-list-for-income')}}">--}}
+                    {{--<i class="fa fa-list text-red"></i>--}}
+                    {{--<span>支出记录</span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
+            {{--<li class="treeview {{ $menu_active_of_finance_list_for_expense or '' }}">--}}
+                {{--<a href="{{ url('/finance/finance-list-for-expense')}}">--}}
+                    {{--<i class="fa fa-list text-red"></i>--}}
+                    {{--<span>收入记录</span>--}}
+                {{--</a>--}}
+            {{--</li>--}}
 
 
 
