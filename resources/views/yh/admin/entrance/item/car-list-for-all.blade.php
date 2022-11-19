@@ -130,7 +130,7 @@
 @section('custom-style')
     <style>
         .tableArea .main-table {
-            min-width: 2800px;
+            min-width: 3000px;
         }
     </style>
 @endsection
@@ -394,7 +394,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "160px",
                         "title": "车辆类型",
                         "data": "car_type",
                         "orderable": false,
@@ -404,7 +404,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "100px",
                         "title": "所有人",
                         "data": "car_owner",
                         "orderable": false,
@@ -514,7 +514,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "80px",
                         "title": "准牵引质量",
                         "data": "traction_mass",
                         "orderable": false,
@@ -587,6 +587,26 @@
                         "width": "120px",
                         "title": "创建时间",
                         "data": 'created_at',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+//                            return $year+'-'+$month+'-'+$day;
+                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "120px",
+                        "title": "更新时间",
+                        "data": 'updated_at',
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
