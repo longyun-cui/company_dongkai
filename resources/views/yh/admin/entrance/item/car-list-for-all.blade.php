@@ -130,7 +130,7 @@
 @section('custom-style')
     <style>
         .tableArea .main-table {
-            min-width: 3000px;
+            min-width: 3200px;
         }
     </style>
 @endsection
@@ -424,7 +424,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "160px",
                         "title": "品牌",
                         "data": "car_brand",
                         "orderable": false,
