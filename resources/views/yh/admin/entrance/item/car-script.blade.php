@@ -28,28 +28,6 @@
 
 
 
-        // 【下载二维码】
-        $("#item-main-body").on('click', ".item-download-qr-code-submit", function() {
-            var $that = $(this);
-            window.open("/download/qr-code?type=item&id="+$that.attr('data-id'));
-        });
-
-        // 【数据分析】
-        $("#item-main-body").on('click', ".item-statistic-submit", function() {
-            var $that = $(this);
-            window.open("/item/car-statistic?id="+$that.attr('data-id'));
-//            window.location.href = "/admin/statistic/statistic-item?id="+$that.attr('data-id');
-        });
-
-        // 【编辑】
-        $("#item-main-body").on('click', ".item-edit-link", function() {
-            var $that = $(this);
-            window.location.href = "/item/car-edit?id="+$that.attr('data-id');
-        });
-
-
-
-
         /*
             // 批量操作
          */
