@@ -65,6 +65,13 @@ class YHAdminRepository {
     // 返回（后台）主页视图
     public function view_admin_index()
     {
+//        $condition = request()->all();
+//        $return['condition'] = $condition;
+//
+//        $condition['task-list-type'] = 'unfinished';
+//        $parameter_result = http_build_query($condition);
+//        return redirect('/?'.$parameter_result);
+
         $this->get_me();
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.index';
         return view($view_blade);
@@ -1465,7 +1472,22 @@ class YHAdminRepository {
 //            ->withTrashed()
             ->with('owner','creator');
 //            ->where('item_category',11)
-//            ->where('item_type', '!=',0);
+//            ->where('item_type', '!=',0)
+//            ->withCount([
+//                'order_list as order_'=>function($query) {
+//                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','desc');
+//                }
+//            ]);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->with('ep','parent','fund')
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
@@ -3488,31 +3510,98 @@ class YHAdminRepository {
         $me = $this->me;
 
         $query = YH_Car::select('*')
-            ->with(['creator','owner',
-                'car_order_list'=>function($query) {
-                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','desc')->limit(1);
+            ->withTrashed()
+            ->withCount([
+                'car_order_list as car_on_the_road'=>function($query) {
+                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
                 },
-                'trailer_order_list'=>function($query) {
-                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','desc')->limit(1);
+                'trailer_order_list as trailer_on_the_road'=>function($query) {
+                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                },
+                'car_order_list as car_future'=>function($query) {
+                    $query->whereNull('actual_departure_time');
+                },
+                'trailer_order_list as trailer_future'=>function($query) {
+                    $query->whereNull('actual_departure_time');
+                }
+            ])
+            ->with(['creator','owner',
+                'car_order_list_for_current'=>function($query) {
+                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','asc')->limit(1);
+                },
+                'trailer_order_list_for_current'=>function($query) {
+                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','asc')->limit(1);
+                },
+                'car_order_list_for_completed'=>function($query) {
+                    $query->whereNotNull('actual_arrival_time')->orderby('actual_arrival_time','desc')->limit(1);
+                },
+                'trailer_order_list_for_completed'=>function($query) {
+                    $query->whereNotNull('actual_arrival_time')->orderby('actual_arrival_time','desc')->limit(1);
+                },
+                'car_order_list_for_future'=>function($query) {
+                    $query->whereNull('actual_departure_time')->orderby('actual_departure_time','asc');
+                },
+                'trailer_order_list_for_future'=>function($query) {
+                    $query->whereNull('actual_departure_time')->orderby('actual_departure_time','asc');
                 }
             ]);
-//            ->withCount([
-//                'order_list as order_'=>function($query) {
-//                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','desc');
-//                }
-//            ]);
-//            ->whereIn('user_category',[11])
-//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
-//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
-//            ->with('ep','parent','fund')
-//            ->withCount([
-//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
-//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
-//            ]);
-//            ->where(['userstatus'=>'正常','status'=>1])
-//            ->whereIn('usergroup',['Agent','Agent2']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        if(!empty($post_data['work_status']) || $post_data['work_status'] == 0)
+        {
+            $work_status = $post_data['work_status'];
+            if(in_array($work_status,[-1,0,1,9]))
+            {
+                if($work_status == 0)
+                {
+                    $query->whereDoesntHave('car_order_list_for_current', function ($query) {
+                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                        })
+                        ->whereDoesntHave('trailer_order_list_for_current', function ($query) {
+                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                        })
+                        ->whereDoesntHave('car_order_list_for_future', function ($query) {
+                            $query->whereNull('actual_departure_time');
+                        })
+                        ->whereDoesntHave('trailer_order_list_for_future', function ($query) {
+                            $query->whereNull('actual_departure_time');
+                        });
+                }
+                else if($work_status == 1)
+                {
+                    $query->whereHas('car_order_list_for_current', function ($query) {
+                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                        })
+                        ->orWhereHas('trailer_order_list_for_current', function ($query) {
+                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                        });
+                }
+                else if($work_status == 9)
+                {
+                    $query->where(function ($query) {
+                            $query->whereDoesntHave('car_order_list_for_current', function ($query) {
+                                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                                })
+                                ->whereDoesntHave('trailer_order_list_for_current', function ($query) {
+                                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                                });
+                        })
+                        ->where(function ($query) {
+                            $query->whereHas('car_order_list_for_future', function ($query) {
+                                    $query->whereNull('actual_departure_time');
+                                })
+                                ->orWhereHas('trailer_order_list_for_future', function ($query) {
+                                    $query->whereNull('actual_departure_time');
+                                });
+                        });
+                }
+            }
+        }
+
 
         $total = $query->count();
 
@@ -3533,15 +3622,80 @@ class YHAdminRepository {
         else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-//        dd($list);
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
 
         foreach ($list as $k => $v)
         {
-            $list[$k]->encode_id = encode($v->id);
+//            $list[$k]->encode_id = encode($v->id);
 
-            if(count($v->car_order_list) || count($v->trailer_order_list)) $list[$k]->car_status = 1;
-            else $list[$k]->car_status = 0;
+            $list[$k]->work_status = 0;
+            $list[$k]->current_place = '--';
+            $list[$k]->future_place = '--';
+
+            // 车辆类型 牵引车 || 车挂
+            if($v->item_type == 1)
+            {
+                $mine_on_the_road = $v->car_on_the_road;
+                $mine_future = $v->car_future;
+                $mine_order_list_for_current = $v->car_order_list_for_current;
+                $mine_order_list_for_completed = $v->car_order_list_for_completed;
+                $mine_order_list_for_future = $v->car_order_list_for_future;
+            }
+            else if($v->item_type == 21)
+            {
+                $mine_on_the_road = $v->trailer_on_the_road;
+                $mine_future = $v->trailer_future;
+                $mine_order_list_for_current = $v->trailer_order_list_for_current;
+                $mine_order_list_for_completed = $v->trailer_order_list_for_completed;
+                $mine_order_list_for_future = $v->trailer_order_list_for_future;
+            }
+
+//            if(count($v->car_order_list) || count($v->trailer_order_list)) $list[$k]->work_status = 1;
+            if($mine_on_the_road)
+            {
+                $list[$k]->work_status = 1;  // 工作中
+                // 未来位置
+                if(count($mine_order_list_for_current) > 0)
+                {
+                    $list[$k]->future_place = $mine_order_list_for_current[0]->destination_place;
+                }
+            }
+            else
+            {
+                if($mine_future)
+                {
+                    $list[$k]->work_status = 9;  // 待发车
+                    // 当前位置
+                    if(count($mine_order_list_for_completed) > 0)
+                    {
+                        $list[$k]->current_place = $mine_order_list_for_completed[0]->destination_place;
+
+                        if(count($mine_order_list_for_future) > 0)
+                        {
+                            $list[$k]->future_place = $mine_order_list_for_future[0]->destination_place;
+                        }
+                    }
+                    else
+                    {
+                        if(count($mine_order_list_for_future) > 0)
+                        {
+                            $list[$k]->current_place = $mine_order_list_for_future[0]->departure_place;
+                            $list[$k]->future_place = $mine_order_list_for_future[0]->destination_place;
+                        }
+                    }
+                }
+                else
+                {
+                    $list[$k]->work_status = 0;  // 空闲中
+                    // 当前位置
+                    if(count($v->car_order_completed_list) > 0)
+                    {
+                        $list[$k]->current_place = $v->car_order_completed_list[0]->destination_place;
+                    }
+                }
+
+            }
 
         }
 //        dd($list->toArray());

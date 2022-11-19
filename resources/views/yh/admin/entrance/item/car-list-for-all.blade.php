@@ -43,7 +43,7 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="item-main-body">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-car-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
@@ -57,10 +57,11 @@
                             {{--@endforeach--}}
                         {{--</select>--}}
 
-                        <select class="form-control form-filter" name="finished" style="width:96px;">
-                            <option value ="-1">全部</option>
-                            <option value ="0">待完成</option>
-                            <option value ="1">已完成</option>
+                        <select class="form-control form-filter" name="work_status" style="width:96px;">
+                            <option value ="-1">工作状态</option>
+                            <option value ="0">空闲</option>
+                            <option value ="1">工作中</option>
+                            <option value ="9">待发车</option>
                         </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
@@ -129,7 +130,7 @@
 @section('custom-style')
     <style>
         .tableArea .main-table {
-            min-width: 3000px;
+            min-width: 2800px;
         }
     </style>
 @endsection
@@ -157,15 +158,7 @@
                         d._token = $('meta[name="_token"]').attr('content');
                         d.name = $('input[name="name"]').val();
                         d.title = $('input[name="title"]').val();
-                        d.keyword = $('input[name="keyword"]').val();
-                        d.website = $('input[name="website"]').val();
-                        d.owner = $('select[name="owner"]').val();
-                        d.status = $('select[name="status"]').val();
-                        d.finished = $('select[name="finished"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
+                        d.work_status = $('select[name="work_status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -195,8 +188,8 @@
 //                        'orderable': false
 //                    },
                     {
-                        "className": "font-12px",
-                        "width": "40px",
+                        "className": "f",
+                        "width": "60px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -254,6 +247,28 @@
                     },
                     {
                         "width": "60px",
+                        "title": "状态",
+                        "data": "item_status",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.item_status == 1)
+                            {
+                                return '<small class="btn-xs btn-success">启用</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs btn-danger">禁用</small>';
+                            }
+                        }
+                    },
+                    {
+                        "width": "60px",
                         "title": "类型",
                         "data": 'item_type',
                         "orderable": false,
@@ -265,7 +280,7 @@
                     },
                     {
                         "className": "text-left",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "车牌号",
                         "data": "name",
                         "orderable": false,
@@ -277,12 +292,33 @@
                         "className": "",
                         "width": "80px",
                         "title": "工作状态",
-                        "data": 'car_status',
+                        "data": 'work_status',
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data == 0) return '<small class="btn-xs bg-grey">待运</small>';
-                            else if(data == 1) return '<small class="btn-xs bg-orange">工作中</small>';
+                            if(data == 0) return '<small class="btn-xs bg-red">空闲</small>';
+                            else if(data == 1) return '<small class="btn-xs bg-olive">工作中</small>';
+                            else if(data == 9) return '<small class="btn-xs bg-blue">待发车</small>';
                             else return "--";
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "当前位置",
+                        "data": "current_place",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "未来位置",
+                        "data": "future_place",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
                         }
                     },
                     {
@@ -469,7 +505,7 @@
                     {
                         "className": "text-center",
                         "width": "60px",
-                        "title": "核定载重质量",
+                        "title": "核定载重",
                         "data": "load_weight",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -479,7 +515,7 @@
                     {
                         "className": "text-center",
                         "width": "60px",
-                        "title": "准牵引总质量",
+                        "title": "准牵引质量",
                         "data": "traction_mass",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -498,7 +534,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "100px",
                         "title": "购买日期",
                         "data": "purchase_date",
                         "orderable": false,
@@ -508,7 +544,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "100px",
                         "title": "注册日期",
                         "data": "registration_date",
                         "orderable": false,
@@ -518,7 +554,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "100px",
                         "title": "发证日期",
                         "data": "issue_date",
                         "orderable": false,
@@ -528,7 +564,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "100px",
                         "title": "检验有效期",
                         "data": "inspection_validity",
                         "orderable": false,
@@ -586,28 +622,6 @@
 ////                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 //                        }
 //                    },
-                    {
-                        "width": "60px",
-                        "title": "状态",
-                        "data": "item_status",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(row.item_status == 1)
-                            {
-                                return '<small class="btn-xs btn-success">启用</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
-                            }
-                        }
-                    },
                 ],
                 "drawCallback": function (settings) {
 

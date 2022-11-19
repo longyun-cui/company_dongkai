@@ -71,6 +71,36 @@ class YH_Car extends Model
     {
         return $this->hasMany('App\Models\YH\YH_Order','trailer_id','id');
     }
+    // 车辆订单【当前】
+    function car_order_list_for_current()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','car_id','id');
+    }
+    // 车挂订单【当前】
+    function trailer_order_list_for_current()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','trailer_id','id');
+    }
+    // 车辆订单【已完成】
+    function car_order_list_for_completed()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','car_id','id');
+    }
+    // 车挂订单【已完成】
+    function trailer_order_list_for_completed()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','trailer_id','id');
+    }
+    // 车辆订单【未来】
+    function car_order_list_for_future()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','car_id','id');
+    }
+    // 车挂订单【未来】
+    function trailer_order_list_for_future()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','trailer_id','id');
+    }
 
 
 

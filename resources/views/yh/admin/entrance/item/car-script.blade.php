@@ -2,26 +2,26 @@
     $(function() {
 
         // 【搜索】
-        $(".item-main-body").on('click', ".filter-submit", function() {
+        $("#datatable-for-car-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $(".item-main-body").on('click', ".filter-cancel", function() {
-            $('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-car-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-car-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $('select.form-filter option').attr("selected",false);
-            $('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-car-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-car-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $(".item-main-body").on('keyup', ".item-search-keyup", function(event) {
+        $("#datatable-for-car-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#filter-submit").click();
+                $("#datatable-for-car-list").find(".filter-submit").click();
             }
         });
 
