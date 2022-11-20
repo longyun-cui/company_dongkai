@@ -3554,7 +3554,7 @@ class YHAdminRepository {
         if(!empty($post_data['work_status']) || $post_data['work_status'] == 0)
         {
             $work_status = $post_data['work_status'];
-            if(in_array($work_status,[-1,0,1,9]))
+            if(in_array($work_status,[-1,0,1,9,19]))
             {
                 if($work_status == 0)
                 {
@@ -3599,6 +3599,15 @@ class YHAdminRepository {
                                 });
                         });
                 }
+                else if($work_status == 19)
+                {
+                    $query->whereDoesntHave('car_order_list_for_current', function ($query) {
+                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                        })
+                        ->whereDoesntHave('trailer_order_list_for_current', function ($query) {
+                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                        });
+                }
             }
         }
 
@@ -3632,6 +3641,7 @@ class YHAdminRepository {
             $list[$k]->work_status = 0;
             $list[$k]->current_place = '--';
             $list[$k]->future_place = '--';
+            $list[$k]->future_time = 0;
 
             // 车辆类型 牵引车 || 车挂
             if($v->item_type == 1)
@@ -3659,6 +3669,7 @@ class YHAdminRepository {
                 if(count($mine_order_list_for_current) > 0)
                 {
                     $list[$k]->future_place = $mine_order_list_for_current[0]->destination_place;
+                    $list[$k]->future_time = $mine_order_list_for_current[0]->should_arrival_time;
                 }
             }
             else
@@ -3682,6 +3693,7 @@ class YHAdminRepository {
                         {
                             $list[$k]->current_place = $mine_order_list_for_future[0]->departure_place;
                             $list[$k]->future_place = $mine_order_list_for_future[0]->destination_place;
+                            $list[$k]->future_time = $mine_order_list_for_future[0]->should_arrival_time;
                         }
                     }
                 }
