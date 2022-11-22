@@ -128,6 +128,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/order_select2_client', $controller.'@operate_order_select2_client');
     Route::match(['get','post'], '/item/order_select2_car', $controller.'@operate_order_select2_car');
     Route::match(['get','post'], '/item/order_select2_trailer', $controller.'@operate_order_select2_trailer');
+    Route::match(['get','post'], '/item/order_list_select2_car', $controller.'@operate_order_list_select2_car');
     // 创建 & 修改
     Route::match(['get','post'], '/item/order-create', $controller.'@operate_item_order_create');
     Route::match(['get','post'], '/item/order-edit', $controller.'@operate_item_order_edit');
@@ -151,8 +152,11 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/order-list-for-all', $controller.'@view_item_order_list_for_all');
 
     // 订单-基本信息
-    Route::post('/item/order-info-set', $controller.'@operate_item_order_info_set');
+    Route::post('/item/order-info-text-set', $controller.'@operate_item_order_info_text_set');
     Route::post('/item/order-info-time-set', $controller.'@operate_item_order_info_time_set');
+    Route::post('/item/order-info-select-set', $controller.'@operate_item_order_info_select_set');
+    Route::post('/item/order-info-client-set', $controller.'@operate_item_order_info_client_set');
+    Route::post('/item/order-info-car-set', $controller.'@operate_item_order_info_car_set');
     // 订单-行程信息
     Route::post('/item/order-travel-set', $controller.'@operate_item_order_travel_set');
     // 订单-财务信息

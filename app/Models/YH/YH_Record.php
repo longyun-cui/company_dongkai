@@ -60,6 +60,28 @@ class YH_Record extends Model
     }
 
 
+    // 客户
+    function before_client_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Client','before','id');
+    }
+    // 客户
+    function after_client_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Client','after','id');
+    }
+    // 客户
+    function before_car_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Car','before','id');
+    }
+    // 客户
+    function after_car_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Car','after','id');
+    }
+
+
 
 
     // 其他人的

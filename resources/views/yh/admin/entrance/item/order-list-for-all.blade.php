@@ -64,11 +64,14 @@
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="order-car" style="width:96px;">
-                            <option value ="-1">选择车辆</option>
-                            @foreach($car_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->name }}</option>
-                            @endforeach
+                        {{--<select class="form-control form-filter" name="order-car" style="width:96px;">--}}
+                            {{--<option value ="-1">选择车辆</option>--}}
+                            {{--@foreach($car_list as $v)--}}
+                                {{--<option value ="{{ $v->id }}">{{ $v->name }}</option>--}}
+                            {{--@endforeach--}}
+                        {{--</select>--}}
+                        <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:96px;">
+                            <option value="-1">选择车辆</option>
                         </select>
 
                         <select class="form-control form-filter" name="order-status" style="width:96px;">
@@ -362,7 +365,7 @@
                 </div>
             </div>
 
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-set-form">
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-text-set-form">
                 <div class="box-body">
 
                     {{ csrf_field() }}
@@ -435,6 +438,53 @@
                     <div class="col-md-8 col-md-offset-2">
                         <button type="button" class="btn btn-success" id="item-submit-for-info-time-set"><i class="fa fa-check"></i> 提交</button>
                         <button type="button" class="btn btn-default" id="item-cancel-for-info-time-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{--修改-客户--}}
+<div class="modal fade modal-main-body" id="modal-body-for-info-select-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改订单【<span class="info-select-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-select-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="info-select-set-operate" value="item-order-info-select-set" readonly>
+                    <input type="hidden" name="info-select-set-order-id" value="0" readonly>
+                    <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="info-select-set-column-key" value="" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 info-select-set-column-name"></label>
+                        <div class="col-md-8 ">
+                            <select class="form-control select2-client" name="info-select-set-column-value" style="width:240px;" id="">
+                                <option data-id="0" value="0">未指定</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-select-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select-set">取消</button>
                     </div>
                 </div>
             </div>
@@ -886,17 +936,26 @@
 
 
 
+@section('custom-css')
+    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
+    <link rel="stylesheet" href="{{ asset('/lib/css/select2-4.0.5.min.css') }}">
+@endsection
 @section('custom-style')
 <style>
     .tableArea table {
         min-width: 4400px;
     }
+    .select2-container { height:100%; border-radius:0; float:left; }
+    .select2-container .select2-selection--single { border-radius:0; }
 </style>
 @endsection
 
 
 
-
+@section('custom-js')
+    {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
+    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
+@endsection
 @section('custom-script')
 <script>
     var TableDatatablesAjax = function () {
@@ -973,6 +1032,7 @@
                             var $html_finance = '';
                             var $html_record = '';
                             var $html_delete = '';
+                            var $html_completed = '';
 
                             if(row.item_status == 1)
                             {
@@ -988,6 +1048,7 @@
                             {
                                 $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
                                 $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
+                                $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
                                 $html_delete = '<a class="btn btn-xs bg-black item-delete-submit" data-id="'+data+'">删除</a>';
                             }
                             else
@@ -997,9 +1058,11 @@
                                 $html_edit = '<a class="btn btn-xs btn-default disabled">编辑</a>';
                                 $html_edit = '';
                                 $html_detail = '<a class="btn btn-xs bg-primary item-modal-show-for-detail" data-id="'+data+'">详情</a>';
-                                $html_travel = '<a class="btn btn-xs bg-olive item-modal-show-for-travel" data-id="'+data+'">行程</a>';
+//                                $html_travel = '<a class="btn btn-xs bg-olive item-modal-show-for-travel" data-id="'+data+'">行程</a>';
                                 $html_finance = '<a class="btn btn-xs bg-orange item-modal-show-for-finance" data-id="'+data+'">财务</a>';
                                 $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+                                $html_delete = '<a class="btn btn-xs bg-navy item-abandon-submit" data-id="'+data+'">弃用</a>';
+                                $html_completed = '<a class="btn btn-xs btn-default disabled">结束</a>';
                             }
 
 //                            if(row.deleted_at == null)
@@ -1021,6 +1084,7 @@
                                 $html_finance+
                                 $html_record+
                                 $html_delete+
+                                $html_completed+
 //                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
 //                                '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
                                     '';
@@ -1173,22 +1237,23 @@
                     {
                         "className": "text-center",
                         "width": "120px",
-                        "title": "客户",
-                        "data": "client_id",
+                        "title": "订单类型",
+                        "data": "car_owner_type",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-//                            return row.client_er == null ? '未知' : '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
-                            if(row.client_er == null) return '未知';
-                            else {
-                                if(row.client_er.short_name)
-                                {
-                                    return '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
-                                }
-                                else
-                                {
-                                    return '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.username+'</a>';
-                                }
+                            if(data == 1)
+                            {
+                                return '<small class="btn-xs bg-green">自有</small>';
                             }
+                            else if(data == 41)
+                            {
+                                return '<small class="btn-xs bg-blue">外配·配货</small>';
+                            }
+                            else if(data == 61)
+                            {
+                                return '<small class="btn-xs bg-purple">外请·调车</small>';
+                            }
+                            else return "有误";
                         }
                     },
                     {
@@ -1198,7 +1263,7 @@
                         "data": 'assign_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
+//                            if(row.is_published != 0)
                             {
                                 var $assign_time_value = '';
                                 if(data)
@@ -1235,12 +1300,136 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "客户",
+                        "data": "client_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).attr('data-id',row.id).attr('data-key','client_id').attr('data-value',data);
+                                if(row.client_er == null) $(nTd).attr('data-option-name','未指定');
+                                else {
+                                    if(row.client_er.short_name) $(nTd).attr('data-option-name',row.client_er.short_name);
+                                    else $(nTd).attr('data-option-name',row.client_er.username);
+                                }
+                                $(nTd).attr('data-name','客户');
+                                if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+//                            return row.client_er == null ? '未知' : '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
+                            if(row.client_er == null) return '未指定';
+                            else {
+                                if(row.client_er.short_name)
+                                {
+//                                    return '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
+                                    return '<a href="javascript:void(0);">'+row.client_er.short_name+'</a>';
+                                }
+                                else
+                                {
+//                                    return '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.username+'</a>';
+                                    return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "车辆",
+                        "data": "car_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                if(row.car_owner_type == 1 || row.car_owner_type == 41)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-select-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-key','car_id').attr('data-value',row.car_id);
+                                    if(row.car_er == null) $(nTd).attr('data-option-name','未指定');
+                                    else $(nTd).attr('data-option-name',row.car_er.name);
+                                    $(nTd).attr('data-name','车辆');
+                                    if(row.car_id) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                                else if(row.car_owner_type == 61)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-key','outside_car').attr('data-value',row.outside_car);
+                                    $(nTd).attr('data-name','车辆');
+                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var car_html = '';
+                            if(row.car_owner_type == 1 || row.car_owner_type == 41)
+                            {
+                                if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
+                            }
+                            else
+                            {
+                                if(row.outside_car) car_html = row.outside_car;
+                            }
+                            if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
+                            return car_html;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "车挂",
+                        "data": "trailer_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                if(row.car_owner_type == 1 || row.car_owner_type == 41)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-select-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-key','trailer_id').attr('data-value',row.trailer_id);
+                                    if(row.trailer_er == null) $(nTd).attr('data-option-name','未指定');
+                                    else $(nTd).attr('data-option-name',row.trailer_er.name);
+                                    $(nTd).attr('data-name','车挂');
+                                    if(row.trailer_id) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                                else if(row.car_owner_type == 61)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-key','outside_trailer').attr('data-value',row.outside_trailer);
+                                    $(nTd).attr('data-name','车挂');
+                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var trailer_html = '';
+                            if(row.car_owner_type == 1 || row.car_owner_type == 41)
+                            {
+                                if(row.trailer_er != null) trailer_html = '<a href="javascript:void(0);">'+row.trailer_er.name+'</a>';
+                            }
+                            else
+                            {
+                                if(row.outside_trailer) trailer_html = row.outside_trailer;
+                            }
+                            return trailer_html;
+                        }
+                    },
+                    {
+                        "className": "_bold",
                         "width": "50px",
                         "title": "运价",
                         "data": "amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
+//                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','amount').attr('data-value',data);
@@ -1248,6 +1437,10 @@
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
+//                            else
+//                            {
+//                                $(nTd).addClass('alert-published-first');
+//                            }
                         },
                         render: function(data, type, row, meta) {
                             return data;
@@ -1259,7 +1452,7 @@
                         "data": "oil_card_amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
+//                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','oil_card_amount').attr('data-value',data);
@@ -1297,7 +1490,7 @@
                         "data": "invoice_point",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
+//                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','invoice_point').attr('data-value',data);
@@ -1316,7 +1509,7 @@
                         "data": "information_fee",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
+//                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','information_fee').attr('data-value',data);
@@ -1335,7 +1528,7 @@
                         "data": "customer_management_fee",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
+//                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','customer_management_fee').attr('data-value',data);
@@ -1572,92 +1765,6 @@
                             var $stopover_html = '';
                             if(row.stopover_place) $stopover_html = '--' + row.stopover_place;
                             return row.departure_place + $stopover_html + '--' + row.destination_place;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "120px",
-                        "title": "类型",
-                        "data": "car_owner_type",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 1)
-                            {
-                                return '<small class="btn-xs bg-green">自有</small>';
-                            }
-                            else if(data == 21)
-                            {
-                                return '<small class="btn-xs bg-blue">外请·调车</small>';
-                            }
-                            else if(data == 41)
-                            {
-                                return '<small class="btn-xs bg-purple">外配·配货</small>';
-                            }
-                            else return "有误";
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "80px",
-                        "title": "车辆",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                if(row.car_owner_type > 1)
-                                {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','outside_car').attr('data-value',row.outside_car);
-                                    $(nTd).attr('data-name','车辆');
-                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var car_html = '';
-                            if(row.car_owner_type == 1)
-                            {
-                                if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
-                            }
-                            else
-                            {
-                                if(row.outside_car) car_html = row.outside_car;
-                            }
-                            return car_html;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "80px",
-                        "title": "车挂",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                if(row.car_owner_type > 1)
-                                {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','outside_trailer').attr('data-value',row.outside_trailer);
-                                    $(nTd).attr('data-name','车挂');
-                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var trailer_html = '';
-                            if(row.car_owner_type == 1)
-                            {
-                                if(row.trailer_er != null) trailer_html = '<a href="javascript:void(0);">'+row.trailer_er.name+'</a>';
-                            }
-                            else
-                            {
-                                if(row.outside_trailer) trailer_html = row.outside_trailer;
-                            }
-                            return trailer_html;
                         }
                     },
                     {
@@ -2951,6 +3058,9 @@
                             else if(data == "driver_phone") return '主驾电话';
                             else if(data == "copilot_name") return '副驾姓名';
                             else if(data == "copilot_phone") return '副驾电话';
+                            else if(data == "car_id") return '车辆';
+                            else if(data == "client_id") return '客户';
+                            else if(data == "trailer_id") return '车挂';
                             else if(data == "outside_car") return '车辆';
                             else if(data == "outside_trailer") return '车挂';
                             else if(data == "trailer_type") return '车挂类型';
@@ -2977,6 +3087,24 @@
                         "data": "before",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            if(row.column == 'client_id')
+                            {
+                                if(row.before_client_er == null) return '';
+                                else
+                                {
+                                    if(row.before_client_er.short_name != null)
+                                    {
+                                        return '<a href="javascript:void(0);">'+row.before_client_er.short_name+'</a>';
+                                    }
+                                    else return '<a href="javascript:void(0);">'+row.before_client_er.username+'</a>';
+                                }
+                            }
+                            else if(row.column == 'car_id' || row.column == 'trailer_id')
+                            {
+                                if(row.before_car_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_car_er.name+'</a>';
+                            }
+
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {
                                 if(data)
@@ -3003,6 +3131,7 @@
                                 }
                                 else return '';
                             }
+
                             return data;
                         }
                     },
@@ -3013,6 +3142,24 @@
                         "data": "after",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            if(row.column == 'client_id')
+                            {
+                                if(row.after_client_er == null) return '';
+                                else
+                                {
+                                    if(row.after_client_er.short_name)
+                                    {
+                                        return '<a href="javascript:void(0);">'+row.after_client_er.short_name+'</a>';
+                                    }
+                                    else return '<a href="javascript:void(0);">'+row.after_client_er.username+'</a>';
+                                }
+                            }
+                            else if(row.column == 'car_id' || row.column == 'trailer_id')
+                            {
+                                if(row.after_car_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.after_car_er.name+'</a>';
+                            }
+
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {
                                 var $date = new Date(data*1000);
@@ -3036,6 +3183,7 @@
                                 }
 
                             }
+
                             return data;
                         }
                     },

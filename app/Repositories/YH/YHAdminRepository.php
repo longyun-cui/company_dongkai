@@ -3685,6 +3685,7 @@ class YHAdminRepository {
                         if(count($mine_order_list_for_future) > 0)
                         {
                             $list[$k]->future_place = $mine_order_list_for_future[0]->destination_place;
+                            $list[$k]->future_time = $mine_order_list_for_future[0]->should_arrival_time;
                         }
                     }
                     else
@@ -3817,6 +3818,30 @@ class YHAdminRepository {
         }
         return $list;
     }
+    //
+    public function operate_order_list_select2_car($post_data)
+    {
+        $query = YH_Car::select(['id','name as text']);
+
+        if(!empty($post_data['car_type']))
+        {
+            if($post_data['car_type'] == 'all')
+            {
+            }
+            else if($post_data['car_type'] == 'car') $query->where('item_type',1);
+            else if($post_data['car_type'] == 'trailer') $query->where('item_type',21);
+            else if($post_data['car_type'] == 'container') $query->where('item_type',31);
+        }
+
+        if(!empty($post_data['keyword']))
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query->where('name','like',"%$keyword%");
+        }
+
+        $list = $query->get()->toArray();
+        return $list;
+    }
 
 
     // 【订单管理】返回-添加-视图
@@ -3875,19 +3900,23 @@ class YHAdminRepository {
         }
         else
         {
-            $mine = YH_Order::with(['client_er','car_er','trailer_er'])->find($id);
+            $mine = YH_Order::find($id);
             if($mine)
             {
+//                if($mine->deleted_at) return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
+//                else
+                {
+                    $mine->load(['client_er','car_er','trailer_er']);
+                    $mine->custom = json_decode($mine->custom);
+                    $mine->custom2 = json_decode($mine->custom2);
+                    $mine->custom3 = json_decode($mine->custom3);
 
-                $mine->custom = json_decode($mine->custom);
-                $mine->custom2 = json_decode($mine->custom2);
-                $mine->custom3 = json_decode($mine->custom3);
+                    $return['data'] = $mine;
 
-                $return['data'] = $mine;
-
-                return view($view_blade)->with($return);
+                    return view($view_blade)->with($return);
+                }
             }
-            else return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+            else return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
         }
     }
     // 【订单管理】保存数据
@@ -4345,7 +4374,7 @@ class YHAdminRepository {
 //            ->where(['userstatus'=>'正常','status'=>1])
 //            ->whereIn('usergroup',['Agent','Agent2']);
 
-        if($me->user_type == 88) $query->where('creator_id', $me->id);
+//        if($me->user_type == 88) $query->where('creator_id', $me->id);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
@@ -4737,8 +4766,8 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理-修改信息】设置-基本信息
-    public function operate_item_order_info_set($post_data)
+    // 【订单管理-修改信息】设置-文本-类型
+    public function operate_item_order_info_text_set($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4791,25 +4820,31 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new YH_Record;
-
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_category"] = 11;
-
-                if($operate_type == "add") $record_data["operate_type"] = 1;
-                else if($operate_type == "edit") $record_data["operate_type"] = 11;
-
-                $record_data["column"] = $column_key;
-                $record_data["before"] = $before;
-                $record_data["after"] = $column_value;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if($bool_1)
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0)
                 {
                 }
-                else throw new Exception("insert--record--fail");
+                else
+                {
+                    $record = new YH_Record;
 
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_category"] = 11;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
             }
             DB::commit();
 
@@ -4825,7 +4860,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理-修改信息】设置-基本信息
+    // 【订单管理-修改信息】设置-时间-类型
     public function operate_item_order_info_time_set($post_data)
     {
         $messages = [
@@ -5060,6 +5095,100 @@ class YHAdminRepository {
         }
 
     }
+    // 【订单管理-修改信息】设置-select2-类型
+    public function operate_item_order_info_select_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-info-select-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+//        if($column_key == "client")
+//        {
+//            if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
+//        }
+//        else
+//        {
+//            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+//        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_category"] = 11;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+            DB::commit();
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 
 
@@ -5085,7 +5214,7 @@ class YHAdminRepository {
 
         $id  = $post_data["id"];
         $query = YH_Record::select('*')
-            ->with(['creator','owner'])
+            ->with(['creator','before_client_er','after_client_er','before_car_er','after_car_er'])
             ->where(['order_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");

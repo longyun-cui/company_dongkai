@@ -37,6 +37,13 @@
                 <input type="hidden" name="operate_type" value="{{ $operate_type or 'order' }}" readonly>
 
 
+                {{--自定义标题--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 自定义标题</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="title" placeholder="自定义订单标题" value="{{ $data->title or '' }}">
+                    </div>
+                </div>
                 {{--选择客户--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择客户</label>
@@ -80,44 +87,44 @@
                         <div class="btn-group">
 
                             @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            <input type="radio" name="car_owner_type" value="1" checked="checked"> 自有
-                                            {{--<input type="radio" name="user_type" value=11--}}
-                                            {{--@if($operate == 'edit' && $data->user_type == 11) checked="checked" @endif--}}
-                                            {{--> 总经理--}}
-                                        </label>
-                                    </span>
-                                </button>
-                            @endif
-
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 21))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            @if($operate == 'edit' && $data->car_owner_type == 21)
-                                                <input type="radio" name="car_owner_type" value=21 checked="checked"> 外请（调车）
-                                            @else
-                                                <input type="radio" name="car_owner_type" value=21> 外请（调车）
-                                            @endif
-                                        </label>
-                                    </span>
-                                </button>
+                            <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="car_owner_type" value="1" checked="checked"> 自有
+                                        {{--<input type="radio" name="user_type" value=11--}}
+                                        {{--@if($operate == 'edit' && $data->user_type == 11) checked="checked" @endif--}}
+                                        {{--> 总经理--}}
+                                    </label>
+                                </span>
+                            </button>
                             @endif
 
                             @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 41))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            @if($operate == 'edit' && $data->car_owner_type == 41)
-                                                <input type="radio" name="car_owner_type" value=41 checked="checked"> 外配（配货）
-                                            @else
-                                                <input type="radio" name="car_owner_type" value=41> 外配（配货）
-                                            @endif
-                                        </label>
-                                    </span>
-                                </button>
+                            <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->car_owner_type == 41)
+                                            <input type="radio" name="car_owner_type" value=41 checked="checked"> 外配（配货）
+                                        @else
+                                            <input type="radio" name="car_owner_type" value=41> 外配（配货）
+                                        @endif
+                                    </label>
+                                </span>
+                            </button>
+                            @endif
+
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 61))
+                            <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->car_owner_type == 61)
+                                            <input type="radio" name="car_owner_type" value=61 checked="checked"> 外请（调车）
+                                        @else
+                                            <input type="radio" name="car_owner_type" value=61> 外请（调车）
+                                        @endif
+                                    </label>
+                                </span>
+                            </button>
                             @endif
 
                         </div>
@@ -152,7 +159,7 @@
                 @endif
 
                 {{--外请或外派车辆--}}
-                @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 41)))
+                @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 61)))
                 <div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 外部车辆</label>
                     <div class="col-md-8 ">
@@ -165,6 +172,135 @@
                     </div>
                 </div>
                 @endif
+
+
+                {{--外车·属性--}}
+                @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 61)))
+                <div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>
+                    <label class="control-label col-md-2">外车·属性</label>
+                    <div class="col-md-8 ">
+                        <div class="col-xs-6 col-sm-4 col-md-4 padding-0">
+                            <select class="form-control" name="trailer_type" id="">
+                                <option value="0">选择箱型</option>
+                                <option value="直板" @if($operate == 'edit' && $data->trailer_type == '直板')selected="selected"@endif>直板</option>
+                                <option value="高栏" @if($operate == 'edit' && $data->trailer_type == '高栏')selected="selected"@endif>高栏</option>
+                                <option value="平板" @if($operate == 'edit' && $data->trailer_type == '平板')selected="selected"@endif>平板</option>
+                                <option value="冷藏" @if($operate == 'edit' && $data->trailer_type == '冷藏')selected="selected"@endif>冷藏</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-4 padding-0">
+                            <select class="form-control" name="trailer_length" id="">
+                                <option value="0">选择车挂尺寸</option>
+                                <option value="9.6" @if($operate == 'edit' && $data->trailer_length == '9.6')selected="selected"@endif>9.6</option>
+                                <option value="12.5" @if($operate == 'edit' && $data->trailer_length == '12.5')selected="selected"@endif>12.5</option>
+                                <option value="15" @if($operate == 'edit' && $data->trailer_length == '15')selected="selected"@endif>15</option>
+                                <option value="16.5" @if($operate == 'edit' && $data->trailer_length == '16.5')selected="selected"@endif>16.5</option>
+                                <option value="17.5" @if($operate == 'edit' && $data->trailer_length == '17.5')selected="selected"@endif>17.5</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-4 padding-0">
+                            <select class="form-control" name="trailer_volume" id="">
+                                <option value="0">选择承载方数</option>
+                                <option value="125" @if($operate == 'edit' && $data->trailer_volume == 125)selected="selected"@endif>125</option>
+                                <option value="130" @if($operate == 'edit' && $data->trailer_volume == 130)selected="selected"@endif>130</option>
+                                <option value="135" @if($operate == 'edit' && $data->trailer_volume == 135)selected="selected"@endif>135</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-4 padding-0">
+                            <select class="form-control" name="trailer_weight" id="">
+                                <option value="0">选择承载重量</option>
+                                <option value="13" @if($operate == 'edit' && $data->trailer_weight == 13)selected="selected"@endif>13吨</option>
+                                <option value="20" @if($operate == 'edit' && $data->trailer_weight == 20)selected="selected"@endif>20吨</option>
+                                <option value="25" @if($operate == 'edit' && $data->trailer_weight == 25)selected="selected"@endif>25吨</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-4 padding-0">
+                            <select class="form-control" name="trailer_axis_count" id="">
+                                <option value="0">选择轴数</option>
+                                <option value="1" @if($operate == 'edit' && $data->trailer_axis_count == 1)selected="selected"@endif>1轴</option>
+                                <option value="2" @if($operate == 'edit' && $data->trailer_axis_count == 2)selected="selected"@endif>2轴</option>
+                                <option value="3" @if($operate == 'edit' && $data->trailer_axis_count == 3)selected="selected"@endif>3轴</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+
+                {{--箱型--}}
+                {{--@if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 61)))--}}
+                {{--<div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>--}}
+                    {{--<label class="control-label col-md-2">箱型</label>--}}
+                    {{--<div class="col-md-8 ">--}}
+                        {{--<select class="form-control" name="trailer_type" id="">--}}
+                            {{--<option value="0">选择箱型</option>--}}
+                            {{--<option value="直板" @if($operate == 'edit' && $data->trailer_type == '直板')selected="selected"@endif>直板</option>--}}
+                            {{--<option value="高栏" @if($operate == 'edit' && $data->trailer_type == '高栏')selected="selected"@endif>高栏</option>--}}
+                            {{--<option value="平板" @if($operate == 'edit' && $data->trailer_type == '平板')selected="selected"@endif>平板</option>--}}
+                            {{--<option value="冷藏" @if($operate == 'edit' && $data->trailer_type == '冷藏')selected="selected"@endif>冷藏</option>--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--@endif--}}
+                {{--车挂尺寸--}}
+                {{--@if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 61)))--}}
+                {{--<div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>--}}
+                    {{--<label class="control-label col-md-2">车挂尺寸</label>--}}
+                    {{--<div class="col-md-8 ">--}}
+                        {{--<select class="form-control" name="trailer_length" id="">--}}
+                            {{--<option value="0">选择车挂尺寸</option>--}}
+                            {{--<option value="9.6" @if($operate == 'edit' && $data->trailer_length == '9.6')selected="selected"@endif>9.6</option>--}}
+                            {{--<option value="12.5" @if($operate == 'edit' && $data->trailer_length == '12.5')selected="selected"@endif>12.5</option>--}}
+                            {{--<option value="15" @if($operate == 'edit' && $data->trailer_length == '15')selected="selected"@endif>15</option>--}}
+                            {{--<option value="16.5" @if($operate == 'edit' && $data->trailer_length == '16.5')selected="selected"@endif>16.5</option>--}}
+                            {{--<option value="17.5" @if($operate == 'edit' && $data->trailer_length == '17.5')selected="selected"@endif>17.5</option>--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--@endif--}}
+                {{--承载方数--}}
+                {{--@if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 61)))--}}
+                {{--<div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>--}}
+                    {{--<label class="control-label col-md-2">承载方数</label>--}}
+                    {{--<div class="col-md-8 ">--}}
+                        {{--<select class="form-control" name="trailer_volume" id="">--}}
+                            {{--<option value="0">选择承载方数</option>--}}
+                            {{--<option value="125" @if($operate == 'edit' && $data->trailer_volume == 125)selected="selected"@endif>125</option>--}}
+                            {{--<option value="130" @if($operate == 'edit' && $data->trailer_volume == 130)selected="selected"@endif>130</option>--}}
+                            {{--<option value="135" @if($operate == 'edit' && $data->trailer_volume == 135)selected="selected"@endif>135</option>--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--@endif--}}
+                {{--承载重量--}}
+                {{--@if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 61)))--}}
+                {{--<div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>--}}
+                    {{--<label class="control-label col-md-2">承载重量</label>--}}
+                    {{--<div class="col-md-8 ">--}}
+                        {{--<select class="form-control" name="trailer_weight" id="">--}}
+                            {{--<option value="0">选择承载重量</option>--}}
+                            {{--<option value="13" @if($operate == 'edit' && $data->trailer_weight == 13)selected="selected"@endif>13吨</option>--}}
+                            {{--<option value="20" @if($operate == 'edit' && $data->trailer_weight == 20)selected="selected"@endif>20吨</option>--}}
+                            {{--<option value="25" @if($operate == 'edit' && $data->trailer_weight == 25)selected="selected"@endif>25吨</option>--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--@endif--}}
+                {{--轴数--}}
+                {{--@if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 61)))--}}
+                {{--<div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>--}}
+                    {{--<label class="control-label col-md-2">轴数</label>--}}
+                    {{--<div class="col-md-8 ">--}}
+                        {{--<select class="form-control" name="trailer_axis_count" id="">--}}
+                            {{--<option value="0">选择轴数</option>--}}
+                            {{--<option value="1" @if($operate == 'edit' && $data->trailer_axis_count == 1)selected="selected"@endif>1轴</option>--}}
+                            {{--<option value="2" @if($operate == 'edit' && $data->trailer_axis_count == 2)selected="selected"@endif>2轴</option>--}}
+                            {{--<option value="3" @if($operate == 'edit' && $data->trailer_axis_count == 3)selected="selected"@endif>3轴</option>--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--@endif--}}
+
 
                 {{--主驾--}}
                 <div class="form-group">
@@ -204,81 +340,6 @@
                         </select>
                     </div>
                 </div>
-
-
-                {{--箱型--}}
-                @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 41)))
-                <div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>
-                    <label class="control-label col-md-2">箱型</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="trailer_type" id="">
-                            <option value="0">选择箱型</option>
-                            <option value="直板" @if($operate == 'edit' && $data->trailer_type == '直板')selected="selected"@endif>直板</option>
-                            <option value="高栏" @if($operate == 'edit' && $data->trailer_type == '高栏')selected="selected"@endif>高栏</option>
-                            <option value="平板" @if($operate == 'edit' && $data->trailer_type == '平板')selected="selected"@endif>平板</option>
-                            <option value="冷藏" @if($operate == 'edit' && $data->trailer_type == '冷藏')selected="selected"@endif>冷藏</option>
-                        </select>
-                    </div>
-                </div>
-                @endif
-                {{--车挂尺寸--}}
-                @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 41)))
-                <div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>
-                    <label class="control-label col-md-2">车挂尺寸</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="trailer_length" id="">
-                            <option value="0">选择车挂尺寸</option>
-                            <option value="9.6" @if($operate == 'edit' && $data->trailer_length == '9.6')selected="selected"@endif>9.6</option>
-                            <option value="12.5" @if($operate == 'edit' && $data->trailer_length == '12.5')selected="selected"@endif>12.5</option>
-                            <option value="15" @if($operate == 'edit' && $data->trailer_length == '15')selected="selected"@endif>15</option>
-                            <option value="16.5" @if($operate == 'edit' && $data->trailer_length == '16.5')selected="selected"@endif>16.5</option>
-                            <option value="17.5" @if($operate == 'edit' && $data->trailer_length == '17.5')selected="selected"@endif>17.5</option>
-                        </select>
-                    </div>
-                </div>
-                @endif
-                {{--承载方数--}}
-                @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 41)))
-                <div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>
-                    <label class="control-label col-md-2">承载方数</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="trailer_volume" id="">
-                            <option value="0">选择承载方数</option>
-                            <option value="125" @if($operate == 'edit' && $data->trailer_volume == 125)selected="selected"@endif>125</option>
-                            <option value="130" @if($operate == 'edit' && $data->trailer_volume == 130)selected="selected"@endif>130</option>
-                            <option value="135" @if($operate == 'edit' && $data->trailer_volume == 135)selected="selected"@endif>135</option>
-                        </select>
-                    </div>
-                </div>
-                @endif
-                {{--承载重量--}}
-                @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 41)))
-                <div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>
-                    <label class="control-label col-md-2">承载重量</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="trailer_weight" id="">
-                            <option value="0">选择承载重量</option>
-                            <option value="13" @if($operate == 'edit' && $data->trailer_weight == 13)selected="selected"@endif>13吨</option>
-                            <option value="20" @if($operate == 'edit' && $data->trailer_weight == 20)selected="selected"@endif>20吨</option>
-                            <option value="25" @if($operate == 'edit' && $data->trailer_weight == 25)selected="selected"@endif>25吨</option>
-                        </select>
-                    </div>
-                </div>
-                @endif
-                {{--轴数--}}
-                    @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 41)))
-                <div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>
-                    <label class="control-label col-md-2">轴数</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="trailer_axis_count" id="">
-                            <option value="0">选择轴数</option>
-                            <option value="1" @if($operate == 'edit' && $data->trailer_axis_count == 1)selected="selected"@endif>1轴</option>
-                            <option value="2" @if($operate == 'edit' && $data->trailer_axis_count == 2)selected="selected"@endif>2轴</option>
-                            <option value="3" @if($operate == 'edit' && $data->trailer_axis_count == 3)selected="selected"@endif>3轴</option>
-                        </select>
-                    </div>
-                </div>
-                @endif
 
 
                 {{--派车时间--}}

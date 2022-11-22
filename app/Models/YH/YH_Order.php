@@ -78,11 +78,14 @@ class YH_Order extends Model
     {
         return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
     }
+
+
     // 客户
     function client_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Client','client_id','id');
     }
+
 
     // 车辆
     function car_er()
