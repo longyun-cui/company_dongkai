@@ -102,6 +102,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 创建 & 修改
     Route::match(['get','post'], '/item/car-create', $controller.'@operate_item_car_create');
     Route::match(['get','post'], '/item/car-edit', $controller.'@operate_item_car_edit');
+
+    // 修改-单条属性
+    Route::post('/item/car-info-text-set', $controller.'@operate_item_car_info_text_set');
     // 删除 & 恢复
     Route::post('/item/car-admin-delete', $controller.'@operate_item_car_admin_delete');
     Route::post('/item/car-admin-restore', $controller.'@operate_item_car_admin_restore');

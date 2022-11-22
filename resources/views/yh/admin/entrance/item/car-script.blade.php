@@ -27,6 +27,14 @@
 
 
 
+        // 【编辑】
+        $(".main-content").on('click', ".item-edit-link", function() {
+            var $that = $(this);
+            window.location.href = "/item/car-edit?id="+$that.attr('data-id');
+        });
+
+
+
 
         /*
             // 批量操作
@@ -323,6 +331,71 @@
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+
+
+        // 显示【修改文本属性】
+        $(".main-content").on('dblclick', ".modal-show-for-info-text-set", function() {
+            var $that = $(this);
+            $('.info-set-title').html($that.attr("data-name"));
+            $('.info-set-column-name').html($that.attr("data-column-name"));
+            $('input[name=info-set-car-id]').val($that.attr("data-id"));
+            $('input[name=info-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-set-column-value]').val($that.attr("data-value"));
+            $('input[name=info-set-operate-type]').val($that.attr('data-operate-type'));
+
+            $('#modal-body-for-info-text-set').modal('show');
+        });
+        // 【修改属性】取消
+        $(".main-content").on('click', "#item-cancel-for-info-text-set", function() {
+            var that = $(this);
+
+            $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【修改属性】提交
+        $(".main-content").on('click', "#item-submit-for-info-text-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-set-column-key"]').val();
+            var $column_value = $('input[name="info-set-column-value"]').val();
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/car-info-text-set') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: $('input[name="info-set-operate"]').val(),
+                            car_id: $('input[name="info-set-car-id"]').val(),
+                            operate_type: $('input[name="info-set-operate-type"]').val(),
+                            column_key: $column_key,
+                            column_value: $column_value,
+                        },
+                        function(data){
+                            if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                            else
+                            {
+                                layer.close(index);
+                                $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
+                                    $("body").addClass("modal-open");
+                                });
+
+//                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
+////                                TableDatatablesAjax_inner.init($keyword_id);
+
+                                $('#datatable_ajax').DataTable().ajax.reload();
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload();
                             }
                         },
                         'json'

@@ -123,6 +123,53 @@
         </div>
     </div>
 </div>
+
+
+{{--修改-基本信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改车辆【<span class="info-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-text-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="info-set-operate" value="item-car-info-text-set" readonly>
+                    <input type="hidden" name="info-set-car-id" value="0" readonly>
+                    <input type="hidden" name="info-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="info-set-column-key" value="" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 info-set-column-name"></label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="info-set-column-value" autocomplete="off" placeholder="" value="">
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-text-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-text-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 @endsection
 
 
@@ -354,6 +401,16 @@
                         "title": "类型",
                         "data": "trailer_type",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_type').attr('data-value',data);
+                                $(nTd).attr('data-column-name','类型');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -364,6 +421,16 @@
                         "title": "尺寸",
                         "data": "trailer_length",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_length').attr('data-value',data);
+                                $(nTd).attr('data-column-name','尺寸');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -374,6 +441,16 @@
                         "title": "容积",
                         "data": "trailer_volume",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_volume').attr('data-value',data);
+                                $(nTd).attr('data-column-name','容积');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -384,6 +461,16 @@
                         "title": "载重",
                         "data": "trailer_weight",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_weight').attr('data-value',data);
+                                $(nTd).attr('data-column-name','载重');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -394,6 +481,16 @@
                         "title": "轴数",
                         "data": "trailer_axis_count",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_axis_count').attr('data-value',data);
+                                $(nTd).attr('data-column-name','轴数');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data) return data;
                             else return "";
@@ -405,6 +502,16 @@
                         "title": "司机",
                         "data": "linkman_name",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','linkman_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','司机');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -415,6 +522,16 @@
                         "title": "电话",
                         "data": "linkman_phone",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','linkman_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','电话');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -425,6 +542,16 @@
                         "title": "车辆类型",
                         "data": "car_type",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_type').attr('data-value',data);
+                                $(nTd).attr('data-column-name','车辆类型');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -435,6 +562,16 @@
                         "title": "所有人",
                         "data": "car_owner",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_owner').attr('data-value',data);
+                                $(nTd).attr('data-column-name','所有人');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -445,6 +582,16 @@
                         "title": "使用性质",
                         "data": "car_function",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_function').attr('data-value',data);
+                                $(nTd).attr('data-column-name','使用性质');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -455,6 +602,16 @@
                         "title": "品牌",
                         "data": "car_brand",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_brand').attr('data-value',data);
+                                $(nTd).attr('data-column-name','品牌');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -465,6 +622,16 @@
                         "title": "车辆识别代码",
                         "data": "car_identification_number",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_identification_number').attr('data-value',data);
+                                $(nTd).attr('data-column-name','车辆识别代码');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -475,6 +642,16 @@
                         "title": "发动机号",
                         "data": "engine_number",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','engine_number').attr('data-value',data);
+                                $(nTd).attr('data-column-name','发动机号');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -485,6 +662,16 @@
                         "title": "车头轴距",
                         "data": "locomotive_wheelbase",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','locomotive_wheelbase').attr('data-value',data);
+                                $(nTd).attr('data-column-name','车头轴距');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -495,6 +682,16 @@
                         "title": "主油箱",
                         "data": "main_fuel_tank",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','main_fuel_tank').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主油箱');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -505,6 +702,16 @@
                         "title": "副油箱",
                         "data": "auxiliary_fuel_tank",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','auxiliary_fuel_tank').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副油箱');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -515,6 +722,16 @@
                         "title": "总质量",
                         "data": "total_mass",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','total_mass').attr('data-value',data);
+                                $(nTd).attr('data-column-name','总质量');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -525,6 +742,16 @@
                         "title": "整备质量",
                         "data": "curb_weight",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','curb_weight').attr('data-value',data);
+                                $(nTd).attr('data-column-name','整备质量');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -535,6 +762,16 @@
                         "title": "核定载重",
                         "data": "load_weight",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','load_weight').attr('data-value',data);
+                                $(nTd).attr('data-column-name','核定载重');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -545,6 +782,16 @@
                         "title": "准牵引质量",
                         "data": "traction_mass",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','traction_mass').attr('data-value',data);
+                                $(nTd).attr('data-column-name','准牵引质量');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -555,6 +802,16 @@
                         "title": "外廓尺寸",
                         "data": "overall_size",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','overall_size').attr('data-value',data);
+                                $(nTd).attr('data-column-name','外廓尺寸');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -565,6 +822,16 @@
                         "title": "购买日期",
                         "data": "purchase_date",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','purchase_date').attr('data-value',data);
+                                $(nTd).attr('data-column-name','购买日期');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -575,6 +842,16 @@
                         "title": "注册日期",
                         "data": "registration_date",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','registration_date').attr('data-value',data);
+                                $(nTd).attr('data-column-name','注册日期');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -585,6 +862,16 @@
                         "title": "发证日期",
                         "data": "issue_date",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','issue_date').attr('data-value',data);
+                                $(nTd).attr('data-column-name','发证日期');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -595,6 +882,16 @@
                         "title": "检验有效期",
                         "data": "inspection_validity",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','inspection_validity').attr('data-value',data);
+                                $(nTd).attr('data-column-name','检验有效期');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }

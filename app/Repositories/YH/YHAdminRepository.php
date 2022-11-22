@@ -3389,6 +3389,120 @@ class YHAdminRepository {
     }
 
 
+    // 【车辆管理】【修改信息】设置-文本-类型
+    public function operate_item_car_info_text_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'car_id.required' => 'car_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'car_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-car-info-text-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["car_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Car::withTrashed()->find($id);
+        if(!$item) return response_error([],"该车辆不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【车辆管理】【修改信息】设置-select2-类型
+    public function operate_item_car_info_select_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'car_id.required' => 'car_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'car_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-car-info-select-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Car::withTrashed()->find($id);
+        if(!$item) return response_error([],"该车辆不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
     // 【车辆管理】管理员-启用
     public function operate_item_car_admin_enable($post_data)
     {
@@ -4566,7 +4680,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理-财务往来记录】返回-列表-视图
+    // 【订单管理】【财务往来记录】返回-列表-视图
     public function view_item_order_finance_record($post_data)
     {
         $this->get_me();
@@ -4579,7 +4693,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【订单管理-财务往来记录】返回-列表-数据
+    // 【订单管理】【财务往来记录】返回-列表-数据
     public function get_item_order_finance_record_datatable($post_data)
     {
         $this->get_me();
@@ -4766,7 +4880,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理-修改信息】设置-文本-类型
+    // 【订单管理】【修改信息】设置-文本-类型
     public function operate_item_order_info_text_set($post_data)
     {
         $messages = [
@@ -4860,7 +4974,101 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理-修改信息】设置-时间-类型
+    // 【订单管理】【修改信息】设置-select2-类型
+    public function operate_item_order_info_select_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-info-select-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+//        if($column_key == "client")
+//        {
+//            if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
+//        }
+//        else
+//        {
+//            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+//        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_category"] = 11;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+            DB::commit();
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【订单管理】【修改信息】设置-时间-类型
     public function operate_item_order_info_time_set($post_data)
     {
         $messages = [
@@ -4996,7 +5204,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理-修改信息】设置-行程时间
+    // 【订单管理】【修改信息】设置-行程时间
     public function operate_item_order_travel_set($post_data)
     {
         $messages = [
@@ -5081,100 +5289,6 @@ class YHAdminRepository {
 
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");
-            DB::commit();
-
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【订单管理-修改信息】设置-select2-类型
-    public function operate_item_order_info_select_set($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-order-info-select-set') return response_error([],"参数[operate]有误！");
-        $id = $post_data["order_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = YH_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $operate_type = $post_data["operate_type"];
-        $column_key = $post_data["column_key"];
-        $column_value = $post_data["column_value"];
-
-        $before = $item->$column_key;
-
-//        if($column_key == "client")
-//        {
-//            if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
-//        }
-//        else
-//        {
-//            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
-//        }
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->$column_key = $column_value;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                // 需要记录(本人修改已发布 || 他人修改)
-                if($me->id == $item->creator_id && $item->is_published == 0)
-                {
-                }
-                else
-                {
-                    $record = new YH_Record;
-
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $id;
-                    $record_data["operate_category"] = 11;
-
-                    if($operate_type == "add") $record_data["operate_type"] = 1;
-                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
-
-                    $record_data["column"] = $column_key;
-                    $record_data["before"] = $before;
-                    $record_data["after"] = $column_value;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if($bool_1)
-                    {
-                    }
-                    else throw new Exception("insert--record--fail");
-                }
-            }
             DB::commit();
 
             return response_success([]);

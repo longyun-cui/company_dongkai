@@ -530,6 +530,23 @@ class YHAdminController extends Controller
     }
 
 
+    // 【车辆管理】修改-文本信息
+    public function operate_item_car_info_text_set()
+    {
+        return $this->repo->operate_item_car_info_text_set(request()->all());
+    }
+    // 【车辆管理】修改-SELECT2信息
+    public function operate_item_car_info_select_set()
+    {
+        return $this->repo->operate_item_car_info_select_set(request()->all());
+    }
+    // 【车辆管理】修改-时间信息
+    public function operate_item_car_info_time_set()
+    {
+        return $this->repo->operate_item_car_info_time_set(request()->all());
+    }
+
+
     // 【车辆管理】启用
     public function operate_item_car_admin_enable()
     {
@@ -627,11 +644,6 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_item_order_info_text_set(request()->all());
     }
-    // 【订单管理】修改-时间信息
-    public function operate_item_order_info_time_set()
-    {
-        return $this->repo->operate_item_order_info_time_set(request()->all());
-    }
     // 【订单管理】修改-SELECT2信息
     public function operate_item_order_info_select_set()
     {
@@ -646,6 +658,11 @@ class YHAdminController extends Controller
     public function operate_item_order_info_car_set()
     {
         return $this->repo->operate_item_order_info_car_set(request()->all());
+    }
+    // 【订单管理】修改-时间信息
+    public function operate_item_order_info_time_set()
+    {
+        return $this->repo->operate_item_order_info_time_set(request()->all());
     }
 
     // 【订单管理】添加-行程记录
