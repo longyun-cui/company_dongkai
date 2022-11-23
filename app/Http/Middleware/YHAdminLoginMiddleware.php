@@ -39,4 +39,10 @@ class YHAdminLoginMiddleware
         }
         return $next($request);
     }
+
+    public function terminate($request, $response)
+    {
+        $me_admin = Auth::guard('yh_admin')->user();
+        view()->share('me', $me_admin);
+    }
 }

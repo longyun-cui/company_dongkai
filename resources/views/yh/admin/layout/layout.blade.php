@@ -184,8 +184,6 @@ desired effect
 <script src="{{ asset('/resource/component/js/swiper-4.2.2.min.js') }}"></script>
 
 
-<script src="{{ asset('/resource/custom/super/admin/js/index.js') }}"></script>
-
 @yield('js')
 @yield('script')
 @yield('custom-js')

@@ -82,6 +82,13 @@ class YHAdminController extends Controller
     }
 
 
+    // 返回主页视图
+    public function view_admin_404()
+    {
+        return $this->repo->view_admin_404();
+    }
+
+
     /*
      * 用户基本信息
      */

@@ -57,18 +57,29 @@ class Handler extends ExceptionHandler
         {
             if (!($request->ajax() || $request->wantsJson()))
             {
-                $request_str = request()->path();
-                if(strpos($request_str, "admin/") === 0)
+//                dd(request()->url());
+//                dd('admin.'.env('DOMAIN_ROOT'));
+//                dd(request()->is('admin.'.env('DOMAIN_ROOT')));
+//                {
+//                    dd(1);
+//                }
+
+                $request_str = request()->url();
+                $request_str = request()->fullUrl();
+//                dd($request_str);
+                if(strpos($request_str, 'admin.'.env('DOMAIN_ROOT')))
                 {
-                    return redirect('/admin/404');
-//                    return response()->view('admin.errors.404');
+                    return redirect('/404');
+//                    return response()->view('yh.admin.entrance.errors.404');
+//                    return redirect()->action('YH\YHAdminController@view_admin_404');
                 }
-                else if(strpos($request_str, "staff/") === 0)
+                else if(strpos($request_str, 'staff.'.env('DOMAIN_ROOT')))
                 {
-                    return redirect('/staff/404');
-//                    return response()->view('admin.errors.404');
+                    return redirect('/404');
                 }
                 else return response()->view('frontend.errors.404');
+
+
             }
         }
 
@@ -96,7 +107,7 @@ class Handler extends ExceptionHandler
 
             case ($e instanceof ModelNotFoundException):
 
-                //自定义处理异常，此处我们返回一个404页面
+                // 自定义处理异常，此处我们返回一个404页面
                 return view('frontend.errors.404');
                 break;
 

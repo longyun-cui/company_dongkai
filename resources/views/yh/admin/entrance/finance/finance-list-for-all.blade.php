@@ -23,7 +23,7 @@
 
                 <h3 class="box-title">财务记录</h3>
 
-                <div class="caption pull-right">
+                <div class="caption pull-right _none">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
                     <a href="{{ url('/item/finance-create') }}">
@@ -31,31 +31,16 @@
                     </a>
                 </div>
 
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="item-main-body">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-finance-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
                         <input type="text" class="form-control form-filter item-search-keyup" name="order_id" placeholder="订单ID" />
-
-                        {{--<select class="form-control form-filter" name="owner" style="width:96px;">--}}
-                            {{--<option value ="-1">选择员工</option>--}}
-                            {{--@foreach($sales as $v)--}}
-                                {{--<option value ="{{ $v->id }}">{{ $v->true_name }}</option>--}}
-                            {{--@endforeach--}}
-                        {{--</select>--}}
+                        <input type="text" class="form-control form-filter date_picker" name="transaction_time" placeholder="交易日期" readonly="readonly" />
 
                         <select class="form-control form-filter" name="item_type" style="width:96px;">
                             <option value ="-1">全部</option>
@@ -73,26 +58,16 @@
                     </div>
                 </div>
 
-                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
+                <div class="tableArea">
+                <table class='table table-striped table-bordered table-hover main-table' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
-                            <th>ID</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
+                </div>
 
             </div>
 
@@ -136,6 +111,17 @@
 
 
 
+@section('custom-style')
+    <style>
+        .tableArea .main-table {
+            min-width: 1000px;
+        }
+    </style>
+@endsection
+
+
+
+
 @section('custom-script')
 <script>
     var TableDatatablesAjax = function () {
@@ -155,14 +141,8 @@
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
                         d.order_id = $('input[name="order_id"]').val();
-                        d.keyword = $('input[name="keyword"]').val();
-                        d.owner = $('select[name="owner"]').val();
-                        d.finished = $('select[name="finished"]').val();
+                        d.transaction_time = $('input[name="transaction_time"]').val();
                         d.item_type = $('select[name="item_type"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -175,25 +155,25 @@
                 "order": [],
                 "orderCellsTop": true,
                 "columns": [
-                    {
-                        "width": "32px",
-                        "title": "选择",
-                        "data": "id",
-                        'orderable': false,
-                        render: function(data, type, row, meta) {
-                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
-                        }
-                    },
-                    {
-                        "width": "32px",
-                        "title": "序号",
-                        "data": null,
-                        "targets": 0,
-                        'orderable': false
-                    },
+//                    {
+//                        "width": "40px",
+//                        "title": "选择",
+//                        "data": "id",
+//                        'orderable': false,
+//                        render: function(data, type, row, meta) {
+//                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+//                        }
+//                    },
+//                    {
+//                        "width": "40px",
+//                        "title": "序号",
+//                        "data": null,
+//                        "targets": 0,
+//                        'orderable': false
+//                    },
                     {
                         "className": "font-12px",
-                        "width": "32px",
+                        "width": "60px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -202,8 +182,8 @@
                         }
                     },
                     {
-                        "width": "48px",
-                        "title": "类型",
+                        "width": "60px",
+                        "title": "收支类型",
                         "data": 'item_type',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -213,17 +193,17 @@
                         }
                     },
                     {
-                        "width": "48px",
+                        "width": "60px",
                         "title": "订单ID",
                         "data": "order_id",
-                        "orderable": true,
+                        "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
                     {
                         "className": "text-left",
-                        "width": "120px",
+                        "width": "180px",
                         "title": "订单行程",
                         "data": "order_id",
                         "orderable": false,
@@ -241,21 +221,11 @@
                         }
                     },
                     {
-                        "className": "text-left",
-                        "width": "48px",
-                        "title": "金额",
-                        "data": "transaction_amount",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
                         "className": "text-center",
-                        "width": "96px",
+                        "width": "100px",
                         "title": "交易日期",
                         "data": "transaction_time",
-                        "orderable": false,
+                        "orderable": true,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $date = new Date(data*1000);
@@ -265,46 +235,49 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
-                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            return $year+'-'+$month+'-'+$day;
                         }
                     },
                     {
                         "width": "80px",
                         "title": "支付方式",
-                        "data": 'transaction_type',
+                        "data": "transaction_type",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data ? data : '--';
                         }
                     },
-//                    {
-//                        "className": "text-left",
-//                        "width": "64px",
-//                        "title": "拥有者",
-//                        "data": "owner_id",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            return row.owner == null ? '未知' : '<a target="_blank" href="/user/'+row.owner.id+'">'+row.owner.username+'</a>';
-//                        }
-//                    },
                     {
-                        "className": "text-left",
-                        "width": "64px",
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "金额",
+                        "data": "transaction_amount",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
                         "title": "创建者",
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.username+'</a>';
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
                         }
                     },
                     {
                         "className": "font-12px",
-                        "width": "108px",
+                        "width": "120px",
                         "title": "创建时间",
                         "data": 'created_at',
-                        "orderable": true,
+                        "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $date = new Date(data*1000);
@@ -412,10 +385,10 @@
                 ],
                 "drawCallback": function (settings) {
 
-                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
-                    this.api().column(1).nodes().each(function(cell, i) {
-                        cell.innerHTML =  startIndex + i + 1;
-                    });
+//                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+//                    this.api().column(1).nodes().each(function(cell, i) {
+//                        cell.innerHTML =  startIndex + i + 1;
+//                    });
 
                     ajax_datatable.$('.tooltips').tooltip({placement: 'top', html: true});
                     $("a.verify").click(function(event){
@@ -484,5 +457,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_YH_ADMIN').'entrance.item.car-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.finance.finance-script')
 @endsection

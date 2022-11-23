@@ -401,6 +401,8 @@
                         "title": "类型",
                         "data": "trailer_type",
                         "orderable": false,
+                        "sortable": true,
+                        "sorting": ['asc','desc'],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {

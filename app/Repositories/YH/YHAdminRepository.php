@@ -37,7 +37,7 @@ class YHAdminRepository {
         $this->modelClinet = new YH_Client;
         $this->modelCar = new YH_Car;
 
-        $this->view_blade_404 = env('TEMPLATE_YH_ADMIN').'errors.404';
+        $this->view_blade_404 = env('TEMPLATE_YH_ADMIN').'entrance.errors.404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -65,6 +65,8 @@ class YHAdminRepository {
     // 返回（后台）主页视图
     public function view_admin_index()
     {
+        $this->get_me();
+
 //        $condition = request()->all();
 //        $return['condition'] = $condition;
 //
@@ -72,8 +74,84 @@ class YHAdminRepository {
 //        $parameter_result = http_build_query($condition);
 //        return redirect('/?'.$parameter_result);
 
-        $this->get_me();
+
+        $query = YH_Car::select('id');
+
+
+        // 车辆总数
+        $car_all_count = YH_Car::count("*");
+        $car_car_count = YH_Car::where('item_type',1)->count("*");
+        $car_trailer_count = YH_Car::where('item_type',21)->count("*");
+
+
+        $car_idle_count = YH_Car::select('id')
+            ->whereDoesntHave('car_order_list_for_current', function ($query) {
+                $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+            })
+            ->whereDoesntHave('trailer_order_list_for_current', function ($query) {
+                $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+            })
+            ->whereDoesntHave('car_order_list_for_future', function ($query) {
+                $query->whereNull('actual_departure_time');
+            })
+            ->whereDoesntHave('trailer_order_list_for_future', function ($query) {
+                $query->whereNull('actual_departure_time');
+            })
+            ->count("*");
+
+        $car_working_count = YH_Car::select('id')
+            ->whereHas('car_order_list_for_current',function($query) {
+                $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+            })
+            ->orWhereHas('trailer_order_list_for_current',function($query) {
+                $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+            })
+            ->count("*");
+
+
+        $car_waiting_for_departure_count = YH_Car::select('id')
+            ->where(function ($query) {
+                $query->whereDoesntHave('car_order_list_for_current', function ($query) {
+                        $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                    })
+                    ->whereDoesntHave('trailer_order_list_for_current', function ($query) {
+                        $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                    });
+            })
+            ->where(function ($query) {
+                $query->whereHas('car_order_list_for_future', function ($query) {
+                    $query->whereNull('actual_departure_time');
+                })
+                    ->orWhereHas('trailer_order_list_for_future', function ($query) {
+                        $query->whereNull('actual_departure_time');
+                    });
+            })
+            ->count("*");
+
+
+//        dd($car_working_count);
+
+
+
+
+
+        $return['car_all_count'] = $car_all_count;
+        $return['car_car_count'] = $car_car_count;
+        $return['car_trailer_count'] = $car_trailer_count;
+        $return['car_idle_count'] = $car_idle_count;
+        $return['car_working_count'] = $car_working_count;
+        $return['car_waiting_for_departure_count'] = $car_waiting_for_departure_count;
+
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.index';
+        return view($view_blade)->with($return);
+    }
+
+
+    // 返回（后台）主页视图
+    public function view_admin_404()
+    {
+        $this->get_me();
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.errors.404';
         return view($view_blade);
     }
 
@@ -4376,8 +4454,22 @@ class YHAdminRepository {
             $item->published_at = time();
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");
-            DB::commit();
+            else
+            {
+                $record = new YH_Record;
 
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["record_category"] = 1;
+                $record_data["record_type"] = 1;
+                $record_data["operate_category"] = 1;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
             return response_success([]);
         }
         catch (Exception $e)
@@ -4448,8 +4540,6 @@ class YHAdminRepository {
         }
 
     }
-
-
 
 
     // 【订单管理】返回-列表-视图
@@ -4680,206 +4770,6 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】【财务往来记录】返回-列表-视图
-    public function view_item_order_finance_record($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
-
-        $return['staff_list'] = $staff_list;
-        $return['menu_active_of_order_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【订单管理】【财务往来记录】返回-列表-数据
-    public function get_item_order_finance_record_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $id  = $post_data["id"];
-        $query = YH_Finance::select('*')
-            ->with(['creator','owner'])
-            ->where(['order_id'=>$id]);
-
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-
-
-        if(!empty($post_data['type']))
-        {
-            if($post_data['type'] == "income")
-            {
-                $query->where('item_type', 1);
-            }
-            else if($post_data['type'] == "expenditure")
-            {
-                $query->where('item_type', 21);
-            }
-        }
-
-        if(!empty($post_data['item_type']))
-        {
-            if(in_array($post_data['item_type'],[1,21]))
-            {
-                $query->where('item_type', $post_data['item_type']);
-            }
-        }
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-
-            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-            else $list[$k]->is_me = 0;
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【订单管理】添加-财务数据-保存数据
-    public function operate_item_order_finance_record_create($post_data)
-    {
-//        dd($post_data);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-            'transaction_date.required' => '请选择交易日期！',
-            'transaction_title.required' => '请填写费用类型！',
-            'transaction_type.required' => '请填写支付方式！',
-            'transaction_amount.required' => '请填写金额！',
-            'transaction_account.required' => '请填写交易账号！',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-            'transaction_date' => 'required',
-            'transaction_title' => 'required',
-            'transaction_type' => 'required',
-            'transaction_amount' => 'required',
-            'transaction_account' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
-
-
-//        $operate = $post_data["operate"];
-//        $operate_id = $post_data["operate_id"];
-
-        $transaction_date_timestamp = strtotime($post_data['transaction_date']);
-        if($transaction_date_timestamp > time('Y-m-d')) return response_error([],"指定日期不能大于今天！");
-
-        $order_id = $post_data["order_id"];
-        $order = YH_Order::where('id',$order_id)->lockForUpdate()->first();
-        if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
-
-        // 交易类型 收入 || 支出
-        $record_type = $post_data["record_type"];
-        if(!in_array($record_type,[1,21])) return response_error([],"交易类型错误！");
-
-        $transaction_amount = $post_data["transaction_amount"];
-        if(!is_numeric($transaction_amount)) return response_error([],"交易金额必须为数字！");
-        if($transaction_amount <= 0) return response_error([],"交易金额必须大于零！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $FinanceRecord = new YH_Finance;
-
-            $FinanceRecord_data['creator_id'] = $me->id;
-            $FinanceRecord_data['item_category'] = 11;
-            $FinanceRecord_data['item_type'] = $record_type;
-            $FinanceRecord_data['order_id'] = $post_data["order_id"];
-            $FinanceRecord_data['transaction_time'] = $transaction_date_timestamp;
-            $FinanceRecord_data['transaction_type'] = $post_data["transaction_type"];
-            $FinanceRecord_data['transaction_amount'] = $post_data["transaction_amount"];
-            $FinanceRecord_data['transaction_account'] = $post_data["transaction_account"];
-            $FinanceRecord_data['transaction_order'] = $post_data["transaction_order"];
-            $FinanceRecord_data['title'] = $post_data["transaction_title"];
-            $FinanceRecord_data['description'] = $post_data["transaction_description"];
-
-            $mine_data = $post_data;
-
-            unset($mine_data['operate']);
-            unset($mine_data['operate_id']);
-            unset($mine_data['operate_category']);
-            unset($mine_data['operate_type']);
-
-            $bool = $FinanceRecord->fill($FinanceRecord_data)->save();
-            if($bool)
-            {
-                if($record_type == 1)
-                {
-                    $order->income_total = $order->income_total + $transaction_amount;
-                }
-                else if($record_type == 21)
-                {
-                    $order->expenditure_total = $order->expenditure_total + $transaction_amount;
-                }
-
-                $bool_1 = $order->save();
-
-                if($bool_1)
-                {
-
-                }
-                else throw new Exception("update--order--fail");
-            }
-            else throw new Exception("insert--finance--fail");
-
-            DB::commit();
-            return response_success(['id'=>$FinanceRecord->id]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-
-
-
-
-
-
     // 【订单管理】【修改信息】设置-文本-类型
     public function operate_item_order_info_text_set($post_data)
     {
@@ -4917,7 +4807,7 @@ class YHAdminRepository {
 
         if($column_key == "amount")
         {
-             if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
         }
         else
         {
@@ -5307,7 +5197,202 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理-修改记录】返回-列表-视图
+    // 【订单管理】【财务往来记录】返回-列表-视图
+    public function view_item_order_finance_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_order_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【订单管理】【财务往来记录】返回-列表-数据
+    public function get_item_order_finance_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Finance::select('*')
+            ->with(['creator','owner'])
+            ->where(['order_id'=>$id]);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        if(!empty($post_data['type']))
+        {
+            if($post_data['type'] == "income")
+            {
+                $query->where('item_type', 1);
+            }
+            else if($post_data['type'] == "expenditure")
+            {
+                $query->where('item_type', 21);
+            }
+        }
+
+        if(!empty($post_data['item_type']))
+        {
+            if(in_array($post_data['item_type'],[1,21]))
+            {
+                $query->where('item_type', $post_data['item_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+    // 【订单管理】添加-财务数据-保存数据
+    public function operate_item_order_finance_record_create($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+            'transaction_date.required' => '请选择交易日期！',
+            'transaction_title.required' => '请填写费用类型！',
+            'transaction_type.required' => '请填写支付方式！',
+            'transaction_amount.required' => '请填写金额！',
+            'transaction_account.required' => '请填写交易账号！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+            'transaction_date' => 'required',
+            'transaction_title' => 'required',
+            'transaction_type' => 'required',
+            'transaction_amount' => 'required',
+            'transaction_account' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
+
+
+//        $operate = $post_data["operate"];
+//        $operate_id = $post_data["operate_id"];
+
+        $transaction_date_timestamp = strtotime($post_data['transaction_date']);
+        if($transaction_date_timestamp > time('Y-m-d')) return response_error([],"指定日期不能大于今天！");
+
+        $order_id = $post_data["order_id"];
+        $order = YH_Order::where('id',$order_id)->lockForUpdate()->first();
+        if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
+
+        // 交易类型 收入 || 支出
+        $record_type = $post_data["record_type"];
+        if(!in_array($record_type,[1,21])) return response_error([],"交易类型错误！");
+
+        $transaction_amount = $post_data["transaction_amount"];
+        if(!is_numeric($transaction_amount)) return response_error([],"交易金额必须为数字！");
+        if($transaction_amount <= 0) return response_error([],"交易金额必须大于零！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $FinanceRecord = new YH_Finance;
+
+            $FinanceRecord_data['creator_id'] = $me->id;
+            $FinanceRecord_data['item_category'] = 11;
+            $FinanceRecord_data['item_type'] = $record_type;
+            $FinanceRecord_data['order_id'] = $post_data["order_id"];
+            $FinanceRecord_data['transaction_time'] = $transaction_date_timestamp;
+            $FinanceRecord_data['transaction_type'] = $post_data["transaction_type"];
+            $FinanceRecord_data['transaction_amount'] = $post_data["transaction_amount"];
+            $FinanceRecord_data['transaction_account'] = $post_data["transaction_account"];
+            $FinanceRecord_data['transaction_order'] = $post_data["transaction_order"];
+            $FinanceRecord_data['title'] = $post_data["transaction_title"];
+            $FinanceRecord_data['description'] = $post_data["transaction_description"];
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['operate_category']);
+            unset($mine_data['operate_type']);
+
+            $bool = $FinanceRecord->fill($FinanceRecord_data)->save();
+            if($bool)
+            {
+                if($record_type == 1)
+                {
+                    $order->income_total = $order->income_total + $transaction_amount;
+                }
+                else if($record_type == 21)
+                {
+                    $order->expenditure_total = $order->expenditure_total + $transaction_amount;
+                }
+
+                $bool_1 = $order->save();
+
+                if($bool_1)
+                {
+
+                }
+                else throw new Exception("update--order--fail");
+            }
+            else throw new Exception("insert--finance--fail");
+
+            DB::commit();
+            return response_success(['id'=>$FinanceRecord->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+    // 【订单管理】【修改记录】返回-列表-视图
     public function view_item_order_modify_record($post_data)
     {
         $this->get_me();
@@ -5320,7 +5405,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【订单管理-修改记录】返回-列表-数据
+    // 【订单管理】【修改记录】返回-列表-数据
     public function get_item_order_modify_record_datatable($post_data)
     {
         $this->get_me();
@@ -5375,6 +5460,9 @@ class YHAdminRepository {
 
 
 
+    /*
+     * Finance 财务
+     */
     // 【财务往来记录】返回-列表-视图
     public function view_finance_record_list_for_all($post_data)
     {
@@ -5393,11 +5481,14 @@ class YHAdminRepository {
 
 //        $id  = $post_data["id"];
         $query = YH_Finance::select('*')
-            ->with(['creator','owner','order_er']);
+            ->with(['creator','order_er']);
 
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+
+        if(!empty($post_data['transaction_time'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), $post_data['transaction_time']);
 
 
         if(!empty($post_data['item_type']))

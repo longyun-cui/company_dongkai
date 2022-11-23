@@ -2,44 +2,31 @@
     $(function() {
 
         // 【搜索】
-        $(".item-main-body").on('click', ".filter-submit", function() {
+        $("#datatable-for-finance-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $(".item-main-body").on('click', ".filter-cancel", function() {
-            $('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-finance-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-finance-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $('select.form-filter option').attr("selected",false);
-            $('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-finance-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-finance-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $(".item-main-body").on('keyup', ".item-search-keyup", function(event) {
+        $("#datatable-for-finance-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#filter-submit").click();
+                $("#datatable-for-finance-list").find(".filter-submit").click();
             }
         });
 
 
 
-
-        // 【下载二维码】
-        $("#item-main-body").on('click', ".item-download-qr-code-submit", function() {
-            var $that = $(this);
-            window.open("/download/qr-code?type=item&id="+$that.attr('data-id'));
-        });
-
-        // 【数据分析】
-        $("#item-main-body").on('click', ".item-statistic-submit", function() {
-            var $that = $(this);
-            window.open("/statistic/statistic-item?id="+$that.attr('data-id'));
-//            window.location.href = "/admin/statistic/statistic-item?id="+$that.attr('data-id');
-        });
 
         // 【编辑】
         $("#item-main-body").on('click', ".item-edit-link", function() {
@@ -353,6 +340,24 @@
             });
         });
 
+
+
+
+        $('.datetime_picker').datetimepicker({
+            locale: moment.locale('zh-cn'),
+            format:"YYYY-MM-DD HH:mm",
+            ignoreReadonly:true
+        });
+        $('.date_picker').datetimepicker({
+            locale: moment.locale('zh-cn'),
+            format:"YYYY-MM-DD",
+            ignoreReadonly:true
+        });
+        $('.month_picker').datetimepicker({
+            locale: moment.locale('zh-cn'),
+            format:"YYYY-MM",
+            ignoreReadonly:true
+        });
 
 
 
