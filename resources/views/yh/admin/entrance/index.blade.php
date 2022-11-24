@@ -16,41 +16,49 @@
     <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
 @section('content')
-{{----}}
+{{--车辆统计--}}
 <div class="row">
     <div class="col-md-12">
-        <div class="box">
-            <div class="callout callout-green">
-                <h4>车辆统计</h4>
-                <div>
-                    <span style="margin-right:12px;">
-                        车辆 <span class="text-purple font-24px">{{ $car_all_count or 0 }}</span> 个
-                    </span>
-
-                    <span style="margin-right:12px;">
-                        牵引车 <span class="text-purple font-24px">{{ $car_car_count or 0 }}</span> 辆
-                    </span>
-
-                    <span style="margin-right:12px;">
-                        车挂 <span class="text-purple font-24px">{{ $car_trailer_count or 0 }}</span> 辆
-                    </span>
-
-                    <span style="margin-right:12px;">
-                        工作中 <span class="text-green font-24px">{{ $car_working_count or '' }}</span> 辆
-                    </span>
-
-                    <span style="margin-right:12px;">
-                        待发车 <span class="text-blue font-24px">{{ $car_waiting_for_departure_count or 0 }}</span> 元
-                    </span>
-
-                    <span style="margin-right:12px;">
-                        空闲 <span class="text-red font-24px">{{ $car_idle_count or '' }}</span> 辆
-                    </span>
-                </div>
+        <div class="callout callout-success- bg-white">
+            <h4>车辆统计</h4>
+            <div class="callout-body">
+                <span>总计 <text class="text-purple- font-24px">{{ $car_all_count or 0 }}</text> 辆</span>
+                <span>车辆 <text class="text-green font-24px">{{ $car_car_count or 0 }}</text> 辆</span>
+                <span>车挂 <text class="text-purple font-24px">{{ $car_trailer_count or 0 }}</text> 辆</span>
+                <span>工作中 <text class="text-green font-24px">{{ $car_working_count or '' }}</text> 辆</span>
+                <span>待发车 <text class="text-blue font-24px">{{ $car_waiting_for_departure_count or 0 }}</text> 辆</span>
+                <span>空闲 <text class="text-red font-24px">{{ $car_idle_count or '' }}</text> 辆</span>
             </div>
         </div>
     </div>
 </div>
+
+
+{{--订单统计--}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="callout callout-success- bg-white">
+            <h4>订单统计</h4>
+            <div class="callout-body">
+                <span>总计 <text class="text-black font-24px">{{ $order_all_count or 0 }}</text> 单</span>
+                <span>待发布 <text class="text-teal font-24px">{{ $order_unpublished_count or 0 }}</text> 单</span>
+                <span>待发车 <text class="text-aqua font-24px">{{ $order_waiting_for_departure_count or 0 }}</text> 单</span>
+                <span>进行中 <text class="text-blue font-24px">{{ $order_working_count or 0 }}</text> 单</span>
+                <span>待收款 <text class="text-orange font-24px">{{ $order_waiting_for_receipt_count or '' }}</text> 单</span>
+                <span>已收款 <text class="text-blue font-24px">{{ $order_received_count or '' }}</text> 单</span>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+
+
+
+@section('custom-style')
+<style>
+    .main-content .callout .callout-body span { margin-right:12px; }
+</style>
 @endsection
 
 

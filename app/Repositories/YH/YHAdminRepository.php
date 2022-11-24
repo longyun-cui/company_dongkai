@@ -130,7 +130,13 @@ class YHAdminRepository {
 
 
 //        dd($car_working_count);
-
+        // 车辆总数
+        $order_all_count = YH_Order::count("*");
+        $order_unpublished_count = YH_Order::where('is_published', 0)->count("*");
+        $order_waiting_for_departure_count = YH_Order::where('is_published', 1)->whereNull('actual_departure_time')->count("*");
+        $order_working_count = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->count("*");
+        $order_waiting_for_receipt_count = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn('amount','>','income_total')->count("*");
+        $order_received_count = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn('amount','<=','income_total')->count("*");
 
 
 
@@ -141,6 +147,14 @@ class YHAdminRepository {
         $return['car_idle_count'] = $car_idle_count;
         $return['car_working_count'] = $car_working_count;
         $return['car_waiting_for_departure_count'] = $car_waiting_for_departure_count;
+
+        $return['order_all_count'] = $order_all_count;
+        $return['order_unpublished_count'] = $order_unpublished_count;
+        $return['order_waiting_for_departure_count'] = $order_waiting_for_departure_count;
+        $return['order_working_count'] = $order_working_count;
+        $return['order_waiting_for_receipt_count'] = $order_waiting_for_receipt_count;
+        $return['order_received_count'] = $order_received_count;
+
 
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.index';
         return view($view_blade)->with($return);
@@ -4391,8 +4405,22 @@ class YHAdminRepository {
 //                $bool = $item->forceDelete();  // 永久删除
                 $bool = $item->delete();  // 普通删除
                 if(!$bool) throw new Exception("item--delete--fail");
-                DB::commit();
+                else
+                {
+                    $record = new YH_Record;
 
+                    $record_data["record_category"] = 1;
+                    $record_data["record_type"] = 99;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $item_id;
+                    $record_data["operate_category"] = 1;
+                    $record_data["operate_type"] = 99;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("insert--record--fail");
+                }
+
+                DB::commit();
                 $this->delete_the_item_files($item_copy);
             }
             else
@@ -4401,6 +4429,21 @@ class YHAdminRepository {
 //                $bool = $item->delete();  // 普通删除
                 $bool = $item->forceDelete();  // 永久删除
                 if(!$bool) throw new Exception("item--delete--fail");
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 100;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $item_id;
+                    $record_data["operate_category"] = 1;
+                    $record_data["operate_type"] = 99;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("insert--record--fail");
+                }
+
                 DB::commit();
             }
 
@@ -4458,10 +4501,10 @@ class YHAdminRepository {
             {
                 $record = new YH_Record;
 
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 9;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["record_category"] = 1;
-                $record_data["record_type"] = 1;
                 $record_data["operate_category"] = 1;
                 $record_data["operate_type"] = 1;
 
@@ -4619,7 +4662,6 @@ class YHAdminRepository {
                 else if($order_status == "待发车") $query->where('is_published', 1)->whereNull('actual_departure_time');
                 else if($order_status == "进行中") $query->where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
                 else if($order_status == "已到达") $query->where('is_published', 1)->whereNotNull('actual_arrival_time');
-
             }
         }
 
@@ -4832,6 +4874,8 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
                     $record_data["operate_category"] = 11;
@@ -4926,6 +4970,8 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
                     $record_data["operate_category"] = 11;
@@ -5061,6 +5107,8 @@ class YHAdminRepository {
             {
                 $record = new YH_Record;
 
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
                 $record_data["operate_category"] = 11;
