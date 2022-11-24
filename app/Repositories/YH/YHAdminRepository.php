@@ -78,12 +78,11 @@ class YHAdminRepository {
         $query = YH_Car::select('id');
 
 
-        // 车辆总数
+        // 车辆统计
         $car_all_count = YH_Car::count("*");
         $car_car_count = YH_Car::where('item_type',1)->count("*");
         $car_trailer_count = YH_Car::where('item_type',21)->count("*");
-
-
+        // 空闲车辆
         $car_idle_count = YH_Car::select('id')
             ->whereDoesntHave('car_order_list_for_current', function ($query) {
                 $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
@@ -98,7 +97,7 @@ class YHAdminRepository {
                 $query->whereNull('actual_departure_time');
             })
             ->count("*");
-
+        // 工作中
         $car_working_count = YH_Car::select('id')
             ->whereHas('car_order_list_for_current',function($query) {
                 $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
@@ -107,8 +106,7 @@ class YHAdminRepository {
                 $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
             })
             ->count("*");
-
-
+        // 待发车
         $car_waiting_for_departure_count = YH_Car::select('id')
             ->where(function ($query) {
                 $query->whereDoesntHave('car_order_list_for_current', function ($query) {
@@ -129,8 +127,17 @@ class YHAdminRepository {
             ->count("*");
 
 
-//        dd($car_working_count);
-        // 车辆总数
+        $return['car_all_count'] = $car_all_count;
+        $return['car_car_count'] = $car_car_count;
+        $return['car_trailer_count'] = $car_trailer_count;
+        $return['car_idle_count'] = $car_idle_count;
+        $return['car_working_count'] = $car_working_count;
+        $return['car_waiting_for_departure_count'] = $car_waiting_for_departure_count;
+
+
+
+
+        // 订单统计
         $order_all_count = YH_Order::count("*");
         $order_unpublished_count = YH_Order::where('is_published', 0)->count("*");
         $order_waiting_for_departure_count = YH_Order::where('is_published', 1)->whereNull('actual_departure_time')->count("*");
@@ -139,21 +146,89 @@ class YHAdminRepository {
         $order_received_count = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn('amount','<=','income_total')->count("*");
 
 
-
-
-        $return['car_all_count'] = $car_all_count;
-        $return['car_car_count'] = $car_car_count;
-        $return['car_trailer_count'] = $car_trailer_count;
-        $return['car_idle_count'] = $car_idle_count;
-        $return['car_working_count'] = $car_working_count;
-        $return['car_waiting_for_departure_count'] = $car_waiting_for_departure_count;
-
         $return['order_all_count'] = $order_all_count;
         $return['order_unpublished_count'] = $order_unpublished_count;
         $return['order_waiting_for_departure_count'] = $order_waiting_for_departure_count;
         $return['order_working_count'] = $order_working_count;
         $return['order_waiting_for_receipt_count'] = $order_waiting_for_receipt_count;
         $return['order_received_count'] = $order_received_count;
+
+
+
+
+        // 财务统计
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+
+        $finance_this_month_income = YH_Finance::select('id')
+            ->where('item_type',1)
+            ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
+            ->sum("transaction_amount");
+
+        $finance_this_month_payout = YH_Finance::select('id')
+            ->where('item_type',21)
+            ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
+            ->sum("transaction_amount");
+
+
+        $finance_last_month_income = YH_Finance::select('id')
+            ->where('item_type',1)
+            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$last_month_start_date,$last_month_ended_date])
+            ->sum("transaction_amount");
+
+        $finance_last_month_payout = YH_Finance::select('id')
+            ->where('item_type',21)
+            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$last_month_start_date,$last_month_ended_date])
+            ->sum("transaction_amount");
+
+
+        $return['finance_this_month_income'] = $finance_this_month_income;
+        $return['finance_this_month_payout'] = $finance_this_month_payout;
+        $return['finance_last_month_income'] = $finance_last_month_income;
+        $return['finance_last_month_payout'] = $finance_last_month_payout;
+
+
+        $statistics_income_data = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
+            ->where('item_type',1)
+            ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(transaction_time,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(transaction_time,'%e') as day,
+                    sum(transaction_amount) as sum,
+                    count(*) as count
+                "))
+            ->get()->keyBy('day');
+        $return['statistics_income_data'] = $statistics_income_data;
+
+        $statistics_payout_data = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
+            ->where('item_type',21)
+            ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(transaction_time,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(transaction_time,'%e') as day,
+                    sum(transaction_amount) as sum,
+                    count(*) as count
+                "))
+            ->get()->keyBy('day');
+        $return['statistics_payout_data'] = $statistics_payout_data;
+
+
 
 
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.index';
@@ -2798,294 +2873,6 @@ class YHAdminRepository {
     }
 
 
-    // 【任务管理】管理员-删除
-    public function operate_item_task_admin_delete($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'task-admin-delete') return response_error([],"参数【operate】有误！");
-        $item_id = $post_data["item_id"];
-        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
-
-        $item = YH_Task::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"用户类型错误！");
-
-        // 判断用户操作权限
-//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
-        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->timestamps = false;
-            if($item->item_active == 0 && $item->owner_id != $me->id)
-            {
-                $item_copy = $item;
-
-                $item->timestamps = false;
-                $bool = $item->delete();  // 普通删除
-//                $bool = $item->forceDelete();  // 永久删除
-                if(!$bool) throw new Exception("item--delete--fail");
-                DB::commit();
-
-                $this->delete_the_item_files($item_copy);
-            }
-            else
-            {
-                $item->timestamps = false;
-                $bool = $item->delete();  // 普通删除
-//                $bool = $item->forceDelete();  // 永久删除
-                if(!$bool) throw new Exception("item--delete--fail");
-                DB::commit();
-            }
-
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【任务管理】管理员-恢复
-    public function operate_item_task_admin_restore($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'operate.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'task-admin-restore') return response_error([],"参数【operate】有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
-
-        $item = YH_Task::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"用户类型错误！");
-
-        // 判断用户操作权限
-        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->timestamps = false;
-            $bool = $item->restore();
-            if(!$bool) throw new Exception("item--restore--fail");
-            DB::commit();
-
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【任务管理】管理员-彻底删除
-    public function operate_item_task_admin_delete_permanently($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'task-admin-delete-permanently') return response_error([],"参数【operate】有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
-
-        $item = YH_Task::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"用户类型错误！");
-
-
-        // 判断用户操作权限
-//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
-        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item_copy = $item;
-
-            $bool = $item->forceDelete();
-            if(!$bool) throw new Exception("item--delete--fail");
-            DB::commit();
-
-            $this->delete_the_item_files($item_copy);
-
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-    // 【任务管理】管理员-启用
-    public function operate_item_task_admin_enable($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'task-admin-enable') return response_error([],"参数【operate】有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
-
-        $item = YH_Task::find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($me->user_category != 0) return response_error([],"你没有操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->item_status = 1;
-            $item->timestamps = false;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("update--item--fail");
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【任务管理】管理员-禁用
-    public function operate_item_task_admin_disable($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'task-admin-disable') return response_error([],"参数【operate】有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
-
-        $item = YH_Task::find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        // 权限管理
-//        if($me->user_category != 0) return response_error([],"你没有操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->item_status = 9;
-            $item->timestamps = false;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("update--item--fail");
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
 
 
     // 【任务管理】批量-操作（全部操作）
@@ -3402,11 +3189,12 @@ class YHAdminRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'name.required' => 'name.required.',
+            'name.required' => '请输入车牌号！',
+            'name.unique' => '该车牌号已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'name' => 'required',
+            'name' => 'required|unique:yh_car,name',
         ], $messages);
         if ($v->fails())
         {
@@ -3595,6 +3383,168 @@ class YHAdminRepository {
     }
 
 
+    // 【任务管理】管理员-删除
+    public function operate_item_car_admin_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'car-admin-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Car::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("item--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【任务管理】管理员-恢复
+    public function operate_item_car_admin_restore($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'operate.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'car-admin-restore') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Car::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->restore();
+            if(!$bool) throw new Exception("item--restore--fail");
+            DB::commit();
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【任务管理】管理员-彻底删除
+    public function operate_item_car_admin_delete_permanently($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'car-admin-delete-permanently') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Car::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item_copy = $item;
+
+            $bool = $item->forceDelete();
+            if(!$bool) throw new Exception("car--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
     // 【车辆管理】管理员-启用
     public function operate_item_car_admin_enable($post_data)
     {

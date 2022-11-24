@@ -393,96 +393,10 @@ class YHAdminController extends Controller
     }
 
 
-    // 【任务】添加
-    public function operate_item_task_create()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_task_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_task_save(request()->all());
-    }
-    // 【任务】编辑
-    public function operate_item_task_edit()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_task_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_task_save(request()->all());
-    }
-
-    // 【任务】获取-详情
-    public function operate_item_task_get()
-    {
-        return $this->repo->operate_item_task_get(request()->all());
-    }
-    // 【任务】删除
-    public function operate_item_task_delete()
-    {
-        return $this->repo->operate_item_task_delete(request()->all());
-    }
-    // 【任务】恢复
-    public function operate_item_task_restore()
-    {
-        return $this->repo->operate_item_task_restore(request()->all());
-    }
-    // 【任务】永久删除
-    public function operate_item_task_delete_permanently()
-    {
-        return $this->repo->operate_item_task_delete_permanently(request()->all());
-    }
-    // 【任务】发布
-    public function operate_item_task_publish()
-    {
-        return $this->repo->operate_item_task_publish(request()->all());
-    }
-    // 【任务】完成
-    public function operate_item_task_complete()
-    {
-        return $this->repo->operate_item_task_complete(request()->all());
-    }
-    // 【任务】启用
-    public function operate_item_task_enable()
-    {
-        return $this->repo->operate_item_task_enable(request()->all());
-    }
-    // 【任务】禁用
-    public function operate_item_task_disable()
-    {
-        return $this->repo->operate_item_task_disable(request()->all());
-    }
-
-    // 【任务】备注编辑
-    public function operate_item_task_remark_edit()
-    {
-        return $this->repo->operate_item_task_remark_save(request()->all());
-    }
-
-
 
     /*
      * Task 任务管理
      */
-    // 【任务管理】管理员-删除
-    public function operate_item_task_admin_delete()
-    {
-        return $this->repo->operate_item_task_admin_delete(request()->all());
-    }
-    // 【任务管理】管理员-恢复
-    public function operate_item_task_admin_restore()
-    {
-        return $this->repo->operate_item_task_admin_restore(request()->all());
-    }
-    // 【任务管理】管理员-永久删除
-    public function operate_item_task_admin_delete_permanently()
-    {
-        return $this->repo->operate_item_task_admin_delete_permanently(request()->all());
-    }
-    // 【任务管理】管理员-启用
-    public function operate_item_task_admin_enable()
-    {
-        return $this->repo->operate_item_task_admin_enable(request()->all());
-    }
-    // 【任务管理】管理员-禁用
-    public function operate_item_task_admin_disable()
-    {
-        return $this->repo->operate_item_task_admin_disable(request()->all());
-    }
 
 
     // 【任务管理】管理员-批量-操作
@@ -554,6 +468,21 @@ class YHAdminController extends Controller
     }
 
 
+    // 【内容】删除
+    public function operate_item_car_admin_delete()
+    {
+        return $this->repo->operate_item_car_admin_delete(request()->all());
+    }
+    // 【内容】恢复
+    public function operate_item_car_admin_restore()
+    {
+        return $this->repo->operate_item_car_admin_restore(request()->all());
+    }
+    // 【内容】永久删除
+    public function operate_item_car_admin_delete_permanently()
+    {
+        return $this->repo->operate_item_car_admin_delete_permanently(request()->all());
+    }
     // 【车辆管理】启用
     public function operate_item_car_admin_enable()
     {

@@ -50,6 +50,51 @@
         </div>
     </div>
 </div>
+
+
+{{--财务统计--}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="callout callout-success- bg-white">
+            <h4>财务统计</h4>
+            <div class="callout-body">
+                <span>本月收入 <text class="text-green font-24px">{{ $finance_this_month_income or 0 }}</text> 元</span>
+                <span>本月支出 <text class="text-orange font-24px">{{ $finance_this_month_payout or 0 }}</text> 元</span>
+                <span>净收入 <text class="text-red font-24px">{{ $finance_this_month_income - $finance_this_month_payout }}</text> 元</span>
+                <br>
+                <span>上月收入 <text class="text-green font-24px">{{ $finance_last_month_income or 0 }}</text> 元</span>
+                <span>上月支出 <text class="text-orange font-24px">{{ $finance_last_month_payout or 0 }}</text> 元</span>
+                <span>净收入 <text class="text-red font-24px">{{ $finance_last_month_income - $finance_last_month_payout }}</text> 元</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{--消费统计--}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-info">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">财务统计</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="eChart-finance-statistics" style="width:100%;height:320px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
 @endsection
 
 
@@ -63,10 +108,97 @@
 
 
 
-
+@section('custom-js')
+    <script src="{{ asset('/lib/js/echarts-3.7.2.min.js') }}"></script>
+@endsection
 @section('custom-script')
 <script>
     $(function() {
+
+        // 收入
+        var $income_res = new Array();
+        $.each({!! $statistics_income_data !!},function(key,v){
+            $income_res[(v.day - 1)] = { value:v.sum, name:v.day };
+//            $income_res.push({ value:v.sum, name:v.date });
+        });
+        // 支出
+        var $payout_res = new Array();
+        $.each({!! $statistics_payout_data !!},function(key,v){
+            $payout_res[(v.day - 1)] = { value:v.sum, name:v.day };
+        });
+
+        var option_finance_statistics = {
+            title: {
+                text: '当月财务统计'
+            },
+            tooltip : {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+                data:['收入','支出']
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    axisLabel : { interval:0 },
+                    data : [
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
+                    ]
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'收入',
+                    type:'line',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    itemStyle : { normal: { label : { show: true } } },
+                    data: $income_res
+                },
+                {
+                    name:'支出',
+                    type:'line',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    itemStyle : { normal: { label : { show: true } } },
+                    data: $payout_res
+                }
+            ]
+        };
+        var myChart_finance_statistics = echarts.init(document.getElementById('eChart-finance-statistics'));
+        myChart_finance_statistics.setOption(option_finance_statistics);
+
     });
 </script>
 @endsection
