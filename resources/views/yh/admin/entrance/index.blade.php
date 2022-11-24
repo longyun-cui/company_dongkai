@@ -66,35 +66,28 @@
                 <span>上月支出 <text class="text-orange font-24px">{{ $finance_last_month_payout or 0 }}</text> 元</span>
                 <span>净收入 <text class="text-red font-24px">{{ $finance_last_month_income - $finance_last_month_payout }}</text> 元</span>
             </div>
-        </div>
-    </div>
-</div>
 
-{{--消费统计--}}
-<div class="row">
-    <div class="col-md-12">
-        <div class="box box-info">
+            <div class="box box-info margin-top-32px">
 
-            <div class="box-header with-border" style="margin:16px 0;">
-                <h3 class="box-title">财务统计</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
+                {{--<div class="box-header">--}}
+                {{--</div>--}}
 
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="eChart-finance-statistics" style="width:100%;height:320px;"></div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="eChart-finance-statistics" style="width:100%;height:320px;"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="box-footer">
-            </div>
+                {{--<div class="box-footer">--}}
+                {{--</div>--}}
 
+            </div>
         </div>
     </div>
 </div>
+
 @endsection
 
 
