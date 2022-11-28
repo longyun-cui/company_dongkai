@@ -9,18 +9,21 @@ class YH_Finance extends Model
     //
     protected $table = "yh_finance";
     protected $fillable = [
-        'active', 'status', 'item_active', 'item_status', 'item_category', 'item_type', 'category', 'type', 'sort',
+        'active', 'status', 'category', 'type', 'sort',
+        'item_active', 'item_status', 'item_category', 'item_type',
+        'finance_active', 'finance_status', 'finance_category', 'finance_type',
+        'is_confirmed', 'confirmer_id',
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
-        'org_id', 'admin_id',
-        'item_id', 'menu_id', 'order_id',
-        'transaction_amount', 'transaction_time', 'transaction_type', 'transaction_account', 'transaction_order',
+        'admin_id',
+        'menu_id', 'item_id', 'order_id',
+        'transaction_amount', 'transaction_time', 'transaction_type', 'transaction_account', 'transaction_receipt_account', 'transaction_payment_account', 'transaction_order',
         'total_funds', 'balance_funds', 'available_funds', 'init_freeze_funds', 'freeze_funds',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'time_point', 'time_type', 'start_time', 'end_time', 'address',
+        'mobile', 'address',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at'
+        'confirmed_at', 'completed_at'
     ];
     protected $dateFormat = 'U';
 
@@ -37,20 +40,25 @@ class YH_Finance extends Model
     {
         return $this->belongsTo('App\Models\YH\YH_User','owner_id','id');
     }
-    // 创作者
+    // 创建者
     function creator()
     {
         return $this->belongsTo('App\Models\YH\YH_User','creator_id','id');
     }
-    // 创作者
+    // 更新者
     function updater()
     {
         return $this->belongsTo('App\Models\YH\YH_User','updater_id','id');
     }
-    // 创作者
+    // 完成者
     function completer()
     {
         return $this->belongsTo('App\Models\YH\YH_User','completer_id','id');
+    }
+    // 完成者
+    function confirmer()
+    {
+        return $this->belongsTo('App\Models\YH\YH_User','confirmer_id','id');
     }
     // 用户
     function user()

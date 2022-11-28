@@ -37,85 +37,20 @@
 
 
 
-        /*
-            // 批量操作
-         */
-        // 【批量操作】全选or反选
-        $(".main-list-body").on('click', '#check-review-all', function () {
-            $('input[name="bulk-id"]').prop('checked',this.checked);//checked为true时为默认显示的状态
-        });
 
-        // 【批量操作】
-        $(".main-list-body").on('click', '#operate-bulk-submit', function() {
-            var $checked = [];
-            $('input[name="bulk-id"]:checked').each(function() {
-                $checked.push($(this).val());
-            });
-
-            if($checked.length == 0)
-            {
-                layer.msg("请先选择操作对象！");
-                return false;
-            }
-
-//            var $operate_set = new Array("启用","禁用","删除","彻底删除");
-            var $operate_set = ["启用","禁用","删除","彻底删除"];
-            var $operate_result = $('select[name="bulk-operate-status"]').val();
-            if($.inArray($operate_result, $operate_set) == -1)
-            {
-                layer.msg("请选择操作类型！");
-                return false;
-            }
-
-
-            layer.msg('确定"批量操作"么', {
+        // 【确认】
+        $(".main-content").on('click', ".item-confirm-submit", function() {
+            var $that = $(this);
+            layer.msg('确定要"确认"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
-
                     $.post(
-                        "{{ url('/item/task-admin-operate-bulk') }}",
+                        "{{ url('/finance/finance-confirm') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "operate-bulk",
-                            bulk_item_id: $checked,
-                            bulk_item_operate:$('select[name="bulk-operate-status"]').val()
-                        },
-                        function(data){
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-                            else
-                            {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
-                                $("#check-review-all").prop('checked',false);
-                            }
-                        },
-                        'json'
-                    );
-
-                }
-            });
-
-        });
-
-        // 【批量删除】
-        $(".main-list-body").on('click', '#delete-bulk-submit', function() {
-            var $checked = [];
-            $('input[name="bulk-id"]:checked').each(function() {
-                $checked.push($(this).val());
-            });
-
-            layer.msg('确定"批量删除"么', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-
-                    $.post(
-                        "{{ url('/item/task-admin-delete-bulk') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-delete-bulk",
-                            bulk_item_id: $checked
+                            operate: "finance-confirm",
+                            item_id: $that.attr('data-id')
                         },
                         function(data){
                             layer.close(index);
@@ -127,17 +62,43 @@
                         },
                         'json'
                     );
-
                 }
             });
+        });
 
+        // 【删除】
+        $(".main-content").on('click', ".item-delete-submit", function() {
+            var $that = $(this);
+            layer.msg('确定要"删除"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/finance/finance-delete') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "finance-delete",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
         });
 
 
 
 
-        // 内容【获取详情】
-        $("#item-main-body").on('click', ".item-detail-show", function() {
+        // 【获取详情】
+        $(".main-content").on('click', ".item-detail-show", function() {
             var $that = $(this);
             var $data = new Object();
             $.ajax({
@@ -172,18 +133,18 @@
 
         });
 
-        // 内容【管理员-删除】
-        $("#item-main-body").on('click', ".item-admin-delete-submit", function() {
+        // 【管理员-删除】
+        $(".main-content").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
             layer.msg('确定要"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-delete') }}",
+                        "{{ url('/finance/finance-admin-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-delete",
+                            operate: "finance-admin-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -200,18 +161,18 @@
             });
         });
 
-        // 内容【管理员-恢复】
-        $("#item-main-body").on('click', ".item-admin-restore-submit", function() {
+        // 【管理员-恢复】
+        $(".main-content").on('click', ".item-admin-restore-submit", function() {
             var $that = $(this);
             layer.msg('确定要"恢复"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-restore') }}",
+                        "{{ url('/finance/finance-admin-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-restore",
+                            operate: "finance-admin-restore",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -228,47 +189,19 @@
             });
         });
 
-        // 内容【管理员-永久删除】
-        $("#item-main-body").on('click', ".item-admin-delete-permanently-submit", function() {
+        // 【管理员-永久删除】
+        $(".main-content").on('click', ".item-admin-delete-permanently-submit", function() {
             var $that = $(this);
             layer.msg('确定要"永久删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-delete-permanently') }}",
+                        "{{ url('/finance/finance-admin-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-delete-permanently",
+                            operate: "finance-admin-delete-permanently",
                             item_id: $that.attr('data-id')
-                        },
-                        function(data){
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-                            else
-                            {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
-                            }
-                        },
-                        'json'
-                    );
-                }
-            });
-        });
-
-        // 内容【推送】
-        $("#item-main-body").on('click', ".item-publish-submit", function() {
-            var $that = $(this);
-            layer.msg('确定要"发布"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-                    $.post(
-                        "{{ url('/item/item-publish') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "item-publish",
-                            id: $that.attr('data-id')
                         },
                         function(data){
                             layer.close(index);
@@ -293,10 +226,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-enable') }}",
+                        "{{ url('/finance/finance-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-enable",
+                            operate: "finance-admin-enable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -320,10 +253,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/task-admin-disable') }}",
+                        "{{ url('/finance/finance-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "task-admin-disable",
+                            operate: "finance-admin-disable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){

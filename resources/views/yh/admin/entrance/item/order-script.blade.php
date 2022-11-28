@@ -113,6 +113,33 @@
                 }
             });
         });
+        // 【启用】
+        $(".main-content").on('click', ".item-abandon-submit", function() {
+            var $that = $(this);
+            layer.msg('确定要"弃用"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-abandon') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-abandon",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
         // 【发布】
         $(".main-content").on('click', ".item-publish-submit", function() {
             var $that = $(this);
@@ -125,6 +152,33 @@
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "order-publish",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+        // 【完成】
+        $(".main-content").on('click', ".item-complete-submit", function() {
+            var $that = $(this);
+            layer.msg('确定要"完成"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-complete') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-complete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -453,6 +507,20 @@
             $('#modal-body-for-finance-list').modal('show');
         });
         // 显示【财务-收入-记录】
+        $(".main-content").on('dblclick', ".item-show-for-finance", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+        // 显示【财务-收入-记录】
         $(".main-content").on('dblclick', ".item-show-for-finance-income", function() {
             var that = $(this);
             var $id = that.attr("data-id");
@@ -527,7 +595,7 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-info-set') }}",
+                        "{{ url('/item/order-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-set-operate"]').val(),

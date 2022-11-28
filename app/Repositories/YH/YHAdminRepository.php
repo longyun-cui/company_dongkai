@@ -143,7 +143,7 @@ class YHAdminRepository {
         $order_waiting_for_departure_count = YH_Order::where('is_published', 1)->whereNull('actual_departure_time')->count("*");
         $order_working_count = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->count("*");
         $order_waiting_for_receipt_count = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn('amount','>','income_total')->count("*");
-        $order_received_count = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn('amount','<=','income_total')->count("*");
+        $order_received_count = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'), '<=', 'income_total')->count("*");
 
 
         $return['order_all_count'] = $order_all_count;
@@ -175,23 +175,23 @@ class YHAdminRepository {
 
 
         $finance_this_month_income = YH_Finance::select('id')
-            ->where('item_type',1)
+            ->where('finance_type',1)
             ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
             ->sum("transaction_amount");
 
         $finance_this_month_payout = YH_Finance::select('id')
-            ->where('item_type',21)
+            ->where('finance_type',21)
             ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
             ->sum("transaction_amount");
 
 
         $finance_last_month_income = YH_Finance::select('id')
-            ->where('item_type',1)
+            ->where('finance_type',1)
             ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$last_month_start_date,$last_month_ended_date])
             ->sum("transaction_amount");
 
         $finance_last_month_payout = YH_Finance::select('id')
-            ->where('item_type',21)
+            ->where('finance_type',21)
             ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$last_month_start_date,$last_month_ended_date])
             ->sum("transaction_amount");
 
@@ -203,7 +203,7 @@ class YHAdminRepository {
 
 
         $statistics_income_data = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
-            ->where('item_type',1)
+            ->where('finance_type',1)
             ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
             ->select(DB::raw("
@@ -216,7 +216,7 @@ class YHAdminRepository {
         $return['statistics_income_data'] = $statistics_income_data;
 
         $statistics_payout_data = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
-            ->where('item_type',21)
+            ->where('finance_type',21)
             ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
             ->select(DB::raw("
@@ -557,7 +557,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,21])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -1307,12 +1307,14 @@ class YHAdminRepository {
     {
 //        dd($post_data);
         $messages = [
-            'operate.required' => '参数有误',
-            'username.required' => '请输入用户名',
+            'operate.required' => 'operate.required.',
+            'username.required' => '请输入客户名称！',
+//            'username.unique' => '该客户已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'username' => 'required',
+//            'username' => 'required|unique:yh_client,username',
         ], $messages);
         if ($v->fails())
         {
@@ -1331,6 +1333,9 @@ class YHAdminRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
+            $is_exist = YH_Client::select('id')->where('username',$post_data["username"])->count();
+            if($is_exist) return response_error([],"该客户名已存在，请勿重复添加！");
+
             $mine = new YH_Client;
             $post_data["user_category"] = 11;
             $post_data["active"] = 1;
@@ -3190,11 +3195,12 @@ class YHAdminRepository {
         $messages = [
             'operate.required' => 'operate.required.',
             'name.required' => '请输入车牌号！',
-            'name.unique' => '该车牌号已存在！',
+//            'name.unique' => '该车牌号已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'name' => 'required|unique:yh_car,name',
+            'name' => 'required',
+//            'name' => 'required|unique:yh_car,name',
         ], $messages);
         if ($v->fails())
         {
@@ -3213,6 +3219,9 @@ class YHAdminRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
+            $is_exist = YH_Car::select('id')->where('name',$post_data["name"])->count();
+            if($is_exist) return response_error([],"该车牌已存在，请勿重复添加！");
+
             $mine = new YH_Car;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
@@ -4338,7 +4347,7 @@ class YHAdminRepository {
         $me = $this->me;
 
         // 判断操作权限
-//        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"用户类型错误！");
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
 //        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
         if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
 
@@ -4359,12 +4368,14 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_category"] = 1;
-                    $record_data["record_type"] = 99;
+                    $record_data["record_object"] = 41;
+                    $record_data["record_category"] = 41;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $item_id;
-                    $record_data["operate_category"] = 1;
-                    $record_data["operate_type"] = 99;
+                    $record_data["operate_object"] = 41;
+                    $record_data["operate_category"] = 101;
+                    $record_data["operate_type"] = 1;
 
                     $bool_1 = $record->fill($record_data)->save();
                     if(!$bool_1) throw new Exception("insert--record--fail");
@@ -4376,19 +4387,21 @@ class YHAdminRepository {
             else
             {
                 $item->timestamps = false;
-//                $bool = $item->delete();  // 普通删除
-                $bool = $item->forceDelete();  // 永久删除
+                $bool = $item->delete();  // 普通删除
+//                $bool = $item->forceDelete();  // 永久删除
                 if(!$bool) throw new Exception("item--delete--fail");
                 else
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 100;
+                    $record_data["record_object"] = 41;
+                    $record_data["record_category"] = 41;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $item_id;
-                    $record_data["operate_category"] = 1;
-                    $record_data["operate_type"] = 99;
+                    $record_data["operate_object"] = 41;
+                    $record_data["operate_category"] = 101;
+                    $record_data["operate_type"] = 1;
 
                     $bool_1 = $record->fill($record_data)->save();
                     if(!$bool_1) throw new Exception("insert--record--fail");
@@ -4451,11 +4464,13 @@ class YHAdminRepository {
             {
                 $record = new YH_Record;
 
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 9;
+                $record_data["record_object"] = 41;
+                $record_data["record_category"] = 41;
+                $record_data["record_type"] = 11;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_category"] = 1;
+                $record_data["operate_object"] = 41;
+                $record_data["operate_category"] = 11;
                 $record_data["operate_type"] = 1;
 
                 $bool_1 = $record->fill($record_data)->save();
@@ -4502,8 +4517,10 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-//        if(!in_array($me->user_type,[0,1,9,11,19,41])) return response_error([],"用户类型错误！");
-        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
+//        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -4515,13 +4532,95 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");
-            DB::commit();
+            else
+            {
+                $record = new YH_Record;
 
-            $item->custom = json_decode($item->custom);
-            $item_array[0] = $item;
-            $return['item_list'] = $item_array;
-            $item_html = view(env('TEMPLATE_STAFF_FRONT').'component.item-list')->with($return)->__toString();
-            return response_success(['item_html'=>$item_html]);
+                $record_data["record_object"] = 41;
+                $record_data["record_category"] = 41;
+                $record_data["record_type"] = 11;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 41;
+                $record_data["operate_category"] = 100;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+            
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【订单管理】完成
+    public function operate_item_order_abandon($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-abandon') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
+//        if($item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 97;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 41;
+                $record_data["record_category"] = 41;
+                $record_data["record_type"] = 11;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 41;
+                $record_data["operate_category"] = 97;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
         }
         catch (Exception $e)
         {
@@ -4670,9 +4769,20 @@ class YHAdminRepository {
                     }
                     else
                     {
-                        $list[$k]->travel_status = "已到达";
+                        if($v->is_completed == 1)
+                        {
+                            $list[$k]->travel_status = "已完成";
+                            $list[$k]->travel_result = "已结束";
+                        }
+                        else
+                        {
+                            $list[$k]->travel_status = "已到达";
+                            if(($v->amount + $v->oil_card_amount - $v->time_limitation_deduction) <= $v->income_total) $list[$k]->travel_result = "已收款";
+                            else $list[$k]->travel_result = "待收款";
+                        }
 
 
+                        // 行程记录
                         $journey_time = $v->actual_arrival_time - $v->actual_departure_time;
                         $journey_day=floor($journey_time/86400);
                         $journey_hour=floor($journey_time%86400/3600);
@@ -4746,8 +4856,7 @@ class YHAdminRepository {
                         }
 
 
-                        if($v->amount <= $v->income_total) $list[$k]->travel_result = "已收款";
-                        else $list[$k]->travel_result = "待收款";
+
 
                     }
 
@@ -4799,7 +4908,7 @@ class YHAdminRepository {
 
         if($column_key == "amount")
         {
-            if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
         }
         else
         {
@@ -4824,11 +4933,13 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
+                    $record_data["record_object"] = 41;
+                    $record_data["record_category"] = 41;
+                    $record_data["record_type"] = 11;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_category"] = 11;
+                    $record_data["operate_object"] = 41;
+                    $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
                     else if($operate_type == "edit") $record_data["operate_type"] = 11;
@@ -4920,11 +5031,13 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_category"] = 11;
+                    $record_data["record_object"] = 41;
+                    $record_data["record_category"] = 41;
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_category"] = 11;
+                    $record_data["operate_object"] = 41;
+                    $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
                     else if($operate_type == "edit") $record_data["operate_type"] = 11;
@@ -5057,11 +5170,13 @@ class YHAdminRepository {
             {
                 $record = new YH_Record;
 
-                $record_data["record_category"] = 11;
+                $record_data["record_object"] = 41;
+                $record_data["record_category"] = 41;
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_category"] = 11;
+                $record_data["operate_object"] = 41;
+                $record_data["operate_category"] = 1;
 
                 if($operate_type == "add") $record_data["operate_type"] = 1;
                 else if($operate_type == "edit") $record_data["operate_type"] = 11;
@@ -5226,19 +5341,19 @@ class YHAdminRepository {
         {
             if($post_data['type'] == "income")
             {
-                $query->where('item_type', 1);
+                $query->where('finance_type', 1);
             }
             else if($post_data['type'] == "expenditure")
             {
-                $query->where('item_type', 21);
+                $query->where('finance_type', 21);
             }
         }
 
-        if(!empty($post_data['item_type']))
+        if(!empty($post_data['finance_type']))
         {
-            if(in_array($post_data['item_type'],[1,21]))
+            if(in_array($post_data['finance_type'],[1,21]))
             {
-                $query->where('item_type', $post_data['item_type']);
+                $query->where('finance_type', $post_data['finance_type']);
             }
         }
 
@@ -5285,7 +5400,7 @@ class YHAdminRepository {
             'transaction_title.required' => '请填写费用类型！',
             'transaction_type.required' => '请填写支付方式！',
             'transaction_amount.required' => '请填写金额！',
-            'transaction_account.required' => '请填写交易账号！',
+//            'transaction_account.required' => '请填写交易账号！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
@@ -5294,7 +5409,7 @@ class YHAdminRepository {
             'transaction_title' => 'required',
             'transaction_type' => 'required',
             'transaction_amount' => 'required',
-            'transaction_account' => 'required',
+//            'transaction_account' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -5305,7 +5420,9 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,11,41,42,81,82,88])) return response_error([],"你没有操作权限！");
 
 
 //        $operate = $post_data["operate"];
@@ -5319,8 +5436,8 @@ class YHAdminRepository {
         if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
 
         // 交易类型 收入 || 支出
-        $record_type = $post_data["record_type"];
-        if(!in_array($record_type,[1,21])) return response_error([],"交易类型错误！");
+        $finance_type = $post_data["finance_type"];
+        if(!in_array($finance_type,[1,21])) return response_error([],"交易类型错误！");
 
         $transaction_amount = $post_data["transaction_amount"];
         if(!is_numeric($transaction_amount)) return response_error([],"交易金额必须为数字！");
@@ -5332,14 +5449,21 @@ class YHAdminRepository {
         {
             $FinanceRecord = new YH_Finance;
 
+            if(in_array($me->user_type,[41,42]))
+            {
+                $FinanceRecord_data['is_confirmed'] = 1;
+            }
+
             $FinanceRecord_data['creator_id'] = $me->id;
-            $FinanceRecord_data['item_category'] = 11;
-            $FinanceRecord_data['item_type'] = $record_type;
+            $FinanceRecord_data['finance_category'] = 11;
+            $FinanceRecord_data['finance_type'] = $finance_type;
             $FinanceRecord_data['order_id'] = $post_data["order_id"];
             $FinanceRecord_data['transaction_time'] = $transaction_date_timestamp;
             $FinanceRecord_data['transaction_type'] = $post_data["transaction_type"];
             $FinanceRecord_data['transaction_amount'] = $post_data["transaction_amount"];
-            $FinanceRecord_data['transaction_account'] = $post_data["transaction_account"];
+//            $FinanceRecord_data['transaction_account'] = $post_data["transaction_account"];
+            $FinanceRecord_data['transaction_receipt_account'] = $post_data["transaction_receipt_account"];
+            $FinanceRecord_data['transaction_payment_account'] = $post_data["transaction_payment_account"];
             $FinanceRecord_data['transaction_order'] = $post_data["transaction_order"];
             $FinanceRecord_data['title'] = $post_data["transaction_title"];
             $FinanceRecord_data['description'] = $post_data["transaction_description"];
@@ -5354,20 +5478,32 @@ class YHAdminRepository {
             $bool = $FinanceRecord->fill($FinanceRecord_data)->save();
             if($bool)
             {
-                if($record_type == 1)
+                if(in_array($me->user_type,[41,42]))
                 {
-                    $order->income_total = $order->income_total + $transaction_amount;
+                    if($finance_type == 1)
+                    {
+                        $order->income_total = $order->income_total + $transaction_amount;
+                    }
+                    else if($finance_type == 21)
+                    {
+                        $order->expenditure_total = $order->expenditure_total + $transaction_amount;
+                    }
                 }
-                else if($record_type == 21)
+                else
                 {
-                    $order->expenditure_total = $order->expenditure_total + $transaction_amount;
+                    if($finance_type == 1)
+                    {
+                        $order->income_to_be_confirm = $order->income_to_be_confirm + $transaction_amount;
+                    }
+                    else if($finance_type == 21)
+                    {
+                        $order->expenditure_to_be_confirm = $order->expenditure_to_be_confirm + $transaction_amount;
+                    }
                 }
 
                 $bool_1 = $order->save();
-
                 if($bool_1)
                 {
-
                 }
                 else throw new Exception("update--order--fail");
             }
@@ -5461,7 +5597,7 @@ class YHAdminRepository {
     /*
      * Finance 财务
      */
-    // 【财务往来记录】返回-列表-视图
+    // 【财务管理】返回-列表-视图
     public function view_finance_record_list_for_all($post_data)
     {
         $this->get_me();
@@ -5471,7 +5607,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.finance.finance-list-for-all';
         return view($view_blade)->with($view_data);
     }
-    // 【财务往来记录】返回-列表-数据
+    // 【财务管理】返回-列表-数据
     public function get_finance_record_list_for_all_datatable($post_data)
     {
         $this->get_me();
@@ -5479,7 +5615,7 @@ class YHAdminRepository {
 
 //        $id  = $post_data["id"];
         $query = YH_Finance::select('*')
-            ->with(['creator','order_er']);
+            ->with(['creator','confirmer','order_er']);
 
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
@@ -5527,6 +5663,195 @@ class YHAdminRepository {
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【财务管理】确认
+    public function operate_finance_confirm($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'finance-confirm') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Finance::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 权限
+        if(!in_array($me->user_type,[41,42])) return response_error([],"用户类型错误，只有财务人员有权限确认！");
+//        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->is_confirmed = 1;
+            $item->confirmer_id = $me->id;
+            $item->confirmed_at = time();
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $order = YH_Order::find($item->order_id);
+                if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
+
+                if($item->finance_type == 1)
+                {
+                    $order->income_to_be_confirm = $order->income_to_be_confirm - $item->transaction_amount;
+                    $order->income_total = $order->income_total + $item->transaction_amount;
+                }
+                else if($item->finance_type == 21)
+                {
+                    $order->expenditure_to_be_confirm = $order->expenditure_to_be_confirm - $item->transaction_amount;
+                    $order->expenditure_total = $order->expenditure_total + $item->transaction_amount;
+                }
+
+                $bool_1 = $order->save();
+                if(!$bool_1) throw new Exception("update--order--fail");
+
+
+//                $record = new YH_Record;
+//
+//                $record_data["record_category"] = 41;
+//                $record_data["record_type"] = 100;
+//                $record_data["creator_id"] = $me->id;
+//                $record_data["order_id"] = $id;
+//                $record_data["operate_category"] = 1;
+//                $record_data["operate_type"] = 1;
+//
+//                $bool_1 = $record->fill($record_data)->save();
+//                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【订单管理】删除
+    public function operate_finance_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'finance-delete') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Finance::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,41,42,81,82,88])) return response_error([],"用户类型错误！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+        if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
+        if($item->is_confirmed == 1 && !in_array($me->user_type,[41,42])) return response_error([],"已确认不能删除！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("finance--delete--fail");
+            else
+            {
+                $order = YH_Order::find($item->order_id);
+                if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
+
+                if($item->is_confirmed == 0)
+                {
+                    if($item->finance_type == 1)
+                    {
+                        $order->income_to_be_confirm = $order->income_to_be_confirm - $item->transaction_amount;
+                    }
+                    else if($item->finance_type == 21)
+                    {
+                        $order->expenditure_to_be_confirm = $order->expenditure_to_be_confirm - $item->transaction_amount;
+                    }
+                }
+                else if($item->is_confirmed == 1)
+                {
+                    if($item->finance_type == 1)
+                    {
+                        $order->income_total = $order->income_total - $item->transaction_amount;
+                    }
+                    else if($item->finance_type == 21)
+                    {
+                        $order->expenditure_total = $order->expenditure_total - $item->transaction_amount;
+                    }
+                }
+
+                $bool_1 = $order->save();
+                if(!$bool_1) throw new Exception("update--order--fail");
+
+//                $record = new YH_Record;
+//
+//                $record_data["record_category"] = 1;
+//                $record_data["record_type"] = 99;
+//                $record_data["creator_id"] = $me->id;
+//                $record_data["order_id"] = $item_id;
+//                $record_data["operate_category"] = 1;
+//                $record_data["operate_type"] = 99;
+//
+//                $bool_1 = $record->fill($record_data)->save();
+//                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
     }
 
 

@@ -11,18 +11,18 @@ class YH_Order extends Model
     //
     protected $table = "yh_order";
     protected $fillable = [
-        'active', 'status', 'item_active', 'item_status', 'item_result',
-        'item_category', 'item_type', 'item_form', 'category', 'type', 'form', 'sort',
+        'active', 'status', 'category', 'type', 'form', 'sort',
+        'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
         'owner_active', 'is_show', 'is_published', 'is_completed',
         'owner_id', 'creator_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
         'item_id', 'menu_id',
-        'order_type',
+        'order_category', 'order_type',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'amount', 'oil_card_amount', 'invoice_amount', 'invoice_point',
         'information_fee', 'customer_management_fee', 'time_limitation_deduction',
         'driver_fine',
-        'income_total', 'expenditure_total',
+        'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
         'client_id',
         'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type', 'outside_car', 'outside_trailer',
         'trailer_type', 'trailer_length', 'trailer_volume', 'trailer_weight', 'trailer_axis_count',
@@ -39,7 +39,6 @@ class YH_Order extends Model
         'travel_distance',
         'company', 'fund', 'mobile', 'city', 'address',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'time_point', 'time_type', 'start_time', 'end_time',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
         'published_at', 'completed_at'
     ];

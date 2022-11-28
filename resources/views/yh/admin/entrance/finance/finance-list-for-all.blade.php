@@ -42,7 +42,7 @@
                         <input type="text" class="form-control form-filter item-search-keyup" name="order_id" placeholder="订单ID" />
                         <input type="text" class="form-control form-filter date_picker" name="transaction_time" placeholder="交易日期" readonly="readonly" />
 
-                        <select class="form-control form-filter" name="item_type" style="width:96px;">
+                        <select class="form-control form-filter" name="finance_type" style="width:96px;">
                             <option value ="-1">全部</option>
                             <option value ="1">收入</option>
                             <option value ="21">支出</option>
@@ -114,7 +114,7 @@
 @section('custom-style')
     <style>
         .tableArea .main-table {
-            min-width: 1000px;
+            min-width: 1680px;
         }
     </style>
 @endsection
@@ -142,7 +142,7 @@
                         d._token = $('meta[name="_token"]').attr('content');
                         d.order_id = $('input[name="order_id"]').val();
                         d.transaction_time = $('input[name="transaction_time"]').val();
-                        d.item_type = $('select[name="item_type"]').val();
+                        d.finance_type = $('select[name="finance_type"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -182,9 +182,69 @@
                         }
                     },
                     {
+                        "width": "100px",
+                        "title": "操作",
+                        "data": 'id',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $html_confirm = '';
+                            var $html_delete = '';
+
+                            if(row.deleted_at == null)
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-navy item-delete-submit" data-id="'+data+'">删除</a>';
+
+                                if(row.is_confirmed == 1)
+                                {
+                                    $html_confirm = '<a class="btn btn-xs btn-default disabled">确认</a>';
+
+                                    if(row.confirmer_id == 0 || row.confirmer_id == row.creator_id)
+                                    {
+                                        $html_delete = '<a class="btn btn-xs bg-navy item-delete-submit" data-id="'+data+'">删除</a>';
+                                    }
+                                    else $html_delete = '<a class="btn btn-xs btn-default disabled">删除</a>';
+                                }
+                                else
+                                {
+                                    $html_confirm = '<a class="btn btn-xs bg-green item-confirm-submit" data-id="'+data+'">确认</a>';
+                                }
+                            }
+                            else
+                            {
+                                $html_confirm = '<a class="btn btn-xs btn-default disabled">确认</a>';
+                                $html_delete = '<a class="btn btn-xs btn-default disabled">删除</a>';
+//                                $html_delete = '<a class="btn btn-xs bg-grey item-restore-submit" data-id="'+data+'">恢复</a>';
+                            }
+
+
+                            var html =
+                                    $html_confirm+
+                                    $html_delete+
+//                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
+//                                '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
+                                '';
+                            return html;
+
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "状态",
+                        "data": "is_confirmed",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.deleted_at == null)
+                            {
+                                if(data == 1) return '<small class="btn-xs btn-success">已确认</small>';
+                                else return '<small class="btn-xs btn-danger">待确认</small>';
+                            }
+                            else return '<small class="btn-xs bg-black">已删除</small>';
+                        }
+                    },
+                    {
                         "width": "60px",
                         "title": "收支类型",
-                        "data": 'item_type',
+                        "data": 'finance_type',
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 1) return '<small class="btn-xs bg-olive">收入</small>';
@@ -193,31 +253,13 @@
                         }
                     },
                     {
-                        "width": "60px",
-                        "title": "订单ID",
-                        "data": "order_id",
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "创建者",
+                        "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "text-left",
-                        "width": "180px",
-                        "title": "订单行程",
-                        "data": "order_id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.order_er == null)
-                            {
-                                return '--';
-                            }
-                            else
-                            {
-                                var $stopover_html = '';
-                                if(row.order_er.stopover_place) $stopover_html = '--' + row.order_er.stopover_place;
-                                return row.order_er.departure_place + $stopover_html + '--' + row.order_er.destination_place;
-                            }
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
                         }
                     },
                     {
@@ -225,7 +267,7 @@
                         "width": "100px",
                         "title": "交易日期",
                         "data": "transaction_time",
-                        "orderable": true,
+                        "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $date = new Date(data*1000);
@@ -244,12 +286,40 @@
                         }
                     },
                     {
+                        "className": "text-center",
                         "width": "80px",
-                        "title": "支付方式",
-                        "data": "transaction_type",
+                        "title": "确认者",
+                        "data": "confirmer_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data ? data : '--';
+                            return row.confirmer == null ? '' : '<a href="javascript:void(0);">'+row.confirmer.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "160px",
+                        "title": "确认时间",
+                        "data": "confirmed_at",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+
                         }
                     },
                     {
@@ -259,17 +329,64 @@
                         "data": "transaction_amount",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            return data+'元';
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "费用名目",
+                        "data": "title",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data ? data : '--';
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "支付方式",
+                        "data": "transaction_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data ? data : '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "160px",
+                        "title": "收款账户",
+                        "data": "transaction_receipt_account",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
                             return data;
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
-                        "title": "创建者",
-                        "data": "creator_id",
+                        "className": "",
+                        "width": "160px",
+                        "title": "支出账户",
+                        "data": "transaction_payment_account",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "160px",
+                        "title": "交易单号",
+                        "data": "transaction_order",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "60px",
+                        "title": "订单ID",
+                        "data": "order_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
                         }
                     },
                     {
@@ -290,96 +407,6 @@
 //                            return $year+'-'+$month+'-'+$day;
                             return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-                        }
-                    },
-//                    {
-//                        "className": "font-12px",
-//                        "width": "108px",
-//                        "title": "修改时间",
-//                        "data": 'updated_at',
-//                        "orderable": true,
-//                        render: function(data, type, row, meta) {
-////                            return data;
-//                            var $date = new Date(data*1000);
-//                            var $year = $date.getFullYear();
-//                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-//                            var $day = ('00'+($date.getDate())).slice(-2);
-//                            var $hour = ('00'+$date.getHours()).slice(-2);
-//                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-//                            var $second = ('00'+$date.getSeconds()).slice(-2);
-////                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-////                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-//                        }
-//                    },
-//                    {
-//                        "width": "60px",
-//                        "title": "状态",
-//                        "data": "item_status",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-////                            return data;
-//                            if(row.deleted_at != null)
-//                            {
-//                                return '<small class="btn-xs bg-black">已删除</small>';
-//                            }
-//
-//                            if(row.item_status == 1)
-//                            {
-//                                return '<small class="btn-xs btn-success">启用</small>';
-//                            }
-//                            else
-//                            {
-//                                return '<small class="btn-xs btn-danger">禁用</small>';
-//                            }
-//                        }
-//                    },
-                    {
-                        "width": "144px",
-                        "title": "操作",
-                        "data": 'id',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            if(row.item_status == 1)
-                            {
-                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.is_me == 1 && row.active == 0)
-                            {
-                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
-                            }
-                            else
-                            {
-                                $html_publish = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">发布</a>';
-                            }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            var html =
-//                                    $html_able+
-//                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
-//                                    '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
-//                                    $html_publish+
-//                                    $html_delete+
-//                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
-//                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
-                                    '';
-                            return html;
-
                         }
                     }
                 ],

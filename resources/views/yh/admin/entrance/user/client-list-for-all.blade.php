@@ -33,19 +33,9 @@
                     </a>
                 </div>
 
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
             </div>
 
             <div class="box-body datatable-body item-main-body" id="item-main-body">
-
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
@@ -63,8 +53,8 @@
                 </div>
 
 
-                <!-- datatable start -->
-                <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
+                <div class="tableArea">
+                <table class='table table-striped- table-bordered table-hover main-table' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
@@ -72,7 +62,8 @@
                     <tbody>
                     </tbody>
                 </table>
-                <!-- datatable end -->
+                </div>
+
             </div>
 
             <div class="box-footer">
@@ -87,6 +78,17 @@
         <!-- END PORTLET-->
     </div>
 </div>
+@endsection
+
+
+
+
+@section('custom-style')
+    <style>
+        .tableArea .main-table {
+            min-width: 1000px;
+        }
+    </style>
 @endsection
 
 
@@ -137,6 +139,90 @@
                             return data;
                         }
                     },
+                    {
+                        "width": "80px",
+                        "title": "状态",
+                        "data": "active",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.user_status == 1)
+                            {
+                                return '<small class="btn-xs btn-success">正常</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs btn-danger">禁用</small>';
+                            }
+                        }
+                    },
+                    {
+                        "width": "120px",
+                        "title": "操作",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                        var $html =
+                            '<div class="btn-group">'+
+                                '<button type="button" class="btn btn-sm btn-warning btn-flat">Action</button>'+
+                                '<button type="button" class="btn btn-sm btn-warning btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="true">'+
+                                    '<span class="caret"></span>'+
+                                    '<span class="sr-only">Toggle Dropdown</span>'+
+                                '</button>'+
+                                '<ul class="dropdown-menu" role="menu">'+
+                                    '<li><a href="#">Action</a></li>'+
+                                    '<li><a href="#">Another action</a></li>'+
+                                    '<li><a href="#">Something else here</a></li>'+
+                                    '<li class="divider"></li>'+
+                                    '<li><a href="#">Separated link</a></li>'+
+                                '</ul>'+
+                            '</div>';
+
+
+                            if(row.user_status == 1)
+                            {
+                                $html_able =
+                                    '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                            }
+                            else
+                            {
+                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                            }
+
+                            if(row.user_category == 1)
+                            {
+                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
+                            }
+                            else
+                            {
+                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
+                            }
+
+                            if(row.deleted_at == null)
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
+                            }
+                            else
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
+                            }
+
+                            var html =
+                                $html_edit+
+                                $html_able+
+//                                $html_delete+
+//                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
+//                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
+                                '';
+                            return html;
+                        }
+                    },
 //                    {
 //                        "className": "font-12px",
 //                        "width": "80px",
@@ -173,7 +259,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "80px",
                         "title": "简称",
                         "data": "short_name",
@@ -183,7 +269,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "100px",
                         "title": "所属公司",
                         "data": "company",
@@ -193,7 +279,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "100px",
                         "title": "手机",
                         "data": "mobile",
@@ -233,7 +319,6 @@
                         "orderable": true,
                         render: function(data, type, row, meta) {
 //                            return data;
-
 //                            newDate = new Date();
 //                            newDate.setTime(data * 1000);
 //                            return newDate.toLocaleString('chinese',{hour12:false});
@@ -246,77 +331,12 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
+
 //                            return $year+'-'+$month+'-'+$day;
-                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-                        }
-                    },
-                    {
-                        "width": "64px",
-                        "title": "状态",
-                        "data": "active",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
 
-                            if(row.user_status == 1)
-                            {
-                                return '<small class="btn-xs btn-success">正常</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
-                            }
-                        }
-                    },
-                    {
-                        "width": "180px",
-                        "title": "操作",
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.user_status == 1)
-                            {
-                                $html_able =
-                                    '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.user_category == 1)
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
-                            }
-                            else
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
-                            }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            var html =
-                                $html_able+
-//                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
-//                                '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
-                                $html_edit+
-//                                $html_delete+
-//                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
-//                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
-                                '';
-                            return html;
+                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                         }
                     }
                 ],

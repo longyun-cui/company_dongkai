@@ -561,18 +561,27 @@ class YHAdminController extends Controller
     }
 
 
-    // 【订单管理】获取-详情
+    // 【订单管理】删除
     public function operate_item_order_delete()
     {
         return $this->repo->operate_item_order_delete(request()->all());
     }
-
-
+    // 【订单管理】发布
+    public function operate_item_order_abandon()
+    {
+        return $this->repo->operate_item_order_abandon(request()->all());
+    }
     // 【订单管理】发布
     public function operate_item_order_publish()
     {
         return $this->repo->operate_item_order_publish(request()->all());
     }
+    // 【订单管理】完成
+    public function operate_item_order_complete()
+    {
+        return $this->repo->operate_item_order_complete(request()->all());
+    }
+
 
 
     // 【订单管理】修改-文本信息
@@ -653,6 +662,18 @@ class YHAdminController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_finance_record_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_finance_record_list_for_all_datatable(request()->all());
+    }
+
+
+    // 【订单管理】删除
+    public function operate_finance_delete()
+    {
+        return $this->repo->operate_finance_delete(request()->all());
+    }
+    // 【订单管理】完成
+    public function operate_finance_confirm()
+    {
+        return $this->repo->operate_finance_confirm(request()->all());
     }
 
 

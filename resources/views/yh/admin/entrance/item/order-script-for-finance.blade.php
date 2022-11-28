@@ -33,6 +33,63 @@
             window.location.href = "/item/order-finance-edit?id="+$that.attr('data-id');
         });
 
+        // 【删除】
+        $(".main-content").on('click', ".item-finance-delete-submit", function() {
+            var $that = $(this);
+            layer.msg('确定要"删除"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/finance/finance-delete') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "finance-delete",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload();
+                                $('#datatable_ajax_finance').DataTable().ajax.reload();
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+        // 【确认】
+        $(".main-content").on('click', ".item-finance-confirm-submit", function() {
+            var $that = $(this);
+            layer.msg('确定要"确认"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/finance/finance-confirm') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "finance-confirm",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload();
+                                $('#datatable_ajax_finance').DataTable().ajax.reload();
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
 
 
 
@@ -106,11 +163,13 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="finance-create-operate"]').val(),
                             order_id: $('input[name="finance-create-order-id"]').val(),
-                            record_type: $("input[name='finance-create-type']:checked").val(),
+                            finance_type: $("input[name='finance-create-type']:checked").val(),
                             transaction_amount: $('input[name="finance-create-transaction-amount"]').val(),
                             transaction_date: $('input[name="finance-create-transaction-date"]').val(),
                             transaction_type: $('input[name="finance-create-transaction-type"]').val(),
-                            transaction_account: $('input[name="finance-create-transaction-account"]').val(),
+//                            transaction_account: $('input[name="finance-create-transaction-account"]').val(),
+                            transaction_receipt_account: $('input[name="finance-create-transaction-receipt-account"]').val(),
+                            transaction_payment_account: $('input[name="finance-create-transaction-payment-account"]').val(),
                             transaction_order: $('input[name="finance-create-transaction-order"]').val(),
                             transaction_title: $('input[name="finance-create-transaction-title"]').val(),
                             transaction_description: $('textarea[name="finance-create-transaction-description"]').val(),

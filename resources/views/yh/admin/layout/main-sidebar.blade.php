@@ -55,6 +55,7 @@
             </li>
 
 
+            @if(in_array($me->user_type,[0,1,9,11,21,22]))
             {{--用户管理--}}
             <li class="header">员工管理</li>
 
@@ -64,21 +65,7 @@
                     <span>员工列表</span>
                 </a>
             </li>
-            {{--<li class="treeview {{ $sidebar_user_list_for_individual_active or '' }}">--}}
-                {{--<a href="{{ url('/user/user-list-for-individual') }}">--}}
-                    {{--<i class="fa fa-user"></i><span>个人</span>--}}
-                {{--</a>--}}
-            {{--</li>--}}
-            {{--<li class="treeview {{ $sidebar_user_list_for_doc_active or '' }}">--}}
-                {{--<a href="{{ url('/user/user-list-for-doc') }}">--}}
-                    {{--<i class="fa fa-user"></i><span>轻博</span>--}}
-                {{--</a>--}}
-            {{--</li>--}}
-            {{--<li class="treeview {{ $sidebar_user_list_for_org_active or '' }}">--}}
-                {{--<a href="{{ url('/user/user-list-for-org') }}">--}}
-                    {{--<i class="fa fa-user"></i><span>组织</span>--}}
-                {{--</a>--}}
-            {{--</li>--}}
+            @endif
 
 
 

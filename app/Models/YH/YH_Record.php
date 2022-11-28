@@ -9,9 +9,9 @@ class YH_Record extends Model
     //
     protected $table = "yh_record";
     protected $fillable = [
-        'active', 'status', 'record_active', 'record_status',
-        'record_category', 'record_type', 'record_module', 'category', 'type', 'sort',
-        'operate_category', 'operate_type',
+        'active', 'status', 'category', 'type', 'sort',
+        'record_active', 'record_status', 'record_object', 'record_category', 'record_type', 'record_module',
+        'operate_object', 'operate_category', 'operate_type',
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
