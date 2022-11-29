@@ -1564,7 +1564,7 @@
                     {
                         "className": "",
                         "width": "50px",
-                        "title": "待确认",
+                        "title": "待入账",
                         "data": "income_to_be_confirm",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1602,7 +1602,7 @@
                     {
                         "className": "",
                         "width": "50px",
-                        "title": "待确认",
+                        "title": "待出账",
                         "data": "expenditure_to_be_confirm",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {

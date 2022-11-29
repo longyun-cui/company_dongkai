@@ -91,9 +91,20 @@
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="car_owner_type" value="1" checked="checked"> 自有
-                                        {{--<input type="radio" name="user_type" value=11--}}
-                                        {{--@if($operate == 'edit' && $data->user_type == 11) checked="checked" @endif--}}
-                                        {{--> 总经理--}}
+                                    </label>
+                                </span>
+                            </button>
+                            @endif
+
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 11))
+                            <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->car_owner_type == 11)
+                                            <input type="radio" name="car_owner_type" value=11 checked="checked"> 空单
+                                        @else
+                                            <input type="radio" name="car_owner_type" value=11> 空单
+                                        @endif
                                     </label>
                                 </span>
                             </button>
@@ -607,7 +618,7 @@
 //            }
             // radio
             var $value = $(this).val();
-            if($value == 1 || $value == 41) {
+            if($value == 1 || $value == 11 || $value == 41) {
                 $('.inside-car').show();
                 $('.outside-car').hide();
             } else {

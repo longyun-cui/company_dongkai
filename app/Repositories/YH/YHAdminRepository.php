@@ -4450,7 +4450,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,81,82,88])) return response_error([],"你没有操作权限！");
-        if(in_array($me->user_type,[82,88]) && $item->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(in_array($me->user_type,[81,82,88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         // 启动数据库事务
         DB::beginTransaction();
