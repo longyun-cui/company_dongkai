@@ -1318,6 +1318,10 @@
                             {
                                 return '<small class="btn-xs bg-green">自有</small>';
                             }
+                            else if(data == 11)
+                            {
+                                return '<small class="btn-xs bg-teal">空单</small>';
+                            }
                             else if(data == 41)
                             {
                                 return '<small class="btn-xs bg-blue">外配·配货</small>';
@@ -1336,7 +1340,7 @@
                         "data": 'assign_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 var $assign_time_value = '';
                                 if(data)
@@ -1379,7 +1383,7 @@
                         "data": "client_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','client_id').attr('data-value',data);
@@ -1394,8 +1398,11 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-//                            return row.client_er == null ? '未知' : '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
-                            if(row.client_er == null) return '未指定';
+                            if(row.client_er == null)
+                            {
+                                if(row.car_owner_type == 11) return '--';
+                                else return '未指定';
+                            }
                             else {
                                 if(row.client_er.short_name)
                                 {
@@ -1417,7 +1424,7 @@
                         "data": "car_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 if(row.car_owner_type == 1 || row.car_owner_type == 41)
                                 {
@@ -1460,7 +1467,7 @@
                         "data": "trailer_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 if(row.car_owner_type == 1 || row.car_owner_type == 41)
                                 {
@@ -1646,7 +1653,7 @@
                         "data": "amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','amount').attr('data-value',data);
@@ -1669,7 +1676,7 @@
                         "data": "oil_card_amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','oil_card_amount').attr('data-value',data);
@@ -1688,7 +1695,7 @@
                         "data": "time_limitation_deduction",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','time_limitation_deduction').attr('data-value',data);
@@ -1707,7 +1714,7 @@
                         "data": "information_fee",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','information_fee').attr('data-value',data);
@@ -1726,7 +1733,7 @@
                         "data": "customer_management_fee",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','customer_management_fee').attr('data-value',data);
@@ -1764,7 +1771,7 @@
                         "data": "invoice_point",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','invoice_point').attr('data-value',data);
@@ -1824,7 +1831,7 @@
                         "data": "route",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','route').attr('data-value',data);
@@ -1895,7 +1902,7 @@
                         "data": "driver_name",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名').attr('data-key','driver_name').attr('data-value',data);
@@ -1914,7 +1921,7 @@
                         "data": "driver_phone",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','主驾电话').attr('data-key','driver_phone').attr('data-value',data);
@@ -1933,7 +1940,7 @@
                         "data": "copilot_name",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','副驾姓名').attr('data-key','copilot_name').attr('data-value',data);
@@ -1952,7 +1959,7 @@
                         "data": "copilot_phone",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','副驾电话').attr('data-key','copilot_phone').attr('data-value',data);
@@ -1972,7 +1979,7 @@
                         "data": "id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 if(row.car_owner_type > 1)
                                 {
@@ -2004,7 +2011,7 @@
                         "data": "id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 if(row.car_owner_type > 1)
                                 {
@@ -2036,7 +2043,7 @@
                         "data": "id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 if(row.car_owner_type > 1)
                                 {
@@ -2068,7 +2075,7 @@
                         "data": "id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 if(row.car_owner_type > 1)
                                 {
@@ -2100,7 +2107,7 @@
                         "data": "id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 if(row.car_owner_type > 1)
                                 {
@@ -2132,7 +2139,7 @@
                         "data": "departure_place",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','departure_place').attr('data-value',data);
@@ -2152,7 +2159,7 @@
                         "data": "destination_place",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','destination_place').attr('data-value',data);
@@ -2172,7 +2179,7 @@
                         "data": "stopover_place",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','stopover_place').attr('data-value',data);
@@ -2192,7 +2199,7 @@
                         "data": 'should_departure_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 var $time_value = '';
                                 if(data)
@@ -2243,7 +2250,7 @@
                         "data": 'should_arrival_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 var $time_value = '';
                                 if(data)
@@ -2295,7 +2302,7 @@
                         "data": 'actual_departure_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 var $time_value = '';
                                 if(data)
@@ -2346,7 +2353,7 @@
                         "data": 'stopover_arrival_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 var $time_value = '';
                                 if(data)
@@ -2398,7 +2405,7 @@
                         "data": 'stopover_departure_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 var $time_value = '';
                                 if(data)
@@ -2450,7 +2457,7 @@
                         "data": 'actual_arrival_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 var $time_value = '';
                                 if(data)
@@ -2473,7 +2480,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                             }
                             if(!data) return '';
@@ -2503,7 +2510,7 @@
                         "data": "order_number",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','单号').attr('data-key','order_number').attr('data-value',data);
@@ -2521,7 +2528,7 @@
                         "data": "payee_name",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','收款人').attr('data-key','payee_name').attr('data-value',data);
@@ -2539,7 +2546,7 @@
                         "data": "car_supply",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','车货源').attr('data-key','car_supply').attr('data-value',data);
@@ -2557,7 +2564,7 @@
                         "data": "arrange_people",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','安排人').attr('data-key','arrange_people').attr('data-value',data);
@@ -2575,7 +2582,7 @@
                         "data": "car_managerial_people",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','车辆负责人').attr('data-key','car_managerial_people').attr('data-value',data);
@@ -2593,7 +2600,7 @@
                         "data": "weight",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','重量').attr('data-key','weight').attr('data-value',data);
@@ -2611,7 +2618,7 @@
                         "data": "GPS",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','GPS').attr('data-key','GPS').attr('data-value',data);
@@ -2629,7 +2636,7 @@
                         "data": "receipt_status",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','回单状态').attr('data-key','receipt_status').attr('data-value',data);
@@ -2647,7 +2654,7 @@
                         "data": "receipt_address",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1)
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','回单地址').attr('data-key','receipt_address').attr('data-value',data);
@@ -2664,7 +2671,7 @@
                         "width": "120px",
                         "title": "创建时间",
                         "data": 'created_at',
-                        "orderable": true,
+                        "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $date = new Date(data*1000);
