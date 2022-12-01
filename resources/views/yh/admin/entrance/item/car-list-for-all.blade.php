@@ -17,6 +17,65 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
+        <div class="box box-info">
+
+            <div class="box-header with-border" style="margin:8px 0;">
+                <h3 class="box-title">车辆检验提醒</h3>
+            </div>
+
+            <div class="box-body" style="font-size:13px;">
+                @foreach($car_list as $car)
+                    <div style="clear:both;line-height:24px;">
+                        <span class="pull-left" style="width:120px;">
+                            @if($car->item_type == 1) <text class="text-green">[车辆]</text>
+                            @elseif($car->item_type == 21) <text class="text-purple">[车挂]</text>
+                            @endif
+                            <b class="font-14px- text-red-">{{ $car->name }}</b>
+                        </span>
+
+                        <span class="pull-left" style="width:200px;">
+                            <text class="text-blue">[行驶证]</text> 检验期
+                            @if($car->inspection_validity_is)
+                            <b class="font-16px text-red">{{ $car->inspection_validity }}</b>
+                            @else
+                            <b class="font-16px">{{ $car->inspection_validity }}</b>
+                            @endif
+                        </span>
+
+
+                        <span class="pull-left" style="width:200px;">
+                            <text class="text-green">[运输证]</text> 年检
+                            @if($car->transportation_license_validity_is)
+                            <b class="font-16px text-red">{{ $car->transportation_license_validity }}</b>
+                            @else
+                            <b class="font-16px">{{ $car->transportation_license_validity }}</b>
+                            @endif
+                        </span>
+
+
+                        <span class="pull-left" style="width:200px;">
+                            换证
+                            @if($car->transportation_license_change_time_is)
+                            <b class="font-16px text-red">{{ $car->transportation_license_change_time }}</b>
+                            @else
+                            <b class="font-16px">{{ $car->transportation_license_change_time }}</b>
+                            @endif
+                        </span>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="box-footer">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
         <div class="box box-info main-list-body">
 
             <div class="box-header with-border" style="margin:16px 0;">

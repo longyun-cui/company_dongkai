@@ -278,28 +278,42 @@
                         <div class="form-group">
                             <label class="control-label col-md-2">购买日期</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control date_picker" name="purchase_date" placeholder="购买日期" value="{{ $data->purchase_date or '' }}">
+                                <input type="text" class="form-control date_picker" name="purchase_date" placeholder="购买日期" value="{{ $data->purchase_date or '' }}" readonly="readonly">
                             </div>
                         </div>
                         {{--注册日期--}}
                         <div class="form-group">
                             <label class="control-label col-md-2">注册日期</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control date_picker" name="registration_date" placeholder="注册日期" value="{{ $data->registration_date or '' }}">
+                                <input type="text" class="form-control date_picker" name="registration_date" placeholder="注册日期" value="{{ $data->registration_date or '' }}" readonly="readonly">
                             </div>
                         </div>
                         {{--发证日期--}}
                         <div class="form-group">
                             <label class="control-label col-md-2">发证日期</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control date_picker" name="issue_date" placeholder="发证日期" value="{{ $data->issue_date or '' }}">
+                                <input type="text" class="form-control date_picker" name="issue_date" placeholder="发证日期" value="{{ $data->issue_date or '' }}" readonly="readonly">
                             </div>
                         </div>
                         {{--检验有效期--}}
                         <div class="form-group">
                             <label class="control-label col-md-2">检验有效期</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control date_picker" name="inspection_validity" placeholder="检验有效期" value="{{ $data->inspection_validity or '' }}">
+                                <input type="text" class="form-control date_picker" name="inspection_validity" placeholder="检验有效期" value="{{ $data->inspection_validity or '' }}" readonly="readonly">
+                            </div>
+                        </div>
+                        {{--运输证-年检时间--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">运输证-年检时间</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control date_picker" name="transportation_license_validity" placeholder="运输证-年检时间" value="{{ $data->transportation_license_validity or '' }}" readonly="readonly">
+                            </div>
+                        </div>
+                        {{--运输证-换证期--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">运输证-换证期</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control date_picker" name="transportation_license_change_time" placeholder="运输证-换证期" value="{{ $data->transportation_license_change_time or '' }}" readonly="readonly">
                             </div>
                         </div>
 
@@ -398,41 +412,51 @@
 
 
 
+@section('custom-js')
+{{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
+<script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
+@endsection
 @section('custom-script')
-    {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
-    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
-    <script>
-        $(function() {
+<script>
+    $(function() {
 
-            $("#multiple-images").fileinput({
-                allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
-                showUpload: false
-            });
-
-            $('.date_picker').datetimepicker({
-                locale: moment.locale('zh-cn'),
-                format:"YYYY-MM-DD"
-            });
-
-            // 添加or编辑
-            $("#edit-item-submit").on('click', function() {
-                var options = {
-                    url: "{{ url('/item/car-edit') }}",
-                    type: "post",
-                    dataType: "json",
-                    // target: "#div2",
-                    success: function (data) {
-                        if(!data.success) layer.msg(data.msg);
-                        else
-                        {
-                            layer.msg(data.msg);
-                            location.href = "{{ url('/item/car-list-for-all') }}";
-                        }
-                    }
-                };
-                $("#form-edit-item").ajaxSubmit(options);
-            });
-
+        $("#multiple-images").fileinput({
+            allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
+            showUpload: false
         });
-    </script>
+
+        $('.time_picker').datetimepicker({
+            locale: moment.locale('zh-CN'),
+            format: "YYYY-MM-DD HH:mm",
+            ignoreReadonly: true
+        });
+        $('.date_picker').datetimepicker({
+            locale: moment.locale('zh-CN'),
+            format: "YYYY-MM-DD",
+            ignoreReadonly: true
+        });
+
+        // 添加or编辑
+        $("#edit-item-submit").on('click', function() {
+            var options = {
+                url: "{{ url('/item/car-edit') }}",
+                type: "post",
+                dataType: "json",
+                // target: "#div2",
+                success: function (data) {
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        layer.msg(data.msg);
+                        location.href = "{{ url('/item/car-list-for-all') }}";
+                    }
+                }
+            };
+            $("#form-edit-item").ajaxSubmit(options);
+        });
+
+
+
+    });
+</script>
 @endsection

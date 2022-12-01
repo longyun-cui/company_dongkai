@@ -44,6 +44,15 @@
                         <input type="text" class="form-control" name="title" placeholder="自定义订单标题" value="{{ $data->title or '' }}">
                     </div>
                 </div>
+                {{--派车时间--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 派车时间</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="assign_date" placeholder="派车时间" readonly="readonly"
+                               @if(!empty($data->assign_time)) value="{{ date("Y-m-d",$data->assign_time) }}" @endif
+                        >
+                    </div>
+                </div>
                 {{--选择客户--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择客户</label>
@@ -353,26 +362,17 @@
                 </div>
 
 
-                {{--派车时间--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 派车时间</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="assign_date" placeholder="派车时间"
-                               @if(!empty($data->assign_time)) value="{{ date("Y-m-d",$data->assign_time) }}" @endif
-                        >
-                    </div>
-                </div>
                 {{--规定时间--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 规定时间</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="should_departure" placeholder="应出发时间"
+                            <input type="text" class="form-control" name="should_departure" placeholder="应出发时间" readonly="readonly"
                                    @if(!empty($data->should_departure_time)) value="{{ date("Y-m-d H:i",$data->should_departure_time) }}" @endif
                             >
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="should_arrival" placeholder="应到达时间"
+                            <input type="text" class="form-control" name="should_arrival" placeholder="应到达时间" readonly="readonly"
                                    @if(!empty($data->should_arrival_time)) value="{{ date("Y-m-d H:i",$data->should_arrival_time) }}" @endif
                             >
                         </div>
@@ -630,16 +630,19 @@
 
         $('input[name=assign_date]').datetimepicker({
             locale: moment.locale('zh-cn'),
-            format:"YYYY-MM-DD"
+            format: "YYYY-MM-DD",
+            ignoreReadonly: true
         });
 
         $('input[name=should_departure]').datetimepicker({
             locale: moment.locale('zh-cn'),
-            format:"YYYY-MM-DD HH:mm"
+            format:"YYYY-MM-DD HH:mm",
+            ignoreReadonly: true
         });
         $('input[name=should_arrival]').datetimepicker({
             locale: moment.locale('zh-cn'),
-            format:"YYYY-MM-DD HH:mm"
+            format: "YYYY-MM-DD HH:mm",
+            ignoreReadonly: true
         });
 
         // 添加or编辑

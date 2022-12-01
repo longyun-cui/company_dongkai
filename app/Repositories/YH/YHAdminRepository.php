@@ -3664,6 +3664,73 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+
+
+
+
+        $car_list = YH_Car::select(DB::raw("
+                id,name,item_type,inspection_validity,transportation_license_validity,transportation_license_change_time
+            "))
+            ->whereDate('inspection_validity', '<=', DB::raw("DATE_ADD(CURDATE(), INTERVAL 30 DAY)"))
+            ->orWhereDate('transportation_license_validity', '<=', DB::raw("DATE_ADD(CURDATE(), INTERVAL 30 DAY)"))
+            ->orWhereDate('transportation_license_change_time', '<=', DB::raw("DATE_ADD(CURDATE(), INTERVAL 30 DAY)"))
+//            ->where(function ($query) {
+//                $query
+////                    ->whereNotNull('inspection_validity')
+////                    ->where('inspection_validity', '!=', '')
+////                    ->where(DB::raw("DATE_ADD(CURDATE(), INTERVAL 30 DAY)"), '>=', DB::raw("DATE(inspection_validity)"))
+//                    ->whereDate('inspection_validity', '<=', DB::raw("DATE_ADD(CURDATE(), INTERVAL 30 DAY)"))
+//                    ->get();
+//            })
+//            ->orWhere(function ($query) {
+//                $query
+////                    ->whereNotNull('transportation_license_validity')
+////                    ->where('transportation_license_validity', '!=', '')
+//                    ->whereDate('transportation_license_validity', '<=', DB::raw("DATE_ADD(CURDATE(), INTERVAL 30 DAY)"))
+//                    ->get();
+//            })
+//            ->orWhere(function ($query) {
+//                $query
+////                    ->whereNotNull('transportation_license_change_time')
+////                    ->where('transportation_license_change_time', '!=', '')
+//                    ->whereDate('transportation_license_change_time', '<=', DB::raw("DATE_ADD(CURDATE(), INTERVAL 30 DAY)"))
+//                    ->get();
+//            })
+            ->get();
+
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+        $after_30_day = strtotime(date("Y-m-d 23:59:59")) + 60*60*24*30;
+
+        foreach ($car_list as $k => $v)
+        {
+            $v->inspection_validity_is = 0;
+            if($v->inspection_validity && strtotime($v->inspection_validity) <= $after_30_day)
+            {
+                $v->inspection_validity_is = 1;
+            }
+
+            $v->transportation_license_validity_is = 0;
+            if($v->transportation_license_validity && strtotime($v->transportation_license_validity) <= $after_30_day)
+            {
+                $v->transportation_license_validity_is = 1;
+            }
+
+            $v->transportation_license_change_time_is = 0;
+            if($v->transportation_license_change_time && strtotime($v->transportation_license_change_time) <= $after_30_day)
+            {
+                $v->transportation_license_change_time_is = 1;
+            }
+        }
+
+
+        $return['car_list'] = $car_list;
         $return['menu_active_of_car_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.car-list-for-all';
         return view($view_blade)->with($return);
