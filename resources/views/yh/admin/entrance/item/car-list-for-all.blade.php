@@ -959,6 +959,46 @@
                     },
                     {
                         "className": "text-center",
+                        "width": "100px",
+                        "title": "运输证-年检",
+                        "data": "transportation_license_validity",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','transportation_license_validity').attr('data-value',data);
+                                $(nTd).attr('data-column-name','运输证-年检');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "100px",
+                        "title": "运输证-换证",
+                        "data": "transportation_license_change_time",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','transportation_license_change_time').attr('data-value',data);
+                                $(nTd).attr('data-column-name','运输证-换证');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
                         "width": "60px",
                         "title": "创建者",
                         "data": "creator_id",
