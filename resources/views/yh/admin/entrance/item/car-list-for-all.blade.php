@@ -237,7 +237,7 @@
 @section('custom-style')
     <style>
         .tableArea .main-table {
-            min-width: 3200px;
+            min-width: 3400px;
         }
     </style>
 @endsection
@@ -353,7 +353,7 @@
                         }
                     },
                     {
-                        "width": "60px",
+                        "width": "80px",
                         "title": "状态",
                         "data": "item_status",
                         "orderable": false,
