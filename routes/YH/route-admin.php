@@ -105,6 +105,8 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
     // 修改-单条属性
     Route::post('/item/car-info-text-set', $controller.'@operate_item_car_info_text_set');
+    Route::post('/item/car-info-time-set', $controller.'@operate_item_car_info_time_set');
+    Route::post('/item/car-info-select2-set', $controller.'@operate_item_car_info_select2_set');
     // 删除 & 恢复
     Route::post('/item/car-admin-delete', $controller.'@operate_item_car_admin_delete');
     Route::post('/item/car-admin-restore', $controller.'@operate_item_car_admin_restore');
@@ -158,7 +160,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 订单-基本信息
     Route::post('/item/order-info-text-set', $controller.'@operate_item_order_info_text_set');
     Route::post('/item/order-info-time-set', $controller.'@operate_item_order_info_time_set');
-    Route::post('/item/order-info-select-set', $controller.'@operate_item_order_info_select_set');
+    Route::post('/item/order-info-select2-set', $controller.'@operate_item_order_info_select2_set');
     Route::post('/item/order-info-client-set', $controller.'@operate_item_order_info_client_set');
     Route::post('/item/order-info-car-set', $controller.'@operate_item_order_info_car_set');
     // 订单-行程信息

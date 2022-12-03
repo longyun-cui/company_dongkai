@@ -565,7 +565,7 @@
 
 
 
-        // 显示【修改文本属性】
+        // 显示【修改文本text属性】
         $(".main-content").on('dblclick', ".modal-show-for-info-text-set", function() {
             var $that = $(this);
             $('.info-set-title').html($that.attr("data-id"));
@@ -577,7 +577,7 @@
 
             $('#modal-body-for-info-text-set').modal('show');
         });
-        // 【修改属性】取消
+        // 【修改文本text属性】取消
         $(".main-content").on('click', "#item-cancel-for-info-text-set", function() {
             var that = $(this);
 
@@ -585,7 +585,7 @@
                 $("body").addClass("modal-open");
             });
         });
-        // 【修改属性】提交
+        // 【修改文本text属性】提交
         $(".main-content").on('click', "#item-submit-for-info-text-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-set-column-key"]').val();
@@ -657,7 +657,7 @@
 
             $('#modal-body-for-info-time-set').modal('show');
         });
-        // 【修改时间】取消
+        // 【修改时间time属性】取消
         $(".main-content").on('click', "#item-cancel-for-info-time-set", function() {
             var that = $(this);
 
@@ -665,7 +665,7 @@
                 $("body").addClass("modal-open");
             });
         });
-        // 【修改时间】提交
+        // 【修改时间time属性】提交
         $(".main-content").on('click', "#item-submit-for-info-time-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-time-set-column-key"]').val();
@@ -715,8 +715,8 @@
         });
 
 
-        // 显示【修改文本属性】
-        $(".main-content").on('dblclick', ".modal-show-for-info-select-set", function() {
+        // 显示【修改select2属性】
+        $(".main-content").on('dblclick', ".modal-show-for-info-select2-set", function() {
 
 
             $('select[name=info-select-set-column-value]').attr("selected","");
@@ -735,7 +735,7 @@
             $('select[name=info-select-set-column-value]').find('option').eq(0).attr('data-id',$that.attr("data-value"));
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
-            $('#modal-body-for-info-select-set').modal('show');
+            $('#modal-body-for-info-select2-set').modal('show');
 
 
             if($that.attr("data-key") == "client_id")
@@ -833,16 +833,16 @@
             }
 
         });
-        // 【修改属性】取消
-        $(".main-content").on('click', "#item-cancel-for-info-select-set", function() {
+        // 【修改select2属性】取消
+        $(".main-content").on('click', "#item-cancel-for-info-select2-set", function() {
             var that = $(this);
 
             $('#modal-body-for-info-client-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
-        // 【修改属性】提交
-        $(".main-content").on('click', "#item-submit-for-info-select-set", function() {
+        // 【修改select2属性】提交
+        $(".main-content").on('click', "#item-submit-for-info-select2-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-select-set-column-key"]').val();
             var $column_value = $('select[name="info-select-set-column-value"]').val();
@@ -851,7 +851,7 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-info-select-set') }}",
+                        "{{ url('/item/order-info-select2-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
@@ -867,7 +867,7 @@
                             else
                             {
                                 layer.close(index);
-                                $('#modal-body-for-info-select-set').modal('hide').on("hidden.bs.modal", function () {
+                                $('#modal-body-for-info-select2-set').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
                                 });
 

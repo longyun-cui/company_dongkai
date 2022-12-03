@@ -446,7 +446,7 @@
     </div>
 </div>
 {{--修改-客户--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-select-set">
+<div class="modal fade modal-main-body" id="modal-body-for-info-select2-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
@@ -483,8 +483,8 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-select-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select-set">取消</button>
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-select2-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select2-set">取消</button>
                     </div>
                 </div>
             </div>
@@ -1385,7 +1385,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-key','client_id').attr('data-value',data);
                                 if(row.client_er == null) $(nTd).attr('data-option-name','未指定');
                                 else {
@@ -1426,9 +1426,9 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                if(row.car_owner_type == 1 || row.car_owner_type == 41)
+                                if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                                 {
-                                    $(nTd).addClass('modal-show-for-info-select-set');
+                                    $(nTd).addClass('modal-show-for-info-select2-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','car_id').attr('data-value',row.car_id);
                                     if(row.car_er == null) $(nTd).attr('data-option-name','未指定');
                                     else $(nTd).attr('data-option-name',row.car_er.name);
@@ -1448,7 +1448,7 @@
                         },
                         render: function(data, type, row, meta) {
                             var car_html = '';
-                            if(row.car_owner_type == 1 || row.car_owner_type == 41)
+                            if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                             {
                                 if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
                             }
@@ -1469,9 +1469,9 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                if(row.car_owner_type == 1 || row.car_owner_type == 41)
+                                if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                                 {
-                                    $(nTd).addClass('modal-show-for-info-select-set');
+                                    $(nTd).addClass('modal-show-for-info-select2-set');
                                     $(nTd).attr('data-id',row.id).attr('data-key','trailer_id').attr('data-value',row.trailer_id);
                                     if(row.trailer_er == null) $(nTd).attr('data-option-name','未指定');
                                     else $(nTd).attr('data-option-name',row.trailer_er.name);
@@ -1491,7 +1491,7 @@
                         },
                         render: function(data, type, row, meta) {
                             var trailer_html = '';
-                            if(row.car_owner_type == 1 || row.car_owner_type == 41)
+                            if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                             {
                                 if(row.trailer_er != null) trailer_html = '<a href="javascript:void(0);">'+row.trailer_er.name+'</a>';
                             }
@@ -1790,6 +1790,16 @@
                         "title": "里程",
                         "data": "travel_distance",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-key','travel_distance').attr('data-value',data);
+                                $(nTd).attr('data-name','里程');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(!data) return '';
                             else return data;
@@ -3211,7 +3221,7 @@
 //                    },
                     {
                         "className": "font-12px",
-                        "width": "40px",
+                        "width": "60px",
                         "title": "ID",
                         "data": "id",
                         "orderable": false,
@@ -3221,7 +3231,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "60px",
+                        "width": "80px",
                         "title": "类型",
                         "data": "operate_category",
                         "orderable": false,
@@ -3240,14 +3250,19 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "60px",
+                        "width": "80px",
                         "title": "修改属性",
                         "data": "column",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.operate_type == 1)
+                            if(row.operate_category == 1)
                             {
-                                if(data == "amount") return '金额';
+                                if(data == "client_id") return '客户';
+                                else if(data == "car_id") return '车辆';
+                                else if(data == "trailer_id") return '车挂';
+                                else if(data == "outside_car") return '车辆';
+                                else if(data == "outside_trailer") return '车挂';
+                                else if(data == "amount") return '金额';
                                 else if(data == "deposit") return '定金';
                                 else if(data == "oil_card_amount") return '油卡';
                                 else if(data == "invoice_amount") return '开票金额';
@@ -3270,15 +3285,11 @@
                                 else if(data == "actual_arrival_time") return '实际到达时间';
                                 else if(data == "stopover_departure_time") return '实际出发时间';
                                 else if(data == "stopover_arrival_time") return '实际到达时间';
+                                else if(data == "travel_distance") return '里程数';
                                 else if(data == "driver_name") return '主驾姓名';
                                 else if(data == "driver_phone") return '主驾电话';
                                 else if(data == "copilot_name") return '副驾姓名';
                                 else if(data == "copilot_phone") return '副驾电话';
-                                else if(data == "car_id") return '车辆';
-                                else if(data == "client_id") return '客户';
-                                else if(data == "trailer_id") return '车挂';
-                                else if(data == "outside_car") return '车辆';
-                                else if(data == "outside_trailer") return '车挂';
                                 else if(data == "trailer_type") return '车挂类型';
                                 else if(data == "trailer_length") return '车挂尺寸';
                                 else if(data == "trailer_volume") return '车挂容积';
@@ -3407,7 +3418,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "80px",
                         "title": "操作人",
                         "data": "creator_id",
                         "orderable": false,

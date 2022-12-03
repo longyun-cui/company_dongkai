@@ -229,6 +229,53 @@
 
     </div>
 </div>
+{{--修改-时间信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改【<span class="info-time-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-time-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="info-time-set-operate" value="item-car-info-text-set" readonly>
+                    <input type="hidden" name="info-time-set-car-id" value="0" readonly>
+                    <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="info-time-set-column-key" value="" readonly>
+                    <input type="hidden" name="info-time-set-time-type" value="" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 info-time-set-column-name"></label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
+                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-time-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-time-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 @endsection
 
 
@@ -927,7 +974,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','issue_date').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','issue_date').attr('data-value',data);
                                 $(nTd).attr('data-column-name','发证日期');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -946,9 +994,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','inspection_validity').attr('data-value',data);
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','inspection_validity').attr('data-value',data);
                                 $(nTd).attr('data-column-name','检验有效期');
+                                $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -966,9 +1016,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','transportation_license_validity').attr('data-value',data);
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','transportation_license_validity').attr('data-value',data);
                                 $(nTd).attr('data-column-name','运输证-年检');
+                                $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -986,9 +1038,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','transportation_license_change_time').attr('data-value',data);
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','transportation_license_change_time').attr('data-value',data);
                                 $(nTd).attr('data-column-name','运输证-换证');
+                                $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }

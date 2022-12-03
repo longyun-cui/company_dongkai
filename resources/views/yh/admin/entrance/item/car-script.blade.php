@@ -309,7 +309,100 @@
         });
 
 
+        // 显示【修改时间】
+        $(".main-content").on('dblclick', ".modal-show-for-info-time-set", function() {
+            var $that = $(this);
+            $('.info-time-set-title').html($that.attr("data-name"));
+            $('.info-time-set-column-name').html($that.attr("data-column-name"));
+            $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
+            $('input[name=info-time-set-car-id]').val($that.attr("data-id"));
+            $('input[name=info-time-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-time-set-time-type]').val($that.attr('data-time-type'));
+            if($that.attr('data-time-type') == "datetime")
+            {
+                $('input[name=info-time-set-column-value]').show();
+                $('input[name=info-date-set-column-value]').hide();
+                $('input[name=info-time-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            }
+            else if($that.attr('data-time-type') == "date")
+            {
+                $('input[name=info-time-set-column-value]').hide();
+                $('input[name=info-date-set-column-value]').show();
+                $('input[name=info-date-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            }
 
+            $('#modal-body-for-info-time-set').modal('show');
+        });
+        // 【修改时间】取消
+        $(".main-content").on('click', "#item-cancel-for-info-time-set", function() {
+            var that = $(this);
+
+            $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【修改时间】提交
+        $(".main-content").on('click', "#item-submit-for-info-time-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-time-set-column-key"]').val();
+            var $time_type = $('input[name="info-time-set-time-type"]').val();
+            var $column_value = '';
+            if($time_type == "datetime")
+            {
+                $column_value = $('input[name="info-time-set-column-value"]').val();
+            }
+            else if($time_type == "date")
+            {
+                $column_value = $('input[name="info-date-set-column-value"]').val();
+            }
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/car-info-text-set') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: $('input[name="info-time-set-operate"]').val(),
+                            car_id: $('input[name="info-time-set-car-id"]').val(),
+                            operate_type: $('input[name="info-time-set-operate-type"]').val(),
+                            column_key: $column_key,
+                            column_value: $column_value,
+                            time_type: $time_type
+                        },
+                        function(data){
+                            if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                            else
+                            {
+                                layer.close(index);
+                                $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
+                                    $("body").addClass("modal-open");
+                                });
+
+                                $('#datatable_ajax').DataTable().ajax.reload();
+
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+
+
+        $('.time_picker').datetimepicker({
+            locale: moment.locale('zh-CN'),
+            format: "YYYY-MM-DD HH:mm",
+            ignoreReadonly: true
+        });
+        $('.date_picker').datetimepicker({
+            locale: moment.locale('zh-CN'),
+            format: "YYYY-MM-DD",
+            ignoreReadonly: true
+        });
 
     });
 </script>
