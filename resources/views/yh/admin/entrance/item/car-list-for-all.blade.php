@@ -513,7 +513,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_type').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','trailer_type').attr('data-value',data);
                                 $(nTd).attr('data-column-name','类型');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -533,7 +534,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_length').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','trailer_length').attr('data-value',data);
                                 $(nTd).attr('data-column-name','尺寸');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -553,7 +555,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_volume').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','trailer_volume').attr('data-value',data);
                                 $(nTd).attr('data-column-name','容积');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -573,7 +576,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_weight').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','trailer_weight').attr('data-value',data);
                                 $(nTd).attr('data-column-name','载重');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -593,7 +597,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','trailer_axis_count').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','trailer_axis_count').attr('data-value',data);
                                 $(nTd).attr('data-column-name','轴数');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -614,7 +619,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','linkman_name').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','linkman_name').attr('data-value',data);
                                 $(nTd).attr('data-column-name','司机');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -634,7 +640,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','linkman_phone').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','linkman_phone').attr('data-value',data);
                                 $(nTd).attr('data-column-name','电话');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -654,7 +661,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_type').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','car_type').attr('data-value',data);
                                 $(nTd).attr('data-column-name','车辆类型');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -674,7 +682,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_owner').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','car_owner').attr('data-value',data);
                                 $(nTd).attr('data-column-name','所有人');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -694,7 +703,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_function').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','car_function').attr('data-value',data);
                                 $(nTd).attr('data-column-name','使用性质');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -714,7 +724,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_brand').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','car_brand').attr('data-value',data);
                                 $(nTd).attr('data-column-name','品牌');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -734,7 +745,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','car_identification_number').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','car_identification_number').attr('data-value',data);
                                 $(nTd).attr('data-column-name','车辆识别代码');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -754,7 +766,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','engine_number').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','engine_number').attr('data-value',data);
                                 $(nTd).attr('data-column-name','发动机号');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -774,7 +787,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','locomotive_wheelbase').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','locomotive_wheelbase').attr('data-value',data);
                                 $(nTd).attr('data-column-name','车头轴距');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -794,7 +808,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','main_fuel_tank').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','main_fuel_tank').attr('data-value',data);
                                 $(nTd).attr('data-column-name','主油箱');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -814,7 +829,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','auxiliary_fuel_tank').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','auxiliary_fuel_tank').attr('data-value',data);
                                 $(nTd).attr('data-column-name','副油箱');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -834,7 +850,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','total_mass').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','total_mass').attr('data-value',data);
                                 $(nTd).attr('data-column-name','总质量');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -854,7 +871,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','curb_weight').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','curb_weight').attr('data-value',data);
                                 $(nTd).attr('data-column-name','整备质量');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -874,7 +892,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','load_weight').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','load_weight').attr('data-value',data);
                                 $(nTd).attr('data-column-name','核定载重');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -894,7 +913,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','traction_mass').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','traction_mass').attr('data-value',data);
                                 $(nTd).attr('data-column-name','准牵引质量');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -914,7 +934,8 @@
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','overall_size').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','overall_size').attr('data-value',data);
                                 $(nTd).attr('data-column-name','外廓尺寸');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -933,9 +954,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','purchase_date').attr('data-value',data);
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','purchase_date').attr('data-value',data);
                                 $(nTd).attr('data-column-name','购买日期');
+                                $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -953,9 +976,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name).attr('data-key','registration_date').attr('data-value',data);
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','registration_date').attr('data-value',data);
                                 $(nTd).attr('data-column-name','注册日期');
+                                $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -973,10 +998,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','issue_date').attr('data-value',data);
                                 $(nTd).attr('data-column-name','发证日期');
+                                $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1110,27 +1136,7 @@
                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                             else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                         }
-                    },
-//                    {
-//                        "className": "font-12px",
-//                        "width": "96px",
-//                        "title": "修改时间",
-//                        "data": 'updated_at',
-//                        "orderable": true,
-//                        render: function(data, type, row, meta) {
-////                            return data;
-//                            var $date = new Date(data*1000);
-//                            var $year = $date.getFullYear();
-//                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-//                            var $day = ('00'+($date.getDate())).slice(-2);
-//                            var $hour = ('00'+$date.getHours()).slice(-2);
-//                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-//                            var $second = ('00'+$date.getSeconds()).slice(-2);
-////                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-////                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-//                        }
-//                    },
+                    }
                 ],
                 "drawCallback": function (settings) {
 

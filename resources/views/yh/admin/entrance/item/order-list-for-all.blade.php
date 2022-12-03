@@ -1353,8 +1353,9 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','assign_time').attr('data-value',$assign_time_value);
-                                $(nTd).attr('data-name','派车日期');
+                                $(nTd).attr('data-id',row.id).attr('data-name','派车日期');
+                                $(nTd).attr('data-key','assign_time').attr('data-value',$assign_time_value);
+                                $(nTd).attr('data-column-name','派车日期');
                                 $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1386,13 +1387,14 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','client_id').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','客户');
+                                $(nTd).attr('data-key','client_id').attr('data-value',data);
                                 if(row.client_er == null) $(nTd).attr('data-option-name','未指定');
                                 else {
                                     if(row.client_er.short_name) $(nTd).attr('data-option-name',row.client_er.short_name);
                                     else $(nTd).attr('data-option-name',row.client_er.username);
                                 }
-                                $(nTd).attr('data-name','客户');
+                                $(nTd).attr('data-column-name','客户');
                                 if(row.client_id) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1429,18 +1431,20 @@
                                 if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                                 {
                                     $(nTd).addClass('modal-show-for-info-select2-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','car_id').attr('data-value',row.car_id);
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车辆');
+                                    $(nTd).attr('data-key','car_id').attr('data-value',row.car_id);
                                     if(row.car_er == null) $(nTd).attr('data-option-name','未指定');
                                     else $(nTd).attr('data-option-name',row.car_er.name);
-                                    $(nTd).attr('data-name','车辆');
+                                    $(nTd).attr('data-column-name','车辆');
                                     if(row.car_id) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
                                 else if(row.car_owner_type == 61)
                                 {
                                     $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','outside_car').attr('data-value',row.outside_car);
-                                    $(nTd).attr('data-name','车辆');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车辆');
+                                    $(nTd).attr('data-key','outside_car').attr('data-value',row.outside_car);
+                                    $(nTd).attr('data-column-name','车辆');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
@@ -1472,18 +1476,20 @@
                                 if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                                 {
                                     $(nTd).addClass('modal-show-for-info-select2-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','trailer_id').attr('data-value',row.trailer_id);
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂');
+                                    $(nTd).attr('data-key','trailer_id').attr('data-value',row.trailer_id);
                                     if(row.trailer_er == null) $(nTd).attr('data-option-name','未指定');
                                     else $(nTd).attr('data-option-name',row.trailer_er.name);
-                                    $(nTd).attr('data-name','车挂');
+                                    $(nTd).attr('data-column-name','车挂');
                                     if(row.trailer_id) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
                                 else if(row.car_owner_type == 61)
                                 {
                                     $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','outside_trailer').attr('data-value',row.outside_trailer);
-                                    $(nTd).attr('data-name','车挂');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂');
+                                    $(nTd).attr('data-key','outside_trailer').attr('data-value',row.outside_trailer);
+                                    $(nTd).attr('data-column-name','车挂');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
@@ -1656,8 +1662,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','amount').attr('data-value',data);
-                                $(nTd).attr('data-name','运价');
+                                $(nTd).attr('data-id',row.id).attr('data-name','运价');
+                                $(nTd).attr('data-key','amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','运价');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1679,8 +1686,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','oil_card_amount').attr('data-value',data);
-                                $(nTd).attr('data-name','油卡');
+                                $(nTd).attr('data-id',row.id).attr('data-name','油卡');
+                                $(nTd).attr('data-key','oil_card_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','油卡');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1698,8 +1706,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','time_limitation_deduction').attr('data-value',data);
-                                $(nTd).attr('data-name','时效扣款');
+                                $(nTd).attr('data-id',row.id).attr('data-name','时效扣款');
+                                $(nTd).attr('data-key','time_limitation_deduction').attr('data-value',data);
+                                $(nTd).attr('data-column-name','时效扣款');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1717,8 +1726,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','information_fee').attr('data-value',data);
-                                $(nTd).attr('data-name','信息费');
+                                $(nTd).attr('data-id',row.id).attr('data-name','信息费');
+                                $(nTd).attr('data-key','information_fee').attr('data-value',data);
+                                $(nTd).attr('data-column-name','信息费');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1736,8 +1746,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','customer_management_fee').attr('data-value',data);
-                                $(nTd).attr('data-name','客户管理费');
+                                $(nTd).attr('data-id',row.id).attr('data-name','客户管理费');
+                                $(nTd).attr('data-key','customer_management_fee').attr('data-value',data);
+                                $(nTd).attr('data-column-name','客户管理费');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1752,11 +1763,12 @@
 //                        "data": "invoice_amount",
 //                        "orderable": false,
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                            if(row.is_published != 0)
+//                            if(row.is_published != 0 && row.item_status != 97)
 //                            {
 //                                $(nTd).addClass('modal-show-for-info-text-set');
-//                                $(nTd).attr('data-id',row.id).attr('data-key','invoice_amount').attr('data-value',data);
-//                                $(nTd).attr('data-name','开票额');
+//                                $(nTd).attr('data-id',row.id).attr('data-name','开票额');
+//                                $(nTd).attr('data-key','invoice_amount').attr('data-value',data);
+//                                $(nTd).attr('data-column-name','开票额');
 //                                if(data) $(nTd).attr('data-operate-type','edit');
 //                                else $(nTd).attr('data-operate-type','add');
 //                            }
@@ -1774,8 +1786,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','invoice_point').attr('data-value',data);
-                                $(nTd).attr('data-name','票点');
+                                $(nTd).attr('data-id',row.id).attr('data-name','票点');
+                                $(nTd).attr('data-key','invoice_point').attr('data-value',data);
+                                $(nTd).attr('data-column-name','票点');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1794,8 +1807,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','travel_distance').attr('data-value',data);
-                                $(nTd).attr('data-name','里程');
+                                $(nTd).attr('data-id',row.id).attr('data-name','里程');
+                                $(nTd).attr('data-key','travel_distance').attr('data-value',data);
+                                $(nTd).attr('data-column-name','里程');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1844,8 +1858,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','route').attr('data-value',data);
-                                $(nTd).attr('data-name','线路');
+                                $(nTd).attr('data-id',row.id).attr('data-name','线路');
+                                $(nTd).attr('data-key','route').attr('data-value',data);
+                                $(nTd).attr('data-column-name','线路');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1860,11 +1875,12 @@
 //                        "data": "fixed_route",
 //                        "orderable": false,
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                            if(row.is_published != 0)
+//                            if(row.is_published != 0 && row.item_status != 97)
 //                            {
 //                                $(nTd).addClass('modal-show-for-info-text-set');
-//                                $(nTd).attr('data-id',row.id).attr('data-key','fixed_route').attr('data-value',data);
-//                                $(nTd).attr('data-name','固定线路');
+//                                $(nTd).attr('data-id',row.id).attr('data-name','固定线路');
+//                                $(nTd).attr('data-key','fixed_route').attr('data-value',data);
+//                                $(nTd).attr('data-column-name','固定线路');
 //                                if(data) $(nTd).attr('data-operate-type','edit');
 //                                else $(nTd).attr('data-operate-type','add');
 //                            }
@@ -1879,11 +1895,12 @@
 //                        "data": "temporary_route",
 //                        "orderable": false,
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                            if(row.is_published != 0)
+//                            if(row.is_published != 0 && row.item_status != 97)
 //                            {
 //                                $(nTd).addClass('modal-show-for-info-text-set');
-//                                $(nTd).attr('data-id',row.id).attr('data-key','temporary_route').attr('data-value',data);
-//                                $(nTd).attr('data-name','临时线路');
+//                                $(nTd).attr('data-id',row.id).attr('data-name','临时线路');
+//                                $(nTd).attr('data-key','temporary_route').attr('data-value',data);
+//                                $(nTd).attr('data-column-name','临时线路');
 //                                if(data) $(nTd).attr('data-operate-type','edit');
 //                                else $(nTd).attr('data-operate-type','add');
 //                            }
@@ -1915,7 +1932,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名').attr('data-key','driver_name').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名');
+                                $(nTd).attr('data-key','driver_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾姓名');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1934,7 +1953,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾电话').attr('data-key','driver_phone').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
+                                $(nTd).attr('data-key','driver_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾电话');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1953,7 +1974,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','副驾姓名').attr('data-key','copilot_name').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾姓名');
+                                $(nTd).attr('data-key','copilot_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾姓名');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1972,7 +1995,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','副驾电话').attr('data-key','copilot_phone').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾电话');
+                                $(nTd).attr('data-key','copilot_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾电话');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1982,7 +2007,6 @@
                         }
                     },
                     {
-                        "className": "",
                         "className": "text-center",
                         "width": "40px",
                         "title": "类型",
@@ -1991,11 +2015,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                if(row.car_owner_type > 1)
+                                if(row.car_owner_type == 61)
                                 {
                                     $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','trailer_type').attr('data-value',row.trailer_type);
-                                    $(nTd).attr('data-name','车挂类型');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂类型');
+                                    $(nTd).attr('data-key','trailer_type').attr('data-value',row.trailer_type);
+                                    $(nTd).attr('data-column-name','车挂类型');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
@@ -2023,11 +2048,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                if(row.car_owner_type > 1)
+                                if(row.car_owner_type == 61)
                                 {
                                     $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','trailer_length').attr('data-value',row.trailer_length);
-                                    $(nTd).attr('data-name','车挂尺寸');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂尺寸');
+                                    $(nTd).attr('data-key','trailer_length').attr('data-value',row.trailer_length);
+                                    $(nTd).attr('data-column-name','车挂尺寸');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
@@ -2055,11 +2081,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                if(row.car_owner_type > 1)
+                                if(row.car_owner_type == 61)
                                 {
                                     $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','trailer_volume').attr('data-value',row.trailer_volume);
-                                    $(nTd).attr('data-name','车挂容积');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂容积');
+                                    $(nTd).attr('data-key','trailer_volume').attr('data-value',row.trailer_volume);
+                                    $(nTd).attr('data-column-name','车挂容积');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
@@ -2087,11 +2114,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                if(row.car_owner_type > 1)
+                                if(row.car_owner_type == 61)
                                 {
                                     $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','trailer_weight').attr('data-value',row.trailer_weight);
-                                    $(nTd).attr('data-name','车挂载重');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂载重');
+                                    $(nTd).attr('data-key','trailer_weight').attr('data-value',row.trailer_weight);
+                                    $(nTd).attr('data-column-name','车挂载重');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
@@ -2119,11 +2147,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                if(row.car_owner_type > 1)
+                                if(row.car_owner_type == 61)
                                 {
                                     $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-key','trailer_axis_count').attr('data-value',row.trailer_axis_count);
-                                    $(nTd).attr('data-name','车挂轴数');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂轴数');
+                                    $(nTd).attr('data-key','trailer_axis_count').attr('data-value',row.trailer_axis_count);
+                                    $(nTd).attr('data-column-name','车挂轴数');
                                     if(row.outside_car) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
@@ -2152,8 +2181,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','departure_place').attr('data-value',data);
-                                $(nTd).attr('data-name','出发地');
+                                $(nTd).attr('data-id',row.id).attr('data-name','出发地');
+                                $(nTd).attr('data-key','departure_place').attr('data-value',data);
+                                $(nTd).attr('data-column-name','出发地');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2172,8 +2202,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','destination_place').attr('data-value',data);
-                                $(nTd).attr('data-name','目的地');
+                                $(nTd).attr('data-id',row.id).attr('data-name','目的地');
+                                $(nTd).attr('data-key','destination_place').attr('data-value',data);
+                                $(nTd).attr('data-column-name','目的地');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2192,8 +2223,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','stopover_place').attr('data-value',data);
-                                $(nTd).attr('data-name','经停地');
+                                $(nTd).attr('data-id',row.id).attr('data-name','经停地');
+                                $(nTd).attr('data-key','stopover_place').attr('data-value',data);
+                                $(nTd).attr('data-column-name','经停地');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2224,8 +2256,9 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','should_departure_time').attr('data-value',$time_value);
-                                $(nTd).attr('data-name','应出发时间');
+                                $(nTd).attr('data-id',row.id).attr('data-name','应出发时间');
+                                $(nTd).attr('data-key','should_departure_time').attr('data-value',$time_value);
+                                $(nTd).attr('data-column-name','应出发时间');
                                 $(nTd).attr('data-time-type','datetime');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2275,8 +2308,9 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','should_arrival_time').attr('data-value',$time_value);
-                                $(nTd).attr('data-name','应到达时间');
+                                $(nTd).attr('data-id',row.id).attr('data-name','应到达时间');
+                                $(nTd).attr('data-key','should_arrival_time').attr('data-value',$time_value);
+                                $(nTd).attr('data-column-name','应到达时间');
                                 $(nTd).attr('data-time-type','datetime');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2327,8 +2361,9 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','actual_departure_time').attr('data-value',$time_value);
-                                $(nTd).attr('data-name','实际出发时间');
+                                $(nTd).attr('data-id',row.id).attr('data-name','实际出发时间');
+                                $(nTd).attr('data-key','actual_departure_time').attr('data-value',$time_value);
+                                $(nTd).attr('data-column-name','实际出发时间');
                                 $(nTd).attr('data-time-type','datetime');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2378,8 +2413,9 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','stopover_arrival_time').attr('data-value',$time_value);
-                                $(nTd).attr('data-name','经停到达时间');
+                                $(nTd).attr('data-id',row.id).attr('data-name','经停到达时间');
+                                $(nTd).attr('data-key','stopover_arrival_time').attr('data-value',$time_value);
+                                $(nTd).attr('data-column-name','经停到达时间');
                                 $(nTd).attr('data-time-type','datetime');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2430,8 +2466,9 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','stopover_departure_time').attr('data-value',$time_value);
-                                $(nTd).attr('data-name','经停出发时间');
+                                $(nTd).attr('data-id',row.id).attr('data-name','经停出发时间');
+                                $(nTd).attr('data-key','stopover_departure_time').attr('data-value',$time_value);
+                                $(nTd).attr('data-column-name','经停出发时间');
                                 $(nTd).attr('data-time-type','datetime');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2482,8 +2519,9 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-key','actual_arrival_time').attr('data-value',$time_value);
-                                $(nTd).attr('data-name','实际到达时间');
+                                $(nTd).attr('data-id',row.id).attr('data-name','实际到达时间');
+                                $(nTd).attr('data-key','actual_arrival_time').attr('data-value',$time_value);
+                                $(nTd).attr('data-column-name','实际到达时间');
                                 $(nTd).attr('data-time-type','datetime');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2523,7 +2561,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','单号').attr('data-key','order_number').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','单号');
+                                $(nTd).attr('data-key','order_number').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2541,7 +2580,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','收款人').attr('data-key','payee_name').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','收款人');
+                                $(nTd).attr('data-key','payee_name').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2559,7 +2599,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','车货源').attr('data-key','car_supply').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','车货源');
+                                $(nTd).attr('data-key','car_supply').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2577,7 +2618,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','安排人').attr('data-key','arrange_people').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','安排人');
+                                $(nTd).attr('data-key','arrange_people').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2595,7 +2637,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','车辆负责人').attr('data-key','car_managerial_people').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','车辆负责人');
+                                $(nTd).attr('data-key','car_managerial_people').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2613,7 +2656,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','重量').attr('data-key','weight').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','重量');
+                                $(nTd).attr('data-key','weight').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2631,7 +2675,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','GPS').attr('data-key','GPS').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','GPS');
+                                $(nTd).attr('data-key','GPS').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2649,7 +2694,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','回单状态').attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','回单状态');
+                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2667,7 +2713,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','回单地址').attr('data-key','receipt_address').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','回单地址');
+                                $(nTd).attr('data-key','receipt_address').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2691,6 +2738,7 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
+
 //                            return $year+'-'+$month+'-'+$day;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;

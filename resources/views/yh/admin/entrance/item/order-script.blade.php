@@ -419,7 +419,7 @@
             $('#modal-body-for-travel-detail').modal('show');
         });
 
-        // 显示【设置行程时间】
+        // 【设置行程时间】【显示】
         $(".main-content").on('click', ".item-travel-time-set-show", function() {
             var $that = $(this);
 
@@ -436,7 +436,7 @@
                 $(this).attr('id', 'id_' + Math.random());
             });
         });
-        // 【设置行程时间】取消
+        // 【设置行程时间】【取消】
         $(".main-content").on('click', "#item-cancel-for-travel-set", function() {
             var that = $(this);
             $('input[name="travel-set-object-type"]').val('');
@@ -445,7 +445,7 @@
                 $("body").addClass("modal-open");
             });
         });
-        // 【设置行程时间】提交
+        // 【设置行程时间】【提交】
         $(".main-content").on('click', "#item-submit-for-travel-set", function() {
             var that = $(this);
             layer.msg('确定"添加"么？', {
@@ -487,12 +487,12 @@
 
 
 
-        // 【财务记录】跳转
+        // 【财务记录】【跳转】
         $(".main-content").on('click', ".item-data-finance-link", function() {
             var that = $(this);
             window.open("/admin/business/keyword-detect-record?id="+that.attr('data-id'));
         });
-        // 显示【财务记录】
+        // 【财务记录】【显示】
         $(".main-content").on('click', ".item-modal-show-for-finance", function() {
             var that = $(this);
             var $id = that.attr("data-id");
@@ -506,7 +506,7 @@
 
             $('#modal-body-for-finance-list').modal('show');
         });
-        // 显示【财务-收入-记录】
+        // 【财务记录】【显示】
         $(".main-content").on('dblclick', ".item-show-for-finance", function() {
             var that = $(this);
             var $id = that.attr("data-id");
@@ -520,7 +520,7 @@
 
             $('#modal-body-for-finance-list').modal('show');
         });
-        // 显示【财务-收入-记录】
+        // 【财务-收入-记录】【显示】
         $(".main-content").on('dblclick', ".item-show-for-finance-income", function() {
             var that = $(this);
             var $id = that.attr("data-id");
@@ -534,7 +534,7 @@
 
             $('#modal-body-for-finance-list').modal('show');
         });
-        // 显示【财务-支出-记录】
+        // 【财务-支出-记录】【显示】
         $(".main-content").on('dblclick', ".item-show-for-finance-expenditure", function() {
             var that = $(this);
             var $id = that.attr("data-id");
@@ -552,7 +552,7 @@
 
 
 
-        // 显示【修改记录】
+        // 【修改记录】【显示】
         $(".main-content").on('click', ".item-modal-show-for-modify", function() {
             var that = $(this);
             var $id = that.attr("data-id");
@@ -565,7 +565,7 @@
 
 
 
-        // 显示【修改文本text属性】
+        // 【修改-文本-text-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-text-set", function() {
             var $that = $(this);
             $('.info-set-title').html($that.attr("data-id"));
@@ -577,7 +577,7 @@
 
             $('#modal-body-for-info-text-set').modal('show');
         });
-        // 【修改文本text属性】取消
+        // 【修改-文本-text-属性】【取消】
         $(".main-content").on('click', "#item-cancel-for-info-text-set", function() {
             var that = $(this);
 
@@ -585,7 +585,7 @@
                 $("body").addClass("modal-open");
             });
         });
-        // 【修改文本text属性】提交
+        // 【修改-文本-text-属性】【提交】
         $(".main-content").on('click', "#item-submit-for-info-text-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-set-column-key"]').val();
@@ -633,7 +633,7 @@
         });
 
 
-        // 显示【修改时间】
+        // 【修改-时间-time-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-time-set", function() {
             var $that = $(this);
             $('.info-time-set-title').html($that.attr("data-id"));
@@ -657,7 +657,7 @@
 
             $('#modal-body-for-info-time-set').modal('show');
         });
-        // 【修改时间time属性】取消
+        // 【修改-时间-time-属性】【取消】
         $(".main-content").on('click', "#item-cancel-for-info-time-set", function() {
             var that = $(this);
 
@@ -665,7 +665,7 @@
                 $("body").addClass("modal-open");
             });
         });
-        // 【修改时间time属性】提交
+        // 【修改-时间-time-属性】【提交】
         $(".main-content").on('click', "#item-submit-for-info-time-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-time-set-column-key"]').val();
@@ -715,7 +715,7 @@
         });
 
 
-        // 显示【修改select2属性】
+        // 【修改-select2-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-select2-set", function() {
 
 
@@ -833,15 +833,15 @@
             }
 
         });
-        // 【修改select2属性】取消
+        // 【修改-select2-属性】【取消】
         $(".main-content").on('click', "#item-cancel-for-info-select2-set", function() {
             var that = $(this);
 
-            $('#modal-body-for-info-client-set').modal('hide').on("hidden.bs.modal", function () {
+            $('#modal-body-for-info-select2-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
-        // 【修改select2属性】提交
+        // 【修改-select2-属性】【提交】
         $(".main-content").on('click', "#item-submit-for-info-select2-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-select-set-column-key"]').val();
