@@ -140,6 +140,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 获取
     Route::match(['get','post'], '/item/order-get', $controller.'@operate_item_order_get');
     Route::match(['get','post'], '/item/order-get-html', $controller.'@operate_item_order_get_html');
+    Route::match(['get','post'], '/item/order-get-attachment-html', $controller.'@operate_item_order_get_attachment_html');
     // 删除 & 恢复
     Route::post('/item/order-delete', $controller.'@operate_item_order_delete');
     Route::post('/item/order-restore', $controller.'@operate_item_order_restore');
@@ -160,9 +161,14 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 订单-基本信息
     Route::post('/item/order-info-text-set', $controller.'@operate_item_order_info_text_set');
     Route::post('/item/order-info-time-set', $controller.'@operate_item_order_info_time_set');
-    Route::post('/item/order-info-select2-set', $controller.'@operate_item_order_info_select2_set');
+    Route::post('/item/order-info-radio-set', $controller.'@operate_item_order_info_option_set');
+    Route::post('/item/order-info-select-set', $controller.'@operate_item_order_info_option_set');
+    Route::post('/item/order-info-select2-set', $controller.'@operate_item_order_info_option_set');
     Route::post('/item/order-info-client-set', $controller.'@operate_item_order_info_client_set');
     Route::post('/item/order-info-car-set', $controller.'@operate_item_order_info_car_set');
+
+    Route::post('/item/order-info-attachment-set', $controller.'@operate_item_order_info_attachment_set');
+    Route::post('/item/order-info-attachment-delete', $controller.'@operate_item_order_info_attachment_delete');
     // 订单-行程信息
     Route::post('/item/order-travel-set', $controller.'@operate_item_order_travel_set');
     // 订单-财务信息

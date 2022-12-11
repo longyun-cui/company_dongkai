@@ -559,6 +559,11 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_item_order_get_html(request()->all());
     }
+    // 【订单管理】获取-附件
+    public function operate_item_order_get_attachment_html()
+    {
+        return $this->repo->operate_item_order_get_attachment_html(request()->all());
+    }
 
 
     // 【订单管理】删除
@@ -584,20 +589,40 @@ class YHAdminController extends Controller
 
 
 
-    // 【订单管理】修改-文本信息
+    // 【订单管理】修改-文本-信息
     public function operate_item_order_info_text_set()
     {
         return $this->repo->operate_item_order_info_text_set(request()->all());
     }
-    // 【订单管理】修改-时间信息
+    // 【订单管理】修改-时间-信息
     public function operate_item_order_info_time_set()
     {
         return $this->repo->operate_item_order_info_time_set(request()->all());
     }
-    // 【订单管理】修改-SELECT2信息
-    public function operate_item_order_info_select2_set()
+    // 【订单管理】修改-option-信息
+    public function operate_item_order_info_option_set()
     {
-        return $this->repo->operate_item_order_info_select2_set(request()->all());
+        return $this->repo->operate_item_order_info_option_set(request()->all());
+    }
+    // 【订单管理】修改-radio-信息
+    public function operate_item_order_info_radio_set()
+    {
+        return $this->repo->operate_item_order_info_option_set(request()->all());
+    }
+    // 【订单管理】修改-select-信息
+    public function operate_item_order_info_select_set()
+    {
+        return $this->repo->operate_item_order_info_option_set(request()->all());
+    }
+    // 【订单管理】添加-attachment-信息
+    public function operate_item_order_info_attachment_set()
+    {
+        return $this->repo->operate_item_order_info_attachment_set(request()->all());
+    }
+    // 【订单管理】删除-attachment-信息
+    public function operate_item_order_info_attachment_delete()
+    {
+        return $this->repo->operate_item_order_info_attachment_delete(request()->all());
     }
     // 【订单管理】修改-客户信息
     public function operate_item_order_info_client_set()

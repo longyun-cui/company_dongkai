@@ -462,11 +462,11 @@
                             travel_time: $('input[name="travel-set-time"]').val()
                         },
                         function(data){
+                            layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
                             {
-                                layer.close(index);
                                 $('#modal-body-for-travel-set').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
                                 });
@@ -580,7 +580,6 @@
         // 【修改-文本-text-属性】【取消】
         $(".main-content").on('click', "#item-cancel-for-info-text-set", function() {
             var that = $(this);
-
             $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
@@ -605,11 +604,11 @@
                             column_value: $column_value,
                         },
                         function(data){
+                            layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
                             {
-                                layer.close(index);
                                 $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
                                 });
@@ -660,7 +659,6 @@
         // 【修改-时间-time-属性】【取消】
         $(".main-content").on('click', "#item-cancel-for-info-time-set", function() {
             var that = $(this);
-
             $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
@@ -695,11 +693,11 @@
                             time_type: $time_type
                         },
                         function(data){
+                            layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
                             {
-                                layer.close(index);
                                 $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
                                 });
@@ -715,6 +713,138 @@
         });
 
 
+        // 【修改-radio-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-info-radio-set", function() {
+
+
+            $('select[name=info-radio-set-column-value]').attr("selected","");
+            $('select[name=info-radio-set-column-value]').find('option').eq(0).val(0).text('');
+            $('select[name=info-radio-set-column-value]').find('option:not(:first)').remove();
+
+            var $that = $(this);
+            $('.info-radio-set-title').html($that.attr("data-id"));
+            $('.info-radio-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-radio-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-radio-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-radio-set-operate-type]').val($that.attr('data-operate-type'));
+
+
+            if($that.attr("data-key") == "receipt_need")
+            {
+                var $option_html = $('#receipt_need-option-list').html();
+            }
+            $('.radio-box').html($option_html);
+            $('input[name=receipt_need][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
+
+
+            $('#modal-body-for-info-radio-set').modal('show');
+
+        });
+        // 【修改-radio-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-info-radio-set", function() {
+            var that = $(this);
+            $('#modal-body-for-info-radio-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【修改-radio-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-info-radio-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-radio-set-column-key"]').val();
+            var $column_value = $('#modal-info-radio-set-form').find('input:radio:checked').val();
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-info-radio-set') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: $('input[name="info-radio-set-operate"]').val(),
+                            order_id: $('input[name="info-radio-set-order-id"]').val(),
+                            operate_type: $('input[name="info-radio-set-operate-type"]').val(),
+                            column_key: $column_key,
+                            column_value: $column_value,
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                            else
+                            {
+                                $('#modal-body-for-info-radio-set').modal('hide').on("hidden.bs.modal", function () {
+                                    $("body").addClass("modal-open");
+                                });
+
+//                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
+////                                TableDatatablesAjax_inner.init($keyword_id);
+
+                                $('#datatable_ajax').DataTable().ajax.reload();
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload();
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+        // 【修改-select-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-info-select-set", function() {
+
+
+            $('select[name=info-select-set-column-value]').attr("selected","");
+            $('select[name=info-select-set-column-value]').find('option').eq(0).val(0).text('');
+            $('select[name=info-select-set-column-value]').find('option:not(:first)').remove();
+
+            var $that = $(this);
+            $('.info-select-set-title').html($that.attr("data-id"));
+            $('.info-select-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-select-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
+//            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
+//            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
+//            $('select[name=info-select-set-column-value]').find('option').eq(0).val($that.attr("data-value"));
+//            $('select[name=info-select-set-column-value]').find('option').eq(0).text($that.attr("data-option-name"));
+//            $('select[name=info-select-set-column-value]').find('option').eq(0).attr('data-id',$that.attr("data-value"));
+            $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
+
+
+            $('select[name=info-select-set-column-value]').removeClass('select2-car').removeClass('select2-client');
+            if($that.attr("data-key") == "receipt_status")
+            {
+                var $option_html = $('#receipt_status-option-list').html();
+            }
+            else if($that.attr("data-key") == "trailer_type")
+            {
+                var $option_html = $('#trailer_type-option-list').html();
+            }
+            else if($that.attr("data-key") == "trailer_length")
+            {
+                var $option_html = $('#trailer_length-option-list').html();
+            }
+            else if($that.attr("data-key") == "trailer_volume")
+            {
+                var $option_html = $('#trailer_volume-option-list').html();
+            }
+            else if($that.attr("data-key") == "trailer_weight")
+            {
+                var $option_html = $('#trailer_weight-option-list').html();
+            }
+            else if($that.attr("data-key") == "trailer_axis_count")
+            {
+                var $option_html = $('#trailer_axis_count-option-list').html();
+            }
+            $('select[name=info-select-set-column-value]').html($option_html);
+            $('select[name=info-select-set-column-value]').find("option[value='"+$that.attr("data-value")+"']").attr("selected","selected");
+
+
+            $('#modal-body-for-info-select-set').modal('show');
+
+
+
+        });
         // 【修改-select2-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-select2-set", function() {
 
@@ -735,7 +865,7 @@
             $('select[name=info-select-set-column-value]').find('option').eq(0).attr('data-id',$that.attr("data-value"));
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
-            $('#modal-body-for-info-select2-set').modal('show');
+            $('#modal-body-for-info-select-set').modal('show');
 
 
             if($that.attr("data-key") == "client_id")
@@ -833,16 +963,15 @@
             }
 
         });
-        // 【修改-select2-属性】【取消】
-        $(".main-content").on('click', "#item-cancel-for-info-select2-set", function() {
+        // 【修改-select-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-info-select-set", function() {
             var that = $(this);
-
-            $('#modal-body-for-info-select2-set').modal('hide').on("hidden.bs.modal", function () {
+            $('#modal-body-for-info-select-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
-        // 【修改-select2-属性】【提交】
-        $(".main-content").on('click', "#item-submit-for-info-select2-set", function() {
+        // 【修改-select-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-info-select-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-select-set-column-key"]').val();
             var $column_value = $('select[name="info-select-set-column-value"]').val();
@@ -851,7 +980,7 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-info-select2-set') }}",
+                        "{{ url('/item/order-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
@@ -866,8 +995,7 @@
 //                            else location.reload();
                             else
                             {
-                                layer.close(index);
-                                $('#modal-body-for-info-select2-set').modal('hide').on("hidden.bs.modal", function () {
+                                $('#modal-body-for-info-select-set').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
                                 });
 
@@ -876,11 +1004,6 @@
 
                                 $('#datatable_ajax').DataTable().ajax.reload();
 //                                $('#datatable_ajax_inner').DataTable().ajax.reload();
-
-                                $set_column = $('.item-detail-operate[data-key='+$column_key+']');
-                                $set_column.attr('data-value',$column_value);
-                                $set_column.html('<a href="javascript:void(0);" data-type="edit">修改</a>');
-                                $set_column.parents('.form-group').find('.item-detail-text').html($column_value);
                             }
                         },
                         'json'
@@ -888,6 +1011,192 @@
                 }
             });
         });
+
+
+        // 【修改-附件-attachment-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-attachment", function() {
+            var $that = $(this);
+            $('.attachment-set-title').html($that.attr("data-id"));
+            $('.info-set-column-name').html($that.attr("data-name"));
+            $('input[name=attachment-set-order-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
+            $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
+            $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
+
+
+            $('#modal-attachment-set-form input[name=order_id]').val($that.attr("data-id"));
+            $('#modal-attachment-set-form input[name=column-key]').val($that.attr("data-key"));
+            $('#modal-attachment-set-form input[name=column-value]').val($that.attr("data-value"));
+            $('#modal-attachment-set-form input[name=-operate-type]').val($that.attr('data-operate-type'));
+
+
+            var $data = new Object();
+            $.ajax({
+                type:"post",
+                dataType:'json',
+                async:false,
+                url: "{{ url('/item/order-get-attachment-html') }}",
+                data: {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate:"item-get",
+                    order_id: $that.attr('data-id')
+                },
+                success:function(data){
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        $data = data.data;
+                    }
+                }
+            });
+            $('.attachment-box').html($data.html);
+
+            $('#modal-body-for-attachment').modal('show');
+        });
+        // 【修改-附件-attachment-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-attachment-set", function() {
+            var that = $(this);
+            $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【修改-附件-attachment-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-attachment-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-attachment-set-column-key"]').val();
+            var $column_value = $('select[name="info-attachment-set-column-value"]').val();
+
+
+//            var fileItem1 = $('input[name="attachment_file"]')[0].prop('files');
+//            console.log("1  "+fileItem1);
+//            var fileItem2 = $('input[name="attachment_file"]').prop('files')[0];
+//            var $blob = new Blob([fileItem2]);
+//            console.log("2  "+fileItem2);
+//            console.log("2  "+$blob);
+//            var fileItem3 = $('input[name="attachment_file"]')[0].prop('files')[0];
+//            console.log("3  "+fileItem3);
+
+
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+
+
+                    var options = {
+                        url: "{{ url('/item/order-info-attachment-set') }}",
+                        type: "post",
+                        dataType: "json",
+                        // target: "#div2",
+                        success: function (data) {
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+//                                $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
+//                                    $("body").addClass("modal-open");
+//                                });
+
+                                $('.fileinput-exists[data-dismiss="fileinput"]').click();
+                                $('#modal-attachment-set-form input[name=attachment_name]').val('');
+
+                                var $data = new Object();
+                                $.ajax({
+                                    type:"post",
+                                    dataType:'json',
+                                    async:false,
+                                    url: "{{ url('/item/order-get-attachment-html') }}",
+                                    data: {
+                                        _token: $('meta[name="_token"]').attr('content'),
+                                        operate:"item-get",
+                                        order_id: $('#modal-attachment-set-form input[name=order_id]').val()
+                                    },
+                                    success:function(data){
+                                        if(!data.success) layer.msg(data.msg);
+                                        else
+                                        {
+                                            $data = data.data;
+                                        }
+                                    }
+                                });
+                                $('.attachment-box').html($data.html);
+
+//                                $('#datatable_ajax').DataTable().ajax.reload();
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload();
+                            }
+                        }
+                    };
+                    $("#modal-attachment-set-form").ajaxSubmit(options);
+
+
+
+//                    var formData = new FormData();
+//                    formData.append('attachment_file', fileItem);
+//                    formData.append('operate', $('input[name="attachment-set-operate"]').val());
+//                    formData.append('order_id', $('input[name="attachment-set-order-id"]').val());
+
+                    {{--$.post(--}}
+                        {{--"{{ url('/item/order-info-attachment-set') }}",--}}
+                        {{--{--}}
+                            {{--_token: $('meta[name="_token"]').attr('content'),--}}
+                            {{--operate: $('input[name="attachment-set-operate"]').val(),--}}
+                            {{--order_id: $('input[name="attachment-set-order-id"]').val(),--}}
+                            {{--operate_type: $('input[name="attachment-set-operate-type"]').val(),--}}
+                            {{--attachment_file: $blob--}}
+                        {{--},--}}
+                        {{--function(data){--}}
+                            {{--layer.close(index);--}}
+                            {{--if(!data.success) layer.msg(data.msg);--}}
+{{--//                            else location.reload();--}}
+                            {{--else--}}
+                            {{--{--}}
+                                {{--layer.close(index);--}}
+                                {{--$('#modal-body-for-attachment-set').modal('hide').on("hidden.bs.modal", function () {--}}
+                                    {{--$("body").addClass("modal-open");--}}
+                                {{--});--}}
+
+                                {{--$('#datatable_ajax').DataTable().ajax.reload();--}}
+{{--//                                $('#datatable_ajax_inner').DataTable().ajax.reload();--}}
+                            {{--}--}}
+                        {{--},--}}
+                        {{--'json'--}}
+                    {{--);--}}
+
+
+                }
+            });
+        });
+
+        // 【删除】
+        $(".main-content").on('click', ".order-attachment-delete-this", function() {
+            var $that = $(this);
+            layer.msg('确定要"删除"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-info-attachment-delete') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-attachment-delete",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $that.parents('.attachment-option').remove();
+//                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
 
 
 

@@ -352,8 +352,99 @@
     </div>
 </div>
 
+{{--修改-基本-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-attachment">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
-{{--修改-基本信息--}}
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">订单【<span class="attachment-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+
+
+            {{--attachment--}}
+            <form action="" method="post" class="form-horizontal form-bordered " id="">
+            <div class="box-body attachment-box">
+
+            </div>
+            </form>
+
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px-">
+                <h4 class="box-title">【添加附件】</h4>
+            </div>
+
+            {{--上传附件--}}
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-attachment-set-form">
+            <div class="box-body">
+
+                {{ csrf_field() }}
+                <input type="hidden" name="attachment-set-operate" value="item-order-attachment-set" readonly>
+                <input type="hidden" name="attachment-set-order-id" value="0" readonly>
+                <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
+                <input type="hidden" name="attachment-set-column-key" value="" readonly>
+
+                <input type="hidden" name="operate" value="item-order-attachment-set" readonly>
+                <input type="hidden" name="order_id" value="0" readonly>
+                <input type="hidden" name="operate_type" value="add" readonly>
+                <input type="hidden" name="column_key" value="attachment" readonly>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">附件名称</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="attachment_name" autocomplete="off" placeholder="附件名称" value="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <label class="control-label col-md-2" style="clear:left;">选择图片</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                            </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail">
+                            </div>
+                            <div class="btn-tool-group">
+                            <span class="btn-file">
+                                <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
+                                <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
+                                <input type="file" name="attachment_file" />
+                            </span>
+                                <span class="">
+                                <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
+                            </span>
+                            </div>
+                        </div>
+                        <div id="titleImageError" style="color: #a94442"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{{--修改-基本-信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
@@ -398,7 +489,7 @@
 
     </div>
 </div>
-{{--修改-时间信息--}}
+{{--修改-时间-信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
@@ -445,8 +536,48 @@
 
     </div>
 </div>
-{{--修改-客户--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-select2-set">
+{{--修改-radio-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-info-radio-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改订单【<span class="info-radio-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-radio-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="info-radio-set-operate" value="item-order-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-order-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
+                    <input type="hidden" name="info-radio-set-column-key" value="" readonly>
+
+
+                    <div class="form-group radio-box">
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-radio-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-radio-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{--修改-select-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-info-select-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
@@ -461,7 +592,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-order-info-select-set" readonly>
+                    <input type="hidden" name="info-select-set-operate" value="item-order-info-option-set" readonly>
                     <input type="hidden" name="info-select-set-order-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
@@ -483,14 +614,96 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-select2-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select2-set">取消</button>
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-select-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select-set">取消</button>
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
+</div>
+
+{{----}}
+<div class="option-container _none">
+
+    <div id="trailer_type-option-list">
+        <option value="0">选择箱型</option>
+        <option value="直板">直板</option>
+        <option value="高栏">高栏</option>
+        <option value="平板">平板</option>
+        <option value="冷藏">冷藏</option>
+    </div>
+
+    <div id="trailer_length-option-list">
+        <option value="0">选择车挂尺寸</option>
+        <option value="9.6">9.6</option>
+        <option value="12.5">12.5</option>
+        <option value="15">15</option>
+        <option value="16.5">16.5</option>
+        <option value="17.5">17.5</option>
+    </div>
+
+    <div id="trailer_volume-option-list">
+        <option value="0">选择承载方数</option>
+        <option value="125">125</option>
+        <option value="130">130</option>
+        <option value="135">135</option>
+    </div>
+
+    <div id="trailer_weight-option-list">
+        <option value="0">选择承载重量</option>
+        <option value="13">13吨</option>
+        <option value="20">20吨</option>
+        <option value="25">25吨</option>
+    </div>
+
+    <div id="trailer_axis_count-option-list">
+        <option value="0">选择轴数</option>
+        <option value="1">1轴</option>
+        <option value="2">2轴</option>
+        <option value="3">3轴</option>
+    </div>
+
+
+
+    {{--回单状态--}}
+    <div id="receipt_status-option-list">
+        <option value="-1">选择回单状态</option>
+        <option value="1">等待回单</option>
+        <option value="21">邮寄中</option>
+        <option value="41">已签收，等待确认</option>
+        <option value="100">已完成</option>
+        <option value="101">回单异常</option>
+    </div>
+
+    <div id="receipt_need-option-list">
+
+        <label class="control-label col-md-2">是否需要回单</label>
+        <div class="col-md-8">
+            <div class="btn-group">
+
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="receipt_need" value="0" class="info-set-column"> 不需要
+                        </label>
+                    </span>
+                </button>
+
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="receipt_need" value="1" class="info-set-column"> 需要
+                        </label>
+                    </span>
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 
@@ -1035,9 +1248,19 @@
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
+                                $(nTd).attr('data-key','attachment_list').attr('data-value',row.attachment_list);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
-                        },
+                        }
                     },
                     {
                         "width": "280px",
@@ -1909,19 +2132,19 @@
 //                            return data;
 //                        }
 //                    },
-                    {
-                        "className": "text-center",
-                        "width": "120px",
-                        "title": "行程",
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data == null ? '--' : data;
-                            var $stopover_html = '';
-                            if(row.stopover_place) $stopover_html = '--' + row.stopover_place;
-                            return row.departure_place + $stopover_html + '--' + row.destination_place;
-                        }
-                    },
+//                    {
+//                        "className": "text-center",
+//                        "width": "120px",
+//                        "title": "行程",
+//                        "data": "id",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+////                            return data == null ? '--' : data;
+//                            var $stopover_html = '';
+//                            if(row.stopover_place) $stopover_html = '--' + row.stopover_place;
+//                            return row.departure_place + $stopover_html + '--' + row.destination_place;
+//                        }
+//                    },
                     {
                         "className": "",
                         "width": "60px",
@@ -2017,7 +2240,7 @@
                             {
                                 if(row.car_owner_type == 61)
                                 {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).addClass('modal-show-for-info-select-set');
                                     $(nTd).attr('data-id',row.id).attr('data-name','车挂类型');
                                     $(nTd).attr('data-key','trailer_type').attr('data-value',row.trailer_type);
                                     $(nTd).attr('data-column-name','车挂类型');
@@ -2050,7 +2273,7 @@
                             {
                                 if(row.car_owner_type == 61)
                                 {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).addClass('modal-show-for-info-select-set');
                                     $(nTd).attr('data-id',row.id).attr('data-name','车挂尺寸');
                                     $(nTd).attr('data-key','trailer_length').attr('data-value',row.trailer_length);
                                     $(nTd).attr('data-column-name','车挂尺寸');
@@ -2083,7 +2306,7 @@
                             {
                                 if(row.car_owner_type == 61)
                                 {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).addClass('modal-show-for-info-select-set');
                                     $(nTd).attr('data-id',row.id).attr('data-name','车挂容积');
                                     $(nTd).attr('data-key','trailer_volume').attr('data-value',row.trailer_volume);
                                     $(nTd).attr('data-column-name','车挂容积');
@@ -2116,7 +2339,7 @@
                             {
                                 if(row.car_owner_type == 61)
                                 {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).addClass('modal-show-for-info-select-set');
                                     $(nTd).attr('data-id',row.id).attr('data-name','车挂载重');
                                     $(nTd).attr('data-key','trailer_weight').attr('data-value',row.trailer_weight);
                                     $(nTd).attr('data-column-name','车挂载重');
@@ -2149,7 +2372,7 @@
                             {
                                 if(row.car_owner_type == 61)
                                 {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).addClass('modal-show-for-info-select-set');
                                     $(nTd).attr('data-id',row.id).attr('data-name','车挂轴数');
                                     $(nTd).attr('data-key','trailer_axis_count').attr('data-value',row.trailer_axis_count);
                                     $(nTd).attr('data-column-name','车挂轴数');
@@ -2195,16 +2418,16 @@
                     {
                         "className": "text-center",
                         "width": "60px",
-                        "title": "目的地",
-                        "data": "destination_place",
+                        "title": "经停地",
+                        "data": "stopover_place",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','目的地');
-                                $(nTd).attr('data-key','destination_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','目的地');
+                                $(nTd).attr('data-id',row.id).attr('data-name','经停地');
+                                $(nTd).attr('data-key','stopover_place').attr('data-value',data);
+                                $(nTd).attr('data-column-name','经停地');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2216,16 +2439,16 @@
                     {
                         "className": "text-center",
                         "width": "60px",
-                        "title": "经停地",
-                        "data": "stopover_place",
+                        "title": "目的地",
+                        "data": "destination_place",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','经停地');
-                                $(nTd).attr('data-key','stopover_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','经停地');
+                                $(nTd).attr('data-id',row.id).attr('data-name','目的地');
+                                $(nTd).attr('data-key','destination_place').attr('data-value',data);
+                                $(nTd).attr('data-column-name','目的地');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -2687,21 +2910,22 @@
                     },
                     {
                         "width": "100px",
-                        "title": "回单状态",
-                        "data": "receipt_status",
+                        "title": "是否回单",
+                        "data": "receipt_need",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','回单状态');
-                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).addClass('modal-show-for-info-radio-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','是否回单');
+                                $(nTd).attr('data-key','receipt_need').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data == 1) return '<small class="btn-xs btn-danger">需要</small>';
+                            else return '--';
                         }
                     },
                     {
@@ -2712,15 +2936,77 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','回单地址');
-                                $(nTd).attr('data-key','receipt_address').attr('data-value',data);
+                                if(row.receipt_need == 1)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','回单地址');
+                                    $(nTd).attr('data-key','receipt_address').attr('data-value',data);
+                                    if(data) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.receipt_need == 1) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "width": "100px",
+                        "title": "回单状态",
+                        "data": "receipt_status",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                if(row.receipt_need == 1)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-select-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','回单状态');
+                                    $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                    if(data) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.receipt_need == 1)
+                            {
+                                if(data == 0) return '<small class="btn-xs bg-orange">等待回单</small>';
+                                else if(data == 1) return '<small class="btn-xs bg-orange">等待回单</small>';
+                                else if(data == 21) return '<small class="btn-xs bg-blue">邮寄中</small>';
+                                else if(data == 41) return '<small class="btn-xs bg-blue">已签收</small>';
+                                else if(data == 100) return '<small class="btn-xs bg-olive">已完成</small>';
+                                else if(data == 101) return '<small class="btn-xs bg-red">回单异常</small>';
+                            }
+                            else return '--';
+
+                        }
+                    },
+                    {
+                        "width": "100px",
+                        "title": "附件",
+                        "data": "attachment_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
+                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(!data) return '--';
+                            if(data.length == 0) return '--';
+                            var html = '';
+                            $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                                html += '<a target="_blank" href="/people?id='+this.id+'">'+this.attachment_name+'</a><br>';
+                            });
+                            return html;
                         }
                     },
                     {
@@ -3292,6 +3578,7 @@
                                 else return '有误';
                             }
                             else if(data == 11) return '<small class="btn-xs bg-orange">发布</small>';
+                            else if(data == 61) return '<small class="btn-xs bg-blue">附件</small>';
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
                             else return '有误';
                         }
@@ -3343,9 +3630,9 @@
                                 else if(data == "trailer_volume") return '车挂容积';
                                 else if(data == "trailer_weight") return '车辆载重';
                                 else if(data == "trailer_axis_count") return '轴数';
-                                else if(data == "receipt_status") return '回单状态';
-                                else if(data == "receipt_address") return '回单地址';
                                 else if(data == "GPS") return 'GPS';
+                                else if(data == "receipt_address") return '回单地址';
+                                else if(data == "receipt_status") return '回单状态';
                                 else if(data == "order_number") return '单号';
                                 else if(data == "payee_name") return '收款人';
                                 else if(data == "arrange_people") return '安排人';
@@ -3353,6 +3640,10 @@
                                 else if(data == "car_supply") return '车货源';
                                 else if(data == "weight") return '重量';
                                 else return '有误';
+                            }
+                            else if(row.operate_category == 11)
+                            {
+
                             }
                             else return '';
                         }

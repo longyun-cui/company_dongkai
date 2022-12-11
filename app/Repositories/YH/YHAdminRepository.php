@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\YH;
 
+use App\Models\YH\YH_Attachment;
 use App\Models\YH\YH_Finance;
 use App\Models\YH\YH_Record;
 use App\Models\YH\YH_User;
@@ -3750,9 +3751,6 @@ class YHAdminRepository {
         $me = $this->me;
 
 
-
-
-
         $car_list = YH_Car::select(DB::raw("
                 id,name,item_type,inspection_validity,transportation_license_validity,transportation_license_change_time
             "))
@@ -4469,6 +4467,42 @@ class YHAdminRepository {
 
     }
 
+    public function operate_item_order_get_attachment_html($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::with(['attachment_list'])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-assign-html-for-attachment';
+        $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
+
+        return response_success(['html'=>$html],"");
+
+    }
+
 
     // 【订单管理】删除
     public function operate_item_order_delete($post_data)
@@ -4810,7 +4844,7 @@ class YHAdminRepository {
         $me = $this->me;
 
         $query = YH_Order::select('*')
-            ->with(['creator','owner','client_er','car_er','trailer_er']);
+            ->with(['creator','owner','client_er','car_er','trailer_er','attachment_list']);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -5262,7 +5296,7 @@ class YHAdminRepository {
 
     }
     // 【订单管理】【修改信息】设置-select2-类型
-    public function operate_item_order_info_select2_set($post_data)
+    public function operate_item_order_info_option_set($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -5279,7 +5313,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-order-info-select-set') return response_error([],"参数[operate]有误！");
+        if($operate != 'item-order-info-option-set') return response_error([],"参数[operate]有误！");
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -5347,6 +5381,163 @@ class YHAdminRepository {
             }
             DB::commit();
 
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【订单管理】【修改信息】设置-文本-类型
+    public function operate_item_order_info_attachment_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-attachment-set') return response_error([],"参数[operate]有误！");
+        $order_id = $post_data["order_id"];
+        if(intval($order_id) !== 0 && !$order_id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Order::withTrashed()->find($order_id);
+        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+
+//        $operate_type = $post_data["operate_type"];
+//        $column_key = $post_data["column_key"];
+//        $column_value = $post_data["column_value"];
+
+
+
+//        dd($post_data);
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $attachment = new YH_Attachment;
+            // 头像
+            if(!empty($post_data["attachment_file"]))
+            {
+
+//                $result = upload_storage($post_data["portrait"]);
+//                $result = upload_storage($post_data["portrait"], null, null, 'assign');
+                $result = upload_img_storage($post_data["attachment_file"],'','yh/attachment','');
+                if($result["result"])
+                {
+                    $attachment_data['order_id'] = $order_id;
+                    $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                    $attachment_data['attachment_src'] = $result["local"];
+                    $bool = $attachment->fill($attachment_data)->save();
+                    if($bool)
+                    {
+                        // 需要记录(本人修改已发布 || 他人修改)
+                        if($me->id == $item->creator_id && $item->is_published == 0)
+                        {
+                        }
+                        else
+                        {
+                            $record = new YH_Record;
+
+                            $record_data["record_category"] = 41;
+                            $record_data["record_type"] = 11;
+                            $record_data["record_object"] = 41;
+                            $record_data["creator_id"] = $me->id;
+                            $record_data["order_id"] = $order_id;
+                            $record_data["operate_object"] = 41;
+                            $record_data["operate_category"] = 1;
+                            $record_data["operate_type"] = 1;
+
+                            $record_data["column"] = 'attachment';
+                            $record_data["after"] = $attachment_data['attachment_src'];
+
+                            $bool_1 = $record->fill($record_data)->save();
+                            if($bool_1)
+                            {
+                            }
+                            else throw new Exception("insert--record--fail");
+                        }
+                    }
+                    else throw new Exception("insert--attachment--fail");
+                }
+                else throw new Exception("upload--portrait_img--file--fail");
+            }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【任务管理】管理员-删除
+    public function operate_item_order_info_attachment_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-attachment-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Attachment::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【附件】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("item--delete--fail");
+
+            DB::commit();
             return response_success([]);
         }
         catch (Exception $e)

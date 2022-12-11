@@ -434,11 +434,45 @@
                         <input type="text" class="form-control" name="subordinate_company" placeholder="所属公司" value="{{ $data->subordinate_company or '' }}">
                     </div>
                 </div>
-                {{--回单状态--}}
+                {{--GPS--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">回单状态</label>
+                    <label class="control-label col-md-2">GPS</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="receipt_status" placeholder="回单状态" value="{{ $data->receipt_status or '' }}">
+                        <input type="text" class="form-control" name="GPS" placeholder="GPS" value="{{ $data->GPS or '' }}">
+                    </div>
+                </div>
+
+                {{--是否需要回单--}}
+                <div class="form-group form-category">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 是否需要回单</label>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn">
+                            <span class="radio">
+                                <label>
+                                    @if($operate == 'create' || ($operate == 'edit' && $data->receipt_need == 0))
+                                        <input type="radio" name="receipt_need" value="0" checked="checked"> 不需要
+                                    @else
+                                        <input type="radio" name="receipt_need" value="0"> 不需要
+                                    @endif
+                                </label>
+                            </span>
+                            </button>
+
+                            <button type="button" class="btn">
+                            <span class="radio">
+                                <label>
+                                    @if($operate == 'edit' && $data->receipt_need == 1)
+                                        <input type="radio" name="receipt_need" value="1" checked="checked"> 需要
+                                    @else
+                                        <input type="radio" name="receipt_need" value="1"> 需要
+                                    @endif
+                                </label>
+                            </span>
+                            </button>
+
+                        </div>
                     </div>
                 </div>
                 {{--回单地址--}}
@@ -448,13 +482,13 @@
                         <input type="text" class="form-control" name="receipt_address" placeholder="回单地址" value="{{ $data->receipt_address or '' }}">
                     </div>
                 </div>
-                {{--GPS--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">GPS</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="GPS" placeholder="GPS" value="{{ $data->GPS or '' }}">
-                    </div>
-                </div>
+                {{--回单状态--}}
+                {{--<div class="form-group _none">--}}
+                    {{--<label class="control-label col-md-2">回单状态</label>--}}
+                    {{--<div class="col-md-8 ">--}}
+                        {{--<input type="text" class="form-control" name="receipt_status" placeholder="回单状态" value="{{ $data->receipt_status or '' }}">--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
 
                 {{--单号--}}

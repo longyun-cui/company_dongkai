@@ -34,7 +34,7 @@ class YH_Order extends Model
         'stopover_departure_time', 'stopover_arrival_time',
         'stopover_1_departure_time', 'stopover_1_arrival_time',
         'stopover_2_departure_time', 'stopover_2_arrival_time',
-        'subordinate_company', 'receipt_status', 'receipt_address', 'GPS', 'order_number', 'payee_name', 'arrange_people', 'car_supply', 'car_managerial_people',
+        'subordinate_company', 'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'order_number', 'payee_name', 'arrange_people', 'car_supply', 'car_managerial_people',
         'driver', 'copilot', 'driver_name', 'copilot_name', 'driver_phone', 'copilot_phone', 'weight',
         'travel_distance',
         'company', 'fund', 'mobile', 'city', 'address',
@@ -100,6 +100,15 @@ class YH_Order extends Model
     function container_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Car','container_id','id');
+    }
+
+
+
+
+    // 附件
+    function attachment_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Attachment','order_id','id');
     }
 
 
