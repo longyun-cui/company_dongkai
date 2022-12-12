@@ -3001,12 +3001,14 @@
                         render: function(data, type, row, meta) {
                             if(!data) return '--';
                             if(data.length == 0) return '--';
-                            var html = '';
-                            $.each(data,function( key, val ) {
-//                                console.log( key, val, this );
-                                html += '<a target="_blank" href="/people?id='+this.id+'">'+this.attachment_name+'</a><br>';
-                            });
-                            return html;
+                            else if(data.length > 0) return '<small class="btn-xs bg-purple">有附件</small>';
+                            else return '--';
+//                            var html = '';
+//                            $.each(data,function( key, val ) {
+////                                console.log( key, val, this );
+//                                html += '<a target="_blank" href="/people?id='+this.id+'">'+this.attachment_name+'</a><br>';
+//                            });
+//                            return html;
                         }
                     },
                     {
@@ -3578,7 +3580,7 @@
                                 else return '有误';
                             }
                             else if(data == 11) return '<small class="btn-xs bg-orange">发布</small>';
-                            else if(data == 61) return '<small class="btn-xs bg-blue">附件</small>';
+                            else if(data == 71) return '<small class="btn-xs bg-purple">附件</small>';
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
                             else return '有误';
                         }
@@ -3641,9 +3643,9 @@
                                 else if(data == "weight") return '重量';
                                 else return '有误';
                             }
-                            else if(row.operate_category == 11)
+                            else if(row.operate_category == 71)
                             {
-
+                                if(data == "attachment") return '附件';
                             }
                             else return '';
                         }
@@ -3749,7 +3751,13 @@
                                     if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                                     else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
                                 }
+                            }
 
+                            if(row.column == 'attachment')
+                            {
+                                var $cdn = "{{ env('DOMAIN_CDN') }}";
+                                var $src = $cdn = $cdn + "/" + data;
+                                return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
                             }
 
                             return data;
@@ -3797,6 +3805,11 @@
 //                    this.api().column(0).nodes().each(function(cell, i) {
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
+
+                    $('.lightcase-image').lightcase({
+                        maxWidth: 9999,
+                        maxHeight: 9999
+                    });
 
                     ajax_datatable_record.$('.tooltips').tooltip({placement: 'top', html: true});
                     $("a.verify").click(function(event){

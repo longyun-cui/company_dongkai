@@ -5464,7 +5464,7 @@ class YHAdminRepository {
                             $record_data["creator_id"] = $me->id;
                             $record_data["order_id"] = $order_id;
                             $record_data["operate_object"] = 41;
-                            $record_data["operate_category"] = 1;
+                            $record_data["operate_category"] = 71;
                             $record_data["operate_type"] = 1;
 
                             $record_data["column"] = 'attachment';
@@ -5535,7 +5535,35 @@ class YHAdminRepository {
         {
             $item->timestamps = false;
             $bool = $item->delete();  // 普通删除
-            if(!$bool) throw new Exception("item--delete--fail");
+            if(!$bool)
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_category"] = 41;
+                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 41;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $item_id;
+                    $record_data["operate_object"] = 41;
+                    $record_data["operate_category"] = 71;
+                    $record_data["operate_type"] = 91;
+
+                    $record_data["column"] = 'attachment';
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+            else throw new Exception("item--delete--fail");
 
             DB::commit();
             return response_success([]);

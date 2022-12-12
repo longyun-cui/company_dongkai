@@ -1258,5 +1258,12 @@
             theme: 'classic'
         });
 
+
+
+        $('.lightcase-image').lightcase({
+            maxWidth: 9999,
+            maxHeight: 9999
+        });
+
     });
 </script>
