@@ -1174,7 +1174,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width: 4600px; }
+    .tableArea table { min-width: 4800px; }
     .tableArea table#datatable_ajax_finance { min-width: 1440px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
@@ -3012,6 +3012,26 @@
                         }
                     },
                     {
+                        "width": "80px",
+                        "title": "备注",
+                        "data": "remark",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
+                                $(nTd).attr('data-key','remark').attr('data-value',data);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            else return '';
+                        }
+                    },
+                    {
                         "className": "",
                         "width": "120px",
                         "title": "创建时间",
@@ -3580,7 +3600,19 @@
                                 else return '有误';
                             }
                             else if(data == 11) return '<small class="btn-xs bg-orange">发布</small>';
-                            else if(data == 71) return '<small class="btn-xs bg-purple">附件</small>';
+                            else if(data == 71)
+                            {
+                                if(row.operate_type == 1)
+                                {
+                                    return '<small class="btn-xs bg-purple">附件</small><small class="btn-xs bg-green">添加</small>';
+                                }
+                                else if(row.operate_type == 91)
+                                {
+                                    return '<small class="btn-xs bg-purple">附件</small><small class="btn-xs bg-red">删除</small>';
+                                }
+                                else return '';
+
+                            }
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
                             else return '有误';
                         }
@@ -3645,6 +3677,11 @@
                             }
                             else if(row.operate_category == 71)
                             {
+                                return '';
+
+                                if(row.operate_type == 1) return '添加';
+                                else if(row.operate_type == 91) return '删除';
+
                                 if(data == "attachment") return '附件';
                             }
                             else return '';
@@ -3702,6 +3739,13 @@
                                 else return '';
                             }
 
+                            if(row.column == 'attachment' && row.operate_category == 71 && row.operate_type == 91)
+                            {
+                                var $cdn = "{{ env('DOMAIN_CDN') }}";
+                                var $src = $cdn = $cdn + "/" + data;
+                                return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
+                            }
+
                             return data;
                         }
                     },
@@ -3753,7 +3797,7 @@
                                 }
                             }
 
-                            if(row.column == 'attachment')
+                            if(row.column == 'attachment' && row.operate_category == 71 && row.operate_type == 1)
                             {
                                 var $cdn = "{{ env('DOMAIN_CDN') }}";
                                 var $src = $cdn = $cdn + "/" + data;

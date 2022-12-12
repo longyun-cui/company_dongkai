@@ -5346,15 +5346,9 @@ class YHAdminRepository {
         {
             $item->$column_key = $column_value;
             $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
+            if(!$bool) throw new Exception("order--update--fail");
             else
             {
-                // 需要记录(本人修改已发布 || 他人修改)
-                if($me->id == $item->creator_id && $item->is_published == 0)
-                {
-                }
-                else
-                {
                     $record = new YH_Record;
 
                     $record_data["record_object"] = 41;
@@ -5377,7 +5371,7 @@ class YHAdminRepository {
                     {
                     }
                     else throw new Exception("insert--record--fail");
-                }
+
             }
             DB::commit();
 
@@ -5450,12 +5444,6 @@ class YHAdminRepository {
                     $bool = $attachment->fill($attachment_data)->save();
                     if($bool)
                     {
-                        // 需要记录(本人修改已发布 || 他人修改)
-                        if($me->id == $item->creator_id && $item->is_published == 0)
-                        {
-                        }
-                        else
-                        {
                             $record = new YH_Record;
 
                             $record_data["record_category"] = 41;
@@ -5475,7 +5463,6 @@ class YHAdminRepository {
                             {
                             }
                             else throw new Exception("insert--record--fail");
-                        }
                     }
                     else throw new Exception("insert--attachment--fail");
                 }
@@ -5535,7 +5522,7 @@ class YHAdminRepository {
         {
             $item->timestamps = false;
             $bool = $item->delete();  // 普通删除
-            if(!$bool)
+            if($bool)
             {
                 // 需要记录(本人修改已发布 || 他人修改)
                 if($me->id == $item->creator_id && $item->is_published == 0)
@@ -5549,12 +5536,14 @@ class YHAdminRepository {
                     $record_data["record_type"] = 11;
                     $record_data["record_object"] = 41;
                     $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $item_id;
+                    $record_data["item_id"] = $item_id;
+                    $record_data["order_id"] = $item->order_id;
                     $record_data["operate_object"] = 41;
                     $record_data["operate_category"] = 71;
                     $record_data["operate_type"] = 91;
 
                     $record_data["column"] = 'attachment';
+                    $record_data["before"] = $item->attachment_src;
 
                     $bool_1 = $record->fill($record_data)->save();
                     if($bool_1)
@@ -5563,7 +5552,7 @@ class YHAdminRepository {
                     else throw new Exception("insert--record--fail");
                 }
             }
-            else throw new Exception("item--delete--fail");
+            else throw new Exception("attachment--delete--fail");
 
             DB::commit();
             return response_success([]);
