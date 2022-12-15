@@ -94,6 +94,13 @@ class YH_Order extends Model
     }
 
 
+    // 定价
+    function pricing_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Pricing','pricing_id','id');
+    }
+
+
     // 车辆
     function car_er()
     {

@@ -4980,13 +4980,14 @@ class YHAdminRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            $is_exist = YH_Route::select('id')->where('title',$post_data["title"])->count();
+            $is_exist = YH_Pricing::select('id')->where('title',$post_data["title"])->count();
             if($is_exist) return response_error([],"该【定价】已存在，请勿重复添加！");
 
-            $mine = new YH_Route;
+            $mine = new YH_Pricing;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
             $post_data["item_category"] = 1;
+            $post_data["item_type"] = 1;
         }
         else if($operate == 'edit') // 编辑
         {
@@ -5687,6 +5688,24 @@ class YHAdminRepository {
         {
             $keyword = "%{$post_data['keyword']}%";
             $list =YH_Route::select(['id','title as text'])->where('title','like',"%$keyword%")
+                ->where(['item_status'=>1,'item_category'=>1])
+                ->get()->toArray();
+        }
+        return $list;
+    }
+    //
+    public function operate_order_select2_pricing($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $list =YH_Pricing::select(['id','title as text'])
+                ->where(['item_status'=>1,'item_category'=>1])
+                ->get()->toArray();
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $list =YH_Pricing::select(['id','title as text'])->where('title','like',"%$keyword%")
                 ->where(['item_status'=>1,'item_category'=>1])
                 ->get()->toArray();
         }
@@ -6463,7 +6482,7 @@ class YHAdminRepository {
         $me = $this->me;
 
         $query = YH_Order::select('*')
-            ->with(['creator','owner','client_er','route_er','car_er','trailer_er','attachment_list']);
+            ->with(['creator','owner','client_er','route_er','pricing_er','car_er','trailer_er','attachment_list']);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -7032,6 +7051,11 @@ class YHAdminRepository {
                         $record_data["before_route_id"] = $before;
                         $record_data["after_route_id"] = $column_value;
                     }
+                    else if($column_key == 'pricing_id')
+                    {
+                        $record_data["before_pricing_id"] = $before;
+                        $record_data["after_pricing_id"] = $column_value;
+                    }
                     else if($column_key == 'car_id' || $column_key == 'trailer_id')
                     {
                         $record_data["before_car_id"] = $before;
@@ -7570,7 +7594,7 @@ class YHAdminRepository {
 
         $id  = $post_data["id"];
         $query = YH_Record::select('*')
-            ->with(['creator','before_client_er','after_client_er','before_route_er','after_route_er','before_car_er','after_car_er'])
+            ->with(['creator','before_client_er','after_client_er','before_route_er','after_route_er','before_pricing_er','after_pricing_er','before_car_er','after_car_er'])
             ->where(['order_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");

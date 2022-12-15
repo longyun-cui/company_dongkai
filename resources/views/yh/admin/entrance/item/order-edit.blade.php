@@ -244,6 +244,22 @@
                 </div>
                 @endif
 
+
+                {{--包油定价--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">选择包油定价</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="pricing_id" id="select2-pricing">
+                            @if($operate == 'edit' && $data->pricing_id)
+                                <option data-id="{{ $data->pricing_id or 0 }}" value="{{ $data->pricing_id or 0 }}">{{ $data->pricing_er->title }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
+
+
                 {{--外请或外派车辆--}}
                 @if($operate == 'create' || ($operate == 'edit' && ($data->car_owner_type == 21 || $data->car_owner_type == 61)))
                 <div class="form-group outside-car" @if($operate == 'create') style="display:none" @endif>
@@ -820,6 +836,36 @@
         $('#select2-route').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_route') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+
+        //
+        $('#select2-pricing').select2({
+            ajax: {
+                url: "{{ url('/item/order_select2_pricing') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

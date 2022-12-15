@@ -1647,7 +1647,7 @@
                     {
                         "className": "text-center",
                         "width": "120px",
-                        "title": "线路",
+                        "title": "固定线路",
                         "data": "route_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1670,6 +1670,35 @@
                             }
                             else {
                                 return '<a href="javascript:void(0);">'+row.route_er.title+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "包油价",
+                        "data": "pricing_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
+                                $(nTd).attr('data-key','pricing_id').attr('data-value',data);
+                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.pricing_er.title);
+                                $(nTd).attr('data-column-name','包油价');
+                                if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.pricing_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.pricing_er.title+'</a>';
                             }
                         }
                     },
@@ -3720,6 +3749,7 @@
                                 if(data == "client_id") return '客户';
                                 else if(data == "car_id") return '车辆';
                                 else if(data == "route_id") return '固定线路';
+                                else if(data == "pricing_id") return '包油价';
                                 else if(data == "trailer_id") return '车挂';
                                 else if(data == "outside_car") return '车辆';
                                 else if(data == "outside_trailer") return '车挂';
@@ -3805,6 +3835,11 @@
                                 if(row.before_route_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.before_route_er.title+'</a>';
                             }
+                            else if(row.column_name == 'pricing_id')
+                            {
+                                if(row.before_pricing_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_pricing_er.title+'</a>';
+                            }
                             else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
                             {
                                 if(row.before_car_er == null) return '';
@@ -3872,6 +3907,11 @@
                             {
                                 if(row.after_route_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.after_route_er.title+'</a>';
+                            }
+                            else if(row.column_name == 'pricing_id')
+                            {
+                                if(row.after_pricing_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.after_pricing_er.title+'</a>';
                             }
                             else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
                             {

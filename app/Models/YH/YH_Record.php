@@ -82,6 +82,16 @@ class YH_Record extends Model
     {
         return $this->belongsTo('App\Models\YH\YH_Route','after_route_id','id');
     }
+    // 定价
+    function before_pricing_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Pricing','before_pricing_id','id');
+    }
+    // 定价
+    function after_pricing_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Pricing','after_pricing_id','id');
+    }
     // 车辆
     function before_car_er()
     {

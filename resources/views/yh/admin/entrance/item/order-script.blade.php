@@ -910,7 +910,7 @@
             }
             else if($that.attr("data-key") == "route_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-car').addClass('select2-route');
+                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-car').removeClass('select2-pricing').addClass('select2-route');
                 $('.select2-route').select2({
                     ajax: {
                         url: "{{ url('/item/order_select2_route') }}",
@@ -939,9 +939,40 @@
                     theme: 'classic'
                 });
             }
+            else if($that.attr("data-key") == "pricing_id")
+            {
+                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-car').removeClass('select2-route').addClass('select2-pricing');
+                $('.select2-pricing').select2({
+                    ajax: {
+                        url: "{{ url('/item/order_select2_pricing') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+            }
             else if($that.attr("data-key") == "car_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-route').addClass('select2-car');
+                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-route').removeClass('select2-pricing').addClass('select2-car');
                 $('.select2-car').select2({
                     ajax: {
                         url: "{{ url('/item/order_list_select2_car?car_type=car') }}",
@@ -972,7 +1003,7 @@
             }
             else if($that.attr("data-key") == "trailer_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-route').addClass('select2-car');
+                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-route').removeClass('select2-pricing').addClass('select2-car');
                 $('.select2-car').select2({
                     ajax: {
                         url: "{{ url('/item/order_list_select2_car?car_type=trailer') }}",

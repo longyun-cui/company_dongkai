@@ -670,10 +670,15 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_order_select2_client(request()->all());
     }
-    // 【订单管理】SELECT2 Car 车辆
+    // 【订单管理】SELECT2 Route 线路
     public function operate_order_select2_route()
     {
         return $this->repo->operate_order_select2_route(request()->all());
+    }
+    // 【订单管理】SELECT2 Pricing 定价
+    public function operate_order_select2_pricing()
+    {
+        return $this->repo->operate_order_select2_pricing(request()->all());
     }
     // 【订单管理】SELECT2 Car 车辆
     public function operate_order_select2_car()

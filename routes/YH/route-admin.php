@@ -200,6 +200,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/order_select2_client', $controller.'@operate_order_select2_client');
     Route::match(['get','post'], '/item/order_select2_car', $controller.'@operate_order_select2_car');
     Route::match(['get','post'], '/item/order_select2_route', $controller.'@operate_order_select2_route');
+    Route::match(['get','post'], '/item/order_select2_pricing', $controller.'@operate_order_select2_pricing');
     Route::match(['get','post'], '/item/order_select2_trailer', $controller.'@operate_order_select2_trailer');
     Route::match(['get','post'], '/item/order_list_select2_car', $controller.'@operate_order_list_select2_car');
     // 创建 & 修改
