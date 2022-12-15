@@ -3335,12 +3335,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 21;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -3425,12 +3425,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 21;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -3516,12 +3516,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 21;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -4327,12 +4327,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 31;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -4418,12 +4418,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 31;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -4509,12 +4509,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 31;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -5090,9 +5090,9 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
                     $record_data["operate_object"] = 41;
@@ -5131,7 +5131,7 @@ class YHAdminRepository {
     {
         $messages = [
             'operate.required' => 'operate.required.',
-            'item_id.required' => 'order_id.required.',
+            'item_id.required' => 'item_id.required.',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
@@ -5144,7 +5144,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-pricing-info-set') return response_error([],"参数[operate]有误！");
+        if($operate != 'item-pricing-info-time-set') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -5180,9 +5180,9 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
                     $record_data["operate_object"] = 41;
@@ -5235,7 +5235,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-pricing-info-select-set') return response_error([],"参数[operate]有误！");
+        if($operate != 'item-pricing-info-option-set') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -5271,9 +5271,9 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
                     $record_data["operate_object"] = 41;
@@ -6173,12 +6173,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 101;
                     $record_data["operate_type"] = 1;
 
@@ -6199,12 +6199,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 101;
                     $record_data["operate_type"] = 1;
 
@@ -6269,12 +6269,12 @@ class YHAdminRepository {
             {
                 $record = new YH_Record;
 
-                $record_data["record_object"] = 41;
-                $record_data["record_category"] = 41;
-                $record_data["record_type"] = 11;
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 41;
+                $record_data["operate_object"] = 61;
                 $record_data["operate_category"] = 11;
                 $record_data["operate_type"] = 1;
 
@@ -6341,12 +6341,12 @@ class YHAdminRepository {
             {
                 $record = new YH_Record;
 
-                $record_data["record_object"] = 41;
-                $record_data["record_category"] = 41;
-                $record_data["record_type"] = 11;
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 41;
+                $record_data["operate_object"] = 61;
                 $record_data["operate_category"] = 100;
                 $record_data["operate_type"] = 1;
 
@@ -6411,12 +6411,12 @@ class YHAdminRepository {
             {
                 $record = new YH_Record;
 
-                $record_data["record_object"] = 41;
-                $record_data["record_category"] = 41;
-                $record_data["record_type"] = 11;
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 41;
+                $record_data["operate_object"] = 61;
                 $record_data["operate_category"] = 97;
                 $record_data["operate_type"] = 1;
 
@@ -6739,12 +6739,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
-                    $record_data["record_type"] = 11;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -6902,12 +6902,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -7001,12 +7001,12 @@ class YHAdminRepository {
                 {
                     $record = new YH_Record;
 
-                    $record_data["record_object"] = 41;
-                    $record_data["record_category"] = 41;
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -7117,12 +7117,12 @@ class YHAdminRepository {
                     {
                         $record = new YH_Record;
 
-                        $record_data["record_category"] = 41;
-                        $record_data["record_type"] = 11;
-                        $record_data["record_object"] = 41;
+                        $record_data["record_object"] = 21;
+                        $record_data["record_category"] = 11;
+                        $record_data["record_type"] = 1;
                         $record_data["creator_id"] = $me->id;
                         $record_data["order_id"] = $order_id;
-                        $record_data["operate_object"] = 41;
+                        $record_data["operate_object"] = 61;
                         $record_data["operate_category"] = 71;
                         $record_data["operate_type"] = 1;
 
@@ -7196,13 +7196,13 @@ class YHAdminRepository {
             {
                 $record = new YH_Record;
 
-                $record_data["record_category"] = 41;
-                $record_data["record_type"] = 11;
-                $record_data["record_object"] = 41;
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["item_id"] = $item_id;
                 $record_data["order_id"] = $item->order_id;
-                $record_data["operate_object"] = 41;
+                $record_data["operate_object"] = 61;
                 $record_data["operate_category"] = 71;
                 $record_data["operate_type"] = 91;
 
