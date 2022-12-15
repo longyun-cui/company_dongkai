@@ -36,19 +36,11 @@
 
 
 
-
-
-
         // 【编辑】
         $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);
             window.location.href = "/item/order-edit?id="+$that.attr('data-id');
         });
-
-
-
-
-
 
 
         // 内容【获取详情】
@@ -343,10 +335,6 @@
 
 
 
-
-
-
-
         // 【行程管理】
         $(".main-content").on('click', ".item-modal-show-for-travel", function() {
             var that = $(this);
@@ -568,12 +556,23 @@
         // 【修改-文本-text-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-text-set", function() {
             var $that = $(this);
-            $('.info-set-title').html($that.attr("data-id"));
-            $('.info-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-set-order-id]').val($that.attr("data-id"));
-            $('input[name=info-set-column-key]').val($that.attr("data-key"));
-            $('input[name=info-set-column-value]').val($that.attr("data-value"));
-            $('input[name=info-set-operate-type]').val($that.attr('data-operate-type'));
+            $('.info-text-set-title').html($that.attr("data-id"));
+            $('.info-text-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-text-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-text-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-text-set-operate-type]').val($that.attr('data-operate-type'));
+            if($that.attr('data-text-type') == "textarea")
+            {
+                $('input[name=info-text-set-column-value]').val('').hide();
+                $('textarea[name=info-textarea-set-column-value]').text($that.attr("data-value")).show();
+            }
+            else
+            {
+                $('textarea[name=info-textarea-set-column-value]').val('').hide();
+                $('input[name=info-text-set-column-value]').val($that.attr("data-value")).show();
+            }
+
+            $('#item-submit-for-info-text-set').attr('data-text-type',$that.attr('data-text-type'));
 
             $('#modal-body-for-info-text-set').modal('show');
         });
@@ -583,12 +582,21 @@
             $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
+            $('input[name=info-text-set-column-value]').val('');
+            $('textarea[name=info-textarea-set-column-value]').val('');
         });
         // 【修改-文本-text-属性】【提交】
         $(".main-content").on('click', "#item-submit-for-info-text-set", function() {
             var $that = $(this);
-            var $column_key = $('input[name="info-set-column-key"]').val();
-            var $column_value = $('input[name="info-set-column-value"]').val();
+            var $column_key = $('input[name="info-text-set-column-key"]').val();
+            if($that.attr('data-text-type') == "textarea")
+            {
+                var $column_value = $('textarea[name="info-textarea-set-column-value"]').val();
+            }
+            else
+            {
+                var $column_value = $('input[name="info-text-set-column-value"]').val();
+            }
             layer.msg('确定"提交"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
@@ -597,9 +605,9 @@
                         "{{ url('/item/order-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: $('input[name="info-set-operate"]').val(),
-                            order_id: $('input[name="info-set-order-id"]').val(),
-                            operate_type: $('input[name="info-set-operate-type"]').val(),
+                            operate: $('input[name="info-text-set-operate"]').val(),
+                            order_id: $('input[name="info-text-set-order-id"]').val(),
+                            operate_type: $('input[name="info-text-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
                         },
@@ -613,16 +621,14 @@
                                     $("body").addClass("modal-open");
                                 });
 
+                                $('input[name=info-text-set-column-value]').val('');
+                                $('textarea[name=info-textarea-set-column-value]').text('');
+
 //                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
 ////                                TableDatatablesAjax_inner.init($keyword_id);
 
                                 $('#datatable_ajax').DataTable().ajax.reload();
 //                                $('#datatable_ajax_inner').DataTable().ajax.reload();
-
-                                $set_column = $('.item-detail-operate[data-key='+$column_key+']');
-                                $set_column.attr('data-value',$column_value);
-                                $set_column.html('<a href="javascript:void(0);" data-type="edit">修改</a>');
-                                $set_column.parents('.form-group').find('.item-detail-text').html($column_value);
                             }
                         },
                         'json'
@@ -630,6 +636,8 @@
                 }
             });
         });
+
+
 
 
         // 【修改-时间-time-属性】【显示】
@@ -713,9 +721,10 @@
         });
 
 
+
+
         // 【修改-radio-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-radio-set", function() {
-
 
             $('select[name=info-radio-set-column-value]').attr("selected","");
             $('select[name=info-radio-set-column-value]').find('option').eq(0).val(0).text('');
@@ -790,9 +799,10 @@
         });
 
 
+
+
         // 【修改-select-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-select-set", function() {
-
 
             $('select[name=info-select-set-column-value]').attr("selected","");
             $('select[name=info-select-set-column-value]').find('option').eq(0).val(0).text('');
@@ -848,7 +858,6 @@
         // 【修改-select2-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-select2-set", function() {
 
-
             $('select[name=info-select-set-column-value]').attr("selected","");
             $('select[name=info-select-set-column-value]').find('option').eq(0).val(0).text('');
             $('select[name=info-select-set-column-value]').find('option:not(:first)').remove();
@@ -870,7 +879,7 @@
 
             if($that.attr("data-key") == "client_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-car').addClass('select2-client');
+                $('select[name=info-select-set-column-value]').removeClass('select2-route').removeClass('select2-car').addClass('select2-client');
                 $('.select2-client').select2({
                     ajax: {
                         url: "{{ url('/item/order_select2_client') }}",
@@ -899,9 +908,40 @@
                     theme: 'classic'
                 });
             }
+            else if($that.attr("data-key") == "route_id")
+            {
+                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-car').addClass('select2-route');
+                $('.select2-route').select2({
+                    ajax: {
+                        url: "{{ url('/item/order_select2_route') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+            }
             else if($that.attr("data-key") == "car_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').addClass('select2-car');
+                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-route').addClass('select2-car');
                 $('.select2-car').select2({
                     ajax: {
                         url: "{{ url('/item/order_list_select2_car?car_type=car') }}",
@@ -932,7 +972,7 @@
             }
             else if($that.attr("data-key") == "trailer_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').addClass('select2-car');
+                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-route').addClass('select2-car');
                 $('.select2-car').select2({
                     ajax: {
                         url: "{{ url('/item/order_list_select2_car?car_type=trailer') }}",
@@ -1013,9 +1053,12 @@
         });
 
 
-        // 【修改-附件-attachment-属性】【显示】
+
+
+        // 【附件-attachment-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-attachment", function() {
             var $that = $(this);
+
             $('.attachment-set-title').html($that.attr("data-id"));
             $('.info-set-column-name').html($that.attr("data-name"));
             $('input[name=attachment-set-order-id]').val($that.attr("data-id"));
@@ -1053,36 +1096,24 @@
 
             $('#modal-body-for-attachment').modal('show');
         });
-        // 【修改-附件-attachment-属性】【取消】
+        // 【附件-attachment-属性】【取消】
         $(".main-content").on('click', "#item-cancel-for-attachment-set", function() {
             var that = $(this);
             $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
-        // 【修改-附件-attachment-属性】【提交】
+        // 【附件-attachment-属性】【提交】
         $(".main-content").on('click', "#item-submit-for-attachment-set", function() {
             var $that = $(this);
+
             var $column_key = $('input[name="info-attachment-set-column-key"]').val();
             var $column_value = $('select[name="info-attachment-set-column-value"]').val();
-
-
-//            var fileItem1 = $('input[name="attachment_file"]')[0].prop('files');
-//            console.log("1  "+fileItem1);
-//            var fileItem2 = $('input[name="attachment_file"]').prop('files')[0];
-//            var $blob = new Blob([fileItem2]);
-//            console.log("2  "+fileItem2);
-//            console.log("2  "+$blob);
-//            var fileItem3 = $('input[name="attachment_file"]')[0].prop('files')[0];
-//            console.log("3  "+fileItem3);
-
 
             layer.msg('确定"提交"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
-
-
 
                     var options = {
                         url: "{{ url('/item/order-info-attachment-set') }}",
@@ -1168,7 +1199,7 @@
             });
         });
 
-        // 【删除】
+        // 【附件-attachment-属性】【删除】
         $(".main-content").on('click', ".order-attachment-delete-this", function() {
             var $that = $(this);
             layer.msg('确定要"删除"么？', {
@@ -1196,7 +1227,6 @@
                 }
             });
         });
-
 
 
 

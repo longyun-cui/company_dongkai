@@ -451,38 +451,39 @@ class YHAdminController extends Controller
     }
 
 
-    // 【车辆管理】修改-文本-信息
+    // 【车辆管理】修改-文本-text-信息
     public function operate_item_car_info_text_set()
     {
         return $this->repo->operate_item_car_info_text_set(request()->all());
     }
-    // 【车辆管理】修改-时间-信息
+    // 【车辆管理】修改-时间-time-信息
     public function operate_item_car_info_time_set()
     {
         return $this->repo->operate_item_car_info_time_set(request()->all());
     }
-    // 【车辆管理】修改-SELECT2-信息
-    public function operate_item_car_info_select2_set()
+    // 【车辆管理】修改-选项-option-信息
+    public function operate_item_car_info_option_set()
     {
-        return $this->repo->operate_item_car_info_select2_set(request()->all());
+        return $this->repo->operate_item_car_info_option_set(request()->all());
     }
 
 
-    // 【内容】删除
+    // 【车辆管理】删除
     public function operate_item_car_admin_delete()
     {
         return $this->repo->operate_item_car_admin_delete(request()->all());
     }
-    // 【内容】恢复
+    // 【车辆管理】恢复
     public function operate_item_car_admin_restore()
     {
         return $this->repo->operate_item_car_admin_restore(request()->all());
     }
-    // 【内容】永久删除
+    // 【车辆管理】永久删除
     public function operate_item_car_admin_delete_permanently()
     {
         return $this->repo->operate_item_car_admin_delete_permanently(request()->all());
     }
+
     // 【车辆管理】启用
     public function operate_item_car_admin_enable()
     {
@@ -492,6 +493,158 @@ class YHAdminController extends Controller
     public function operate_item_car_admin_disable()
     {
         return $this->repo->operate_item_car_admin_disable(request()->all());
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 固定线路
+     */
+    // 【固定线路】返回-列表-视图（全部任务）
+    public function view_item_route_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_route_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_route_list_for_all_datatable(request()->all());
+    }
+
+
+    // 【固定线路】添加
+    public function operate_item_route_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_route_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_route_save(request()->all());
+    }
+    // 【固定线路】编辑
+    public function operate_item_route_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_route_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_route_save(request()->all());
+    }
+
+
+    // 【固定线路】修改-文本-text-信息
+    public function operate_item_route_info_text_set()
+    {
+        return $this->repo->operate_item_route_info_text_set(request()->all());
+    }
+    // 【固定线路】修改-时间-time-信息
+    public function operate_item_route_info_time_set()
+    {
+        return $this->repo->operate_item_route_info_time_set(request()->all());
+    }
+    // 【固定线路】修改-选项-option-信息
+    public function operate_item_route_info_option_set()
+    {
+        return $this->repo->operate_item_route_info_option_set(request()->all());
+    }
+
+
+    // 【固定线路】删除
+    public function operate_item_route_admin_delete()
+    {
+        return $this->repo->operate_item_route_admin_delete(request()->all());
+    }
+    // 【固定线路】恢复
+    public function operate_item_route_admin_restore()
+    {
+        return $this->repo->operate_item_route_admin_restore(request()->all());
+    }
+    // 【固定线路】永久删除
+    public function operate_item_route_admin_delete_permanently()
+    {
+        return $this->repo->operate_item_route_admin_delete_permanently(request()->all());
+    }
+
+    // 【固定线路】启用
+    public function operate_item_route_admin_enable()
+    {
+        return $this->repo->operate_item_route_admin_enable(request()->all());
+    }
+    // 【固定线路】禁用
+    public function operate_item_route_admin_disable()
+    {
+        return $this->repo->operate_item_route_admin_disable(request()->all());
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 定价管理
+     */
+    // 【定价管理】返回-列表-视图
+    public function view_item_pricing_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_pricing_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_pricing_list_for_all_datatable(request()->all());
+    }
+
+
+    // 【定价管理】添加
+    public function operate_item_pricing_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_pricing_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_pricing_save(request()->all());
+    }
+    // 【定价管理】编辑
+    public function operate_item_pricing_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_pricing_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_pricing_save(request()->all());
+    }
+
+
+    // 【定价管理】修改-文本-text-信息
+    public function operate_item_pricing_info_text_set()
+    {
+        return $this->repo->operate_item_pricing_info_text_set(request()->all());
+    }
+    // 【定价管理】修改-时间-time-信息
+    public function operate_item_pricing_info_time_set()
+    {
+        return $this->repo->operate_item_pricing_info_time_set(request()->all());
+    }
+    // 【定价管理】修改-选项-option-信息
+    public function operate_item_pricing_info_option_set()
+    {
+        return $this->repo->operate_item_pricing_info_option_set(request()->all());
+    }
+
+
+    // 【定价管理】删除
+    public function operate_item_pricing_admin_delete()
+    {
+        return $this->repo->operate_item_pricing_admin_delete(request()->all());
+    }
+    // 【定价管理】恢复
+    public function operate_item_pricing_admin_restore()
+    {
+        return $this->repo->operate_item_pricing_admin_restore(request()->all());
+    }
+    // 【定价管理】永久删除
+    public function operate_item_pricing_admin_delete_permanently()
+    {
+        return $this->repo->operate_item_pricing_admin_delete_permanently(request()->all());
+    }
+
+    // 【定价管理】启用
+    public function operate_item_pricing_admin_enable()
+    {
+        return $this->repo->operate_item_pricing_admin_enable(request()->all());
+    }
+    // 【定价管理】禁用
+    public function operate_item_pricing_admin_disable()
+    {
+        return $this->repo->operate_item_pricing_admin_disable(request()->all());
     }
 
 
@@ -516,6 +669,11 @@ class YHAdminController extends Controller
     public function operate_order_select2_client()
     {
         return $this->repo->operate_order_select2_client(request()->all());
+    }
+    // 【订单管理】SELECT2 Car 车辆
+    public function operate_order_select2_route()
+    {
+        return $this->repo->operate_order_select2_route(request()->all());
     }
     // 【订单管理】SELECT2 Car 车辆
     public function operate_order_select2_car()

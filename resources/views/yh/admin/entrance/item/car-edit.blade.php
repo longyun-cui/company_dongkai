@@ -66,13 +66,29 @@
                                             <span class="radio">
                                                 <label>
                                                     @if($operate == 'edit' && $data->item_type == 21)
-                                                        <input type="radio" name="item_type" value=21 checked="checked"> 车挂
+                                                        <input type="radio" name="item_type" value="21" checked="checked"> 车挂
                                                     @else
-                                                        <input type="radio" name="item_type" value=21> 车挂
+                                                        <input type="radio" name="item_type" value="21"> 车挂
                                                     @endif
                                                 </label>
                                             </span>
                                         </button>
+                                        @endif
+                                    @endif
+
+                                    @if(in_array($me->user_type, [0,1,9,11,21,22]))
+                                        @if($operate == 'create' || ($operate == 'edit' && $data->item_type == 71))
+                                            <button type="button" class="btn">
+                                        <span class="radio">
+                                            <label>
+                                                @if($operate == 'edit' && $data->item_type == 71)
+                                                    <input type="radio" name="item_type" value="71" checked="checked"> 包油
+                                                @else
+                                                    <input type="radio" name="item_type" value="71"> 包油
+                                                @endif
+                                            </label>
+                                        </span>
+                                            </button>
                                         @endif
                                     @endif
 

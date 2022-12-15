@@ -3,25 +3,22 @@ namespace App\Models\YH;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class YH_Record extends Model
+class YH_Pricing extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "yh_record";
+    protected $table = "yh_pricing";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'sort',
-        'record_active', 'record_status', 'record_object', 'record_category', 'record_type', 'record_module',
-        'operate_object', 'operate_category', 'operate_type',
+        'active', 'status', 'category', 'type', 'sort', 'form',
+        'item_active', 'item_status', 'item_category', 'item_type', 'item_sort', 'item_form',
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
-        'item_id', 'order_id',
-        'column', 'column_type', 'column_name',
-        'before', 'after', 'before_id', 'after_id',
-        'before_client_id', 'after_client_id', 'before_route_id', 'after_route_id', 'before_car_id', 'after_car_id',
-        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'time_point', 'time_type', 'start_time', 'end_time', 'address',
+        'item_id', 'menu_id',
+        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'tag', 'custom', 'custom2', 'custom3',
+        'trailer_type', 'trailer_length', 'trailer_volume', 'trailer_weight', 'trailer_axis_count',
+        'price1', 'price2', 'price3',
+        'link_url', 'cover_pic', 'attachment_name', 'attachment_src',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
         'published_at'
     ];
@@ -62,35 +59,45 @@ class YH_Record extends Model
     }
 
 
-    // 客户
-    function before_client_er()
+    // 车辆订单
+    function car_order_list()
     {
-        return $this->belongsTo('App\Models\YH\YH_Client','before_client_id','id');
+        return $this->hasMany('App\Models\YH\YH_Order','car_id','id');
     }
-    // 客户
-    function after_client_er()
+    // 车挂订单
+    function trailer_order_list()
     {
-        return $this->belongsTo('App\Models\YH\YH_Client','after_client_id','id');
+        return $this->hasMany('App\Models\YH\YH_Order','trailer_id','id');
     }
-    // 线路
-    function before_route_er()
+    // 车辆订单【当前】
+    function car_order_list_for_current()
     {
-        return $this->belongsTo('App\Models\YH\YH_Route','before_route_id','id');
+        return $this->hasMany('App\Models\YH\YH_Order','car_id','id');
     }
-    // 线路
-    function after_route_er()
+    // 车挂订单【当前】
+    function trailer_order_list_for_current()
     {
-        return $this->belongsTo('App\Models\YH\YH_Route','after_route_id','id');
+        return $this->hasMany('App\Models\YH\YH_Order','trailer_id','id');
     }
-    // 车辆
-    function before_car_er()
+    // 车辆订单【已完成】
+    function car_order_list_for_completed()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','before_car_id','id');
+        return $this->hasMany('App\Models\YH\YH_Order','car_id','id');
     }
-    // 车辆
-    function after_car_er()
+    // 车挂订单【已完成】
+    function trailer_order_list_for_completed()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','after_car_id','id');
+        return $this->hasMany('App\Models\YH\YH_Order','trailer_id','id');
+    }
+    // 车辆订单【未来】
+    function car_order_list_for_future()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','car_id','id');
+    }
+    // 车挂订单【未来】
+    function trailer_order_list_for_future()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','trailer_id','id');
     }
 
 

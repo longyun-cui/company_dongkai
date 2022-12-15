@@ -3,27 +3,34 @@ namespace App\Models\YH;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class YH_Record extends Model
+use DB;
+
+class YH_Route extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "yh_record";
+    protected $table = "yh_route";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'sort',
-        'record_active', 'record_status', 'record_object', 'record_category', 'record_type', 'record_module',
-        'operate_object', 'operate_category', 'operate_type',
-        'owner_active',
-        'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+        'active', 'status', 'category', 'type', 'form', 'sort',
+        'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
+        'owner_active', 'is_show', 'is_published', 'is_completed',
+        'owner_id', 'creator_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
-        'item_id', 'order_id',
-        'column', 'column_type', 'column_name',
-        'before', 'after', 'before_id', 'after_id',
-        'before_client_id', 'after_client_id', 'before_route_id', 'after_route_id', 'before_car_id', 'after_car_id',
+        'item_id', 'menu_id',
+        'order_category', 'order_type',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+        'amount', 'amount_with_cash', 'amount_with_invoice',
+        'driver_fine',
+        'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
+        'travel_distance', 'time_limitation_prescribed',
+        'route', 'fixed_route', 'temporary_route',
+        'client_id',
+        'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type', 'outside_car', 'outside_trailer',
+        'trailer_type', 'trailer_length', 'trailer_volume', 'trailer_weight', 'trailer_axis_count',
+        'departure_place', 'destination_place', 'stopover_place', 'stopover_place_1', 'stopover_place_2',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'time_point', 'time_type', 'start_time', 'end_time', 'address',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at'
+        'published_at', 'completed_at'
     ];
     protected $dateFormat = 'U';
 
@@ -63,34 +70,35 @@ class YH_Record extends Model
 
 
     // 客户
-    function before_client_er()
+    function client_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Client','before_client_id','id');
+        return $this->belongsTo('App\Models\YH\YH_Client','client_id','id');
     }
-    // 客户
-    function after_client_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Client','after_client_id','id');
-    }
-    // 线路
-    function before_route_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Route','before_route_id','id');
-    }
-    // 线路
-    function after_route_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Route','after_route_id','id');
-    }
+
+
     // 车辆
-    function before_car_er()
+    function car_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','before_car_id','id');
+        return $this->belongsTo('App\Models\YH\YH_Car','car_id','id');
     }
-    // 车辆
-    function after_car_er()
+    // 车挂
+    function trailer_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','after_car_id','id');
+        return $this->belongsTo('App\Models\YH\YH_Car','trailer_id','id');
+    }
+    // 车厢
+    function container_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Car','container_id','id');
+    }
+
+
+
+
+    // 附件
+    function attachment_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Attachment','order_id','id');
     }
 
 
@@ -160,4 +168,18 @@ class YH_Record extends Model
     {
         return $this->morphToMany('App\Models\Tag', 'taggable');
     }
+
+
+
+
+    /**
+     * 自定义更新
+     */
+//    public function update_batch_in($setColumn,$setValue,$whereColumn,$whereValue)
+//    {
+//        $sql ="UPDATE ".$this->table." SET ".$setColumn." = ".$setValue." WHERE ".$whereColumn." = ".$whereValue;
+//        return DB::update(DB::raw($sql);
+//    }
+    
+    
 }

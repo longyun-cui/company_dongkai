@@ -107,7 +107,7 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="name" placeholder="车牌" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="car-name" placeholder="车牌" />
 
                         {{--<select class="form-control form-filter" name="owner" style="width:96px;">--}}
                             {{--<option value ="-1">选择员工</option>--}}
@@ -184,6 +184,8 @@
 </div>
 
 
+
+
 {{--修改-基本信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
@@ -191,7 +193,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改车辆【<span class="info-set-title"></span>】</h3>
+                <h3 class="box-title">修改车辆【<span class="info-text-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -200,19 +202,18 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-set-operate" value="item-car-info-text-set" readonly>
-                    <input type="hidden" name="info-set-car-id" value="0" readonly>
-                    <input type="hidden" name="info-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-set-column-key" value="" readonly>
-
+                    <input type="hidden" name="info-text-set-operate" value="item-car-info-text-set" readonly>
+                    <input type="hidden" name="info-text-set-item-id" value="0" readonly>
+                    <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="info-text-set-column-key" value="" readonly>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2 info-set-column-name"></label>
+                        <label class="control-label col-md-2 info-text-set-column-name"></label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="info-set-column-value" autocomplete="off" placeholder="" value="">
+                            <input type="text" class="form-control" name="info-text-set-column-value" autocomplete="off" placeholder="" value="">
+                            <textarea class="form-control" name="info-textarea-set-column-value" rows="6" cols="100%"></textarea>
                         </div>
                     </div>
-
 
                 </div>
             </form>
@@ -246,7 +247,7 @@
 
                     {{ csrf_field() }}
                     <input type="hidden" name="info-time-set-operate" value="item-car-info-text-set" readonly>
-                    <input type="hidden" name="info-time-set-car-id" value="0" readonly>
+                    <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
                     <input type="hidden" name="info-time-set-time-type" value="" readonly>
@@ -275,6 +276,167 @@
         </div>
 
     </div>
+</div>
+{{--修改-radio-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-info-radio-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改【<span class="info-radio-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-radio-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="info-radio-set-operate" value="item-order-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-order-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
+                    <input type="hidden" name="info-radio-set-column-key" value="" readonly>
+
+
+                    <div class="form-group radio-box">
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-radio-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-radio-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{--修改-select-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-info-select-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改【<span class="info-select-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-select-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="info-select-set-operate" value="item-car-info-option-set" readonly>
+                    <input type="hidden" name="info-select-set-item-id" value="0" readonly>
+                    <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="info-select-set-column-key" value="" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 info-select-set-column-name"></label>
+                        <div class="col-md-8 ">
+                            <select class="form-control select2-client" name="info-select-set-column-value" style="width:240px;" id="">
+                                <option data-id="0" value="0">未指定</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-info-select-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{{----}}
+<div class="option-container _none">
+
+    <div id="trailer_type-option-list">
+        <option value="0">选择箱型</option>
+        <option value="直板">直板</option>
+        <option value="高栏">高栏</option>
+        <option value="平板">平板</option>
+        <option value="冷藏">冷藏</option>
+    </div>
+
+    <div id="trailer_length-option-list">
+        <option value="0">选择车挂尺寸</option>
+        <option value="9.6">9.6</option>
+        <option value="12.5">12.5</option>
+        <option value="15">15</option>
+        <option value="16.5">16.5</option>
+        <option value="17.5">17.5</option>
+    </div>
+
+    <div id="trailer_volume-option-list">
+        <option value="0">选择承载方数</option>
+        <option value="125">125</option>
+        <option value="130">130</option>
+        <option value="135">135</option>
+    </div>
+
+    <div id="trailer_weight-option-list">
+        <option value="0">选择承载重量</option>
+        <option value="13">13吨</option>
+        <option value="20">20吨</option>
+        <option value="25">25吨</option>
+    </div>
+
+    <div id="trailer_axis_count-option-list">
+        <option value="0">选择轴数</option>
+        <option value="1">1轴</option>
+        <option value="2">2轴</option>
+        <option value="3">3轴</option>
+    </div>
+
+
+
+
+    <div id="receipt_need-option-list">
+
+        <label class="control-label col-md-2">是否需要回单</label>
+        <div class="col-md-8">
+            <div class="btn-group">
+
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="receipt_need" value="0" class="info-set-column"> 不需要
+                        </label>
+                    </span>
+                </button>
+
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="receipt_need" value="1" class="info-set-column"> 需要
+                        </label>
+                    </span>
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
 </div>
 @endsection
 
@@ -310,8 +472,11 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.name = $('input[name="name"]').val();
-                        d.title = $('input[name="title"]').val();
+                        d.id = $('input[name="car-id"]').val();
+                        d.name = $('input[name="car-name"]').val();
+                        d.title = $('input[name="car-title"]').val();
+                        d.keyword = $('input[name="car-keyword"]').val();
+                        d.status = $('select[name="car-status"]').val();
                         d.work_status = $('select[name="work_status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
@@ -512,7 +677,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','trailer_type').attr('data-value',data);
                                 $(nTd).attr('data-column-name','类型');
@@ -533,7 +698,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','trailer_length').attr('data-value',data);
                                 $(nTd).attr('data-column-name','尺寸');
@@ -554,7 +719,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','trailer_volume').attr('data-value',data);
                                 $(nTd).attr('data-column-name','容积');
@@ -575,7 +740,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','trailer_weight').attr('data-value',data);
                                 $(nTd).attr('data-column-name','载重');
@@ -596,7 +761,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','trailer_axis_count').attr('data-value',data);
                                 $(nTd).attr('data-column-name','轴数');
@@ -622,6 +787,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','linkman_name').attr('data-value',data);
                                 $(nTd).attr('data-column-name','司机');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -643,6 +809,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','linkman_phone').attr('data-value',data);
                                 $(nTd).attr('data-column-name','电话');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -685,6 +852,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','car_owner').attr('data-value',data);
                                 $(nTd).attr('data-column-name','所有人');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -706,6 +874,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','car_function').attr('data-value',data);
                                 $(nTd).attr('data-column-name','使用性质');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -727,6 +896,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','car_brand').attr('data-value',data);
                                 $(nTd).attr('data-column-name','品牌');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -748,6 +918,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','car_identification_number').attr('data-value',data);
                                 $(nTd).attr('data-column-name','车辆识别代码');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -769,6 +940,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','engine_number').attr('data-value',data);
                                 $(nTd).attr('data-column-name','发动机号');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -790,6 +962,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','locomotive_wheelbase').attr('data-value',data);
                                 $(nTd).attr('data-column-name','车头轴距');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -811,6 +984,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','main_fuel_tank').attr('data-value',data);
                                 $(nTd).attr('data-column-name','主油箱');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -832,6 +1006,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','auxiliary_fuel_tank').attr('data-value',data);
                                 $(nTd).attr('data-column-name','副油箱');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -853,6 +1028,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','total_mass').attr('data-value',data);
                                 $(nTd).attr('data-column-name','总质量');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -874,6 +1050,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','curb_weight').attr('data-value',data);
                                 $(nTd).attr('data-column-name','整备质量');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -895,6 +1072,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','load_weight').attr('data-value',data);
                                 $(nTd).attr('data-column-name','核定载重');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -916,6 +1094,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','traction_mass').attr('data-value',data);
                                 $(nTd).attr('data-column-name','准牵引质量');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -937,6 +1116,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
                                 $(nTd).attr('data-key','overall_size').attr('data-value',data);
                                 $(nTd).attr('data-column-name','外廓尺寸');
+                                $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }

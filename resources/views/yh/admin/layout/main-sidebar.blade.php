@@ -85,7 +85,18 @@
                     <span>车辆列表</span>
                 </a>
             </li>
-
+            <li class="treeview {{ $menu_active_of_route_list_for_all or '' }}">
+                <a href="{{ url('/item/route-list-for-all')}}">
+                    <i class="fa fa-map text-green"></i>
+                    <span>线路列表</span>
+                </a>
+            </li>
+            <li class="treeview {{ $menu_active_of_pricing_list_for_all or '' }}">
+                <a href="{{ url('/item/pricing-list-for-all')}}">
+                    <i class="fa fa-map text-green"></i>
+                    <span>定价列表</span>
+                </a>
+            </li>
             <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
                 <a href="{{ url('/item/order-list-for-all')}}">
                     <i class="fa fa-file-text text-green"></i>
@@ -120,32 +131,8 @@
 
 
 
-            <li class="header _none">内容管理</li>
-
-            <li class="treeview {{ $menu_active_of_item_list_for_all or '' }} _none">
-                <a href="{{ url('/item/item-list-for-all')}}">
-                    <i class="fa fa-list text-red"></i>
-                    <span>全部内容</span>
-                </a>
-            </li>
-            <li class="treeview {{ $menu_active_of_task_list_for_all or '' }} _none">
-                <a href="{{ url('/item/task-list-for-all')}}">
-                    <i class="fa fa-list text-red"></i>
-                    <span>任务列表</span>
-                </a>
-            </li>
-            {{--<li class="treeview {{ $menu_active_of_task_list_for_finished or '' }}">--}}
-                {{--<a href="{{ url('/item/task-list-for-finished')}}">--}}
-                    {{--<i class="fa fa-list text-red"></i>--}}
-                    {{--<span>已完成任务</span>--}}
-                {{--</a>--}}
-            {{--</li>--}}
-
-
-
-
             {{--流量统计--}}
-            <li class="header _none">数据统计</li>
+            <li class="header">数据统计</li>
 
             <li class="treeview {{ $menu_active_of_statistic_index or '' }} _none">
                 <a href="{{ url('/statistic/statistic-index') }}">
@@ -153,7 +140,7 @@
                 </a>
             </li>
             <li class="treeview {{ $menu_active_of_statistic_list_for_all or '' }} _none">
-                <a href="{{ url('/statistic/statistic-all-list') }}">
+                <a href="{{ url('/statistic/statistic-list-for-all') }}">
                     <i class="fa fa-bar-chart text-green"></i> <span>统计列表</span>
                 </a>
             </li>

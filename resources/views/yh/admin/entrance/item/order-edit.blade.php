@@ -89,6 +89,72 @@
                     </div>
                 </div>
 
+                {{--线路选择--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 线路类型</label>
+                    <div class="col-md-8 ">
+                        <div class="btn-group">
+
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
+                                <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="route_type" value="1" checked="checked"> 固定线路
+                                    </label>
+                                </span>
+                                </button>
+                            @endif
+
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 11))
+                                <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->car_owner_type == 11)
+                                            <input type="radio" name="route_type" value=11 checked="checked"> 临时线路
+                                        @else
+                                            <input type="radio" name="route_type" value=11> 临时线路
+                                        @endif
+                                    </label>
+                                </span>
+                                </button>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+
+
+                {{--固定线路--}}
+                @if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))
+                <div class="form-group route-fixed-box">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择固定线路</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="route_id" id="select2-route">
+                            @if($operate == 'edit' && $data->route_id)
+                                <option data-id="{{ $data->route_id or 0 }}" value="{{ $data->route_id or 0 }}">{{ $data->route_er->title }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                @endif
+
+                {{--固定线路--}}
+                <div class="form-group _none">
+                    <label class="control-label col-md-2">固定线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="route_fixed" placeholder="固定线路" value="{{ $data->route_fixed or '' }}">
+                    </div>
+                </div>
+                {{--临时线路--}}
+                <div class="form-group route-temporary-box" style="display:none;">
+                    <label class="control-label col-md-2">临时线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="route_temporary" placeholder="临时线路" value="{{ $data->route_temporary or '' }}">
+                    </div>
+                </div>
+
                 {{--需求类型--}}
                 <div class="form-group form-category">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 需求类型</label>
@@ -383,16 +449,21 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 出发地</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="departure_place" placeholder="出发地" value="{{ $data->departure_place or '' }}">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="departure_place" placeholder="出发地" value="{{ $data->departure_place or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="destination_place" placeholder="目的地" value="{{ $data->destination_place or '' }}">
+                        </div>
                     </div>
                 </div>
                 {{--目的地--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 目的地</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="destination_place" placeholder="目的地" value="{{ $data->destination_place or '' }}">
-                    </div>
-                </div>
+                {{--<div class="form-group">--}}
+                    {{--<label class="control-label col-md-2"><sup class="text-red">*</sup> 目的地</label>--}}
+                    {{--<div class="col-md-8 ">--}}
+                        {{--<input type="text" class="form-control" name="destination_place" placeholder="目的地" value="{{ $data->destination_place or '' }}">--}}
+                    {{--</div>--}}
+                {{--</div>--}}
                 {{--经停地--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">经停地</label>
@@ -401,26 +472,20 @@
                     </div>
                 </div>
 
-                {{--线路--}}
+
+                {{--里程--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">线路</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 里程</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="route" placeholder="线路" value="{{ $data->route or '' }}">
+                        <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or '' }}">
                     </div>
                 </div>
 
-                {{--固定线路--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2">固定线路</label>
+                {{--时效--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">时效（小时）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="fixed_route" placeholder="固定线路" value="{{ $data->fixed_route or '' }}">
-                    </div>
-                </div>
-                {{--临时线路--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2">临时线路</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="temporary_route" placeholder="临时线路" value="{{ $data->temporary_route or '' }}">
+                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or '' }}">
                     </div>
                 </div>
 
@@ -432,13 +497,6 @@
                     <label class="control-label col-md-2">所属公司</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="subordinate_company" placeholder="所属公司" value="{{ $data->subordinate_company or '' }}">
-                    </div>
-                </div>
-                {{--GPS--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">GPS</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="GPS" placeholder="GPS" value="{{ $data->GPS or '' }}">
                     </div>
                 </div>
 
@@ -489,6 +547,13 @@
                         {{--<input type="text" class="form-control" name="receipt_status" placeholder="回单状态" value="{{ $data->receipt_status or '' }}">--}}
                     {{--</div>--}}
                 {{--</div>--}}
+                {{--GPS--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">GPS</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="GPS" placeholder="GPS" value="{{ $data->GPS or '' }}">
+                    </div>
+                </div>
 
 
                 {{--单号--}}
@@ -645,19 +710,41 @@
         // 【选择车辆所属】
         $("#form-edit-item").on('click', "input[name=car_owner_type]", function() {
             // checkbox
-//            if($(this).is(':checked')) {
+//            if($(this).is(':checked'))
+//            {
 //                $('.time-show').show();
-//            } else {
+//            }
+//            else
+//            {
 //                $('.time-show').hide();
 //            }
             // radio
             var $value = $(this).val();
-            if($value == 1 || $value == 11 || $value == 41) {
+            if($value == 1 || $value == 11 || $value == 41)
+            {
                 $('.inside-car').show();
                 $('.outside-car').hide();
-            } else {
+            }
+            else
+            {
                 $('.outside-car').show();
                 $('.inside-car').hide();
+            }
+        });
+
+        // 【选择线路类型】
+        $("#form-edit-item").on('click', "input[name=route_type]", function() {
+            // radio
+            var $value = $(this).val();
+            if($value == 1)
+            {
+                $('.route-fixed-box').show();
+                $('.route-temporary-box').hide();
+            }
+            else
+            {
+                $('.route-temporary-box').show();
+                $('.route-fixed-box').hide();
             }
         });
 
@@ -703,6 +790,36 @@
         $('#select2-client').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_client') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+
+        //
+        $('#select2-route').select2({
+            ajax: {
+                url: "{{ url('/item/order_select2_route') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

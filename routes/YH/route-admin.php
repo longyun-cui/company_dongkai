@@ -103,10 +103,11 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/car-create', $controller.'@operate_item_car_create');
     Route::match(['get','post'], '/item/car-edit', $controller.'@operate_item_car_edit');
 
-    // 修改-单条属性
+    // 编辑-单条-信息
     Route::post('/item/car-info-text-set', $controller.'@operate_item_car_info_text_set');
     Route::post('/item/car-info-time-set', $controller.'@operate_item_car_info_time_set');
-    Route::post('/item/car-info-select2-set', $controller.'@operate_item_car_info_select2_set');
+    Route::post('/item/car-info-radio-set', $controller.'@operate_item_car_info_option_set');
+    Route::post('/item/car-info-select-set', $controller.'@operate_item_car_info_option_set');
     // 删除 & 恢复
     Route::post('/item/car-admin-delete', $controller.'@operate_item_car_admin_delete');
     Route::post('/item/car-admin-restore', $controller.'@operate_item_car_admin_restore');
@@ -127,11 +128,78 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
     /*
+     * 线路管理
+     */
+    // 创建 & 修改
+    Route::match(['get','post'], '/item/route-create', $controller.'@operate_item_route_create');
+    Route::match(['get','post'], '/item/route-edit', $controller.'@operate_item_route_edit');
+
+    // 编辑-单条-信息
+    Route::post('/item/route-info-text-set', $controller.'@operate_item_route_info_text_set');
+    Route::post('/item/route-info-time-set', $controller.'@operate_item_route_info_time_set');
+    Route::post('/item/route-info-radio-set', $controller.'@operate_item_route_info_option_set');
+    Route::post('/item/route-info-select-set', $controller.'@operate_item_route_info_option_set');
+    Route::post('/item/route-info-select2-set', $controller.'@operate_item_route_info_option_set');
+
+    // 删除 & 恢复
+    Route::post('/item/route-admin-delete', $controller.'@operate_item_route_admin_delete');
+    Route::post('/item/route-admin-restore', $controller.'@operate_item_route_admin_restore');
+    Route::post('/item/route-admin-delete-permanently', $controller.'@operate_item_route_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/item/route-admin-enable', $controller.'@operate_item_route_admin_enable');
+    Route::post('/item/route-admin-disable', $controller.'@operate_item_route_admin_disable');
+
+    // 列表
+    Route::match(['get','post'], '/item/route-list', $controller.'@view_item_route_list');
+    Route::match(['get','post'], '/item/route-list-for-all', $controller.'@view_item_route_list_for_all');
+
+
+
+
+
+
+
+
+    /*
+     * 定价管理
+     */
+    // 创建 & 修改
+    Route::match(['get','post'], '/item/pricing-create', $controller.'@operate_item_pricing_create');
+    Route::match(['get','post'], '/item/pricing-edit', $controller.'@operate_item_pricing_edit');
+
+    // 编辑-单条-信息
+    Route::post('/item/pricing-info-text-set', $controller.'@operate_item_pricing_info_text_set');
+    Route::post('/item/pricing-info-time-set', $controller.'@operate_item_pricing_info_time_set');
+    Route::post('/item/pricing-info-radio-set', $controller.'@operate_item_pricing_info_option_set');
+    Route::post('/item/pricing-info-select-set', $controller.'@operate_item_pricing_info_option_set');
+    Route::post('/item/pricing-info-select2-set', $controller.'@operate_item_pricing_info_option_set');
+
+    // 删除 & 恢复
+    Route::post('/item/pricing-admin-delete', $controller.'@operate_item_pricing_admin_delete');
+    Route::post('/item/pricing-admin-restore', $controller.'@operate_item_pricing_admin_restore');
+    Route::post('/item/pricing-admin-delete-permanently', $controller.'@operate_item_pricing_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/item/pricing-admin-enable', $controller.'@operate_item_pricing_admin_enable');
+    Route::post('/item/pricing-admin-disable', $controller.'@operate_item_pricing_admin_disable');
+
+    // 列表
+    Route::match(['get','post'], '/item/pricing-list', $controller.'@view_item_pricing_list');
+    Route::match(['get','post'], '/item/pricing-list-for-all', $controller.'@view_item_pricing_list_for_all');
+
+
+
+
+
+
+
+
+    /*
      * 订单管理
      */
     // select2
     Route::match(['get','post'], '/item/order_select2_client', $controller.'@operate_order_select2_client');
     Route::match(['get','post'], '/item/order_select2_car', $controller.'@operate_order_select2_car');
+    Route::match(['get','post'], '/item/order_select2_route', $controller.'@operate_order_select2_route');
     Route::match(['get','post'], '/item/order_select2_trailer', $controller.'@operate_order_select2_trailer');
     Route::match(['get','post'], '/item/order_list_select2_car', $controller.'@operate_order_list_select2_car');
     // 创建 & 修改

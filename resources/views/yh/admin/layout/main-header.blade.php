@@ -26,25 +26,33 @@
                         <i class="fa fa-plus"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">用户</li>
+                        <li class="header">员工</li>
                         <li class="header">
                             <a href="{{ url('/user/staff-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加员工
                             </a>
                         </li>
-                        <li class="header">客户</li>
+                        <li class="header">业务</li>
                         <li class="header">
                             <a href="{{ url('/user/client-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加客户
                             </a>
                         </li>
-                        <li class="header">车辆</li>
                         <li class="header">
                             <a href="{{ url('/item/car-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加车辆
                             </a>
                         </li>
-                        <li class="header">订单</li>
+                        <li class="header">
+                            <a href="{{ url('/item/route-create') }}">
+                                <i class="fa fa-plus text-red"></i> 添加线路
+                            </a>
+                        </li>
+                        <li class="header">
+                            <a href="{{ url('/item/pricing-create') }}">
+                                <i class="fa fa-plus text-red"></i> 添加定价
+                            </a>
+                        </li>
                         <li class="header">
                             <a href="{{ url('/item/order-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加订单

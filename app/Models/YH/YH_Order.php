@@ -23,10 +23,11 @@ class YH_Order extends Model
         'information_fee', 'customer_management_fee', 'time_limitation_deduction',
         'driver_fine',
         'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
+        'travel_distance', 'time_limitation_prescribed',
+        'route_type', 'route_id', 'route', 'route_fixed', 'route_temporary',
         'client_id',
         'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type', 'outside_car', 'outside_trailer',
         'trailer_type', 'trailer_length', 'trailer_volume', 'trailer_weight', 'trailer_axis_count',
-        'route', 'fixed_route', 'temporary_route',
         'departure_place', 'destination_place', 'stopover_place', 'stopover_place_1', 'stopover_place_2',
         'assign_time',
         'should_departure_time', 'should_arrival_time',
@@ -34,9 +35,9 @@ class YH_Order extends Model
         'stopover_departure_time', 'stopover_arrival_time',
         'stopover_1_departure_time', 'stopover_1_arrival_time',
         'stopover_2_departure_time', 'stopover_2_arrival_time',
-        'subordinate_company', 'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'order_number', 'payee_name', 'arrange_people', 'car_supply', 'car_managerial_people',
+        'receipt_status', 'receipt_need', 'receipt_address', 'GPS',
+        'subordinate_company', 'order_number', 'payee_name', 'arrange_people', 'car_supply', 'car_managerial_people',
         'driver', 'copilot', 'driver_name', 'copilot_name', 'driver_phone', 'copilot_phone', 'weight',
-        'travel_distance',
         'company', 'fund', 'mobile', 'city', 'address',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
@@ -83,6 +84,13 @@ class YH_Order extends Model
     function client_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Client','client_id','id');
+    }
+
+
+    // 固定线路
+    function route_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Route','route_id','id');
     }
 
 
