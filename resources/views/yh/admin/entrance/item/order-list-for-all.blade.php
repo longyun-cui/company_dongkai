@@ -1465,6 +1465,16 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "创建人",
+                        "data": "creator_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
+                        }
+                    },
+                    {
                         "className": "",
                         "width": "100px",
                         "title": "派车日期",
@@ -1800,16 +1810,6 @@
                             if(row.travel_arrival_overtime_time) $travel_arrival_overtime_time = '<small class="btn-xs bg-red">到达超时 '+row.travel_arrival_overtime_time+'</small><br>';
 
                             return $journey_time + $travel_departure_overtime_time + $travel_arrival_overtime_time;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "创建人",
-                        "data": "creator_id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
                         }
                     },
                     {

@@ -853,10 +853,15 @@ class YHAdminController extends Controller
     }
 
 
-    // 【订单管理】SELECT2 Client 客户
+    // 【订单管理】SELECT2 Order 订单
     public function operate_circle_select2_order_list()
     {
         return $this->repo->operate_circle_select2_order_list(request()->all());
+    }
+    // 【订单管理】SELECT2 Car 车辆
+    public function operate_circle_select2_car()
+    {
+        return $this->repo->operate_circle_select2_car(request()->all());
     }
 
 

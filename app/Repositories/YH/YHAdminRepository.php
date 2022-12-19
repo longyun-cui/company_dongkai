@@ -7709,6 +7709,26 @@ class YHAdminRepository {
 //        dd($list->toArray());
         return $list->toArray();
     }
+    //
+    public function operate_circle_select2_car($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $list =YH_Car::select(['id','name as text'])
+                ->where(['item_status'=>1, 'item_type'=>1])
+//                ->whereIn('user_type',[41,61,88])
+                ->get()->toArray();
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $list =YH_Car::select(['id','name as text'])->where('name','like',"%$keyword%")
+                ->where(['item_status'=>1, 'item_type'=>1])
+//                ->whereIn('user_type',[41,61,88])
+                ->get()->toArray();
+        }
+        return $list;
+    }
 
 
     // 【环线管理】返回-添加-视图
@@ -8466,8 +8486,7 @@ class YHAdminRepository {
         else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-//        dd($list->toArray());
+        else $list = $query->skip($skip)->take($limit)->get();s
 
         foreach ($list as $k => $v)
         {
