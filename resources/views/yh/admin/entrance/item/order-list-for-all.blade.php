@@ -1579,7 +1579,7 @@
                         "width": "100px",
                         "title": "派车日期",
                         "data": 'assign_time',
-                        "orderable": false,
+                        "orderable": true,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {

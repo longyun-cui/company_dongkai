@@ -258,6 +258,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
      * 环线管理
      */
     // select2
+    Route::match(['get','post'], '/item/circle_select2_car', $controller.'@operate_circle_select2_car');
     Route::match(['get','post'], '/item/circle_select2_order_list', $controller.'@operate_circle_select2_order_list');
     // 创建 & 修改
     Route::match(['get','post'], '/item/circle-create', $controller.'@operate_item_circle_create');
