@@ -255,6 +255,41 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
     /*
+     * 环线管理
+     */
+    // select2
+    Route::match(['get','post'], '/item/circle_select2_order_list', $controller.'@operate_circle_select2_order_list');
+    // 创建 & 修改
+    Route::match(['get','post'], '/item/circle-create', $controller.'@operate_item_circle_create');
+    Route::match(['get','post'], '/item/circle-edit', $controller.'@operate_item_circle_edit');
+
+    // 编辑-单条-信息
+    Route::post('/item/circle-info-text-set', $controller.'@operate_item_circle_info_text_set');
+    Route::post('/item/circle-info-time-set', $controller.'@operate_item_circle_info_time_set');
+    Route::post('/item/circle-info-radio-set', $controller.'@operate_item_circle_info_option_set');
+    Route::post('/item/circle-info-select-set', $controller.'@operate_item_pcircle_info_option_set');
+    Route::post('/item/circle-info-select2-set', $controller.'@operate_item_circle_info_option_set');
+
+    // 删除 & 恢复
+    Route::post('/item/circle-admin-delete', $controller.'@operate_item_circle_admin_delete');
+    Route::post('/item/circle-admin-restore', $controller.'@operate_item_circle_admin_restore');
+    Route::post('/item/circle-admin-delete-permanently', $controller.'@operate_item_circle_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/item/circle-admin-enable', $controller.'@operate_item_circle_admin_enable');
+    Route::post('/item/circle-admin-disable', $controller.'@operate_item_circle_admin_disable');
+
+    // 列表
+    Route::match(['get','post'], '/item/circle-list', $controller.'@view_item_circle_list');
+    Route::match(['get','post'], '/item/circle-list-for-all', $controller.'@view_item_circle_list_for_all');
+
+
+
+
+
+
+
+
+    /*
      * 内容管理
      */
     Route::match(['get','post'], '/item/item-create', $controller.'@operate_item_item_create');

@@ -1,9 +1,6 @@
 <?php
 namespace App\Repositories\YH;
 
-use App\Models\YH\YH_Attachment;
-use App\Models\YH\YH_Finance;
-use App\Models\YH\YH_Record;
 use App\Models\YH\YH_User;
 use App\Models\YH\YH_UserExt;
 use App\Models\YH\YH_Client;
@@ -11,6 +8,10 @@ use App\Models\YH\YH_Car;
 use App\Models\YH\YH_Route;
 use App\Models\YH\YH_Pricing;
 use App\Models\YH\YH_Order;
+use App\Models\YH\YH_Circle;
+use App\Models\YH\YH_Attachment;
+use App\Models\YH\YH_Finance;
+use App\Models\YH\YH_Record;
 use App\Models\YH\YH_Item;
 use App\Models\YH\YH_Task;
 use App\Models\YH\YH_Pivot_Item_Relation;
@@ -3340,7 +3341,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 21;
+                    $record_data["operate_object"] = 41;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -3430,7 +3431,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 21;
+                    $record_data["operate_object"] = 41;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -3521,7 +3522,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 21;
+                    $record_data["operate_object"] = 41;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -3593,7 +3594,7 @@ class YHAdminRepository {
         {
             $item->timestamps = false;
             $bool = $item->delete();  // 普通删除
-            if(!$bool) throw new Exception("item--delete--fail");
+            if(!$bool) throw new Exception("car--delete--fail");
 
             DB::commit();
             return response_success([]);
@@ -3646,9 +3647,9 @@ class YHAdminRepository {
         {
             $item->timestamps = false;
             $bool = $item->restore();
-            if(!$bool) throw new Exception("item--restore--fail");
-            DB::commit();
+            if(!$bool) throw new Exception("car--restore--fail");
 
+            DB::commit();
             return response_success([]);
         }
         catch (Exception $e)
@@ -4332,7 +4333,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 31;
+                    $record_data["operate_object"] = 51;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -4423,7 +4424,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 31;
+                    $record_data["operate_object"] = 51;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -4514,7 +4515,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 31;
+                    $record_data["operate_object"] = 51;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -5096,7 +5097,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -5150,7 +5151,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Pricing::withTrashed()->find($id);
-        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【定价】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5186,7 +5187,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -5241,7 +5242,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Car::withTrashed()->find($id);
-        if(!$item) return response_error([],"该车辆不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【定价】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5277,7 +5278,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -5435,7 +5436,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'car-admin-delete-permanently') return response_error([],"参数【operate】有误！");
+        if($operate != 'pricing-admin-delete-permanently') return response_error([],"参数【operate】有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
@@ -5680,17 +5681,22 @@ class YHAdminRepository {
     {
         if(empty($post_data['keyword']))
         {
-            $list =YH_Route::select(['id','title as text'])
+            $list =YH_Route::select('*','title as text')
+//                ->select(['id','title as text','amount_with_cash','amount_with_invoice'])
                 ->where(['item_status'=>1,'item_category'=>1])
                 ->get()->toArray();
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Route::select(['id','title as text'])->where('title','like',"%$keyword%")
+            $list =YH_Route::select('*','title as text')
+//                ->select(['id','title as text','amount_with_cash','amount_with_invoice'])
+                ->where('title','like',"%$keyword%")
                 ->where(['item_status'=>1,'item_category'=>1])
                 ->get()->toArray();
         }
+        $unSpecified = ['id'=>0,'text'=>'(清空)','amount_with_cash'=>0,'amount_with_invoice'=>0];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
@@ -5944,12 +5950,16 @@ class YHAdminRepository {
 //            else $post_data['should_arrival_time'] = 0;
 
 
+
             $mine_data = $post_data;
 
             unset($mine_data['operate']);
             unset($mine_data['operate_id']);
             unset($mine_data['operate_category']);
             unset($mine_data['operate_type']);
+
+
+            if($mine_data["route_type"] == 11) $mine_data["route_id"] = 0;
 
             if(!empty($mine_data["trailer_type"]) && in_array($mine_data["trailer_type"],["0","-1"])) unset($mine_data['trailer_type']);
             if(!empty($mine_data["trailer_length"]) && in_array($mine_data["trailer_length"],["0","-1"])) unset($mine_data['trailer_length']);
@@ -6293,7 +6303,7 @@ class YHAdminRepository {
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 61;
+                $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 11;
                 $record_data["operate_type"] = 1;
 
@@ -6365,7 +6375,7 @@ class YHAdminRepository {
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 61;
+                $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 100;
                 $record_data["operate_type"] = 1;
 
@@ -6435,7 +6445,7 @@ class YHAdminRepository {
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 61;
+                $record_data["operate_object"] = 91;
                 $record_data["operate_category"] = 97;
                 $record_data["operate_type"] = 1;
 
@@ -6763,7 +6773,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 61;
+                    $record_data["operate_object"] = 71;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -6926,7 +6936,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 61;
+                    $record_data["operate_object"] = 71;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -7025,7 +7035,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 61;
+                    $record_data["operate_object"] = 71;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -7146,7 +7156,7 @@ class YHAdminRepository {
                         $record_data["record_type"] = 1;
                         $record_data["creator_id"] = $me->id;
                         $record_data["order_id"] = $order_id;
-                        $record_data["operate_object"] = 61;
+                        $record_data["operate_object"] = 71;
                         $record_data["operate_category"] = 71;
                         $record_data["operate_type"] = 1;
 
@@ -7226,7 +7236,7 @@ class YHAdminRepository {
                 $record_data["creator_id"] = $me->id;
                 $record_data["item_id"] = $item_id;
                 $record_data["order_id"] = $item->order_id;
-                $record_data["operate_object"] = 61;
+                $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 71;
                 $record_data["operate_type"] = 91;
 
@@ -7626,6 +7636,822 @@ class YHAdminRepository {
 
             if($v->owner_id == $me->id) $list[$k]->is_me = 1;
             else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 环线管理
+     */
+    //
+    public function operate_circle_select2_order_list($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $list =YH_Order::select(['id','title','departure_place','destination_place','assign_time'])
+//                ->selectRaw('CONCAT(id, " ", IfNull(title,""), " (", IfNull(departure_place,""), "-", IfNull(destination_place,""), ") (", FROM_UNIXTIME(IfNull(assign_time,"--"),"%Y-%m-%d"), ")") as text')
+//                ->where(['user_status'=>1,'user_category'=>11])
+//                ->whereIn('user_type',[41,61,88])
+                ->orderby('id','desc')->get();
+//                ->toArray();
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $list =YH_Order::select(['id','title','departure_place','destination_place','assign_time'])
+//                ->selectRaw('CONCAT(id, " ", IfNull(title,""), " (", IfNull(departure_place,""), "-", IfNull(destination_place,""), ") (", FROM_UNIXTIME(IfNull(assign_time,"--"),"%Y-%m-%d"), ")") as text')
+                ->where('id', 'like', $keyword)
+                ->orWhere('title', 'like', $keyword)
+                ->orWhere('departure_place', 'like', $keyword)
+                ->orWhere('destination_place', 'like', $keyword)
+//                ->where(['user_status'=>1,'user_category'=>11])
+//                ->whereIn('user_type',[41,61,88])
+                ->orderby('id','desc')->get();
+//                ->toArray();
+        }
+        foreach($list as $v)
+        {
+            $v->assign_time = $v->assign_time ? " (".date('Y-m-d',$v->assign_time).")" : "";
+            $v->text = $v->id." ".$v->title." (".$v->departure_place."-".$v->destination_place.")".$v->assign_time;
+//            unset($v->title);
+//            unset($v->departure_place);
+//            unset($v->destination_place);
+//            unset($v->assign_time);
+        }
+//        dd($list->toArray());
+        return $list->toArray();
+    }
+
+
+    // 【环线管理】返回-添加-视图
+    public function view_item_circle_create()
+    {
+        $this->get_me();
+
+        $item_type = 'item';
+        $item_type_text = '环线';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/item/circle-list-for-all';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['category'] = 'item';
+        $return['type'] = $item_type;
+        $return['item_type_text'] = $item_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.circle-edit';
+        return view($view_blade)->with($return);
+    }
+    // 【环线管理】返回-编辑-视图
+    public function view_item_circle_edit()
+    {
+        $this->get_me();
+
+        $id = request("id",0);
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.circle-edit';
+
+        $item_type = 'item';
+        $item_type_text = '换线';
+        $title_text = '编辑'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/item/pricing-list-for-all';
+
+        $return['operate'] = 'edit';
+        $return['operate_id'] = $id;
+        $return['category'] = 'item';
+        $return['type'] = $item_type;
+        $return['item_type_text'] = $item_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        if($id == 0)
+        {
+            $return['operate'] = 'create';
+            $return['operate_id'] = 0;
+
+            return view($view_blade)->with($return);
+        }
+        else
+        {
+            $mine = YH_Circle::find($id);
+            if($mine)
+            {
+//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+                $mine->custom = json_decode($mine->custom);
+                $mine->custom2 = json_decode($mine->custom2);
+                $mine->custom3 = json_decode($mine->custom3);
+
+                $return['data'] = $mine;
+
+                return view($view_blade)->with($return);
+            }
+            else return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+        }
+    }
+    // 【环线管理】保存数据
+    public function operate_item_circle_save($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'title.required' => '请输入环线标题！',
+            'title.unique' => '该环线已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'title' => 'required',
+//            'title' => 'required|unique:yh_route,title',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = YH_Circle::select('id')->where('title',$post_data["title"])->count();
+            if($is_exist) return response_error([],"该【环线】已存在，请勿重复添加！");
+
+            $mine = new YH_Circle;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+            $post_data["item_category"] = 1;
+            $post_data["item_type"] = 1;
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = YH_Circle::find($operate_id);
+            if(!$mine) return response_error([],"该【环线】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['operate_category']);
+            unset($mine_data['operate_type']);
+
+//            if(in_array($mine_data["trailer_length"],["0","-1"])) unset($mine_data['trailer_length']);
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+                if(!empty($post_data["order_list"]))
+                {
+                    foreach($post_data["order_list"] as $key => $val)
+                    {
+                        $order_list[$key]['order_id'] = $val;
+                        $order_list[$key]['creator_id'] = $me->id;
+                    }
+//                    $mine->pivot_order_list()->attach($order_list);  //
+                    $mine->pivot_order_list()->syncWithoutDetaching($order_list);  //
+                }
+
+            }
+            else throw new Exception("insert--circle--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【环线管理】【文本】修改-文本-类型
+    public function operate_item_circle_info_text_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-circle-info-text-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Circle::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【换线】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 77;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【环线管理】【时间】修改-时间-类型
+    public function operate_item_circle_info_time_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-circle-info-time-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Circle::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【环线】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+        $time_type = $post_data["time_type"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = strtotime($column_value);
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 77;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_type"] = $time_type;
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = strtotime($column_value);
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【环线管理】【选项】修改-radio-select-[option]-类型
+    public function operate_item_circle_info_option_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'car_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-circle-info-option-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Car::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【环线】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 77;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【环线管理】管理员-删除
+    public function operate_item_circle_admin_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'circle-admin-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Circle::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【定价】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("circle--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【环线管理】管理员-恢复
+    public function operate_item_circle_admin_restore($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'operate.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'circle-admin-restore') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Circle::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【定价】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->restore();
+            if(!$bool) throw new Exception("circle--restore--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【环线管理】管理员-彻底删除
+    public function operate_item_circle_admin_delete_permanently($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'circle-admin-delete-permanently') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Circle::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【定价】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item_copy = $item;
+
+            $bool = $item->forceDelete();
+            if(!$bool) throw new Exception("circle--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【环线管理】管理员-启用
+    public function operate_item_circle_admin_enable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'circle-admin-enable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Circle::find($id);
+        if(!$item) return response_error([],"该【环线】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 1;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--circle--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【环线管理】管理员-禁用
+    public function operate_item_circle_admin_disable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'circle-admin-disable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Circle::find($id);
+        if(!$item) return response_error([],"该【环线】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 9;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--circle--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【环线管理】返回-列表-视图
+    public function view_item_circle_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_circle_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.circle-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【环线管理】返回-列表-数据
+    public function get_item_circle_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = YH_Circle::select('*')
+            ->withTrashed()
+//            ->withCount([''])
+            ->with(['creator','pivot_order_list',
+//                'pivot_order_list'=>function($query) {
+//                    $query->with('order_er');
+//                },
+            ]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach ($list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);

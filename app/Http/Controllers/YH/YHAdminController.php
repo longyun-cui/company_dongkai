@@ -790,12 +790,12 @@ class YHAdminController extends Controller
     // 【订单管理】修改-客户信息
     public function operate_item_order_info_client_set()
     {
-        return $this->repo->operate_item_order_info_client_set(request()->all());
+        return $this->repo->operate_item_order_info_option_set(request()->all());
     }
     // 【订单管理】修改-车辆信息
     public function operate_item_order_info_car_set()
     {
-        return $this->repo->operate_item_order_info_car_set(request()->all());
+        return $this->repo->operate_item_order_info_option_set(request()->all());
     }
 
     // 【订单管理】添加-行程记录
@@ -833,6 +833,89 @@ class YHAdminController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_order_modify_record_datatable(request()->all());
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 环线管理
+     */
+    // 【环线管理】返回-列表-视图
+    public function view_item_circle_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_circle_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_circle_list_for_all_datatable(request()->all());
+    }
+
+
+    // 【订单管理】SELECT2 Client 客户
+    public function operate_circle_select2_order_list()
+    {
+        return $this->repo->operate_circle_select2_order_list(request()->all());
+    }
+
+
+    // 【环线管理】添加
+    public function operate_item_circle_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_circle_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_circle_save(request()->all());
+    }
+    // 【环线管理】编辑
+    public function operate_item_circle_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_circle_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_circle_save(request()->all());
+    }
+
+
+    // 【环线管理】修改-文本-text-信息
+    public function operate_item_circle_info_text_set()
+    {
+        return $this->repo->operate_item_circle_info_text_set(request()->all());
+    }
+    // 【环线管理】修改-时间-time-信息
+    public function operate_item_circle_info_time_set()
+    {
+        return $this->repo->operate_item_circle_info_time_set(request()->all());
+    }
+    // 【环线管理】修改-选项-option-信息
+    public function operate_item_circle_info_option_set()
+    {
+        return $this->repo->operate_item_circle_info_option_set(request()->all());
+    }
+
+
+    // 【环线管理】删除
+    public function operate_item_circle_admin_delete()
+    {
+        return $this->repo->operate_item_circle_admin_delete(request()->all());
+    }
+    // 【环线管理】恢复
+    public function operate_item_circle_admin_restore()
+    {
+        return $this->repo->operate_item_circle_admin_restore(request()->all());
+    }
+    // 【环线管理】永久删除
+    public function operate_item_circle_admin_delete_permanently()
+    {
+        return $this->repo->operate_item_circle_admin_delete_permanently(request()->all());
+    }
+
+    // 【环线管理】启用
+    public function operate_item_circle_admin_enable()
+    {
+        return $this->repo->operate_item_circle_admin_enable(request()->all());
+    }
+    // 【环线管理】禁用
+    public function operate_item_circle_admin_disable()
+    {
+        return $this->repo->operate_item_circle_admin_disable(request()->all());
     }
 
 

@@ -3,14 +3,14 @@
 
 @section('head_title')
     @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
-    {{ $title_text or '订单列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '线路列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')订单列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '线路列表' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -21,7 +21,7 @@
 
             <div class="box-header with-border" style="margin:16px 0;">
 
-                <h3 class="box-title">订单列表</h3>
+                <h3 class="box-title">{{ $title_text or '线路列表' }}</h3>
 
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>

@@ -1647,30 +1647,46 @@
                     {
                         "className": "text-center",
                         "width": "120px",
-                        "title": "固定线路",
-                        "data": "route_id",
+                        "title": "线路",
+                        "data": "route_type",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','线路');
-                                $(nTd).attr('data-key','route_id').attr('data-value',data);
-                                if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
-                                else $(nTd).attr('data-option-name',row.route_er.title);
-                                $(nTd).attr('data-column-name','线路');
-                                if(row.client_id) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                if(data == 1)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-select2-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','固定线路');
+                                    $(nTd).attr('data-key','route_id').attr('data-value',data);
+                                    if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
+                                    else $(nTd).attr('data-option-name',row.route_er.title);
+                                    $(nTd).attr('data-column-name','固定线路');
+                                    if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                                else if(data == 11)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','临时线路');
+                                    $(nTd).attr('data-key','route_temporary').attr('data-value',row.route_temporary);
+                                    if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
+                                    $(nTd).attr('data-column-name','临时线路');
+                                    if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(row.route_er == null)
+                            if(data == 1)
                             {
-                                return '--';
+                                if(row.route_er == null) return '--';
+                                else return '<a href="javascript:void(0);">'+row.route_er.title+'</a>';
                             }
-                            else {
-                                return '<a href="javascript:void(0);">'+row.route_er.title+'</a>';
+                            else if(data == 11)
+                            {
+                                return '[临]'+ row.route_temporary;
                             }
+                            else return '有误';
                         }
                     },
                     {

@@ -70,7 +70,9 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 金额</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="amount" placeholder="金额" value="{{ $data->amount or '' }}">
+                        <input type="text" class="form-control" name="amount" placeholder="金额" value="{{ $data->amount or '' }}" id="order-price"
+                               @if($data->route_id > 0) readonly="readonly" @endif
+                        >
                     </div>
                 </div>
 
@@ -95,21 +97,25 @@
                     <div class="col-md-8 ">
                         <div class="btn-group">
 
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
+                            {{--@if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))--}}
                                 <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="route_type" value="1" checked="checked"> 固定线路
+                                        @if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))
+                                            <input type="radio" name="route_type" value="1" checked="checked"> 固定线路
+                                        @else
+                                            <input type="radio" name="route_type" value="1"> 固定线路
+                                        @endif
                                     </label>
                                 </span>
                                 </button>
-                            @endif
+                            {{--@endif--}}
 
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 11))
+                            {{--@if($operate == 'create' || ($operate == 'edit' && $data->route_type == 11))--}}
                                 <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
-                                        @if($operate == 'edit' && $data->car_owner_type == 11)
+                                        @if($operate == 'edit' && $data->route_type == 11)
                                             <input type="radio" name="route_type" value=11 checked="checked"> 临时线路
                                         @else
                                             <input type="radio" name="route_type" value=11> 临时线路
@@ -117,7 +123,7 @@
                                     </label>
                                 </span>
                                 </button>
-                            @endif
+                            {{--@endif--}}
 
                         </div>
                     </div>
@@ -131,7 +137,17 @@
                     <div class="col-md-8 ">
                         <select class="form-control" name="route_id" id="select2-route">
                             @if($operate == 'edit' && $data->route_id)
-                                <option data-id="{{ $data->route_id or 0 }}" value="{{ $data->route_id or 0 }}">{{ $data->route_er->title }}</option>
+                                <option data-id="{{ $data->route_id or 0 }}"
+                                        value="{{ $data->route_id or 0 }}"
+                                        data-price="{{ $data->route_er->amount_with_cash or 0 }}"
+                                        data-distance="{{ $data->route_er->travel_distance or 0 }}"
+                                        data-prescribed="{{ $data->route_er->time_limitation_prescribed or 0 }}"
+                                        data-departure="{{ $data->route_er->departure_place or '' }}"
+                                        data-destination="{{ $data->route_er->destination_place or '' }}"
+                                        data-stopover="{{ $data->route_er->stopover_place or '' }}"
+                                >
+                                    {{ $data->route_er->title }}
+                                </option>
                             @else
                                 <option data-id="0" value="0">未指定</option>
                             @endif
@@ -466,10 +482,10 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 出发地</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="departure_place" placeholder="出发地" value="{{ $data->departure_place or '' }}">
+                            <input type="text" class="form-control" name="departure_place" placeholder="出发地" value="{{ $data->departure_place or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="destination_place" placeholder="目的地" value="{{ $data->destination_place or '' }}">
+                            <input type="text" class="form-control" name="destination_place" placeholder="目的地" value="{{ $data->destination_place or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
                         </div>
                     </div>
                 </div>
@@ -484,7 +500,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">经停地</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="stopover_place" placeholder="经停地" value="{{ $data->stopover_place or '' }}">
+                        <input type="text" class="form-control" name="stopover_place" placeholder="经停地" value="{{ $data->stopover_place or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
                     </div>
                 </div>
 
@@ -493,7 +509,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 里程</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or '' }}">
+                        <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
                     </div>
                 </div>
 
@@ -501,7 +517,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">时效（小时）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or '' }}">
+                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
                     </div>
                 </div>
 
@@ -756,11 +772,32 @@
             {
                 $('.route-fixed-box').show();
                 $('.route-temporary-box').hide();
+
+
+                var $select2_route_val = $('#select2-route').val();
+                console.log($select2_route_val);
+                var $select2_route_selected = $('#select2-route').find('option:selected');
+                if($select2_route_selected.val() > 0)
+                {
+                    $('#order-price').attr('readonly','readonly').val($select2_route_selected.attr('data-price'));
+                    $('input[name=departure_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-departure'));
+                    $('input[name=destination_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-destination'));
+                    $('input[name=stopover_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-stopover'));
+                    $('input[name=travel_distance]').attr('readonly','readonly').val($select2_route_selected.attr('data-price'));
+                    $('input[name=time_limitation_prescribed]').attr('readonly','readonly').val($select2_route_selected.attr('data-prescribed'));
+                }
             }
             else
             {
                 $('.route-temporary-box').show();
                 $('.route-fixed-box').hide();
+
+                $('#order-price').removeAttr('readonly');
+                $('input[name=departure_place]').removeAttr('readonly');
+                $('input[name=destination_place]').removeAttr('readonly');
+                $('input[name=stopover_place]').removeAttr('readonly');
+                $('input[name=travel_distance]').removeAttr('readonly');
+                $('input[name=time_limitation_prescribed]').removeAttr('readonly');
             }
         });
 
@@ -846,6 +883,14 @@
                 },
                 processResults: function (data, params) {
 
+//                    var $o = [];
+//                    var $lt = data;
+//                    $.each($lt, function(i,item) {
+//                        item.id = item.id;
+//                        item.text = item.text;
+//                        item.data_id = item.text;
+//                        $o.push(item);
+//                    });
                     params.page = params.page || 1;
                     return {
                         results: data,
@@ -856,9 +901,42 @@
                 },
                 cache: true
             },
+            templateSelection: function(data, container) {
+                $(data.element).attr("data-price",data.amount_with_cash);
+                $(data.element).attr("data-departure",data.departure_place);
+                $(data.element).attr("data-destination",data.destination_place);
+                $(data.element).attr("data-stopover",data.stopover_place);
+                $(data.element).attr("data-distance",data.travel_distance);
+                $(data.element).attr("data-prescribed",data.time_limitation_prescribed);
+                return data.text;
+            },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
             minimumInputLength: 0,
             theme: 'classic'
+        });
+        $("#select2-route").on("select2:select",function(){
+            var $id = $(this).val();
+            console.log($id);
+            var $price = $(this).find('option:selected').attr('data-price');
+            if($id > 0)
+            {
+                $('#order-price').attr('readonly','readonly').val($price);
+                $('input[name=departure_place]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-departure'));
+                $('input[name=destination_place]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-destination'));
+                $('input[name=stopover_place]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-stopover'));
+                $('input[name=travel_distance]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-price'));
+                $('input[name=time_limitation_prescribed]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-prescribed'));
+            }
+            else
+            {
+                console.log($id);
+                $('#order-price').removeAttr('readonly');
+                $('input[name=departure_place]').removeAttr('readonly');
+                $('input[name=destination_place]').removeAttr('readonly');
+                $('input[name=stopover_place]').removeAttr('readonly');
+                $('input[name=travel_distance]').removeAttr('readonly');
+                $('input[name=time_limitation_prescribed]').removeAttr('readonly');
+            }
         });
 
 

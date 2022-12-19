@@ -3,14 +3,14 @@
 
 @section('head_title')
     @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
-    {{ $title_text or '定价列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '环线列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description'){{ $title_text or '定价列表' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '环线列表' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -21,31 +21,31 @@
 
             <div class="box-header with-border" style="margin:16px 0;">
 
-                <h3 class="box-title">{{ $title_text or '定价列表' }}</h3>
+                <h3 class="box-title">{{ $title_text or '环线列表' }}</h3>
 
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/pricing-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加定价</button>
+                    <a href="{{ url('/item/circle-create') }}">
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加环线</button>
                     </a>
                 </div>
 
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-pricing-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-circle-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="pricing-id" placeholder="ID" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="pricing-name" placeholder="标题" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="circle-id" placeholder="ID" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="circle-name" placeholder="标题" />
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-pricing">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-circle">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-pricing">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-circle">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -466,7 +466,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width: 1400px; }
+    .tableArea table { min-width: 1600px; }
     .tableArea table#datatable_ajax_finance { min-width: 1440px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
@@ -494,16 +494,16 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/item/pricing-list-for-all') }}",
+                    'url': "{{ url('/item/circle-list-for-all') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="pricing-id"]').val();
-                        d.name = $('input[name="pricing-name"]').val();
-                        d.title = $('input[name="pricing-title"]').val();
-                        d.keyword = $('input[name="pricing-keyword"]').val();
-                        d.status = $('select[name="pricing-status"]').val();
+                        d.id = $('input[name="circle-id"]').val();
+                        d.name = $('input[name="circle-name"]').val();
+                        d.title = $('input[name="circle-title"]').val();
+                        d.keyword = $('input[name="circle-keyword"]').val();
+                        d.status = $('select[name="circle-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -602,7 +602,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "200px",
+                        "width": "120px",
                         "title": "标题",
                         "data": "title",
                         "orderable": false,
@@ -623,49 +623,176 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
-                        "title": "包油价",
-                        "data": "price1",
+                        "width": "200px",
+                        "title": "订单",
+                        "data": "pivot_order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
-                                $(nTd).attr('data-key','price1').attr('data-value',data);
-                                $(nTd).attr('data-column-name','包油价');
-                                $(nTd).attr('data-text-type','text');
+                                $(nTd).attr('data-id',row.id).attr('data-name','订单');
+                                $(nTd).attr('data-key','remark').attr('data-value',data);
+                                $(nTd).attr('data-column-name','备注');
+                                $(nTd).attr('data-text-type','textarea');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return data;
-                            else return '--';
+                            var $html = '';
+                            $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                                var $id = this.id;
+                                var $title = (this.title) ? this.title : '';
+                                var $departure  = (this.departure_place) ? this.departure_place : '';
+                                var $destination  = (this.destination_place) ? this.destination_place : '';
+
+                                var $date = new Date(this.assign_time*1000);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+                                var $assign = $year+'-'+$month+'-'+$day;
+
+                                var $text = $id + " " + $title + " (" + $departure + "-" + $destination + ") (" + $assign + ")";
+
+                                $html += '<a href="javascript:void(0);" data-id="'+$id+'">'+$text+'</a><br>';
+                            });
+                            return $html;
+//                            return row.people == null ? '未知' :
+//                                '<a target="_blank" href="/people?id='+row.people.encode_id+'">'+row.people.name+'</a>';
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
-                        "title": "空放价",
-                        "data": "price2",
+                        "width": "60px",
+                        "title": "总里程",
+                        "data": "pivot_order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','空放价');
-                                $(nTd).attr('data-key','price1').attr('data-value',data);
-                                $(nTd).attr('data-column-name','空放价');
+                                $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).attr('data-id',row.id).attr('data-name','总里程');
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','总里程');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return data;
-                            else return '--';
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseInt(this.travel_distance);
+                            });
+                            return $amount + ' km';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "收入",
+                        "data": "pivot_order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','标题');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction);
+                            });
+                            return $amount;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "支出",
+                        "data": "pivot_order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','标题');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseInt(this.expenditure_total);
+                            });
+                            return $amount;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "利润",
+                        "data": "pivot_order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).attr('data-id',row.id).attr('data-name','利润');
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','利润');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.expenditure_total);
+                            });
+                            return $amount;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "利润率",
+                        "data": "pivot_order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','标题');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            var $profit = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction);
+                                $profit += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.expenditure_total);
+                            });
+                            return (($profit/$amount).toFixed(4)*100) + '%';
                         }
                     },
                     {
@@ -826,5 +953,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_YH_ADMIN').'entrance.item.pricing-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.item.circle-script')
 @endsection

@@ -58,6 +58,11 @@
                                 <i class="fa fa-plus text-red"></i> 添加订单
                             </a>
                         </li>
+                        <li class="header">
+                            <a href="{{ url('/item/circle-create') }}">
+                                <i class="fa fa-plus text-red"></i> 添加环线
+                            </a>
+                        </li>
                         <li class="header _none">内容</li>
                         <li class="header _none">
                             <a href="{{ url('/item/item-create') }}">
