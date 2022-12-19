@@ -74,6 +74,20 @@
                             <option value="-1">选择车辆</option>
                         </select>
 
+                        <select class="form-control form-filter" name="order-route" style="width:96px;">
+                            <option value="-1">选择线路</option>
+                            @foreach($route_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-control form-filter" name="order-pricing" style="width:96px;">
+                            <option value="-1">选择定价</option>
+                            @foreach($pricing_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
+                            @endforeach
+                        </select>
+
                         <select class="form-control form-filter" name="order-status" style="width:96px;">
                             <option value ="-1">订单状态</option>
                             <option value ="未发布">未发布</option>
@@ -1198,7 +1212,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50, 100, 200], ["50", "100", "200"]],
+                "aLengthMenu": [[50, 10, 100, 200], ["50", "10", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -1215,6 +1229,8 @@
                         d.staff = $('select[name="order-staff"]').val();
                         d.client = $('select[name="order-client"]').val();
                         d.car = $('select[name="order-car"]').val();
+                        d.route = $('select[name="order-route"]').val();
+                        d.pricing = $('select[name="order-pricing"]').val();
                         d.status = $('select[name="order-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();

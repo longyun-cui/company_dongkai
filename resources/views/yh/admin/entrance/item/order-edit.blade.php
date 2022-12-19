@@ -71,7 +71,7 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 金额</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="amount" placeholder="金额" value="{{ $data->amount or '' }}" id="order-price"
-                               @if($data->route_id > 0) readonly="readonly" @endif
+                               @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif
                         >
                     </div>
                 </div>
@@ -482,10 +482,10 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 出发地</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="departure_place" placeholder="出发地" value="{{ $data->departure_place or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
+                            <input type="text" class="form-control" name="departure_place" placeholder="出发地" value="{{ $data->departure_place or '' }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="destination_place" placeholder="目的地" value="{{ $data->destination_place or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
+                            <input type="text" class="form-control" name="destination_place" placeholder="目的地" value="{{ $data->destination_place or '' }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
                         </div>
                     </div>
                 </div>
@@ -500,7 +500,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">经停地</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="stopover_place" placeholder="经停地" value="{{ $data->stopover_place or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
+                        <input type="text" class="form-control" name="stopover_place" placeholder="经停地" value="{{ $data->stopover_place or '' }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
                     </div>
                 </div>
 
@@ -509,7 +509,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 里程</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
+                        <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or '' }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
                     </div>
                 </div>
 
@@ -517,7 +517,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">时效（小时）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or '' }}" @if($data->route_id > 0) readonly="readonly" @endif >
+                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or '' }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
                     </div>
                 </div>
 

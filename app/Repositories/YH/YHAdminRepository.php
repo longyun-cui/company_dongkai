@@ -6477,10 +6477,14 @@ class YHAdminRepository {
         $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $car_list = YH_Car::select('id','name')->whereIn('item_type',[1,21])->get();
+        $route_list = YH_Route::select('id','title')->get();
+        $pricing_list = YH_Pricing::select('id','title')->get();
 
         $return['staff_list'] = $staff_list;
         $return['client_list'] = $client_list;
         $return['car_list'] = $car_list;
+        $return['route_list'] = $route_list;
+        $return['pricing_list'] = $pricing_list;
         $return['menu_active_of_order_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
@@ -6532,6 +6536,22 @@ class YHAdminRepository {
             {
 
                 $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car'])->orWhere('trailer_id', $post_data['car']); } );
+            }
+        }
+
+        if(!empty($post_data['route']))
+        {
+            if(!in_array($post_data['route'],[-1,0]))
+            {
+                $query->where('route_id', $post_data['route']);
+            }
+        }
+
+        if(!empty($post_data['pricing']))
+        {
+            if(!in_array($post_data['pricing'],[-1,0]))
+            {
+                $query->where('pricing_id', $post_data['pricing']);
             }
         }
 
