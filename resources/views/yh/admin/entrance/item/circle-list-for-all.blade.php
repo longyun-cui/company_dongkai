@@ -135,12 +135,12 @@
             <div class="box-body">
 
                 {{ csrf_field() }}
-                <input type="hidden" name="attachment-set-operate" value="item-pricing-attachment-set" readonly>
+                <input type="hidden" name="attachment-set-operate" value="item-circle-attachment-set" readonly>
                 <input type="hidden" name="attachment-set-order-id" value="0" readonly>
                 <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
                 <input type="hidden" name="attachment-set-column-key" value="" readonly>
 
-                <input type="hidden" name="operate" value="item-pricing-attachment-set" readonly>
+                <input type="hidden" name="operate" value="item-circle-attachment-set" readonly>
                 <input type="hidden" name="order_id" value="0" readonly>
                 <input type="hidden" name="operate_type" value="add" readonly>
                 <input type="hidden" name="column_key" value="attachment" readonly>
@@ -213,7 +213,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-pricing-info-text-set" readonly>
+                    <input type="hidden" name="info-text-set-operate" value="item-circle-info-text-set" readonly>
                     <input type="hidden" name="info-text-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-text-set-column-key" value="" readonly>
@@ -259,7 +259,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-pricing-info-time-set" readonly>
+                    <input type="hidden" name="info-time-set-operate" value="item-circle-info-time-set" readonly>
                     <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
@@ -306,7 +306,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-pricing-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-operate" value="item-circle-info-option-set" readonly>
                     <input type="hidden" name="info-radio-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
@@ -346,7 +346,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-pricing-info-option-set" readonly>
+                    <input type="hidden" name="info-select-set-operate" value="item-circle-info-option-set" readonly>
                     <input type="hidden" name="info-select-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
@@ -620,6 +620,29 @@
                         },
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "车辆",
+                        "data": "car_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','车辆');
+                                $(nTd).attr('data-key','car_id').attr('data-value',row.car_id);
+                                if(row.car_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.car_er.name);
+                                $(nTd).attr('data-column-name','车辆');
+                                if(row.car_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return row.car_er == null ? '--' : '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
                         }
                     },
                     {

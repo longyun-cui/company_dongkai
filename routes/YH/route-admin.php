@@ -268,7 +268,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/circle-info-text-set', $controller.'@operate_item_circle_info_text_set');
     Route::post('/item/circle-info-time-set', $controller.'@operate_item_circle_info_time_set');
     Route::post('/item/circle-info-radio-set', $controller.'@operate_item_circle_info_option_set');
-    Route::post('/item/circle-info-select-set', $controller.'@operate_item_pcircle_info_option_set');
+    Route::post('/item/circle-info-select-set', $controller.'@operate_item_circle_info_option_set');
     Route::post('/item/circle-info-select2-set', $controller.'@operate_item_circle_info_option_set');
 
     // 删除 & 恢复

@@ -352,7 +352,7 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/pricing-info-text-set') }}",
+                        "{{ url('/item/circle-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-text-set-operate"]').val(),
@@ -510,7 +510,7 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/pricing-info-radio-set') }}",
+                        "{{ url('/item/circle-info-radio-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-radio-set-operate"]').val(),
@@ -735,7 +735,7 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/pricing-info-select-set') }}",
+                        "{{ url('/item/circle-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),

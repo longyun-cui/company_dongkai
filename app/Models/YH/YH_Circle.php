@@ -18,6 +18,7 @@ class YH_Circle extends Model
         'item_id', 'order_id',
         'column', 'column_type', 'column_name',
         'before', 'after', 'before_id', 'after_id',
+        'client_id', 'car_id',
         'before_client_id', 'after_client_id', 'before_route_id', 'after_route_id', 'before_car_id', 'after_car_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
@@ -63,44 +64,14 @@ class YH_Circle extends Model
 
 
     // 客户
-    function before_client_er()
+    function client_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Client','before_client_id','id');
-    }
-    // 客户
-    function after_client_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Client','after_client_id','id');
-    }
-    // 线路
-    function before_route_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Route','before_route_id','id');
-    }
-    // 线路
-    function after_route_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Route','after_route_id','id');
-    }
-    // 定价
-    function before_pricing_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Pricing','before_pricing_id','id');
-    }
-    // 定价
-    function after_pricing_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Pricing','after_pricing_id','id');
+        return $this->belongsTo('App\Models\YH\YH_Client','client_id','id');
     }
     // 车辆
-    function before_car_er()
+    function car_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','before_car_id','id');
-    }
-    // 车辆
-    function after_car_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Car','after_car_id','id');
+        return $this->belongsTo('App\Models\YH\YH_Car','car_id','id');
     }
 
 

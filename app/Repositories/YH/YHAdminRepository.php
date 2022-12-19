@@ -8101,7 +8101,7 @@ class YHAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Car::withTrashed()->find($id);
+        $item = YH_Circle::withTrashed()->find($id);
         if(!$item) return response_error([],"该【环线】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -8456,7 +8456,7 @@ class YHAdminRepository {
         $query = YH_Circle::select('*')
             ->withTrashed()
 //            ->withCount([''])
-            ->with(['creator','pivot_order_list',
+            ->with(['creator','car_er','pivot_order_list',
 //                'pivot_order_list'=>function($query) {
 //                    $query->with('order_er');
 //                },
@@ -8486,7 +8486,7 @@ class YHAdminRepository {
         else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();s
+        else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)
         {
