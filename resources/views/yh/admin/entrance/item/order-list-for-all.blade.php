@@ -1466,116 +1466,6 @@
                     },
                     {
                         "className": "",
-                        "width": "80px",
-                        "title": "状态",
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-
-                            if(row.deleted_at != null)
-                            {
-                                return '';
-                            }
-
-                            if(row.is_published == 0)
-                            {
-                                return '';
-                            }
-
-
-                            var $travel_status_html = '';
-                            var $travel_result_html = '';
-
-
-
-                            if(row.travel_result == "正常")
-                            {
-                                $travel_result_html = '<small class="btn-xs bg-olive">正常</small>';
-                            }
-                            else if(row.travel_result == "超时")
-                            {
-                                $travel_result_html = '<small class="btn-xs bg-red">超时</small><br>';
-                            }
-                            else if(row.travel_result == "发车超时")
-                            {
-                                $travel_result_html = '<small class="btn-xs btn-danger">发车超时</small>';
-                            }
-                            else if(row.travel_result == "待收款")
-                            {
-                                $travel_result_html = '<small class="btn-xs bg-orange">待收款</small>';
-                            }
-                            else if(row.travel_result == "已收款")
-                            {
-                                $travel_result_html = '<small class="btn-xs bg-blue">已收款</small>';
-                            }
-
-
-                            if(row.is_completed == 1)
-                            {
-                                $travel_result_html = '<small class="btn-xs bg-grey">已结束</small>';
-                            }
-
-                            return $travel_status_html + $travel_result_html;
-
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "200px",
-                        "title": "行程",
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            var $journey_time = '';
-                            var $travel_departure_overtime_time = '';
-                            var $travel_arrival_overtime_time = '';
-
-                            if(row.travel_journey_time) $journey_time = '<small class="btn-xs bg-gray">行程 '+row.travel_journey_time+'</small><br>';
-                            if(row.travel_departure_overtime_time) $travel_departure_overtime_time = '<small class="btn-xs bg-red">发车超时 '+row.travel_departure_overtime_time+'</small><br>';
-                            if(row.travel_arrival_overtime_time) $travel_arrival_overtime_time = '<small class="btn-xs bg-red">到达超时 '+row.travel_arrival_overtime_time+'</small><br>';
-
-                            return $journey_time + $travel_departure_overtime_time + $travel_arrival_overtime_time;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "创建人",
-                        "data": "creator_id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "120px",
-                        "title": "订单类型",
-                        "data": "car_owner_type",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 1)
-                            {
-                                return '<small class="btn-xs bg-green">自有</small>';
-                            }
-                            else if(data == 11)
-                            {
-                                return '<small class="btn-xs bg-teal">空单</small>';
-                            }
-                            else if(data == 41)
-                            {
-                                return '<small class="btn-xs bg-blue">外配·配货</small>';
-                            }
-                            else if(data == 61)
-                            {
-                                return '<small class="btn-xs bg-purple">外请·调车</small>';
-                            }
-                            else return "有误";
-                        }
-                    },
-                    {
-                        "className": "",
                         "width": "100px",
                         "title": "派车日期",
                         "data": 'assign_time',
@@ -1707,35 +1597,6 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "120px",
-                        "title": "包油价",
-                        "data": "pricing_id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
-                                $(nTd).attr('data-key','pricing_id').attr('data-value',data);
-                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
-                                else $(nTd).attr('data-option-name',row.pricing_er.title);
-                                $(nTd).attr('data-column-name','包油价');
-                                if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.pricing_er == null)
-                            {
-                                return '--';
-                            }
-                            else {
-                                return '<a href="javascript:void(0);">'+row.pricing_er.title+'</a>';
-                            }
-                        }
-                    },
-                    {
-                        "className": "text-center",
                         "width": "80px",
                         "title": "车辆",
                         "data": "car_id",
@@ -1821,6 +1682,160 @@
                                 if(row.outside_trailer) trailer_html = row.outside_trailer;
                             }
                             return trailer_html;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "主驾",
+                        "data": "driver_name",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名');
+                                $(nTd).attr('data-key','driver_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾姓名');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "100px",
+                        "title": "主驾电话",
+                        "data": "driver_phone",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
+                                $(nTd).attr('data-key','driver_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾电话');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "状态",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+
+                            if(row.deleted_at != null)
+                            {
+                                return '';
+                            }
+
+                            if(row.is_published == 0)
+                            {
+                                return '';
+                            }
+
+
+                            var $travel_status_html = '';
+                            var $travel_result_html = '';
+
+
+
+                            if(row.travel_result == "正常")
+                            {
+                                $travel_result_html = '<small class="btn-xs bg-olive">正常</small>';
+                            }
+                            else if(row.travel_result == "超时")
+                            {
+                                $travel_result_html = '<small class="btn-xs bg-red">超时</small><br>';
+                            }
+                            else if(row.travel_result == "发车超时")
+                            {
+                                $travel_result_html = '<small class="btn-xs btn-danger">发车超时</small>';
+                            }
+                            else if(row.travel_result == "待收款")
+                            {
+                                $travel_result_html = '<small class="btn-xs bg-orange">待收款</small>';
+                            }
+                            else if(row.travel_result == "已收款")
+                            {
+                                $travel_result_html = '<small class="btn-xs bg-blue">已收款</small>';
+                            }
+
+
+                            if(row.is_completed == 1)
+                            {
+                                $travel_result_html = '<small class="btn-xs bg-grey">已结束</small>';
+                            }
+
+                            return $travel_status_html + $travel_result_html;
+
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "200px",
+                        "title": "行程",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $journey_time = '';
+                            var $travel_departure_overtime_time = '';
+                            var $travel_arrival_overtime_time = '';
+
+                            if(row.travel_journey_time) $journey_time = '<small class="btn-xs bg-gray">行程 '+row.travel_journey_time+'</small><br>';
+                            if(row.travel_departure_overtime_time) $travel_departure_overtime_time = '<small class="btn-xs bg-red">发车超时 '+row.travel_departure_overtime_time+'</small><br>';
+                            if(row.travel_arrival_overtime_time) $travel_arrival_overtime_time = '<small class="btn-xs bg-red">到达超时 '+row.travel_arrival_overtime_time+'</small><br>';
+
+                            return $journey_time + $travel_departure_overtime_time + $travel_arrival_overtime_time;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "创建人",
+                        "data": "creator_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "订单类型",
+                        "data": "car_owner_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 1)
+                            {
+                                return '<small class="btn-xs bg-green">自有</small>';
+                            }
+                            else if(data == 11)
+                            {
+                                return '<small class="btn-xs bg-teal">空单</small>';
+                            }
+                            else if(data == 41)
+                            {
+                                return '<small class="btn-xs bg-blue">外配·配货</small>';
+                            }
+                            else if(data == 61)
+                            {
+                                return '<small class="btn-xs bg-purple">外请·调车</small>';
+                            }
+                            else return "有误";
                         }
                     },
                     {
@@ -2012,6 +2027,35 @@
                         },
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "包油价",
+                        "data": "pricing_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
+                                $(nTd).attr('data-key','pricing_id').attr('data-value',data);
+                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.pricing_er.title);
+                                $(nTd).attr('data-column-name','包油价');
+                                if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.pricing_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.pricing_er.title+'</a>';
+                            }
                         }
                     },
                     {
@@ -2269,50 +2313,6 @@
 //                            return row.departure_place + $stopover_html + '--' + row.destination_place;
 //                        }
 //                    },
-                    {
-                        "className": "",
-                        "width": "60px",
-                        "title": "主驾",
-                        "data": "driver_name",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名');
-                                $(nTd).attr('data-key','driver_name').attr('data-value',data);
-                                $(nTd).attr('data-column-name','主驾姓名');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "100px",
-                        "title": "主驾电话",
-                        "data": "driver_phone",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
-                                $(nTd).attr('data-key','driver_phone').attr('data-value',data);
-                                $(nTd).attr('data-column-name','主驾电话');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
                     {
                         "className": "",
                         "width": "60px",
