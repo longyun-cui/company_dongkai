@@ -783,7 +783,7 @@
                     $('input[name=departure_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-departure'));
                     $('input[name=destination_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-destination'));
                     $('input[name=stopover_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-stopover'));
-                    $('input[name=travel_distance]').attr('readonly','readonly').val($select2_route_selected.attr('data-price'));
+                    $('input[name=travel_distance]').attr('readonly','readonly').val($select2_route_selected.attr('data-distance'));
                     $('input[name=time_limitation_prescribed]').attr('readonly','readonly').val($select2_route_selected.attr('data-prescribed'));
                 }
             }
