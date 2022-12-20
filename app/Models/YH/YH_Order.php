@@ -25,6 +25,7 @@ class YH_Order extends Model
         'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
         'travel_distance', 'time_limitation_prescribed',
         'route_type', 'route_id', 'route', 'route_fixed', 'route_temporary',
+        'pricing_id',
         'client_id',
         'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type', 'outside_car', 'outside_trailer',
         'trailer_type', 'trailer_length', 'trailer_volume', 'trailer_weight', 'trailer_axis_count',
