@@ -1839,6 +1839,52 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "里程",
+                        "data": "travel_distance",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','里程');
+                                $(nTd).attr('data-key','travel_distance').attr('data-value',data);
+                                $(nTd).attr('data-column-name','里程');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+                            else return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "时效",
+                        "data": "time_limitation_prescribed",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','时效');
+                                $(nTd).attr('data-key','time_limitation_prescribed').attr('data-value',data);
+                                $(nTd).attr('data-column-name','时效');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+                            else return data;
+                        }
+                    },
+                    {
                         "className": "",
                         "width": "50px",
                         "title": "应收款",
@@ -2163,52 +2209,6 @@
                             return data;
                         }
                     },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "里程",
-                        "data": "travel_distance",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','里程');
-                                $(nTd).attr('data-key','travel_distance').attr('data-value',data);
-                                $(nTd).attr('data-column-name','里程');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '';
-                            else return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "时效",
-                        "data": "time_limitation_prescribed",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','时效');
-                                $(nTd).attr('data-key','time_limitation_prescribed').attr('data-value',data);
-                                $(nTd).attr('data-column-name','时效');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '';
-                            else return data;
-                        }
-                    },
 //                    {
 //                        "className": "text-center",
 //                        "width": "80px",
@@ -2239,59 +2239,19 @@
 //                            else return "";
 //                        }
 //                    },
-                    {
-                        "width": "120px",
-                        "title": "线路",
-                        "data": "route",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','线路');
-                                $(nTd).attr('data-key','route').attr('data-value',data);
-                                $(nTd).attr('data-column-name','线路');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
 //                    {
 //                        "width": "120px",
-//                        "title": "固定线路",
-//                        "data": "fixed_route",
+//                        "title": "线路",
+//                        "data": "route",
 //                        "orderable": false,
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                            if(row.is_published != 0 && row.item_status != 97)
+//                            if(row.is_completed != 1 && row.item_status != 97)
 //                            {
 //                                $(nTd).addClass('modal-show-for-info-text-set');
-//                                $(nTd).attr('data-id',row.id).attr('data-name','固定线路');
-//                                $(nTd).attr('data-key','fixed_route').attr('data-value',data);
-//                                $(nTd).attr('data-column-name','固定线路');
-//                                if(data) $(nTd).attr('data-operate-type','edit');
-//                                else $(nTd).attr('data-operate-type','add');
-//                            }
-//                        },
-//                        render: function(data, type, row, meta) {
-//                            return data;
-//                        }
-//                    },
-//                    {
-//                        "width": "120px",
-//                        "title": "临时线路",
-//                        "data": "temporary_route",
-//                        "orderable": false,
-//                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                            if(row.is_published != 0 && row.item_status != 97)
-//                            {
-//                                $(nTd).addClass('modal-show-for-info-text-set');
-//                                $(nTd).attr('data-id',row.id).attr('data-name','临时线路');
-//                                $(nTd).attr('data-key','temporary_route').attr('data-value',data);
-//                                $(nTd).attr('data-column-name','临时线路');
+//                                $(nTd).attr('data-id',row.id).attr('data-name','线路');
+//                                $(nTd).attr('data-key','route').attr('data-value',data);
+//                                $(nTd).attr('data-column-name','线路');
+//                                $(nTd).attr('data-text-type','text');
 //                                if(data) $(nTd).attr('data-operate-type','edit');
 //                                else $(nTd).attr('data-operate-type','add');
 //                            }

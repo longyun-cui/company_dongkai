@@ -93,19 +93,26 @@
             </li>
             <li class="treeview {{ $menu_active_of_pricing_list_for_all or '' }}">
                 <a href="{{ url('/item/pricing-list-for-all')}}">
-                    <i class="fa fa-map text-green"></i>
+                    <i class="fa fa-rmb text-green"></i>
                     <span>定价列表</span>
                 </a>
             </li>
+
+
+
+
+
+            <li class="header">订单管理</li>
+
             <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
                 <a href="{{ url('/item/order-list-for-all')}}">
-                    <i class="fa fa-file-text text-green"></i>
+                    <i class="fa fa-file-text text-yellow"></i>
                     <span>订单列表</span>
                 </a>
             </li>
             <li class="treeview {{ $menu_active_of_circle_list_for_all or '' }}">
                 <a href="{{ url('/item/circle-list-for-all')}}">
-                    <i class="fa fa-file-text text-green"></i>
+                    <i class="fa fa-refresh text-yellow"></i>
                     <span>环线列表</span>
                 </a>
             </li>
