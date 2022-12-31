@@ -1607,6 +1607,72 @@
                     },
                     {
                         "className": "text-center",
+                        "width": "60px",
+                        "title": "出发地",
+                        "data": "departure_place",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','出发地');
+                                $(nTd).attr('data-key','departure_place').attr('data-value',data);
+                                $(nTd).attr('data-column-name','出发地');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data == null ? '--' : data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "经停地",
+                        "data": "stopover_place",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','经停地');
+                                $(nTd).attr('data-key','stopover_place').attr('data-value',data);
+                                $(nTd).attr('data-column-name','经停地');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data == null ? '--' : data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "目的地",
+                        "data": "destination_place",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','目的地');
+                                $(nTd).attr('data-key','destination_place').attr('data-value',data);
+                                $(nTd).attr('data-column-name','目的地');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data == null ? '--' : data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
                         "width": "80px",
                         "title": "车辆",
                         "data": "car_id",
@@ -2480,72 +2546,6 @@
                                 if(row.trailer_axis_count) reurn_html = row.trailer_axis_count;
                             }
                             return reurn_html;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "出发地",
-                        "data": "departure_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','出发地');
-                                $(nTd).attr('data-key','departure_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','出发地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "经停地",
-                        "data": "stopover_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','经停地');
-                                $(nTd).attr('data-key','stopover_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','经停地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "目的地",
-                        "data": "destination_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','目的地');
-                                $(nTd).attr('data-key','destination_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','目的地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
                         }
                     },
                     {
