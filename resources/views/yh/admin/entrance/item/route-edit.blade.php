@@ -49,13 +49,13 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 运价（现金）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="amount_with_cash" placeholder="运价（现金）" value="{{ $data->amount_with_cash or '' }}">
+                        <input type="text" class="form-control" name="amount_with_cash" placeholder="运价（现金）" value="{{ $data->amount_with_cash or 0 }}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 运价（带票）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="amount_with_invoice" placeholder="运价（现金）" value="{{ $data->amount_with_invoice or '' }}">
+                        <input type="text" class="form-control" name="amount_with_invoice" placeholder="运价（现金）" value="{{ $data->amount_with_invoice or 0 }}">
                     </div>
                 </div>
 

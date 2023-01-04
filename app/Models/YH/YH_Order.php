@@ -22,6 +22,7 @@ class YH_Order extends Model
         'amount', 'oil_card_amount', 'invoice_amount', 'invoice_point',
         'information_fee', 'customer_management_fee', 'time_limitation_deduction',
         'driver_fine',
+        'outside_car_price',
         'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
         'travel_distance', 'time_limitation_prescribed',
         'route_type', 'route_id', 'route', 'route_fixed', 'route_temporary',

@@ -1779,7 +1779,12 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
+                            {
+                                if(row.car_er != null) return row.car_er.linkman_name;
+                                else return data;
+                            }
+                            else return data;
                         }
                     },
                     {
@@ -1801,7 +1806,12 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
+                            {
+                                if(row.car_er != null) return row.car_er.linkman_phone;
+                                else return data;
+                            }
+                            else return data;
                         }
                     },
                     {
@@ -2168,6 +2178,27 @@
                             else {
                                 return '<a href="javascript:void(0);">'+row.pricing_er.title+'</a>';
                             }
+                        }
+                    },
+                    {
+                        "width": "60px",
+                        "title": "请车价",
+                        "data": "outside_car_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
+                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
                         }
                     },
                     {
