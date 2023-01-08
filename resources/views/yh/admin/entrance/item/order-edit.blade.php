@@ -526,7 +526,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 时效（小时）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or '0 }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
+                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or 0 }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
                     </div>
                 </div>
 
