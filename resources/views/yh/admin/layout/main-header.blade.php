@@ -53,6 +53,7 @@
                                 <i class="fa fa-plus text-red"></i> 添加定价
                             </a>
                         </li>
+                        <li class="header">订单</li>
                         <li class="header">
                             <a href="{{ url('/item/order-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加订单
