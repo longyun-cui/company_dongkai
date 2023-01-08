@@ -1779,6 +1779,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            if(data) return data;
                             if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                             {
                                 if(row.car_er != null) return row.car_er.linkman_name;
@@ -1806,6 +1807,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            if(data) return data;
                             if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                             {
                                 if(row.car_er != null) return row.car_er.linkman_phone;
