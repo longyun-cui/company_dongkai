@@ -770,6 +770,178 @@
 
 
 
+        // 【修改记录】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-analysis", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            var $data = new Object();
+            $.ajax({
+                type:"post",
+                dataType:'json',
+                async:false,
+                url: "{{ url('/item/circle-analysis') }}",
+                data: {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate:"item-get",
+                    circle_id: $id
+                },
+                success:function(data){
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        $data = data.data;
+                    }
+                }
+            });
+
+            console.log($data);
+
+
+            var $overview = $data.overview;
+            var $option_overview = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['收入', '支出', '利润']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisTick: {
+                            show: false
+                        },
+                        data: $overview.title
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '支出',
+                        type: 'bar',
+                        stack: 'Total',
+                        label: {
+                            show: true,
+                            position: 'inside'
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: $overview.expenses
+                    },
+                    {
+                        name: '收入',
+                        type: 'bar',
+                        stack: 'Total',
+                        label: {
+                            show: true,
+                            position: 'inside'
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: $overview.income
+                    },
+                    {
+                        name: '利润',
+                        type: 'bar',
+                        label: {
+                            show: true,
+                            position: 'inside'
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: $overview.profit
+                    }
+                ]
+            };
+            var $myChart_overview = echarts.init(document.getElementById('echart-overview'));
+            $myChart_overview.setOption($option_overview);
+
+
+            // 支出占比
+            var $expenditure_rate = $data.expenditure_rate;
+            var $option_expenditure_rate = {
+                title : {
+                    text: '支出占比',
+                    subtext: '支出占比',
+                    x:'center'
+                },
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient : 'vertical',
+                    x : 'left',
+                    data: $expenditure_rate
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {
+                            show: true,
+                            type: ['pie', 'funnel'],
+                            option: {
+                                funnel: {
+                                    x: '25%',
+                                    width: '50%',
+                                    funnelAlign: 'left',
+                                    max: 1548
+                                }
+                            }
+                        },
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                series : [
+                    {
+                        name:'支出占比',
+                        type:'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data: $expenditure_rate
+                    }
+                ]
+            };
+            var $myChart_expenditure_rate = echarts.init(document.getElementById('echart-expenditure-rate'));
+            $myChart_expenditure_rate.setOption($option_expenditure_rate);
+
+
+
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-body-for-analysis').modal('show');
+        });
+
+
+
+
 
 
 

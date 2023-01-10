@@ -69,7 +69,7 @@ class YH_Finance extends Model
 
 
 
-    // 客户
+    // 订单
     function order_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Order','order_id','id');

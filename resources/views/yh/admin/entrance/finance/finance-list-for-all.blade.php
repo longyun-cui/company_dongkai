@@ -114,7 +114,7 @@
 @section('custom-style')
     <style>
         .tableArea .main-table {
-            min-width: 1680px;
+            min-width:1800px;
         }
     </style>
 @endsection
@@ -253,13 +253,29 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
-                        "title": "创建者",
-                        "data": "creator_id",
+                        "width": "240px",
+                        "title": "订单",
+                        "data": "order_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
+
+                            var $id = row.order_er.id;
+                            var $title = (row.order_er.title) ? row.order_er.title : '';
+                            var $departure  = (row.order_er.departure_place) ? row.order_er.departure_place : '';
+                            var $destination  = (row.order_er.destination_place) ? row.order_er.destination_place : '';
+
+                            var $date = new Date(row.order_er.assign_time*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $assign = $year+'-'+$month+'-'+$day;
+
+                            var $text = $id + " " + $title + "&nbsp;&nbsp;[" + $departure + "-" + $destination + "]&nbsp;&nbsp;&nbsp;&nbsp;(" + $assign + ")";
+
+                            $html = '<a href="javascript:void(0);" data-id="'+$id+'">'+$text+'</a><br>';
+
+                            return $html;
+
                         }
                     },
                     {
@@ -288,6 +304,16 @@
                     {
                         "className": "text-center",
                         "width": "80px",
+                        "title": "创建者",
+                        "data": "creator_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
                         "title": "确认者",
                         "data": "confirmer_id",
                         "orderable": false,
@@ -297,7 +323,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "160px",
+                        "width": "120px",
                         "title": "确认时间",
                         "data": "confirmed_at",
                         "orderable": false,
@@ -375,15 +401,6 @@
                         "width": "160px",
                         "title": "交易单号",
                         "data": "transaction_order",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "width": "60px",
-                        "title": "订单ID",
-                        "data": "order_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;

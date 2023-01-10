@@ -283,6 +283,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/circle-list', $controller.'@view_item_circle_list');
     Route::match(['get','post'], '/item/circle-list-for-all', $controller.'@view_item_circle_list_for_all');
 
+    Route::match(['get','post'], '/item/circle-analysis', $controller.'@get_item_circle_analysis');
+    Route::match(['get','post'], '/item/circle-finance-record', $controller.'@get_item_circle_finance_record');
+
 
 
 

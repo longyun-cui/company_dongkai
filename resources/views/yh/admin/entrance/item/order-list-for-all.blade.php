@@ -50,6 +50,8 @@
 
                         <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" />
 
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" readonly="readonly" />
+
                         <select class="form-control form-filter" name="order-staff" style="width:96px;">
                             <option value ="-1">选择员工</option>
                             @foreach($staff_list as $v)
@@ -640,7 +642,8 @@
     </div>
 </div>
 
-{{----}}
+
+{{--option--}}
 <div class="option-container _none">
 
     <div id="trailer_type-option-list">
@@ -941,6 +944,9 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1186,12 +1192,12 @@
 
 @section('custom-css')
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/lib/css/select2-4.0.5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/resource/component/css/select2-4.0.5.min.css') }}">
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width: 4800px; }
-    .tableArea table#datatable_ajax_finance { min-width: 1440px; }
+    .tableArea table { min-width:4800px; }
+    .tableArea table#datatable_ajax_finance { min-width:1600px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
@@ -1223,6 +1229,7 @@
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
                         d.id = $('input[name="order-id"]').val();
+                        d.assign = $('input[name="order-assign"]').val();
                         d.name = $('input[name="order-name"]').val();
                         d.title = $('input[name="order-title"]').val();
                         d.keyword = $('input[name="order-keyword"]').val();
@@ -3405,13 +3412,16 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "60px",
-                        "title": "创建者",
-                        "data": "creator_id",
+                        "title": "类型",
+                        "data": "finance_type",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
+//                            return data;
+                            if(row.finance_type == 1) return '<small class="btn-xs bg-olive">收入</small>';
+                            else if(row.finance_type == 21) return '<small class="btn-xs bg-orange">支出</small>';
+                            else return '有误';
                         }
                     },
                     {
@@ -3439,26 +3449,50 @@
                         }
                     },
                     {
-                        "className": "",
+                        "className": "text-center",
                         "width": "60px",
-                        "title": "类型",
-                        "data": "finance_type",
+                        "title": "创建者",
+                        "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.finance_type == 1) return '<small class="btn-xs bg-olive">收入</small>';
-                            else if(row.finance_type == 21) return '<small class="btn-xs bg-orange">支出</small>';
-                            else return '有误';
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
                         }
                     },
                     {
-                        "className": "",
+                        "className": "text-center",
                         "width": "80px",
-                        "title": "费用名目",
-                        "data": "title",
+                        "title": "确认者",
+                        "data": "confirmer_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return row.confirmer == null ? '' : '<a href="javascript:void(0);">'+row.confirmer.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "确认时间",
+                        "data": "confirmed_at",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+
                         }
                     },
                     {
@@ -3470,6 +3504,16 @@
                         render: function(data, type, row, meta) {
                             if((data > 0) && (data <= 10)) return '<samll class="text-red">'+data+'</samll>';
                             else return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "费用名目",
+                        "data": "title",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
                         }
                     },
                     {

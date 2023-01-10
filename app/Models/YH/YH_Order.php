@@ -131,6 +131,15 @@ class YH_Order extends Model
 
 
 
+    // 财务记录
+    function finance_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Finance','order_id','id');
+    }
+
+
+
+
     // 其他人的
     function pivot_item_relation()
     {

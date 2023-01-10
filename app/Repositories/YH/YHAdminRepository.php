@@ -14,6 +14,7 @@ use App\Models\YH\YH_Finance;
 use App\Models\YH\YH_Record;
 use App\Models\YH\YH_Item;
 use App\Models\YH\YH_Task;
+use App\Models\YH\YH_Pivot_Circle_Order;
 use App\Models\YH\YH_Pivot_Item_Relation;
 
 use App\Repositories\Common\CommonRepository;
@@ -6496,11 +6497,11 @@ class YHAdminRepository {
         $me = $this->me;
 
         $query = YH_Order::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->with(['creator','owner','client_er','route_er','pricing_er','car_er','trailer_er','attachment_list']);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
-//            ->with('ep','parent','fund')
 //            ->withCount([
 //                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
 //                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
@@ -6513,6 +6514,11 @@ class YHAdminRepository {
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), $post_data['assign']);
+//        if(!empty($post_data['assign'])) $query->where(DB::Raw("from_unixtime(assign_time, '%Y-%m-%d') = {$post_data['assign']}"));
+//        if(!empty($post_data['assign'])) $query->whereRaw("from_unixtime(assign_time, '%Y-%m-%d') = {$post_data['assign']}");
+
 
         if(!empty($post_data['staff']))
         {
@@ -6591,7 +6597,7 @@ class YHAdminRepository {
 
         foreach ($list as $k => $v)
         {
-            $list[$k]->encode_id = encode($v->id);
+//            $list[$k]->encode_id = encode($v->id);
 
             if($v->owner_id == $me->id) $list[$k]->is_me = 1;
             else $list[$k]->is_me = 0;
@@ -6708,9 +6714,6 @@ class YHAdminRepository {
                                 $list[$k]->travel_arrival_overtime_time = $arrival_subtract_result;
                             }
                         }
-
-
-
 
                     }
 
@@ -7408,7 +7411,7 @@ class YHAdminRepository {
 
         $id  = $post_data["id"];
         $query = YH_Finance::select('*')
-            ->with(['creator','owner'])
+            ->with(['creator','confirmer','owner'])
             ->where(['order_id'=>$id]);
 
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
@@ -8456,9 +8459,10 @@ class YHAdminRepository {
         $query = YH_Circle::select('*')
             ->withTrashed()
 //            ->withCount([''])
-            ->with(['creator','car_er','pivot_order_list',
+            ->with(['creator','car_er',
+                'pivot_order_list',
 //                'pivot_order_list'=>function($query) {
-//                    $query->with('order_er');
+//                    $query->with('finance_list');
 //                },
             ]);
 
@@ -8491,6 +8495,132 @@ class YHAdminRepository {
         foreach ($list as $k => $v)
         {
 //            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【环线管理】返回-分析-数据
+    public function get_item_circle_analysis($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $circle_id  = $post_data["circle_id"];
+        $pivot_order_list = YH_Pivot_Circle_Order::select('order_id')
+            ->withTrashed()
+            ->where('circle_id',$circle_id)->get();
+        $order_id_list = $pivot_order_list->pluck('order_id')->toArray();
+
+
+        $this_month = date('Y-m');
+        $this_month_year = date('Y');
+        $this_month_month = date('m');
+        $last_month = date('Y-m',strtotime('last month'));
+        $last_month_year = date('Y',strtotime('last month'));
+        $last_month_month = date('m',strtotime('last month'));
+
+
+        // 总览
+        $order_list = YH_Order::select('*')
+            ->whereIn('id',$order_id_list)
+            ->get();
+        $overview = [];
+        foreach($order_list as $k => $v)
+        {
+            $overview['title'][$k] = $v->id;
+            $overview['income'][$k] = intval($v->amount + $v->oil_card_amount - $v->time_limitation_deduction);
+            $overview['expenses'][$k] = intval(0 - $v->expenditure_total);
+            $overview['profit'][$k] = intval($overview['income'][$k] + $overview['expenses'][$k]);
+        }
+        $return_data["overview"] = $overview;
+//        dd($order_list->toArray());
+
+
+        // 支出【占比】
+        $expenditure_rate = YH_Finance::groupBy('title')
+            ->select('title',DB::raw("
+                    sum(transaction_amount) as value,
+                    count(*) as count
+                "))
+            ->whereIn('order_id',$order_id_list)
+            ->get();
+        foreach($expenditure_rate as $k => $v)
+        {
+            $expenditure_rate[$k]->name = $v->title;
+        }
+        $return_data["expenditure_rate"] = $expenditure_rate;
+
+        return response_success($return_data,"");
+    }
+    // 【环线管理】【财务往来记录】返回-列表-数据
+    public function get_item_circle_finance_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $order_list = YH_Pivot_Circle_Order::select('order_id')
+            ->withTrashed()
+            ->where('circle_id',$id)->get();
+        $order_list_array = $order_list->pluck('order_id')->toArray();
+
+
+        $query = YH_Finance::select('*')
+            ->with(['creator','confirmer','owner','order_er'])
+            ->whereIn('order_id',$order_list_array);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        if(!empty($post_data['type']))
+        {
+            if($post_data['type'] == "income")
+            {
+                $query->where('finance_type', 1);
+            }
+            else if($post_data['type'] == "expenditure")
+            {
+                $query->where('finance_type', 21);
+            }
+        }
+
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,21]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);

@@ -853,12 +853,24 @@ class YHAdminController extends Controller
     }
 
 
-    // 【订单管理】SELECT2 Order 订单
+    // 【环线管理】返回-财务-数据
+    public function get_item_circle_analysis()
+    {
+        return $this->repo->get_item_circle_analysis(request()->all());
+    }
+    // 【环线管理】返回-财务-数据
+    public function get_item_circle_finance_record()
+    {
+        return $this->repo->get_item_circle_finance_record_datatable(request()->all());
+    }
+
+
+    // 【环线管理】SELECT2 Order 订单
     public function operate_circle_select2_order_list()
     {
         return $this->repo->operate_circle_select2_order_list(request()->all());
     }
-    // 【订单管理】SELECT2 Car 车辆
+    // 【环线管理】SELECT2 Car 车辆
     public function operate_circle_select2_car()
     {
         return $this->repo->operate_circle_select2_car(request()->all());

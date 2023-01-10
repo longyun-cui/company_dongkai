@@ -381,46 +381,68 @@
 
 
 
-{{--修改列表--}}
-<div class="modal fade modal-main-body" id="modal-body-for-modify-list">
-    <div class="col-md-8 col-md-offset-2 margin-top-32px margin-bottom-64px bg-white">
+{{--分析--}}
+<div class="modal fade modal-main-body" id="modal-body-for-analysis">
+    <div class="col-md-10 col-md-offset-1 margin-top-32px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改记录</h3>
-                <div class="box-tools pull-right caption _none">
+                <h3 class="box-title">财务分析</h3>
+
+                <div class="box-tools- pull-right _none">
                     <a href="javascript:void(0);">
-                        <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加记录</button>
+                        <button type="button" class="btn btn-success pull-right modal-show-for-finance-create">
+                            <i class="fa fa-plus"></i> 添加记录
+                        </button>
                     </a>
                 </div>
             </div>
 
-            <div class="box-body datatable-body" id="datatable-for-modify-list">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="echart-overview" style="width:800px;height:400px;"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="echart-expenditure-rate" style="width:480px;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-body datatable-body" id="datatable-for-finance-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="modify-keyword" placeholder="关键词" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="finance-title" placeholder="费用类型" />
 
-                        <select class="form-control form-filter" name="modify-attribute" style="width:96px;">
-                            <option value ="-1">选择属性</option>
-                            <option value ="amount">金额</option>
-                            <option value ="11">支出</option>
+                        <select class="form-control form-filter" name="finance-finance_type" style="width:96px;">
+                            <option value ="-1">选择</option>
+                            <option value ="1">收入</option>
+                            <option value ="21">支出</option>
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-modify">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-modify">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-finance">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
                     </div>
                 </div>
 
-                <table class='table table-striped table-bordered' id='datatable_ajax_record'>
-                    <thead>
+                <div class="tableArea">
+                    <table class='table table-striped table-bordered' id='datatable_ajax_finance'>
+                        <thead>
                         <tr role='row' class='heading'>
                             <th></th>
                             <th></th>
@@ -429,12 +451,23 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <!-- datatable end -->
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
 
             <div class="box-footer _none">
@@ -466,8 +499,8 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width: 1600px; }
-    .tableArea table#datatable_ajax_finance { min-width: 1440px; }
+    .tableArea table { min-width:1400px; }
+    .tableArea table#datatable_ajax_finance { min-width:1800px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
@@ -479,7 +512,9 @@
 
 @section('custom-js')
     {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
-    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
+    <script src="{{ asset('/resource/component/js/select2-4.0.5.min.js') }}"></script>
+    {{--<script src="{{ asset('/resource/component/js/echarts-3.7.2.min.js') }}"></script>--}}
+    <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
 <script>
@@ -534,7 +569,7 @@
 //                    },
                     {
                         "className": "",
-                        "width": "40px",
+                        "width": "60px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -553,7 +588,7 @@
                         }
                     },
                     {
-                        "width": "160px",
+                        "width": "100px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
@@ -588,7 +623,7 @@
 
                             var html =
                                 '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
-                                $html_able+
+//                                $html_able+
 //                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
 //                                    $html_publish+
                                 $html_delete+
@@ -624,7 +659,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "车辆",
                         "data": "car_id",
                         "orderable": false,
@@ -799,7 +834,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-analysis');
                                 $(nTd).attr('data-id',row.id).attr('data-name','标题');
                                 $(nTd).attr('data-key','title').attr('data-value',data);
                                 $(nTd).attr('data-column-name','标题');
@@ -815,11 +850,11 @@
                                 $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction);
                                 $profit += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.expenditure_total);
                             });
-                            return (($profit/$amount).toFixed(4)*100) + '%';
+                            return (($profit/$amount).toFixed(2)*100) + '%';
                         }
                     },
                     {
-                        "width": "200px",
+                        "width": "60px",
                         "title": "备注",
                         "data": "remark",
                         "orderable": false,
@@ -848,31 +883,6 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "120px",
-                        "title": "创建时间",
-                        "data": 'created_at',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
                     },
                     {
@@ -975,6 +985,455 @@
     $(function () {
         TableDatatablesAjax.init();
     });
+</script>
+
+
+<script>
+    var TableDatatablesAjax_finance = function ($id) {
+        var datatableAjax_finance = function ($id,$type) {
+
+            var dt_finance = $('#datatable_ajax_finance');
+            dt_finance.DataTable().destroy();
+            var ajax_datatable_finance = dt_finance.DataTable({
+                "retrieve": true,
+                "destroy": true,
+//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[20, 50, 200], ["20", "50", "200"]],
+                "bAutoWidth": false,
+                "processing": true,
+                "serverSide": true,
+                "searching": false,
+                "ajax": {
+                    'url': "/item/circle-finance-record?id="+$id+"&type="+$type,
+                    "type": 'POST',
+                    "dataType" : 'json',
+                    "data": function (d) {
+                        d._token = $('meta[name="_token"]').attr('content');
+                        d.name = $('input[name="finance-name"]').val();
+                        d.title = $('input[name="finance-title"]').val();
+                        d.keyword = $('input[name="finance-keyword"]').val();
+                        d.finance_type = $('select[name="finance-finance_type"]').val();
+//
+//                        d.created_at_from = $('input[name="created_at_from"]').val();
+//                        d.created_at_to = $('input[name="created_at_to"]').val();
+//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
+//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
+
+                    },
+                },
+                "pagingType": "simple_numbers",
+                "order": [],
+                "orderCellsTop": true,
+                "columns": [
+//                    {
+//                        "className": "font-12px",
+//                        "width": "32px",
+//                        "title": "序号",
+//                        "data": null,
+//                        "targets": 0,
+//                        "orderable": false
+//                    },
+//                    {
+//                        "className": "font-12px",
+//                        "width": "32px",
+//                        "title": "选择",
+//                        "data": "id",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            return '<label><input type="checkbox" name="bulk-detect-record-id" class="minimal" value="'+data+'"></label>';
+//                        }
+//                    },
+                    {
+                        "className": "",
+                        "width": "40px",
+                        "title": "ID",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "width": "120px",
+                        "title": "操作",
+                        "data": 'id',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $html_confirm = '';
+                            var $html_delete = '';
+
+                            if(row.deleted_at == null)
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-navy item-finance-delete-submit" data-id="'+data+'">删除</a>';
+
+                                if(row.is_confirmed == 1)
+                                {
+                                    $html_confirm = '<a class="btn btn-xs btn-default disabled">确认</a>';
+
+                                    if(row.confirmer_id == 0 || row.confirmer_id == row.creator_id)
+                                    {
+                                        $html_delete = '<a class="btn btn-xs bg-navy item-finance-delete-submit" data-id="'+data+'">删除</a>';
+                                    }
+                                    else $html_delete = '<a class="btn btn-xs btn-default disabled">删除</a>';
+                                }
+                                else
+                                {
+                                    $html_confirm = '<a class="btn btn-xs bg-green item-finance-confirm-submit" data-id="'+data+'">确认</a>';
+                                }
+                            }
+                            else
+                            {
+                                $html_confirm = '<a class="btn btn-xs btn-default disabled">确认</a>';
+                                $html_delete = '<a class="btn btn-xs btn-default disabled">删除</a>';
+//                                $html_delete = '<a class="btn btn-xs bg-grey item-finance-restore-submit" data-id="'+data+'">恢复</a>';
+                            }
+
+
+                            var html =
+                                $html_confirm+
+                                $html_delete+
+//                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
+//                                '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
+                                '';
+                            return html;
+
+                        }
+                    },
+                    {
+                        "width": "60px",
+                        "title": "状态",
+                        "data": "is_confirmed",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.deleted_at == null)
+                            {
+                                if(data == 1) return '<small class="btn-xs btn-success">已确认</small>';
+                                else return '<small class="btn-xs btn-danger">待确认</small>';
+                            }
+                            else return '<small class="btn-xs bg-black">已删除</small>';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "类型",
+                        "data": "finance_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.finance_type == 1) return '<small class="btn-xs bg-olive">收入</small>';
+                            else if(row.finance_type == 21) return '<small class="btn-xs bg-orange">支出</small>';
+                            else return '有误';
+                        }
+                    },
+                    {
+                        "width": "240px",
+                        "title": "订单",
+                        "data": "order_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            var $id = row.order_er.id;
+                            var $title = (row.order_er.title) ? row.order_er.title : '';
+                            var $departure  = (row.order_er.departure_place) ? row.order_er.departure_place : '';
+                            var $destination  = (row.order_er.destination_place) ? row.order_er.destination_place : '';
+
+                            var $date = new Date(row.order_er.assign_time*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $assign = $year+'-'+$month+'-'+$day;
+
+                            var $text = $id + " " + $title + "&nbsp;&nbsp;[" + $departure + "-" + $destination + "]&nbsp;&nbsp;&nbsp;&nbsp;(" + $assign + ")";
+
+                            $html = '<a href="javascript:void(0);" data-id="'+$id+'">'+$text+'</a><br>';
+
+                            return $html;
+
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "交易时间",
+                        "data": "transaction_time",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day;
+                            else return $year+'-'+$month+'-'+$day;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "创建者",
+                        "data": "creator_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "确认者",
+                        "data": "confirmer_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.confirmer == null ? '' : '<a href="javascript:void(0);">'+row.confirmer.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "确认时间",
+                        "data": "confirmed_at",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "费用名目",
+                        "data": "title",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "金额",
+                        "data": "transaction_amount",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if((data > 0) && (data <= 10)) return '<samll class="text-red">'+data+'</samll>';
+                            else return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "支付方式",
+                        "data": "transaction_type",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "160px",
+                        "title": "收款账户",
+                        "data": "transaction_receipt_account",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "160px",
+                        "title": "支出账户",
+                        "data": "transaction_payment_account",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+//                    {
+//                        "className": "",
+//                        "width": "120px",
+//                        "title": "交易账户",
+//                        "data": "transaction_account",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            return data;
+//                        }
+//                    },
+                    {
+                        "className": "",
+                        "width": "160px",
+                        "title": "交易单号",
+                        "data": "transaction_order",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "200px",
+                        "title": "备注",
+                        "data": "description",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "120px",
+                        "title": "操作时间",
+                        "data": "created_at",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                        }
+                    },
+//                    {
+//                        "width": "120px",
+//                        "title": "操作",
+//                        'data': 'id',
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+////                            var $date = row.transaction_date.trim().split(" ")[0];
+//                            var html = '';
+////                                '<a class="btn btn-xs item-enable-submit" data-id="'+value+'">启用</a>'+
+////                                '<a class="btn btn-xs item-disable-submit" data-id="'+value+'">禁用</a>'+
+////                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
+////                                '<a class="btn btn-xs item-statistics-submit" data-id="'+value+'">流量统计</a>'+
+////                                    '<a class="btn btn-xs" href="/item/edit?id='+value+'">编辑</a>'+
+////                                '<a class="btn btn-xs item-edit-submit" data-id="'+value+'">编辑</a>'+
+//
+//                            return html;
+//                        }
+//                    }
+                ],
+                "drawCallback": function (settings) {
+
+//                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+//                    this.api().column(0).nodes().each(function(cell, i) {
+//                        cell.innerHTML =  startIndex + i + 1;
+//                    });
+
+                    ajax_datatable_finance.$('.tooltips').tooltip({placement: 'top', html: true});
+                    $("a.verify").click(function(event){
+                        event.preventDefault();
+                        var node = $(this);
+                        var tr = node.closest('tr');
+                        var nickname = tr.find('span.nickname').text();
+                        var cert_name = tr.find('span.certificate_type_name').text();
+                        var action = node.attr('data-action');
+                        var certificate_id = node.attr('data-id');
+                        var action_name = node.text();
+
+                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
+                        layer.open({
+                            'title': '警告',
+                            content: tpl
+                                .replace('@action_name', action_name)
+                                .replace('@nickname', nickname)
+                                .replace('@certificate_type_name', cert_name),
+                            btn: ['Yes', 'No'],
+                            yes: function(index) {
+                                layer.close(index);
+                                $.post(
+                                    '/admin/medsci/certificate/user/verify',
+                                    {
+                                        action: action,
+                                        id: certificate_id,
+                                        _token: '{{csrf_token()}}'
+                                    },
+                                    function(json){
+                                        if(json['response_code'] == 'success') {
+                                            layer.msg('操作成功!', {time: 3500});
+                                            ajax_datatable.ajax.reload();
+                                        } else {
+                                            layer.alert(json['response_data'], {time: 10000});
+                                        }
+                                    }, 'json');
+                            }
+                        });
+                    });
+
+//                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+//                        checkboxClass: 'icheckbox_minimal-blue',
+//                        radioClass   : 'iradio_minimal-blue'
+//                    });
+                },
+                "language": { url: '/common/dataTableI18n' },
+            });
+
+
+            dt_finance.on('click', '.finance-filter-submit', function () {
+                ajax_datatable_finance.ajax.reload();
+            });
+
+            dt_finance.on('click', '.finance-filter-cancel', function () {
+                $('textarea.form-filter, input.form-filter, select.form-filter', dt_finance).each(function () {
+                    $(this).val("");
+                });
+
+//                $('select.form-filter').selectpicker('refresh');
+                $('select.form-filter option').attr("selected",false);
+                $('select.form-filter').find('option:eq(0)').attr('selected', true);
+
+                ajax_datatable_finance.ajax.reload();
+            });
+
+
+//            dt_finance.on('click', '#all_checked', function () {
+////                layer.msg(this.checked);
+//                $('input[name="detect-record"]').prop('checked',this.checked);//checked为true时为默认显示的状态
+//            });
+
+
+        };
+        return {
+            init: datatableAjax_finance
+        }
+    }();
+    //    $(function () {
+    //        TableDatatablesAjax_finance.init();
+    //    });
 </script>
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.circle-script')
 @endsection
