@@ -80,6 +80,22 @@ class YHAdminRepository {
 //        return redirect('/?'.$parameter_result);
 
 
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
         $query = YH_Car::select('id');
 
 
@@ -161,23 +177,36 @@ class YHAdminRepository {
 
 
 
+        // 本月每日订单量
+        $statistics_order_this_month_data = YH_Order::select('id','assign_time')
+//            ->where('finance_type',1)
+            ->whereBetween('assign_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(assign_time,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(assign_time,'%e') as day,
+                    count(*) as sum
+                "))
+            ->get()->keyBy('day');
+        $return['statistics_order_this_month_data'] = $statistics_order_this_month_data;
+
+        // 上月每日订单量
+        $statistics_order_last_month_data = YH_Order::select('id','assign_time')
+//            ->where('finance_type',1)
+            ->whereBetween('assign_time',[$last_month_start_timestamp,$last_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(assign_time,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(assign_time,'%e') as day,
+                    count(*) as sum
+                "))
+            ->get()->keyBy('day');
+        $return['statistics_order_last_month_data'] = $statistics_order_last_month_data;
+
+
+
+
         // 财务统计
-        $this_month = date('Y-m');
-        $this_month_start_date = date('Y-m-01'); // 本月开始日期
-        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
-        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
-        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
-        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
-        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
-
-        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
-        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
-        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
-        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
-        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
-        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
-
-
 
         $finance_this_month_income = YH_Finance::select('id')
             ->where('finance_type',1)
