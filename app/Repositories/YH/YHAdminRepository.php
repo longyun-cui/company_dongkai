@@ -100,11 +100,15 @@ class YHAdminRepository {
 
 
         // 车辆统计
-        $car_all_count = YH_Car::count("*");
-        $car_car_count = YH_Car::where('item_type',1)->count("*");
-        $car_trailer_count = YH_Car::where('item_type',21)->count("*");
+        $car_count_for_all = YH_Car::count("*");
+        $car_count_for_car = YH_Car::where('item_type',1)->count("*");
+        $car_count_for_trailer = YH_Car::where('item_type',21)->count("*");
+        $return['car_count_for_all'] = $car_count_for_all;
+        $return['car_count_for_car'] = $car_count_for_car;
+        $return['car_count_for_trailer'] = $car_count_for_trailer;
+
         // 空闲车辆
-        $car_idle_count = YH_Car::select('id')
+        $car_idle_query = YH_Car::select('id')
             ->whereDoesntHave('car_order_list_for_current', function ($query) {
                 $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
             })
@@ -116,19 +120,39 @@ class YHAdminRepository {
             })
             ->whereDoesntHave('trailer_order_list_for_future', function ($query) {
                 $query->whereNull('actual_departure_time');
-            })
-            ->count("*");
+            });
+        $car_idle_query_for_all = clone $car_idle_query;
+        $car_idle_query_for_car = clone $car_idle_query;
+        $car_idle_query_for_trailer = clone $car_idle_query;
+        $idle_count_for_all = $car_idle_query_for_all->count("*");
+        $idle_count_for_car = $car_idle_query_for_car->where('item_type',1)->count("*");
+        $idle_count_for_trailer = $car_idle_query_for_trailer->where('item_type',21)->count("*");
+        $return['idle_count_for_all'] = $idle_count_for_all;
+        $return['idle_count_for_car'] = $idle_count_for_car;
+        $return['idle_count_for_trailer'] = $idle_count_for_trailer;
+
         // 工作中
-        $car_working_count = YH_Car::select('id')
-            ->whereHas('car_order_list_for_current',function($query) {
-                $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-            })
-            ->orWhereHas('trailer_order_list_for_current',function($query) {
-                $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-            })
-            ->count("*");
+        $car_working_query = YH_Car::select('id')
+            ->where(function ($query){
+                $query->whereHas('car_order_list_for_current',function($query) {
+                        $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                    })
+                    ->orWhereHas('trailer_order_list_for_current',function($query) {
+                        $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                    });
+            });
+        $car_working_query_for_all = clone $car_working_query;
+        $car_working_query_for_car = clone $car_working_query;
+        $car_working_query_for_trailer = clone $car_working_query;
+        $working_count_for_all = $car_working_query_for_all->count("*");
+        $working_count_for_car = $car_working_query_for_car->where('item_type',1)->count("*");
+        $working_count_for_trailer = $car_working_query_for_trailer->where('item_type',21)->count("*");
+        $return['working_count_for_all'] = $working_count_for_all;
+        $return['working_count_for_car'] = $working_count_for_car;
+        $return['working_count_for_trailer'] = $working_count_for_trailer;
+
         // 待发车
-        $car_waiting_for_departure_count = YH_Car::select('id')
+        $car_waiting_for_departure_query = YH_Car::select('id')
             ->where(function ($query) {
                 $query->whereDoesntHave('car_order_list_for_current', function ($query) {
                         $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
@@ -144,16 +168,20 @@ class YHAdminRepository {
                     ->orWhereHas('trailer_order_list_for_future', function ($query) {
                         $query->whereNull('actual_departure_time');
                     });
-            })
-            ->count("*");
+            });
+        $car_waiting_query_for_all = clone $car_waiting_for_departure_query;
+        $car_waiting_query_for_car = clone $car_waiting_for_departure_query;
+        $car_waiting_query_for_trailer = clone $car_waiting_for_departure_query;
+        $waiting_count_for_all = $car_waiting_query_for_all->count("*");
+        $waiting_count_for_car = $car_waiting_query_for_car->where('item_type',1)->count("*");
+        $waiting_count_for_trailer = $car_waiting_query_for_trailer->where('item_type',21)->count("*");
+        $return['waiting_count_for_all'] = $waiting_count_for_all;
+        $return['waiting_count_for_car'] = $waiting_count_for_car;
+        $return['waiting_count_for_trailer'] = $waiting_count_for_trailer;
 
 
-        $return['car_all_count'] = $car_all_count;
-        $return['car_car_count'] = $car_car_count;
-        $return['car_trailer_count'] = $car_trailer_count;
-        $return['car_idle_count'] = $car_idle_count;
-        $return['car_working_count'] = $car_working_count;
-        $return['car_waiting_for_departure_count'] = $car_waiting_for_departure_count;
+
+
 
 
 

@@ -22,12 +22,20 @@
         <div class="callout callout-success- bg-white">
             <h4>车辆统计</h4>
             <div class="callout-body">
-                <span>总计 <text class="text-purple- font-24px">{{ $car_all_count or 0 }}</text> 辆</span>
-                <span>车辆 <text class="text-green font-24px">{{ $car_car_count or 0 }}</text> 辆</span>
-                <span>车挂 <text class="text-purple font-24px">{{ $car_trailer_count or 0 }}</text> 辆</span>
-                <span>工作中 <text class="text-green font-24px">{{ $car_working_count or '' }}</text> 辆</span>
-                <span>待发车 <text class="text-blue font-24px">{{ $car_waiting_for_departure_count or 0 }}</text> 辆</span>
-                <span>空闲 <text class="text-red font-24px">{{ $car_idle_count or '' }}</text> 辆</span>
+                <span>总计 <text class="text-purple- font-24px">{{ $car_count_for_all or 0 }}</text> 辆</span>
+                <span>（工作中 <text class="text-green font-24px">{{ $working_count_for_all or '' }}</text> 辆</span>
+                <span>待发车 <text class="text-blue font-24px">{{ $waiting_count_for_all or '' }}</text> 辆</span>
+                <span>空闲 <text class="text-red font-24px">{{ $idle_count_for_all or '' }}</text> 辆）</span>
+                <br>
+                <span>车辆 <text class="text-green font-24px">{{ $car_count_for_car or 0 }}</text> 辆</span>
+                <span>（工作中 <text class="text-green font-24px">{{ $working_count_for_car or '' }}</text> 辆</span>
+                <span>待发车 <text class="text-blue font-24px">{{ $waiting_count_for_car or 0 }}</text> 辆</span>
+                <span>空闲 <text class="text-red font-24px">{{ $idle_count_for_car or '' }}</text> 辆）</span>
+                <br>
+                <span>车挂 <text class="text-purple font-24px">{{ $car_count_for_trailer or 0 }}</text> 辆</span>
+                <span>（工作中 <text class="text-green font-24px">{{ $working_count_for_trailer or '' }}</text> 辆</span>
+                <span>待发车 <text class="text-blue font-24px">{{ $waiting_count_for_trailer or '' }}</text> 辆</span>
+                <span>空闲 <text class="text-red font-24px">{{ $idle_count_for_trailer or '' }}</text> 辆）</span>
             </div>
         </div>
     </div>
