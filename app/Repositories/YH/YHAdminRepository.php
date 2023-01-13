@@ -124,9 +124,9 @@ class YHAdminRepository {
         $car_idle_query_for_all = clone $car_idle_query;
         $car_idle_query_for_car = clone $car_idle_query;
         $car_idle_query_for_trailer = clone $car_idle_query;
-        $idle_count_for_all = $car_idle_query_for_all->count("*");
-        $idle_count_for_car = $car_idle_query_for_car->where('item_type',1)->count("*");
-        $idle_count_for_trailer = $car_idle_query_for_trailer->where('item_type',21)->count("*");
+        $idle_count_for_all = (clone $car_idle_query)->count("*");
+        $idle_count_for_car = (clone $car_idle_query)->where('item_type',1)->count("*");
+        $idle_count_for_trailer = (clone $car_idle_query)->where('item_type',21)->count("*");
         $return['idle_count_for_all'] = $idle_count_for_all;
         $return['idle_count_for_car'] = $idle_count_for_car;
         $return['idle_count_for_trailer'] = $idle_count_for_trailer;
@@ -144,9 +144,9 @@ class YHAdminRepository {
         $car_working_query_for_all = clone $car_working_query;
         $car_working_query_for_car = clone $car_working_query;
         $car_working_query_for_trailer = clone $car_working_query;
-        $working_count_for_all = $car_working_query_for_all->count("*");
-        $working_count_for_car = $car_working_query_for_car->where('item_type',1)->count("*");
-        $working_count_for_trailer = $car_working_query_for_trailer->where('item_type',21)->count("*");
+        $working_count_for_all = (clone $car_working_query)->count("*");
+        $working_count_for_car = (clone $car_working_query)->where('item_type',1)->count("*");
+        $working_count_for_trailer = (clone $car_working_query)->where('item_type',21)->count("*");
         $return['working_count_for_all'] = $working_count_for_all;
         $return['working_count_for_car'] = $working_count_for_car;
         $return['working_count_for_trailer'] = $working_count_for_trailer;
@@ -172,9 +172,9 @@ class YHAdminRepository {
         $car_waiting_query_for_all = clone $car_waiting_for_departure_query;
         $car_waiting_query_for_car = clone $car_waiting_for_departure_query;
         $car_waiting_query_for_trailer = clone $car_waiting_for_departure_query;
-        $waiting_count_for_all = $car_waiting_query_for_all->count("*");
-        $waiting_count_for_car = $car_waiting_query_for_car->where('item_type',1)->count("*");
-        $waiting_count_for_trailer = $car_waiting_query_for_trailer->where('item_type',21)->count("*");
+        $waiting_count_for_all = (clone $car_waiting_for_departure_query)->count("*");
+        $waiting_count_for_car = (clone $car_waiting_for_departure_query)->where('item_type',1)->count("*");
+        $waiting_count_for_trailer = (clone $car_waiting_for_departure_query)->where('item_type',21)->count("*");
         $return['waiting_count_for_all'] = $waiting_count_for_all;
         $return['waiting_count_for_car'] = $waiting_count_for_car;
         $return['waiting_count_for_trailer'] = $waiting_count_for_trailer;
@@ -187,20 +187,20 @@ class YHAdminRepository {
 
 
         // 订单统计
-        $order_all_count = YH_Order::count("*");
-        $order_unpublished_count = YH_Order::where('is_published', 0)->count("*");
-        $order_waiting_for_departure_count = YH_Order::where('is_published', 1)->whereNull('actual_departure_time')->count("*");
-        $order_working_count = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->count("*");
-        $order_waiting_for_receipt_count = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn('amount','>','income_total')->count("*");
-        $order_received_count = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'), '<=', 'income_total')->count("*");
+        $order_count_for_all = YH_Order::count("*");
+        $order_count_for_unpublished = YH_Order::where('is_published', 0)->count("*");
+        $order_count_for_waiting_for_departure = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->count("*");
+        $order_count_for_working = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->count("*");
+        $order_count_for_waiting_for_receipt = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'),'>','income_total')->count("*");
+        $order_count_for_received = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'), '<=', 'income_total')->count("*");
 
 
-        $return['order_all_count'] = $order_all_count;
-        $return['order_unpublished_count'] = $order_unpublished_count;
-        $return['order_waiting_for_departure_count'] = $order_waiting_for_departure_count;
-        $return['order_working_count'] = $order_working_count;
-        $return['order_waiting_for_receipt_count'] = $order_waiting_for_receipt_count;
-        $return['order_received_count'] = $order_received_count;
+        $return['order_count_for_all'] = $order_count_for_all;
+        $return['order_count_for_unpublished'] = $order_count_for_unpublished;
+        $return['order_count_for_waiting_for_departure'] = $order_count_for_waiting_for_departure;
+        $return['order_count_for_working'] = $order_count_for_working;
+        $return['order_count_for_waiting_for_receipt'] = $order_count_for_waiting_for_receipt;
+        $return['order_count_for_received'] = $order_count_for_received;
 
 
 
