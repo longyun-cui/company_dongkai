@@ -366,7 +366,7 @@
 </div>
 
 
-{{----}}
+{{--option--}}
 <div class="option-container _none">
 
     <div id="trailer_type-option-list">
@@ -445,9 +445,7 @@
 
 @section('custom-style')
     <style>
-        .tableArea .main-table {
-            min-width: 3400px;
-        }
+        .tableArea .main-table { min-width:3400px; }
     </style>
 @endsection
 
@@ -489,6 +487,13 @@
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
+                "scrollX": true,
+//                "scrollY": true,
+                "scrollCollapse": true,
+                "fixedColumns": {
+                    "leftColumns": 5,
+                    "rightColumns": 1
+                },
                 "columns": [
 //                    {
 //                        "width": "40px",
@@ -514,54 +519,6 @@
                         "orderable": true,
                         render: function(data, type, row, meta) {
                             return data;
-                        }
-                    },
-                    {
-                        "width": "160px",
-                        "title": "操作",
-                        "data": 'id',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            if(row.item_status == 1)
-                            {
-                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.is_me == 1 && row.active == 0)
-                            {
-                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
-                            }
-                            else
-                            {
-                                $html_publish = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">发布</a>';
-                            }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            var html =
-                                '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
-                                $html_able+
-//                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
-                                //                                    $html_publish+
-                                $html_delete+
-//                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-//                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
-//                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
-                                '';
-                            return html;
-
                         }
                     },
                     {
@@ -598,7 +555,7 @@
                         }
                     },
                     {
-                        "className": "text-left",
+                        "className": "text-center",
                         "width": "80px",
                         "title": "车牌号",
                         "data": "name",
@@ -1316,7 +1273,55 @@
                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                             else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                         }
-                    }
+                    },
+                    {
+                        "width": "120px",
+                        "title": "操作",
+                        "data": 'id',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            if(row.item_status == 1)
+                            {
+                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                            }
+                            else
+                            {
+                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                            }
+
+                            if(row.is_me == 1 && row.active == 0)
+                            {
+                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
+                            }
+                            else
+                            {
+                                $html_publish = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">发布</a>';
+                            }
+
+                            if(row.deleted_at == null)
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
+                            }
+                            else
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
+                            }
+
+                            var html =
+                                '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
+                                $html_able+
+                                //                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
+                                //                                    $html_publish+
+                                $html_delete+
+                                //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
+                                //                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
+                                //                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
+                                '';
+                            return html;
+
+                        }
+                    },
                 ],
                 "drawCallback": function (settings) {
 
