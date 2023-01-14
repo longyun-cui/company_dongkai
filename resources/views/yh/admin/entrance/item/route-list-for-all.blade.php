@@ -616,7 +616,7 @@
 //                    },
                     {
                         "className": "",
-                        "width": "40px",
+                        "width": "60px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -723,8 +723,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return data;
-                            else return '--';
+                            return data;
                         }
                     },
                     {

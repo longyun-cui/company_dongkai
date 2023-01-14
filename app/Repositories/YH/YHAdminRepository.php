@@ -7102,10 +7102,38 @@ class YHAdminRepository {
 //        }
 
 
+//        if($column_key == "route_id")
+//        {
+//            $route = YH_Route::withTrashed()->find($column_value);
+//            if(!$route) return response_error([],"该【线路】不存在，刷新页面重试！");
+//        }
+
+
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
+            if($column_key == "route_id")
+            {
+                $route = YH_Route::withTrashed()->find($column_value);
+                if(!$route) throw new Exception("该【线路】不存在，刷新页面重试！");
+
+                $item->amount = $route->amount_with_cash;
+                $item->departure_place = $route->departure_place;
+                $item->destination_place = $route->destination_place;
+                $item->stopover_place = $route->stopover_place;
+                $item->travel_distance = $route->travel_distance;
+                $item->time_limitation_prescribed = $route->time_limitation_prescribed;
+            }
+            else if($column_key == "car_id")
+            {
+                $car = YH_Car::withTrashed()->find($column_value);
+                if(!$car) throw new Exception("该【车辆】不存在，刷新页面重试！");
+
+                $item->driver_name = null;
+                $item->driver_phone = null;
+            }
+
             $item->$column_key = $column_value;
             $bool = $item->save();
             if(!$bool) throw new Exception("order--update--fail");

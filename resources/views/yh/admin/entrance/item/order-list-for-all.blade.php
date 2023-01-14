@@ -1487,7 +1487,7 @@
                                 {
                                     $(nTd).addClass('modal-show-for-info-select2-set');
                                     $(nTd).attr('data-id',row.id).attr('data-name','固定线路');
-                                    $(nTd).attr('data-key','route_id').attr('data-value',data);
+                                    $(nTd).attr('data-key','route_id').attr('data-value',row.route_id);
                                     if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
                                     else $(nTd).attr('data-option-name',row.route_er.title);
                                     $(nTd).attr('data-column-name','固定线路');
@@ -1732,6 +1732,52 @@
                     },
                     {
                         "className": "text-center",
+                        "width": "60px",
+                        "title": "里程",
+                        "data": "travel_distance",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','里程');
+                                $(nTd).attr('data-key','travel_distance').attr('data-value',data);
+                                $(nTd).attr('data-column-name','里程');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+                            else return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "时效",
+                        "data": "time_limitation_prescribed",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','时效');
+                                $(nTd).attr('data-key','time_limitation_prescribed').attr('data-value',data);
+                                $(nTd).attr('data-column-name','时效');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+                            else return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
                         "width": "100px",
                         "title": "订单类型",
                         "data": "car_owner_type",
@@ -1828,52 +1874,6 @@
                             if(row.travel_arrival_overtime_time) $travel_arrival_overtime_time = '<small class="btn-xs bg-red">到达超时 '+row.travel_arrival_overtime_time+'</small><br>';
 
                             return $journey_time + $travel_departure_overtime_time + $travel_arrival_overtime_time;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "里程",
-                        "data": "travel_distance",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','里程');
-                                $(nTd).attr('data-key','travel_distance').attr('data-value',data);
-                                $(nTd).attr('data-column-name','里程');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '';
-                            else return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "时效",
-                        "data": "time_limitation_prescribed",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','时效');
-                                $(nTd).attr('data-key','time_limitation_prescribed').attr('data-value',data);
-                                $(nTd).attr('data-column-name','时效');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '';
-                            else return data;
                         }
                     },
                     {
