@@ -90,6 +90,15 @@
                             @endforeach
                         </select>
 
+                        <select class="form-control form-filter" name="order-type" style="width:96px;">
+                            <option value ="-1">订单类型</option>
+                            <option value ="1">自有</option>
+                            <option value ="11">空单</option>
+                            <option value ="41">外配·配货</option>
+                            <option value ="61">外请·调车</option>
+                            {{--<option value ="已结束">已结束</option>--}}
+                        </select>
+
                         <select class="form-control form-filter" name="order-status" style="width:96px;">
                             <option value ="-1">订单状态</option>
                             <option value ="未发布">未发布</option>
@@ -1239,6 +1248,7 @@
                         d.route = $('select[name="order-route"]').val();
                         d.pricing = $('select[name="order-pricing"]').val();
                         d.status = $('select[name="order-status"]').val();
+                        d.order_type = $('select[name="order-type"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -1255,7 +1265,7 @@
 //                        "width": "32px",
 //                        "title": "选择",
 //                        "data": "id",
-//                        "orderable": false,
+//                        "orderAble": false,
 //                        render: function(data, type, row, meta) {
 //                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
 //                        }
@@ -1265,14 +1275,15 @@
 //                        "title": "序号",
 //                        "data": null,
 //                        "targets": 0,
-//                        "orderable": false
+//                        "orderAble": false
 //                    },
                     {
                         "className": "",
                         "width": "40px",
                         "title": "ID",
                         "data": "id",
-                        "orderable": true,
+                        "orderAble": true,
+                        "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1291,7 +1302,7 @@
                         "width": "200px",
                         "title": "操作",
                         "data": 'id',
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
 
 
@@ -1404,7 +1415,7 @@
                         "width": "80px",
                         "title": "订单状态",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
 //                            return data;
 
@@ -1476,7 +1487,7 @@
                         "width": "60px",
                         "title": "创建人",
                         "data": "creator_id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
                         }
@@ -1486,7 +1497,8 @@
                         "width": "100px",
                         "title": "派车日期",
                         "data": 'assign_time',
-                        "orderable": true,
+                        "orderAble": true,
+                        "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1530,7 +1542,7 @@
                         "width": "120px",
                         "title": "客户",
                         "data": "client_id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1572,7 +1584,7 @@
                         "width": "120px",
                         "title": "线路",
                         "data": "route_type",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1617,7 +1629,7 @@
                         "width": "60px",
                         "title": "出发地",
                         "data": "departure_place",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1639,7 +1651,7 @@
                         "width": "60px",
                         "title": "经停地",
                         "data": "stopover_place",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1661,7 +1673,7 @@
                         "width": "60px",
                         "title": "目的地",
                         "data": "destination_place",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1683,7 +1695,7 @@
                         "width": "80px",
                         "title": "车辆",
                         "data": "car_id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1728,7 +1740,7 @@
                         "width": "80px",
                         "title": "车挂",
                         "data": "trailer_id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1772,7 +1784,7 @@
                         "width": "60px",
                         "title": "主驾",
                         "data": "driver_name",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1800,7 +1812,7 @@
                         "width": "100px",
                         "title": "主驾电话",
                         "data": "driver_phone",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1824,11 +1836,37 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "订单类型",
+                        "data": "car_owner_type",
+                        "orderAble": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 1)
+                            {
+                                return '<small class="btn-xs bg-green">自有</small>';
+                            }
+                            else if(data == 11)
+                            {
+                                return '<small class="btn-xs bg-teal">空单</small>';
+                            }
+                            else if(data == 41)
+                            {
+                                return '<small class="btn-xs bg-blue">外配·配货</small>';
+                            }
+                            else if(data == 61)
+                            {
+                                return '<small class="btn-xs bg-purple">外请·调车</small>';
+                            }
+                            else return "有误";
+                        }
+                    },
+                    {
                         "className": "",
                         "width": "80px",
                         "title": "状态",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
 //                            return data;
 
@@ -1884,7 +1922,7 @@
                         "width": "200px",
                         "title": "行程",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             var $journey_time = '';
                             var $travel_departure_overtime_time = '';
@@ -1899,36 +1937,10 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "120px",
-                        "title": "订单类型",
-                        "data": "car_owner_type",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 1)
-                            {
-                                return '<small class="btn-xs bg-green">自有</small>';
-                            }
-                            else if(data == 11)
-                            {
-                                return '<small class="btn-xs bg-teal">空单</small>';
-                            }
-                            else if(data == 41)
-                            {
-                                return '<small class="btn-xs bg-blue">外配·配货</small>';
-                            }
-                            else if(data == 61)
-                            {
-                                return '<small class="btn-xs bg-purple">外请·调车</small>';
-                            }
-                            else return "有误";
-                        }
-                    },
-                    {
-                        "className": "text-center",
                         "width": "60px",
                         "title": "里程",
                         "data": "travel_distance",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1951,7 +1963,7 @@
                         "width": "60px",
                         "title": "时效",
                         "data": "time_limitation_prescribed",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1974,7 +1986,7 @@
                         "width": "50px",
                         "title": "应收款",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
@@ -1997,7 +2009,7 @@
                         "width": "50px",
                         "title": "欠款",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
@@ -2021,7 +2033,7 @@
                         "width": "50px",
                         "title": "已收款",
                         "data": "income_total",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
@@ -2040,7 +2052,7 @@
                         "width": "50px",
                         "title": "待入账",
                         "data": "income_to_be_confirm",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
@@ -2059,7 +2071,7 @@
                         "width": "50px",
                         "title": "已支出",
                         "data": "expenditure_total",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
@@ -2078,7 +2090,7 @@
                         "width": "50px",
                         "title": "待出账",
                         "data": "expenditure_to_be_confirm",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
@@ -2097,7 +2109,7 @@
                         "width": "80px",
                         "title": "利润·实时",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
@@ -2118,7 +2130,7 @@
                         "width": "50px",
                         "title": "运价",
                         "data": "amount",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2143,7 +2155,7 @@
                         "width": "50px",
                         "title": "油卡",
                         "data": "oil_card_amount",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2165,7 +2177,7 @@
                         "width": "120px",
                         "title": "包油价",
                         "data": "pricing_id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2193,7 +2205,7 @@
                         "width": "60px",
                         "title": "请车价",
                         "data": "outside_car_price",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2214,7 +2226,7 @@
                         "width": "60px",
                         "title": "时效扣款",
                         "data": "time_limitation_deduction",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2235,7 +2247,7 @@
                         "width": "50px",
                         "title": "信息费",
                         "data": "information_fee",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2256,7 +2268,7 @@
                         "width": "50px",
                         "title": "客管费",
                         "data": "customer_management_fee",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2277,7 +2289,7 @@
 //                        "width": "50px",
 //                        "title": "开票额",
 //                        "data": "invoice_amount",
-//                        "orderable": false,
+//                        "orderAble": false,
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0 && row.item_status != 97)
 //                            {
@@ -2298,7 +2310,7 @@
                         "width": "50px",
                         "title": "票点",
                         "data": "invoice_point",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2320,7 +2332,7 @@
 //                        "width": "80px",
 //                        "title": "需求类型",
 //                        "data": "order_type",
-//                        "orderable": false,
+//                        "orderAble": false,
 //                        render: function(data, type, row, meta) {
 //                            if(data == 1)
 //                            {
@@ -2349,7 +2361,7 @@
 //                        "width": "120px",
 //                        "title": "线路",
 //                        "data": "route",
-//                        "orderable": false,
+//                        "orderAble": false,
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_completed != 1 && row.item_status != 97)
 //                            {
@@ -2371,7 +2383,7 @@
 //                        "width": "120px",
 //                        "title": "行程",
 //                        "data": "id",
-//                        "orderable": false,
+//                        "orderAble": false,
 //                        render: function(data, type, row, meta) {
 ////                            return data == null ? '--' : data;
 //                            var $stopover_html = '';
@@ -2384,7 +2396,7 @@
                         "width": "60px",
                         "title": "副驾",
                         "data": "copilot_name",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2406,7 +2418,7 @@
                         "width": "100px",
                         "title": "副驾电话",
                         "data": "copilot_phone",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2428,7 +2440,7 @@
                         "width": "40px",
                         "title": "类型",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2461,7 +2473,7 @@
                         "width": "40px",
                         "title": "尺寸",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2494,7 +2506,7 @@
                         "width": "40px",
                         "title": "容积",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2527,7 +2539,7 @@
                         "width": "40px",
                         "title": "载重",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2560,7 +2572,7 @@
                         "width": "40px",
                         "title": "轴数",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2593,7 +2605,7 @@
                         "width": "120px",
                         "title": "应出发时间",
                         "data": 'should_departure_time',
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2645,7 +2657,7 @@
                         "width": "120px",
                         "title": "应到达时间",
                         "data": 'should_arrival_time',
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2698,7 +2710,7 @@
                         "width": "120px",
                         "title": "实际出发",
                         "data": 'actual_departure_time',
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2750,7 +2762,7 @@
                         "width": "120px",
                         "title": "经停点-到达时间",
                         "data": 'stopover_arrival_time',
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2803,7 +2815,7 @@
                         "width": "120px",
                         "title": "经停点-出发时间",
                         "data": 'stopover_departure_time',
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2856,7 +2868,7 @@
                         "width": "120px",
                         "title": "实际到达",
                         "data": 'actual_arrival_time',
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2910,7 +2922,7 @@
                         "width": "120px",
                         "title": "单号",
                         "data": "order_number",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2931,7 +2943,7 @@
                         "width": "80px",
                         "title": "收款人",
                         "data": "payee_name",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2952,7 +2964,7 @@
                         "width": "100px",
                         "title": "车货源",
                         "data": "car_supply",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2973,7 +2985,7 @@
                         "width": "80px",
                         "title": "安排人",
                         "data": "arrange_people",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2994,7 +3006,7 @@
                         "width": "80px",
                         "title": "车辆负责人",
                         "data": "car_managerial_people",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -3015,7 +3027,7 @@
                         "width": "80px",
                         "title": "重量",
                         "data": "weight",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -3036,7 +3048,7 @@
                         "width": "80px",
                         "title": "GPS",
                         "data": "GPS",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -3057,7 +3069,7 @@
                         "width": "100px",
                         "title": "是否回单",
                         "data": "receipt_need",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -3078,7 +3090,7 @@
                         "width": "100px",
                         "title": "回单地址",
                         "data": "receipt_address",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -3103,7 +3115,7 @@
                         "width": "100px",
                         "title": "回单状态",
                         "data": "receipt_status",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -3136,7 +3148,7 @@
                         "width": "100px",
                         "title": "附件",
                         "data": "attachment_list",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -3165,7 +3177,7 @@
                         "width": "80px",
                         "title": "备注",
                         "data": "remark",
-                        "orderable": false,
+                        "orderAble": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -3186,9 +3198,10 @@
                     {
                         "className": "",
                         "width": "120px",
-                        "title": "创建时间",
-                        "data": 'created_at',
-                        "orderable": false,
+                        "title": "修改时间",
+                        "data": 'updated_at',
+                        "orderAble": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $date = new Date(data*1000);
@@ -3329,14 +3342,14 @@
 //                        "title": "序号",
 //                        "data": null,
 //                        "targets": 0,
-//                        "orderable": false
+//                        "orderAble": false
 //                    },
 //                    {
 //                        "className": "font-12px",
 //                        "width": "32px",
 //                        "title": "选择",
 //                        "data": "id",
-//                        "orderable": false,
+//                        "orderAble": false,
 //                        render: function(data, type, row, meta) {
 //                            return '<label><input type="checkbox" name="bulk-detect-record-id" class="minimal" value="'+data+'"></label>';
 //                        }
@@ -3346,7 +3359,7 @@
                         "width": "40px",
                         "title": "ID",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -3355,7 +3368,7 @@
                         "width": "120px",
                         "title": "操作",
                         "data": 'id',
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             var $html_confirm = '';
                             var $html_delete = '';
@@ -3401,7 +3414,7 @@
                         "width": "60px",
                         "title": "状态",
                         "data": "is_confirmed",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             if(row.deleted_at == null)
                             {
@@ -3416,7 +3429,7 @@
                         "width": "60px",
                         "title": "类型",
                         "data": "finance_type",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             if(row.finance_type == 1) return '<small class="btn-xs bg-olive">收入</small>';
@@ -3429,7 +3442,7 @@
                         "width": "80px",
                         "title": "交易时间",
                         "data": "transaction_time",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             var $date = new Date(data*1000);
                             var $year = $date.getFullYear();
@@ -3453,7 +3466,7 @@
                         "width": "60px",
                         "title": "创建者",
                         "data": "creator_id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
                         }
@@ -3463,7 +3476,7 @@
                         "width": "80px",
                         "title": "确认者",
                         "data": "confirmer_id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return row.confirmer == null ? '' : '<a href="javascript:void(0);">'+row.confirmer.true_name+'</a>';
                         }
@@ -3473,7 +3486,7 @@
                         "width": "120px",
                         "title": "确认时间",
                         "data": "confirmed_at",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             if(!data) return '';
 
@@ -3500,7 +3513,7 @@
                         "width": "60px",
                         "title": "金额",
                         "data": "transaction_amount",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             if((data > 0) && (data <= 10)) return '<samll class="text-red">'+data+'</samll>';
                             else return data;
@@ -3511,7 +3524,7 @@
                         "width": "80px",
                         "title": "费用名目",
                         "data": "title",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -3521,7 +3534,7 @@
                         "width": "60px",
                         "title": "支付方式",
                         "data": "transaction_type",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -3531,7 +3544,7 @@
                         "width": "160px",
                         "title": "收款账户",
                         "data": "transaction_receipt_account",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -3541,7 +3554,7 @@
                         "width": "160px",
                         "title": "支出账户",
                         "data": "transaction_payment_account",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -3551,7 +3564,7 @@
 //                        "width": "120px",
 //                        "title": "交易账户",
 //                        "data": "transaction_account",
-//                        "orderable": false,
+//                        "orderAble": false,
 //                        render: function(data, type, row, meta) {
 //                            return data;
 //                        }
@@ -3561,7 +3574,7 @@
                         "width": "160px",
                         "title": "交易单号",
                         "data": "transaction_order",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -3571,7 +3584,7 @@
                         "width": "200px",
                         "title": "备注",
                         "data": "description",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -3581,7 +3594,7 @@
                         "width": "120px",
                         "title": "操作时间",
                         "data": "created_at",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             var $date = new Date(data*1000);
                             var $year = $date.getFullYear();
@@ -3604,7 +3617,7 @@
 //                        "width": "120px",
 //                        "title": "操作",
 //                        'data': 'id',
-//                        "orderable": false,
+//                        "orderAble": false,
 //                        render: function(data, type, row, meta) {
 ////                            var $date = row.transaction_date.trim().split(" ")[0];
 //                            var html = '';
@@ -3752,14 +3765,14 @@
 //                        "title": "序号",
 //                        "data": null,
 //                        "targets": 0,
-//                        "orderable": false
+//                        "orderAble": false
 //                    },
 //                    {
 //                        "className": "font-12px",
 //                        "width": "32px",
 //                        "title": "选择",
 //                        "data": "id",
-//                        "orderable": true,
+//                        "orderAble": true,
 //                        render: function(data, type, row, meta) {
 //                            return '<label><input type="checkbox" name="bulk-detect-record-id" class="minimal" value="'+data+'"></label>';
 //                        }
@@ -3769,7 +3782,7 @@
                         "width": "60px",
                         "title": "ID",
                         "data": "id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -3779,7 +3792,7 @@
                         "width": "80px",
                         "title": "类型",
                         "data": "operate_category",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             if(data == 1)
@@ -3811,7 +3824,7 @@
                         "width": "80px",
                         "title": "属性",
                         "data": "column_name",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             if(row.operate_category == 1)
                             {
@@ -3885,7 +3898,7 @@
                         "width": "240px",
                         "title": "修改前",
                         "data": "before",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             if(row.column_name == 'client_id')
                             {
@@ -3958,7 +3971,7 @@
                         "width": "240px",
                         "title": "修改后",
                         "data": "after",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             if(row.column_name == 'client_id')
                             {
@@ -4026,7 +4039,7 @@
                         "width": "80px",
                         "title": "操作人",
                         "data": "creator_id",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
                         }
@@ -4036,7 +4049,7 @@
                         "width": "120px",
                         "title": "操作时间",
                         "data": "created_at",
-                        "orderable": false,
+                        "orderAble": false,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $date = new Date(data*1000);

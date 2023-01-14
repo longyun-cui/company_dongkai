@@ -840,7 +840,8 @@
                     else
                     {
                         layer.msg(data.msg);
-                        location.href = "{{ url('/item/order-list-for-all') }}";
+                        {{--location.href = "{{ url('/item/order-list-for-all') }}";--}}
+                        window.location.href = document.referrer; //使用document.referrer
                     }
                 }
             };

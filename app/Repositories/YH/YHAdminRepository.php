@@ -6573,8 +6573,6 @@ class YHAdminRepository {
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
         if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), $post_data['assign']);
-//        if(!empty($post_data['assign'])) $query->where(DB::Raw("from_unixtime(assign_time, '%Y-%m-%d') = {$post_data['assign']}"));
-//        if(!empty($post_data['assign'])) $query->whereRaw("from_unixtime(assign_time, '%Y-%m-%d') = {$post_data['assign']}");
 
 
         if(!empty($post_data['staff']))
@@ -6618,6 +6616,17 @@ class YHAdminRepository {
             }
         }
 
+        // 订单类型 [自有|空单|配货|调车]
+        if(!empty($post_data['order_type']))
+        {
+            if(!in_array($post_data['order_type'],[-1,0]))
+            {
+                $query->where('car_owner_type', $post_data['order_type']);
+            }
+        }
+
+
+
 
         if(!empty($post_data['status']))
         {
@@ -6647,7 +6656,7 @@ class YHAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "desc");
+        else $query->orderBy("assign_time", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
