@@ -2047,6 +2047,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "50px",
                         "title": "油卡",
                         "data": "oil_card_amount",
@@ -2097,6 +2098,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "60px",
                         "title": "请车价",
                         "data": "outside_car_price",
@@ -2118,6 +2120,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "60px",
                         "title": "时效扣款",
                         "data": "time_limitation_deduction",
@@ -2139,6 +2142,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "50px",
                         "title": "信息费",
                         "data": "information_fee",
@@ -2160,6 +2164,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "50px",
                         "title": "客管费",
                         "data": "customer_management_fee",
@@ -2181,6 +2186,7 @@
                         }
                     },
 //                    {
+//                        "className": "",
 //                        "width": "50px",
 //                        "title": "开票额",
 //                        "data": "invoice_amount",
@@ -2202,6 +2208,7 @@
 //                        }
 //                    },
                     {
+                        "className": "",
                         "width": "50px",
                         "title": "票点",
                         "data": "invoice_point",
@@ -2814,6 +2821,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "120px",
                         "title": "单号",
                         "data": "order_number",
@@ -2835,6 +2843,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "80px",
                         "title": "收款人",
                         "data": "payee_name",
@@ -2856,6 +2865,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "100px",
                         "title": "车货源",
                         "data": "car_supply",
@@ -2877,6 +2887,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "80px",
                         "title": "安排人",
                         "data": "arrange_people",
@@ -2898,6 +2909,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "80px",
                         "title": "车辆负责人",
                         "data": "car_managerial_people",
@@ -2919,6 +2931,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "80px",
                         "title": "重量",
                         "data": "weight",
@@ -2940,6 +2953,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "80px",
                         "title": "GPS",
                         "data": "GPS",
@@ -2961,6 +2975,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "100px",
                         "title": "是否回单",
                         "data": "receipt_need",
@@ -2982,6 +2997,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "100px",
                         "title": "回单地址",
                         "data": "receipt_address",
@@ -3007,6 +3023,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "100px",
                         "title": "回单状态",
                         "data": "receipt_status",
@@ -3040,6 +3057,7 @@
                         }
                     },
                     {
+                        "className": "",
                         "width": "100px",
                         "title": "附件",
                         "data": "attachment_list",
@@ -3069,7 +3087,8 @@
                         }
                     },
                     {
-                        "width": "80px",
+                        "className": "",
+                        "width": "200px",
                         "title": "备注",
                         "data": "remark",
                         "orderable": false,
@@ -3086,8 +3105,9 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            else return '';
+                            return data;
+//                            if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+//                            else return '';
                         }
                     },
                     {
@@ -3219,9 +3239,9 @@
                                 $html_record+
                                 $html_delete+
                                 $html_abandon+
-                                //                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-                                //                                '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
-                                //                                $more_html+
+//                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
+//                                '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
+//                                $more_html+
                                 '';
                             return $html;
 
