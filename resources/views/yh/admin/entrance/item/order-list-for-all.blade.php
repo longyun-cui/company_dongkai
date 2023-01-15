@@ -96,7 +96,6 @@
                             <option value ="11">空单</option>
                             <option value ="41">外配·配货</option>
                             <option value ="61">外请·调车</option>
-                            {{--<option value ="已结束">已结束</option>--}}
                         </select>
 
                         <select class="form-control form-filter" name="order-status" style="width:96px;">
@@ -105,8 +104,22 @@
                             <option value ="待发车">待发车</option>
                             <option value ="进行中">进行中</option>
                             <option value ="已到达">已到达</option>
-                            {{--<option value ="已结束">已结束</option>--}}
+                            <option value ="待收款">待收款</option>
+                            <option value ="已收款">已收款</option>
+                            <option value ="已结束">已结束</option>
+                            <option value ="弃用">弃用</option>
                         </select>
+
+                        <select class="form-control form-filter" name="order-receipt-status" style="width:96px;">
+                            <option value="-1">回单状态</option>
+                            <option value="199">需要回单</option>
+                            <option value="1">等待回单</option>
+                            <option value="21">邮寄中</option>
+                            <option value="41">已签收，等待确认</option>
+                            <option value="100">已完成</option>
+                            <option value="101">回单异常</option>
+                        </select>
+
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
                             <i class="fa fa-search"></i> 搜索
@@ -1249,6 +1262,7 @@
                         d.pricing = $('select[name="order-pricing"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
+                        d.receipt_status = $('select[name="order-receipt-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -1319,14 +1333,21 @@
                                 return '<small class="btn-xs bg-black">已删除</small>';
                             }
 
+                            if(row.item_status == 97)
+                            {
+                                return '<small class="btn-xs bg-navy">已弃用</small>';
+                            }
+
                             if(row.is_published == 0)
                             {
                                 return '<small class="btn-xs bg-teal">未发布</small>';
                             }
-
-                            if(row.item_status == 97)
+                            else
                             {
-                                return '<small class="btn-xs bg-navy">已弃用</small>';
+                                if(row.is_completed == 1)
+                                {
+                                    return '<small class="btn-xs bg-olive">已结束</small>';
+                                }
                             }
 
                             var $travel_status_html = '';
@@ -1335,7 +1356,7 @@
 //
                             if(row.travel_status == "待发车")
                             {
-                                $travel_status_html = '<small class="btn-xs bg-aqua">待发车</small>';
+                                $travel_status_html = '<small class="btn-xs bg-yellow">待发车</small>';
                             }
                             else if(row.travel_status == "进行中")
                             {
@@ -1343,19 +1364,21 @@
                             }
                             else if(row.travel_status == "已到达")
                             {
-                                $travel_status_html = '<small class="btn-xs bg-olive">已到达</small>';
+                                if(row.travel_result == "待收款") $travel_status_html = '<small class="btn-xs bg-orange">待收款</small>';
+                                if(row.travel_result == "已收款") $travel_status_html = '<small class="btn-xs bg-maroon">已收款</small>';
+                                else $travel_status_html = '<small class="btn-xs bg-olive">已到达</small>';
                             }
-                            else if(row.travel_status == "待收账")
+                            else if(row.travel_status == "待收款")
                             {
-                                $travel_status_html = '<small class="btn-xs bg-orange">待收账</small>';
+                                $travel_status_html = '<small class="btn-xs bg-maroon">待收款</small>';
                             }
-                            else if(row.travel_status == "已收账")
+                            else if(row.travel_status == "已收款")
                             {
-                                $travel_status_html = '<small class="btn-xs bg-maroon">已收账</small>';
+                                $travel_status_html = '<small class="btn-xs bg-purple">已收款</small>';
                             }
                             else if(row.travel_status == "已完成")
                             {
-                                $travel_status_html = '<small class="btn-xs bg-grey">已完成</small>';
+                                $travel_status_html = '<small class="btn-xs bg-olive">已完成</small>';
                             }
 //
 //
@@ -3047,7 +3070,7 @@
                             {
                                 if(data == 0) return '<small class="btn-xs bg-orange">等待回单</small>';
                                 else if(data == 1) return '<small class="btn-xs bg-orange">等待回单</small>';
-                                else if(data == 21) return '<small class="btn-xs bg-blue">邮寄中</small>';
+                                else if(data == 21) return '<small class="btn-xs bg-aqua">邮寄中</small>';
                                 else if(data == 41) return '<small class="btn-xs bg-blue">已签收</small>';
                                 else if(data == 100) return '<small class="btn-xs bg-olive">已完成</small>';
                                 else if(data == 101) return '<small class="btn-xs bg-red">回单异常</small>';

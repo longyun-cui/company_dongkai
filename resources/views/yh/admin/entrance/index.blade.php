@@ -50,12 +50,13 @@
             <h4>订单统计</h4>
 
             <div class="callout-body">
-                <span>总计 <text class="text-black font-24px">{{ $order_count_for_all or 0 }}</text> 单</span>
-                <span>待发布 <text class="text-teal font-24px">{{ $order_count_for_unpublished or 0 }}</text> 单</span>
-                <span>待发车 <text class="text-aqua font-24px">{{ $order_count_for_waiting_for_departure or 0 }}</text> 单</span>
-                <span>进行中 <text class="text-blue font-24px">{{ $order_count_for_working or 0 }}</text> 单</span>
+                <span>总计 <text class="text-black font-24px">{{ $order_count_for_all or '' }}</text> 单</span>
+                <span>待发布 <text class="text-teal font-24px">{{ $order_count_for_unpublished or '' }}</text> 单</span>
+                <span>已发布 <text class="text-green font-24px">{{ $order_count_for_published or '' }}</text> 单</span>
+                <span>（ 待发车 <text class="text-aqua font-24px">{{ $order_count_for_waiting_for_departure or '' }}</text> 单</span>
+                <span>进行中 <text class="text-blue font-24px">{{ $order_count_for_working or '' }}</text> 单</span>
                 <span>待收款 <text class="text-orange font-24px">{{ $order_count_for_waiting_for_receipt or '' }}</text> 单</span>
-                <span>已收款 <text class="text-blue font-24px">{{ $order_count_for_received or '' }}</text> 单</span>
+                <span>已收款 <text class="text-purple font-24px">{{ $order_count_for_received or '' }}</text> 单 ）</span>
             </div>
 
             <div class="box box-info margin-top-32px">

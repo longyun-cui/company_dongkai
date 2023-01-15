@@ -163,8 +163,8 @@ class YHAdminRepository {
             })
             ->where(function ($query) {
                 $query->whereHas('car_order_list_for_future', function ($query) {
-                    $query->whereNull('actual_departure_time');
-                })
+                        $query->whereNull('actual_departure_time');
+                    })
                     ->orWhereHas('trailer_order_list_for_future', function ($query) {
                         $query->whereNull('actual_departure_time');
                     });
@@ -189,7 +189,8 @@ class YHAdminRepository {
         // 订单统计
         $order_count_for_all = YH_Order::count("*");
         $order_count_for_unpublished = YH_Order::where('is_published', 0)->count("*");
-        $order_count_for_waiting_for_departure = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->count("*");
+        $order_count_for_published = YH_Order::where('is_published', 1)->count("*");
+        $order_count_for_waiting_for_departure = YH_Order::where('is_published', 1)->whereNull('actual_departure_time')->count("*");
         $order_count_for_working = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->count("*");
         $order_count_for_waiting_for_receipt = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'),'>','income_total')->count("*");
         $order_count_for_received = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'), '<=', 'income_total')->count("*");
@@ -197,6 +198,7 @@ class YHAdminRepository {
 
         $return['order_count_for_all'] = $order_count_for_all;
         $return['order_count_for_unpublished'] = $order_count_for_unpublished;
+        $return['order_count_for_published'] = $order_count_for_published;
         $return['order_count_for_waiting_for_departure'] = $order_count_for_waiting_for_departure;
         $return['order_count_for_working'] = $order_count_for_working;
         $return['order_count_for_waiting_for_receipt'] = $order_count_for_waiting_for_receipt;
@@ -6625,18 +6627,39 @@ class YHAdminRepository {
             }
         }
 
+        // 回单
+        if(!empty($post_data['receipt_status']))
+        {
+            $receipt_status = $post_data['receipt_status'];
+            if(!in_array($receipt_status,[-1,0]))
+            {
+                if(in_array($receipt_status,[1,21,41,100,101,199]))
+                {
+                    if($receipt_status == 199) $query->where('receipt_need', 1);
+                    else if($receipt_status == 1) $query->where('receipt_need', 1)->whereIn('receipt_status', [0,1]);
+                    else $query->where('receipt_need', 1)->where('receipt_status', $receipt_status);
+                }
+            }
+        }
+
 
 
 
         if(!empty($post_data['status']))
         {
             $order_status = $post_data['status'];
-            if(in_array($order_status,["未发布","待发车","进行中","已到达"]))
+            if(in_array($order_status,["未发布","待发车","进行中","已到达","待收款","已收款","已结束","弃用"]))
             {
                 if($order_status == "未发布") $query->where('is_published', 0);
                 else if($order_status == "待发车") $query->where('is_published', 1)->whereNull('actual_departure_time');
                 else if($order_status == "进行中") $query->where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
                 else if($order_status == "已到达") $query->where('is_published', 1)->whereNotNull('actual_arrival_time');
+                else if($order_status == "待收款") $query->where('is_published', 1)->where('is_completed', '!=', 1)->whereNotNull('actual_arrival_time')
+                    ->whereRaw('(amount + oil_card_amount - time_limitation_deduction) > income_total');
+                else if($order_status == "已收款") $query->where('is_published', 1)->where('is_completed', '!=', 1)->whereNotNull('actual_arrival_time')
+                    ->whereRaw('(amount + oil_card_amount - time_limitation_deduction) <= income_total');
+                else if($order_status == "已结束") $query->where('is_published', 1)->where('is_completed', 1);
+                else if($order_status == "弃用") $query->where('item_status', 97);
             }
         }
 
@@ -6703,8 +6726,11 @@ class YHAdminRepository {
                         else
                         {
                             $list[$k]->travel_status = "已到达";
-                            if(($v->amount + $v->oil_card_amount - $v->time_limitation_deduction) <= $v->income_total) $list[$k]->travel_result = "已收款";
-                            else $list[$k]->travel_result = "待收款";
+                            if(($v->amount + $v->oil_card_amount - $v->time_limitation_deduction) <= $v->income_total)
+                            {
+                                $list[$k]->travel_status = "已收款";
+                            }
+                            else $list[$k]->travel_status = "待收款";
                         }
 
 
