@@ -6540,14 +6540,15 @@ class YHAdminRepository {
         $route_list = YH_Route::select('id','title')->get();
         $pricing_list = YH_Pricing::select('id','title')->get();
 
-        $return['staff_list'] = $staff_list;
-        $return['client_list'] = $client_list;
-        $return['car_list'] = $car_list;
-        $return['route_list'] = $route_list;
-        $return['pricing_list'] = $pricing_list;
-        $return['menu_active_of_order_list_for_all'] = 'active menu-open';
+        $view_data['staff_list'] = $staff_list;
+        $view_data['client_list'] = $client_list;
+        $view_data['car_list'] = $car_list;
+        $view_data['route_list'] = $route_list;
+        $view_data['pricing_list'] = $pricing_list;
+        $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
+
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
-        return view($view_blade)->with($return);
+        return view($view_blade)->with($view_data);
     }
     // 【订单管理】返回-列表-数据
     public function get_item_order_list_for_all_datatable($post_data)
@@ -9032,6 +9033,18 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
+        $car_list = YH_Car::select('id','name')->whereIn('item_type',[1,21])->get();
+        $route_list = YH_Route::select('id','title')->get();
+        $pricing_list = YH_Pricing::select('id','title')->get();
+
+        $view_data['staff_list'] = $staff_list;
+        $view_data['client_list'] = $client_list;
+        $view_data['car_list'] = $car_list;
+        $view_data['route_list'] = $route_list;
+        $view_data['pricing_list'] = $pricing_list;
 
         $this_month = date('Y-m');
         $this_month_year = date('Y');

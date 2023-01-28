@@ -15,6 +15,120 @@
     <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
 @section('content')
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-info main-list-body">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+
+                <h3 class="box-title">{{ $title_text or '' }}</h3>
+
+            </div>
+
+
+            <div class="box-body datatable-body item-main-body" id="datatable-for-circle-list">
+
+                <div class="row col-md-12 datatable-search-row">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="statistic-month" placeholder="选择月份" readonly="readonly" />
+
+                        <select class="form-control form-filter" name="statistic-staff" style="width:96px;">
+                            <option value ="-1">选择员工</option>
+                            @foreach($staff_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->true_name }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-control form-filter" name="statistic-client" style="width:96px;">
+                            <option value ="-1">选择客户</option>
+                            @foreach($client_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->username }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-control form-filter" name="statistic-route" style="width:96px;">
+                            <option value="-1">选择线路</option>
+                            @foreach($route_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
+                            @endforeach
+                        </select>
+
+                        {{--<select class="form-control form-filter" name="order-car" style="width:96px;">--}}
+                        {{--<option value ="-1">选择车辆</option>--}}
+                        {{--@foreach($car_list as $v)--}}
+                        {{--<option value ="{{ $v->id }}">{{ $v->name }}</option>--}}
+                        {{--@endforeach--}}
+                        {{--</select>--}}
+                        <select class="form-control form-filter order-list-select2-car" name="statistic-car" style="width:96px;">
+                            <option value="-1">选择车辆</option>
+                        </select>
+
+                        <select class="form-control form-filter" name="statistic-pricing" style="width:96px;">
+                            <option value="-1">选择定价</option>
+                            @foreach($pricing_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-control form-filter" name="statistic-type" style="width:96px;">
+                            <option value ="-1">订单类型</option>
+                            <option value ="1">自有</option>
+                            <option value ="11">空单</option>
+                            <option value ="41">外配·配货</option>
+                            <option value ="61">外请·调车</option>
+                        </select>
+
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-statistic">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-statistic">
+                            <i class="fa fa-circle-o-notch"></i> 重置
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="box-footer">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
+                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
+                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
+                        <div class="input-group">
+                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
+                            <select name="bulk-operate-status" class="form-control form-filter">
+                                <option value ="-1">请选择操作类型</option>
+                                <option value ="启用">启用</option>
+                                <option value ="禁用">禁用</option>
+                                <option value ="删除">删除</option>
+                                <option value ="彻底删除">彻底删除</option>
+                            </select>
+                            <span class="input-group-addon btn btn-default" id="operate-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
+                            <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-9">
+                        <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 {{--网站总流量统计--}}
 <div class="row">
     <div class="col-md-12">
