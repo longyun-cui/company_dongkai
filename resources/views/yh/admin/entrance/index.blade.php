@@ -155,7 +155,7 @@
 
         var option_finance_statistics = {
             title: {
-                text: '当月财务【每日收入总额/每日支出总额】统计'
+                text: '当月每日财务统计【收入总额/支出总额】'
             },
             tooltip : {
                 trigger: 'axis',
@@ -238,7 +238,7 @@
 
         var $option_order_statistics = {
             title: {
-                text: '本月/上月【每日订单量】统计'
+                text: '每日订单量统计【本月/上月】'
             },
             tooltip : {
                 trigger: 'axis',

@@ -770,7 +770,7 @@
 
 
 
-        // 【修改记录】【显示】
+        // 【数据分析】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-analysis", function() {
             var that = $(this);
             var $id = that.attr("data-id");
@@ -795,8 +795,6 @@
                     }
                 }
             });
-
-            console.log($data);
 
 
             var $overview = $data.overview;
