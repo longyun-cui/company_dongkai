@@ -32,7 +32,16 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="statistic-month" placeholder="选择月份" readonly="readonly" />
+                        <button type="button" class="form-control btn btn-flat btn-default month_picker_pre" style="width:30px;">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="statistic-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" style="text-align:center;width:90px;" />
+
+                        <button type="button" class="form-control btn btn-flat btn-default month_picker_next" style="width:30px;">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+
 
                         <select class="form-control form-filter" name="statistic-staff" style="width:96px;">
                             <option value ="-1">选择员工</option>
@@ -97,12 +106,12 @@
             <div class="box-body">
                 <div class="row" style="margin:16px 0;">
                     <div class="col-md-12">
-                        <div id="eChart-order-statistics" style="width:100%;height:280px;"></div>
+                        <div id="myChart-for-order" style="width:100%;height:240px;"></div>
                     </div>
                 </div>
                 <div class="row" style="margin:16px 0;">
                     <div class="col-md-12">
-                        <div id="eChart-finance-statistics" style="width:100%;height:280px;"></div>
+                        <div id="myChart-for-finance" style="width:100%;height:240px;"></div>
                     </div>
                 </div>
             </div>
@@ -122,50 +131,6 @@
 </div>
 
 
-{{--网站总流量统计--}}
-<div class="row">
-    <div class="col-md-12">
-        <!-- BEGIN PORTLET-->
-        <div class="box box-info">
-
-            <div class="box-header with-border" style="margin:16px 0;">
-                <h3 class="box-title">员工对比</h3>
-            </div>
-
-            {{--总电话量-对比--}}
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="echart-all-comparison" style="width:100%;height:240px;"></div>
-                    </div>
-                </div>
-            </div>
-            {{--通话量-对比--}}
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="echart-dialog-comparison" style="width:100%;height:240px;"></div>
-                    </div>
-                </div>
-            </div>
-            {{--加微信-对比--}}
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="echart-wx-comparison" style="width:100%;height:240px;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box-footer">
-            </div>
-
-        </div>
-        <!-- END PORTLET-->
-    </div>
-</div>
-
-
 {{--转化率--}}
 <div class="row">
     <div class="col-md-12">
@@ -179,10 +144,10 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <div id="echart-all-rate" style="width:100%;height:320px;"></div>
+                        <div id="myChart-all-rate" style="width:100%;height:320px;"></div>
                     </div>
                     <div class="col-md-6">
-                        <div id="echart-today-rate" style="width:100%;height:320px;"></div>
+                        <div id="myChart-today-rate" style="width:100%;height:320px;"></div>
                     </div>
                 </div>
             </div>
@@ -200,27 +165,15 @@
 
 
 @section('custom-js')
-    <script src="{{ asset('/lib/js/echarts-3.7.2.min.js') }}"></script>
+    <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
-<script>
-$(function() {
-
-    $('input').iCheck({
-        checkboxClass: 'icheckbox_square-blue',
-        radioClass: 'iradio_square-blue',
-        increaseArea: '20%' // optional
-    });
-
-});
-</script>
-
 <script>
     $(function(){
 
 
         // 【数据分析】【显示】
-        $(".main-content").on('click', ".filter-submit-for-analysis", function() {
+        $(".main-content").on('click', "#filter-submit-for-statistic", function() {
             var that = $(this);
             var $id = that.attr("data-id");
 
@@ -233,13 +186,13 @@ $(function() {
                 url: "{{ url('/statistic/statistic-index') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
-                    keyword: $('input[name="order-keyword"]').val(),
-                    staff: $('select[name="order-staff"]').val(),
-                    client: $('select[name="order-client"]').val(),
-                    car: $('select[name="order-car"]').val(),
-                    route: $('select[name="order-route"]').val(),
-                    pricing: $('select[name="order-pricing"]').val(),
-                    status: $('select[name="order-status"]').val(),
+                    month: $('input[name="statistic-month"]').val(),
+                    staff: $('select[name="statistic-staff"]').val(),
+                    client: $('select[name="statistic-client"]').val(),
+                    car: $('select[name="statistic-car"]').val(),
+                    route: $('select[name="statistic-route"]').val(),
+                    pricing: $('select[name="statistic-pricing"]').val(),
+                    status: $('select[name="statistic-status"]').val(),
                     order_type: $('select[name="order-type"]').val(),
                     operate:"statistic-index",
                     item_id: $id
@@ -249,21 +202,46 @@ $(function() {
                     else
                     {
                         $data = data.data;
+                        console.log($data);
                     }
                 }
             });
 
 
-            var $overview = $data.overview;
-            var $option_overview = {
-                tooltip: {
+
+
+            // 每日订单量
+            // 本月
+            var $order_this_month_res = new Array();
+            $.each($data.statistics_data_for_order_this_month,function(key,v){
+                $order_this_month_res[(v.day - 1)] = { value:v.sum, name:v.day };
+            });
+            // 上月
+            var $order_last_month_res = new Array();
+            $.each($data.statistics_data_for_order_last_month,function(key,v){
+                $order_last_month_res[(v.day - 1)] = { value:v.sum, name:v.day };
+            });
+
+            var $statistics_option_for_order = {
+                title: {
+                    text: '每日订单量统计【本月/上月】'
+                },
+                tooltip : {
                     trigger: 'axis',
                     axisPointer: {
-                        type: 'shadow'
+                        type: 'line',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
                     }
                 },
                 legend: {
-                    data: ['收入', '支出', '利润']
+                    data:['订单量']
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
                 },
                 grid: {
                     left: '3%',
@@ -271,127 +249,139 @@ $(function() {
                     bottom: '3%',
                     containLabel: true
                 },
-                xAxis: [
+                xAxis : [
                     {
-                        type: 'category',
-                        axisTick: {
-                            show: false
-                        },
-                        data: $overview.title
+                        type : 'category',
+                        boundaryGap : false,
+                        axisLabel : { interval:0 },
+                        data : [
+                            1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
+                        ]
                     }
                 ],
-                yAxis: [
+                yAxis : [
                     {
-                        type: 'value'
+                        type : 'value'
                     }
                 ],
-                series: [
-                    {
-                        name: '支出',
-                        type: 'bar',
-                        stack: 'Total',
-                        label: {
-                            show: true,
-                            position: 'inside'
-                        },
-                        emphasis: {
-                            focus: 'series'
-                        },
-                        data: $overview.expenses
-                    },
-                    {
-                        name: '收入',
-                        type: 'bar',
-                        stack: 'Total',
-                        label: {
-                            show: true,
-                            position: 'inside'
-                        },
-                        emphasis: {
-                            focus: 'series'
-                        },
-                        data: $overview.income
-                    },
-                    {
-                        name: '利润',
-                        type: 'bar',
-                        label: {
-                            show: true,
-                            position: 'inside'
-                        },
-                        emphasis: {
-                            focus: 'series'
-                        },
-                        data: $overview.profit
-                    }
-                ]
-            };
-            var $myChart_overview = echarts.init(document.getElementById('echart-overview'));
-            $myChart_overview.setOption($option_overview);
-
-
-            // 支出占比
-            var $expenditure_rate = $data.expenditure_rate;
-            var $option_expenditure_rate = {
-                title : {
-                    text: '支出占比',
-                    subtext: '支出占比',
-                    x:'center'
-                },
-                tooltip : {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    orient : 'vertical',
-                    x : 'left',
-                    data: $expenditure_rate
-                },
-                toolbox: {
-                    show : true,
-                    feature : {
-                        mark : {show: true},
-                        dataView : {show: true, readOnly: false},
-                        magicType : {
-                            show: true,
-                            type: ['pie', 'funnel'],
-                            option: {
-                                funnel: {
-                                    x: '25%',
-                                    width: '50%',
-                                    funnelAlign: 'left',
-                                    max: 1548
-                                }
-                            }
-                        },
-                        restore : {show: true},
-                        saveAsImage : {show: true}
-                    }
-                },
-                calculable : true,
                 series : [
                     {
-                        name:'支出占比',
-                        type:'pie',
-                        radius : '55%',
-                        center: ['50%', '60%'],
-                        data: $expenditure_rate
+                        name:'本月',
+                        type:'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
+                            }
+                        },
+                        itemStyle : { normal: { label : { show: true } } },
+                        data: $order_this_month_res
+                    },
+                    {
+                        name:'上月',
+                        type:'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
+                            }
+                        },
+                        itemStyle : { normal: { label : { show: true } } },
+                        data: $order_last_month_res
                     }
                 ]
             };
-            var $myChart_expenditure_rate = echarts.init(document.getElementById('echart-expenditure-rate'));
-            $myChart_expenditure_rate.setOption($option_expenditure_rate);
+            var $myChart_for_order = echarts.init(document.getElementById('myChart-for-order'));
+            $myChart_for_order.setOption($statistics_option_for_order);
 
 
 
 
-            $('input[name="finance-create-order-id"]').val($id);
-            $('.finance-create-order-id').html($id);
-            $('.finance-create-order-title').html($keyword);
+            // 每日收入
+            var $income_res = new Array();
+            $.each($data.statistics_data_for_income,function(key,v){
+                $income_res[(v.day - 1)] = { value:v.sum, name:v.day };
+//            $income_res.push({ value:v.sum, name:v.date });
+            });
+            // 每日支出
+            var $payout_res = new Array();
+            $.each($data.statistics_data_for_payout,function(key,v){
+                $payout_res[(v.day - 1)] = { value:v.sum, name:v.day };
+            });
 
-            TableDatatablesAjax_finance.init($id);
+            var $statistics_option_for_finance = {
+                title: {
+                    text: '每日财务统计【收入总额/支出总额】'
+                },
+                tooltip : {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'line',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data:['收入','支出']
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        axisLabel : { interval:0 },
+                        data : [
+                            1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
+                        ]
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'收入',
+                        type:'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
+                            }
+                        },
+                        itemStyle : { normal: { label : { show: true } } },
+                        data: $income_res
+                    },
+                    {
+                        name:'支出',
+                        type:'line',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
+                            }
+                        },
+                        itemStyle : { normal: { label : { show: true } } },
+                        data: $payout_res
+                    }
+                ]
+            };
+            var $myChart_for_finance = echarts.init(document.getElementById('myChart-for-finance'));
+            $myChart_for_finance.setOption($statistics_option_for_finance);
 
-            $('#modal-body-for-analysis').modal('show');
+
         });
 
 

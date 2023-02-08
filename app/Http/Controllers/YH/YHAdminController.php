@@ -980,7 +980,8 @@ class YHAdminController extends Controller
     // 【统计】概览
     public function view_statistic_index()
     {
-        return $this->repo->view_statistic_index();
+        if(request()->isMethod('get')) return $this->repo->view_statistic_index(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data(request()->all());
     }
     // 【统计】用户
     public function view_statistic_user()
