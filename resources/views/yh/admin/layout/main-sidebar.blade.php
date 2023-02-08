@@ -152,16 +152,16 @@
                     <i class="fa fa-bar-chart text-green"></i> <span>数据统计</span>
                 </a>
             </li>
-            <li class="treeview {{ $menu_active_of_statistic_list_for_client or '' }}">
-                <a href="{{ url('/statistic/statistic-list-for-client') }}">
-                    <i class="fa fa-bar-chart text-green"></i> <span>客户统计</span>
-                </a>
-            </li>
-            <li class="treeview {{ $menu_active_of_statistic_list_for_car or '' }}">
-                <a href="{{ url('/statistic/statistic-list-for-car') }}">
-                    <i class="fa fa-bar-chart text-green"></i> <span>车辆统计</span>
-                </a>
-            </li>
+{{--            <li class="treeview {{ $menu_active_of_statistic_list_for_client or '' }}">--}}
+{{--                <a href="{{ url('/statistic/statistic-list-for-client') }}">--}}
+{{--                    <i class="fa fa-bar-chart text-green"></i> <span>客户统计</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+{{--            <li class="treeview {{ $menu_active_of_statistic_list_for_car or '' }}">--}}
+{{--                <a href="{{ url('/statistic/statistic-list-for-car') }}">--}}
+{{--                    <i class="fa fa-bar-chart text-green"></i> <span>车辆统计</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
 
 
 

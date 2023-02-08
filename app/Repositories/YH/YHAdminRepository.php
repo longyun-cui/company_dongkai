@@ -9046,15 +9046,8 @@ class YHAdminRepository {
         $view_data['route_list'] = $route_list;
         $view_data['pricing_list'] = $pricing_list;
 
-        $this_month = date('Y-m');
-        $this_month_year = date('Y');
-        $this_month_month = date('m');
-        $last_month = date('Y-m',strtotime('last month'));
-        $last_month_year = date('Y',strtotime('last month'));
-        $last_month_month = date('m',strtotime('last month'));
 
-        $staff = [];
-
+        $view_data['menu_active_of_statistic_index'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-index';
         return view($view_blade)->with($view_data);
@@ -9301,7 +9294,7 @@ class YHAdminRepository {
 
 
 
-        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+        $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
         $the_month_timestamp = strtotime($the_month);
 
         $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
@@ -9321,7 +9314,59 @@ class YHAdminRepository {
 
 
 
+        $type = isset($post_data['type']) ? $post_data['type']  : '';
 
+        $staff_id = 0;
+        $client_id = 0;
+        $car_id = 0;
+        $route_id = 0;
+        $pricing_id = 0;
+
+        if($type == 'component')
+        {
+            // 员工
+            if(!empty($post_data['staff']))
+            {
+                if(!in_array($post_data['staff'],[-1,0]))
+                {
+                    $staff_id = $post_data['staff'];
+                }
+            }
+            // 客户
+            if(!empty($post_data['client']))
+            {
+                if(!in_array($post_data['client'],[-1,0]))
+                {
+                    $client_id = $post_data['client'];
+                }
+            }
+            // 车辆
+            if(!empty($post_data['car']))
+            {
+                if(!in_array($post_data['car'],[-1,0]))
+                {
+                    $car_id = $post_data['car'];
+                }
+            }
+            // 线路
+            if(!empty($post_data['route']))
+            {
+                if(!in_array($post_data['route'],[-1,0]))
+                {
+                    $route_id = $post_data['route'];
+                }
+            }
+            // 定价
+            if(!empty($post_data['pricing']))
+            {
+                if(!in_array($post_data['pricing'],[-1,0]))
+                {
+                    $pricing_id = $post_data['pricing'];
+                }
+            }
+        }
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
 
 
         // 车辆统计
@@ -9334,22 +9379,22 @@ class YHAdminRepository {
 
 
         // 订单统计
-        $order_count_for_all = YH_Order::count("*");
-        $order_count_for_unpublished = YH_Order::where('is_published', 0)->count("*");
-        $order_count_for_published = YH_Order::where('is_published', 1)->count("*");
-        $order_count_for_waiting_for_departure = YH_Order::where('is_published', 1)->whereNull('actual_departure_time')->count("*");
-        $order_count_for_working = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->count("*");
-        $order_count_for_waiting_for_receipt = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'),'>','income_total')->count("*");
-        $order_count_for_received = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'), '<=', 'income_total')->count("*");
-
-
-        $return['order_count_for_all'] = $order_count_for_all;
-        $return['order_count_for_unpublished'] = $order_count_for_unpublished;
-        $return['order_count_for_published'] = $order_count_for_published;
-        $return['order_count_for_waiting_for_departure'] = $order_count_for_waiting_for_departure;
-        $return['order_count_for_working'] = $order_count_for_working;
-        $return['order_count_for_waiting_for_receipt'] = $order_count_for_waiting_for_receipt;
-        $return['order_count_for_received'] = $order_count_for_received;
+//        $order_count_for_all = YH_Order::count("*");
+//        $order_count_for_unpublished = YH_Order::where('is_published', 0)->count("*");
+//        $order_count_for_published = YH_Order::where('is_published', 1)->count("*");
+//        $order_count_for_waiting_for_departure = YH_Order::where('is_published', 1)->whereNull('actual_departure_time')->count("*");
+//        $order_count_for_working = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->count("*");
+//        $order_count_for_waiting_for_receipt = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'),'>','income_total')->count("*");
+//        $order_count_for_received = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'), '<=', 'income_total')->count("*");
+//
+//
+//        $return['order_count_for_all'] = $order_count_for_all;
+//        $return['order_count_for_unpublished'] = $order_count_for_unpublished;
+//        $return['order_count_for_published'] = $order_count_for_published;
+//        $return['order_count_for_waiting_for_departure'] = $order_count_for_waiting_for_departure;
+//        $return['order_count_for_working'] = $order_count_for_working;
+//        $return['order_count_for_waiting_for_receipt'] = $order_count_for_waiting_for_receipt;
+//        $return['order_count_for_received'] = $order_count_for_received;
 
 
 
@@ -9357,7 +9402,7 @@ class YHAdminRepository {
         // 订单统计
 
         // 本月每日订单量
-        $statistics_data_for_order_this_month = YH_Order::select('id','assign_time')
+        $query_for_order_this_month = YH_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
@@ -9365,12 +9410,20 @@ class YHAdminRepository {
                     FROM_UNIXTIME(assign_time,'%Y-%m-%d') as date,
                     FROM_UNIXTIME(assign_time,'%e') as day,
                     count(*) as sum
-                "))
-            ->get()->keyBy('day');
+                "));
+
+        if($staff_id) $query_for_order_this_month->where('creator_id',$staff_id);
+        if($client_id) $query_for_order_this_month->where('client_id',$client_id);
+        if($car_id) $query_for_order_this_month->where('car_id',$car_id);
+        if($route_id) $query_for_order_this_month->where('route_id',$route_id);
+        if($pricing_id) $query_for_order_this_month->where('pricing_id',$pricing_id);
+
+
+        $statistics_data_for_order_this_month = $query_for_order_this_month->get()->keyBy('day');
         $return_data['statistics_data_for_order_this_month'] = $statistics_data_for_order_this_month;
 
         // 上月每日订单量
-        $statistics_data_for_order_last_month = YH_Order::select('id','assign_time')
+        $query_for_order_last_month = YH_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
@@ -9378,8 +9431,15 @@ class YHAdminRepository {
                     FROM_UNIXTIME(assign_time,'%Y-%m-%d') as date,
                     FROM_UNIXTIME(assign_time,'%e') as day,
                     count(*) as sum
-                "))
-            ->get()->keyBy('day');
+                "));
+
+        if($staff_id) $query_for_order_last_month->where('creator_id',$staff_id);
+        if($client_id) $query_for_order_last_month->where('client_id',$client_id);
+        if($car_id) $query_for_order_last_month->where('car_id',$car_id);
+        if($route_id) $query_for_order_last_month->where('route_id',$route_id);
+        if($pricing_id) $query_for_order_last_month->where('pricing_id',$pricing_id);
+
+        $statistics_data_for_order_last_month = $query_for_order_last_month->get()->keyBy('day');
         $return_data['statistics_data_for_order_last_month'] = $statistics_data_for_order_last_month;
 
 
@@ -9387,60 +9447,83 @@ class YHAdminRepository {
 
         // 财务统计
 
-        $finance_this_month_income = YH_Finance::select('id')
-            ->where('finance_type',1)
+//        $finance_this_month_income = YH_Finance::select('id')
+//            ->where('finance_type',1)
+//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+//            ->sum("transaction_amount");
+//
+//        $finance_this_month_payout = YH_Finance::select('id')
+//            ->where('finance_type',21)
+//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+//            ->sum("transaction_amount");
+//
+//
+//        $finance_last_month_income = YH_Finance::select('id')
+//            ->where('finance_type',1)
+//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
+//            ->sum("transaction_amount");
+//
+//        $finance_last_month_payout = YH_Finance::select('id')
+//            ->where('finance_type',21)
+//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
+//            ->sum("transaction_amount");
+//
+//
+//        $return_data['finance_this_month_income'] = $finance_this_month_income;
+//        $return_data['finance_this_month_payout'] = $finance_this_month_payout;
+//        $return_data['finance_last_month_income'] = $finance_last_month_income;
+//        $return_data['finance_last_month_payout'] = $finance_last_month_payout;
+
+
+        $query_for_finance = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
             ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->sum("transaction_amount");
-
-        $finance_this_month_payout = YH_Finance::select('id')
-            ->where('finance_type',21)
-            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->sum("transaction_amount");
-
-
-        $finance_last_month_income = YH_Finance::select('id')
-            ->where('finance_type',1)
-            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
-            ->sum("transaction_amount");
-
-        $finance_last_month_payout = YH_Finance::select('id')
-            ->where('finance_type',21)
-            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
-            ->sum("transaction_amount");
-
-
-        $return_data['finance_this_month_income'] = $finance_this_month_income;
-        $return_data['finance_this_month_payout'] = $finance_this_month_payout;
-        $return_data['finance_last_month_income'] = $finance_last_month_income;
-        $return_data['finance_last_month_payout'] = $finance_last_month_payout;
-
-
-        $statistics_data_for_income = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
-            ->where('finance_type',1)
-            ->whereBetween('transaction_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
             ->select(DB::raw("
                     FROM_UNIXTIME(transaction_time,'%Y-%m-%d') as date,
                     FROM_UNIXTIME(transaction_time,'%e') as day,
                     sum(transaction_amount) as sum,
                     count(*) as count
-                "))
-            ->get()->keyBy('day');
+                "));
+
+        if($staff_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($staff_id) {
+                $query->where('creator_id', $staff_id);
+            });
+        }
+        if($client_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($client_id) {
+                $query->where('client_id', $client_id);
+            });
+        }
+        if($car_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($car_id) {
+                $query->where('car_id', $car_id);
+            });
+        }
+        if($route_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($route_id) {
+                $query->where('route_id', $route_id);
+            });
+        }
+        if($pricing_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($pricing_id) {
+                $query->where('pricing_id', $pricing_id);
+            });
+        }
+
+        $query_for_income = clone $query_for_finance;
+        $statistics_data_for_income = $query_for_income->where('finance_type',1)->get()->keyBy('day');
         $return_data['statistics_data_for_income'] = $statistics_data_for_income;
 
-        $statistics_data_for_payout = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
-            ->where('finance_type',21)
-            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
-            ->select(DB::raw("
-                    FROM_UNIXTIME(transaction_time,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(transaction_time,'%e') as day,
-                    sum(transaction_amount) as sum,
-                    count(*) as count
-                "))
-            ->get()->keyBy('day');
-        $return_data['statistics_data_for_payout'] = $statistics_data_for_payout;
 
+        $query_for_payout = clone $query_for_finance;
+        $statistics_data_for_payout = $query_for_payout->where('finance_type',21)->get()->keyBy('day');
+        $return_data['statistics_data_for_payout'] = $statistics_data_for_payout;
 
 
         return response_success($return_data,"");

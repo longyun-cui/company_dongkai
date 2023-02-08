@@ -73,6 +73,13 @@
                             @endforeach
                         </select>
 
+                        <select class="form-control form-filter" name="order-pricing" style="width:96px;">
+                            <option value="-1">选择定价</option>
+                            @foreach($pricing_list as $v)
+                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
+                            @endforeach
+                        </select>
+
                         {{--<select class="form-control form-filter" name="order-car" style="width:96px;">--}}
                             {{--<option value ="-1">选择车辆</option>--}}
                             {{--@foreach($car_list as $v)--}}
@@ -81,13 +88,6 @@
                         {{--</select>--}}
                         <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:96px;">
                             <option value="-1">选择车辆</option>
-                        </select>
-
-                        <select class="form-control form-filter" name="order-pricing" style="width:96px;">
-                            <option value="-1">选择定价</option>
-                            @foreach($pricing_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
-                            @endforeach
                         </select>
 
                         <select class="form-control form-filter" name="order-type" style="width:96px;">

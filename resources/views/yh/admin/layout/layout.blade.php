@@ -89,6 +89,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     @yield('custom-css')
     @yield('custom-style')
 
+    {{--layout-style--}}
+    @include(env('TEMPLATE_YH_ADMIN').'layout.layout-style')
+
 </head>
 <!--
 BODY TAG OPTIONS:
