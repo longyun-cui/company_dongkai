@@ -104,6 +104,11 @@
 
 
             <div class="box-body">
+
+                <div class="box-header with-border" style="margin:16px 0;text-align:center;">
+                    <h3 class="box-title statistic-title"></h3>
+                </div>
+
                 <div class="row" style="margin:16px 0;">
                     <div class="col-md-12">
                         <div id="myChart-for-order" style="width:100%;height:240px;"></div>
@@ -177,6 +182,8 @@
             var that = $(this);
             var $id = that.attr("data-id");
 
+            $('.statistic-title').html($('input[name="statistic-month"]').val()+'月');
+
             var $data = new Object();
             $.ajax({
                 type:"post",
@@ -208,8 +215,6 @@
             });
 
 
-
-
             // 每日订单量
             // 本月
             var $order_this_month_res = new Array();
@@ -236,7 +241,7 @@
                     }
                 },
                 legend: {
-                    data:['订单量']
+                    data:['本月','上月']
                 },
                 toolbox: {
                     feature: {
@@ -384,6 +389,58 @@
 
         });
 
+        // 【前一月】
+        $(".main-content").on('click', ".month_picker_pre", function() {
+
+            var $the_month = $('input[name="statistic-month"]').val();
+            var $date = new Date($the_month);
+            var $year = $date.getFullYear();
+            var $month = $date.getMonth();
+
+            var $pre_year = $year;
+            var $pre_month = $month;
+
+            if(parseInt($month) == 0)
+            {
+                $pre_year = $year - 1;
+                $pre_month = 12;
+            }
+
+            if($pre_month < 10) $pre_month = '0'+$pre_month;
+
+            var $pre_month_str = $pre_year+'-'+$pre_month;
+            $('input[name="statistic-month"]').val($pre_month_str);
+            $("#filter-submit-for-statistic").click();
+
+        });
+        // 【后一月】
+        $(".main-content").on('click', ".month_picker_next", function() {
+
+            var $the_month_str = $('input[name="statistic-month"]').val();
+            var $date = new Date($the_month_str);
+            var $year = $date.getFullYear();
+            var $month = $date.getMonth();
+
+            var $next_year = $year;
+            var $next_month = $month;
+
+            if(parseInt($month) == 11)
+            {
+                $next_year = $year + 1;
+                $next_month = 1;
+            }
+            else $next_month = $month + 2;
+
+            if($next_month < 10) $next_month = '0'+$next_month;
+
+            var $next_month_str = $next_year+'-'+$next_month;
+            $('input[name="statistic-month"]').val($next_month_str);
+            $("#filter-submit-for-statistic").click();
+
+        });
+
+
+        $("#filter-submit-for-statistic").click();
 
 
     });
