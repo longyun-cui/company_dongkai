@@ -1183,6 +1183,7 @@
                                     }
                                 });
                                 $('.attachment-box').html($data.html);
+                                $(".fileinput-remove-button").click();
 
 //                                $('#datatable_ajax').DataTable().ajax.reload();
 //                                $('#datatable_ajax_inner').DataTable().ajax.reload();
@@ -1324,6 +1325,12 @@
         $('.lightcase-image').lightcase({
             maxWidth: 9999,
             maxHeight: 9999
+        });
+
+
+        $(".file-multiple-images").fileinput({
+            allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
+            showUpload: false
         });
 
     });

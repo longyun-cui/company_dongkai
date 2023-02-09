@@ -62,8 +62,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('/resource/component/css/jquery.dataTables-1.13.1.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resource/component/css/fixedColumns.dataTables.min.css') }}">
 
-    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/resource/component/css/bootstrap-fileinput-4.4.8.min.css') }}">
+{{--    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css">--}}
+    <link rel="stylesheet" href="{{ asset('/resource/component/css/fileinput-4.4.8.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resource/component/css/fileinput-only.css') }}">
 
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">--}}
@@ -170,7 +170,7 @@ desired effect
 
 {{--<script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>--}}
 <script src="{{ asset('/resource/component/js/fileinput-4.4.8.min.js') }}"></script>
-<script src="{{ asset('/resource/component/js/fileinput-only.js') }}"></script>
+<script src="{{ asset('/resource/component/js/fileinput-only-1.js') }}"></script>
 
 {{--<script src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.min.js"></script>--}}
 <script src="{{ asset('/resource/component/js/jquery.form-4.2.2.min.js') }}"></script>

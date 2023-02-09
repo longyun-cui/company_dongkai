@@ -62,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('/AdminLTE/plugins/datatables/dataTables.bootstrap.css') }}">
 
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/resource/component/css/bootstrap-fileinput-4.4.8.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('fileinput-4.4.8.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resource/component/css/fileinput-only.css') }}">
 
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">--}}

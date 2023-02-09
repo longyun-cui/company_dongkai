@@ -7277,10 +7277,59 @@ class YHAdminRepository {
         DB::beginTransaction();
         try
         {
-            $attachment = new YH_Attachment;
-            // 头像
+
+            // 多图
+            $multiple_images = [];
+            if(!empty($post_data["multiple_images"][0]))
+            {
+                // 添加图片
+                foreach ($post_data["multiple_images"] as $n => $f)
+                {
+                    if(!empty($f))
+                    {
+                        $result = upload_img_storage($f,'','yh/attachment','');
+                        if($result["result"])
+                        {
+                            $attachment = new YH_Attachment;
+
+                            $attachment_data['order_id'] = $order_id;
+                            $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                            $attachment_data['attachment_src'] = $result["local"];
+                            $bool = $attachment->fill($attachment_data)->save();
+                            if($bool)
+                            {
+                                $record = new YH_Record;
+
+                                $record_data["record_object"] = 21;
+                                $record_data["record_category"] = 11;
+                                $record_data["record_type"] = 1;
+                                $record_data["creator_id"] = $me->id;
+                                $record_data["order_id"] = $order_id;
+                                $record_data["operate_object"] = 71;
+                                $record_data["operate_category"] = 71;
+                                $record_data["operate_type"] = 1;
+
+                                $record_data["column_name"] = 'attachment';
+                                $record_data["after"] = $attachment_data['attachment_src'];
+
+                                $bool_1 = $record->fill($record_data)->save();
+                                if($bool_1)
+                                {
+                                }
+                                else throw new Exception("insert--record--fail");
+                            }
+                            else throw new Exception("insert--attachment--fail");
+                        }
+                        else throw new Exception("upload--attachment--file--fail");
+                    }
+                }
+            }
+
+
+            // 单图
             if(!empty($post_data["attachment_file"]))
             {
+                $attachment = new YH_Attachment;
 
 //                $result = upload_storage($post_data["portrait"]);
 //                $result = upload_storage($post_data["portrait"], null, null, 'assign');
@@ -7315,7 +7364,7 @@ class YHAdminRepository {
                     }
                     else throw new Exception("insert--attachment--fail");
                 }
-                else throw new Exception("upload--portrait_img--file--fail");
+                else throw new Exception("upload--attachment--file--fail");
             }
 
             DB::commit();

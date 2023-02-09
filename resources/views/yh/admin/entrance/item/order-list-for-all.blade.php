@@ -439,7 +439,19 @@
                     </div>
                 </div>
 
+                {{--多图上传--}}
                 <div class="form-group">
+
+                    <label class="control-label col-md-2">图片上传</label>
+
+                    <div class="col-md-8">
+                        <input id="multiple-images" type="file" class="file-multiple-images" name="multiple_images[]" multiple >
+                    </div>
+
+                </div>
+
+                {{--多图上传--}}
+                <div class="form-group _none">
 
                     <label class="control-label col-md-2" style="clear:left;">选择图片</label>
                     <div class="col-md-8 fileinput-group">
