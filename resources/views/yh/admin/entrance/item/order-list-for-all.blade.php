@@ -2260,7 +2260,7 @@
                     {
                         "className": "text-center",
                         "width": "160px",
-                        "title": "包油价",
+                        "title": "包油油耗",
                         "data": "pricing_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
