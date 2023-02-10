@@ -1,16 +1,8 @@
 .tableArea .dataTables_wrapper { position:relative; clear:both; zoom:1; overflow-x:auto; }
 .tableArea.overflow-none .dataTables_wrapper { overflow-x:hidden; }
-.tableArea .row {
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
-}
+.tableArea .row { margin-left:0; margin-right:0; padding-left:0; padding-right:0; }
 .tableArea .col-sm-12,.tableArea .col-md-12,.tableArea .col-ls-12,.tableArea .col-sm-6,.tableArea .col-md-6,.tableArea .col-ls-6 {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0;
+    padding-left:0; padding-right:0; margin-left:0; margin-right:0;
 }
 
 .datatable-body * { font-size:12px; }
