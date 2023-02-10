@@ -45,19 +45,27 @@
                     </div>
                 </div>
 
-                {{--包油价--}}
+                {{--包油--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 包油价</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 包油（升）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="price1" placeholder="包油价" value="{{ $data->price1 or '' }}">
+                        <input type="text" class="form-control" name="price1" placeholder="包油（升）" value="{{ $data->price1 or '' }}">
                     </div>
                 </div>
 
-                {{--空放价--}}
+                {{--空放--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">空放价</label>
+                    <label class="control-label col-md-2">空放（升）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="price2" placeholder="空放价" value="{{ $data->price2 or '' }}">
+                        <input type="text" class="form-control" name="price2" placeholder="空放（升）" value="{{ $data->price2 or '' }}">
+                    </div>
+                </div>
+
+                {{--空放200+--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">空放200+（升）</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="price3" placeholder="空放200+（升）" value="{{ $data->price3 or '' }}">
                     </div>
                 </div>
 

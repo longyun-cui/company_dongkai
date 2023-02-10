@@ -2126,35 +2126,6 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "120px",
-                        "title": "包油价",
-                        "data": "pricing_id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
-                                $(nTd).attr('data-key','pricing_id').attr('data-value',data);
-                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
-                                else $(nTd).attr('data-option-name',row.pricing_er.title);
-                                $(nTd).attr('data-column-name','包油价');
-                                if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.pricing_er == null)
-                            {
-                                return '--';
-                            }
-                            else {
-                                return '<a href="javascript:void(0);">'+row.pricing_er.title+'()</a>';
-                            }
-                        }
-                    },
-                    {
                         "className": "",
                         "width": "60px",
                         "title": "请车价",
@@ -2284,6 +2255,42 @@
                         },
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "160px",
+                        "title": "包油价",
+                        "data": "pricing_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
+                                $(nTd).attr('data-key','pricing_id').attr('data-value',data);
+                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.pricing_er.title);
+                                $(nTd).attr('data-column-name','包油价');
+                                if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.pricing_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                var $price = "--";
+                                if(row.car_owner_type == 11)
+                                {
+                                    if(row.travel_distance >= 200) $price = row.pricing_er.price3;
+                                    else $price = row.pricing_er.price2;
+                                }
+                                else $price = row.pricing_er.price1;
+                                return '<a href="javascript:void(0);">'+row.pricing_er.title+'('+$price+')</a>';
+                            }
                         }
                     },
 //                    {

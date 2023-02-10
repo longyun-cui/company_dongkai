@@ -466,7 +466,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:1400px; }
+    .tableArea table { min-width:1380px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
@@ -624,16 +624,16 @@
                     {
                         "className": "text-center",
                         "width": "80px",
-                        "title": "包油价",
+                        "title": "包油（升）",
                         "data": "price1",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
+                                $(nTd).attr('data-id',row.id).attr('data-name','包油（升）');
                                 $(nTd).attr('data-key','price1').attr('data-value',data);
-                                $(nTd).attr('data-column-name','包油价');
+                                $(nTd).attr('data-column-name','包油（升）');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -647,16 +647,39 @@
                     {
                         "className": "text-center",
                         "width": "80px",
-                        "title": "空放价",
+                        "title": "空放（升）",
                         "data": "price2",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','空放价');
-                                $(nTd).attr('data-key','price1').attr('data-value',data);
-                                $(nTd).attr('data-column-name','空放价');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空放（升）');
+                                $(nTd).attr('data-key','price2').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空放（升）');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "空放-200+（升）",
+                        "data": "price3",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空放-200+（升）');
+                                $(nTd).attr('data-key','price3').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空放-200+（升）');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
