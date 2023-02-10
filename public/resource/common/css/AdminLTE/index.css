@@ -1,9 +1,5 @@
-.tableArea .dataTables_wrapper {
-    position: relative;
-    clear: both;
-    zoom: 1;
-    overflow-x: auto;
-}
+.tableArea .dataTables_wrapper { position:relative; clear:both; zoom:1; overflow-x:auto; }
+.tableArea.overflow-none .dataTables_wrapper { overflow-x:hidden; }
 .tableArea .row {
     margin-left: 0;
     margin-right: 0;

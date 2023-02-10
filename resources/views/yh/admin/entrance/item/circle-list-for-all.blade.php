@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="tableArea">
+                <div class="tableArea  overflow-none">
                 <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
@@ -499,7 +499,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:1380px; }
+    .tableArea table { min-width:1360px; }
     .tableArea table#datatable_ajax_finance { min-width:1800px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
@@ -588,7 +588,7 @@
                         }
                     },
                     {
-                        "width": "100px",
+                        "width": "80px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
@@ -659,7 +659,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "车辆",
                         "data": "car_id",
                         "orderable": false,
@@ -681,7 +681,7 @@
                         }
                     },
                     {
-                        "width": "200px",
+                        "width": "180px",
                         "title": "订单",
                         "data": "pivot_order_list",
                         "orderable": false,
@@ -854,7 +854,8 @@
                         }
                     },
                     {
-                        "width": "60px",
+                        "className": "text-center",
+                        "width": "",
                         "title": "备注",
                         "data": "remark",
                         "orderable": false,
@@ -876,7 +877,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "60px",
                         "title": "创建人",
                         "data": "creator_id",

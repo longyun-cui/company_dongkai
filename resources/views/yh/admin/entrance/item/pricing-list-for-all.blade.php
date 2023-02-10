@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="tableArea">
+                <div class="tableArea overflow-none">
                 <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
@@ -552,7 +552,7 @@
                         }
                     },
                     {
-                        "width": "180px",
+                        "width": "120px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
@@ -691,7 +691,8 @@
                         }
                     },
                     {
-                        "width": "200px",
+                        "className": "text-center",
+                        "width": "",
                         "title": "备注",
                         "data": "remark",
                         "orderable": false,
@@ -713,8 +714,8 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "60px",
+                        "className": "",
+                        "width": "80px",
                         "title": "创建人",
                         "data": "creator_id",
                         "orderable": false,
