@@ -2150,7 +2150,7 @@
                                 return '--';
                             }
                             else {
-                                return '<a href="javascript:void(0);">'+row.pricing_er.title+'</a>';
+                                return '<a href="javascript:void(0);">'+row.pricing_er.title+'()</a>';
                             }
                         }
                     },
@@ -2394,171 +2394,171 @@
                             return data;
                         }
                     },
-                    {
-                        "className": "text-center",
-                        "width": "40px",
-                        "title": "类型",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                if(row.car_owner_type == 61)
-                                {
-                                    $(nTd).addClass('modal-show-for-info-select-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂类型');
-                                    $(nTd).attr('data-key','trailer_type').attr('data-value',row.trailer_type);
-                                    $(nTd).attr('data-column-name','车挂类型');
-                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var reurn_html = '';
-                            if(row.car_owner_type == 1)
-                            {
-                                if(row.trailer_er != null && row.trailer_er.trailer_type) reurn_html = row.trailer_er.trailer_type;
-                            }
-                            else
-                            {
-                                if(row.trailer_type && row.trailer_type != 0) reurn_html = row.trailer_type;
-                            }
-                            return reurn_html;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "40px",
-                        "title": "尺寸",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                if(row.car_owner_type == 61)
-                                {
-                                    $(nTd).addClass('modal-show-for-info-select-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂尺寸');
-                                    $(nTd).attr('data-key','trailer_length').attr('data-value',row.trailer_length);
-                                    $(nTd).attr('data-column-name','车挂尺寸');
-                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var reurn_html = '';
-                            if(row.car_owner_type == 1)
-                            {
-                                if(row.trailer_er != null && row.trailer_er.trailer_length) reurn_html = row.trailer_er.trailer_length;
-                            }
-                            else
-                            {
-                                if(row.trailer_length && row.trailer_length != 0) reurn_html = row.trailer_length;
-                            }
-                            return reurn_html;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "40px",
-                        "title": "容积",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                if(row.car_owner_type == 61)
-                                {
-                                    $(nTd).addClass('modal-show-for-info-select-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂容积');
-                                    $(nTd).attr('data-key','trailer_volume').attr('data-value',row.trailer_volume);
-                                    $(nTd).attr('data-column-name','车挂容积');
-                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var $return_html = '';
-                            if(row.car_owner_type == 1)
-                            {
-                                if(row.trailer_er != null && row.trailer_er.trailer_volume) $return_html = row.trailer_er.trailer_volume;
-                            }
-                            else
-                            {
-                                if(row.trailer_volume && row.trailer_volume != 0) $return_html = row.trailer_volume;
-                            }
-                            return $return_html;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "40px",
-                        "title": "载重",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                if(row.car_owner_type == 61)
-                                {
-                                    $(nTd).addClass('modal-show-for-info-select-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂载重');
-                                    $(nTd).attr('data-key','trailer_weight').attr('data-value',row.trailer_weight);
-                                    $(nTd).attr('data-column-name','车挂载重');
-                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var $return_html = '';
-                            if(row.car_owner_type == 1)
-                            {
-                                if(row.trailer_er != null && row.trailer_er.trailer_weight) $return_html = row.trailer_er.trailer_weight;
-                            }
-                            else
-                            {
-                                if(row.trailer_weight && row.trailer_weight != 0) $return_html = row.trailer_weight;
-                            }
-                            return $return_html;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "40px",
-                        "title": "轴数",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                if(row.car_owner_type == 61)
-                                {
-                                    $(nTd).addClass('modal-show-for-info-select-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-name','车挂轴数');
-                                    $(nTd).attr('data-key','trailer_axis_count').attr('data-value',row.trailer_axis_count);
-                                    $(nTd).attr('data-column-name','车挂轴数');
-                                    if(row.outside_car) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var reurn_html = '';
-                            if(row.car_owner_type == 1)
-                            {
-                                if(row.trailer_er != null && row.trailer_er.trailer_axis_count) reurn_html = row.trailer_er.trailer_axis_count;
-                            }
-                            else
-                            {
-                                if(row.trailer_axis_count) reurn_html = row.trailer_axis_count;
-                            }
-                            return reurn_html;
-                        }
-                    },
+                    // {
+                    //     "className": "text-center",
+                    //     "width": "40px",
+                    //     "title": "类型",
+                    //     "data": "id",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             if(row.car_owner_type == 61)
+                    //             {
+                    //                 $(nTd).addClass('modal-show-for-info-select-set');
+                    //                 $(nTd).attr('data-id',row.id).attr('data-name','车挂类型');
+                    //                 $(nTd).attr('data-key','trailer_type').attr('data-value',row.trailer_type);
+                    //                 $(nTd).attr('data-column-name','车挂类型');
+                    //                 if(row.outside_car) $(nTd).attr('data-operate-type','edit');
+                    //                 else $(nTd).attr('data-operate-type','add');
+                    //             }
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         var reurn_html = '';
+                    //         if(row.car_owner_type == 1)
+                    //         {
+                    //             if(row.trailer_er != null && row.trailer_er.trailer_type) reurn_html = row.trailer_er.trailer_type;
+                    //         }
+                    //         else
+                    //         {
+                    //             if(row.trailer_type && row.trailer_type != 0) reurn_html = row.trailer_type;
+                    //         }
+                    //         return reurn_html;
+                    //     }
+                    // },
+                    // {
+                    //     "className": "text-center",
+                    //     "width": "40px",
+                    //     "title": "尺寸",
+                    //     "data": "id",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             if(row.car_owner_type == 61)
+                    //             {
+                    //                 $(nTd).addClass('modal-show-for-info-select-set');
+                    //                 $(nTd).attr('data-id',row.id).attr('data-name','车挂尺寸');
+                    //                 $(nTd).attr('data-key','trailer_length').attr('data-value',row.trailer_length);
+                    //                 $(nTd).attr('data-column-name','车挂尺寸');
+                    //                 if(row.outside_car) $(nTd).attr('data-operate-type','edit');
+                    //                 else $(nTd).attr('data-operate-type','add');
+                    //             }
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         var reurn_html = '';
+                    //         if(row.car_owner_type == 1)
+                    //         {
+                    //             if(row.trailer_er != null && row.trailer_er.trailer_length) reurn_html = row.trailer_er.trailer_length;
+                    //         }
+                    //         else
+                    //         {
+                    //             if(row.trailer_length && row.trailer_length != 0) reurn_html = row.trailer_length;
+                    //         }
+                    //         return reurn_html;
+                    //     }
+                    // },
+                    // {
+                    //     "className": "text-center",
+                    //     "width": "40px",
+                    //     "title": "容积",
+                    //     "data": "id",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             if(row.car_owner_type == 61)
+                    //             {
+                    //                 $(nTd).addClass('modal-show-for-info-select-set');
+                    //                 $(nTd).attr('data-id',row.id).attr('data-name','车挂容积');
+                    //                 $(nTd).attr('data-key','trailer_volume').attr('data-value',row.trailer_volume);
+                    //                 $(nTd).attr('data-column-name','车挂容积');
+                    //                 if(row.outside_car) $(nTd).attr('data-operate-type','edit');
+                    //                 else $(nTd).attr('data-operate-type','add');
+                    //             }
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         var $return_html = '';
+                    //         if(row.car_owner_type == 1)
+                    //         {
+                    //             if(row.trailer_er != null && row.trailer_er.trailer_volume) $return_html = row.trailer_er.trailer_volume;
+                    //         }
+                    //         else
+                    //         {
+                    //             if(row.trailer_volume && row.trailer_volume != 0) $return_html = row.trailer_volume;
+                    //         }
+                    //         return $return_html;
+                    //     }
+                    // },
+                    // {
+                    //     "className": "text-center",
+                    //     "width": "40px",
+                    //     "title": "载重",
+                    //     "data": "id",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             if(row.car_owner_type == 61)
+                    //             {
+                    //                 $(nTd).addClass('modal-show-for-info-select-set');
+                    //                 $(nTd).attr('data-id',row.id).attr('data-name','车挂载重');
+                    //                 $(nTd).attr('data-key','trailer_weight').attr('data-value',row.trailer_weight);
+                    //                 $(nTd).attr('data-column-name','车挂载重');
+                    //                 if(row.outside_car) $(nTd).attr('data-operate-type','edit');
+                    //                 else $(nTd).attr('data-operate-type','add');
+                    //             }
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         var $return_html = '';
+                    //         if(row.car_owner_type == 1)
+                    //         {
+                    //             if(row.trailer_er != null && row.trailer_er.trailer_weight) $return_html = row.trailer_er.trailer_weight;
+                    //         }
+                    //         else
+                    //         {
+                    //             if(row.trailer_weight && row.trailer_weight != 0) $return_html = row.trailer_weight;
+                    //         }
+                    //         return $return_html;
+                    //     }
+                    // },
+                    // {
+                    //     "className": "text-center",
+                    //     "width": "40px",
+                    //     "title": "轴数",
+                    //     "data": "id",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             if(row.car_owner_type == 61)
+                    //             {
+                    //                 $(nTd).addClass('modal-show-for-info-select-set');
+                    //                 $(nTd).attr('data-id',row.id).attr('data-name','车挂轴数');
+                    //                 $(nTd).attr('data-key','trailer_axis_count').attr('data-value',row.trailer_axis_count);
+                    //                 $(nTd).attr('data-column-name','车挂轴数');
+                    //                 if(row.outside_car) $(nTd).attr('data-operate-type','edit');
+                    //                 else $(nTd).attr('data-operate-type','add');
+                    //             }
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         var reurn_html = '';
+                    //         if(row.car_owner_type == 1)
+                    //         {
+                    //             if(row.trailer_er != null && row.trailer_er.trailer_axis_count) reurn_html = row.trailer_er.trailer_axis_count;
+                    //         }
+                    //         else
+                    //         {
+                    //             if(row.trailer_axis_count) reurn_html = row.trailer_axis_count;
+                    //         }
+                    //         return reurn_html;
+                    //     }
+                    // },
                     {
                         "className": "order-info-time-edit",
                         "width": "120px",
