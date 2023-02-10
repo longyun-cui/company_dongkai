@@ -75,13 +75,34 @@
                         >
                     </div>
                 </div>
-                {{--费用--}}
+                {{--油卡--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 油卡</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="oil_card_amount" placeholder="油卡" value="{{ $data->oil_card_amount or 0 }}">
+                    </div>
+                </div>
+                {{--订金--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 订金</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="deposit" placeholder="订金" value="{{ $data->deposit or 0 }}">
+                    </div>
+                </div>
+                {{--请车价--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 请车价</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="outside_car_price" placeholder="请车价" value="{{ $data->outside_car_price or 0 }}" id="order-out-car-price"
                                @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif
                         >
+                    </div>
+                </div>
+                {{--信息费--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 信息费</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="information_fee" placeholder="信息费" value="{{ $data->information_fee or 0 }}">
                     </div>
                 </div>
 
@@ -637,6 +658,14 @@
                     <label class="control-label col-md-2">重量</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="weight" placeholder="重量" value="{{ $data->weight or '' }}">
+                    </div>
+                </div>
+
+                {{--备注--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">备注</label>
+                    <div class="col-md-8 ">
+                        <textarea class="form-control" name="remark" rows="3" cols="100%">{{ $data->remark or '' }}</textarea>
                     </div>
                 </div>
 

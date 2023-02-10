@@ -42,6 +42,7 @@ class YHAdminRepository {
         $this->modelClinet = new YH_Client;
         $this->modelCar = new YH_Car;
 
+        $this->view_blade_403 = env('TEMPLATE_YH_ADMIN').'entrance.errors.403';
         $this->view_blade_404 = env('TEMPLATE_YH_ADMIN').'entrance.errors.404';
 
         Blade::setEchoFormat('%s');
@@ -3181,6 +3182,8 @@ class YHAdminRepository {
     public function view_item_car_create()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '车辆';
@@ -3204,6 +3207,8 @@ class YHAdminRepository {
     public function view_item_car_edit()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.car-edit';

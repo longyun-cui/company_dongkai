@@ -2104,6 +2104,28 @@
                         }
                     },
                     {
+                        "className": "",
+                        "width": "60px",
+                        "title": "订金",
+                        "data": "deposit",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','订金');
+                                $(nTd).attr('data-key','deposit').attr('data-value',data);
+                                $(nTd).attr('data-column-name','订金');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "className": "text-center",
                         "width": "120px",
                         "title": "包油价",
@@ -3122,7 +3144,7 @@
                         }
                     },
                     {
-                        "className": "",
+                        "className": "text-left",
                         "width": "200px",
                         "title": "备注",
                         "data": "remark",

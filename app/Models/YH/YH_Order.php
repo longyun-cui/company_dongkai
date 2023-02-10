@@ -19,7 +19,7 @@ class YH_Order extends Model
         'item_id', 'menu_id',
         'order_category', 'order_type',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'amount', 'oil_card_amount', 'invoice_amount', 'invoice_point',
+        'amount', 'deposit', 'oil_card_amount', 'invoice_amount', 'invoice_point',
         'information_fee', 'customer_management_fee', 'time_limitation_deduction',
         'driver_fine',
         'outside_car_price',
