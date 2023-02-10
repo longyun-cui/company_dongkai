@@ -499,7 +499,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:1400px; }
+    .tableArea table { min-width:1380px; }
     .tableArea table#datatable_ajax_finance { min-width:1800px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }

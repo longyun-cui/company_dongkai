@@ -2289,7 +2289,7 @@
                                     else $price = row.pricing_er.price2;
                                 }
                                 else $price = row.pricing_er.price1;
-                                return '<a href="javascript:void(0);">'+row.pricing_er.title+'('+$price+')</a>';
+                                return '<a href="javascript:void(0);">'+row.pricing_er.title+' ('+$price+')</a>';
                             }
                         }
                     },
