@@ -313,8 +313,8 @@
 //                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
 ////                                TableDatatablesAjax_inner.init($keyword_id);
 
-                                $('#datatable_ajax').DataTable().ajax.reload();
-//                                $('#datatable_ajax_inner').DataTable().ajax.reload();
+                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
                             }
                         },
                         'json'
@@ -397,7 +397,7 @@
                                     $("body").addClass("modal-open");
                                 });
 
-                                $('#datatable_ajax').DataTable().ajax.reload();
+                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
 
                             }
                         },
@@ -651,8 +651,8 @@
 //                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
 ////                                TableDatatablesAjax_inner.init($keyword_id);
 
-                                $('#datatable_ajax').DataTable().ajax.reload();
-//                                $('#datatable_ajax_inner').DataTable().ajax.reload();
+                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
                             }
                         },
                         'json'

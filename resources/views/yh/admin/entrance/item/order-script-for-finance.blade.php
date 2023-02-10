@@ -52,8 +52,8 @@
                             if(!data.success) layer.msg(data.msg);
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload();
-                                $('#datatable_ajax_finance').DataTable().ajax.reload();
+                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                $('#datatable_ajax_finance').DataTable().ajax.reload(null, false);
                             }
                         },
                         'json'
@@ -80,8 +80,8 @@
                             if(!data.success) layer.msg(data.msg);
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload();
-                                $('#datatable_ajax_finance').DataTable().ajax.reload();
+                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                $('#datatable_ajax_finance').DataTable().ajax.reload(null, false);
                             }
                         },
                         'json'
@@ -186,8 +186,8 @@
 
 //                                TableDatatablesAjax_finance.init($('input[name="finance-create-order-id"]').val());
 
-                                $('#datatable_ajax').DataTable().ajax.reload();
-                                $('#datatable_ajax_finance').DataTable().ajax.reload();
+                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                $('#datatable_ajax_finance').DataTable().ajax.reload(null, false);
                             }
                         },
                         'json'
