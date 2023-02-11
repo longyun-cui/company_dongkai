@@ -54,7 +54,7 @@
 
 
                 <div class="tableArea">
-                <table class='table table-striped- table-bordered table-hover main-table' id='datatable_ajax'>
+                <table class='table table-striped table-bordered- table-hover main-table' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
@@ -131,7 +131,7 @@
                 "columns": [
                     {
                         "className": "font-12px",
-                        "width": "60px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -141,28 +141,6 @@
                     },
                     {
                         "width": "80px",
-                        "title": "状态",
-                        "data": "active",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(row.user_status == 1)
-                            {
-                                return '<small class="btn-xs btn-success">正常</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
-                            }
-                        }
-                    },
-                    {
-                        "width": "120px",
                         "title": "操作",
                         "data": "id",
                         "orderable": false,
@@ -221,6 +199,28 @@
 //                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
                                 '';
                             return html;
+                        }
+                    },
+                    {
+                        "width": "60px",
+                        "title": "状态",
+                        "data": "active",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.user_status == 1)
+                            {
+                                return '<small class="btn-xs btn-success">正常</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs btn-danger">禁用</small>';
+                            }
                         }
                     },
 //                    {
@@ -300,6 +300,30 @@
 ////                            return html;
 //                        }
 //                    },
+                    {
+                        "className": "text-center",
+                        "width": "",
+                        "title": "备注",
+                        "data": "remark",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
+                                $(nTd).attr('data-key','remark').attr('data-value',data);
+                                $(nTd).attr('data-column-name','备注');
+                                $(nTd).attr('data-text-type','textarea');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
+                        }
+                    },
                     {
                         "className": "font-12px",
                         "width": "80px",

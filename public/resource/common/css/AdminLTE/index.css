@@ -17,7 +17,7 @@ table.dataTable tfoot th,
 table.dataTable tfoot td { text-align:center; }
 
 table.dataTable tbody th,
-table.dataTable tbody td { padding:6px; }
+table.dataTable tbody td { padding:10px 4px; }
 
 table.dataTable thead > tr > th { padding-left:0; }
 table.dataTable thead > tr > th.text-left { padding-left:4px; }
@@ -32,6 +32,7 @@ table.dataTable thead>tr>td.sorting_asc,
 table.dataTable thead>tr>td.sorting_desc,
 table.dataTable thead>tr>td.sorting_asc_disabled,
 table.dataTable thead>tr>td.sorting_desc_disabled { padding-right:0; }
+table.dataTable .btn-group-xs>.btn, .btn-xs { line-height:1.4; }
 
 
 

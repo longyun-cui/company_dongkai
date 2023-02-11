@@ -132,7 +132,7 @@
                 </div>
 
                 <div class="tableArea">
-                <table class='table table-striped- table-bordered table-hover order-column' id='datatable_ajax'>
+                <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>

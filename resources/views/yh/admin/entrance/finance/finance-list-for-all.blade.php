@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="tableArea">
-                <table class='table table-striped table-bordered table-hover main-table' id='datatable_ajax'>
+                <table class='table table-striped table-bordered- table-hover main-table' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
@@ -154,6 +154,13 @@
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
+                "scrollX": true,
+//                "scrollY": true,
+                "scrollCollapse": true,
+                "fixedColumns": {
+                    "leftColumns": 6,
+                    "rightColumns": 1
+                },
                 "columns": [
 //                    {
 //                        "width": "40px",
@@ -173,7 +180,7 @@
 //                    },
                     {
                         "className": "font-12px",
-                        "width": "60px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -182,7 +189,7 @@
                         }
                     },
                     {
-                        "width": "100px",
+                        "width": "80px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
@@ -228,7 +235,7 @@
                         }
                     },
                     {
-                        "width": "80px",
+                        "width": "60px",
                         "title": "状态",
                         "data": "is_confirmed",
                         "orderable": false,
@@ -280,7 +287,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "88px",
                         "title": "交易日期",
                         "data": "transaction_time",
                         "orderable": false,
@@ -298,12 +305,15 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
-                            return $year+'-'+$month+'-'+$day;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day;
+                            else return $year+'-'+$month+'-'+$day;
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "创建者",
                         "data": "creator_id",
                         "orderable": false,
@@ -313,7 +323,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "确认者",
                         "data": "confirmer_id",
                         "orderable": false,
@@ -323,7 +333,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "120px",
+                        "width": "108px",
                         "title": "确认时间",
                         "data": "confirmed_at",
                         "orderable": false,
@@ -355,7 +365,7 @@
                         "data": "transaction_amount",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data+'元';
+                            return data;
                         }
                     },
                     {
@@ -378,7 +388,7 @@
                     },
                     {
                         "className": "",
-                        "width": "160px",
+                        "width": "120px",
                         "title": "收款账户",
                         "data": "transaction_receipt_account",
                         "orderable": false,
@@ -388,7 +398,7 @@
                     },
                     {
                         "className": "",
-                        "width": "160px",
+                        "width": "120px",
                         "title": "支出账户",
                         "data": "transaction_payment_account",
                         "orderable": false,
@@ -398,7 +408,7 @@
                     },
                     {
                         "className": "",
-                        "width": "160px",
+                        "width": "120px",
                         "title": "交易单号",
                         "data": "transaction_order",
                         "orderable": false,
@@ -407,8 +417,32 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "",
+                        "title": "备注",
+                        "data": "remark",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
+                                $(nTd).attr('data-key','remark').attr('data-value',data);
+                                $(nTd).attr('data-column-name','备注');
+                                $(nTd).attr('data-text-type','textarea');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
+                        }
+                    },
+                    {
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "108px",
                         "title": "创建时间",
                         "data": 'created_at',
                         "orderable": false,

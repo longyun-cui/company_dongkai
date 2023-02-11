@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="tableArea  overflow-none-">
-                <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
+                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
@@ -744,7 +744,7 @@
                             $.each(data,function( key, val ) {
                                 $amount += parseInt(this.travel_distance);
                             });
-                            return $amount + ' km';
+                            return $amount;
                         }
                     },
                     {
