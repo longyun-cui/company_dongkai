@@ -1296,6 +1296,8 @@ class YHAdminRepository {
     public function view_user_client_create()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '客户';
@@ -1319,6 +1321,8 @@ class YHAdminRepository {
     public function view_user_client_edit()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.client-edit';
@@ -4186,6 +4190,8 @@ class YHAdminRepository {
     public function view_item_route_create()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '线路';
@@ -4209,6 +4215,8 @@ class YHAdminRepository {
     public function view_item_route_edit()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.route-edit';
@@ -4955,6 +4963,8 @@ class YHAdminRepository {
     public function view_item_pricing_create()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '定价';
@@ -4978,6 +4988,8 @@ class YHAdminRepository {
     public function view_item_pricing_edit()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.pricing-edit';
