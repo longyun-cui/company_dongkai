@@ -80,8 +80,9 @@
 
             <div class="box-header with-border" style="margin:16px 0;">
 
-                <h3 class="box-title">车辆列表</h3>
+                <h3 class="box-title">{{ $title_text or '车辆列表' }}</h3>
 
+                @if(in_array($me->user_type,[0,1,9,11]))
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
@@ -89,15 +90,7 @@
                         <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加车辆</button>
                     </a>
                 </div>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
+                @endif
 
             </div>
 

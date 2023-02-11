@@ -23,8 +23,9 @@
 
             <div class="box-header with-border" style="margin:16px 0;">
 
-                <h3 class="box-title">全部客户列表</h3>
+                <h3 class="box-title">{{ $title_text or '客户列表' }}</h3>
 
+                @if(in_array($me->user_type,[0,1,9,11]))
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
@@ -32,6 +33,7 @@
                         <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加客户</button>
                     </a>
                 </div>
+                @endif
 
             </div>
 
