@@ -7185,8 +7185,10 @@ class YHAdminRepository {
                 $car = YH_Car::withTrashed()->find($column_value);
                 if(!$car) throw new Exception("该【车辆】不存在，刷新页面重试！");
 
-                $item->driver_name = null;
-                $item->driver_phone = null;
+//                $item->driver_name = null;
+//                $item->driver_phone = null;
+                $item->driver_name = $car->linkman_name;
+                $item->driver_phone = $car->linkman_phone;
             }
 
             $item->$column_key = $column_value;
