@@ -1033,9 +1033,22 @@
                 },
                 cache: true
             },
+            templateSelection: function(data, container) {
+                $(data.element).attr("data-name",data.linkman_name);
+                $(data.element).attr("data-phone",data.linkman_phone);
+                return data.text;
+            },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
             minimumInputLength: 0,
             theme: 'classic'
+        });
+        $("#select2-car").on("select2:select",function(){
+            var $id = $(this).val();
+            if($id > 0)
+            {
+                $('input[name=driver_name]').val($(this).find('option:selected').attr('data-name'));
+                $('input[name=driver_phone]').val($(this).find('option:selected').attr('data-phone'));
+            }
         });
         //
         $('#select2-trailer').select2({
