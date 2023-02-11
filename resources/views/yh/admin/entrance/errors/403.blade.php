@@ -51,7 +51,7 @@
                 </div>
 
                 <div>
-                    <span id="time" style="color:#ff0018;" data-time="10">10</span> 秒钟自动跳到上一页
+                    <span id="time" style="color:#ff0018;" data-time="5">5</span> 秒钟自动跳到首页
                 </div>
 
                 <p style="display:none;">
