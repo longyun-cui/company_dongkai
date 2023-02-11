@@ -1549,7 +1549,8 @@
                             }
                             else if(data == 11)
                             {
-                                return '[临]'+ row.route_temporary;
+                                if(row.route_temporary) return '[临]' + row.route_temporary;
+                                else return '[临时]';
                             }
                             else return '有误';
                         }
