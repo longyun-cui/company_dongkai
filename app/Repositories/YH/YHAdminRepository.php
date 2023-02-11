@@ -528,6 +528,8 @@ class YHAdminRepository {
     public function view_user_staff_create()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '用户';
@@ -551,6 +553,8 @@ class YHAdminRepository {
     public function view_user_staff_edit()
     {
         $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.staff-edit';
