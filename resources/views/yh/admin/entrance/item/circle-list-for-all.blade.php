@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="tableArea  overflow-none">
+                <div class="tableArea  overflow-none-">
                 <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
@@ -499,7 +499,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:1360px; }
+    .tableArea table { min-width:1380px; }
     .tableArea table#datatable_ajax_finance { min-width:1800px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
@@ -569,7 +569,7 @@
 //                    },
                     {
                         "className": "",
-                        "width": "60px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -681,7 +681,7 @@
                         }
                     },
                     {
-                        "width": "180px",
+                        "width": "200px",
                         "title": "订单",
                         "data": "pivot_order_list",
                         "orderable": false,
@@ -872,8 +872,9 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            else return '';
+                            return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
                         }
                     },
                     {
@@ -888,7 +889,7 @@
                     },
                     {
                         "className": "",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "更新时间",
                         "data": 'updated_at',
                         "orderable": false,

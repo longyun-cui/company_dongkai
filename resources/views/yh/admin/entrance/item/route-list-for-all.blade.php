@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="tableArea">
+                <div class="tableArea overflow-none-">
                 <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
@@ -379,7 +379,7 @@
 </div>
 
 
-{{----}}
+{{--option--}}
 <div class="option-container _none">
 
     <div id="trailer_type-option-list">
@@ -549,7 +549,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:1400px; }
+    .tableArea table { min-width:1380px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
@@ -616,7 +616,7 @@
 //                    },
                     {
                         "className": "",
-                        "width": "60px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -635,7 +635,7 @@
                         }
                     },
                     {
-                        "width": "160px",
+                        "width": "120px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
@@ -751,7 +751,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "里程",
                         "data": "travel_distance",
                         "orderable": false,
@@ -773,7 +773,7 @@
                         }
                     },
                     {
-                        "width": "80px",
+                        "width": "60px",
                         "title": "时效",
                         "data": "time_limitation_prescribed",
                         "orderable": false,
@@ -861,7 +861,8 @@
                         }
                     },
                     {
-                        "width": "160px",
+                        "className": "text-center",
+                        "width": "",
                         "title": "备注",
                         "data": "remark",
                         "orderable": false,
@@ -878,8 +879,9 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            else return '';
+                            return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
                         }
                     },
                     {
@@ -894,7 +896,7 @@
                     },
                     {
                         "className": "",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "创建时间",
                         "data": 'created_at',
                         "orderable": false,
@@ -919,7 +921,7 @@
                     },
                     {
                         "className": "",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "更新时间",
                         "data": 'updated_at',
                         "orderable": false,

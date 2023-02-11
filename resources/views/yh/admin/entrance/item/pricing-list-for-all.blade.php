@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="tableArea overflow-none">
+                <div class="tableArea overflow-none-">
                 <table class='table table-striped- table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
@@ -533,7 +533,7 @@
 //                    },
                     {
                         "className": "",
-                        "width": "60px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -552,7 +552,7 @@
                         }
                     },
                     {
-                        "width": "120px",
+                        "width": "150px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
@@ -601,7 +601,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "200px",
+                        "width": "240px",
                         "title": "标题",
                         "data": "title",
                         "orderable": false,
@@ -624,7 +624,7 @@
                     {
                         "className": "text-center",
                         "width": "80px",
-                        "title": "包油（升）",
+                        "title": "包油(升)",
                         "data": "price1",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -647,7 +647,7 @@
                     {
                         "className": "text-center",
                         "width": "80px",
-                        "title": "空放（升）",
+                        "title": "空放(升)",
                         "data": "price2",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -670,7 +670,7 @@
                     {
                         "className": "text-center",
                         "width": "80px",
-                        "title": "空放-200+（升）",
+                        "title": "空放200+(升)",
                         "data": "price3",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -709,13 +709,14 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            else return '';
+                            return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
                         }
                     },
                     {
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "创建人",
                         "data": "creator_id",
                         "orderable": false,
@@ -725,7 +726,7 @@
                     },
                     {
                         "className": "",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "创建时间",
                         "data": 'created_at',
                         "orderable": false,
@@ -750,7 +751,7 @@
                     },
                     {
                         "className": "",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "更新时间",
                         "data": 'updated_at',
                         "orderable": false,
