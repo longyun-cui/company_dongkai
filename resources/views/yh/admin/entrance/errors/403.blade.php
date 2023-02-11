@@ -103,11 +103,12 @@
         time--;
 
         if (time <= 0) {
-            if(!document.referrer || window.location.href == document.referrer)
-            {
-                window.location.href = "{{ url('/') }}";
-            }
-            else window.location.href = document.referrer;
+            {{--if(!document.referrer || window.location.href == document.referrer)--}}
+            {{--{--}}
+            {{--    window.location.href = "{{ url('/') }}";--}}
+            {{--}--}}
+            {{--else window.location.href = document.referrer;--}}
+            window.location.href = "{{ url('/') }}";
         }
         else {
             $("#time").text(time);
