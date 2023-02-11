@@ -1230,7 +1230,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:4800px; }
+    .tableArea table { min-width:4600px; }
     .tableArea table#datatable_ajax_finance { min-width:1600px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
@@ -1312,7 +1312,7 @@
 //                    },
                     {
                         "className": "",
-                        "width": "60px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -1333,7 +1333,7 @@
                     },
                     {
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "订单状态",
                         "data": "id",
                         "orderable": false,
@@ -1424,7 +1424,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "派车日期",
                         "data": 'assign_time',
                         "orderable": true,
@@ -1816,7 +1816,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "订单类型",
                         "data": "car_owner_type",
                         "orderable": false,
@@ -2571,7 +2571,7 @@
                     // },
                     {
                         "className": "order-info-time-edit",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "应出发时间",
                         "data": 'should_departure_time',
                         "orderable": false,
@@ -2623,7 +2623,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "应到达时间",
                         "data": 'should_arrival_time',
                         "orderable": false,
@@ -2676,7 +2676,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "实际出发",
                         "data": 'actual_departure_time',
                         "orderable": false,
@@ -2728,7 +2728,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "经停点-到达时间",
                         "data": 'stopover_arrival_time',
                         "orderable": false,
@@ -2781,7 +2781,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "经停点-出发时间",
                         "data": 'stopover_departure_time',
                         "orderable": false,
@@ -2834,7 +2834,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "实际到达",
                         "data": 'actual_arrival_time',
                         "orderable": false,
@@ -2933,7 +2933,7 @@
                     },
                     {
                         "className": "",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "车货源",
                         "data": "car_supply",
                         "orderable": false,
@@ -2978,7 +2978,7 @@
                     {
                         "className": "",
                         "width": "80px",
-                        "title": "车辆负责人",
+                        "title": "车负责人",
                         "data": "car_managerial_people",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3043,7 +3043,7 @@
                     },
                     {
                         "className": "",
-                        "width": "100px",
+                        "width": "60px",
                         "title": "是否回单",
                         "data": "receipt_need",
                         "orderable": false,
@@ -3065,33 +3065,7 @@
                     },
                     {
                         "className": "",
-                        "width": "100px",
-                        "title": "回单地址",
-                        "data": "receipt_address",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                if(row.receipt_need == 1)
-                                {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-name','回单地址');
-                                    $(nTd).attr('data-key','receipt_address').attr('data-value',data);
-                                    $(nTd).attr('data-column-name','回单地址');
-                                    $(nTd).attr('data-text-type','text');
-                                    if(data) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.receipt_need == 1) return data;
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "回单状态",
                         "data": "receipt_status",
                         "orderable": false,
@@ -3126,6 +3100,32 @@
                     {
                         "className": "",
                         "width": "100px",
+                        "title": "回单地址",
+                        "data": "receipt_address",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                if(row.receipt_need == 1)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','回单地址');
+                                    $(nTd).attr('data-key','receipt_address').attr('data-value',data);
+                                    $(nTd).attr('data-column-name','回单地址');
+                                    $(nTd).attr('data-text-type','text');
+                                    if(data) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.receipt_need == 1) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
                         "title": "附件",
                         "data": "attachment_list",
                         "orderable": false,
@@ -3179,7 +3179,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "修改时间",
                         "data": 'updated_at',
                         "orderable": true,
@@ -3205,7 +3205,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "160px",
+                        "width": "150px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,

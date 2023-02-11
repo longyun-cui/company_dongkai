@@ -17,7 +17,7 @@ table.dataTable tfoot th,
 table.dataTable tfoot td { text-align:center; }
 
 table.dataTable tbody th,
-table.dataTable tbody td { padding:8px; }
+table.dataTable tbody td { padding:6px; }
 
 table.dataTable thead > tr > th { padding-left:0; }
 table.dataTable thead > tr > th.text-left { padding-left:4px; }
