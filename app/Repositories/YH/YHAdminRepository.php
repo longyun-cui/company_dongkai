@@ -4885,6 +4885,12 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+
+        $route_list = YH_Route::select(DB::raw("id,title,contract_ended_date"))
+            ->whereDate('contract_ended_date', '<=', DB::raw("CURDATE()"))
+            ->get();
+        $return['route_list'] = $route_list;
+
         $return['menu_active_of_route_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.route-list-for-all';
         return view($view_blade)->with($return);

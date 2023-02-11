@@ -17,6 +17,38 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
+        <div class="box box-info">
+
+            <div class="box-header with-border" style="margin:8px 0;">
+                <h3 class="box-title">合同到期提醒</h3>
+            </div>
+
+            <div class="box-body" style="font-size:13px;">
+                @foreach($route_list as $route)
+                    <div style="clear:both;line-height:24px;">
+                        <span class="pull-left" style="width:200px;">
+                            <text class="text-green">[{{ $route->id }}]</text>
+                            <b class="font-14px- text-red-">{{ $route->title }}</b>
+                        </span>
+
+                        <span class="pull-left" style="width:200px;">
+                            结束时间 <b class="font-16px text-red">{{ $route->contract_ended_date }}</b>
+                        </span>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="box-footer">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
         <div class="box box-info main-list-body">
 
             <div class="box-header with-border" style="margin:16px 0;">
@@ -259,7 +291,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-order-info-set" readonly>
+                    <input type="hidden" name="info-time-set-operate" value="item-route-info-text-set" readonly>
+                    {{--<input type="hidden" name="info-time-set-operate" value="item-route-info-time-set" readonly>--}}
                     <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
@@ -706,7 +739,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "运价(现金)",
                         "data": "amount_with_cash",
                         "orderable": false,
@@ -728,7 +761,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "运价(带票)",
                         "data": "amount_with_invoice",
                         "orderable": false,
@@ -858,6 +891,74 @@
                         },
                         render: function(data, type, row, meta) {
                             return data == null ? '--' : data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "开始日期",
+                        "data": "contract_start_date",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','contract_start_date').attr('data-value',data);
+                                $(nTd).attr('data-column-name','开始日期');
+                                $(nTd).attr('data-time-type','date');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                            return '--';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "结束日期",
+                        "data": "contract_ended_date",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','contract_ended_date').attr('data-value',data);
+                                $(nTd).attr('data-column-name','结束日期');
+                                $(nTd).attr('data-time-type','date');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                           return '--';
                         }
                     },
                     {

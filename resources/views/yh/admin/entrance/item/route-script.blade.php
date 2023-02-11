@@ -435,7 +435,8 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/route-info-time-set') }}",
+                        "{{ url('/item/route-info-text-set') }}",
+                        {{--"{{ url('/item/route-info-time-set') }}",--}}
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),

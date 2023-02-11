@@ -247,6 +247,7 @@
 
                     {{ csrf_field() }}
                     <input type="hidden" name="info-time-set-operate" value="item-car-info-text-set" readonly>
+                    {{--<input type="hidden" name="info-time-set-operate" value="item-car-info-time-set" readonly>--}}
                     <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
@@ -513,7 +514,7 @@
 //                    },
                     {
                         "className": "f",
-                        "width": "60px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -522,7 +523,7 @@
                         }
                     },
                     {
-                        "width": "80px",
+                        "width": "60px",
                         "title": "状态",
                         "data": "item_status",
                         "orderable": false,
@@ -556,7 +557,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "120px",
                         "title": "车牌号",
                         "data": "name",
                         "orderable": false,
@@ -1084,7 +1085,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "购买日期",
                         "data": "purchase_date",
                         "orderable": false,
@@ -1101,12 +1102,24 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                            return '--';
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "注册日期",
                         "data": "registration_date",
                         "orderable": false,
@@ -1123,12 +1136,24 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                            return '--';
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "发证日期",
                         "data": "issue_date",
                         "orderable": false,
@@ -1145,12 +1170,24 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                            return '--';
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "检验有效期",
                         "data": "inspection_validity",
                         "orderable": false,
@@ -1167,12 +1204,24 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                            return '--';
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "运输证-年检",
                         "data": "transportation_license_validity",
                         "orderable": false,
@@ -1189,12 +1238,24 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                            return '--';
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "title": "运输证-换证",
                         "data": "transportation_license_change_time",
                         "orderable": false,
@@ -1211,7 +1272,19 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                            return '--';
                         }
                     },
                     {
@@ -1226,7 +1299,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "创建时间",
                         "data": 'created_at',
                         "orderable": false,
@@ -1251,7 +1324,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "更新时间",
                         "data": 'updated_at',
                         "orderable": false,

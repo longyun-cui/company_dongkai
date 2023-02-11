@@ -78,7 +78,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 里程</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or '' }}">
+                        <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or 0 }}">
                     </div>
                 </div>
 
@@ -86,7 +86,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">时效（小时）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or '' }}">
+                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or 0 }}">
                     </div>
                 </div>
 
@@ -117,7 +117,18 @@
                     </div>
                 </div>
 
-
+                {{--合同有效期--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">合同有效期</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control date_picker" name="contract_start_date" placeholder="开始日期" value="{{ $data->contract_start_date or '' }}" readonly="readonly">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control date_picker" name="contract_ended_date" placeholder="结束日期" value="{{ $data->contract_ended_date or '' }}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
 
 
                 {{--描述--}}

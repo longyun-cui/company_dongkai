@@ -378,6 +378,7 @@
                 ,yes: function(index){
                     $.post(
                         "{{ url('/item/car-info-text-set') }}",
+                        {{--"{{ url('/item/car-info-time-set') }}",--}}
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),
