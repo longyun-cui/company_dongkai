@@ -770,6 +770,19 @@
 
 
 
+        // 【修改记录】【显示】
+        $(".main-content").on('click', ".item-modal-show-for-modify", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+
+            TableDatatablesAjax_record.init($id);
+
+            $('#modal-body-for-modify-list').modal('show');
+        });
+
+
+
+
 
 
 

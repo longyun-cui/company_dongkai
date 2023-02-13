@@ -107,6 +107,15 @@ class YH_Car extends Model
 
 
 
+    // 附件
+    function attachment_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Attachment','item_id','id');
+    }
+
+
+
+
     // 其他人的
     function pivot_item_relation()
     {

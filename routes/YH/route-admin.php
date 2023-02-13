@@ -103,11 +103,16 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/car-create', $controller.'@operate_item_car_create');
     Route::match(['get','post'], '/item/car-edit', $controller.'@operate_item_car_edit');
 
-    // 编辑-单条-信息
+    // 编辑-信息
     Route::post('/item/car-info-text-set', $controller.'@operate_item_car_info_text_set');
     Route::post('/item/car-info-time-set', $controller.'@operate_item_car_info_time_set');
     Route::post('/item/car-info-radio-set', $controller.'@operate_item_car_info_option_set');
     Route::post('/item/car-info-select-set', $controller.'@operate_item_car_info_option_set');
+    // 编辑-附件
+    Route::match(['get','post'], '/item/car-get-attachment-html', $controller.'@operate_item_car_get_attachment_html');
+    Route::post('/item/car-info-attachment-set', $controller.'@operate_item_car_info_attachment_set');
+    Route::post('/item/car-info-attachment-delete', $controller.'@operate_item_car_info_attachment_delete');
+
     // 删除 & 恢复
     Route::post('/item/car-admin-delete', $controller.'@operate_item_car_admin_delete');
     Route::post('/item/car-admin-restore', $controller.'@operate_item_car_admin_restore');
@@ -119,6 +124,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 列表
     Route::match(['get','post'], '/item/car-list', $controller.'@view_item_car_list');
     Route::match(['get','post'], '/item/car-list-for-all', $controller.'@view_item_car_list_for_all');
+
+    // 车辆-修改信息
+    Route::match(['get','post'], '/item/car-modify-record', $controller.'@view_item_car_modify_record');
 
 
 
@@ -134,12 +142,16 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/route-create', $controller.'@operate_item_route_create');
     Route::match(['get','post'], '/item/route-edit', $controller.'@operate_item_route_edit');
 
-    // 编辑-单条-信息
+    // 编辑-信息
     Route::post('/item/route-info-text-set', $controller.'@operate_item_route_info_text_set');
     Route::post('/item/route-info-time-set', $controller.'@operate_item_route_info_time_set');
     Route::post('/item/route-info-radio-set', $controller.'@operate_item_route_info_option_set');
     Route::post('/item/route-info-select-set', $controller.'@operate_item_route_info_option_set');
     Route::post('/item/route-info-select2-set', $controller.'@operate_item_route_info_option_set');
+    // 编辑-附件
+    Route::match(['get','post'], '/item/route-get-attachment-html', $controller.'@operate_item_route_get_attachment_html');
+    Route::post('/item/route-info-attachment-set', $controller.'@operate_item_route_info_attachment_set');
+    Route::post('/item/route-info-attachment-delete', $controller.'@operate_item_route_info_attachment_delete');
 
     // 删除 & 恢复
     Route::post('/item/route-admin-delete', $controller.'@operate_item_route_admin_delete');
@@ -152,6 +164,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 列表
     Route::match(['get','post'], '/item/route-list', $controller.'@view_item_route_list');
     Route::match(['get','post'], '/item/route-list-for-all', $controller.'@view_item_route_list_for_all');
+
+    // 修改-列表
+    Route::match(['get','post'], '/item/route-modify-record', $controller.'@view_item_route_modify_record');
 
 
 
@@ -173,6 +188,10 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/pricing-info-radio-set', $controller.'@operate_item_pricing_info_option_set');
     Route::post('/item/pricing-info-select-set', $controller.'@operate_item_pricing_info_option_set');
     Route::post('/item/pricing-info-select2-set', $controller.'@operate_item_pricing_info_option_set');
+    // 编辑-附件
+    Route::match(['get','post'], '/item/pricing-get-attachment-html', $controller.'@operate_item_pricing_get_attachment_html');
+    Route::post('/item/pricing-info-attachment-set', $controller.'@operate_item_pricing_info_attachment_set');
+    Route::post('/item/pricing-info-attachment-delete', $controller.'@operate_item_pricing_info_attachment_delete');
 
     // 删除 & 恢复
     Route::post('/item/pricing-admin-delete', $controller.'@operate_item_pricing_admin_delete');
@@ -185,6 +204,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 列表
     Route::match(['get','post'], '/item/pricing-list', $controller.'@view_item_pricing_list');
     Route::match(['get','post'], '/item/pricing-list-for-all', $controller.'@view_item_pricing_list_for_all');
+
+    // 修改-列表
+    Route::match(['get','post'], '/item/pricing-modify-record', $controller.'@view_item_pricing_modify_record');
 
 
 
@@ -235,16 +257,18 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/order-info-select2-set', $controller.'@operate_item_order_info_option_set');
     Route::post('/item/order-info-client-set', $controller.'@operate_item_order_info_client_set');
     Route::post('/item/order-info-car-set', $controller.'@operate_item_order_info_car_set');
-
+    // 订单-附件
     Route::post('/item/order-info-attachment-set', $controller.'@operate_item_order_info_attachment_set');
     Route::post('/item/order-info-attachment-delete', $controller.'@operate_item_order_info_attachment_delete');
+
+
     // 订单-行程信息
     Route::post('/item/order-travel-set', $controller.'@operate_item_order_travel_set');
     // 订单-财务信息
     Route::match(['get','post'], '/item/order-finance-record', $controller.'@view_item_order_finance_record');
     Route::post('/item/order-finance-record-create', $controller.'@operate_item_order_finance_record_create');
     Route::post('/item/order-finance-record-edit', $controller.'@operate_item_order_finance_record_edit');
-    // 订单-财务信息
+    // 订单-修改信息
     Route::match(['get','post'], '/item/order-modify-record', $controller.'@view_item_order_modify_record');
 
 

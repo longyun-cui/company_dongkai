@@ -390,6 +390,7 @@
     </div>
 </div>
 
+
 {{--显示-附件-信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-attachment">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
@@ -4129,7 +4130,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "操作人",
                         "data": "creator_id",
                         "orderable": false,
@@ -4139,7 +4140,7 @@
                     },
                     {
                         "className": "",
-                        "width": "120px",
+                        "width": "108px",
                         "title": "操作时间",
                         "data": "created_at",
                         "orderable": false,

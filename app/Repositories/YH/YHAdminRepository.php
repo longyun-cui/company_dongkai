@@ -1194,98 +1194,6 @@ class YHAdminRepository {
     }
 
 
-    // 【用户】【个人用户】返回-列表-视图
-    public function view_user_list_for_individual($post_data)
-    {
-        return view(env('TEMPLATE_YH_ADMIN').'entrance.user.user-list-for-individual')
-            ->with(['sidebar_user_list_for_individual_active'=>'active menu-open']);
-    }
-    // 【用户】【个人用户】返回-列表-数据
-    public function get_user_list_for_individual_datatable($post_data)
-    {
-        $me = Auth::guard("staff_admin")->user();
-        $query = User::select('*')
-            ->with(['district'])
-            ->where(['active'=>1,'user_category'=>1,'user_type'=>1]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【用户】【组织】返回-列表-视图
-    public function view_user_list_for_org($post_data)
-    {
-        return view(env('TEMPLATE_YH_ADMIN').'entrance.user.user-list-for-org')
-            ->with(['sidebar_user_list_for_org_active'=>'active menu-open']);
-    }
-    // 【用户】【组织】返回-列表-数据
-    public function get_user_list_for_org_datatable($post_data)
-    {
-        $me = Auth::guard("staff_admin")->user();
-        $query = User::select('*')
-            ->with(['district'])
-            ->where(['active'=>1,'user_category'=>11]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
 
 
 
@@ -1562,7 +1470,7 @@ class YHAdminRepository {
     }
 
 
-    // 【客户管理管理】返回-列表-视图
+    // 【客户管理】返回-列表-视图
     public function view_user_client_list_for_all($post_data)
     {
         $this->get_me();
@@ -1572,7 +1480,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.client-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【用户-员工管理】返回-列表-数据
+    // 【客户管理】返回-列表-数据
     public function get_user_client_list_for_all_datatable($post_data)
     {
         $this->get_me();
@@ -1617,6 +1525,65 @@ class YHAdminRepository {
         foreach ($list as $k => $v)
         {
             $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【客户管理】【修改记录】返回-列表-视图
+    public function view_user_client_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.client-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【客户管理】【修改记录】返回-列表-数据
+    public function get_user_client_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Record::select('*')
+            ->with(['creator'])
+            ->where(['operate_object'=>41,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
@@ -3626,6 +3593,263 @@ class YHAdminRepository {
         }
 
     }
+    // 【订单管理】【附件】添加
+    public function operate_item_car_info_attachment_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-car-attachment-set') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Car::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+//        $operate_type = $post_data["operate_type"];
+//        $column_key = $post_data["column_key"];
+//        $column_value = $post_data["column_value"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            // 多图
+            $multiple_images = [];
+            if(!empty($post_data["multiple_images"][0]))
+            {
+                // 添加图片
+                foreach ($post_data["multiple_images"] as $n => $f)
+                {
+                    if(!empty($f))
+                    {
+                        $result = upload_img_storage($f,'','yh/attachment','');
+                        if($result["result"])
+                        {
+                            $attachment = new YH_Attachment;
+
+                            $attachment_data["operate_object"] = 41;
+                            $attachment_data['item_id'] = $item_id;
+                            $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                            $attachment_data['attachment_src'] = $result["local"];
+                            $bool = $attachment->fill($attachment_data)->save();
+                            if($bool)
+                            {
+                                $record = new YH_Record;
+
+                                $record_data["record_object"] = 21;
+                                $record_data["record_category"] = 11;
+                                $record_data["record_type"] = 1;
+                                $record_data["creator_id"] = $me->id;
+                                $record_data["item_id"] = $item_id;
+                                $record_data["operate_object"] = 41;
+                                $record_data["operate_category"] = 71;
+                                $record_data["operate_type"] = 1;
+
+                                $record_data["column_name"] = 'attachment';
+                                $record_data["after"] = $attachment_data['attachment_src'];
+
+                                $bool_1 = $record->fill($record_data)->save();
+                                if($bool_1)
+                                {
+                                }
+                                else throw new Exception("insert--record--fail");
+                            }
+                            else throw new Exception("insert--attachment--fail");
+                        }
+                        else throw new Exception("upload--attachment--file--fail");
+                    }
+                }
+            }
+
+
+            // 单图
+            if(!empty($post_data["attachment_file"]))
+            {
+                $attachment = new YH_Attachment;
+
+//                $result = upload_storage($post_data["portrait"]);
+//                $result = upload_storage($post_data["portrait"], null, null, 'assign');
+                $result = upload_img_storage($post_data["attachment_file"],'','yh/attachment','');
+                if($result["result"])
+                {
+                    $attachment_data["operate_object"] = 41;
+                    $attachment_data['item_id'] = $item_id;
+                    $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                    $attachment_data['attachment_src'] = $result["local"];
+                    $bool = $attachment->fill($attachment_data)->save();
+                    if($bool)
+                    {
+                        $record = new YH_Record;
+
+                        $record_data["record_object"] = 21;
+                        $record_data["record_category"] = 11;
+                        $record_data["record_type"] = 1;
+                        $record_data["creator_id"] = $me->id;
+                        $record_data["item_id"] = $item_id;
+                        $record_data["operate_object"] = 41;
+                        $record_data["operate_category"] = 71;
+                        $record_data["operate_type"] = 1;
+
+                        $record_data["column_name"] = 'attachment';
+                        $record_data["after"] = $attachment_data['attachment_src'];
+
+                        $bool_1 = $record->fill($record_data)->save();
+                        if($bool_1)
+                        {
+                        }
+                        else throw new Exception("insert--record--fail");
+                    }
+                    else throw new Exception("insert--attachment--fail");
+                }
+                else throw new Exception("upload--attachment--file--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【订单管理】【附件】删除
+    public function operate_item_car_info_attachment_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'car-attachment-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Attachment::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【附件】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if($bool)
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $item->item_id;
+                $record_data["operate_object"] = 41;
+                $record_data["operate_category"] = 71;
+                $record_data["operate_type"] = 91;
+
+                $record_data["column_name"] = 'attachment';
+                $record_data["before"] = $item->attachment_src;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if($bool_1)
+                {
+                }
+                else throw new Exception("insert--record--fail");
+            }
+            else throw new Exception("attachment--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【订单管理】【附件】获取
+    public function operate_item_car_get_attachment_html($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Car::with([
+                'attachment_list' => function($query) { $query->where('operate_object',41); }
+            ])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
+
+        return response_success(['html'=>$html],"");
+    }
 
 
     // 【任务管理】管理员-删除
@@ -4175,6 +4399,65 @@ class YHAdminRepository {
 
             }
 
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【车辆管理】【修改记录】返回-列表-视图
+    public function view_item_car_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_car_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.car-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【车辆管理】【修改记录】返回-列表-数据
+    public function get_item_car_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Record::select('*')
+            ->with(['creator'])
+            ->where(['operate_object'=>41,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
@@ -4954,6 +5237,65 @@ class YHAdminRepository {
     }
 
 
+    // 【线路管理】【修改记录】返回-列表-视图
+    public function view_item_route_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_route_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.route-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【线路管理】【修改记录】返回-列表-数据
+    public function get_item_route_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Record::select('*')
+            ->with(['creator'])
+            ->where(['operate_object'=>51,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
 
 
 
@@ -5721,6 +6063,65 @@ class YHAdminRepository {
     }
 
 
+    // 【定价管理】【修改记录】返回-列表-视图
+    public function view_item_pricing_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_pricing_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.pricing-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【定价管理】【修改记录】返回-列表-数据
+    public function get_item_pricing_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Record::select('*')
+            ->with(['creator'])
+            ->where(['operate_object'=>61,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
 
 
 
@@ -6236,7 +6637,6 @@ class YHAdminRepository {
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
-
     }
 
 
@@ -7457,7 +7857,6 @@ class YHAdminRepository {
                 $record_data["record_category"] = 11;
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
-                $record_data["item_id"] = $item_id;
                 $record_data["order_id"] = $item->order_id;
                 $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 71;

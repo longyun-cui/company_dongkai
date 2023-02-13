@@ -475,7 +475,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-car-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
@@ -492,7 +492,7 @@
                 $('select[name=info-select-set-column-value]').removeClass('select2-route').removeClass('select2-car').addClass('select2-client');
                 $('.select2-client').select2({
                     ajax: {
-                        url: "{{ url('/item/order_select2_client') }}",
+                        url: "{{ url('/item/car_select2_client') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -523,7 +523,7 @@
                 $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-car').addClass('select2-route');
                 $('.select2-route').select2({
                     ajax: {
-                        url: "{{ url('/item/order_select2_route') }}",
+                        url: "{{ url('/item/car_select2_route') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -554,7 +554,7 @@
                 $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-route').addClass('select2-car');
                 $('.select2-car').select2({
                     ajax: {
-                        url: "{{ url('/item/order_list_select2_car?car_type=car') }}",
+                        url: "{{ url('/item/car_list_select2_car?car_type=car') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -585,7 +585,7 @@
                 $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-route').addClass('select2-car');
                 $('.select2-car').select2({
                     ajax: {
-                        url: "{{ url('/item/order_list_select2_car?car_type=trailer') }}",
+                        url: "{{ url('/item/car_list_select2_car?car_type=trailer') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -665,6 +665,161 @@
 
 
 
+        // 【附件-attachment-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-attachment", function() {
+            var $that = $(this);
+
+            $('.attachment-set-title').html($that.attr("data-id"));
+            $('.info-set-column-name').html($that.attr("data-name"));
+            $('input[name=attachment-set-car-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
+            $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
+            $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
+
+
+            $('#modal-attachment-set-form input[name=item_id]').val($that.attr("data-id"));
+            $('#modal-attachment-set-form input[name=column-key]').val($that.attr("data-key"));
+            $('#modal-attachment-set-form input[name=column-value]').val($that.attr("data-value"));
+            $('#modal-attachment-set-form input[name=-operate-type]').val($that.attr('data-operate-type'));
+
+
+            var $data = new Object();
+            $.ajax({
+                type:"post",
+                dataType:'json',
+                async:false,
+                url: "{{ url('/item/car-get-attachment-html') }}",
+                data: {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate:"item-get",
+                    item_id: $that.attr('data-id')
+                },
+                success:function(data){
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        $data = data.data;
+                    }
+                }
+            });
+            $('.attachment-box').html($data.html);
+
+            $('#modal-body-for-attachment').modal('show');
+        });
+        // 【附件-attachment-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-attachment-set", function() {
+            var that = $(this);
+            $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【附件-attachment-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-attachment-set", function() {
+            var $that = $(this);
+
+            var $column_key = $('input[name="info-attachment-set-column-key"]').val();
+            var $column_value = $('select[name="info-attachment-set-column-value"]').val();
+
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    var options = {
+                        url: "{{ url('/item/car-info-attachment-set') }}",
+                        type: "post",
+                        dataType: "json",
+                        // target: "#div2",
+                        success: function (data) {
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+//                                $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
+//                                    $("body").addClass("modal-open");
+//                                });
+
+                                $('.fileinput-exists[data-dismiss="fileinput"]').click();
+                                $('#modal-attachment-set-form input[name=attachment_name]').val('');
+
+                                var $data = new Object();
+                                $.ajax({
+                                    type:"post",
+                                    dataType:'json',
+                                    async:false,
+                                    url: "{{ url('/item/car-get-attachment-html') }}",
+                                    data: {
+                                        _token: $('meta[name="_token"]').attr('content'),
+                                        operate:"item-get",
+                                        item_id: $('#modal-attachment-set-form input[name=item_id]').val()
+                                    },
+                                    success:function(data){
+                                        if(!data.success) layer.msg(data.msg);
+                                        else
+                                        {
+                                            $data = data.data;
+                                        }
+                                    }
+                                });
+                                $('.attachment-box').html($data.html);
+                                $(".fileinput-remove-button").click();
+
+//                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
+                            }
+                        }
+                    };
+                    $("#modal-attachment-set-form").ajaxSubmit(options);
+
+                }
+            });
+        });
+
+        // 【附件-attachment-属性】【删除】
+        $(".main-content").on('click', ".item-attachment-delete-this", function() {
+            var $that = $(this);
+            layer.msg('确定要"删除"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/car-info-attachment-delete') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "car-attachment-delete",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $that.parents('.attachment-option').remove();
+//                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+
+
+        // 【修改记录】【显示】
+        $(".main-content").on('click', ".item-modal-show-for-modify", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+
+            TableDatatablesAjax_record.init($id);
+
+            $('#modal-body-for-modify-list').modal('show');
+        });
+
+
+
+
         $('.time_picker').datetimepicker({
             locale: moment.locale('zh-CN'),
             format: "YYYY-MM-DD HH:mm",
@@ -674,6 +829,12 @@
             locale: moment.locale('zh-CN'),
             format: "YYYY-MM-DD",
             ignoreReadonly: true
+        });
+
+
+        $(".file-multiple-images").fileinput({
+            allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
+            showUpload: false
         });
 
     });

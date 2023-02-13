@@ -435,6 +435,12 @@ class YHAdminController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_car_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_car_list_for_all_datatable(request()->all());
     }
+    // 【车辆管理】【修改记录】返回-列表-视图（全部任务）
+    public function view_item_car_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_car_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_car_modify_record_datatable(request()->all());
+    }
 
 
     // 【车辆管理】添加
@@ -465,6 +471,21 @@ class YHAdminController extends Controller
     public function operate_item_car_info_option_set()
     {
         return $this->repo->operate_item_car_info_option_set(request()->all());
+    }
+    // 【车辆管理】添加-附件-attachment-信息
+    public function operate_item_car_info_attachment_set()
+    {
+        return $this->repo->operate_item_car_info_attachment_set(request()->all());
+    }
+    // 【车辆管理】删除-附件-attachment-信息
+    public function operate_item_car_info_attachment_delete()
+    {
+        return $this->repo->operate_item_car_info_attachment_delete(request()->all());
+    }
+    // 【定价管理】获取-附件-attachment-信息
+    public function operate_item_car_get_attachment_html()
+    {
+        return $this->repo->operate_item_car_get_attachment_html(request()->all());
     }
 
 
@@ -511,6 +532,12 @@ class YHAdminController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_route_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_route_list_for_all_datatable(request()->all());
     }
+    // 【固定线路】【修改记录】返回-列表-视图（全部任务）
+    public function view_item_route_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_route_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_route_modify_record_datatable(request()->all());
+    }
 
 
     // 【固定线路】添加
@@ -541,6 +568,21 @@ class YHAdminController extends Controller
     public function operate_item_route_info_option_set()
     {
         return $this->repo->operate_item_route_info_option_set(request()->all());
+    }
+    // 【定价管理】添加-附件-attachment-信息
+    public function operate_item_route_info_attachment_set()
+    {
+        return $this->repo->operate_item_route_info_attachment_set(request()->all());
+    }
+    // 【定价管理】删除-附件-attachment-信息
+    public function operate_item_route_info_attachment_delete()
+    {
+        return $this->repo->operate_item_route_info_attachment_delete(request()->all());
+    }
+    // 【定价管理】获取-附件-attachment-信息
+    public function operate_item_route_get_attachment_html()
+    {
+        return $this->repo->operate_item_route_get_attachment_html(request()->all());
     }
 
 
@@ -587,6 +629,12 @@ class YHAdminController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_pricing_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_pricing_list_for_all_datatable(request()->all());
     }
+    // 【定价管理】【修改记录】返回-列表-视图（全部任务）
+    public function view_item_pricing_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_pricing_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_pricing_modify_record_datatable(request()->all());
+    }
 
 
     // 【定价管理】添加
@@ -617,6 +665,21 @@ class YHAdminController extends Controller
     public function operate_item_pricing_info_option_set()
     {
         return $this->repo->operate_item_pricing_info_option_set(request()->all());
+    }
+    // 【定价管理】添加-附件-attachment-信息
+    public function operate_item_pricing_info_attachment_set()
+    {
+        return $this->repo->operate_item_pricing_info_attachment_set(request()->all());
+    }
+    // 【定价管理】删除-附件-attachment-信息
+    public function operate_item_pricing_info_attachment_delete()
+    {
+        return $this->repo->operate_item_pricing_info_attachment_delete(request()->all());
+    }
+    // 【定价管理】获取-附件-attachment-信息
+    public function operate_item_pricing_get_attachment_html()
+    {
+        return $this->repo->operate_item_pricing_get_attachment_html(request()->all());
     }
 
 
