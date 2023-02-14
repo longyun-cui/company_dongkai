@@ -287,8 +287,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-order-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-order-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-operate" value="item-car-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-car-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
 
@@ -367,7 +367,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">订单【<span class="attachment-set-title"></span>】</h3>
+                <h3 class="box-title">车辆【<span class="attachment-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -780,7 +780,7 @@
                                 return '<small class="btn-xs bg-black">已删除</small>';
                             }
 
-                            if(row.item_status == 1)
+                            if(data == 1)
                             {
                                 return '<small class="btn-xs btn-success">启用</small>';
                             }
@@ -1749,6 +1749,8 @@
                                 else return '有误';
                             }
                             else if(data == 11) return '<small class="btn-xs bg-blue">发布</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-green">启用</small>';
+                            else if(data == 22) return '<small class="btn-xs bg-red">禁用</small>';
                             else if(data == 71)
                             {
                                 if(row.operate_type == 1)
@@ -1763,6 +1765,9 @@
 
                             }
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
+                            else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
+                            else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
+                            else if(data == 103) return '<small class="btn-xs bg-black">永久删除</small>';
                             else return '有误';
                         }
                     },

@@ -3,88 +3,55 @@
 
 @section('head_title')
     @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
-    {{ $title_text or '线路列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '驾驶员列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description'){{ $title_text or '线路列表' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')驾驶员列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
-    <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
+    <li><a href="{{url('/')}}"><i class="fa fa-dashboard"></i>首页</a></li>
+    <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
+        <!-- BEGIN PORTLET-->
         <div class="box box-info">
 
-            <div class="box-header with-border" style="margin:8px 0;">
-                <h3 class="box-title">合同到期提醒</h3>
-            </div>
-
-            <div class="box-body" style="font-size:13px;">
-                @foreach($route_list as $route)
-                    <div style="clear:both;line-height:24px;">
-                        <span class="pull-left" style="width:200px;">
-                            <text class="text-green">[{{ $route->id }}]</text>
-                            <b class="font-14px- text-red-">{{ $route->title }}</b>
-                        </span>
-
-                        <span class="pull-left" style="width:200px;">
-                            结束时间 <b class="font-16px text-red">{{ $route->contract_ended_date }}</b>
-                        </span>
-                    </div>
-                @endforeach
-            </div>
-
-            <div class="box-footer">
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="box box-info main-list-body">
-
             <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">驾驶员列表</h3>
 
-                <h3 class="box-title">{{ $title_text or '线路列表' }}</h3>
-
-                @if(in_array($me->user_type,[0,1,9,11,19]))
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/route-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加线路</button>
+                    <a href="{{ url('/user/driver-create') }}">
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加驾驶员</button>
                     </a>
                 </div>
-                @endif
-
             </div>
 
+            <div class="box-body datatable-body item-main-body" id="datatable-for-driver-list">
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-route-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="route-id" placeholder="ID" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="route-name" placeholder="标题" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="driver_name" placeholder="主驾姓名" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="sub_driver_name" placeholder="副驾姓名" />
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-route">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-route">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
                     </div>
                 </div>
+
 
                 <div class="tableArea overflow-none-">
                 <table class='table table-striped table-bordered- table-hover' id='datatable_ajax'>
@@ -99,30 +66,7 @@
 
             </div>
 
-
             <div class="box-footer">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
-                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
-                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
-                        <div class="input-group">
-                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
-                            <select name="bulk-operate-status" class="form-control form-filter">
-                                <option value ="-1">请选择操作类型</option>
-                                <option value ="启用">启用</option>
-                                <option value ="禁用">禁用</option>
-                                <option value ="删除">删除</option>
-                                <option value ="彻底删除">彻底删除</option>
-                            </select>
-                            <span class="input-group-addon btn btn-default" id="operate-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
-                            <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="box-footer _none">
                 <div class="row" style="margin:16px 0;">
                     <div class="col-md-offset-0 col-md-9">
                         <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
@@ -130,115 +74,22 @@
                     </div>
                 </div>
             </div>
-
         </div>
+        <!-- END PORTLET-->
     </div>
 </div>
 
 
 
 
-{{--显示-附件-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-attachment">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">线路【<span class="attachment-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-
-
-            {{--attachment--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="">
-            <div class="box-body attachment-box">
-
-            </div>
-            </form>
-
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px-">
-                <h4 class="box-title">【添加附件】</h4>
-            </div>
-
-            {{--上传附件--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-attachment-set-form">
-            <div class="box-body">
-
-                {{ csrf_field() }}
-                <input type="hidden" name="attachment-set-operate" value="item-route-attachment-set" readonly>
-                <input type="hidden" name="attachment-set-order-id" value="0" readonly>
-                <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
-                <input type="hidden" name="attachment-set-column-key" value="" readonly>
-
-                <input type="hidden" name="operate" value="item-route-attachment-set" readonly>
-                <input type="hidden" name="order_id" value="0" readonly>
-                <input type="hidden" name="operate_type" value="add" readonly>
-                <input type="hidden" name="column_key" value="attachment" readonly>
-
-
-                <div class="form-group">
-                    <label class="control-label col-md-2">附件名称</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="attachment_name" autocomplete="off" placeholder="附件名称" value="">
-                    </div>
-                </div>
-
-                <div class="form-group">
-
-                    <label class="control-label col-md-2" style="clear:left;">选择图片</label>
-                    <div class="col-md-8 fileinput-group">
-
-                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-new thumbnail">
-                            </div>
-                            <div class="fileinput-preview fileinput-exists thumbnail">
-                            </div>
-                            <div class="btn-tool-group">
-                            <span class="btn-file">
-                                <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
-                                <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
-                                <input type="file" name="attachment_file" />
-                            </span>
-                                <span class="">
-                                <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
-                            </span>
-                            </div>
-                        </div>
-                        <div id="titleImageError" style="color: #a94442"></div>
-
-                    </div>
-
-                </div>
-
-            </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-{{--修改-文本-text-信息--}}
+{{--修改-基本信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改线路【<span class="info-text-set-title"></span>】</h3>
+                <h3 class="box-title">修改【<span class="info-text-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -247,20 +98,18 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-route-info-text-set" readonly>
-                    <input type="hidden" name="info-text-set-item-id" value="0" readonly>
+                    <input type="hidden" name="info-text-set-operate" value="user-driver-info-text-set" readonly>
+                    <input type="hidden" name="info-text-set-user-id" value="0" readonly>
                     <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-text-set-column-key" value="" readonly>
 
-
                     <div class="form-group">
-                        <label class="control-label col-md-2 info-set-column-name"></label>
+                        <label class="control-label col-md-2 info-text-set-column-name"></label>
                         <div class="col-md-8 ">
                             <input type="text" class="form-control" name="info-text-set-column-value" autocomplete="off" placeholder="" value="">
                             <textarea class="form-control" name="info-textarea-set-column-value" rows="6" cols="100%"></textarea>
                         </div>
                     </div>
-
 
                 </div>
             </form>
@@ -277,14 +126,14 @@
 
     </div>
 </div>
-{{--修改-时间-time-信息--}}
+{{--修改-时间信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改线路【<span class="info-time-set-title"></span>】</h3>
+                <h3 class="box-title">修改【<span class="info-time-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -293,9 +142,9 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-route-info-text-set" readonly>
-                    {{--<input type="hidden" name="info-time-set-operate" value="item-route-info-time-set" readonly>--}}
-                    <input type="hidden" name="info-time-set-item-id" value="0" readonly>
+                    <input type="hidden" name="info-time-set-operate" value="user-driver-info-text-set" readonly>
+                    {{--<input type="hidden" name="info-time-set-operate" value="user-driver-info-time-set" readonly>--}}
+                    <input type="hidden" name="info-time-set-user-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
                     <input type="hidden" name="info-time-set-time-type" value="" readonly>
@@ -304,8 +153,8 @@
                     <div class="form-group">
                         <label class="control-label col-md-2 info-time-set-column-name"></label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime">
-                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date">
+                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
+                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
                         </div>
                     </div>
 
@@ -332,7 +181,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改线路【<span class="info-radio-set-title"></span>】</h3>
+                <h3 class="box-title">修改【<span class="info-radio-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -341,8 +190,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-route-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-item-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-operate" value="user-driver-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-order-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
 
@@ -372,7 +221,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改线路【<span class="info-select-set-title"></span>】</h3>
+                <h3 class="box-title">修改【<span class="info-select-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -381,8 +230,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-route-info-option-set" readonly>
-                    <input type="hidden" name="info-select-set-item-id" value="0" readonly>
+                    <input type="hidden" name="info-select-set-operate" value="user-driver-info-option-set" readonly>
+                    <input type="hidden" name="info-select-set-user-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
 
@@ -414,86 +263,108 @@
 </div>
 
 
-{{--option--}}
-<div class="option-container _none">
+{{--显示-附件-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-attachment">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
-    <div id="trailer_type-option-list">
-        <option value="0">选择箱型</option>
-        <option value="直板">直板</option>
-        <option value="高栏">高栏</option>
-        <option value="平板">平板</option>
-        <option value="冷藏">冷藏</option>
-    </div>
+        <div class="box- box-info- form-container">
 
-    <div id="trailer_length-option-list">
-        <option value="0">选择车挂尺寸</option>
-        <option value="9.6">9.6</option>
-        <option value="12.5">12.5</option>
-        <option value="15">15</option>
-        <option value="16.5">16.5</option>
-        <option value="17.5">17.5</option>
-    </div>
-
-    <div id="trailer_volume-option-list">
-        <option value="0">选择承载方数</option>
-        <option value="125">125</option>
-        <option value="130">130</option>
-        <option value="135">135</option>
-    </div>
-
-    <div id="trailer_weight-option-list">
-        <option value="0">选择承载重量</option>
-        <option value="13">13吨</option>
-        <option value="20">20吨</option>
-        <option value="25">25吨</option>
-    </div>
-
-    <div id="trailer_axis_count-option-list">
-        <option value="0">选择轴数</option>
-        <option value="1">1轴</option>
-        <option value="2">2轴</option>
-        <option value="3">3轴</option>
-    </div>
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">驾驶员【<span class="attachment-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
 
 
 
-    {{--回单状态--}}
-    <div id="receipt_status-option-list">
-        <option value="-1">选择回单状态</option>
-        <option value="1">等待回单</option>
-        <option value="21">邮寄中</option>
-        <option value="41">已签收，等待确认</option>
-        <option value="100">已完成</option>
-        <option value="101">回单异常</option>
-    </div>
+            {{--attachment--}}
+            <form action="" method="post" class="form-horizontal form-bordered " id="">
+                <div class="box-body attachment-box">
 
-    <div id="receipt_need-option-list">
+                </div>
+            </form>
 
-        <label class="control-label col-md-2">是否需要回单</label>
-        <div class="col-md-8">
-            <div class="btn-group">
 
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="receipt_need" value="0" class="info-set-column"> 不需要
-                        </label>
-                    </span>
-                </button>
+            <div class="box-header with-border margin-top-16px margin-bottom-16px-">
+                <h4 class="box-title">【添加附件】</h4>
+            </div>
 
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="receipt_need" value="1" class="info-set-column"> 需要
-                        </label>
-                    </span>
-                </button>
+            {{--上传附件--}}
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-attachment-set-form">
+                <div class="box-body">
 
+                    {{ csrf_field() }}
+                    <input type="hidden" name="attachment-set-operate" value="user-driver-attachment-set" readonly>
+                    <input type="hidden" name="attachment-set-driver-id" value="0" readonly>
+                    <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="attachment-set-column-key" value="" readonly>
+
+                    <input type="hidden" name="operate" value="user-driver-attachment-set" readonly>
+                    <input type="hidden" name="user_id" value="0" readonly>
+                    <input type="hidden" name="operate_type" value="add" readonly>
+                    <input type="hidden" name="column_key" value="attachment" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">附件名称</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="attachment_name" autocomplete="off" placeholder="附件名称" value="">
+                        </div>
+                    </div>
+
+                    {{--多图上传--}}
+                    <div class="form-group">
+
+                        <label class="control-label col-md-2">图片上传</label>
+
+                        <div class="col-md-8">
+                            <input id="multiple-images" type="file" class="file-multiple-images" name="multiple_images[]" multiple >
+                        </div>
+
+                    </div>
+
+                    {{--多图上传--}}
+                    <div class="form-group _none">
+
+                        <label class="control-label col-md-2" style="clear:left;">选择图片</label>
+                        <div class="col-md-8 fileinput-group">
+
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail">
+                                </div>
+                                <div class="btn-tool-group">
+                            <span class="btn-file">
+                                <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
+                                <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
+                                <input type="file" name="attachment_file" />
+                            </span>
+                                    <span class="">
+                                <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
+                            </span>
+                                </div>
+                            </div>
+                            <div id="titleImageError" style="color: #a94442"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
-
 </div>
 
 
@@ -539,15 +410,15 @@
 
                 <table class='table table-striped table-bordered' id='datatable_ajax_record'>
                     <thead>
-                        <tr role='row' class='heading'>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
+                    <tr role='row' class='heading'>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
                     </tbody>
@@ -578,26 +449,18 @@
 
 
 
-@section('custom-css')
-    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/lib/css/select2-4.0.5.min.css') }}">
-@endsection
 @section('custom-style')
-<style>
-    .tableArea table { min-width:1380px; }
+    <style>
+        .tableArea table { min-width:2800px; }
 
-    .select2-container { height:100%; border-radius:0; float:left; }
-    .select2-container .select2-selection--single { border-radius:0; }
-</style>
+        .select2-container { height:100%; border-radius:0; float:left; }
+        .select2-container .select2-selection--single { border-radius:0; }
+    </style>
 @endsection
 
 
 
 
-@section('custom-js')
-    {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
-    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
-@endsection
 @section('custom-script')
 <script>
     var TableDatatablesAjax = function () {
@@ -611,16 +474,18 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/item/route-list-for-all') }}",
+                    'url': "{{ url('/user/driver-list-for-all') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="route-id"]').val();
-                        d.name = $('input[name="route-name"]').val();
-                        d.title = $('input[name="route-title"]').val();
-                        d.keyword = $('input[name="route-keyword"]').val();
-                        d.status = $('select[name="route-status"]').val();
+                        d.username = $('input[name="username"]').val();
+                        d.driver_name = $('input[name="driver_name"]').val();
+                        d.sub_driver_name = $('input[name="sub_driver_name"]').val();
+//                        d.nickname 	= $('input[name="nickname"]').val();
+//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
+//                        d.certificate_state = $('select[name="certificate_state"]').val();
+//                        d.admin_name = $('input[name="admin_name"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -632,39 +497,20 @@
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
+                "scrollX": true,
+//                "scrollY": true,
+                "scrollCollapse": true,
+                "fixedColumns": {
+                    "leftColumns": 6,
+                    "rightColumns": 0
+                },
                 "columns": [
-//                    {
-//                        "width": "32px",
-//                        "title": "选择",
-//                        "data": "id",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
-//                        }
-//                    },
-//                    {
-//                        "width": "32px",
-//                        "title": "序号",
-//                        "data": null,
-//                        "targets": 0,
-//                        "orderable": false
-//                    },
                     {
-                        "className": "",
+                        "className": "font-12px",
                         "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
-                                $(nTd).attr('data-key','attachment_list').attr('data-value',row.attachment_list);
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -672,19 +518,14 @@
                     {
                         "width": "160px",
                         "title": "操作",
-                        "data": 'id',
+                        "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-
-                            var $html_edit = '';
-                            var $html_detail = '';
-                            var $html_record = '';
+                            var html_edit = '';
                             var $html_able = '';
                             var $html_delete = '';
-                            var $html_publish = '';
-                            var $html_abandon = '';
 
-                            if(row.item_status == 1)
+                            if(row.user_status == 1)
                             {
                                 $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
                             }
@@ -693,13 +534,13 @@
                                 $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
                             }
 
-                            if(row.is_me == 1 && row.active == 0)
+                            if(row.user_category == 1)
                             {
-                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
+                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
                             }
                             else
                             {
-                                $html_publish = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">发布</a>';
+                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
                             }
 
                             if(row.deleted_at == null)
@@ -714,24 +555,20 @@
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                             var html =
-                                '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
+                                $html_edit+
                                 $html_able+
-//                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
-//                                    $html_publish+
                                 $html_delete+
                                 $html_record+
-//                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-//                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
-//                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
+//                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
+//                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
                                 '';
                             return html;
-
                         }
                     },
                     {
                         "width": "60px",
                         "title": "状态",
-                        "data": "item_status",
+                        "data": "user_status",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
@@ -751,62 +588,18 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "200px",
-                        "title": "标题",
-                        "data": "title",
+                        "className": "_bold",
+                        "width": "80px",
+                        "title": "主驾姓名",
+                        "data": "driver_name",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(row.user_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
-                                $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','标题');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "运价(现金)",
-                        "data": "amount_with_cash",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','运价(现金)');
-                                $(nTd).attr('data-key','amount_with_cash').attr('data-value',data);
-                                $(nTd).attr('data-column-name','运价(现金)');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "运价(带票)",
-                        "data": "amount_with_invoice",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','运价(带票)');
-                                $(nTd).attr('data-key','amount_with_invoice').attr('data-value',data);
-                                $(nTd).attr('data-column-name','运价(带票)');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名');
+                                $(nTd).attr('data-key','driver_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾姓名');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -818,129 +611,64 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "里程",
-                        "data": "travel_distance",
+                        "className": "_bold",
+                        "width": "100px",
+                        "title": "主驾电话",
+                        "data": "driver_phone",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(row.user_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','里程');
-                                $(nTd).attr('data-key','travel_distance').attr('data-value',data);
-                                $(nTd).attr('data-column-name','里程');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
+                                $(nTd).attr('data-key','driver_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾电话');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(!data) return '';
-                            else return data;
+                            if(data) return data;
+                            else return '--';
                         }
                     },
                     {
-                        "width": "60px",
-                        "title": "时效",
-                        "data": "time_limitation_prescribed",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','时效');
-                                $(nTd).attr('data-key','time_limitation_prescribed').attr('data-value',data);
-                                $(nTd).attr('data-column-name','时效');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '--';
-                            else return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "出发地",
-                        "data": "departure_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','出发地');
-                                $(nTd).attr('data-key','departure_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','出发地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "经停地",
-                        "data": "stopover_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','经停地');
-                                $(nTd).attr('data-key','stopover_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','经停地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "目的地",
-                        "data": "destination_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','目的地');
-                                $(nTd).attr('data-key','destination_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','目的地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
+                        "className": "",
                         "width": "80px",
-                        "title": "开始日期",
-                        "data": "contract_start_date",
+                        "title": "主驾职称",
+                        "data": "driver_title",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾职称');
+                                $(nTd).attr('data-key','driver_title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾职称');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "入职时间",
+                        "data": "driver_entry_time",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
-                                $(nTd).attr('data-key','contract_start_date').attr('data-value',data);
-                                $(nTd).attr('data-column-name','开始日期');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾入职时间');
+                                $(nTd).attr('data-key','driver_entry_time').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾入职时间');
                                 $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -963,18 +691,244 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
+                        "width": "120px",
+                        "title": "身份证号",
+                        "data": "driver_ID",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证号');
+                                $(nTd).attr('data-key','driver_ID').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾身份证号');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
                         "width": "80px",
-                        "title": "结束日期",
-                        "data": "contract_ended_date",
+                        "title": "驾驶证",
+                        "data": "driver_licence",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾驾驶证');
+                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾驾驶证');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "资格证",
+                        "data": "driver_certification",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾资格证');
+                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾资格证');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "主驾-正页",
+                        "data": "driver_certification",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证正页');
+                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾身份证正页');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "主驾-副页",
+                        "data": "driver_certification",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证副页');
+                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾身份证副页');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "紧急联系人",
+                        "data": "emergency_contact_name",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','紧急联系人');
+                                $(nTd).attr('data-key','emergency_contact_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','紧急联系人');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "100px",
+                        "title": "紧急联系电话",
+                        "data": "emergency_contact_phone",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','紧急联系电话');
+                                $(nTd).attr('data-key','emergency_contact_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','紧急联系电话');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "_bold",
+                        "width": "80px",
+                        "title": "副驾姓名",
+                        "data": "sub_driver_name",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾姓名');
+                                $(nTd).attr('data-key','sub_driver_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾姓名');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "_bold",
+                        "width": "100px",
+                        "title": "副驾电话",
+                        "data": "sub_driver_phone",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾电话');
+                                $(nTd).attr('data-key','sub_driver_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾电话');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "副驾职称",
+                        "data": "sub_driver_title",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾职称');
+                                $(nTd).attr('data-key','sub_driver_title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾职称');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "入职时间",
+                        "data": "sub_driver_entry_time",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
 //                            if(row.is_published != 0)
                             {
                                 $(nTd).addClass('modal-show-for-info-time-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name',row.name);
-                                $(nTd).attr('data-key','contract_ended_date').attr('data-value',data);
-                                $(nTd).attr('data-column-name','结束日期');
+                                $(nTd).attr('data-key','sub_driver_entry_time').attr('data-value',data);
+                                $(nTd).attr('data-column-name','入职时间');
                                 $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -993,7 +947,164 @@
                                 else return $year+'-'+$month+'-'+$day;
                                 return $year;
                             }
-                           return '--';
+                            return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "120px",
+                        "title": "身份证号",
+                        "data": "sub_driver_ID",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证号');
+                                $(nTd).attr('data-key','sub_driver_ID').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾身份证号');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "驾驶证",
+                        "data": "sub_driver_licence",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾驾驶证');
+                                $(nTd).attr('data-key','sub_driver_licence').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾驾驶证');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "资格证",
+                        "data": "sub_driver_certification",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾资格证');
+                                $(nTd).attr('data-key','sub_driver_certification').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾资格证');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "副驾-正页",
+                        "data": "sub_driver_ID_front",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证正页');
+                                $(nTd).attr('data-key','sub_driver_ID_front').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾身份证正页');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "副驾-副页",
+                        "data": "sub_driver_ID_back",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证副页');
+                                $(nTd).attr('data-key','sub_driver_ID_back').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾身份证副页');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "100px",
+                        "title": "紧急联系人",
+                        "data": "sub_contact_name",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾紧急联系人');
+                                $(nTd).attr('data-key','sub_emergency_contact_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾紧急联系人');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "100px",
+                        "title": "紧急联系电话",
+                        "data": "sub_contact_phone",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.user_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾紧急联系电话');
+                                $(nTd).attr('data-key','sub_contact_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾紧急联系电话');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            else return '--';
                         }
                     },
                     {
@@ -1003,7 +1114,7 @@
                         "data": "remark",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(row.user_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','备注');
@@ -1021,23 +1132,30 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "font-12px",
                         "width": "60px",
                         "title": "创建人",
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
+                            if(data == 0) return '未知';
+                            return row.creator.true_name;
                         }
                     },
                     {
-                        "className": "",
+                        "className": "font-12px",
                         "width": "100px",
-                        "title": "更新时间",
-                        "data": 'updated_at',
-                        "orderable": false,
+                        "title": "创建时间",
+                        "data": 'created_at',
+                        "orderable": true,
                         render: function(data, type, row, meta) {
 //                            return data;
+
+//                            newDate = new Date();
+//                            newDate.setTime(data * 1000);
+//                            return newDate.toLocaleString('chinese',{hour12:false});
+//                            return newDate.toLocaleDateString();
+
                             var $date = new Date(data*1000);
                             var $year = $date.getFullYear();
                             var $month = ('00'+($date.getMonth()+1)).slice(-2);
@@ -1045,24 +1163,13 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
-                    },
+                    }
                 ],
                 "drawCallback": function (settings) {
-
-//                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
-//                    this.api().column(1).nodes().each(function(cell, i) {
-//                        cell.innerHTML =  startIndex + i + 1;
-//                    });
-
                     ajax_datatable.$('.tooltips').tooltip({placement: 'top', html: true});
                     $("a.verify").click(function(event){
                         event.preventDefault();
@@ -1089,7 +1196,7 @@
                                     {
                                         action: action,
                                         id: certificate_id,
-                                        _token: '{{ csrf_token() }}'
+                                        _token: '{{csrf_token()}}'
                                     },
                                     function(json){
                                         if(json['response_code'] == 'success') {
@@ -1126,7 +1233,6 @@
             init: datatableAjax
         }
     }();
-
     $(function () {
         TableDatatablesAjax.init();
     });
@@ -1149,7 +1255,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "/item/route-modify-record?id="+$id,
+                    'url': "/user/driver-modify-record?id="+$id,
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -1172,7 +1278,7 @@
                 "columns": [
 //                    {
 //                        "className": "font-12px",
-//                        "width": "32px",
+//                        "width": "40px",
 //                        "title": "序号",
 //                        "data": null,
 //                        "targets": 0,
@@ -1180,7 +1286,7 @@
 //                    },
 //                    {
 //                        "className": "font-12px",
-//                        "width": "32px",
+//                        "width": "40px",
 //                        "title": "选择",
 //                        "data": "id",
 //                        "orderable": true,
@@ -1244,16 +1350,36 @@
                         render: function(data, type, row, meta) {
                             if(row.operate_category == 1)
                             {
-                                if(data == "title") return '标题';
-                                else if(data == "amount_with_cash") return '运价(现金)';
-                                else if(data == "amount_with_invoice") return '运价(带票)';
-                                else if(data == "travel_distance") return '里程';
-                                else if(data == "time_limitation_prescribed") return '时效';
-                                else if(data == "departure_place") return '出发地';
-                                else if(data == "stopover_place") return '经停地';
-                                else if(data == "destination_place") return '目的地';
-                                else if(data == "contract_start_date") return '合同开始日期';
-                                else if(data == "contract_ended_date") return '合同结束日期';
+                                if(data == "name") return '名称';
+
+                                else if(data == "driver_name") return '主驾姓名';
+                                else if(data == "driver_phone") return '主驾电话';
+                                else if(data == "driver_title") return '主驾职称';
+                                else if(data == "driver_entry_time") return '主驾入职时间';
+                                else if(data == "driver_leave_time") return '主驾离职时间';
+                                else if(data == "driver_ID") return '主驾身份证号';
+                                else if(data == "driver_ID_front") return '主驾身份证正页';
+                                else if(data == "driver_ID_back") return '主驾身份证副页';
+                                else if(data == "sub_driver_licence") return '主驾驾驶证';
+                                else if(data == "sub_driver_certification") return '主驾资格证';
+                                else if(data == "emergency_contact_name") return '主驾紧急联系人';
+                                else if(data == "emergency_contact_phone") return '主驾紧急联系电话';
+                                else if(data == "job_performance") return '主驾工作表现';
+
+                                else if(data == "sub_driver_name") return '副驾姓名';
+                                else if(data == "sub_driver_phone") return '副驾电话';
+                                else if(data == "sub_driver_title") return '副驾职称';
+                                else if(data == "sub_driver_entry_time") return '副驾入职时间';
+                                else if(data == "sub_driver_leave_time") return '副驾离职时间';
+                                else if(data == "sub_driver_ID") return '副驾身份证号';
+                                else if(data == "sub_driver_ID_front") return '副驾身份证正页';
+                                else if(data == "sub_driver_ID_back") return '副驾身份证副页';
+                                else if(data == "sub_driver_licence") return '副驾驾驶证';
+                                else if(data == "sub_driver_certification") return '副驾资格证';
+                                else if(data == "sub_contact_name") return '副驾紧急联系人';
+                                else if(data == "sub_contact_phone") return '副驾紧急联系电话';
+                                else if(data == "sub_job_performance") return '副驾副驾工作表现';
+
                                 else if(data == "remark") return '备注';
                                 else return '有误';
                             }
@@ -1304,7 +1430,7 @@
                                 else return '';
                             }
 
-                            if(row.column_name == 'attachment' && row.operate_category == 71 && row.operate_type == 91)
+                            if(row.operate_category == 71 && row.operate_type == 91)
                             {
                                 var $cdn = "{{ env('DOMAIN_CDN') }}";
                                 var $src = $cdn = $cdn + "/" + data;
@@ -1512,5 +1638,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_YH_ADMIN').'entrance.item.route-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.user.driver-script')
 @endsection

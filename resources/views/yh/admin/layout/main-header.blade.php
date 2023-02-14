@@ -26,11 +26,16 @@
                         <i class="fa fa-plus"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        @if(in_array($me->user_type,[0,1,9,11,21,22]))
+                        @if(in_array($me->user_type,[0,1,9,11,19,21,22]))
                         <li class="header">员工</li>
                         <li class="header">
                             <a href="{{ url('/user/staff-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加员工
+                            </a>
+                        </li>
+                        <li class="header">
+                            <a href="{{ url('/user/driver-create') }}">
+                                <i class="fa fa-plus text-red"></i> 添加驾驶员
                             </a>
                         </li>
                         @endif
@@ -38,40 +43,40 @@
                         <li class="header">业务</li>
                         <li class="header">
                             <a href="{{ url('/user/client-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加客户
+                                <i class="fa fa-plus text-green"></i> 添加客户
                             </a>
                         </li>
                         <li class="header">
                             <a href="{{ url('/item/car-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加车辆
+                                <i class="fa fa-plus text-green"></i> 添加车辆
                             </a>
                         </li>
                         <li class="header">
                             <a href="{{ url('/item/route-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加线路
+                                <i class="fa fa-plus text-green"></i> 添加线路
                             </a>
                         </li>
                         <li class="header">
                             <a href="{{ url('/item/pricing-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加定价
+                                <i class="fa fa-plus text-green"></i> 添加定价
                             </a>
                         </li>
                         @endif
                         <li class="header">订单</li>
                         <li class="header">
                             <a href="{{ url('/item/order-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加订单
+                                <i class="fa fa-plus text-yellow"></i> 添加订单
                             </a>
                         </li>
                         <li class="header">
                             <a href="{{ url('/item/circle-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加环线
+                                <i class="fa fa-plus text-yellow"></i> 添加环线
                             </a>
                         </li>
                         <li class="header _none">内容</li>
                         <li class="header _none">
                             <a href="{{ url('/item/item-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加内容
+                                <i class="fa fa-plus text-yellow"></i> 添加内容
                             </a>
                         </li>
                         <li class="footer"><a href="#">See All Messages</a></li>

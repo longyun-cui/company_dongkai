@@ -65,6 +65,13 @@
                     <span>员工列表</span>
                 </a>
             </li>
+
+                <li class="treeview {{ $menu_active_of_driver_list_for_all or '' }}">
+                    <a href="{{ url('/user/driver-list-for-all') }}">
+                        <i class="fa fa-user text-blue"></i>
+                        <span>驾驶员列表</span>
+                    </a>
+                </li>
             @endif
 
 

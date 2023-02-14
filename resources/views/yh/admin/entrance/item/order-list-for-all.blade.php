@@ -3896,6 +3896,8 @@
                                 else return '有误';
                             }
                             else if(data == 11) return '<small class="btn-xs bg-blue">发布</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-green">启用</small>';
+                            else if(data == 22) return '<small class="btn-xs bg-red">禁用</small>';
                             else if(data == 71)
                             {
                                 if(row.operate_type == 1)
@@ -3910,6 +3912,9 @@
 
                             }
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
+                            else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
+                            else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
+                            else if(data == 103) return '<small class="btn-xs bg-black">永久删除</small>';
                             else return '有误';
                         }
                     },

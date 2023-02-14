@@ -56,12 +56,55 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/user/staff-admin-enable', $controller.'@operate_user_staff_admin_enable');
     Route::post('/user/staff-admin-disable', $controller.'@operate_user_staff_admin_disable');
 
-
-
-
-
+    // 列表
     Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
     Route::match(['get','post'], '/user/staff-list-for-all', $controller.'@view_staff_list_for_all');
+
+
+
+
+
+
+
+
+    /*
+     * 驾驶员管理
+     */
+    Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
+    Route::match(['get','post'], '/user/user_select2_sales', $controller.'@operate_user_select2_sales');
+
+    // 创建 & 修改
+    Route::match(['get','post'], '/user/driver-create', $controller.'@operate_user_driver_create');
+    Route::match(['get','post'], '/user/driver-edit', $controller.'@operate_user_driver_edit');
+    // 编辑-信息
+    Route::post('/user/driver-info-text-set', $controller.'@operate_user_driver_info_text_set');
+    Route::post('/user/driver-info-time-set', $controller.'@operate_user_driver_info_time_set');
+    Route::post('/user/driver-info-option-set', $controller.'@operate_user_driver_info_option_set');
+    Route::post('/user/driver-info-radio-set', $controller.'@operate_user_driver_info_option_set');
+    Route::post('/user/driver-info-select-set', $controller.'@operate_user_driver_info_option_set');
+    Route::post('/user/driver-info-select2-set', $controller.'@operate_user_driver_info_option_set');
+    // 编辑-附件
+    Route::match(['get','post'], '/user/driver-get-attachment-html', $controller.'@operate_user_driver_get_attachment_html');
+    Route::post('/user/driver-info-attachment-set', $controller.'@operate_user_driver_info_attachment_set');
+    Route::post('/user/driver-info-attachment-delete', $controller.'@operate_user_driver_info_attachment_delete');
+    // 修改密码
+    Route::match(['get','post'], '/user/driver-password-admin-change', $controller.'@operate_user_driver_password_admin_change');
+    Route::match(['get','post'], '/user/driver-password-admin-reset', $controller.'@operate_user_driver_password_admin_reset');
+    Route::match(['get','post'], '/user/driver-login', $controller.'@operate_user_user_login');
+    // 删除 & 恢复 & 永久删除
+    Route::post('/user/driver-admin-delete', $controller.'@operate_user_driver_admin_delete');
+    Route::post('/user/driver-admin-restore', $controller.'@operate_user_driver_admin_restore');
+    Route::post('/user/driver-admin-delete-permanently', $controller.'@operate_user_driver_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/user/driver-admin-enable', $controller.'@operate_user_driver_admin_enable');
+    Route::post('/user/driver-admin-disable', $controller.'@operate_user_driver_admin_disable');
+
+    // 列表
+    Route::match(['get','post'], '/user/driver-list', $controller.'@view_user_driver_list');
+    Route::match(['get','post'], '/user/driver-list-for-all', $controller.'@view_user_driver_list_for_all');
+
+    // 修改-列表
+    Route::match(['get','post'], '/user/driver-modify-record', $controller.'@view_user_driver_modify_record');
 
 
 
@@ -108,6 +151,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/car-info-time-set', $controller.'@operate_item_car_info_time_set');
     Route::post('/item/car-info-radio-set', $controller.'@operate_item_car_info_option_set');
     Route::post('/item/car-info-select-set', $controller.'@operate_item_car_info_option_set');
+    Route::post('/item/car-info-select2-set', $controller.'@operate_item_car_info_option_set');
     // 编辑-附件
     Route::match(['get','post'], '/item/car-get-attachment-html', $controller.'@operate_item_car_get_attachment_html');
     Route::post('/item/car-info-attachment-set', $controller.'@operate_item_car_info_attachment_set');

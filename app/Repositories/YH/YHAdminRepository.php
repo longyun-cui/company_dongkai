@@ -3,6 +3,7 @@ namespace App\Repositories\YH;
 
 use App\Models\YH\YH_User;
 use App\Models\YH\YH_UserExt;
+use App\Models\YH\YH_Driver;
 use App\Models\YH\YH_Client;
 use App\Models\YH\YH_Car;
 use App\Models\YH\YH_Route;
@@ -28,19 +29,15 @@ class YHAdminRepository {
     private $auth_check;
     private $me;
     private $me_admin;
-    private $model;
     private $modelUser;
     private $modelItem;
-    private $repo;
-    private $service;
+    private $view_blade_403;
     private $view_blade_404;
 
     public function __construct()
     {
         $this->modelUser = new YH_User;
         $this->modelItem = new YH_Item;
-        $this->modelClinet = new YH_Client;
-        $this->modelCar = new YH_Car;
 
         $this->view_blade_403 = env('TEMPLATE_YH_ADMIN').'entrance.errors.403';
         $this->view_blade_404 = env('TEMPLATE_YH_ADMIN').'entrance.errors.404';
@@ -529,7 +526,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,21,22])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '用户';
@@ -537,24 +534,24 @@ class YHAdminRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/user/staff-list-for-all';
 
+        $return_data['operate'] = 'create';
+        $return_data['operate_id'] = 0;
+        $return_data['category'] = 'user';
+        $return_data['type'] = $item_type;
+        $return_data['item_type_text'] = $item_type_text;
+        $return_data['title_text'] = $title_text;
+        $return_data['list_text'] = $list_text;
+        $return_data['list_link'] = $list_link;
+
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.staff-edit';
-        return view($view_blade)->with([
-            'operate'=>'create',
-            'operate_id'=>0,
-            'category'=>'item',
-            'type'=>$item_type,
-            'item_type_text'=>$item_type_text,
-            'title_text'=>$title_text,
-            'list_text'=>$list_text,
-            'list_link'=>$list_link,
-        ]);
+        return view($view_blade)->with($return_data);
     }
     // 【用户-员工管理】返回-编辑-视图
     public function view_user_staff_edit()
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.staff-edit';
@@ -565,40 +562,31 @@ class YHAdminRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/user/staff-list-for-all';
 
+        $return_data['operate'] = 'create';
+        $return_data['operate_id'] = 0;
+        $return_data['category'] = 'user';
+        $return_data['type'] = $item_type;
+        $return_data['item_type_text'] = $item_type_text;
+        $return_data['title_text'] = $title_text;
+        $return_data['list_text'] = $list_text;
+        $return_data['list_link'] = $list_link;
+
         if($id == 0)
         {
-            return view($view_blade)->with([
-                'operate'=>'create',
-                'operate_id'=>0,
-                'category'=>'item',
-                'type'=>$item_type,
-                'item_type_text'=>$item_type_text,
-                'title_text'=>$title_text,
-                'list_text'=>$list_text,
-                'list_link'=>$list_link,
-            ]);
+            return view($view_blade)->with($return_data);
         }
         else
         {
             $mine = YH_User::with(['parent'])->find($id);
             if($mine)
             {
-                if(!in_array($mine->user_category,[0,1,9,11,21,22])) return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
-                $mine->custom = json_decode($mine->custom);
-                $mine->custom2 = json_decode($mine->custom2);
-                $mine->custom3 = json_decode($mine->custom3);
+//                $mine->custom = json_decode($mine->custom);
 
-                return view($view_blade)->with([
-                    'operate'=>'edit',
-                    'operate_id'=>$id,
-                    'data'=>$mine,
-                    'category'=>'item',
-                    'type'=>$item_type,
-                    'item_type_text'=>$item_type_text,
-                    'title_text'=>$title_text,
-                    'list_text'=>$list_text,
-                    'list_link'=>$list_link,
-                ]);
+                $return_data['operate'] = 'edit';
+                $return_data['operate_id'] = $id;
+                $return_data['data'] = $mine;
+
+                return view($view_blade)->with($return_data);
             }
             else return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
         }
@@ -1139,7 +1127,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $return['sidebar_staff_list_for_all_active'] = 'active menu-open';
+        $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.staff-list-for-all';
         return view($view_blade)->with($return);
     }
@@ -1200,6 +1188,1151 @@ class YHAdminRepository {
 
 
 
+    /*
+     * 驾驶员管理
+     */
+    // 【驾驶员管理】返回-添加-视图
+    public function view_user_driver_create()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+
+        $item_type = 'item';
+        $item_type_text = '驾驶员';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/user/driver-list-for-all';
+
+        $return_data['operate'] = 'create';
+        $return_data['operate_id'] = 0;
+        $return_data['category'] = 'user';
+        $return_data['type'] = $item_type;
+        $return_data['item_type_text'] = $item_type_text;
+        $return_data['title_text'] = $title_text;
+        $return_data['list_text'] = $list_text;
+        $return_data['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.driver-edit';
+        return view($view_blade)->with($return_data);
+    }
+    // 【驾驶员管理】返回-编辑-视图
+    public function view_user_driver_edit()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+
+        $id = request("id",0);
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.driver-edit';
+
+        $item_type = 'item';
+        $item_type_text = '驾驶员';
+        $title_text = '编辑'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/user/driver-list-for-all';
+
+        $return_data['operate'] = 'create';
+        $return_data['operate_id'] = 0;
+        $return_data['category'] = 'user';
+        $return_data['type'] = $item_type;
+        $return_data['item_type_text'] = $item_type_text;
+        $return_data['title_text'] = $title_text;
+        $return_data['list_text'] = $list_text;
+        $return_data['list_link'] = $list_link;
+
+        if($id == 0)
+        {
+            return view($view_blade)->with($return_data);
+        }
+        else
+        {
+            $mine = YH_Driver::find($id);
+            if($mine)
+            {
+//                $mine->custom = json_decode($mine->custom);
+
+                $return_data['operate'] = 'edit';
+                $return_data['operate_id'] = $id;
+                $return_data['data'] = $mine;
+
+                return view($view_blade)->with($return_data);
+            }
+            else return view($this->view_blade_404);
+        }
+    }
+    // 【驾驶员管理】保存数据
+    public function operate_user_driver_save($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'driver_name.required' => '请输入主驾姓名！',
+            'driver_phone.required' => '请输入主驾电话！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'driver_name' => 'required',
+            'driver_phone' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $mine = new YH_Driver;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = YH_Driver::find($operate_id);
+            if(!$mine) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['category']);
+            unset($mine_data['type']);
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("insert--driver--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【驾驶员管理】【文本-信息】设置-文本-类型
+    public function operate_user_driver_info_text_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-driver-info-text-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Driver::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 25;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】【时间-信息】修改-时间-类型
+    public function operate_user_driver_info_time_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-driver-info-time-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Driver::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+        $time_type = $post_data["time_type"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = strtotime($column_value);
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 25;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_type"] = $time_type;
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = strtotime($column_value);
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】【选项-信息】修改-radio-select-[option]-类型
+    public function operate_user_driver_info_option_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-driver-info-option-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Driver::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 25;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】【附件】添加
+    public function operate_user_driver_info_attachment_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-driver-attachment-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Driver::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+//        $operate_type = $post_data["operate_type"];
+//        $column_key = $post_data["column_key"];
+//        $column_value = $post_data["column_value"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            // 多图
+            $multiple_images = [];
+            if(!empty($post_data["multiple_images"][0]))
+            {
+                // 添加图片
+                foreach ($post_data["multiple_images"] as $n => $f)
+                {
+                    if(!empty($f))
+                    {
+                        $result = upload_img_storage($f,'','yh/attachment','');
+                        if($result["result"])
+                        {
+                            $attachment = new YH_Attachment;
+
+                            $attachment_data["operate_object"] = 25;
+                            $attachment_data['item_id'] = $id;
+                            $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                            $attachment_data['attachment_src'] = $result["local"];
+                            $bool = $attachment->fill($attachment_data)->save();
+                            if($bool)
+                            {
+                                $record = new YH_Record;
+
+                                $record_data["record_object"] = 21;
+                                $record_data["record_category"] = 11;
+                                $record_data["record_type"] = 1;
+                                $record_data["creator_id"] = $me->id;
+                                $record_data["item_id"] = $id;
+                                $record_data["operate_object"] = 25;
+                                $record_data["operate_category"] = 71;
+                                $record_data["operate_type"] = 1;
+
+                                $record_data["column_name"] = 'attachment';
+                                $record_data["after"] = $attachment_data['attachment_src'];
+
+                                $bool_1 = $record->fill($record_data)->save();
+                                if($bool_1)
+                                {
+                                }
+                                else throw new Exception("insert--record--fail");
+                            }
+                            else throw new Exception("insert--attachment--fail");
+                        }
+                        else throw new Exception("upload--attachment--file--fail");
+                    }
+                }
+            }
+
+
+            // 单图
+            if(!empty($post_data["attachment_file"]))
+            {
+                $attachment = new YH_Attachment;
+
+//                $result = upload_storage($post_data["portrait"]);
+//                $result = upload_storage($post_data["portrait"], null, null, 'assign');
+                $result = upload_img_storage($post_data["attachment_file"],'','yh/attachment','');
+                if($result["result"])
+                {
+                    $attachment_data["operate_object"] = 25;
+                    $attachment_data['item_id'] = $id;
+                    $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                    $attachment_data['attachment_src'] = $result["local"];
+                    $bool = $attachment->fill($attachment_data)->save();
+                    if($bool)
+                    {
+                        $record = new YH_Record;
+
+                        $record_data["record_object"] = 21;
+                        $record_data["record_category"] = 11;
+                        $record_data["record_type"] = 1;
+                        $record_data["creator_id"] = $me->id;
+                        $record_data["item_id"] = $id;
+                        $record_data["operate_object"] = 25;
+                        $record_data["operate_category"] = 71;
+                        $record_data["operate_type"] = 1;
+
+                        $record_data["column_name"] = 'attachment';
+                        $record_data["after"] = $attachment_data['attachment_src'];
+
+                        $bool_1 = $record->fill($record_data)->save();
+                        if($bool_1)
+                        {
+                        }
+                        else throw new Exception("insert--record--fail");
+                    }
+                    else throw new Exception("insert--attachment--fail");
+                }
+                else throw new Exception("upload--attachment--file--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】【附件】删除
+    public function operate_user_driver_info_attachment_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-driver-attachment-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Attachment::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【附件】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if($bool)
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $item->item_id;
+                $record_data["operate_object"] = 25;
+                $record_data["operate_category"] = 71;
+                $record_data["operate_type"] = 91;
+
+                $record_data["column_name"] = 'attachment';
+                $record_data["before"] = $item->attachment_src;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if($bool_1)
+                {
+                }
+                else throw new Exception("insert--record--fail");
+            }
+            else throw new Exception("attachment--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】【附件】获取
+    public function operate_user_driver_get_attachment_html($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Driver::with([
+            'attachment_list' => function($query) { $query->where('operate_object', 25); }
+        ])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
+
+        return response_success(['html'=>$html],"");
+    }
+
+
+    // 【驾驶员管理】管理员-删除
+    public function operate_user_driver_admin_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'driver-admin-delete') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Driver::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("driver--delete--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 25;
+                $record_data["operate_category"] = 101;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】管理员-恢复
+    public function operate_user_driver_admin_restore($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'driver-admin-restore') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Driver::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->restore();
+            if(!$bool) throw new Exception("driver--restore--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 25;
+                $record_data["operate_category"] = 102;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】管理员-彻底删除
+    public function operate_user_driver_admin_delete_permanently($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'driver-admin-delete-permanently') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Driver::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item_copy = $item;
+
+            $bool = $item->forceDelete();
+            if(!$bool) throw new Exception("driver--delete--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 25;
+                $record_data["operate_category"] = 103;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】管理员-启用
+    public function operate_user_driver_admin_enable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'driver-admin-enable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Driver::find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->user_status = 1;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--driver--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 25;
+                $record_data["operate_category"] = 21;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【驾驶员管理】管理员-禁用
+    public function operate_user_driver_admin_disable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'driver-admin-disable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Driver::find($id);
+        if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->user_status = 9;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--driver--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 25;
+                $record_data["operate_category"] = 22;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【驾驶员管理】返回-列表-视图
+    public function view_user_driver_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_driver_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.driver-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【驾驶员管理】返回-列表-数据
+    public function get_user_driver_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = YH_Driver::select('*')
+            ->with(['creator']);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['driver_name'])) $query->where('driver_name', 'like', "%{$post_data['driver_name']}%");
+        if(!empty($post_data['sub_driver_name'])) $query->where('sub_driver_name', 'like', "%{$post_data['sub_driver_name']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【驾驶员管理】【修改记录】返回-列表-视图
+    public function view_user_driver_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_car_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.car-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【驾驶员管理】【修改记录】返回-列表-数据
+    public function get_user_driver_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Record::select('*')
+            ->with(['creator'])
+            ->where(['operate_object'=>25, 'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
+
+
+
 
     /*
      * 客户管理
@@ -1209,7 +2342,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '客户';
@@ -1234,7 +2367,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.client-edit';
@@ -1306,7 +2439,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -1490,14 +2623,6 @@ class YHAdminRepository {
             ->with(['creator'])
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
-//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
-//            ->with('ep','parent','fund')
-//            ->withCount([
-//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
-//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
-//            ]);
-//            ->where(['userstatus'=>'正常','status'=>1])
-//            ->whereIn('usergroup',['Agent','Agent2']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -2399,221 +3524,6 @@ class YHAdminRepository {
     }
 
 
-    // 【内容】发布
-    public function operate_item_item_publish($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-publish') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = Def_Item::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->is_published = 1;
-            $item->published_at = time();
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            DB::commit();
-
-            $item_html = $this->get_the_item_html($item);
-            return response_success(['item_html'=>$item_html]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【内容】完成
-    public function operate_item_item_complete($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-complete') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DEF_Item::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if(!in_array($me->user_type,[0,1,9,11,19,41])) return response_error([],"用户类型错误！");
-        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->is_completed = 1;
-            $item->completer_id = $me->id;
-            $item->completed_at = time();
-            $item->timestamps = false;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            DB::commit();
-
-            $item->custom = json_decode($item->custom);
-            $item_array[0] = $item;
-            $return['item_list'] = $item_array;
-            $item_html = view(env('TEMPLATE_STAFF_FRONT').'component.item-list')->with($return)->__toString();
-            return response_success(['item_html'=>$item_html]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-    // 【内容】启用
-    public function operate_item_item_enable($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'operate.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-enable') return response_error([],"参数【operate】有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
-
-        $item = YH_Item::find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($me->user_category != 0) return response_error([],"你没有操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->item_status = 1;
-            $item->timestamps = false;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("update--item--fail");
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【内容】禁用
-    public function operate_item_item_disable($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-disable') return response_error([],"参数【operate】有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
-
-        $item = YH_Item::find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($me->user_category != 0) return response_error([],"你没有操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->item_status = 9;
-            $item->timestamps = false;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("update--item--fail");
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
     // 【ITEM】批量-操作（全部操作）
     public function operate_item_item_operate_bulk($post_data)
     {
@@ -3158,7 +4068,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '车辆';
@@ -3183,7 +4093,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.car-edit';
@@ -3255,7 +4165,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -3369,7 +4279,7 @@ class YHAdminRepository {
             else
             {
                 // 需要记录(本人修改已发布 || 他人修改)
-                if($me->id == $item->creator_id && $item->is_published == 0)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
                 {
                 }
                 else
@@ -3550,7 +4460,7 @@ class YHAdminRepository {
             else
             {
                 // 需要记录(本人修改已发布 || 他人修改)
-                if($me->id == $item->creator_id && $item->is_published == 0)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
                 {
                 }
                 else
@@ -3593,7 +4503,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】【附件】添加
+    // 【车辆管理】【附件】添加
     public function operate_item_car_info_attachment_set($post_data)
     {
         $messages = [
@@ -3737,7 +4647,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】【附件】删除
+    // 【车辆管理】【附件】删除
     public function operate_item_car_info_attachment_delete($post_data)
     {
         $messages = [
@@ -3813,7 +4723,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】【附件】获取
+    // 【车辆管理】【附件】获取
     public function operate_item_car_get_attachment_html($post_data)
     {
         $messages = [
@@ -3852,7 +4762,7 @@ class YHAdminRepository {
     }
 
 
-    // 【任务管理】管理员-删除
+    // 【车辆管理】管理员-删除
     public function operate_item_car_admin_delete($post_data)
     {
         $messages = [
@@ -3906,7 +4816,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【任务管理】管理员-恢复
+    // 【车辆管理】管理员-恢复
     public function operate_item_car_admin_restore($post_data)
     {
         $messages = [
@@ -3959,7 +4869,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【任务管理】管理员-彻底删除
+    // 【车辆管理】管理员-彻底删除
     public function operate_item_car_admin_delete_permanently($post_data)
     {
         $messages = [
@@ -4478,7 +5388,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '线路';
@@ -4503,7 +5413,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.route-edit';
@@ -4570,7 +5480,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -4927,10 +5837,10 @@ class YHAdminRepository {
 
         $operate = $post_data["operate"];
         if($operate != 'route-admin-delete') return response_error([],"参数【operate】有误！");
-        $item_id = $post_data["item_id"];
-        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $item = YH_Route::withTrashed()->find($item_id);
+        $item = YH_Route::withTrashed()->find($id);
         if(!$item) return response_error([],"该【线路】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -4948,6 +5858,22 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->delete();  // 普通删除
             if(!$bool) throw new Exception("route--delete--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 51;
+                $record_data["operate_category"] = 101;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5001,6 +5927,22 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->restore();
             if(!$bool) throw new Exception("route--restore--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 51;
+                $record_data["operate_category"] = 102;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5056,6 +5998,22 @@ class YHAdminRepository {
 
             $bool = $item->forceDelete();
             if(!$bool) throw new Exception("route--delete--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 51;
+                $record_data["operate_category"] = 103;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5107,6 +6065,22 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->save();
             if(!$bool) throw new Exception("update--route--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 51;
+                $record_data["operate_category"] = 21;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5158,6 +6132,22 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->save();
             if(!$bool) throw new Exception("update--route--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 51;
+                $record_data["operate_category"] = 22;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5310,7 +6300,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '定价';
@@ -5335,7 +6325,7 @@ class YHAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.pricing-edit';
@@ -5402,7 +6392,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -5759,10 +6749,10 @@ class YHAdminRepository {
 
         $operate = $post_data["operate"];
         if($operate != 'pricing-admin-delete') return response_error([],"参数【operate】有误！");
-        $item_id = $post_data["item_id"];
-        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $item = YH_Pricing::withTrashed()->find($item_id);
+        $item = YH_Pricing::withTrashed()->find($id);
         if(!$item) return response_error([],"该【定价】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5780,6 +6770,22 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->delete();  // 普通删除
             if(!$bool) throw new Exception("pricing--delete--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 61;
+                $record_data["operate_category"] = 101;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5833,6 +6839,22 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->restore();
             if(!$bool) throw new Exception("pricing--restore--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 61;
+                $record_data["operate_category"] = 102;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5888,6 +6910,22 @@ class YHAdminRepository {
 
             $bool = $item->forceDelete();
             if(!$bool) throw new Exception("pricing--delete--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 61;
+                $record_data["operate_category"] = 103;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5939,6 +6977,22 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->save();
             if(!$bool) throw new Exception("update--pricing--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 61;
+                $record_data["operate_category"] = 21;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -5990,6 +7044,22 @@ class YHAdminRepository {
             $item->timestamps = false;
             $bool = $item->save();
             if(!$bool) throw new Exception("update--pricing--fail");
+            else
+            {
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 61;
+                $record_data["operate_category"] = 22;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
 
             DB::commit();
             return response_success([]);
@@ -6476,7 +7546,7 @@ class YHAdminRepository {
 
     }
 
-    // 【订单管理】获取详情
+    // 【订单管理】获取-详情-数据
     public function operate_item_order_get($post_data)
     {
         $messages = [
@@ -6527,7 +7597,7 @@ class YHAdminRepository {
         return response_success($item,"");
 
     }
-
+    // 【订单管理】获取-详情-视图
     public function operate_item_order_get_html($post_data)
     {
         $messages = [
@@ -6603,7 +7673,7 @@ class YHAdminRepository {
         return response_success(['html'=>$html],"");
 
     }
-
+    // 【订单管理】获取-附件-视图
     public function operate_item_order_get_attachment_html($post_data)
     {
         $messages = [

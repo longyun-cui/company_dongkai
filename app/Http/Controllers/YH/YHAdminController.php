@@ -235,6 +235,104 @@ class YHAdminController extends Controller
 
 
 
+
+    /*
+     * 驾驶员管理
+     */
+    // 【驾驶员管理】返回-列表-视图（全部任务）
+    public function view_user_driver_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_driver_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_driver_list_for_all_datatable(request()->all());
+    }
+    // 【驾驶员管理】【修改记录】返回-列表-视图（全部任务）
+    public function view_user_driver_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_driver_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_driver_modify_record_datatable(request()->all());
+    }
+
+
+    // 【驾驶员管理】添加
+    public function operate_user_driver_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_driver_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_driver_save(request()->all());
+    }
+    // 【驾驶员管理】编辑
+    public function operate_user_driver_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_driver_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_driver_save(request()->all());
+    }
+
+
+    // 【驾驶员管理】修改-文本-text-信息
+    public function operate_user_driver_info_text_set()
+    {
+        return $this->repo->operate_user_driver_info_text_set(request()->all());
+    }
+    // 【驾驶员管理】修改-时间-time-信息
+    public function operate_user_driver_info_time_set()
+    {
+        return $this->repo->operate_user_driver_info_time_set(request()->all());
+    }
+    // 【驾驶员管理】修改-选项-option-信息
+    public function operate_user_driver_info_option_set()
+    {
+        return $this->repo->operate_user_driver_info_option_set(request()->all());
+    }
+    // 【驾驶员管理】添加-附件-attachment-信息
+    public function operate_user_driver_info_attachment_set()
+    {
+        return $this->repo->operate_user_driver_info_attachment_set(request()->all());
+    }
+    // 【驾驶员管理】删除-附件-attachment-信息
+    public function operate_user_driver_info_attachment_delete()
+    {
+        return $this->repo->operate_user_driver_info_attachment_delete(request()->all());
+    }
+    // 【驾驶员管理】获取-附件-attachment-信息
+    public function operate_user_driver_get_attachment_html()
+    {
+        return $this->repo->operate_user_driver_get_attachment_html(request()->all());
+    }
+
+
+    // 【驾驶员管理】删除
+    public function operate_user_driver_admin_delete()
+    {
+        return $this->repo->operate_user_driver_admin_delete(request()->all());
+    }
+    // 【驾驶员管理】恢复
+    public function operate_user_driver_admin_restore()
+    {
+        return $this->repo->operate_user_driver_admin_restore(request()->all());
+    }
+    // 【驾驶员管理】永久删除
+    public function operate_user_driver_admin_delete_permanently()
+    {
+        return $this->repo->operate_user_driver_admin_delete_permanently(request()->all());
+    }
+
+    // 【驾驶员管理】启用
+    public function operate_user_driver_admin_enable()
+    {
+        return $this->repo->operate_user_driver_admin_enable(request()->all());
+    }
+    // 【驾驶员管理】禁用
+    public function operate_user_driver_admin_disable()
+    {
+        return $this->repo->operate_user_driver_admin_disable(request()->all());
+    }
+
+
+
+
+
+
+
+
     /*
      * 客户管理
      */
@@ -270,6 +368,7 @@ class YHAdminController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
     }
+
 
 
 
@@ -426,6 +525,7 @@ class YHAdminController extends Controller
 
 
 
+
     /*
      * 车辆管理
      */
@@ -482,7 +582,7 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_item_car_info_attachment_delete(request()->all());
     }
-    // 【定价管理】获取-附件-attachment-信息
+    // 【车辆管理】获取-附件-attachment-信息
     public function operate_item_car_get_attachment_html()
     {
         return $this->repo->operate_item_car_get_attachment_html(request()->all());

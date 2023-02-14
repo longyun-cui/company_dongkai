@@ -62,18 +62,9 @@
 
 
                 <!-- datatable start -->
-                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
+                <table class='table table-striped table-bordered- table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
-                            <th>ID</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -196,135 +187,12 @@
                 "columns": [
                     {
                         "className": "font-12px",
-                        "width": "48px",
+                        "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
                         render: function(data, type, row, meta) {
                             return data;
-                        }
-                    },
-                    {
-                        "width": "80px",
-                        "title": "用户类型",
-                        "data": 'user_type',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
-                            else if(data == 11) return '<small class="btn-xs bg-primary">总经理</small>';
-                            else if(data == 21) return '<small class="btn-xs bg-purple">人事经理</small>';
-                            else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
-                            else if(data == 41) return '<small class="btn-xs bg-orange">财务经理</small>';
-                            else if(data == 42) return '<small class="btn-xs bg-orange">财务</small>';
-                            else if(data == 81) return '<small class="btn-xs bg-olive">业务经理</small>';
-                            else if(data == 88) return '<small class="btn-xs bg-olive">业务员</small>';
-                            else return "有误";
-                        }
-                    },
-                    {
-                        "className": "text-left",
-                        "width": "80px",
-                        "title": "姓名",
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
-                            if(row.true_name) return row.true_name;
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "text-left",
-                        "width": "80px",
-                        "title": "昵称",
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return '<a target="_blank" href="/user/'+data+'">'+row.nickname+'</a>';
-                            if(row.nickname) return row.nickname;
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "text-left",
-                        "width": "96px",
-                        "title": "登录手机",
-                        "data": "mobile",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-//                    {
-//                        "className": "text-left",
-//                        "width":"128px",
-//                        "title": "负责人",
-//                        "data": "id",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            if(row.principal) {
-//                                return '<a target="_blank" href="/user/'+data+'">'+row.principal.username+'</a>';
-//                            }
-//                            else return '--';
-//                        }
-//                    },
-                    {
-                        "className": "font-12px",
-                        "width": "64px",
-                        "title": "创建人",
-                        "data": "creator_id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return '未知';
-                            return row.creator.true_name;
-                        }
-                    },
-                    {
-                        "className": "font-12px",
-                        "width": "96px",
-                        "title": "创建时间",
-                        "data": 'created_at',
-                        "orderable": true,
-                        render: function(data, type, row, meta) {
-//                            return data;
-
-//                            newDate = new Date();
-//                            newDate.setTime(data * 1000);
-//                            return newDate.toLocaleString('chinese',{hour12:false});
-//                            return newDate.toLocaleDateString();
-
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-                        }
-                    },
-                    {
-                        "width": "64px",
-                        "title": "状态",
-                        "data": "active",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(row.user_status == 1)
-                            {
-                                return '<small class="btn-xs btn-success">正常</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
-                            }
                         }
                     },
                     {
@@ -362,17 +230,162 @@
                             }
 
                             var html =
-                                $html_able+
-//                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
-//                                '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
                                 $html_edit+
                                 '<a class="btn btn-xs bg-maroon item-password-admin-change-show" data-id="'+data+'" data-name="'+row.username+'">修改密码</a>'+
                                 '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
+                                $html_able+
                                 $html_delete+
 //                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
 //                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
                                 '';
                             return html;
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "状态",
+                        "data": "active",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.user_status == 1)
+                            {
+                                return '<small class="btn-xs btn-success">正常</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs btn-danger">禁用</small>';
+                            }
+                        }
+                    },
+                    {
+                        "width": "80px",
+                        "title": "用户类型",
+                        "data": 'user_type',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
+                            else if(data == 11) return '<small class="btn-xs bg-primary">总经理</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-purple">人事经理</small>';
+                            else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
+                            else if(data == 41) return '<small class="btn-xs bg-orange">财务经理</small>';
+                            else if(data == 42) return '<small class="btn-xs bg-orange">财务</small>';
+                            else if(data == 81) return '<small class="btn-xs bg-olive">业务经理</small>';
+                            else if(data == 88) return '<small class="btn-xs bg-olive">业务员</small>';
+                            else return "有误";
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "100px",
+                        "title": "姓名",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
+                            if(row.true_name) return row.true_name;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "100px",
+                        "title": "昵称",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return '<a target="_blank" href="/user/'+data+'">'+row.nickname+'</a>';
+                            if(row.nickname) return row.nickname;
+                            else return '--';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "100px",
+                        "title": "登录手机",
+                        "data": "mobile",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+//                    {
+//                        "className": "text-left",
+//                        "width":"128px",
+//                        "title": "负责人",
+//                        "data": "id",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            if(row.principal) {
+//                                return '<a target="_blank" href="/user/'+data+'">'+row.principal.username+'</a>';
+//                            }
+//                            else return '--';
+//                        }
+//                    },
+                    {
+                        "className": "text-center",
+                        "width": "",
+                        "title": "备注",
+                        "data": "remark",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
+                                $(nTd).attr('data-key','remark').attr('data-value',data);
+                                $(nTd).attr('data-column-name','备注');
+                                $(nTd).attr('data-text-type','textarea');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "60px",
+                        "title": "创建人",
+                        "data": "creator_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '未知';
+                            return row.creator.true_name;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "108px",
+                        "title": "创建时间",
+                        "data": 'created_at',
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+//                            return data;
+
+//                            newDate = new Date();
+//                            newDate.setTime(data * 1000);
+//                            return newDate.toLocaleString('chinese',{hour12:false});
+//                            return newDate.toLocaleDateString();
+
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     }
                 ],
