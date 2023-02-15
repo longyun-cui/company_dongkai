@@ -7406,6 +7406,25 @@ class YHAdminRepository {
         $list = $query->get()->toArray();
         return $list;
     }
+    //
+    public function operate_order_select2_driver($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $list =YH_Driver::select(['id','driver_name as text'])
+                ->addSelect(['driver_name','driver_phone','sub_driver_name','sub_driver_phone'])
+                ->where(['user_status'=>1])
+                ->get()->toArray();
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $list =YH_Driver::select(['id','driver_name as text'])->where('driver_name','like',"%$keyword%")
+                ->where(['user_status'=>1])
+                ->get()->toArray();
+        }
+        return $list;
+    }
 
 
     // 【订单管理】返回-添加-视图
@@ -8072,299 +8091,6 @@ class YHAdminRepository {
     }
 
 
-    // 【订单管理】返回-列表-视图
-    public function view_item_order_list_for_all($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
-        $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
-        $car_list = YH_Car::select('id','name')->whereIn('item_type',[1,21])->get();
-        $route_list = YH_Route::select('id','title')->get();
-        $pricing_list = YH_Pricing::select('id','title')->get();
-
-        $view_data['staff_list'] = $staff_list;
-        $view_data['client_list'] = $client_list;
-        $view_data['car_list'] = $car_list;
-        $view_data['route_list'] = $route_list;
-        $view_data['pricing_list'] = $pricing_list;
-        $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
-
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
-        return view($view_blade)->with($view_data);
-    }
-    // 【订单管理】返回-列表-数据
-    public function get_item_order_list_for_all_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $query = YH_Order::select('*')
-//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with(['creator','owner','client_er','route_er','pricing_er','car_er','trailer_er','attachment_list']);
-//            ->whereIn('user_category',[11])
-//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
-//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
-//            ->withCount([
-//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
-//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
-//            ]);
-//            ->where(['userstatus'=>'正常','status'=>1])
-//            ->whereIn('usergroup',['Agent','Agent2']);
-
-//        if($me->user_type == 88) $query->where('creator_id', $me->id);
-
-        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
-        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), $post_data['assign']);
-
-
-        if(!empty($post_data['staff']))
-        {
-            if(!in_array($post_data['staff'],[-1,0]))
-            {
-                $query->where('creator_id', $post_data['staff']);
-            }
-        }
-
-        if(!empty($post_data['client']))
-        {
-            if(!in_array($post_data['client'],[-1,0]))
-            {
-                $query->where('client_id', $post_data['client']);
-            }
-        }
-
-        if(!empty($post_data['car']))
-        {
-            if(!in_array($post_data['car'],[-1,0]))
-            {
-
-                $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car'])->orWhere('trailer_id', $post_data['car']); } );
-            }
-        }
-
-        if(!empty($post_data['route']))
-        {
-            if(!in_array($post_data['route'],[-1,0]))
-            {
-                $query->where('route_id', $post_data['route']);
-            }
-        }
-
-        if(!empty($post_data['pricing']))
-        {
-            if(!in_array($post_data['pricing'],[-1,0]))
-            {
-                $query->where('pricing_id', $post_data['pricing']);
-            }
-        }
-
-        // 订单类型 [自有|空单|配货|调车]
-        if(!empty($post_data['order_type']))
-        {
-            if(!in_array($post_data['order_type'],[-1,0]))
-            {
-                $query->where('car_owner_type', $post_data['order_type']);
-            }
-        }
-
-        // 回单
-        if(!empty($post_data['receipt_status']))
-        {
-            $receipt_status = $post_data['receipt_status'];
-            if(!in_array($receipt_status,[-1,0]))
-            {
-                if(in_array($receipt_status,[1,21,41,100,101,199]))
-                {
-                    if($receipt_status == 199) $query->where('receipt_need', 1);
-                    else if($receipt_status == 1) $query->where('receipt_need', 1)->whereIn('receipt_status', [0,1]);
-                    else $query->where('receipt_need', 1)->where('receipt_status', $receipt_status);
-                }
-            }
-        }
-
-
-
-
-        if(!empty($post_data['status']))
-        {
-            $order_status = $post_data['status'];
-            if(in_array($order_status,["未发布","待发车","进行中","已到达","待收款","已收款","已结束","弃用"]))
-            {
-                if($order_status == "未发布") $query->where('is_published', 0);
-                else if($order_status == "待发车") $query->where('is_published', 1)->whereNull('actual_departure_time');
-                else if($order_status == "进行中") $query->where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-                else if($order_status == "已到达") $query->where('is_published', 1)->whereNotNull('actual_arrival_time');
-                else if($order_status == "待收款") $query->where('is_published', 1)->where('is_completed', '!=', 1)->whereNotNull('actual_arrival_time')
-                    ->whereRaw('(amount + oil_card_amount - time_limitation_deduction) > income_total');
-                else if($order_status == "已收款") $query->where('is_published', 1)->where('is_completed', '!=', 1)->whereNotNull('actual_arrival_time')
-                    ->whereRaw('(amount + oil_card_amount - time_limitation_deduction) <= income_total');
-                else if($order_status == "已结束") $query->where('is_published', 1)->where('is_completed', 1);
-                else if($order_status == "弃用") $query->where('item_status', 97);
-            }
-        }
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-
-        foreach ($list as $k => $v)
-        {
-//            $list[$k]->encode_id = encode($v->id);
-
-            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-            else $list[$k]->is_me = 0;
-
-            if($v->is_published != 0)
-            {
-                $list[$k]->travel_status = "--";
-                $list[$k]->travel_result = "--";
-
-                if(!$v->actual_departure_time)
-                {
-                    $list[$k]->travel_status = "待发车";
-
-                    if($v->should_departure_time)
-                    {
-                        if(time() <= $v->should_departure_time) $list[$k]->travel_result = "等待出发";
-                        else $list[$k]->travel_result = "发车超时";
-                    }
-                    else $list[$k]->travel_result = "等待出发";
-                }
-                else
-                {
-                    if(!$v->actual_arrival_time)
-                    {
-                        $list[$k]->travel_status = "进行中";
-
-                        if(time() < $v->should_arrival_time) $list[$k]->travel_result = "正常";
-                        else $list[$k]->travel_result = "已超时";
-                    }
-                    else
-                    {
-                        if($v->is_completed == 1)
-                        {
-                            $list[$k]->travel_status = "已完成";
-                            $list[$k]->travel_result = "已结束";
-                        }
-                        else
-                        {
-                            $list[$k]->travel_status = "已到达";
-                            if(($v->amount + $v->oil_card_amount - $v->time_limitation_deduction) <= $v->income_total)
-                            {
-                                $list[$k]->travel_status = "已收款";
-                            }
-                            else $list[$k]->travel_status = "待收款";
-                        }
-
-
-                        // 行程记录
-                        $journey_time = $v->actual_arrival_time - $v->actual_departure_time;
-                        $journey_day=floor($journey_time/86400);
-                        $journey_hour=floor($journey_time%86400/3600);
-                        $journey_minute=ceil($journey_time%86400%3600/60);
-                        $journey_second=floor($journey_time%86400%3600%60/60);
-                        if($journey_day == 0)
-                        {
-                            if($journey_hour == 0) $journey_result = $journey_minute."分钟";
-                            else $journey_result = $journey_hour."小时".$journey_minute."分钟";
-                        }
-                        else
-                        {
-                            $journey_result = $journey_day."天".$journey_hour."小时".$journey_minute."分钟";
-                        }
-                        $list[$k]->travel_journey_time = $journey_result;
-
-                        // 发车超时
-                        if($v->should_departure_time)
-                        {
-                            if($v->actual_departure_time <= $v->should_departure_time)
-                            {
-                                $list[$k]->travel_result = "正常";
-                            }
-                            else
-                            {
-                                $departure_subtract = $v->actual_departure_time - $v->should_departure_time;
-
-                                $departure_subtract_day=floor($departure_subtract/86400);
-                                $departure_subtract_hour=floor($departure_subtract%86400/3600);
-                                $departure_subtract_minute=ceil($departure_subtract%86400%3600/60);
-                                $departure_subtract_second=floor($departure_subtract%86400%3600%60/60);
-                                if($departure_subtract_day == 0)
-                                {
-                                    if($departure_subtract_hour == 0) $departure_subtract_result = $departure_subtract_minute."分钟";
-                                    else $departure_subtract_result = $departure_subtract_hour."小时".$departure_subtract_minute."分钟";
-                                }
-                                else
-                                {
-                                    $departure_subtract_result = $departure_subtract_day."天".$departure_subtract_hour."小时".$departure_subtract_minute."分钟";
-                                }
-                                $list[$k]->travel_departure_overtime_time = $departure_subtract_result;
-                            }
-                        }
-
-                        // 到达超时
-                        if($v->should_arrival_time)
-                        {
-                            if($v->actual_arrival_time <= $v->should_arrival_time)
-                            {
-                                $list[$k]->travel_result = "正常";
-                            }
-                            else
-                            {
-                                $arrival_subtract = $v->actual_arrival_time - $v->should_arrival_time;
-
-                                $arrival_subtract_day=floor($arrival_subtract/86400);
-                                $arrival_subtract_hour=floor($arrival_subtract%86400/3600);
-                                $arrival_subtract_minute=ceil($arrival_subtract%86400%3600/60);
-                                $arrival_subtract_second=floor($arrival_subtract%86400%3600%60/60);
-                                if($arrival_subtract_day == 0)
-                                {
-                                    if($arrival_subtract_hour == 0) $arrival_subtract_result = $arrival_subtract_minute."分钟";
-                                    else $arrival_subtract_result = $arrival_subtract_hour."小时".$arrival_subtract_minute."分钟";
-                                }
-                                else
-                                {
-                                    $arrival_subtract_result = $arrival_subtract_day."天".$arrival_subtract_hour."小时".$arrival_subtract_minute."分钟";
-                                }
-                                $list[$k]->travel_arrival_overtime_time = $arrival_subtract_result;
-                            }
-                        }
-
-                    }
-
-                }
-            }
-
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-
-
     // 【订单管理】【文本】修改-文本-类型
     public function operate_item_order_info_text_set($post_data)
     {
@@ -8706,6 +8432,18 @@ class YHAdminRepository {
                 $item->driver_name = $car->linkman_name;
                 $item->driver_phone = $car->linkman_phone;
             }
+            else if($column_key == "driver_id")
+            {
+                $driver = YH_Driver::withTrashed()->find($column_value);
+                if(!$driver) throw new Exception("该【驾驶员】不存在，刷新页面重试！");
+
+//                $item->driver_name = null;
+//                $item->driver_phone = null;
+                $item->driver_name = $driver->driver_name;
+                $item->driver_phone = $driver->driver_phone;
+                $item->copilot_name = $driver->sub_driver_name;
+                $item->copilot_phone = $driver->sub_driver_phone;
+            }
 
             $item->$column_key = $column_value;
             $bool = $item->save();
@@ -8735,7 +8473,7 @@ class YHAdminRepository {
                     $record_data["before"] = $before;
                     $record_data["after"] = $column_value;
 
-                    if(in_array($column_key,['client_id','route_id','car_id','trailer_id']))
+                    if(in_array($column_key,['client_id','route_id','car_id','trailer_id','driver_id']))
                     {
                         $record_data["before_id"] = $before;
                         $record_data["after_id"] = $column_value;
@@ -8760,6 +8498,11 @@ class YHAdminRepository {
                     {
                         $record_data["before_car_id"] = $before;
                         $record_data["after_car_id"] = $column_value;
+                    }
+                    else if($column_key == 'driver_id')
+                    {
+                        $record_data["before_driver_id"] = $before;
+                        $record_data["after_driver_id"] = $column_value;
                     }
 
                     $bool_1 = $record->fill($record_data)->save();
@@ -9105,6 +8848,307 @@ class YHAdminRepository {
 
 
 
+    // 【订单管理】返回-列表-视图
+    public function view_item_order_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
+        $car_list = YH_Car::select('id','name')->whereIn('item_type',[1,21])->get();
+        $route_list = YH_Route::select('id','title')->get();
+        $pricing_list = YH_Pricing::select('id','title')->get();
+
+        $view_data['staff_list'] = $staff_list;
+        $view_data['client_list'] = $client_list;
+        $view_data['car_list'] = $car_list;
+        $view_data['route_list'] = $route_list;
+        $view_data['pricing_list'] = $pricing_list;
+        $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
+        return view($view_blade)->with($view_data);
+    }
+    // 【订单管理】返回-列表-数据
+    public function get_item_order_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = YH_Order::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
+            ->with(['creator','owner','client_er','route_er','pricing_er','car_er','trailer_er','driver_er','attachment_list']);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+//        if($me->user_type == 88) $query->where('creator_id', $me->id);
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), $post_data['assign']);
+
+
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0]))
+            {
+                $query->where('creator_id', $post_data['staff']);
+            }
+        }
+
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0]))
+            {
+                $query->where('client_id', $post_data['client']);
+            }
+        }
+
+        if(!empty($post_data['car']))
+        {
+            if(!in_array($post_data['car'],[-1,0]))
+            {
+
+                $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car'])->orWhere('trailer_id', $post_data['car']); } );
+            }
+        }
+
+        if(!empty($post_data['route']))
+        {
+            if(!in_array($post_data['route'],[-1,0]))
+            {
+                $query->where('route_id', $post_data['route']);
+            }
+        }
+
+        if(!empty($post_data['pricing']))
+        {
+            if(!in_array($post_data['pricing'],[-1,0]))
+            {
+                $query->where('pricing_id', $post_data['pricing']);
+            }
+        }
+
+        if(!empty($post_data['driver']))
+        {
+            if(!in_array($post_data['driver'],[-1,0]))
+            {
+                $query->where('driver_id', $post_data['driver']);
+            }
+        }
+
+        // 订单类型 [自有|空单|配货|调车]
+        if(!empty($post_data['order_type']))
+        {
+            if(!in_array($post_data['order_type'],[-1,0]))
+            {
+                $query->where('car_owner_type', $post_data['order_type']);
+            }
+        }
+
+        // 回单
+        if(!empty($post_data['receipt_status']))
+        {
+            $receipt_status = $post_data['receipt_status'];
+            if(!in_array($receipt_status,[-1,0]))
+            {
+                if(in_array($receipt_status,[1,21,41,100,101,199]))
+                {
+                    if($receipt_status == 199) $query->where('receipt_need', 1);
+                    else if($receipt_status == 1) $query->where('receipt_need', 1)->whereIn('receipt_status', [0,1]);
+                    else $query->where('receipt_need', 1)->where('receipt_status', $receipt_status);
+                }
+            }
+        }
+
+
+
+
+        if(!empty($post_data['status']))
+        {
+            $order_status = $post_data['status'];
+            if(in_array($order_status,["未发布","待发车","进行中","已到达","待收款","已收款","已结束","弃用"]))
+            {
+                if($order_status == "未发布") $query->where('is_published', 0);
+                else if($order_status == "待发车") $query->where('is_published', 1)->whereNull('actual_departure_time');
+                else if($order_status == "进行中") $query->where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
+                else if($order_status == "已到达") $query->where('is_published', 1)->whereNotNull('actual_arrival_time');
+                else if($order_status == "待收款") $query->where('is_published', 1)->where('is_completed', '!=', 1)->whereNotNull('actual_arrival_time')
+                    ->whereRaw('(amount + oil_card_amount - time_limitation_deduction) > income_total');
+                else if($order_status == "已收款") $query->where('is_published', 1)->where('is_completed', '!=', 1)->whereNotNull('actual_arrival_time')
+                    ->whereRaw('(amount + oil_card_amount - time_limitation_deduction) <= income_total');
+                else if($order_status == "已结束") $query->where('is_published', 1)->where('is_completed', 1);
+                else if($order_status == "弃用") $query->where('item_status', 97);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+
+            if($v->is_published != 0)
+            {
+                $list[$k]->travel_status = "--";
+                $list[$k]->travel_result = "--";
+
+                if(!$v->actual_departure_time)
+                {
+                    $list[$k]->travel_status = "待发车";
+
+                    if($v->should_departure_time)
+                    {
+                        if(time() <= $v->should_departure_time) $list[$k]->travel_result = "等待出发";
+                        else $list[$k]->travel_result = "发车超时";
+                    }
+                    else $list[$k]->travel_result = "等待出发";
+                }
+                else
+                {
+                    if(!$v->actual_arrival_time)
+                    {
+                        $list[$k]->travel_status = "进行中";
+
+                        if(time() < $v->should_arrival_time) $list[$k]->travel_result = "正常";
+                        else $list[$k]->travel_result = "已超时";
+                    }
+                    else
+                    {
+                        if($v->is_completed == 1)
+                        {
+                            $list[$k]->travel_status = "已完成";
+                            $list[$k]->travel_result = "已结束";
+                        }
+                        else
+                        {
+                            $list[$k]->travel_status = "已到达";
+                            if(($v->amount + $v->oil_card_amount - $v->time_limitation_deduction) <= $v->income_total)
+                            {
+                                $list[$k]->travel_status = "已收款";
+                            }
+                            else $list[$k]->travel_status = "待收款";
+                        }
+
+
+                        // 行程记录
+                        $journey_time = $v->actual_arrival_time - $v->actual_departure_time;
+                        $journey_day=floor($journey_time/86400);
+                        $journey_hour=floor($journey_time%86400/3600);
+                        $journey_minute=ceil($journey_time%86400%3600/60);
+                        $journey_second=floor($journey_time%86400%3600%60/60);
+                        if($journey_day == 0)
+                        {
+                            if($journey_hour == 0) $journey_result = $journey_minute."分钟";
+                            else $journey_result = $journey_hour."小时".$journey_minute."分钟";
+                        }
+                        else
+                        {
+                            $journey_result = $journey_day."天".$journey_hour."小时".$journey_minute."分钟";
+                        }
+                        $list[$k]->travel_journey_time = $journey_result;
+
+                        // 发车超时
+                        if($v->should_departure_time)
+                        {
+                            if($v->actual_departure_time <= $v->should_departure_time)
+                            {
+                                $list[$k]->travel_result = "正常";
+                            }
+                            else
+                            {
+                                $departure_subtract = $v->actual_departure_time - $v->should_departure_time;
+
+                                $departure_subtract_day=floor($departure_subtract/86400);
+                                $departure_subtract_hour=floor($departure_subtract%86400/3600);
+                                $departure_subtract_minute=ceil($departure_subtract%86400%3600/60);
+                                $departure_subtract_second=floor($departure_subtract%86400%3600%60/60);
+                                if($departure_subtract_day == 0)
+                                {
+                                    if($departure_subtract_hour == 0) $departure_subtract_result = $departure_subtract_minute."分钟";
+                                    else $departure_subtract_result = $departure_subtract_hour."小时".$departure_subtract_minute."分钟";
+                                }
+                                else
+                                {
+                                    $departure_subtract_result = $departure_subtract_day."天".$departure_subtract_hour."小时".$departure_subtract_minute."分钟";
+                                }
+                                $list[$k]->travel_departure_overtime_time = $departure_subtract_result;
+                            }
+                        }
+
+                        // 到达超时
+                        if($v->should_arrival_time)
+                        {
+                            if($v->actual_arrival_time <= $v->should_arrival_time)
+                            {
+                                $list[$k]->travel_result = "正常";
+                            }
+                            else
+                            {
+                                $arrival_subtract = $v->actual_arrival_time - $v->should_arrival_time;
+
+                                $arrival_subtract_day=floor($arrival_subtract/86400);
+                                $arrival_subtract_hour=floor($arrival_subtract%86400/3600);
+                                $arrival_subtract_minute=ceil($arrival_subtract%86400%3600/60);
+                                $arrival_subtract_second=floor($arrival_subtract%86400%3600%60/60);
+                                if($arrival_subtract_day == 0)
+                                {
+                                    if($arrival_subtract_hour == 0) $arrival_subtract_result = $arrival_subtract_minute."分钟";
+                                    else $arrival_subtract_result = $arrival_subtract_hour."小时".$arrival_subtract_minute."分钟";
+                                }
+                                else
+                                {
+                                    $arrival_subtract_result = $arrival_subtract_day."天".$arrival_subtract_hour."小时".$arrival_subtract_minute."分钟";
+                                }
+                                $list[$k]->travel_arrival_overtime_time = $arrival_subtract_result;
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
     // 【订单管理】【财务往来记录】返回-列表-视图
     public function view_item_order_finance_record($post_data)
     {
@@ -9342,7 +9386,7 @@ class YHAdminRepository {
 
         $id  = $post_data["id"];
         $query = YH_Record::select('*')
-            ->with(['creator','before_client_er','after_client_er','before_route_er','after_route_er','before_pricing_er','after_pricing_er','before_car_er','after_car_er'])
+            ->with(['creator','before_client_er','after_client_er','before_route_er','after_route_er','before_pricing_er','after_pricing_er','before_car_er','after_car_er','before_driver_er','after_driver_er'])
             ->where(['order_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");

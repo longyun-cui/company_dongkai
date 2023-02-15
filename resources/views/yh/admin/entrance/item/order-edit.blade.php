@@ -66,6 +66,166 @@
                         </select>
                     </div>
                 </div>
+
+
+                {{--需求类型--}}
+                <div class="form-group _none">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 需求类型</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="order_type">
+                            <option value="0">选择需求类型</option>
+                            <option value="1" @if($operate == 'edit' && $data->order_type == 1)selected="selected"@endif>自有</option>
+                            <option value="11" @if($operate == 'edit' && $data->order_type == 11)selected="selected"@endif>调车</option>
+                            <option value="21" @if($operate == 'edit' && $data->order_type == 21)selected="selected"@endif>配货</option>
+                            <option value="31" @if($operate == 'edit' && $data->order_type == 31)selected="selected"@endif>合同单向</option>
+                            <option value="41" @if($operate == 'edit' && $data->order_type == 41)selected="selected"@endif>合同双向</option>
+                        </select>
+                    </div>
+                </div>
+
+                {{--线路选择--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 线路类型</label>
+                    <div class="col-md-8 ">
+                        <div class="btn-group">
+
+                            {{--@if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))--}}
+                            <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))
+                                            <input type="radio" name="route_type" value="1" checked="checked"> 固定线路
+                                        @else
+                                            <input type="radio" name="route_type" value="1"> 固定线路
+                                        @endif
+                                    </label>
+                                </span>
+                            </button>
+                            {{--@endif--}}
+
+                            {{--@if($operate == 'create' || ($operate == 'edit' && $data->route_type == 11))--}}
+                            <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->route_type == 11)
+                                            <input type="radio" name="route_type" value=11 checked="checked"> 临时线路
+                                        @else
+                                            <input type="radio" name="route_type" value=11> 临时线路
+                                        @endif
+                                    </label>
+                                </span>
+                            </button>
+                            {{--@endif--}}
+
+                        </div>
+                    </div>
+                </div>
+
+
+                {{--固定线路--}}
+                @if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))
+                    <div class="form-group route-fixed-box">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择固定线路</label>
+                        <div class="col-md-8 ">
+                            <select class="form-control" name="route_id" id="select2-route">
+                                @if($operate == 'edit' && $data->route_id)
+                                    <option data-id="{{ $data->route_id or 0 }}"
+                                            value="{{ $data->route_id or 0 }}"
+                                            data-price="{{ $data->route_er->amount_with_cash or 0 }}"
+                                            data-distance="{{ $data->route_er->travel_distance or 0 }}"
+                                            data-prescribed="{{ $data->route_er->time_limitation_prescribed or 0 }}"
+                                            data-departure="{{ $data->route_er->departure_place or '' }}"
+                                            data-destination="{{ $data->route_er->destination_place or '' }}"
+                                            data-stopover="{{ $data->route_er->stopover_place or '' }}"
+                                    >
+                                        {{ $data->route_er->title }}
+                                    </option>
+                                @else
+                                    <option data-id="0" value="0">未指定</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                @endif
+
+                {{--固定线路--}}
+                <div class="form-group _none">
+                    <label class="control-label col-md-2">固定线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="route_fixed" placeholder="固定线路" value="{{ $data->route_fixed or '' }}">
+                    </div>
+                </div>
+                {{--临时线路--}}
+                <div class="form-group route-temporary-box" style="display:none;">
+                    <label class="control-label col-md-2">临时线路</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="route_temporary" placeholder="临时线路" value="{{ $data->route_temporary or '' }}">
+                    </div>
+                </div>
+
+                {{--需求类型--}}
+                <div class="form-group form-category">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 需求类型</label>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
+                                <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="car_owner_type" value="1" checked="checked"> 自有
+                                    </label>
+                                </span>
+                                </button>
+                            @endif
+
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 11))
+                                <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->car_owner_type == 11)
+                                            <input type="radio" name="car_owner_type" value=11 checked="checked"> 空单
+                                        @else
+                                            <input type="radio" name="car_owner_type" value=11> 空单
+                                        @endif
+                                    </label>
+                                </span>
+                                </button>
+                            @endif
+
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 41))
+                                <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->car_owner_type == 41)
+                                            <input type="radio" name="car_owner_type" value=41 checked="checked"> 外配（配货）
+                                        @else
+                                            <input type="radio" name="car_owner_type" value=41> 外配（配货）
+                                        @endif
+                                    </label>
+                                </span>
+                                </button>
+                            @endif
+
+                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 61))
+                                <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->car_owner_type == 61)
+                                            <input type="radio" name="car_owner_type" value=61 checked="checked"> 外请（调车）
+                                        @else
+                                            <input type="radio" name="car_owner_type" value=61> 外请（调车）
+                                        @endif
+                                    </label>
+                                </span>
+                                </button>
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+
+
                 {{--费用--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 金额</label>
@@ -120,163 +280,6 @@
                     </div>
                 </div>
 
-                {{--需求类型--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 需求类型</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="order_type">
-                            <option value="0">选择需求类型</option>
-                            <option value="1" @if($operate == 'edit' && $data->order_type == 1)selected="selected"@endif>自有</option>
-                            <option value="11" @if($operate == 'edit' && $data->order_type == 11)selected="selected"@endif>调车</option>
-                            <option value="21" @if($operate == 'edit' && $data->order_type == 21)selected="selected"@endif>配货</option>
-                            <option value="31" @if($operate == 'edit' && $data->order_type == 31)selected="selected"@endif>合同单向</option>
-                            <option value="41" @if($operate == 'edit' && $data->order_type == 41)selected="selected"@endif>合同双向</option>
-                        </select>
-                    </div>
-                </div>
-
-                {{--线路选择--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 线路类型</label>
-                    <div class="col-md-8 ">
-                        <div class="btn-group">
-
-                            {{--@if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))--}}
-                                <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))
-                                            <input type="radio" name="route_type" value="1" checked="checked"> 固定线路
-                                        @else
-                                            <input type="radio" name="route_type" value="1"> 固定线路
-                                        @endif
-                                    </label>
-                                </span>
-                                </button>
-                            {{--@endif--}}
-
-                            {{--@if($operate == 'create' || ($operate == 'edit' && $data->route_type == 11))--}}
-                                <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->route_type == 11)
-                                            <input type="radio" name="route_type" value=11 checked="checked"> 临时线路
-                                        @else
-                                            <input type="radio" name="route_type" value=11> 临时线路
-                                        @endif
-                                    </label>
-                                </span>
-                                </button>
-                            {{--@endif--}}
-
-                        </div>
-                    </div>
-                </div>
-
-
-                {{--固定线路--}}
-                @if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))
-                <div class="form-group route-fixed-box">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择固定线路</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="route_id" id="select2-route">
-                            @if($operate == 'edit' && $data->route_id)
-                                <option data-id="{{ $data->route_id or 0 }}"
-                                        value="{{ $data->route_id or 0 }}"
-                                        data-price="{{ $data->route_er->amount_with_cash or 0 }}"
-                                        data-distance="{{ $data->route_er->travel_distance or 0 }}"
-                                        data-prescribed="{{ $data->route_er->time_limitation_prescribed or 0 }}"
-                                        data-departure="{{ $data->route_er->departure_place or '' }}"
-                                        data-destination="{{ $data->route_er->destination_place or '' }}"
-                                        data-stopover="{{ $data->route_er->stopover_place or '' }}"
-                                >
-                                    {{ $data->route_er->title }}
-                                </option>
-                            @else
-                                <option data-id="0" value="0">未指定</option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
-                @endif
-
-                {{--固定线路--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2">固定线路</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="route_fixed" placeholder="固定线路" value="{{ $data->route_fixed or '' }}">
-                    </div>
-                </div>
-                {{--临时线路--}}
-                <div class="form-group route-temporary-box" style="display:none;">
-                    <label class="control-label col-md-2">临时线路</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="route_temporary" placeholder="临时线路" value="{{ $data->route_temporary or '' }}">
-                    </div>
-                </div>
-
-                {{--需求类型--}}
-                <div class="form-group form-category">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 需求类型</label>
-                    <div class="col-md-8">
-                        <div class="btn-group">
-
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        <input type="radio" name="car_owner_type" value="1" checked="checked"> 自有
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 11))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->car_owner_type == 11)
-                                            <input type="radio" name="car_owner_type" value=11 checked="checked"> 空单
-                                        @else
-                                            <input type="radio" name="car_owner_type" value=11> 空单
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 41))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->car_owner_type == 41)
-                                            <input type="radio" name="car_owner_type" value=41 checked="checked"> 外配（配货）
-                                        @else
-                                            <input type="radio" name="car_owner_type" value=41> 外配（配货）
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 61))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->car_owner_type == 61)
-                                            <input type="radio" name="car_owner_type" value=61 checked="checked"> 外请（调车）
-                                        @else
-                                            <input type="radio" name="car_owner_type" value=61> 外请（调车）
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-
-                        </div>
-                    </div>
-                </div>
-
                 {{--自有车辆--}}
                 @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
                 <div class="form-group inside-car">
@@ -312,6 +315,21 @@
                         <select class="form-control" name="pricing_id" id="select2-pricing">
                             @if($operate == 'edit' && $data->pricing_id)
                                 <option data-id="{{ $data->pricing_id or 0 }}" value="{{ $data->pricing_id or 0 }}">{{ $data->pricing_er->title }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
+
+
+                {{--驾驶员--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">选择驾驶员</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="driver_id" id="select2-driver">
+                            @if($operate == 'edit' && $data->driver_id)
+                                <option data-id="{{ $data->driver_id or 0 }}" value="{{ $data->driver_id or 0 }}">{{ $data->driver_er->driver_name }}</option>
                             @else
                                 <option data-id="0" value="0">未指定</option>
                             @endif
@@ -1091,6 +1109,53 @@
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
             minimumInputLength: 0,
             theme: 'classic'
+        });
+
+
+        //
+        $('#select2-driver').select2({
+            ajax: {
+                url: "{{ url('/item/order_select2_driver') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            templateSelection: function(data, container) {
+                $(data.element).attr("data-name",data.driver_name);
+                $(data.element).attr("data-phone",data.driver_phone);
+                $(data.element).attr("data-sub-name",data.sub_driver_name);
+                $(data.element).attr("data-sub-phone",data.sub_driver_phone);
+                return data.text;
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+        $("#select2-driver").on("select2:select",function(){
+            var $id = $(this).val();
+            if($id > 0)
+            {
+                $('input[name=driver_name]').val($(this).find('option:selected').attr('data-name'));
+                $('input[name=driver_phone]').val($(this).find('option:selected').attr('data-phone'));
+                $('input[name=copilot_name]').val($(this).find('option:selected').attr('data-sub-name'));
+                $('input[name=copilot_phone]').val($(this).find('option:selected').attr('data-sub-phone'));
+            }
         });
 
     });

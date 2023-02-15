@@ -853,11 +853,15 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_order_select2_trailer(request()->all());
     }
-
     // 【订单管理】SELECT2 Car 车辆
     public function operate_order_list_select2_car()
     {
         return $this->repo->operate_order_list_select2_car(request()->all());
+    }
+    // 【订单管理】SELECT2 Trailer 车挂
+    public function operate_order_select2_driver()
+    {
+        return $this->repo->operate_order_select2_driver(request()->all());
     }
 
 

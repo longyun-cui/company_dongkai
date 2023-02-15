@@ -90,6 +90,10 @@
                             <option value="-1">选择车辆</option>
                         </select>
 
+                        <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:96px;">
+                            <option value="-1">选择驾驶员</option>
+                        </select>
+
                         <select class="form-control form-filter" name="order-type" style="width:96px;">
                             <option value ="-1">订单类型</option>
                             <option value ="1">自有</option>
@@ -1273,6 +1277,7 @@
                         d.car = $('select[name="order-car"]').val();
                         d.route = $('select[name="order-route"]').val();
                         d.pricing = $('select[name="order-pricing"]').val();
+                        d.driver = $('select[name="order-driver"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
                         d.receipt_status = $('select[name="order-receipt-status"]').val();
@@ -1643,6 +1648,30 @@
                                 if(row.outside_trailer) trailer_html = row.outside_trailer;
                             }
                             return trailer_html;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "驾驶员",
+                        "data": "driver_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','驾驶员');
+                                $(nTd).attr('data-key','driver_id').attr('data-value',row.route_id);
+                                if(row.driver_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.driver_er.driver_name);
+                                $(nTd).attr('data-column-name','驾驶员');
+                                if(row.driver_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.driver_er == null) return '--';
+                            else return '<a href="javascript:void(0);">'+row.driver_er.driver_name+'</a>';
                         }
                     },
                     {
@@ -3950,12 +3979,13 @@
                             if(row.operate_category == 1)
                             {
                                 if(data == "client_id") return '客户';
-                                else if(data == "car_id") return '车辆';
                                 else if(data == "route_id") return '固定线路';
                                 else if(data == "pricing_id") return '包油价';
+                                else if(data == "car_id") return '车辆';
                                 else if(data == "trailer_id") return '车挂';
                                 else if(data == "outside_car") return '车辆';
                                 else if(data == "outside_trailer") return '车挂';
+                                else if(data == "driver_id") return '驾驶员';
                                 else if(data == "travel_distance") return '里程数';
                                 else if(data == "time_limitation_prescribed") return '时效';
                                 else if(data == "amount") return '金额';
@@ -4050,6 +4080,11 @@
                                 if(row.before_car_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.before_car_er.name+'</a>';
                             }
+                            else if(row.column_name == 'driver_id')
+                            {
+                                if(row.before_driver_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_driver_er.driver_name+'</a>';
+                            }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {
@@ -4122,6 +4157,11 @@
                             {
                                 if(row.after_car_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.after_car_er.name+'</a>';
+                            }
+                            else if(row.column_name == 'driver_id')
+                            {
+                                if(row.after_driver_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.after_driver_er.driver_name+'</a>';
                             }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')

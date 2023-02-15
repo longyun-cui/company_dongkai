@@ -18,7 +18,10 @@ class YH_Record extends Model
         'item_id', 'order_id',
         'column', 'column_type', 'column_name',
         'before', 'after', 'before_id', 'after_id',
-        'before_client_id', 'after_client_id', 'before_route_id', 'after_route_id', 'before_car_id', 'after_car_id',
+        'before_client_id', 'after_client_id',
+        'before_route_id', 'after_route_id',
+        'before_car_id', 'after_car_id',
+        'before_driver_id', 'after_driver_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'time_point', 'time_type', 'start_time', 'end_time', 'address',
@@ -101,6 +104,16 @@ class YH_Record extends Model
     function after_car_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Car','after_car_id','id');
+    }
+    // 驾驶员
+    function before_driver_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Driver','before_driver_id','id');
+    }
+    // 驾驶员
+    function after_driver_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Driver','after_driver_id','id');
     }
 
 
