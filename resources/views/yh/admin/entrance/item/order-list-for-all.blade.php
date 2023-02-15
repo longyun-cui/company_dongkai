@@ -2175,6 +2175,28 @@
                     },
                     {
                         "className": "",
+                        "width": "60px",
+                        "title": "管理费",
+                        "data": "administrative_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','管理费');
+                                $(nTd).attr('data-key','administrative_fee').attr('data-value',data);
+                                $(nTd).attr('data-column-name','管理费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
                         "width": "50px",
                         "title": "信息费",
                         "data": "information_fee",
@@ -3944,6 +3966,7 @@
                                 else if(data == "customer_management_fee") return '客户管理费';
                                 else if(data == "information_fee") return '信息费';
                                 else if(data == "time_limitation_deduction") return '时效扣款';
+                                else if(data == "administrative_fee") return '管理费';
                                 else if(data == "assign_time") return '安排时间';
                                 else if(data == "container_type") return '箱型';
                                 else if(data == "subordinate_company") return '所属公司';

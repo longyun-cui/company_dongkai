@@ -21,6 +21,7 @@ class YH_Order extends Model
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'amount', 'deposit', 'oil_card_amount', 'invoice_amount', 'invoice_point',
         'information_fee', 'customer_management_fee', 'time_limitation_deduction',
+        'administrative_fee',
         'driver_fine',
         'outside_car_price',
         'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
@@ -28,8 +29,10 @@ class YH_Order extends Model
         'route_type', 'route_id', 'route', 'route_fixed', 'route_temporary',
         'pricing_id',
         'client_id',
-        'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type', 'outside_car', 'outside_trailer',
+        'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type',
+        'outside_car', 'outside_trailer',
         'trailer_type', 'trailer_length', 'trailer_volume', 'trailer_weight', 'trailer_axis_count',
+        'driver_id', 'sub_driver_id',
         'departure_place', 'destination_place', 'stopover_place', 'stopover_place_1', 'stopover_place_2',
         'assign_time',
         'should_departure_time', 'should_arrival_time',
@@ -117,6 +120,18 @@ class YH_Order extends Model
     function container_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Car','container_id','id');
+    }
+
+
+    // 司机
+    function driver_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Driver','driver_id','id');
+    }
+    // 副驾
+    function sub_driver_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Driver','driver_id','id');
     }
 
 

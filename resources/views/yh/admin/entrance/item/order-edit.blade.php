@@ -98,11 +98,25 @@
                         >
                     </div>
                 </div>
+                {{--管理费--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理费</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="administrative_fee" placeholder="管理费" value="{{ $data->administrative_fee or 0 }}">
+                    </div>
+                </div>
                 {{--信息费--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 信息费</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="information_fee" placeholder="信息费" value="{{ $data->information_fee or 0 }}">
+                    </div>
+                </div>
+                {{--客管费--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户管理费</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="customer_management_fee" placeholder="客户管理费" value="{{ $data->customer_management_fee or 0 }}">
                     </div>
                 </div>
 

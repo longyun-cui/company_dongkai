@@ -34,21 +34,14 @@ class YH_Driver extends Authenticatable
 
     ];
 
-    protected $datas = ['deleted_at'];
-
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
     protected $dateFormat = 'U';
 
-
-
-    // 所属代理商
-    function ext()
-    {
-        return $this->hasOne('App\Models\YH\YH_UserExt','user_id','id');
-    }
+    protected $dates = ['created_at','updated_at','deleted_at'];
+//    public function getDates()
+//    {
+////        return array(); // 原形返回；
+//        return array('created_at','updated_at');
+//    }
 
 
     // 拥有者
@@ -61,6 +54,16 @@ class YH_Driver extends Authenticatable
     {
         return $this->belongsTo('App\Models\YH\YH_User','creator_id','id');
     }
+    // 创作者
+    function updater()
+    {
+        return $this->belongsTo('App\Models\YH\YH_User','updater_id','id');
+    }
+    // 创作者
+    function completer()
+    {
+        return $this->belongsTo('App\Models\YH\YH_User','completer_id','id');
+    }
     // 用户
     function user()
     {
@@ -68,15 +71,36 @@ class YH_Driver extends Authenticatable
     }
 
 
+    // 司机订单
+    function driver_order_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','driver_id','id');
+    }
+    // 副驾司机订单
+    function sub_driver_order_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','sub_driver_id','id');
+    }
 
 
-    // 所属代理商
+
+
+    // 附件
+    function attachment_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Attachment','item_id','id');
+    }
+
+
+
+
+    // 所属
     function parent()
     {
         return $this->belongsTo('App\Models\YH\YH_User','parent_id','id');
     }
 
-    // 名下代理商
+    // 名下
     function children()
     {
         return $this->hasMany('App\Models\YH\YH_User','parent_id','id');
@@ -113,17 +137,6 @@ class YH_Driver extends Authenticatable
     function items()
     {
         return $this->hasMany('App\Models\YH\YH_Item','owner_id','id');
-    }
-    // 内容
-    function ad_list()
-    {
-        return $this->hasMany('App\Models\YH\YH_Item','owner_id','id');
-    }
-
-    // 广告
-    function ad()
-    {
-        return $this->hasOne('App\Models\YH\YH_Item','id','advertising_id');
     }
 
     // 介绍
@@ -179,27 +192,6 @@ class YH_Driver extends Authenticatable
 
 
 
-
-    // 关联资金
-    function fund()
-    {
-        return $this->hasOne('App\Models\MT\Fund','user_id','id');
-    }
-
-
-
-
-    // 名下站点
-    function sites()
-    {
-        return $this->hasMany('App\Models\MT\SEOSite','create_user_id','id');
-    }
-
-    // 名下关键词
-    function keywords()
-    {
-        return $this->hasMany('App\Models\MT\SEOKeyword','create_user_id','id');
-    }
 
     function children_keywords()
     {
