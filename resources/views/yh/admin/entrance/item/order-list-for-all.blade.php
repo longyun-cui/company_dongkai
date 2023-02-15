@@ -2029,8 +2029,8 @@
                             if(row.is_published != 0)
                             {
                                 $(nTd).addClass('color-red _bold');
-                                $(nTd).addClass('item-show-for-finance-income');
-                                $(nTd).attr('data-id',row.id).attr('data-type','income');
+                                $(nTd).addClass('item-show-for-finance-expenditure');
+                                $(nTd).attr('data-id',row.id).attr('data-type','expenditure');
                             }
                         },
                         render: function(data, type, row, meta) {
