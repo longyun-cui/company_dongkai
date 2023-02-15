@@ -3961,6 +3961,7 @@
                                 else if(data == "amount") return '金额';
                                 else if(data == "deposit") return '定金';
                                 else if(data == "oil_card_amount") return '油卡';
+                                else if(data == "outside_car_price") return '请车价';
                                 else if(data == "invoice_amount") return '开票金额';
                                 else if(data == "invoice_point") return '票点';
                                 else if(data == "customer_management_fee") return '客户管理费';
