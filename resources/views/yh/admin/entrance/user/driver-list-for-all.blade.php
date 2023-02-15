@@ -265,7 +265,7 @@
 
 {{--显示-附件-信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-attachment">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
@@ -276,17 +276,8 @@
             </div>
 
 
-
-            {{--attachment--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="">
-                <div class="box-body attachment-box">
-
-                </div>
-            </form>
-
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px-">
-                <h4 class="box-title">【添加附件】</h4>
+            <div class="box-header with-border margin-top-16px margin-bottom-16px- _none">
+                <h4 class="box-title">【修改附件】</h4>
             </div>
 
             {{--上传附件--}}
@@ -305,25 +296,11 @@
                     <input type="hidden" name="column_key" value="attachment" readonly>
 
 
-                    <div class="form-group">
-                        <label class="control-label col-md-2">附件名称</label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="attachment_name" autocomplete="off" placeholder="附件名称" value="">
-                        </div>
+                    <div class="attachment-edit-box">
                     </div>
 
-                    {{--多图上传--}}
-                    <div class="form-group">
 
-                        <label class="control-label col-md-2">图片上传</label>
-
-                        <div class="col-md-8">
-                            <input id="multiple-images" type="file" class="file-multiple-images" name="multiple_images[]" multiple >
-                        </div>
-
-                    </div>
-
-                    {{--多图上传--}}
+                    {{--单图上传--}}
                     <div class="form-group _none">
 
                         <label class="control-label col-md-2" style="clear:left;">选择图片</label>
@@ -331,18 +308,21 @@
 
                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail">
+                                    @if(!empty($data->portrait_img))
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->portrait_img) }}" alt="" />
+                                    @endif
                                 </div>
                                 <div class="fileinput-preview fileinput-exists thumbnail">
                                 </div>
                                 <div class="btn-tool-group">
-                            <span class="btn-file">
-                                <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
-                                <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
-                                <input type="file" name="attachment_file" />
-                            </span>
+                                    <span class="btn-file">
+                                        <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
+                                        <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
+                                        <input type="file" name="attachment_file" />
+                                    </span>
                                     <span class="">
-                                <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
-                            </span>
+                                        <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
+                                    </span>
                                 </div>
                             </div>
                             <div id="titleImageError" style="color: #a94442"></div>
@@ -357,7 +337,7 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>
+                        {{--<button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>--}}
                         <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
                     </div>
                 </div>
@@ -540,7 +520,7 @@
                             }
                             else
                             {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
+                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-link" data-id="'+data+'">编辑</a>';
                             }
 
                             if(row.deleted_at == null)
@@ -724,8 +704,9 @@
                             {
                                 $(nTd).addClass('modal-show-for-attachment');
                                 $(nTd).attr('data-id',row.id).attr('data-name','主驾驾驶证');
-                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-key','driver_licence').attr('data-value',data);
                                 $(nTd).attr('data-column-name','主驾驾驶证');
+                                $(nTd).attr('data-operate-category','attachment');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -746,8 +727,9 @@
                             {
                                 $(nTd).addClass('modal-show-for-attachment');
                                 $(nTd).attr('data-id',row.id).attr('data-name','主驾资格证');
-                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-key','driver_certification').attr('data-value',data);
                                 $(nTd).attr('data-column-name','主驾资格证');
+                                $(nTd).attr('data-operate-category','attachment');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -761,15 +743,16 @@
                         "className": "",
                         "width": "80px",
                         "title": "主驾-正页",
-                        "data": "driver_certification",
+                        "data": "driver_ID_front",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.user_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-attachment');
                                 $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证正页');
-                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-key','driver_ID_front').attr('data-value',data);
                                 $(nTd).attr('data-column-name','主驾身份证正页');
+                                $(nTd).attr('data-operate-category','attachment');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -783,15 +766,16 @@
                         "className": "",
                         "width": "80px",
                         "title": "主驾-副页",
-                        "data": "driver_certification",
+                        "data": "driver_ID_back",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.user_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-attachment');
                                 $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证副页');
-                                $(nTd).attr('data-key','receipt_status').attr('data-value',data);
+                                $(nTd).attr('data-key','driver_ID_back').attr('data-value',data);
                                 $(nTd).attr('data-column-name','主驾身份证副页');
+                                $(nTd).attr('data-operate-category','attachment');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -986,6 +970,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','副驾驾驶证');
                                 $(nTd).attr('data-key','sub_driver_licence').attr('data-value',data);
                                 $(nTd).attr('data-column-name','副驾驾驶证');
+                                $(nTd).attr('data-operate-category','attachment');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1008,6 +993,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','副驾资格证');
                                 $(nTd).attr('data-key','sub_driver_certification').attr('data-value',data);
                                 $(nTd).attr('data-column-name','副驾资格证');
+                                $(nTd).attr('data-operate-category','attachment');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1030,6 +1016,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证正页');
                                 $(nTd).attr('data-key','sub_driver_ID_front').attr('data-value',data);
                                 $(nTd).attr('data-column-name','副驾身份证正页');
+                                $(nTd).attr('data-operate-category','attachment');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1052,6 +1039,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证副页');
                                 $(nTd).attr('data-key','sub_driver_ID_back').attr('data-value',data);
                                 $(nTd).attr('data-column-name','副驾身份证副页');
+                                $(nTd).attr('data-operate-category','attachment');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1334,6 +1322,7 @@
                                 else return '';
 
                             }
+                            else if(data == 72) return '<small class="btn-xs bg-purple">图片</small>';
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
                             else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
                             else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
@@ -1348,7 +1337,7 @@
                         "data": "column_name",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.operate_category == 1)
+                            if(row.operate_category == 1 || row.operate_category == 72)
                             {
                                 if(data == "name") return '名称';
 
@@ -1360,8 +1349,8 @@
                                 else if(data == "driver_ID") return '主驾身份证号';
                                 else if(data == "driver_ID_front") return '主驾身份证正页';
                                 else if(data == "driver_ID_back") return '主驾身份证副页';
-                                else if(data == "sub_driver_licence") return '主驾驾驶证';
-                                else if(data == "sub_driver_certification") return '主驾资格证';
+                                else if(data == "driver_licence") return '主驾驾驶证';
+                                else if(data == "driver_certification") return '主驾资格证';
                                 else if(data == "emergency_contact_name") return '主驾紧急联系人';
                                 else if(data == "emergency_contact_phone") return '主驾紧急联系电话';
                                 else if(data == "job_performance") return '主驾工作表现';
@@ -1436,6 +1425,16 @@
                                 var $src = $cdn = $cdn + "/" + data;
                                 return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
                             }
+                            if(row.operate_category == 72)
+                            {
+                                if(data)
+                                {
+                                    var $cdn = "{{ env('DOMAIN_CDN') }}";
+                                    var $src = $cdn = $cdn + "/" + data;
+                                    return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
+                                }
+                                else return '--';
+                            }
 
                             if(data == 0) return '';
                             return data;
@@ -1504,6 +1503,16 @@
                                 var $cdn = "{{ env('DOMAIN_CDN') }}";
                                 var $src = $cdn = $cdn + "/" + data;
                                 return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
+                            }
+                            if(row.operate_category == 72)
+                            {
+                                if(data)
+                                {
+                                    var $cdn = "{{ env('DOMAIN_CDN') }}";
+                                    var $src = $cdn = $cdn + "/" + data;
+                                    return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
+                                }
+                                else return '--';
                             }
 
                             return data;

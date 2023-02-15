@@ -118,15 +118,171 @@
                     </div>
                 </div>
 
-                {{--头像--}}
+
+                {{--主驾-驾驶证--}}
                 <div class="form-group">
+                    <label class="control-label col-md-2">主驾-驾驶证</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        @if(!empty($data->driver_licence))
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->driver_licence) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->driver_licence) }}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                        <input type="file" class="file-multiple-images" name="driver_licence_file" multiple- >
+                    </div>
+                </div>
+                {{--主驾-资格证--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">主驾-资格证</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        @if(!empty($data->driver_certification))
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->driver_certification) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->driver_certification) }}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                        <input type="file" class="file-multiple-images" name="driver_certification_file" multiple- >
+                    </div>
+                </div>
+                {{--主驾-身份证-正页--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">主驾-身份证-正页</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        @if(!empty($data->driver_ID_front))
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->driver_ID_front) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->driver_ID_front) }}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                        <input type="file" class="file-multiple-images" name="driver_ID_front_file" multiple- >
+                    </div>
+                </div>
+                {{--主驾-身份证-副页--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">主驾-身份证-副页</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        @if(!empty($data->driver_ID_back))
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->driver_ID_back) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->driver_ID_back) }}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                        <input type="file" class="file-multiple-images" name="driver_ID_back_file" multiple- >
+                    </div>
+                </div>
+
+                {{--副驾-驾驶证--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">副驾-驾驶证</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        @if(!empty($data->sub_driver_licence))
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->sub_driver_licence) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->sub_driver_licence) }}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                        <input type="file" class="file-multiple-images" name="sub_driver_licence_file" multiple- >
+                    </div>
+                </div>
+                {{--副驾-资格证--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">副驾-资格证</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        @if(!empty($data->sub_driver_certification))
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->sub_driver_certification) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->sub_driver_certification) }}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                        <input type="file" class="file-multiple-images" name="sub_driver_certification_file" multiple- >
+                    </div>
+                </div>
+                {{--副驾-身份证-正页--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">副驾-身份证-正页</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        @if(!empty($data->sub_driver_ID_front))
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->sub_driver_ID_front) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->sub_driver_ID_front) }}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                        <input type="file" class="file-multiple-images" name="sub_driver_ID_front_file" multiple- >
+                    </div>
+                </div>
+                {{--副驾-身份证-副页--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">副驾-身份证-副页</label>
+                    <div class="col-md-8 fileinput-group">
+
+                        @if(!empty($data->sub_driver_ID_back))
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->sub_driver_ID_back) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$data->sub_driver_ID_back) }}" alt="" />
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                        <input type="file" class="file-multiple-images" name="sub_driver_ID_back_file" multiple- >
+                    </div>
+                </div>
+
+
+                {{--单图上传--}}
+                <div class="form-group _none">
                     <label class="control-label col-md-2">头像</label>
                     <div class="col-md-8 fileinput-group">
 
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
-                                @if(!empty($data->portrait_img))
-                                    <img src="{{ url(env('DOMAIN_CDN').'/'.$data->portrait_img) }}" alt="" />
+                                @if(!empty($data->image_src))
+                                    <img src="{{ url(env('DOMAIN_CDN').'/'.$data->image_src) }}" alt="" />
                                 @endif
                             </div>
                             <div class="fileinput-preview fileinput-exists thumbnail">
@@ -135,7 +291,7 @@
                                 <span class="btn-file">
                                     <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
                                     <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
-                                    <input type="file" name="portrait" />
+                                    <input type="file" name="image_src_" />
                                 </span>
                                 <span class="">
                                     <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
@@ -208,7 +364,7 @@
 <script>
     $(function() {
 
-        $("#multiple-images").fileinput({
+        $(".file-multiple-images").fileinput({
             allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
             showUpload: false
         });

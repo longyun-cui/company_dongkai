@@ -29,7 +29,7 @@
 
 
         // 【编辑】
-        $(".main-content").on('click', ".item-edit-link", function() {
+        $(".main-content").on('click', ".item-admin-edit-link", function() {
             var $that = $(this);
             window.location.href = "/user/driver-edit?id="+$that.attr('data-id');
         });
@@ -576,23 +576,39 @@
                     }
                 }
             });
-            $('.attachment-box').html($data.html);
+            $('.attachment-edit-box').html($data.html);
 
             $('#modal-body-for-attachment').modal('show');
+
+            $(".file-multiple-images").fileinput({
+                allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
+                showUpload: false
+            });
+
+            $('.lightcase-image').lightcase({
+                maxWidth: 9999,
+                maxHeight: 9999
+            });
+
         });
         // 【附件-attachment-属性】【取消】
-        $(".main-content").on('click', "#item-cancel-for-attachment-set", function() {
+        $(".main-content").on('click', "#item-cancel-for-attachment-set-", function() {
             var that = $(this);
             $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
         // 【附件-attachment-属性】【提交】
-        $(".main-content").on('click', "#item-submit-for-attachment-set", function() {
+        $(".main-content").on('click', ".item-submit-for-attachment-set", function() {
             var $that = $(this);
+            var $parent = $that.parents('.form-group');
 
-            var $column_key = $('input[name="info-attachment-set-column-key"]').val();
-            var $column_value = $('select[name="info-attachment-set-column-value"]').val();
+            var $column_key = $that.attr('data-key');
+            $('input[name=column_key]').val($column_key);
+            $('input[name=attachment-set-column-key]').val($column_key);
+
+            // var $column_key = $('input[name="info-attachment-set-column-key"]').val();
+            // var $column_value = $('select[name="info-attachment-set-column-value"]').val();
 
             layer.msg('确定"提交"么？', {
                 time: 0
@@ -609,37 +625,31 @@
                             if(!data.success) layer.msg(data.msg);
                             else
                             {
-//                                $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
-//                                    $("body").addClass("modal-open");
-//                                });
+                                var $result = '';
+                                var $domain = "{{ env('DOMAIN_CDN').'/' }}";
+
+                                if($column_key == 'driver_licence') $result = $domain + data.data.driver.driver_licence;
+                                else if($column_key == 'driver_certification') $result = $domain + data.data.driver.driver_certification;
+                                else if($column_key == 'driver_ID_front') $result = $domain + data.data.driver.driver_ID_front;
+                                else if($column_key == 'driver_ID_back') $result = $domain + data.data.driver.driver_ID_back;
+
+                                var $a_html = '<a class="lightcase-image" data-rel="lightcase" href="'+$result+'">'+
+                                    '<img src="'+$result+'" alt="" />'+
+                                    '</a>';
+                                console.log(data);
+                                console.log($result);
+                                console.log($a_html);
+
+                                $parent.find('.thumbnail').html($a_html);
 
                                 $('.fileinput-exists[data-dismiss="fileinput"]').click();
-                                $('#modal-attachment-set-form input[name=attachment_name]').val('');
 
-                                var $data = new Object();
-                                $.ajax({
-                                    type:"post",
-                                    dataType:'json',
-                                    async:false,
-                                    url: "{{ url('/user/driver-get-attachment-html') }}",
-                                    data: {
-                                        _token: $('meta[name="_token"]').attr('content'),
-                                        operate:"item-get",
-                                        user_id: $('#modal-attachment-set-form input[name=user_id]').val()
-                                    },
-                                    success:function(data){
-                                        if(!data.success) layer.msg(data.msg);
-                                        else
-                                        {
-                                            $data = data.data;
-                                        }
-                                    }
+                                $parent.find(".fileinput-remove-button").click();
+
+                                $('.lightcase-image').lightcase({
+                                    maxWidth: 9999,
+                                    maxHeight: 9999
                                 });
-                                $('.attachment-box').html($data.html);
-                                $(".fileinput-remove-button").click();
-
-//                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
-//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
                             }
                         }
                     };

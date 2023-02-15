@@ -1323,6 +1323,104 @@ class YHAdminRepository {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
+                // 主驾-驾驶证
+                if(!empty($post_data["driver_licence_file"]))
+                {
+                    $result = upload_img_storage($post_data["driver_licence_file"],'','yh/attachment','');
+                    if($result["result"])
+                    {
+                        $mine->driver_licence = $result["local"];
+                        $bool = $mine->save();
+                        if(!$bool) throw new Exception("update--driver--fail");
+                    }
+                    else throw new Exception("upload--attachment--file--fail");
+                }
+                // 主驾-资格证
+                if(!empty($post_data["driver_certification_file"]))
+                {
+                    $result = upload_img_storage($post_data["driver_certification_file"],'','yh/attachment','');
+                    if($result["result"])
+                    {
+                        $mine->driver_certification = $result["local"];
+                        $bool = $mine->save();
+                        if(!$bool) throw new Exception("update--driver--fail");
+                    }
+                    else throw new Exception("upload--attachment--file--fail");
+                }
+                // 主驾-身份证-正页
+                if(!empty($post_data["driver_ID_front_file"]))
+                {
+                    $result = upload_img_storage($post_data["driver_ID_front_file"],'','yh/attachment','');
+                    if($result["result"])
+                    {
+                        $mine->driver_ID_front = $result["local"];
+                        $bool = $mine->save();
+                        if(!$bool) throw new Exception("update--driver--fail");
+                    }
+                    else throw new Exception("upload--attachment--file--fail");
+                }
+                // 主驾-身份证-副页
+                if(!empty($post_data["driver_ID_back_file"]))
+                {
+                    $result = upload_img_storage($post_data["driver_ID_back_file"],'','yh/attachment','');
+                    if($result["result"])
+                    {
+                        $mine->driver_ID_back = $result["local"];
+                        $bool = $mine->save();
+                        if(!$bool) throw new Exception("update--driver--fail");
+                    }
+                    else throw new Exception("upload--attachment--file--fail");
+                }
+
+
+                // 副驾-驾驶证
+                if(!empty($post_data["sub_driver_licence_file"]))
+                {
+                    $result = upload_img_storage($post_data["sub_driver_licence_file"],'','yh/attachment','');
+                    if($result["result"])
+                    {
+                        $mine->sub_driver_licence = $result["local"];
+                        $bool = $mine->save();
+                        if(!$bool) throw new Exception("update--driver--fail");
+                    }
+                    else throw new Exception("upload--attachment--file--fail");
+                }
+                // 副驾-资格证
+                if(!empty($post_data["sub_driver_certification_file"]))
+                {
+                    $result = upload_img_storage($post_data["sub_driver_certification_file"],'','yh/attachment','');
+                    if($result["result"])
+                    {
+                        $mine->sub_driver_certification = $result["local"];
+                        $bool = $mine->save();
+                        if(!$bool) throw new Exception("update--driver--fail");
+                    }
+                    else throw new Exception("upload--attachment--file--fail");
+                }
+                // 副驾-身份证-正页
+                if(!empty($post_data["sub_driver_ID_front_file"]))
+                {
+                    $result = upload_img_storage($post_data["sub_driver_ID_front_file"],'','yh/attachment','');
+                    if($result["result"])
+                    {
+                        $mine->sub_driver_ID_front = $result["local"];
+                        $bool = $mine->save();
+                        if(!$bool) throw new Exception("update--driver--fail");
+                    }
+                    else throw new Exception("upload--attachment--file--fail");
+                }
+                // 副驾-身份证-副页
+                if(!empty($post_data["sub_driver_ID_back_file"]))
+                {
+                    $result = upload_img_storage($post_data["sub_driver_ID_back_file"],'','yh/attachment','');
+                    if($result["result"])
+                    {
+                        $mine->sub_driver_ID_back = $result["local"];
+                        $bool = $mine->save();
+                        if(!$bool) throw new Exception("update--driver--fail");
+                    }
+                    else throw new Exception("upload--attachment--file--fail");
+                }
             }
             else throw new Exception("insert--driver--fail");
 
@@ -1634,88 +1732,35 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Driver::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        $mine = YH_Driver::withTrashed()->find($id);
+        if(!$mine) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19,21,22])) return response_error([],"你没有操作权限！");
 
 //        $operate_type = $post_data["operate_type"];
-//        $column_key = $post_data["column_key"];
+        $column_key = $post_data["column_key"];
 //        $column_value = $post_data["column_value"];
 
+        $before = $mine->$column_key;
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
-
-            // 多图
-            $multiple_images = [];
-            if(!empty($post_data["multiple_images"][0]))
-            {
-                // 添加图片
-                foreach ($post_data["multiple_images"] as $n => $f)
-                {
-                    if(!empty($f))
-                    {
-                        $result = upload_img_storage($f,'','yh/attachment','');
-                        if($result["result"])
-                        {
-                            $attachment = new YH_Attachment;
-
-                            $attachment_data["operate_object"] = 25;
-                            $attachment_data['item_id'] = $id;
-                            $attachment_data['attachment_name'] = $post_data["attachment_name"];
-                            $attachment_data['attachment_src'] = $result["local"];
-                            $bool = $attachment->fill($attachment_data)->save();
-                            if($bool)
-                            {
-                                $record = new YH_Record;
-
-                                $record_data["record_object"] = 21;
-                                $record_data["record_category"] = 11;
-                                $record_data["record_type"] = 1;
-                                $record_data["creator_id"] = $me->id;
-                                $record_data["item_id"] = $id;
-                                $record_data["operate_object"] = 25;
-                                $record_data["operate_category"] = 71;
-                                $record_data["operate_type"] = 1;
-
-                                $record_data["column_name"] = 'attachment';
-                                $record_data["after"] = $attachment_data['attachment_src'];
-
-                                $bool_1 = $record->fill($record_data)->save();
-                                if($bool_1)
-                                {
-                                }
-                                else throw new Exception("insert--record--fail");
-                            }
-                            else throw new Exception("insert--attachment--fail");
-                        }
-                        else throw new Exception("upload--attachment--file--fail");
-                    }
-                }
-            }
-
-
             // 单图
-            if(!empty($post_data["attachment_file"]))
+            if(!empty($post_data[$column_key."_file"]))
             {
-                $attachment = new YH_Attachment;
-
 //                $result = upload_storage($post_data["portrait"]);
 //                $result = upload_storage($post_data["portrait"], null, null, 'assign');
-                $result = upload_img_storage($post_data["attachment_file"],'','yh/attachment','');
+                $result = upload_img_storage($post_data[$column_key."_file"],'','yh/attachment','');
                 if($result["result"])
                 {
-                    $attachment_data["operate_object"] = 25;
-                    $attachment_data['item_id'] = $id;
-                    $attachment_data['attachment_name'] = $post_data["attachment_name"];
-                    $attachment_data['attachment_src'] = $result["local"];
-                    $bool = $attachment->fill($attachment_data)->save();
+                    $after = $result["local"];
+                    $mine->$column_key = $after;
+                    $bool = $mine->save();
                     if($bool)
                     {
                         $record = new YH_Record;
@@ -1726,11 +1771,12 @@ class YHAdminRepository {
                         $record_data["creator_id"] = $me->id;
                         $record_data["item_id"] = $id;
                         $record_data["operate_object"] = 25;
-                        $record_data["operate_category"] = 71;
+                        $record_data["operate_category"] = 72;
                         $record_data["operate_type"] = 1;
 
-                        $record_data["column_name"] = 'attachment';
-                        $record_data["after"] = $attachment_data['attachment_src'];
+                        $record_data["column_name"] = $column_key;
+                        $record_data["before"] = $before;
+                        $record_data["after"] = $after;
 
                         $bool_1 = $record->fill($record_data)->save();
                         if($bool_1)
@@ -1738,13 +1784,13 @@ class YHAdminRepository {
                         }
                         else throw new Exception("insert--record--fail");
                     }
-                    else throw new Exception("insert--attachment--fail");
+                    else throw new Exception("update--driver--fail");
                 }
                 else throw new Exception("upload--attachment--file--fail");
             }
 
             DB::commit();
-            return response_success([]);
+            return response_success(['driver'=>$mine]);
         }
         catch (Exception $e)
         {
@@ -1854,9 +1900,9 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Driver::with([
-            'attachment_list' => function($query) { $query->where('operate_object', 25); }
-        ])->withTrashed()->find($id);
+        $item = YH_Driver::withTrashed()
+//            ->with([ 'attachment_list' => function($query) { $query->where('operate_object', 25); } ])
+            ->find($id);
         if(!$item) return response_error([],"该【驾驶员】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -1864,8 +1910,8 @@ class YHAdminRepository {
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.item-assign-html-for-attachment';
-        $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.driver-assign-html-for-attachment';
+        $html = view($view_blade)->with(['data'=>$item])->__toString();
 
         return response_success(['html'=>$html],"");
     }
