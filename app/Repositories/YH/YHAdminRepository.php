@@ -4499,6 +4499,17 @@ class YHAdminRepository {
         DB::beginTransaction();
         try
         {
+            if($column_key == "driver_id")
+            {
+                $driver = YH_Driver::withTrashed()->find($column_value);
+                if(!$driver) throw new Exception("该【驾驶员】不存在，刷新页面重试！");
+
+//                $item->linkman_name = $driver->driver_name;
+//                $item->linkman_phone = $driver->driver_phone;
+//                $item->copilot_name = $driver->sub_driver_name;
+//                $item->copilot_phone = $driver->sub_driver_phone;
+            }
+
 //            $item->timestamps = false;
             $item->$column_key = $column_value;
             $bool = $item->save();
@@ -4527,6 +4538,38 @@ class YHAdminRepository {
                     $record_data["column_name"] = $column_key;
                     $record_data["before"] = $before;
                     $record_data["after"] = $column_value;
+
+                    if(in_array($column_key,['client_id','route_id','car_id','trailer_id','driver_id']))
+                    {
+                        $record_data["before_id"] = $before;
+                        $record_data["after_id"] = $column_value;
+                    }
+
+                    if($column_key == 'client_id')
+                    {
+                        $record_data["before_client_id"] = $before;
+                        $record_data["after_client_id"] = $column_value;
+                    }
+                    else if($column_key == 'route_id')
+                    {
+                        $record_data["before_route_id"] = $before;
+                        $record_data["after_route_id"] = $column_value;
+                    }
+                    else if($column_key == 'pricing_id')
+                    {
+                        $record_data["before_pricing_id"] = $before;
+                        $record_data["after_pricing_id"] = $column_value;
+                    }
+                    else if($column_key == 'car_id' || $column_key == 'trailer_id')
+                    {
+                        $record_data["before_car_id"] = $before;
+                        $record_data["after_car_id"] = $column_value;
+                    }
+                    else if($column_key == 'driver_id')
+                    {
+                        $record_data["before_driver_id"] = $before;
+                        $record_data["after_driver_id"] = $column_value;
+                    }
 
                     $bool_1 = $record->fill($record_data)->save();
                     if($bool_1)
@@ -5382,7 +5425,7 @@ class YHAdminRepository {
 
         $id  = $post_data["id"];
         $query = YH_Record::select('*')
-            ->with(['creator'])
+            ->with(['creator','before_driver_er','after_driver_er'])
             ->where(['operate_object'=>41,'item_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");

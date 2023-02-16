@@ -1819,6 +1819,7 @@
                             if(row.operate_category == 1)
                             {
                                 if(data == "name") return '车牌号';
+                                else if(data == "driver_id") return '驾驶员';
                                 else if(data == "trailer_type") return '类型';
                                 else if(data == "trailer_length") return '尺寸';
                                 else if(data == "trailer_volume") return '容积';
@@ -1868,6 +1869,11 @@
                         "data": "before",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            if(row.column_name == 'driver_id')
+                            {
+                                if(row.before_driver_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_driver_er.driver_name+'</a>';
+                            }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {
@@ -1940,6 +1946,11 @@
                             {
                                 if(row.after_car_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.after_car_er.name+'</a>';
+                            }
+                            else if(row.column_name == 'driver_id')
+                            {
+                                if(row.after_driver_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.after_driver_er.driver_name+'</a>';
                             }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
