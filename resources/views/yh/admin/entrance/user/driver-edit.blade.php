@@ -72,6 +72,21 @@
                         <input type="text" class="form-control date_picker" name="driver_entry_time" placeholder="主驾入职时间" value="{{ $data->driver_entry_time or '' }}" readonly="readonly">
                     </div>
                 </div>
+                {{--主驾紧急联系人--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">主驾紧急联系人</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="emergency_contact_name" placeholder="主驾紧急联系人" value="{{ $data->emergency_contact_name or '' }}">
+                    </div>
+                </div>
+                {{--主驾紧急联系电话--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">主驾紧急联系电话</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="emergency_contact_phone" placeholder="主驾紧急联系电话" value="{{ $data->emergency_contact_phone or '' }}">
+                    </div>
+                </div>
+
 
                 {{--副驾姓名--}}
                 <div class="form-group">
@@ -108,6 +123,21 @@
                         <input type="text" class="form-control date_picker" name="sub_driver_entry_time" placeholder="副驾入职时间" value="{{ $data->sub_driver_entry_time or '' }}" readonly="readonly">
                     </div>
                 </div>
+                {{--副驾紧急联系人--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">副驾紧急联系人</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="sub_contact_name" placeholder="副驾紧急联系人" value="{{ $data->sub_contact_name or '' }}">
+                    </div>
+                </div>
+                {{--副驾紧急联系电话--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">副驾紧急联系电话</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="sub_contact_phone" placeholder="副驾紧急联系电话" value="{{ $data->sub_contact_phone or '' }}">
+                    </div>
+                </div>
+
 
                 {{--描述--}}
                 <div class="form-group _none">

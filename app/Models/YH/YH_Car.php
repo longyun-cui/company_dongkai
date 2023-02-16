@@ -15,6 +15,7 @@ class YH_Car extends Model
         'org_id', 'admin_id',
         'item_id', 'menu_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+        'driver_id',
         'trailer_type', 'trailer_length', 'trailer_volume', 'trailer_weight', 'trailer_axis_count',
         'car_type', 'car_owner', 'car_function', 'car_brand', 'car_identification_number', 'engine_number', 'locomotive_wheelbase', 'main_fuel_tank','auxiliary_fuel_tank',  'total_mass', 'curb_weight', 'load_weight', 'traction_mass', 'overall_size',
         'purchase_date', 'registration_date', 'issue_date',
@@ -61,6 +62,17 @@ class YH_Car extends Model
     {
         return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
     }
+
+
+
+
+    // 驾驶员
+    function driver_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Driver','driver_id','id');
+    }
+
+
 
 
     // 车辆订单

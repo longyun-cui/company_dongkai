@@ -620,6 +620,10 @@
 
 
 
+@section('custom-css')
+    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
+    <link rel="stylesheet" href="{{ asset('/resource/component/css/select2-4.0.5.min.css') }}">
+@endsection
 @section('custom-style')
 <style>
     .tableArea .main-table { min-width:3400px; }
@@ -629,6 +633,10 @@
 
 
 
+@section('custom-js')
+    {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
+    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
+@endsection
 @section('custom-script')
 <script>
     var TableDatatablesAjax = function () {
@@ -976,6 +984,30 @@
                         render: function(data, type, row, meta) {
                             if(data) return data;
                             else return "";
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "160px",
+                        "title": "驾驶员",
+                        "data": "driver_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','驾驶员');
+                                $(nTd).attr('data-key','driver_id').attr('data-value',data);
+                                if(row.driver_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.driver_er.driver_name);
+                                $(nTd).attr('data-column-name','驾驶员');
+                                if(row.driver_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.driver_er == null) return '--';
+                            else return '<a href="javascript:void(0);">'+row.driver_er.driver_name+' '+row.driver_er.driver_phone+'</a>';
                         }
                     },
                     {

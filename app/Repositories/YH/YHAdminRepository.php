@@ -5170,7 +5170,7 @@ class YHAdminRepository {
                     $query->whereNull('actual_departure_time');
                 }
             ])
-            ->with(['creator','owner',
+            ->with(['creator','owner','driver_er',
                 'car_order_list_for_current'=>function($query) {
                     $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','asc')->limit(1);
                 },
@@ -7326,7 +7326,8 @@ class YHAdminRepository {
     {
         if(empty($post_data['keyword']))
         {
-            $list =YH_Car::select(['id','name as text','linkman_name','linkman_phone'])
+            $list =YH_Car::select(['id','name as text','driver_id','linkman_name','linkman_phone'])
+                ->with('driver_er')
                 ->where(['item_status'=>1, 'item_type'=>1])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
@@ -7334,7 +7335,8 @@ class YHAdminRepository {
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Car::select(['id','name as text','linkman_name','linkman_phone'])
+            $list =YH_Car::select(['id','name as text','driver_id','linkman_name','linkman_phone'])
+                ->with('driver_er')
                 ->where('name','like',"%$keyword%")
                 ->where(['item_status'=>1, 'item_type'=>1])
 //                ->whereIn('user_type',[41,61,88])
@@ -7348,6 +7350,7 @@ class YHAdminRepository {
         if(empty($post_data['keyword']))
         {
             $list =YH_Car::select(['id','name as text'])
+                ->with('driver_er')
                 ->where(['item_status'=>1, 'item_type'=>21])
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
@@ -7355,7 +7358,9 @@ class YHAdminRepository {
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Car::select(['id','name as text'])->where('name','like',"%$keyword%")
+            $list =YH_Car::select(['id','name as text'])
+                ->with('driver_er')
+                ->where('name','like',"%$keyword%")
                 ->where(['item_status'=>1, 'item_type'=>21])
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
@@ -7368,6 +7373,7 @@ class YHAdminRepository {
         if(empty($post_data['keyword']))
         {
             $list =YH_Car::select(['id','name as text'])
+                ->with('driver_er')
                 ->where(['item_status'=>1, 'item_type'=>31])
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
@@ -7375,7 +7381,9 @@ class YHAdminRepository {
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Car::select(['id','name as text'])->where('name','like',"%$keyword%")
+            $list =YH_Car::select(['id','name as text'])
+                ->with('driver_er')
+                ->where('name','like',"%$keyword%")
                 ->where(['item_status'=>1, 'item_type'=>31])
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
@@ -7385,7 +7393,8 @@ class YHAdminRepository {
     //
     public function operate_order_list_select2_car($post_data)
     {
-        $query = YH_Car::select(['id','name as text']);
+        $query = YH_Car::select(['id','name as text','driver_id'])
+            ->with('driver_er');
 
         if(!empty($post_data['car_type']))
         {
@@ -7544,6 +7553,13 @@ class YHAdminRepository {
             if(in_array($me->user_type,[82,88]) && $mine->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
         }
         else return response_error([],"参数有误！");
+
+        if(!empty($post_data['car_id']))
+        {
+            $car = YH_Car::find($post_data['car_id']);
+            if($car) $post_data['driver_id'] = $car->driver_id;
+            else return response_error([],"选择车辆不存在，刷新页面重试！");
+        }
 
         // 启动数据库事务
         DB::beginTransaction();

@@ -324,18 +324,18 @@
 
 
                 {{--驾驶员--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">选择驾驶员</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="driver_id" id="select2-driver">
-                            @if($operate == 'edit' && $data->driver_id)
-                                <option data-id="{{ $data->driver_id or 0 }}" value="{{ $data->driver_id or 0 }}">{{ $data->driver_er->driver_name }}</option>
-                            @else
-                                <option data-id="0" value="0">未指定</option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">选择驾驶员</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control" name="driver_id" id="select2-driver">--}}
+{{--                            @if($operate == 'edit' && $data->driver_id)--}}
+{{--                                <option data-id="{{ $data->driver_id or 0 }}" value="{{ $data->driver_id or 0 }}">{{ $data->driver_er->driver_name }}</option>--}}
+{{--                            @else--}}
+{{--                                <option data-id="0" value="0">未指定</option>--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
 
                 {{--外请或外派车辆--}}
@@ -1066,8 +1066,12 @@
                 cache: true
             },
             templateSelection: function(data, container) {
-                $(data.element).attr("data-name",data.linkman_name);
-                $(data.element).attr("data-phone",data.linkman_phone);
+                // $(data.element).attr("data-name",data.linkman_name);
+                // $(data.element).attr("data-phone",data.linkman_phone);
+                if(data.driver_er) $(data.element).attr("data-name",data.driver_er.driver_name);
+                if(data.driver_er) $(data.element).attr("data-phone",data.driver_er.driver_phone);
+                if(data.driver_er) $(data.element).attr("data-sub-name",data.driver_er.sub_driver_name);
+                if(data.driver_er) $(data.element).attr("data-sub-phone",data.driver_er.sub_driver_phone);
                 return data.text;
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
@@ -1080,6 +1084,8 @@
             {
                 $('input[name=driver_name]').val($(this).find('option:selected').attr('data-name'));
                 $('input[name=driver_phone]').val($(this).find('option:selected').attr('data-phone'));
+                $('input[name=copilot_name]').val($(this).find('option:selected').attr('data-sub-name'));
+                $('input[name=copilot_phone]').val($(this).find('option:selected').attr('data-sub-phone'));
             }
         });
         //

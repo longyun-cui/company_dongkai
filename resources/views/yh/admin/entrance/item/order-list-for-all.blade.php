@@ -1661,7 +1661,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','驾驶员');
-                                $(nTd).attr('data-key','driver_id').attr('data-value',row.route_id);
+                                $(nTd).attr('data-key','driver_id').attr('data-value',data);
                                 if(row.driver_er == null) $(nTd).attr('data-option-name','未指定');
                                 else $(nTd).attr('data-option-name',row.driver_er.driver_name);
                                 $(nTd).attr('data-column-name','驾驶员');
