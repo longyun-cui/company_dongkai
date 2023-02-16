@@ -676,7 +676,7 @@
 //                "scrollY": true,
                 "scrollCollapse": true,
                 "fixedColumns": {
-                    "leftColumns": 6,
+                    "leftColumns": 5,
                     "rightColumns": 0
                 },
                 "columns": [
@@ -819,65 +819,65 @@
                             return data;
                         }
                     },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "工作状态",
-                        "data": 'work_status',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return '<small class="btn-xs bg-red">空闲</small>';
-                            else if(data == 1) return '<small class="btn-xs bg-olive">工作中</small>';
-                            else if(data == 9) return '<small class="btn-xs bg-blue">待发车</small>';
-                            else return "--";
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "当前位置",
-                        "data": "current_place",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "未来位置",
-                        "data": "future_place",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "font-12px",
-                        "width": "120px",
-                        "title": "到达时间",
-                        "data": 'future_time',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(!data) return "";
-
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                        }
-                    },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "工作状态",
+                    //     "data": 'work_status',
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(data == 0) return '<small class="btn-xs bg-red">空闲</small>';
+                    //         else if(data == 1) return '<small class="btn-xs bg-olive">工作中</small>';
+                    //         else if(data == 9) return '<small class="btn-xs bg-blue">待发车</small>';
+                    //         else return "--";
+                    //     }
+                    // },
+//                     {
+//                         "className": "text-center",
+//                         "width": "60px",
+//                         "title": "当前位置",
+//                         "data": "current_place",
+//                         "orderable": false,
+//                         render: function(data, type, row, meta) {
+//                             return data;
+//                         }
+//                     },
+//                     {
+//                         "className": "text-center",
+//                         "width": "60px",
+//                         "title": "未来位置",
+//                         "data": "future_place",
+//                         "orderable": false,
+//                         render: function(data, type, row, meta) {
+//                             return data;
+//                         }
+//                     },
+//                     {
+//                         "className": "font-12px",
+//                         "width": "120px",
+//                         "title": "到达时间",
+//                         "data": 'future_time',
+//                         "orderable": false,
+//                         render: function(data, type, row, meta) {
+//                             if(!data) return "";
+//
+//                             var $date = new Date(data*1000);
+//                             var $year = $date.getFullYear();
+//                             var $month = ('00'+($date.getMonth()+1)).slice(-2);
+//                             var $day = ('00'+($date.getDate())).slice(-2);
+//                             var $hour = ('00'+$date.getHours()).slice(-2);
+//                             var $minute = ('00'+$date.getMinutes()).slice(-2);
+//                             var $second = ('00'+$date.getSeconds()).slice(-2);
+//
+// //                            return $year+'-'+$month+'-'+$day;
+// //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+// //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+//
+//                             var $currentYear = new Date().getFullYear();
+//                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                             else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                         }
+//                     },
                     {
                         "className": "text-center",
                         "width": "40px",
@@ -1380,6 +1380,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            // return data;
                             if(data)
                             {
                                 var $date = new Date(data);
@@ -1414,6 +1415,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            // return data;
                             if(data)
                             {
                                 var $date = new Date(data);
@@ -1448,6 +1450,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            // return data;
                             if(data)
                             {
                                 var $date = new Date(data);
@@ -1482,6 +1485,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            // return data;
                             if(data)
                             {
                                 var $date = new Date(data);
@@ -1516,6 +1520,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            // return data;
                             if(data)
                             {
                                 var $date = new Date(data);
@@ -1550,6 +1555,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            // return data;
                             if(data)
                             {
                                 var $date = new Date(data);
