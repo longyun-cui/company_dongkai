@@ -1066,12 +1066,20 @@
                 cache: true
             },
             templateSelection: function(data, container) {
-                // $(data.element).attr("data-name",data.linkman_name);
-                // $(data.element).attr("data-phone",data.linkman_phone);
-                if(data.driver_er) $(data.element).attr("data-name",data.driver_er.driver_name);
-                if(data.driver_er) $(data.element).attr("data-phone",data.driver_er.driver_phone);
-                if(data.driver_er) $(data.element).attr("data-sub-name",data.driver_er.sub_driver_name);
-                if(data.driver_er) $(data.element).attr("data-sub-phone",data.driver_er.sub_driver_phone);
+                if(data.driver_er)
+                {
+                    $(data.element).attr("data-name",data.driver_er.driver_name);
+                    $(data.element).attr("data-phone",data.driver_er.driver_phone);
+                    $(data.element).attr("data-sub-name",data.driver_er.sub_driver_name);
+                    $(data.element).attr("data-sub-phone",data.driver_er.sub_driver_phone);
+                }
+                else
+                {
+                    $(data.element).attr("data-name",data.linkman_name);
+                    $(data.element).attr("data-phone",data.linkman_phone);
+                    $(data.element).attr("data-sub-name",'');
+                    $(data.element).attr("data-sub-phone",'');
+                }
                 return data.text;
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
