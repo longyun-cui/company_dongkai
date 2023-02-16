@@ -10306,7 +10306,7 @@ class YHAdminRepository {
         {
             $overview['title'][$k] = $v->id;
             $overview['income'][$k] = intval($v->amount + $v->oil_card_amount - $v->time_limitation_deduction);
-            $overview['expenses'][$k] = intval(0 - $v->expenditure_total);
+            $overview['expenses'][$k] = intval(0 - $v->expenditure_total - $v->expenditure_to_be_confirm);
             $overview['profit'][$k] = intval($overview['income'][$k] + $overview['expenses'][$k]);
         }
         $return_data["overview"] = $overview;

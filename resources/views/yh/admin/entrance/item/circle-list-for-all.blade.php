@@ -636,7 +636,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "120px",
                         "title": "标题",
                         "data": "title",
@@ -658,7 +658,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "80px",
                         "title": "车辆",
                         "data": "car_id",
@@ -722,7 +722,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "60px",
                         "title": "总里程",
                         "data": "pivot_order_list",
@@ -748,7 +748,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "60px",
                         "title": "收入",
                         "data": "pivot_order_list",
@@ -774,7 +774,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "60px",
                         "title": "支出",
                         "data": "pivot_order_list",
@@ -794,14 +794,13 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.expenditure_total);
-                                $amount += parseInt(this.expenditure_to_be_confirm);
+                                $amount += parseInt(this.expenditure_total) + parseInt(this.expenditure_to_be_confirm);
                             });
                             return $amount;
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "_bold",
                         "width": "60px",
                         "title": "利润",
                         "data": "pivot_order_list",
@@ -809,6 +808,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
+                                $(nTd).addClass('color-green');
                                 $(nTd).addClass('modal-show-for-attribute-list');
                                 $(nTd).attr('data-id',row.id).attr('data-name','利润');
                                 $(nTd).attr('data-key','title').attr('data-value',data);
@@ -827,7 +827,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "_bold",
                         "width": "60px",
                         "title": "利润率",
                         "data": "pivot_order_list",
@@ -849,13 +849,13 @@
                             var $profit = 0;
                             $.each(data,function( key, val ) {
                                 $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction);
-                                $profit += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.expenditure_total);
+                                $profit += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
                             });
                             return (($profit/$amount).toFixed(2)*100) + '%';
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "",
                         "title": "备注",
                         "data": "remark",
@@ -1180,7 +1180,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "60px",
                         "title": "创建者",
                         "data": "creator_id",
@@ -1190,7 +1190,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "80px",
                         "title": "确认者",
                         "data": "confirmer_id",
@@ -1200,7 +1200,7 @@
                         }
                     },
                     {
-                        "className": "text-center",
+                        "className": "",
                         "width": "120px",
                         "title": "确认时间",
                         "data": "confirmed_at",
