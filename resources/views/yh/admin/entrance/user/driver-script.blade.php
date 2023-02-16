@@ -539,8 +539,8 @@
 
 
 
-        // 【附件-attachment-属性】【显示】
-        $(".main-content").on('dblclick', ".modal-show-for-attachment", function() {
+        // 【图片-image-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-image", function() {
             var $that = $(this);
 
             $('.attachment-set-title').html($that.attr("data-id"));
@@ -578,7 +578,7 @@
             });
             $('.attachment-edit-box').html($data.html);
 
-            $('#modal-body-for-attachment').modal('show');
+            $('#modal-body-for-image').modal('show');
 
             $(".file-multiple-images").fileinput({
                 allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
@@ -591,15 +591,8 @@
             });
 
         });
-        // 【附件-attachment-属性】【取消】
-        $(".main-content").on('click', "#item-cancel-for-attachment-set-", function() {
-            var that = $(this);
-            $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
-                $("body").addClass("modal-open");
-            });
-        });
-        // 【附件-attachment-属性】【提交】
-        $(".main-content").on('click', ".item-submit-for-attachment-set", function() {
+        // 【图片-image-属性】【提交】
+        $(".main-content").on('click', ".item-submit-for-image-set", function() {
             var $that = $(this);
             var $parent = $that.parents('.form-group');
 
@@ -659,6 +652,224 @@
             });
         });
 
+
+
+
+        // 【附件-attachment-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-attachment", function() {
+            var $that = $(this);
+
+            $('.attachment-set-title').html($that.attr("data-id") + '-' + $that.attr("data-name"));
+            $('.info-set-column-name').html($that.attr("data-name"));
+            $('input[name=attachment-set-driver-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
+            $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
+            $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
+
+
+            $('#modal-attachment-set-form input[name=user_id]').val($that.attr("data-id"));
+            $('#modal-attachment-set-form input[name=column-key]').val($that.attr("data-key"));
+            $('#modal-attachment-set-form input[name=column-value]').val($that.attr("data-value"));
+            $('#modal-attachment-set-form input[name=-operate-type]').val($that.attr('data-operate-type'));
+
+
+            var $data = new Object();
+            $.ajax({
+                type:"post",
+                dataType:'json',
+                async:false,
+                url: "{{ url('/user/driver-info-attachment-get-html') }}",
+                data: {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate:"item-get",
+                    user_id: $that.attr('data-id')
+                },
+                success:function(data){
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        $data = data.data;
+                    }
+                }
+            });
+            $('.attachment-box').html($data.html);
+
+            $('#modal-body-for-attachment').modal('show');
+
+            $('.lightcase-image').lightcase({
+                maxWidth: 9999,
+                maxHeight: 9999
+            });
+        });
+        // 【附件-attachment-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-attachment-set", function() {
+            var that = $(this);
+            $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【附件-attachment-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-attachment-set-", function() {
+            var $that = $(this);
+            var $parent = $that.parents('.form-group');
+
+            var $column_key = $that.attr('data-key');
+            $('input[name=column_key]').val($column_key);
+            $('input[name=attachment-set-column-key]').val($column_key);
+
+            // var $column_key = $('input[name="info-attachment-set-column-key"]').val();
+            // var $column_value = $('select[name="info-attachment-set-column-value"]').val();
+
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    var options = {
+                        url: "{{ url('/user/driver-info-attachment-set') }}",
+                        type: "post",
+                        dataType: "json",
+                        // target: "#div2",
+                        success: function (data) {
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                var $result = '';
+                                var $domain = "{{ env('DOMAIN_CDN').'/' }}";
+
+                                if($column_key == 'driver_licence') $result = $domain + data.data.driver.driver_licence;
+                                else if($column_key == 'driver_certification') $result = $domain + data.data.driver.driver_certification;
+                                else if($column_key == 'driver_ID_front') $result = $domain + data.data.driver.driver_ID_front;
+                                else if($column_key == 'driver_ID_back') $result = $domain + data.data.driver.driver_ID_back;
+
+                                var $a_html = '<a class="lightcase-image" data-rel="lightcase" href="'+$result+'">'+
+                                    '<img src="'+$result+'" alt="" />'+
+                                    '</a>';
+                                console.log(data);
+                                console.log($result);
+                                console.log($a_html);
+
+                                $parent.find('.thumbnail').html($a_html);
+
+                                $('.fileinput-exists[data-dismiss="fileinput"]').click();
+
+                                $parent.find(".fileinput-remove-button").click();
+
+                                $('.lightcase-image').lightcase({
+                                    maxWidth: 9999,
+                                    maxHeight: 9999
+                                });
+                            }
+                        }
+                    };
+                    $("#modal-attachment-set-form").ajaxSubmit(options);
+
+                }
+            });
+        });
+        // 【附件-attachment-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-attachment-set", function() {
+            var $that = $(this);
+
+            var $column_key = $('input[name="info-attachment-set-column-key"]').val();
+            var $column_value = $('select[name="info-attachment-set-column-value"]').val();
+
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    var options = {
+                        url: "{{ url('/user/driver-info-attachment-set') }}",
+                        type: "post",
+                        dataType: "json",
+                        // target: "#div2",
+                        success: function (data) {
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+//                                $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
+//                                    $("body").addClass("modal-open");
+//                                });
+
+                                $('.fileinput-exists[data-dismiss="fileinput"]').click();
+                                $('#modal-attachment-set-form input[name=attachment_name]').val('');
+
+                                var $data = new Object();
+                                $.ajax({
+                                    type:"post",
+                                    dataType:'json',
+                                    async:false,
+                                    url: "{{ url('/user/driver-info-attachment-get-html') }}",
+                                    data: {
+                                        _token: $('meta[name="_token"]').attr('content'),
+                                        operate:"item-get",
+                                        user_id: $('#modal-attachment-set-form input[name=user_id]').val()
+                                    },
+                                    success:function(data){
+                                        if(!data.success) layer.msg(data.msg);
+                                        else
+                                        {
+                                            $data = data.data;
+                                        }
+                                    }
+                                });
+                                $('.attachment-box').html($data.html);
+                                $(".fileinput-remove-button").click();
+
+                                $('.lightcase-image').lightcase({
+                                    maxWidth: 9999,
+                                    maxHeight: 9999
+                                });
+
+//                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
+                            }
+                        }
+                    };
+                    $("#modal-attachment-set-form").ajaxSubmit(options);
+
+
+
+//                    var formData = new FormData();
+//                    formData.append('attachment_file', fileItem);
+//                    formData.append('operate', $('input[name="attachment-set-operate"]').val());
+//                    formData.append('user_id', $('input[name="attachment-set-user-id"]').val());
+
+                    {{--$.post(--}}
+                    {{--"{{ url('/user/driver-info-attachment-set') }}",--}}
+                    {{--{--}}
+                    {{--_token: $('meta[name="_token"]').attr('content'),--}}
+                    {{--operate: $('input[name="attachment-set-operate"]').val(),--}}
+                    {{--user_id: $('input[name="attachment-set-driver-id"]').val(),--}}
+                    {{--operate_type: $('input[name="attachment-set-operate-type"]').val(),--}}
+                    {{--attachment_file: $blob--}}
+                    {{--},--}}
+                    {{--function(data){--}}
+                    {{--layer.close(index);--}}
+                    {{--if(!data.success) layer.msg(data.msg);--}}
+                    {{--//                            else location.reload();--}}
+                    {{--else--}}
+                    {{--{--}}
+                    {{--layer.close(index);--}}
+                    {{--$('#modal-body-for-attachment-set').modal('hide').on("hidden.bs.modal", function () {--}}
+                    {{--$("body").addClass("modal-open");--}}
+                    {{--});--}}
+
+                    {{--$('#datatable_ajax').DataTable().ajax.reload(null, false);--}}
+                    {{--//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);--}}
+                    {{--}--}}
+                    {{--},--}}
+                    {{--'json'--}}
+                    {{--);--}}
+
+
+                }
+            });
+        });
+
         // 【附件-attachment-属性】【删除】
         $(".main-content").on('click', ".item-attachment-delete-this", function() {
             var $that = $(this);
@@ -670,7 +881,7 @@
                         "{{ url('/user/driver-info-attachment-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "driver-attachment-delete",
+                            operate: "user-driver-attachment-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){

@@ -282,6 +282,17 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_user_driver_info_option_set(request()->all());
     }
+    // 【驾驶员管理】修改-图片-image-信息
+    public function operate_user_driver_info_image_set()
+    {
+        return $this->repo->operate_user_driver_info_image_set(request()->all());
+    }
+
+    // 【驾驶员管理】获取-附件-attachment-HTML-页面
+    public function operate_user_driver_info_attachment_get_html()
+    {
+        return $this->repo->operate_user_driver_info_attachment_get_html(request()->all());
+    }
     // 【驾驶员管理】添加-附件-attachment-信息
     public function operate_user_driver_info_attachment_set()
     {

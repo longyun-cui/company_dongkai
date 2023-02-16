@@ -7,17 +7,21 @@
 
             <div class="fileinput fileinput-new" data-provides="fileinput">
                 <div class="fileinput-new thumbnail">
-                    {{--<img src="{{ $item->attachment_src or '' }}" alt="">--}}
-                    <img src="{{ url(env('DOMAIN_CDN').'/'.$item->attachment_src) }}" alt="">
+                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$item->attachment_src) }}">
+                        <img src="{{ url(env('DOMAIN_CDN').'/'.$item->attachment_src) }}" alt="" />
+                    </a>
                 </div>
             </div>
+
         </div>
     </div>
 
     <div class="col-md-8 col-md-offset-2" style="clear:left;">
         <div class="info-text-block">
+
             <span>{{ $item->attachment_name or '未命名' }}</span>
-            <a class="tool-button operate-btn delete-btn order-attachment-delete-this" data-id="{{ $item->id }}" data-order="{{ $item->order_id }}" role="button">删除</a>
+            <a class="tool-button operate-btn delete-btn item-attachment-delete-this" data-id="{{ $item->id }}" data-item-id="{{ $item->item_id }}" role="button">删除</a>
+
         </div>
     </div>
 </div>

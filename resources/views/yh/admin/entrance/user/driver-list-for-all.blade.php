@@ -191,7 +191,7 @@
 
                     {{ csrf_field() }}
                     <input type="hidden" name="info-radio-set-operate" value="user-driver-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-order-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-driver-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
 
@@ -263,8 +263,8 @@
 </div>
 
 
-{{--显示-附件-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-attachment">
+{{--显示-image-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-image">
     <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
@@ -281,19 +281,19 @@
             </div>
 
             {{--上传附件--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-attachment-set-form">
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-image-set-form">
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="attachment-set-operate" value="user-driver-attachment-set" readonly>
-                    <input type="hidden" name="attachment-set-driver-id" value="0" readonly>
-                    <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="attachment-set-column-key" value="" readonly>
+                    <input type="hidden" name="image-set-operate" value="user-driver-image-set" readonly>
+                    <input type="hidden" name="image-set-driver-id" value="0" readonly>
+                    <input type="hidden" name="image-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="image-set-column-key" value="" readonly>
 
-                    <input type="hidden" name="operate" value="user-driver-attachment-set" readonly>
+                    <input type="hidden" name="operate" value="user-driver-image-set" readonly>
                     <input type="hidden" name="user_id" value="0" readonly>
                     <input type="hidden" name="operate_type" value="add" readonly>
-                    <input type="hidden" name="column_key" value="attachment" readonly>
+                    <input type="hidden" name="column_key" value="image" readonly>
 
 
                     <div class="attachment-edit-box">
@@ -338,6 +338,111 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         {{--<button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>--}}
+                        <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{{--显示-附件-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-attachment">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">驾驶员【<span class="attachment-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+
+
+            {{--attachment--}}
+            <form action="" method="post" class="form-horizontal form-bordered " id="">
+                <div class="box-body attachment-box">
+
+                </div>
+            </form>
+
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px-">
+                <h4 class="box-title">【添加附件】</h4>
+            </div>
+
+            {{--上传附件--}}
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-attachment-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="attachment-set-operate" value="user-driver-attachment-set" readonly>
+                    <input type="hidden" name="attachment-set-driver-id" value="0" readonly>
+                    <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="attachment-set-column-key" value="" readonly>
+
+                    <input type="hidden" name="operate" value="user-driver-attachment-set" readonly>
+                    <input type="hidden" name="user_id" value="0" readonly>
+                    <input type="hidden" name="operate_type" value="add" readonly>
+                    <input type="hidden" name="column_key" value="attachment" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">附件名称</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="attachment_name" autocomplete="off" placeholder="附件名称" value="">
+                        </div>
+                    </div>
+
+                    {{--多图上传--}}
+                    <div class="form-group">
+
+                        <label class="control-label col-md-2">图片上传</label>
+
+                        <div class="col-md-8">
+                            <input id="multiple-images" type="file" class="file-multiple-images" name="multiple_images[]" multiple >
+                        </div>
+
+                    </div>
+
+                    {{--多图上传--}}
+                    <div class="form-group _none">
+
+                        <label class="control-label col-md-2" style="clear:left;">选择图片</label>
+                        <div class="col-md-8 fileinput-group">
+
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail">
+                                </div>
+                                <div class="btn-tool-group">
+                            <span class="btn-file">
+                                <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
+                                <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
+                                <input type="file" name="attachment_file" />
+                            </span>
+                                    <span class="">
+                                <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
+                            </span>
+                                </div>
+                            </div>
+                            <div id="titleImageError" style="color: #a94442"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>
                         <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
                     </div>
                 </div>
@@ -431,7 +536,7 @@
 
 @section('custom-style')
     <style>
-        .tableArea table { min-width:2800px; }
+        .tableArea table { min-width:2000px; }
 
         .select2-container { height:100%; border-radius:0; float:left; }
         .select2-container .select2-selection--single { border-radius:0; }
@@ -486,11 +591,22 @@
                 },
                 "columns": [
                     {
-                        "className": "font-12px",
+                        "className": "",
                         "width": "50px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.driver_name);
+                                $(nTd).attr('data-key','attachment_list').attr('data-value','attachment');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -693,98 +809,98 @@
                             else return '--';
                         }
                     },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "驾驶证",
-                        "data": "driver_licence",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.user_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾驾驶证');
-                                $(nTd).attr('data-key','driver_licence').attr('data-value',data);
-                                $(nTd).attr('data-column-name','主驾驾驶证');
-                                $(nTd).attr('data-operate-category','attachment');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "资格证",
-                        "data": "driver_certification",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.user_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾资格证');
-                                $(nTd).attr('data-key','driver_certification').attr('data-value',data);
-                                $(nTd).attr('data-column-name','主驾资格证');
-                                $(nTd).attr('data-operate-category','attachment');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "主驾-正页",
-                        "data": "driver_ID_front",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.user_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证正页');
-                                $(nTd).attr('data-key','driver_ID_front').attr('data-value',data);
-                                $(nTd).attr('data-column-name','主驾身份证正页');
-                                $(nTd).attr('data-operate-category','attachment');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "主驾-副页",
-                        "data": "driver_ID_back",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.user_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证副页');
-                                $(nTd).attr('data-key','driver_ID_back').attr('data-value',data);
-                                $(nTd).attr('data-column-name','主驾身份证副页');
-                                $(nTd).attr('data-operate-category','attachment');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
-                            else return '--';
-                        }
-                    },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "驾驶证",
+                    //     "data": "driver_licence",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.user_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-attachment');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','主驾驾驶证');
+                    //             $(nTd).attr('data-key','driver_licence').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','主驾驾驶证');
+                    //             $(nTd).attr('data-operate-category','attachment');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                    //         else return '--';
+                    //     }
+                    // },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "资格证",
+                    //     "data": "driver_certification",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.user_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-attachment');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','主驾资格证');
+                    //             $(nTd).attr('data-key','driver_certification').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','主驾资格证');
+                    //             $(nTd).attr('data-operate-category','attachment');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                    //         else return '--';
+                    //     }
+                    // },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "主驾-正页",
+                    //     "data": "driver_ID_front",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.user_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-attachment');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证正页');
+                    //             $(nTd).attr('data-key','driver_ID_front').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','主驾身份证正页');
+                    //             $(nTd).attr('data-operate-category','attachment');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                    //         else return '--';
+                    //     }
+                    // },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "主驾-副页",
+                    //     "data": "driver_ID_back",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.user_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-attachment');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','主驾身份证副页');
+                    //             $(nTd).attr('data-key','driver_ID_back').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','主驾身份证副页');
+                    //             $(nTd).attr('data-operate-category','attachment');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                    //         else return '--';
+                    //     }
+                    // },
                     {
                         "className": "",
                         "width": "80px",
@@ -957,98 +1073,98 @@
                             else return '--';
                         }
                     },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "驾驶证",
-                        "data": "sub_driver_licence",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.user_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','副驾驾驶证');
-                                $(nTd).attr('data-key','sub_driver_licence').attr('data-value',data);
-                                $(nTd).attr('data-column-name','副驾驾驶证');
-                                $(nTd).attr('data-operate-category','attachment');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "资格证",
-                        "data": "sub_driver_certification",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.user_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','副驾资格证');
-                                $(nTd).attr('data-key','sub_driver_certification').attr('data-value',data);
-                                $(nTd).attr('data-column-name','副驾资格证');
-                                $(nTd).attr('data-operate-category','attachment');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "副驾-正页",
-                        "data": "sub_driver_ID_front",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.user_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证正页');
-                                $(nTd).attr('data-key','sub_driver_ID_front').attr('data-value',data);
-                                $(nTd).attr('data-column-name','副驾身份证正页');
-                                $(nTd).attr('data-operate-category','attachment');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "副驾-副页",
-                        "data": "sub_driver_ID_back",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.user_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证副页');
-                                $(nTd).attr('data-key','sub_driver_ID_back').attr('data-value',data);
-                                $(nTd).attr('data-column-name','副驾身份证副页');
-                                $(nTd).attr('data-operate-category','attachment');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-purple">已上传</small>';
-                            else return '--';
-                        }
-                    },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "驾驶证",
+                    //     "data": "sub_driver_licence",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.user_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-attachment');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','副驾驾驶证');
+                    //             $(nTd).attr('data-key','sub_driver_licence').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','副驾驾驶证');
+                    //             $(nTd).attr('data-operate-category','attachment');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                    //         else return '--';
+                    //     }
+                    // },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "资格证",
+                    //     "data": "sub_driver_certification",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.user_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-attachment');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','副驾资格证');
+                    //             $(nTd).attr('data-key','sub_driver_certification').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','副驾资格证');
+                    //             $(nTd).attr('data-operate-category','attachment');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                    //         else return '--';
+                    //     }
+                    // },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "副驾-正页",
+                    //     "data": "sub_driver_ID_front",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.user_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-attachment');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证正页');
+                    //             $(nTd).attr('data-key','sub_driver_ID_front').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','副驾身份证正页');
+                    //             $(nTd).attr('data-operate-category','attachment');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                    //         else return '--';
+                    //     }
+                    // },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "副驾-副页",
+                    //     "data": "sub_driver_ID_back",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.user_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-attachment');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','副驾身份证副页');
+                    //             $(nTd).attr('data-key','sub_driver_ID_back').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','副驾身份证副页');
+                    //             $(nTd).attr('data-operate-category','attachment');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return '<small class="btn-xs bg-purple">已上传</small>';
+                    //         else return '--';
+                    //     }
+                    // },
                     {
                         "className": "",
                         "width": "100px",

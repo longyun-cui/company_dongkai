@@ -37,104 +37,96 @@
                 <input type="hidden" name="type" value="{{ $type or 'user' }}" readonly>
 
 
-                {{--主驾姓名--}}
+                {{--主驾 姓名 & 手机号--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 主驾姓名</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 主驾姓名&手机号</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="driver_name" placeholder="主驾姓名" value="{{ $data->driver_name or '' }}">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="driver_name" placeholder="主驾姓名" value="{{ $data->driver_name or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="driver_phone" placeholder="主驾手机号" value="{{ $data->driver_phone or '' }}">
+                        </div>
                     </div>
                 </div>
-                {{--主驾手机号--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 主驾手机号</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="driver_phone" placeholder="主驾手机号" value="{{ $data->driver_phone or '' }}">
-                    </div>
-                </div>
-                {{--主驾职称--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">主驾职称</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="driver_title" placeholder="主驾职称" value="{{ $data->driver_title or '' }}">
-                    </div>
-                </div>
-                {{--主驾身份证号--}}
+                {{--主驾-身份证号--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">主驾身份证号</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="driver_ID" placeholder="主驾身份证号" value="{{ $data->driver_ID or '' }}">
                     </div>
                 </div>
-                {{--主驾入职时间--}}
+                {{--主驾-职称&入职时间--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">主驾入职时间</label>
+                    <label class="control-label col-md-2">主驾-职称&入职时间</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control date_picker" name="driver_entry_time" placeholder="主驾入职时间" value="{{ $data->driver_entry_time or '' }}" readonly="readonly">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="driver_title" placeholder="主驾职称" value="{{ $data->driver_title or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control date_picker" name="driver_entry_time" placeholder="主驾入职时间" value="{{ $data->driver_entry_time or '' }}" readonly="readonly">
+                        </div>
                     </div>
                 </div>
-                {{--主驾紧急联系人--}}
+                {{--主驾-紧急联系人&电话--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">主驾紧急联系人</label>
+                    <label class="control-label col-md-2">主驾-紧急联系人&电话</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="emergency_contact_name" placeholder="主驾紧急联系人" value="{{ $data->emergency_contact_name or '' }}">
-                    </div>
-                </div>
-                {{--主驾紧急联系电话--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">主驾紧急联系电话</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="emergency_contact_phone" placeholder="主驾紧急联系电话" value="{{ $data->emergency_contact_phone or '' }}">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="emergency_contact_name" placeholder="主驾紧急联系人" value="{{ $data->emergency_contact_name or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="emergency_contact_phone" placeholder="主驾紧急联系电话" value="{{ $data->emergency_contact_phone or '' }}">
+                        </div>
                     </div>
                 </div>
 
 
-                {{--副驾姓名--}}
+                {{--null--}}
+                <div class="form-group"></div>
+
+
+                {{--副驾-姓名&手机号--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">副驾姓名</label>
+                    <label class="control-label col-md-2">副驾-姓名&手机号</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="sub_driver_name" placeholder="副驾姓名" value="{{ $data->sub_driver_name or '' }}">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="sub_driver_name" placeholder="副驾姓名" value="{{ $data->sub_driver_name or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="sub_driver_phone" placeholder="副驾电话" value="{{ $data->sub_driver_phone or '' }}">
+                        </div>
                     </div>
                 </div>
-                {{--副驾电话--}}
+                {{--副驾-身份证号--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">副驾电话</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="sub_driver_phone" placeholder="副驾电话" value="{{ $data->sub_driver_phone or '' }}">
-                    </div>
-                </div>
-                {{--副驾职称--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">副驾职称</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="sub_driver_title" placeholder="副驾职称" value="{{ $data->sub_driver_title or '' }}">
-                    </div>
-                </div>
-                {{--副驾身份证号--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">副驾身份证号</label>
+                    <label class="control-label col-md-2">副驾-身份证号</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="sub_driver_ID" placeholder="副驾身份证号" value="{{ $data->sub_driver_ID or '' }}">
                     </div>
                 </div>
-                {{--副驾入职时间--}}
+                {{--副驾-职称&入职时间--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">副驾入职时间</label>
+                    <label class="control-label col-md-2">副驾-职称&入职时间</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control date_picker" name="sub_driver_entry_time" placeholder="副驾入职时间" value="{{ $data->sub_driver_entry_time or '' }}" readonly="readonly">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="sub_driver_title" placeholder="副驾职称" value="{{ $data->sub_driver_title or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control date_picker" name="sub_driver_entry_time" placeholder="副驾入职时间" value="{{ $data->sub_driver_entry_time or '' }}" readonly="readonly">
+                        </div>
                     </div>
                 </div>
-                {{--副驾紧急联系人--}}
+                {{--副驾-紧急联系人&电话--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">副驾紧急联系人</label>
+                    <label class="control-label col-md-2">副驾-紧急联系人&电话</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="sub_contact_name" placeholder="副驾紧急联系人" value="{{ $data->sub_contact_name or '' }}">
-                    </div>
-                </div>
-                {{--副驾紧急联系电话--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">副驾紧急联系电话</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="sub_contact_phone" placeholder="副驾紧急联系电话" value="{{ $data->sub_contact_phone or '' }}">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="sub_contact_name" placeholder="副驾紧急联系人" value="{{ $data->sub_contact_name or '' }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="sub_contact_phone" placeholder="副驾紧急联系电话" value="{{ $data->sub_contact_phone or '' }}">
+                        </div>
                     </div>
                 </div>
 
@@ -150,7 +142,7 @@
 
 
                 {{--主驾-驾驶证--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">主驾-驾驶证</label>
                     <div class="col-md-8 fileinput-group">
 
@@ -169,7 +161,7 @@
                     </div>
                 </div>
                 {{--主驾-资格证--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">主驾-资格证</label>
                     <div class="col-md-8 fileinput-group">
 
@@ -188,7 +180,7 @@
                     </div>
                 </div>
                 {{--主驾-身份证-正页--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">主驾-身份证-正页</label>
                     <div class="col-md-8 fileinput-group">
 
@@ -207,7 +199,7 @@
                     </div>
                 </div>
                 {{--主驾-身份证-副页--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">主驾-身份证-副页</label>
                     <div class="col-md-8 fileinput-group">
 
@@ -227,7 +219,7 @@
                 </div>
 
                 {{--副驾-驾驶证--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">副驾-驾驶证</label>
                     <div class="col-md-8 fileinput-group">
 
@@ -246,7 +238,7 @@
                     </div>
                 </div>
                 {{--副驾-资格证--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">副驾-资格证</label>
                     <div class="col-md-8 fileinput-group">
 
@@ -265,7 +257,7 @@
                     </div>
                 </div>
                 {{--副驾-身份证-正页--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">副驾-身份证-正页</label>
                     <div class="col-md-8 fileinput-group">
 
@@ -284,7 +276,7 @@
                     </div>
                 </div>
                 {{--副驾-身份证-副页--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">副驾-身份证-副页</label>
                     <div class="col-md-8 fileinput-group">
 
@@ -304,6 +296,31 @@
                 </div>
 
 
+                {{--多图上传--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">图片资料</label>
+                    <div class="col-md-8 fileinput-group">
+                        @if(!empty($data->attachment_list))
+                            @foreach($data->attachment_list as $img)
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail">
+                                        <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$img->attachment_src) }}">
+                                            <img src="{{ url(env('DOMAIN_CDN').'/'.$img->attachment_src) }}" alt="" />
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                        @endif
+                    </div>
+
+                    <div class="col-md-8 col-md-offset-2 ">
+                        <input id="multiple-images" type="file" class="file-multiple-images" name="multiple_images[]" multiple >
+                    </div>
+                </div>
+
+
                 {{--单图上传--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">头像</label>
@@ -312,7 +329,9 @@
                         <div class="fileinput fileinput-new" data-provides="fileinput">
                             <div class="fileinput-new thumbnail">
                                 @if(!empty($data->image_src))
-                                    <img src="{{ url(env('DOMAIN_CDN').'/'.$data->image_src) }}" alt="" />
+                                    <a class="lightcase-image" data-rel="lightcase" href="{{ url(env('DOMAIN_CDN').'/'.$data->image_src) }}">
+                                        <img src="{{ url(env('DOMAIN_CDN').'/'.$$data->image_src) }}" alt="" />
+                                    </a>
                                 @endif
                             </div>
                             <div class="fileinput-preview fileinput-exists thumbnail">
@@ -397,6 +416,11 @@
         $(".file-multiple-images").fileinput({
             allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
             showUpload: false
+        });
+
+        $('.lightcase-image').lightcase({
+            maxWidth: 9999,
+            maxHeight: 9999
         });
 
         // 添加or编辑

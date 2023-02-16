@@ -83,8 +83,10 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/user/driver-info-radio-set', $controller.'@operate_user_driver_info_option_set');
     Route::post('/user/driver-info-select-set', $controller.'@operate_user_driver_info_option_set');
     Route::post('/user/driver-info-select2-set', $controller.'@operate_user_driver_info_option_set');
+    Route::post('/user/driver-info-image-set', $controller.'@operate_user_driver_info_image_set');
     // 编辑-附件
     Route::match(['get','post'], '/user/driver-get-attachment-html', $controller.'@operate_user_driver_get_attachment_html');
+    Route::post('/user/driver-info-attachment-get-html', $controller.'@operate_user_driver_info_attachment_get_html');
     Route::post('/user/driver-info-attachment-set', $controller.'@operate_user_driver_info_attachment_set');
     Route::post('/user/driver-info-attachment-delete', $controller.'@operate_user_driver_info_attachment_delete');
     // 修改密码

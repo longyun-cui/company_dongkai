@@ -44,26 +44,32 @@
                         <input type="text" class="form-control" name="title" placeholder="自定义订单标题" value="{{ $data->title or '' }}">
                     </div>
                 </div>
-                {{--派车时间--}}
+                {{--客户 & 派车时间--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户 & 派车时间</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <select class="form-control" name="client_id" id="select2-client">
+                                @if($operate == 'edit' && $data->client_id)
+                                    <option data-id="{{ $data->client_id or 0 }}" value="{{ $data->client_id or 0 }}">{{ $data->client_er->username }}</option>
+                                @else
+                                    <option data-id="0" value="0">未指定</option>
+                                @endif
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="assign_date" placeholder="派车时间" readonly="readonly"
+                                   @if(!empty($data->assign_time)) value="{{ date("Y-m-d",$data->assign_time) }}" @endif
+                            >
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 派车时间</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="assign_date" placeholder="派车时间" readonly="readonly"
                                @if(!empty($data->assign_time)) value="{{ date("Y-m-d",$data->assign_time) }}" @endif
                         >
-                    </div>
-                </div>
-                {{--选择客户--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择客户</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="client_id" id="select2-client">
-                            @if($operate == 'edit' && $data->client_id)
-                                <option data-id="{{ $data->client_id or 0 }}" value="{{ $data->client_id or 0 }}">{{ $data->client_er->username }}</option>
-                            @else
-                                <option data-id="0" value="0">未指定</option>
-                            @endif
-                        </select>
                     </div>
                 </div>
 
@@ -226,20 +232,18 @@
                 </div>
 
 
-                {{--费用--}}
+                {{--运费金额 & 油卡--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 金额</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 运费金额 & 油卡</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="amount" placeholder="金额" value="{{ $data->amount or 0 }}" id="order-price"
-                               @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif
-                        >
-                    </div>
-                </div>
-                {{--油卡--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 油卡</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="oil_card_amount" placeholder="油卡" value="{{ $data->oil_card_amount or 0 }}">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="amount" placeholder="金额" value="{{ $data->amount or 0 }}" id="order-price"
+                                   @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif
+                            >
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="oil_card_amount" placeholder="油卡" value="{{ $data->oil_card_amount or 0 }}">
+                        </div>
                     </div>
                 </div>
                 {{--订金--}}
@@ -249,34 +253,30 @@
                         <input type="text" class="form-control" name="deposit" placeholder="订金" value="{{ $data->deposit or 0 }}">
                     </div>
                 </div>
-                {{--请车价--}}
+                {{--请车价 & 管理费--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 请车价</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 请车价 & 管理费</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="outside_car_price" placeholder="请车价" value="{{ $data->outside_car_price or 0 }}" id="order-out-car-price"
-                               @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif
-                        >
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="outside_car_price" placeholder="请车价" value="{{ $data->outside_car_price or 0 }}" id="order-out-car-price"
+                                   @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif
+                            >
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="administrative_fee" placeholder="管理费" value="{{ $data->administrative_fee or 0 }}">
+                        </div>
                     </div>
                 </div>
-                {{--管理费--}}
+                {{--信息费 & 客户管理费--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理费</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 信息费 & 客户管理费</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="administrative_fee" placeholder="管理费" value="{{ $data->administrative_fee or 0 }}">
-                    </div>
-                </div>
-                {{--信息费--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 信息费</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="information_fee" placeholder="信息费" value="{{ $data->information_fee or 0 }}">
-                    </div>
-                </div>
-                {{--客管费--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户管理费</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="customer_management_fee" placeholder="客户管理费" value="{{ $data->customer_management_fee or 0 }}">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="information_fee" placeholder="信息费" value="{{ $data->information_fee or 0 }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="customer_management_fee" placeholder="客户管理费" value="{{ $data->customer_management_fee or 0 }}">
+                        </div>
                     </div>
                 </div>
 
@@ -539,9 +539,9 @@
                     </div>
                 </div>
 
-                {{--出发地--}}
+                {{--出发地 & 目的地--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 出发地</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 出发地 & 目的地</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
                             <input type="text" class="form-control" name="departure_place" placeholder="出发地" value="{{ $data->departure_place or '' }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
@@ -567,19 +567,16 @@
                 </div>
 
 
-                {{--里程--}}
+                {{--里程 & 时效--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 里程</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 里程(公里) & 时效(小时)</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or 0 }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
-                    </div>
-                </div>
-
-                {{--时效--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 时效（小时）</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or 0 }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="{{ $data->travel_distance or 0 }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="{{ $data->time_limitation_prescribed or 0 }}" @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif >
+                        </div>
                     </div>
                 </div>
 
@@ -594,44 +591,42 @@
                     </div>
                 </div>
 
-                {{--是否需要回单--}}
-                <div class="form-group form-category">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 是否需要回单</label>
-                    <div class="col-md-8">
-                        <div class="btn-group">
-
-                            <button type="button" class="btn">
-                            <span class="radio">
-                                <label>
-                                    @if($operate == 'create' || ($operate == 'edit' && $data->receipt_need == 0))
-                                        <input type="radio" name="receipt_need" value="0" checked="checked"> 不需要
-                                    @else
-                                        <input type="radio" name="receipt_need" value="0"> 不需要
-                                    @endif
-                                </label>
-                            </span>
-                            </button>
-
-                            <button type="button" class="btn">
-                            <span class="radio">
-                                <label>
-                                    @if($operate == 'edit' && $data->receipt_need == 1)
-                                        <input type="radio" name="receipt_need" value="1" checked="checked"> 需要
-                                    @else
-                                        <input type="radio" name="receipt_need" value="1"> 需要
-                                    @endif
-                                </label>
-                            </span>
-                            </button>
-
-                        </div>
-                    </div>
-                </div>
-                {{--回单地址--}}
+                {{--是否需要回单 & 回单地址--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">回单地址</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 是否需要回单 & 回单地址</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="receipt_address" placeholder="回单地址" value="{{ $data->receipt_address or '' }}">
+                        <div class="col-sm-4 col-md-4 padding-0">
+                            <div class="btn-group">
+
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label>
+                                            @if($operate == 'create' || ($operate == 'edit' && $data->receipt_need == 0))
+                                                <input type="radio" name="receipt_need" value="0" checked="checked"> 不需要
+                                            @else
+                                                <input type="radio" name="receipt_need" value="0"> 不需要
+                                            @endif
+                                        </label>
+                                    </span>
+                                </button>
+
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label>
+                                            @if($operate == 'edit' && $data->receipt_need == 1)
+                                                <input type="radio" name="receipt_need" value="1" checked="checked"> 需要
+                                            @else
+                                                <input type="radio" name="receipt_need" value="1"> 需要
+                                            @endif
+                                        </label>
+                                    </span>
+                                </button>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-md-8 padding-0">
+                            <input type="text" class="form-control" name="receipt_address" placeholder="回单地址" value="{{ $data->receipt_address or '' }}">
+                        </div>
                     </div>
                 </div>
                 {{--回单状态--}}
@@ -641,6 +636,7 @@
                         {{--<input type="text" class="form-control" name="receipt_status" placeholder="回单状态" value="{{ $data->receipt_status or '' }}">--}}
                     {{--</div>--}}
                 {{--</div>--}}
+
                 {{--GPS--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">GPS</label>
