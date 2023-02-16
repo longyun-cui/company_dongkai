@@ -300,7 +300,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">图片资料</label>
                     <div class="col-md-8 fileinput-group">
-                        @if(!empty($data->attachment_list))
+                        @if(!empty($data->attachment_list) && count($data->attachment_list) > 0)
                             @foreach($data->attachment_list as $img)
                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail">
