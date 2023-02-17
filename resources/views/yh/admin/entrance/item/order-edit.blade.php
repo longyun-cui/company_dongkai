@@ -64,14 +64,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 派车时间</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="assign_date" placeholder="派车时间" readonly="readonly"
-                               @if(!empty($data->assign_time)) value="{{ date("Y-m-d",$data->assign_time) }}" @endif
-                        >
-                    </div>
-                </div>
 
 
                 {{--需求类型--}}
