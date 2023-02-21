@@ -271,6 +271,25 @@
                         </div>
                     </div>
                 </div>
+                {{--ECT--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">ETC费用</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="ETC_price" placeholder="ETC费用" value="{{ $data->ETC_price or 0 }}">
+                    </div>
+                </div>
+                {{--万金油 & 油价--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 万金油(升) & 油价(元)</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="oil_amount" placeholder="万金油(升) " value="{{ $data->oil_amount or 0 }}">
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <input type="text" class="form-control" name="oil_unit_price" placeholder="油价(元)" value="{{ $data->oil_unit_price or 0 }}">
+                        </div>
+                    </div>
+                </div>
 
                 {{--自有车辆--}}
                 @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
@@ -667,18 +686,18 @@
                     </div>
                 </div>
                 {{--车辆管理人--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">车辆管理人</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="car_managerial_people" placeholder="车辆管理人" value="{{ $data->car_managerial_people or '' }}">
-                    </div>
-                </div>
-                {{--车辆管理人--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">重量</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="weight" placeholder="重量" value="{{ $data->weight or '' }}">
-                    </div>
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">车辆管理人</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <input type="text" class="form-control" name="car_managerial_people" placeholder="车辆管理人" value="{{ $data->car_managerial_people or '' }}">--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+                {{--重量--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">重量</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <input type="text" class="form-control" name="weight" placeholder="重量" value="{{ $data->weight or '' }}">--}}
+{{--                    </div>--}}
                 </div>
 
                 {{--备注--}}
@@ -889,8 +908,11 @@
                     else
                     {
                         layer.msg(data.msg);
-                        {{--location.href = "{{ url('/item/order-list-for-all') }}";--}}
-                        window.location.href = document.referrer; //使用document.referrer
+
+                        if($.getUrlParam('referrer')) location.href = decodeURIComponent($.getUrlParam('referrer'));
+                        if(document.referrer) location.href = document.referrer;
+                        location.href = "{{ url('/item/order-list-for-all') }}";
+                        // history.go(-1);
                     }
                 }
             };

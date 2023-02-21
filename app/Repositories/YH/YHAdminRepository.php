@@ -9214,6 +9214,101 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+        // 订单ID
+        if(!empty($post_data['order_id']))
+        {
+            if(is_numeric($post_data['order_id']) && $post_data['order_id'] > 0) $view_data['order_id'] = $post_data['order_id'];
+            else $view_data['order_id'] = '';
+        }
+        else $view_data['order_id'] = '';
+
+        // 配车时间
+        if(!empty($post_data['assign']))
+        {
+            if($post_data['assign']) $view_data['assign'] = $post_data['assign'];
+            else $view_data['assign'] = 1;
+        }
+        else $view_data['assign'] = '';
+
+        // 员工
+        if(!empty($post_data['staff_id']))
+        {
+            if(is_numeric($post_data['staff_id']) && $post_data['staff_id'] > 0) $view_data['staff_id'] = $post_data['staff_id'];
+            else $view_data['staff_id'] = -1;
+        }
+        else $view_data['staff_id'] = -1;
+
+        // 客户
+        if(!empty($post_data['client_id']))
+        {
+            if(is_numeric($post_data['client_id']) && $post_data['client_id'] > 0) $view_data['client_id'] = $post_data['client_id'];
+            else $view_data['client_id'] = -1;
+        }
+        else $view_data['client_id'] = -1;
+
+        // 路线
+        if(!empty($post_data['route_id']))
+        {
+            if(is_numeric($post_data['route_id']) && $post_data['route_id'] > 0) $view_data['route_id'] = $post_data['route_id'];
+            else $view_data['route_id'] = -1;
+        }
+        else $view_data['route_id'] = -1;
+
+        // 定价
+        if(!empty($post_data['pricing_id']))
+        {
+            if(is_numeric($post_data['pricing_id']) && $post_data['pricing_id'] > 0) $view_data['pricing_id'] = $post_data['pricing_id'];
+            else $view_data['pricing_id'] = -1;
+        }
+        else $view_data['pricing_id'] = -1;
+
+
+
+        // 车辆
+        if(!empty($post_data['car_id']))
+        {
+            if(is_numeric($post_data['car_id']) && $post_data['car_id'] > 0)
+            {
+                $car = YH_Car::select(['id','name'])->find($post_data['car_id']);
+                if($car)
+                {
+                    $view_data['car_id'] = $post_data['car_id'];
+                    $view_data['car_name'] = $car->name;
+                }
+                else $view_data['car_id'] = -1;
+            }
+            else $view_data['car_id'] = -1;
+        }
+        else $view_data['car_id'] = -1;
+
+        // 驾驶员
+        if(!empty($post_data['driver_id']))
+        {
+            if(is_numeric($post_data['driver_id']) && $post_data['driver_id'] > 0)
+            {
+                $driver = YH_Driver::select(['id','driver_name'])->find($post_data['driver_id']);
+                if($driver)
+                {
+                    $view_data['driver_id'] = $post_data['driver_id'];
+                    $view_data['driver_name'] = $driver->driver_name;
+                }
+                else $view_data['driver_id'] = -1;
+            }
+            else $view_data['driver_id'] = -1;
+        }
+        else $view_data['driver_id'] = -1;
+
+
+
+
         $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $car_list = YH_Car::select('id','name')->whereIn('item_type',[1,21])->get();

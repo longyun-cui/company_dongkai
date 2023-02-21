@@ -23,6 +23,7 @@ class YH_Order extends Model
         'information_fee', 'customer_management_fee', 'time_limitation_deduction',
         'administrative_fee',
         'driver_fine',
+        'ETC_price', 'oil_amount', 'oil_unit_price',
         'outside_car_price',
         'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
         'travel_distance', 'time_limitation_prescribed',

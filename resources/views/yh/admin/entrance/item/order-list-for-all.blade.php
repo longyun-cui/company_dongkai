@@ -48,35 +48,35 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" />
 
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" readonly="readonly" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" value="{{ $assign }}" readonly="readonly" />
 
                         <select class="form-control form-filter" name="order-staff" style="width:96px;">
                             <option value ="-1">选择员工</option>
                             @foreach($staff_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->true_name }}</option>
+                                <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->true_name }}</option>
                             @endforeach
                         </select>
 
                         <select class="form-control form-filter" name="order-client" style="width:96px;">
                             <option value ="-1">选择客户</option>
                             @foreach($client_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->username }}</option>
+                                <option value ="{{ $v->id }}" @if($v->id == $client_id) selected="selected" @endif>{{ $v->username }}</option>
                             @endforeach
                         </select>
 
                         <select class="form-control form-filter" name="order-route" style="width:96px;">
                             <option value="-1">选择线路</option>
                             @foreach($route_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
+                                <option value ="{{ $v->id }}" @if($v->id == $route_id) selected="selected" @endif>{{ $v->title }}</option>
                             @endforeach
                         </select>
 
                         <select class="form-control form-filter" name="order-pricing" style="width:96px;">
                             <option value="-1">选择定价</option>
                             @foreach($pricing_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
+                                <option value ="{{ $v->id }}" @if($v->id == $pricing_id) selected="selected" @endif>{{ $v->title }}</option>
                             @endforeach
                         </select>
 
@@ -87,11 +87,19 @@
                             {{--@endforeach--}}
                         {{--</select>--}}
                         <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:96px;">
-                            <option value="-1">选择车辆</option>
+                            @if($car_id > 0)
+                                <option value="{{ $car_id }}">{{ $car_name }}</option>
+                            @else
+                                <option value="-1">选择车辆</option>
+                            @endif
                         </select>
 
                         <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:96px;">
-                            <option value="-1">选择驾驶员</option>
+                            @if($driver_id > 0)
+                                <option value="{{ $driver_id }}">{{ $driver_name }}</option>
+                            @else
+                                <option value="-1">选择驾驶员</option>
+                            @endif
                         </select>
 
                         <select class="form-control form-filter" name="order-type" style="width:96px;">
@@ -1261,6 +1269,8 @@
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
+                "iDisplayStart": "{{ ($page - 1) * 12 }}",
+                "iDisplayLength": 12,
                 "ajax": {
                     'url': "{{ url('/item/order-list-for-all') }}",
                     "type": 'POST',
@@ -1652,6 +1662,42 @@
                     },
                     {
                         "className": "text-center",
+                        "width": "160px",
+                        "title": "包油油耗",
+                        "data": "pricing_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
+                                $(nTd).attr('data-key','pricing_id').attr('data-value',data);
+                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.pricing_er.title);
+                                $(nTd).attr('data-column-name','包油价');
+                                if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.pricing_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                var $price = "--";
+                                if(row.car_owner_type == 11)
+                                {
+                                    if(row.travel_distance >= 200) $price = row.pricing_er.price3;
+                                    else $price = row.pricing_er.price2;
+                                }
+                                else $price = row.pricing_er.price1;
+                                return '<a href="javascript:void(0);">'+row.pricing_er.title+' ('+$price+')</a>';
+                            }
+                        }
+                    },
+                    {
+                        "className": "text-center",
                         "width": "80px",
                         "title": "驾驶员",
                         "data": "driver_id",
@@ -1698,35 +1744,6 @@
                             // if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                             // {
                             //     if(row.car_er != null) return row.car_er.linkman_name;
-                            //     else return data;
-                            // }
-                            // else return data;
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "100px",
-                        "title": "主驾电话",
-                        "data": "driver_phone",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
-                                $(nTd).attr('data-key','driver_phone').attr('data-value',data);
-                                $(nTd).attr('data-column-name','主驾电话');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                            // if(data) return data;
-                            // if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
-                            // {
-                            //     if(row.car_er != null) return row.car_er.linkman_phone;
                             //     else return data;
                             // }
                             // else return data;
@@ -1844,6 +1861,35 @@
                             else return data;
                         }
                     },
+                    // {
+                    //     "className": "",
+                    //     "width": "100px",
+                    //     "title": "主驾电话",
+                    //     "data": "driver_phone",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-text-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
+                    //             $(nTd).attr('data-key','driver_phone').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','主驾电话');
+                    //             $(nTd).attr('data-text-type','text');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //         // if(data) return data;
+                    //         // if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
+                    //         // {
+                    //         //     if(row.car_er != null) return row.car_er.linkman_phone;
+                    //         //     else return data;
+                    //         // }
+                    //         // else return data;
+                    //     }
+                    // },
                     {
                         "className": "text-center",
                         "width": "80px",
@@ -2268,6 +2314,72 @@
                             return data;
                         }
                     },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "ETC",
+                        "data": "ETC_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','ETC');
+                                $(nTd).attr('data-key','ETC_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','ETC');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "万金油(升)",
+                        "data": "oil_amount",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','万金油(升)');
+                                $(nTd).attr('data-key','oil_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','万金油(升)');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "油价(元)",
+                        "data": "oil_unit_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','油价(元)');
+                                $(nTd).attr('data-key','oil_unit_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','油价(元)');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
 //                    {
 //                        "className": "",
 //                        "width": "50px",
@@ -2310,42 +2422,6 @@
                         },
                         render: function(data, type, row, meta) {
                             return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "160px",
-                        "title": "包油油耗",
-                        "data": "pricing_id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','包油价');
-                                $(nTd).attr('data-key','pricing_id').attr('data-value',data);
-                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
-                                else $(nTd).attr('data-option-name',row.pricing_er.title);
-                                $(nTd).attr('data-column-name','包油价');
-                                if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.pricing_er == null)
-                            {
-                                return '--';
-                            }
-                            else {
-                                var $price = "--";
-                                if(row.car_owner_type == 11)
-                                {
-                                    if(row.travel_distance >= 200) $price = row.pricing_er.price3;
-                                    else $price = row.pricing_er.price2;
-                                }
-                                else $price = row.pricing_er.price1;
-                                return '<a href="javascript:void(0);">'+row.pricing_er.title+' ('+$price+')</a>';
-                            }
                         }
                     },
 //                    {
@@ -3027,50 +3103,50 @@
                             return data;
                         }
                     },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "车负责人",
-                        "data": "car_managerial_people",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','车辆负责人');
-                                $(nTd).attr('data-key','car_managerial_people').attr('data-value',data);
-                                $(nTd).attr('data-column-name','车辆负责人');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "重量",
-                        "data": "weight",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','重量');
-                                $(nTd).attr('data-key','weight').attr('data-value',data);
-                                $(nTd).attr('data-column-name','重量');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "车负责人",
+                    //     "data": "car_managerial_people",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-text-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','车辆负责人');
+                    //             $(nTd).attr('data-key','car_managerial_people').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','车辆负责人');
+                    //             $(nTd).attr('data-text-type','text');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
+                    // {
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "title": "重量",
+                    //     "data": "weight",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-text-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','重量');
+                    //             $(nTd).attr('data-key','weight').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','重量');
+                    //             $(nTd).attr('data-text-type','text');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "className": "",
                         "width": "80px",
@@ -3374,45 +3450,29 @@
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
 
-                    ajax_datatable.$('.tooltips').tooltip({placement: 'top', html: true});
-                    $("a.verify").click(function(event){
-                        event.preventDefault();
-                        var node = $(this);
-                        var tr = node.closest('tr');
-                        var nickname = tr.find('span.nickname').text();
-                        var cert_name = tr.find('span.certificate_type_name').text();
-                        var action = node.attr('data-action');
-                        var certificate_id = node.attr('data-id');
-                        var action_name = node.text();
+                    var $obj = new Object();
+                    if($('input[name="order-id"]').val())  $obj.order_id = $('input[name="order-id"]').val();
+                    if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
+                    if($('select[name="order-staff"]').val() > 0)  $obj.client_id = $('select[name="order-staff"]').val();
+                    if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
+                    if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
+                    if($('select[name="order-pricing"]').val() > 0)  $obj.pricing_id = $('select[name="order-pricing"]').val();
+                    if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
+                    if($('select[name="order-driver"]').val() > 0)  $obj.driver_id = $('select[name="order-driver"]').val();
 
-                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
-                        layer.open({
-                            'title': '警告',
-                            content: tpl
-                                .replace('@action_name', action_name)
-                                .replace('@nickname', nickname)
-                                .replace('@certificate_type_name', cert_name),
-                            btn: ['Yes', 'No'],
-                            yes: function(index) {
-                                layer.close(index);
-                                $.post(
-                                    '/admin/medsci/certificate/user/verify',
-                                    {
-                                        action: action,
-                                        id: certificate_id,
-                                        _token: '{{ csrf_token() }}'
-                                    },
-                                    function(json){
-                                        if(json['response_code'] == 'success') {
-                                            layer.msg('操作成功!', {time: 3500});
-                                            ajax_datatable.ajax.reload();
-                                        } else {
-                                            layer.alert(json['response_data'], {time: 10000});
-                                        }
-                                    }, 'json');
-                            }
-                        });
-                    });
+                    var $paging_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
+                    var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
+                    var $page = ($page_start / $paging_length) + 1; //得到页数值 比页码小1
+                    if($page > 1) $obj.page = $page;
+
+
+                    if(JSON.stringify($obj) != "{}")
+                    {
+                        var $url = url_build('',$obj);
+                        console.log(JSON.stringify($obj));
+                        history.replaceState({page: 1}, "", $url);
+                    }
+
                 },
                 "language": { url: '/common/dataTableI18n' },
             });
@@ -3439,7 +3499,11 @@
     }();
 
     $(function () {
+
+        var $id = $.getUrlParam('id');
+        if($id) $('input[name="order-id"]').val($id);
         TableDatatablesAjax.init();
+        // $('#datatable_ajax').DataTable().init().fnPageChange(3);
     });
 </script>
 
@@ -3998,6 +4062,9 @@
                                 else if(data == "information_fee") return '信息费';
                                 else if(data == "time_limitation_deduction") return '时效扣款';
                                 else if(data == "administrative_fee") return '管理费';
+                                else if(data == "ETC_price") return 'ETC费用';
+                                else if(data == "oil_amount") return '万金油量（升）';
+                                else if(data == "oil_unit_price") return '油价（元）';
                                 else if(data == "assign_time") return '安排时间';
                                 else if(data == "container_type") return '箱型';
                                 else if(data == "subordinate_company") return '所属公司';
