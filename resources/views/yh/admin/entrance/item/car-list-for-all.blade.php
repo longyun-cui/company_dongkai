@@ -117,6 +117,12 @@
                             <option value ="19">非工作状态</option>
                         </select>
 
+                        <select class="form-control form-filter" name="car-type" style="width:96px;">
+                            <option value ="-1">全部</option>
+                            <option value ="1">车辆</option>
+                            <option value ="21">车挂</option>
+                        </select>
+
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
@@ -660,6 +666,7 @@
                         d.title = $('input[name="car-title"]').val();
                         d.keyword = $('input[name="car-keyword"]').val();
                         d.status = $('select[name="car-status"]').val();
+                        d.car_type = $('select[name="car-type"]').val();
                         d.work_status = $('select[name="work_status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();

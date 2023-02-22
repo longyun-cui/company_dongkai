@@ -5494,6 +5494,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+
         $query = YH_Car::select('*')
             ->withTrashed()
 //            ->withCount([
@@ -5534,6 +5535,15 @@ class YHAdminRepository {
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        // 车辆类型 [车辆|车挂]
+        if(!empty($post_data['car_type']))
+        {
+            if(!in_array($post_data['car_type'],[-1,0]))
+            {
+                $query->where('item_type', $post_data['car_type']);
+            }
+        }
 
 
 //        if(!empty($post_data['work_status']) || $post_data['work_status'] == 0)
