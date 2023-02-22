@@ -4073,6 +4073,7 @@
                             {
                                 if(data == "client_id") return '客户';
                                 else if(data == "route_id") return '固定线路';
+                                else if(data == "circle_id") return '环线';
                                 else if(data == "pricing_id") return '包油价';
                                 else if(data == "car_id") return '车辆';
                                 else if(data == "trailer_id") return '车挂';
@@ -4161,6 +4162,11 @@
                                     else return '<a href="javascript:void(0);">'+row.before_client_er.username+'</a>';
                                 }
                             }
+                            else if(row.column_name == 'circle_id')
+                            {
+                                if(row.before_circle_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_circle_er.title+'</a>';
+                            }
                             else if(row.column_name == 'route_id')
                             {
                                 if(row.before_route_er == null) return '';
@@ -4238,6 +4244,11 @@
                                     }
                                     else return '<a href="javascript:void(0);">'+row.after_client_er.username+'</a>';
                                 }
+                            }
+                            else if(row.column_name == 'circle_id')
+                            {
+                                if(row.after_circle_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.after_circle_er.title+'</a>';
                             }
                             else if(row.column_name == 'route_id')
                             {

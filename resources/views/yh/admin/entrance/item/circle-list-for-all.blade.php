@@ -683,7 +683,8 @@
                     {
                         "width": "200px",
                         "title": "订单",
-                        "data": "pivot_order_list",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -725,7 +726,8 @@
                         "className": "",
                         "width": "60px",
                         "title": "总里程",
-                        "data": "pivot_order_list",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -751,7 +753,8 @@
                         "className": "",
                         "width": "60px",
                         "title": "收入",
-                        "data": "pivot_order_list",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -777,7 +780,8 @@
                         "className": "",
                         "width": "60px",
                         "title": "支出",
-                        "data": "pivot_order_list",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -803,7 +807,8 @@
                         "className": "_bold",
                         "width": "60px",
                         "title": "利润",
-                        "data": "pivot_order_list",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -830,7 +835,8 @@
                         "className": "_bold",
                         "width": "60px",
                         "title": "利润率",
-                        "data": "pivot_order_list",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)

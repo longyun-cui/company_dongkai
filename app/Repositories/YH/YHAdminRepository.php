@@ -7999,12 +7999,13 @@ class YHAdminRepository {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
-                $circle_data['order_id'] = $mine->id;
-                $circle_data['creator_id'] = $me->id;
-//                    $mine->pivot_order_list()->attach($order_list);  //
-                $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
-
-
+//                if(!empty($post_data['circle_id']))
+//                {
+//                    $circle_data['order_id'] = $mine->id;
+//                    $circle_data['creator_id'] = $me->id;
+//                    $circle->pivot_order_list()->attach($circle_data);  //
+////                    $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
+//                }
             }
             else throw new Exception("insert--order--fail");
 
@@ -8821,7 +8822,12 @@ class YHAdminRepository {
         DB::beginTransaction();
         try
         {
-            if($column_key == "route_id")
+            if($column_key == "circle_id")
+            {
+                $circle = YH_Circle::withTrashed()->find($column_value);
+                if(!$circle) throw new Exception("该【环线】不存在，刷新页面重试！");
+            }
+            else if($column_key == "route_id")
             {
                 $route = YH_Route::withTrashed()->find($column_value);
                 if(!$route) throw new Exception("该【线路】不存在，刷新页面重试！");
@@ -8861,7 +8867,17 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("order--update--fail");
             else
             {
-                // 需要记录(已发布 || 他人修改)
+
+//                if($column_key == "circle_id")
+//                {
+//                    $circle_data['order_id'] = $item->id;
+//                    $circle_data['creator_id'] = $me->id;
+//                    $circle->pivot_order_list()->attach($circle_data);  //
+////                    $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
+//                }
+
+
+                    // 需要记录(已发布 || 他人修改)
                 if($me->id == $item->creator_id && $item->is_published == 0 && false)
                 {
                 }
@@ -8884,16 +8900,23 @@ class YHAdminRepository {
                     $record_data["before"] = $before;
                     $record_data["after"] = $column_value;
 
-                    if(in_array($column_key,['client_id','route_id','car_id','trailer_id','driver_id']))
+                    if(in_array($column_key,['client_id','circle_id','route_id','car_id','trailer_id','driver_id']))
                     {
                         $record_data["before_id"] = $before;
                         $record_data["after_id"] = $column_value;
                     }
 
+
+
                     if($column_key == 'client_id')
                     {
                         $record_data["before_client_id"] = $before;
                         $record_data["after_client_id"] = $column_value;
+                    }
+                    else if($column_key == 'circle_id')
+                    {
+                        $record_data["before_circle_id"] = $before;
+                        $record_data["after_circle_id"] = $column_value;
                     }
                     else if($column_key == 'route_id')
                     {
@@ -10729,6 +10752,7 @@ class YHAdminRepository {
             ->withTrashed()
 //            ->withCount([''])
             ->with(['creator','car_er',
+                'order_list',
                 'pivot_order_list',
 //                'pivot_order_list'=>function($query) {
 //                    $query->with('finance_list');

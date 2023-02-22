@@ -77,6 +77,15 @@ class YH_Circle extends Model
 
 
 
+    // 环线-订单 【一对多】
+    function order_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','circle_id','id');
+    }
+
+
+
+
     // 环线-订单 【多对多】
     function pivot_order_list()
     {
