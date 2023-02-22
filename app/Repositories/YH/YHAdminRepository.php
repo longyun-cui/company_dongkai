@@ -7726,6 +7726,8 @@ class YHAdminRepository {
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
+        $unSpecified = ['id'=>0,'text'=>'(清空)','driver_id'=>0,'linkman_name'=>'','linkman_phone'=>''];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
@@ -7749,6 +7751,8 @@ class YHAdminRepository {
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
         }
+        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
@@ -7772,6 +7776,8 @@ class YHAdminRepository {
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
         }
+        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
@@ -7797,6 +7803,8 @@ class YHAdminRepository {
         }
 
         $list = $query->get()->toArray();
+        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
