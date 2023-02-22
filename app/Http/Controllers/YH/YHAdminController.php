@@ -844,6 +844,11 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_order_select2_client(request()->all());
     }
+    // 【订单管理】SELECT2 Circle 环线
+    public function operate_order_select2_circle()
+    {
+        return $this->repo->operate_order_select2_circle(request()->all());
+    }
     // 【订单管理】SELECT2 Route 线路
     public function operate_order_select2_route()
     {

@@ -7631,6 +7631,39 @@ class YHAdminRepository {
         return $list;
     }
     //
+    public function operate_order_select2_circle($post_data)
+    {
+//        $type = $post_data['type'];
+//        if($type == 0) $district_type = 0;
+//        else if($type == 1) $district_type = 0;
+//        else if($type == 2) $district_type = 1;
+//        else if($type == 3) $district_type = 2;
+//        else if($type == 4) $district_type = 3;
+//        else if($type == 21) $district_type = 4;
+//        else if($type == 31) $district_type = 21;
+//        else if($type == 41) $district_type = 31;
+//        else $district_type = 0;
+//        if(!is_numeric($type)) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+
+        if(empty($post_data['keyword']))
+        {
+            $list =YH_Circle::select(['id','title as text'])
+//                ->where(['user_status'=>1,'user_category'=>11])
+//                ->whereIn('user_type',[41,61,88])
+                ->get()->toArray();
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $list =YH_Circle::select(['id','title as text'])->where('title','like',"%$keyword%")
+//                ->where(['user_status'=>1,'user_category'=>11])
+//                ->whereIn('user_type',[41,61,88])
+                ->get()->toArray();
+        }
+        return $list;
+    }
+    //
     public function operate_order_select2_route($post_data)
     {
         if(empty($post_data['keyword']))
@@ -7908,7 +7941,13 @@ class YHAdminRepository {
         {
             $car = YH_Car::find($post_data['car_id']);
             if($car) $post_data['driver_id'] = $car->driver_id;
-            else return response_error([],"选择车辆不存在，刷新页面重试！");
+            else return response_error([],"选择【车辆】不存在，刷新页面重试！");
+        }
+
+        if(!empty($post_data['circle_id']))
+        {
+            $circle = YH_Circle::find($post_data['circle_id']);
+            if(!$circle) return response_error([],"选【择环】线不存在，刷新页面重试！");
         }
 
         // 启动数据库事务
@@ -7960,6 +7999,12 @@ class YHAdminRepository {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
+                $circle_data['order_id'] = $mine->id;
+                $circle_data['creator_id'] = $me->id;
+//                    $mine->pivot_order_list()->attach($order_list);  //
+                $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
+
+
             }
             else throw new Exception("insert--order--fail");
 
@@ -9343,7 +9388,7 @@ class YHAdminRepository {
 
         $query = YH_Order::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with(['creator','owner','client_er','route_er','pricing_er','car_er','trailer_er','driver_er','attachment_list']);
+            ->with(['creator','owner','client_er','circle_er','route_er','pricing_er','car_er','trailer_er','driver_er','attachment_list']);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )

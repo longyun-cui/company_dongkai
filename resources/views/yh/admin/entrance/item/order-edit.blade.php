@@ -120,28 +120,39 @@
                 </div>
 
 
-                {{--固定线路--}}
+                {{--固定线路 & 环线--}}
                 @if($operate == 'create' || ($operate == 'edit' && $data->route_type == 1))
                     <div class="form-group route-fixed-box">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择固定线路</label>
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 固定线路 & 环线</label>
                         <div class="col-md-8 ">
-                            <select class="form-control" name="route_id" id="select2-route">
-                                @if($operate == 'edit' && $data->route_id)
-                                    <option data-id="{{ $data->route_id or 0 }}"
-                                            value="{{ $data->route_id or 0 }}"
-                                            data-price="{{ $data->route_er->amount_with_cash or 0 }}"
-                                            data-distance="{{ $data->route_er->travel_distance or 0 }}"
-                                            data-prescribed="{{ $data->route_er->time_limitation_prescribed or 0 }}"
-                                            data-departure="{{ $data->route_er->departure_place or '' }}"
-                                            data-destination="{{ $data->route_er->destination_place or '' }}"
-                                            data-stopover="{{ $data->route_er->stopover_place or '' }}"
-                                    >
-                                        {{ $data->route_er->title }}
-                                    </option>
-                                @else
-                                    <option data-id="0" value="0">未指定</option>
-                                @endif
-                            </select>
+                            <div class="col-sm-6 col-md-6 padding-0">
+                                <select class="form-control" name="route_id" id="select2-route">
+                                    @if($operate == 'edit' && $data->route_id)
+                                        <option data-id="{{ $data->route_id or 0 }}"
+                                                value="{{ $data->route_id or 0 }}"
+                                                data-price="{{ $data->route_er->amount_with_cash or 0 }}"
+                                                data-distance="{{ $data->route_er->travel_distance or 0 }}"
+                                                data-prescribed="{{ $data->route_er->time_limitation_prescribed or 0 }}"
+                                                data-departure="{{ $data->route_er->departure_place or '' }}"
+                                                data-destination="{{ $data->route_er->destination_place or '' }}"
+                                                data-stopover="{{ $data->route_er->stopover_place or '' }}"
+                                        >
+                                            {{ $data->route_er->title }}
+                                        </option>
+                                    @else
+                                        <option data-id="0" value="0">未指定</option>
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 padding-0">
+                                <select class="form-control" name="circle_id" id="select2-circle">
+                                    @if($operate == 'edit' && $data->circle_id)
+                                        <option data-id="{{ $data->circle_id or 0 }}" value="{{ $data->circle_id or 0 }}">{{ $data->circle_er->title }}</option>
+                                    @else
+                                        <option data-id="0" value="0">未指定</option>
+                                    @endif
+                                </select>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -924,6 +935,36 @@
         $('#select2-client').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_client') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+
+        //
+        $('#select2-circle').select2({
+            ajax: {
+                url: "{{ url('/item/order_select2_circle') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

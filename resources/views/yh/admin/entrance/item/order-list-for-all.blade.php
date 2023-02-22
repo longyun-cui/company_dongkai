@@ -1663,6 +1663,35 @@
                     {
                         "className": "text-center",
                         "width": "120px",
+                        "title": "环线",
+                        "data": "circle_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','环线');
+                                $(nTd).attr('data-key','circle_id').attr('data-value',data);
+                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.pricing_er.title);
+                                $(nTd).attr('data-column-name','环线');
+                                if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.circle_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.circle_er.title+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
                         "title": "包油油耗",
                         "data": "pricing_id",
                         "orderable": false,

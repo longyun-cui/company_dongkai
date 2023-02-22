@@ -27,6 +27,7 @@ class YH_Order extends Model
         'outside_car_price',
         'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
         'travel_distance', 'time_limitation_prescribed',
+        'circle_id',
         'route_type', 'route_id', 'route', 'route_fixed', 'route_temporary',
         'pricing_id',
         'client_id',
@@ -90,6 +91,13 @@ class YH_Order extends Model
     function client_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Client','client_id','id');
+    }
+
+
+    // 环线
+    function circle_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Circle','circle_id','id');
     }
 
 
