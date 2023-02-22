@@ -7628,29 +7628,19 @@ class YHAdminRepository {
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
+        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
     public function operate_order_select2_circle($post_data)
     {
-//        $type = $post_data['type'];
-//        if($type == 0) $district_type = 0;
-//        else if($type == 1) $district_type = 0;
-//        else if($type == 2) $district_type = 1;
-//        else if($type == 3) $district_type = 2;
-//        else if($type == 4) $district_type = 3;
-//        else if($type == 21) $district_type = 4;
-//        else if($type == 31) $district_type = 21;
-//        else if($type == 41) $district_type = 31;
-//        else $district_type = 0;
-//        if(!is_numeric($type)) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
-//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
-
         if(empty($post_data['keyword']))
         {
             $list =YH_Circle::select(['id','title as text'])
 //                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
+                ->orderBy('id', 'desc')
                 ->get()->toArray();
         }
         else
@@ -7659,8 +7649,11 @@ class YHAdminRepository {
             $list =YH_Circle::select(['id','title as text'])->where('title','like',"%$keyword%")
 //                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
+                ->orderBy('id', 'desc')
                 ->get()->toArray();
         }
+        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
@@ -7702,6 +7695,8 @@ class YHAdminRepository {
                 ->where(['item_status'=>1,'item_category'=>1])
                 ->get()->toArray();
         }
+        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
@@ -7815,6 +7810,8 @@ class YHAdminRepository {
                 ->where(['user_status'=>1])
                 ->get()->toArray();
         }
+        $unSpecified = ['id'=>0,'text'=>'(清空)','driver_name'=>'','driver_phone'=>'','sub_driver_name'=>'','sub_driver_phone'=>''];
+        array_unshift($list,$unSpecified);
         return $list;
     }
 
@@ -9384,6 +9381,23 @@ class YHAdminRepository {
         }
         else $view_data['driver_id'] = -1;
 
+        // 驾驶员
+        if(!empty($post_data['circle_id']))
+        {
+            if(is_numeric($post_data['circle_id']) && $post_data['circle_id'] > 0)
+            {
+                $driver = YH_Circle::select(['id','title'])->find($post_data['circle_id']);
+                if($driver)
+                {
+                    $view_data['circle_id'] = $post_data['circle_id'];
+                    $view_data['circle_name'] = $driver->title;
+                }
+                else $view_data['circle_id'] = -1;
+            }
+            else $view_data['circle_id'] = -1;
+        }
+        else $view_data['circle_id'] = -1;
+
 
 
 
@@ -9444,6 +9458,14 @@ class YHAdminRepository {
             if(!in_array($post_data['client'],[-1,0]))
             {
                 $query->where('client_id', $post_data['client']);
+            }
+        }
+
+        if(!empty($post_data['circle']))
+        {
+            if(!in_array($post_data['circle'],[-1,0]))
+            {
+                $query->where('circle_id', $post_data['circle']);
             }
         }
 

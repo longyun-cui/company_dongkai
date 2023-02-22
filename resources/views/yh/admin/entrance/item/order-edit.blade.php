@@ -1038,7 +1038,6 @@
         });
         $("#select2-route").on("select2:select",function(){
             var $id = $(this).val();
-            console.log($id);
             var $price = $(this).find('option:selected').attr('data-price');
             if($id > 0)
             {
@@ -1051,7 +1050,6 @@
             }
             else
             {
-                console.log($id);
                 $('#order-price').removeAttr('readonly');
                 $('input[name=departure_place]').removeAttr('readonly');
                 $('input[name=destination_place]').removeAttr('readonly');

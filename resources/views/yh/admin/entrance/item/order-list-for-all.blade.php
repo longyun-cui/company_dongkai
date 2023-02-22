@@ -66,6 +66,14 @@
                             @endforeach
                         </select>
 
+                        <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:96px;">
+                            @if($circle_id > 0)
+                                <option value="{{ $circle_id }}">{{ $circle_name }}</option>
+                            @else
+                                <option value="-1">选择环线</option>
+                            @endif
+                        </select>
+
                         <select class="form-control form-filter" name="order-route" style="width:96px;">
                             <option value="-1">选择线路</option>
                             @foreach($route_list as $v)
@@ -1284,6 +1292,7 @@
                         d.keyword = $('input[name="order-keyword"]').val();
                         d.staff = $('select[name="order-staff"]').val();
                         d.client = $('select[name="order-client"]').val();
+                        d.circle = $('select[name="order-circle"]').val();
                         d.car = $('select[name="order-car"]').val();
                         d.route = $('select[name="order-route"]').val();
                         d.pricing = $('select[name="order-pricing"]').val();
@@ -3484,6 +3493,7 @@
                     if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
                     if($('select[name="order-staff"]').val() > 0)  $obj.client_id = $('select[name="order-staff"]').val();
                     if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
+                    if($('select[name="order-circle"]').val() > 0)  $obj.circle_id = $('select[name="order-circle"]').val();
                     if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
                     if($('select[name="order-pricing"]').val() > 0)  $obj.pricing_id = $('select[name="order-pricing"]').val();
                     if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
