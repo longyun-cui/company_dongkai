@@ -62,14 +62,14 @@
                 {{--@endif--}}
 
                 {{--订单--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">选择订单</label>
-                    <div class="col-md-8 ">
-                        <select name="order_list[]" id="select2-order-list" style="width:100%;" multiple="multiple">
-                            {{--<option value="{{$data->people_id or 0}}">{{$data->people->name or '请选择作者'}}</option>--}}
-                        </select>
-                    </div>
-                </div>
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">选择订单</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select name="order_list[]" id="select2-order-list" style="width:100%;" multiple="multiple">--}}
+{{--                            --}}{{--<option value="{{$data->people_id or 0}}">{{$data->people->name or '请选择作者'}}</option>--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
 
 
