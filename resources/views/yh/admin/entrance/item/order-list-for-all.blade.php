@@ -1672,8 +1672,8 @@
                                 $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','环线');
                                 $(nTd).attr('data-key','circle_id').attr('data-value',data);
-                                if(row.pricing_er == null) $(nTd).attr('data-option-name','未指定');
-                                else $(nTd).attr('data-option-name',row.pricing_er.title);
+                                if(row.circle_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.circle_er.title);
                                 $(nTd).attr('data-column-name','环线');
                                 if(row.pricing_id) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
