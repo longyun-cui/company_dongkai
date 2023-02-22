@@ -1306,7 +1306,7 @@
 //                "scrollY": true,
                 "scrollCollapse": true,
                 "fixedColumns": {
-                    "leftColumns": 7,
+                    "leftColumns": 8,
                     "rightColumns": 1
                 },
                 "columns": [
@@ -1662,7 +1662,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "160px",
+                        "width": "120px",
                         "title": "包油油耗",
                         "data": "pricing_id",
                         "orderable": false,
