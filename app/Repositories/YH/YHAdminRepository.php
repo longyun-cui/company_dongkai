@@ -4798,13 +4798,19 @@ class YHAdminRepository {
         {
             if($column_key == "driver_id")
             {
-                $driver = YH_Driver::withTrashed()->find($column_value);
-                if(!$driver) throw new Exception("该【驾驶员】不存在，刷新页面重试！");
+                if($column_value == 0)
+                {
+                }
+                else
+                {
+                    $driver = YH_Driver::withTrashed()->find($column_value);
+                    if(!$driver) throw new Exception("该【驾驶员】不存在，刷新页面重试！");
 
 //                $item->linkman_name = $driver->driver_name;
 //                $item->linkman_phone = $driver->driver_phone;
 //                $item->copilot_name = $driver->sub_driver_name;
 //                $item->copilot_phone = $driver->sub_driver_phone;
+                }
             }
 
 //            $item->timestamps = false;
@@ -8821,42 +8827,66 @@ class YHAdminRepository {
         {
             if($column_key == "circle_id")
             {
-                $circle = YH_Circle::withTrashed()->find($column_value);
-                if(!$circle) throw new Exception("该【环线】不存在，刷新页面重试！");
+                if($column_value == 0)
+                {
+                }
+                else
+                {
+                    $circle = YH_Circle::withTrashed()->find($column_value);
+                    if(!$circle) throw new Exception("该【环线】不存在，刷新页面重试！");
+                }
             }
             else if($column_key == "route_id")
             {
-                $route = YH_Route::withTrashed()->find($column_value);
-                if(!$route) throw new Exception("该【线路】不存在，刷新页面重试！");
+                if($column_value == 0)
+                {
+                }
+                else
+                {
+                    $route = YH_Route::withTrashed()->find($column_value);
+                    if(!$route) throw new Exception("该【线路】不存在，刷新页面重试！");
 
-                $item->amount = $route->amount_with_cash;
-                $item->departure_place = $route->departure_place;
-                $item->destination_place = $route->destination_place;
-                $item->stopover_place = $route->stopover_place;
-                $item->travel_distance = $route->travel_distance;
-                $item->time_limitation_prescribed = $route->time_limitation_prescribed;
+                    $item->amount = $route->amount_with_cash;
+                    $item->departure_place = $route->departure_place;
+                    $item->destination_place = $route->destination_place;
+                    $item->stopover_place = $route->stopover_place;
+                    $item->travel_distance = $route->travel_distance;
+                    $item->time_limitation_prescribed = $route->time_limitation_prescribed;
+                }
             }
             else if($column_key == "car_id")
             {
-                $car = YH_Car::withTrashed()->find($column_value);
-                if(!$car) throw new Exception("该【车辆】不存在，刷新页面重试！");
+                if($column_value == 0)
+                {
+                }
+                else
+                {
+                    $car = YH_Car::withTrashed()->find($column_value);
+                    if(!$car) throw new Exception("该【车辆】不存在，刷新页面重试！");
 
 //                $item->driver_name = null;
 //                $item->driver_phone = null;
-                $item->driver_name = $car->linkman_name;
-                $item->driver_phone = $car->linkman_phone;
+                    $item->driver_name = $car->linkman_name;
+                    $item->driver_phone = $car->linkman_phone;
+                }
             }
             else if($column_key == "driver_id")
             {
-                $driver = YH_Driver::withTrashed()->find($column_value);
-                if(!$driver) throw new Exception("该【驾驶员】不存在，刷新页面重试！");
+                if($column_value == 0)
+                {
+                }
+                else
+                {
+                    $driver = YH_Driver::withTrashed()->find($column_value);
+                    if(!$driver) throw new Exception("该【驾驶员】不存在，刷新页面重试！");
 
 //                $item->driver_name = null;
 //                $item->driver_phone = null;
-                $item->driver_name = $driver->driver_name;
-                $item->driver_phone = $driver->driver_phone;
-                $item->copilot_name = $driver->sub_driver_name;
-                $item->copilot_phone = $driver->sub_driver_phone;
+                    $item->driver_name = $driver->driver_name;
+                    $item->driver_phone = $driver->driver_phone;
+                    $item->copilot_name = $driver->sub_driver_name;
+                    $item->copilot_phone = $driver->sub_driver_phone;
+                }
             }
 
             $item->$column_key = $column_value;
