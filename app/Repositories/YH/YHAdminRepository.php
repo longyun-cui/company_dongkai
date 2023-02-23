@@ -7690,16 +7690,20 @@ class YHAdminRepository {
     {
         if(empty($post_data['keyword']))
         {
-            $list =YH_Pricing::select(['id','title as text'])
+            $list =YH_Pricing::select(['id','title as text','price1','price2','price3'])
                 ->where(['item_status'=>1,'item_category'=>1])
                 ->get()->toArray();
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Pricing::select(['id','title as text'])->where('title','like',"%$keyword%")
+            $list =YH_Pricing::select(['id','title as text','price1','price2','price3'])->where('title','like',"%$keyword%")
                 ->where(['item_status'=>1,'item_category'=>1])
                 ->get()->toArray();
+        }
+        foreach ($list as $v)
+        {
+            $v->text = $v->title.'('.$v->price1.' / '.$v->price2.' / '.$v->price3.')';
         }
         $unSpecified = ['id'=>0,'text'=>'(清空)'];
         array_unshift($list,$unSpecified);
@@ -10798,9 +10802,28 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $return['menu_active_of_circle_list_for_all'] = 'active menu-open';
+
+
+        // 车辆
+        if(!empty($post_data['car_id']))
+        {
+            if(is_numeric($post_data['car_id']) && $post_data['car_id'] > 0)
+            {
+                $car = YH_Car::select(['id','name'])->find($post_data['car_id']);
+                if($car)
+                {
+                    $view_data['car_id'] = $post_data['car_id'];
+                    $view_data['car_name'] = $car->name;
+                }
+                else $view_data['car_id'] = -1;
+            }
+            else $view_data['car_id'] = -1;
+        }
+        else $view_data['car_id'] = -1;
+
+        $view_data['menu_active_of_circle_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.circle-list-for-all';
-        return view($view_blade)->with($return);
+        return view($view_blade)->with($view_data);
     }
     // 【环线管理】返回-列表-数据
     public function get_item_circle_list_for_all_datatable($post_data)
@@ -10822,6 +10845,16 @@ class YHAdminRepository {
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        if(!empty($post_data['car']))
+        {
+            if(!in_array($post_data['car'],[-1,0]))
+            {
+                $query->where(function($query1) use($post_data){
+                    $query1->where('car_id', $post_data['car']);
+                });
+            }
+        }
 
 
         $total = $query->count();

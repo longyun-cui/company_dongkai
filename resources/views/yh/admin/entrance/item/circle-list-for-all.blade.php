@@ -42,6 +42,14 @@
                         <input type="text" class="form-control form-filter filter-keyup" name="circle-id" placeholder="ID" />
                         <input type="text" class="form-control form-filter filter-keyup" name="circle-name" placeholder="标题" />
 
+                        <select class="form-control form-filter order-select2-car" name="circle-car" style="width:96px;">
+                            @if($car_id > 0)
+                                <option value="{{ $car_id }}">{{ $car_name }}</option>
+                            @else
+                                <option value="-1">选择车辆</option>
+                            @endif
+                        </select>
+
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-circle">
                             <i class="fa fa-search"></i> 搜索
                         </button>
@@ -538,6 +546,7 @@
                         d.name = $('input[name="circle-name"]').val();
                         d.title = $('input[name="circle-title"]').val();
                         d.keyword = $('input[name="circle-keyword"]').val();
+                        d.car = $('select[name="circle-car"]').val();
                         d.status = $('select[name="circle-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
