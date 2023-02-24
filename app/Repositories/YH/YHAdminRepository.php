@@ -10894,10 +10894,16 @@ class YHAdminRepository {
         $me = $this->me;
 
         $circle_id  = $post_data["circle_id"];
-        $pivot_order_list = YH_Pivot_Circle_Order::select('order_id')
+
+//        $pivot_order_list = YH_Pivot_Circle_Order::select('order_id')
+//            ->withTrashed()
+//            ->where('circle_id',$circle_id)->get();
+//        $order_id_list = $pivot_order_list->pluck('order_id')->toArray();
+
+        $order_list = YH_Order::select('id')
             ->withTrashed()
             ->where('circle_id',$circle_id)->get();
-        $order_id_list = $pivot_order_list->pluck('order_id')->toArray();
+        $order_id_list = $order_list->pluck('id')->toArray();
 
 
         $this_month = date('Y-m');
@@ -10947,10 +10953,14 @@ class YHAdminRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $order_list = YH_Pivot_Circle_Order::select('order_id')
+//        $pivot_order_list = YH_Pivot_Circle_Order::select('order_id')
+//            ->withTrashed()
+//            ->where('circle_id',$id)->get();
+//        $order_list_array = $pivot_order_list->pluck('order_id')->toArray();
+        $order_list = YH_Order::select('id')
             ->withTrashed()
             ->where('circle_id',$id)->get();
-        $order_list_array = $order_list->pluck('order_id')->toArray();
+        $order_list_array = $order_list->pluck('id')->toArray();
 
 
         $query = YH_Finance::select('*')
