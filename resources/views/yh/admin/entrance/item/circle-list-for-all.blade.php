@@ -795,6 +795,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
+                                $(nTd).addClass('color-red');
                                 $(nTd).addClass('modal-show-for-attribute-list');
                                 $(nTd).attr('data-id',row.id).attr('data-name','标题');
                                 $(nTd).attr('data-key','title').attr('data-value',data);
