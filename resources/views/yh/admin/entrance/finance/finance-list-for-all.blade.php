@@ -280,7 +280,7 @@
 
                             var $text = $id + "&nbsp;&nbsp;[" + $assign + "]&nbsp;&nbsp;" + "(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $title;
 
-                            $html = '<a href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a><br>';
+                            $html = '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a><br>';
 
                             return $html;
 
