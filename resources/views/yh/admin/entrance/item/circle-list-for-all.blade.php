@@ -826,7 +826,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('color-green');
-                                $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).addClass('modal-show-for-analysis');
+                                // $(nTd).addClass('modal-show-for-attribute-list');
                                 $(nTd).attr('data-id',row.id).attr('data-name','利润');
                                 $(nTd).attr('data-key','title').attr('data-value',data);
                                 $(nTd).attr('data-column-name','利润');
