@@ -691,6 +691,7 @@
                         }
                     },
                     {
+                        "className": "text-left",
                         "width": "200px",
                         "title": "订单",
                         "data": "order_list",
@@ -723,7 +724,7 @@
                                 var $day = ('00'+($date.getDate())).slice(-2);
                                 var $assign = $year+'-'+$month+'-'+$day;
 
-                                var $text = $id + " " + $title + " (" + $departure + "-" + $destination + ") (" + $assign + ")";
+                                var $text = $id + "&nbsp; [" + $assign + "] &nbsp; (" + $departure + "-" + $destination + ")  &nbsp;" + $title;
 
                                 $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a><br>';
                             });
