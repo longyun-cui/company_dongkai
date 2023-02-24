@@ -663,7 +663,8 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            // return data;
+                            return '<a target="_blank" href="/item/order-list-for-all?circle_id='+row.id+'">'+data+'</a>';
                         }
                     },
                     {
