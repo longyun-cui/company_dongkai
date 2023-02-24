@@ -277,7 +277,7 @@
                             var $day = ('00'+($date.getDate())).slice(-2);
                             var $assign = $year+'-'+$month+'-'+$day;
 
-                            var $text = $id + " " + $title + "&nbsp;&nbsp;[" + $departure + "-" + $destination + "]&nbsp;&nbsp;&nbsp;&nbsp;(" + $assign + ")";
+                            var $text = $id + "&nbsp;&nbsp;[" + $assign + "]&nbsp;&nbsp;" + "(" + $departure + " - " + $destination + ")&nbsp;&nbsp;" + $title;
 
                             $html = '<a href="javascript:void(0);" data-id="'+$id+'">'+$text+'</a><br>';
 

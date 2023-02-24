@@ -724,7 +724,7 @@
                                 var $day = ('00'+($date.getDate())).slice(-2);
                                 var $assign = $year+'-'+$month+'-'+$day;
 
-                                var $text = $id + "&nbsp; [" + $assign + "] &nbsp; (" + $departure + "-" + $destination + ")  &nbsp;" + $title;
+                                var $text = $id + "&nbsp;&nbsp;[" + $assign + "] &nbsp;&nbsp;(" + $departure + " - " + $destination + ")&nbsp;&nbsp;" + $title;
 
                                 $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a><br>';
                             });
