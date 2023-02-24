@@ -687,7 +687,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return row.car_er == null ? '--' : '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
+                            return row.car_er == null ? '--' : '<a target="_blank" href="/item/order-list-for-all?car_id='+data+'">'+row.car_er.name+'</a>';
                         }
                     },
                     {
