@@ -724,7 +724,7 @@
 
                                 var $text = $id + " " + $title + " (" + $departure + "-" + $destination + ") (" + $assign + ")";
 
-                                $html += '<a href="javascript:void(0);" data-id="'+$id+'">'+$text+'</a><br>';
+                                $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a><br>';
                             });
                             return $html;
 //                            return row.people == null ? '未知' :
