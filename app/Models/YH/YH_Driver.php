@@ -36,6 +36,8 @@ class YH_Driver extends Authenticatable
 
     protected $dateFormat = 'U';
 
+    protected $hidden = ['content','custom'];
+
     protected $dates = ['created_at','updated_at','deleted_at'];
 //    public function getDates()
 //    {

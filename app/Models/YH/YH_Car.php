@@ -29,6 +29,8 @@ class YH_Car extends Model
     ];
     protected $dateFormat = 'U';
 
+    protected $hidden = ['content','custom'];
+
     protected $dates = ['created_at','updated_at','deleted_at'];
 //    public function getDates()
 //    {

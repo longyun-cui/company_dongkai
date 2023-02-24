@@ -25,6 +25,8 @@ class YH_Attachment extends Model
     ];
     protected $dateFormat = 'U';
 
+    protected $hidden = [];
+
     protected $dates = ['created_at','updated_at','deleted_at'];
 //    public function getDates()
 //    {
