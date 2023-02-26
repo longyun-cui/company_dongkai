@@ -68,6 +68,7 @@
 
                         <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:88px;">
                             @if($circle_id > 0)
+                                <option value="-1">选择环线</option>
                                 <option value="{{ $circle_id }}">{{ $circle_name }}</option>
                             @else
                                 <option value="-1">选择环线</option>
@@ -98,6 +99,7 @@
                         {{--</select>--}}
                         <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:88px;">
                             @if($car_id > 0)
+                                <option value="-1">选择车辆</option>
                                 <option value="{{ $car_id }}">{{ $car_name }}</option>
                             @else
                                 <option value="-1">选择车辆</option>
@@ -106,6 +108,7 @@
 
                         <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:90px;">
                             @if($driver_id > 0)
+                                <option value="-1">选择驾驶员</option>
                                 <option value="{{ $driver_id }}">{{ $driver_name }}</option>
                             @else
                                 <option value="-1">选择驾驶员</option>
@@ -114,10 +117,10 @@
 
                         <select class="form-control form-filter" name="order-type" style="width:88px;">
                             <option value ="-1">订单类型</option>
-                            <option value ="1">自有</option>
-                            <option value ="11">空单</option>
-                            <option value ="41">外配·配货</option>
-                            <option value ="61">外请·调车</option>
+                            <option value ="1" @if($order_type == "1") selected="selected" @endif>自有</option>
+                            <option value ="11" @if($order_type == "11") selected="selected" @endif>空单</option>
+                            <option value ="41" @if($order_type == "41") selected="selected" @endif>外配·配货</option>
+                            <option value ="61" @if($order_type == "61") selected="selected" @endif>外请·调车</option>
                         </select>
 
                         <select class="form-control form-filter" name="order-status" style="width:88px;">
@@ -3493,13 +3496,14 @@
                     var $obj = new Object();
                     if($('input[name="order-id"]').val())  $obj.order_id = $('input[name="order-id"]').val();
                     if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
-                    if($('select[name="order-staff"]').val() > 0)  $obj.client_id = $('select[name="order-staff"]').val();
+                    if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
                     if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
                     if($('select[name="order-circle"]').val() > 0)  $obj.circle_id = $('select[name="order-circle"]').val();
                     if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
                     if($('select[name="order-pricing"]').val() > 0)  $obj.pricing_id = $('select[name="order-pricing"]').val();
                     if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
                     if($('select[name="order-driver"]').val() > 0)  $obj.driver_id = $('select[name="order-driver"]').val();
+                    if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
 
                     var $paging_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
@@ -3510,8 +3514,12 @@
                     if(JSON.stringify($obj) != "{}")
                     {
                         var $url = url_build('',$obj);
-                        console.log(JSON.stringify($obj));
                         history.replaceState({page: 1}, "", $url);
+                    }
+                    else
+                    {
+                        $url = "{{ url('/item/order-list-for-all') }}";
+                        if(window.location.search) history.replaceState({page: 1}, "", $url);
                     }
 
                 },

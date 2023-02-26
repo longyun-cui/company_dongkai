@@ -39,12 +39,13 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="circle-id" placeholder="ID" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="circle-title" placeholder="标题" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="circle-id" placeholder="ID" value="{{ $circle_id or '' }}" style="width:80px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="circle-title" placeholder="标题" value="{{ $circle_title or '' }}" />
 
                         <select class="form-control form-filter order-select2-car" name="circle-car" style="width:96px;">
                             @if($car_id > 0)
-                                <option value="{{ $car_id }}">{{ $car_name }}</option>
+                                <option value="-1">选择车辆</option>
+                                <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>
                             @else
                                 <option value="-1">选择车辆</option>
                             @endif
@@ -943,45 +944,34 @@
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
 
-                    ajax_datatable.$('.tooltips').tooltip({placement: 'top', html: true});
-                    $("a.verify").click(function(event){
-                        event.preventDefault();
-                        var node = $(this);
-                        var tr = node.closest('tr');
-                        var nickname = tr.find('span.nickname').text();
-                        var cert_name = tr.find('span.certificate_type_name').text();
-                        var action = node.attr('data-action');
-                        var certificate_id = node.attr('data-id');
-                        var action_name = node.text();
 
-                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
-                        layer.open({
-                            'title': '警告',
-                            content: tpl
-                                .replace('@action_name', action_name)
-                                .replace('@nickname', nickname)
-                                .replace('@certificate_type_name', cert_name),
-                            btn: ['Yes', 'No'],
-                            yes: function(index) {
-                                layer.close(index);
-                                $.post(
-                                    '/admin/medsci/certificate/user/verify',
-                                    {
-                                        action: action,
-                                        id: certificate_id,
-                                        _token: '{{ csrf_token() }}'
-                                    },
-                                    function(json){
-                                        if(json['response_code'] == 'success') {
-                                            layer.msg('操作成功!', {time: 3500});
-                                            ajax_datatable.ajax.reload();
-                                        } else {
-                                            layer.alert(json['response_data'], {time: 10000});
-                                        }
-                                    }, 'json');
-                            }
-                        });
-                    });
+                    console.log($('input[name="circle-title"]').val());
+
+                    var $obj = new Object();
+                    if($('input[name="circle-id"]').val())  $obj.circle_id = $('input[name="circle-id"]').val();
+                    if($('input[name="circle-title"]').val())  $obj.circle_title = $('input[name="circle-title"]').val();
+                    if($('input[name="circle-assign"]').val())  $obj.assign = $('input[name="circle-assign"]').val();
+                    if($('select[name="circle-car"]').val() > 0)  $obj.car_id = $('select[name="circle-car"]').val();
+
+                    var $paging_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
+                    var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
+                    var $page = ($page_start / $paging_length) + 1; //得到页数值 比页码小1
+                    if($page > 1) $obj.page = $page;
+
+
+                    if(JSON.stringify($obj) != "{}")
+                    {
+                        var $url = url_build('',$obj);
+                        console.log($url);
+                        history.replaceState({page: 1}, "", $url);
+                    }
+                    else
+                    {
+                        $url = "{{ url('/item/circle-list-for-all') }}";
+                        if(window.location.search) history.replaceState({page: 1}, "", $url);
+                    }
+
+
                 },
                 "language": { url: '/common/dataTableI18n' },
             });

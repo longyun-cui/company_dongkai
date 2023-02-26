@@ -10,6 +10,9 @@
             $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
+            $(".order-select2-circle").val(-1).trigger("change");
+            $(".order-select2-car").val(-1).trigger("change");
+            $(".order-select2-driver").val(-1).trigger("change");
 
 //            $('select.form-filter').selectpicker('refresh');
             $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);

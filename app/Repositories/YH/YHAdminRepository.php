@@ -9440,6 +9440,14 @@ class YHAdminRepository {
         }
         else $view_data['circle_id'] = -1;
 
+        // 类型
+        if(!empty($post_data['order_type']))
+        {
+            if(is_numeric($post_data['order_type']) && $post_data['order_type'] > 0) $view_data['order_type'] = $post_data['order_type'];
+            else $view_data['order_type'] = -1;
+        }
+        else $view_data['order_type'] = -1;
+
 
 
 
@@ -10818,6 +10826,29 @@ class YHAdminRepository {
         $me = $this->me;
 
 
+
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+        // 环线ID
+        if(!empty($post_data['circle_id']))
+        {
+            if(is_numeric($post_data['circle_id']) && $post_data['circle_id'] > 0) $view_data['circle_id'] = $post_data['circle_id'];
+            else $view_data['circle_id'] = '';
+        }
+        else $view_data['circle_id'] = '';
+
+        // 环线-标题
+        if(!empty($post_data['circle_title']))
+        {
+            $view_data['circle_title'] = $post_data['circle_title'];
+        }
+        else $view_data['circle_title'] = '';
 
         // 车辆
         if(!empty($post_data['car_id']))
