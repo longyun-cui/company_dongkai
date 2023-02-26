@@ -10881,7 +10881,10 @@ class YHAdminRepository {
             ->withTrashed()
 //            ->withCount([''])
             ->with(['creator','car_er',
-                'order_list',
+//                'order_list',
+                'order_list'=>function($query) {
+                    $query->orderby('assign_time','asc');
+                },
                 'pivot_order_list',
 //                'pivot_order_list'=>function($query) {
 //                    $query->with('finance_list');
