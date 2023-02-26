@@ -9487,6 +9487,7 @@ class YHAdminRepository {
         if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), $post_data['assign']);
 
 
+        // 员工
         if(!empty($post_data['staff']))
         {
             if(!in_array($post_data['staff'],[-1,0]))
@@ -9495,6 +9496,7 @@ class YHAdminRepository {
             }
         }
 
+        // 客户
         if(!empty($post_data['client']))
         {
             if(!in_array($post_data['client'],[-1,0]))
@@ -9503,6 +9505,7 @@ class YHAdminRepository {
             }
         }
 
+        // 环线
         if(!empty($post_data['circle']))
         {
             if(!in_array($post_data['circle'],[-1,0]))
@@ -9511,6 +9514,7 @@ class YHAdminRepository {
             }
         }
 
+        // 车辆
         if(!empty($post_data['car']))
         {
             if(!in_array($post_data['car'],[-1,0]))
@@ -9520,14 +9524,24 @@ class YHAdminRepository {
             }
         }
 
-        if(!empty($post_data['route']))
+        // 线路
+        if(isset($post_data['route']))
         {
-            if(!in_array($post_data['route'],[-1,0]))
+            if(!in_array($post_data['route'],[-1]))
             {
-                $query->where('route_id', $post_data['route']);
+                if($post_data['route'] == -9)
+                {
+                    $query->where('route_type', 11);
+                }
+                else if($post_data['route'] == 0)
+                {
+                    $query->where('route_type', 1)->where('route_id', 0);
+                }
+                else $query->where('route_id', $post_data['route']);
             }
         }
 
+        // 定价
         if(!empty($post_data['pricing']))
         {
             if(!in_array($post_data['pricing'],[-1,0]))
@@ -9536,6 +9550,7 @@ class YHAdminRepository {
             }
         }
 
+        // 驾驶员
         if(!empty($post_data['driver']))
         {
             if(!in_array($post_data['driver'],[-1,0]))

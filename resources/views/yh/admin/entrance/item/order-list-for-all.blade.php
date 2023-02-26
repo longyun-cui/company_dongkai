@@ -48,25 +48,25 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:80px;" />
 
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" value="{{ $assign }}" readonly="readonly" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" value="{{ $assign }}" readonly="readonly" style="width:88px;" />
 
-                        <select class="form-control form-filter" name="order-staff" style="width:96px;">
+                        <select class="form-control form-filter" name="order-staff" style="width:88px;">
                             <option value ="-1">选择员工</option>
                             @foreach($staff_list as $v)
                                 <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->true_name }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="order-client" style="width:96px;">
+                        <select class="form-control form-filter" name="order-client" style="width:88px;">
                             <option value ="-1">选择客户</option>
                             @foreach($client_list as $v)
                                 <option value ="{{ $v->id }}" @if($v->id == $client_id) selected="selected" @endif>{{ $v->username }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:96px;">
+                        <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:88px;">
                             @if($circle_id > 0)
                                 <option value="{{ $circle_id }}">{{ $circle_name }}</option>
                             @else
@@ -74,27 +74,29 @@
                             @endif
                         </select>
 
-                        <select class="form-control form-filter" name="order-route" style="width:96px;">
+                        <select class="form-control form-filter" name="order-route" style="width:88px;">
                             <option value="-1">选择线路</option>
+                            <option value="-9">[临时线路]</option>
+                            <option value="0">[未指定]</option>
                             @foreach($route_list as $v)
                                 <option value ="{{ $v->id }}" @if($v->id == $route_id) selected="selected" @endif>{{ $v->title }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="order-pricing" style="width:96px;">
+                        <select class="form-control form-filter" name="order-pricing" style="width:88px;">
                             <option value="-1">选择定价</option>
                             @foreach($pricing_list as $v)
                                 <option value ="{{ $v->id }}" @if($v->id == $pricing_id) selected="selected" @endif>{{ $v->title }}</option>
                             @endforeach
                         </select>
 
-                        {{--<select class="form-control form-filter" name="order-car" style="width:96px;">--}}
+                        {{--<select class="form-control form-filter" name="order-car" style="width:88px;">--}}
                             {{--<option value ="-1">选择车辆</option>--}}
                             {{--@foreach($car_list as $v)--}}
                                 {{--<option value ="{{ $v->id }}">{{ $v->name }}</option>--}}
                             {{--@endforeach--}}
                         {{--</select>--}}
-                        <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:96px;">
+                        <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:88px;">
                             @if($car_id > 0)
                                 <option value="{{ $car_id }}">{{ $car_name }}</option>
                             @else
@@ -102,7 +104,7 @@
                             @endif
                         </select>
 
-                        <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:96px;">
+                        <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:90px;">
                             @if($driver_id > 0)
                                 <option value="{{ $driver_id }}">{{ $driver_name }}</option>
                             @else
@@ -110,7 +112,7 @@
                             @endif
                         </select>
 
-                        <select class="form-control form-filter" name="order-type" style="width:96px;">
+                        <select class="form-control form-filter" name="order-type" style="width:88px;">
                             <option value ="-1">订单类型</option>
                             <option value ="1">自有</option>
                             <option value ="11">空单</option>
@@ -118,7 +120,7 @@
                             <option value ="61">外请·调车</option>
                         </select>
 
-                        <select class="form-control form-filter" name="order-status" style="width:96px;">
+                        <select class="form-control form-filter" name="order-status" style="width:88px;">
                             <option value ="-1">订单状态</option>
                             <option value ="未发布">未发布</option>
                             <option value ="待发车">待发车</option>
@@ -130,7 +132,7 @@
                             <option value ="弃用">弃用</option>
                         </select>
 
-                        <select class="form-control form-filter" name="order-receipt-status" style="width:96px;">
+                        <select class="form-control form-filter" name="order-receipt-status" style="width:88px;">
                             <option value="-1">回单状态</option>
                             <option value="199">需要回单</option>
                             <option value="1">等待回单</option>
