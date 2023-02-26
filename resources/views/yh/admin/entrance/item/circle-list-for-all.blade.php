@@ -718,6 +718,8 @@
                                 var $departure  = (this.departure_place) ? this.departure_place : '';
                                 var $stopover  = (this.stopover_place) ? this.stopover_place : '';
                                 var $destination  = (this.destination_place) ? this.destination_place : '';
+                                var $type  = '';
+                                if(this.car_owner_type == 11) $type = '[空单]';
 
                                 var $date = new Date(this.assign_time*1000);
                                 var $year = $date.getFullYear();
@@ -725,7 +727,7 @@
                                 var $day = ('00'+($date.getDate())).slice(-2);
                                 var $assign = $year+'-'+$month+'-'+$day;
 
-                                var $text = $id + "&nbsp;&nbsp;[" + $assign + "] &nbsp;&nbsp;(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $title;
+                                var $text = $id + "&nbsp;&nbsp;[" + $assign + "] &nbsp;&nbsp;(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $type + $title;
 
                                 $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a><br>';
                             });
