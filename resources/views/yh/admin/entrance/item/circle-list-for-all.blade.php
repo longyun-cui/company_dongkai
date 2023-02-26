@@ -40,7 +40,7 @@
                     <div class="input-group">
 
                         <input type="text" class="form-control form-filter filter-keyup" name="circle-id" placeholder="ID" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="circle-name" placeholder="标题" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="circle-title" placeholder="标题" />
 
                         <select class="form-control form-filter order-select2-car" name="circle-car" style="width:96px;">
                             @if($car_id > 0)
