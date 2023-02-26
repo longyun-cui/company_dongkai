@@ -533,10 +533,12 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50, 100, 200], ["50", "100", "200"]],
+                "aLengthMenu": [[ @if(!in_array($length,[50,100,200])) {{ $length.',' }} @endif 50, 100, 200], [ @if(!in_array($length,[50,100,200])) {{ $length.',' }} @endif "50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
+                "iDisplayStart": {{ ($page - 1) * $length }},
+                "iDisplayLength": {{ $length or 12 }},
                 "ajax": {
                     'url': "{{ url('/item/circle-list-for-all') }}",
                     "type": 'POST',
@@ -945,7 +947,7 @@
 //                    });
 
 
-                    console.log($('input[name="circle-title"]').val());
+                    // console.log($('input[name="circle-title"]').val());
 
                     var $obj = new Object();
                     if($('input[name="circle-id"]').val())  $obj.circle_id = $('input[name="circle-id"]').val();
@@ -953,9 +955,10 @@
                     if($('input[name="circle-assign"]').val())  $obj.assign = $('input[name="circle-assign"]').val();
                     if($('select[name="circle-car"]').val() > 0)  $obj.car_id = $('select[name="circle-car"]').val();
 
-                    var $paging_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
+                    var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
+                    if($page_length != 50) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
-                    var $page = ($page_start / $paging_length) + 1; //得到页数值 比页码小1
+                    var $page = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($page > 1) $obj.page = $page;
 
 
@@ -1369,50 +1372,6 @@
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
 
-                    ajax_datatable_finance.$('.tooltips').tooltip({placement: 'top', html: true});
-                    $("a.verify").click(function(event){
-                        event.preventDefault();
-                        var node = $(this);
-                        var tr = node.closest('tr');
-                        var nickname = tr.find('span.nickname').text();
-                        var cert_name = tr.find('span.certificate_type_name').text();
-                        var action = node.attr('data-action');
-                        var certificate_id = node.attr('data-id');
-                        var action_name = node.text();
-
-                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
-                        layer.open({
-                            'title': '警告',
-                            content: tpl
-                                .replace('@action_name', action_name)
-                                .replace('@nickname', nickname)
-                                .replace('@certificate_type_name', cert_name),
-                            btn: ['Yes', 'No'],
-                            yes: function(index) {
-                                layer.close(index);
-                                $.post(
-                                    '/admin/medsci/certificate/user/verify',
-                                    {
-                                        action: action,
-                                        id: certificate_id,
-                                        _token: '{{csrf_token()}}'
-                                    },
-                                    function(json){
-                                        if(json['response_code'] == 'success') {
-                                            layer.msg('操作成功!', {time: 3500});
-                                            ajax_datatable.ajax.reload();
-                                        } else {
-                                            layer.alert(json['response_data'], {time: 10000});
-                                        }
-                                    }, 'json');
-                            }
-                        });
-                    });
-
-//                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-//                        checkboxClass: 'icheckbox_minimal-blue',
-//                        radioClass   : 'iradio_minimal-blue'
-//                    });
                 },
                 "language": { url: '/common/dataTableI18n' },
             });

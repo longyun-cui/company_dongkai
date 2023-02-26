@@ -9331,6 +9331,15 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 12;
+        }
+        else $view_data['length'] = 12;
+
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -9338,6 +9347,9 @@ class YHAdminRepository {
             else $view_data['page'] = 1;
         }
         else $view_data['page'] = 1;
+
+
+
 
         // 订单ID
         if(!empty($post_data['order_id']))
@@ -9616,7 +9628,7 @@ class YHAdminRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 12;
 
         if(isset($post_data['order']))
         {
@@ -10826,6 +10838,13 @@ class YHAdminRepository {
         $me = $this->me;
 
 
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 50;
+        }
+        else $view_data['length'] = 50;
 
         // 第几页
         if(!empty($post_data['page']))
@@ -10834,6 +10853,9 @@ class YHAdminRepository {
             else $view_data['page'] = 1;
         }
         else $view_data['page'] = 1;
+
+
+
 
         // 环线ID
         if(!empty($post_data['circle_id']))
