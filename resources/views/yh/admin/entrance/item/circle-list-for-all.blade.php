@@ -652,29 +652,6 @@
                     },
                     {
                         "className": "",
-                        "width": "120px",
-                        "title": "标题",
-                        "data": "title",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
-                                $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','标题');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            // return data;
-                            return '<a target="_blank" href="/item/order-list-for-all?circle_id='+row.id+'">'+data+'</a>';
-                        }
-                    },
-                    {
-                        "className": "",
                         "width": "80px",
                         "title": "车辆",
                         "data": "car_id",
@@ -694,6 +671,29 @@
                         },
                         render: function(data, type, row, meta) {
                             return row.car_er == null ? '--' : '<a target="_blank" href="/item/order-list-for-all?car_id='+data+'">'+row.car_er.name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "120px",
+                        "title": "标题",
+                        "data": "title",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','标题');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            return '<a target="_blank" href="/item/order-list-for-all?circle_id='+row.id+'">'+data+'</a>';
                         }
                     },
                     {
