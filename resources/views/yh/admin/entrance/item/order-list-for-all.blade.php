@@ -1679,7 +1679,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "120px",
+                        "width": "80px",
                         "title": "环线",
                         "data": "circle_id",
                         "orderable": false,
@@ -2016,24 +2016,6 @@
 
                             return $travel_status_html + $travel_result_html;
 
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "200px",
-                        "title": "行程",
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            var $journey_time = '';
-                            var $travel_departure_overtime_time = '';
-                            var $travel_arrival_overtime_time = '';
-
-                            if(row.travel_journey_time) $journey_time = '<small class="btn-xs bg-gray">行程 '+row.travel_journey_time+'</small><br>';
-                            if(row.travel_departure_overtime_time) $travel_departure_overtime_time = '<small class="btn-xs bg-red">发车超时 '+row.travel_departure_overtime_time+'</small><br>';
-                            if(row.travel_arrival_overtime_time) $travel_arrival_overtime_time = '<small class="btn-xs bg-red">到达超时 '+row.travel_arrival_overtime_time+'</small><br>';
-
-                            return $journey_time + $travel_departure_overtime_time + $travel_arrival_overtime_time;
                         }
                     },
                     {
@@ -2903,7 +2885,7 @@
                     {
                         "className": "font-12px",
                         "width": "100px",
-                        "title": "经停点-到达时间",
+                        "title": "经停-到达",
                         "data": 'stopover_arrival_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2956,7 +2938,7 @@
                     {
                         "className": "font-12px",
                         "width": "100px",
-                        "title": "经停点-出发时间",
+                        "title": "经停-出发",
                         "data": 'stopover_departure_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3059,6 +3041,24 @@
                             {
                                 return '<a href="javascript:void(0);">'+$year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute+'</a>';
                             }
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "200px",
+                        "title": "行程",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $journey_time = '';
+                            var $travel_departure_overtime_time = '';
+                            var $travel_arrival_overtime_time = '';
+
+                            if(row.travel_journey_time) $journey_time = '<small class="btn-xs bg-gray">行程 '+row.travel_journey_time+'</small><br>';
+                            if(row.travel_departure_overtime_time) $travel_departure_overtime_time = '<small class="btn-xs bg-red">发车超时 '+row.travel_departure_overtime_time+'</small><br>';
+                            if(row.travel_arrival_overtime_time) $travel_arrival_overtime_time = '<small class="btn-xs bg-red">到达超时 '+row.travel_arrival_overtime_time+'</small><br>';
+
+                            return $journey_time + $travel_departure_overtime_time + $travel_arrival_overtime_time;
                         }
                     },
                     {
