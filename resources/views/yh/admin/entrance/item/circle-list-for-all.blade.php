@@ -42,7 +42,7 @@
                         <input type="text" class="form-control form-filter filter-keyup" name="circle-id" placeholder="ID" value="{{ $circle_id or '' }}" style="width:80px;" />
                         <input type="text" class="form-control form-filter filter-keyup" name="circle-title" placeholder="标题" value="{{ $circle_title or '' }}" />
 
-                        <select class="form-control form-filter order-select2-car" name="circle-car" style="width:96px;">
+                        <select class="form-control form-filter order-select2-car" name="circle-car" style="width:120px;">
                             @if($car_id > 0)
                                 <option value="-1">选择车辆</option>
                                 <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>

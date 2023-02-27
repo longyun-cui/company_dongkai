@@ -66,7 +66,7 @@
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:88px;">
+                        <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:96px;">
                             @if($circle_id > 0)
                                 <option value="-1">选择环线</option>
                                 <option value="{{ $circle_id }}" selected="selected">{{ $circle_name }}</option>
@@ -97,7 +97,7 @@
                                 {{--<option value ="{{ $v->id }}">{{ $v->name }}</option>--}}
                             {{--@endforeach--}}
                         {{--</select>--}}
-                        <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:88px;">
+                        <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:120px;">
                             @if($car_id > 0)
                                 <option value="-1">选择车辆</option>
                                 <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>
@@ -106,7 +106,7 @@
                             @endif
                         </select>
 
-                        <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:90px;">
+                        <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:96px;">
                             @if($driver_id > 0)
                                 <option value="-1">选择驾驶员</option>
                                 <option value="{{ $driver_id }}" selected="selected">{{ $driver_name }}</option>
@@ -1281,12 +1281,12 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[12,20,50,100,200])) {{ $length.',' }} @endif 12, 20, 50, 100, 200], [ @if(!in_array($length,[12,20,50,100,200])) {{ $length.',' }} @endif "12", "20", "50", "100", "200"]],
+                "aLengthMenu": [[ @if(!in_array($length,[20,50,100,200])) {{ $length.',' }} @endif 20, 50, 100, 200], [ @if(!in_array($length,[20,50,100,200])) {{ $length.',' }} @endif "20", "50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "iDisplayStart": {{ ($page - 1) * $length }},
-                "iDisplayLength": {{ $length or 12 }},
+                "iDisplayLength": {{ $length or 20 }},
                 "ajax": {
                     'url': "{{ url('/item/order-list-for-all') }}",
                     "type": 'POST',
