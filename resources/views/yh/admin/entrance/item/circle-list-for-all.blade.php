@@ -26,7 +26,7 @@
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/circle-create') }}">
+                    <a target="_blank" href="{{ url('/item/circle-create') }}">
                         <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加环线</button>
                     </a>
                 </div>
@@ -53,6 +53,9 @@
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-circle">
                             <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-circle">
+                            <i class="fa fa-circle-o-notch"></i> 刷新
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-circle">
                             <i class="fa fa-circle-o-notch"></i> 重置

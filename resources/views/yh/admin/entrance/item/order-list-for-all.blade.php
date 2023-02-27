@@ -149,6 +149,9 @@
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
                             <i class="fa fa-search"></i> 搜索
                         </button>
+                        <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-order">
+                            <i class="fa fa-circle-o-notch"></i> 刷新
+                        </button>
                         <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-order">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>

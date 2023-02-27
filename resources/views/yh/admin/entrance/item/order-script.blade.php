@@ -5,6 +5,10 @@
         $("#datatable-for-order-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
+        // 【刷新】
+        $("#datatable-for-order-list").on('click', ".filter-refresh", function() {
+            $('#datatable_ajax').DataTable().ajax.reload(null,false);
+        });
         // 【重置】
         $("#datatable-for-order-list").on('click', ".filter-cancel", function() {
             $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
