@@ -69,7 +69,7 @@
                         <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:88px;">
                             @if($circle_id > 0)
                                 <option value="-1">选择环线</option>
-                                <option value="{{ $circle_id }}">{{ $circle_name }}</option>
+                                <option value="{{ $circle_id }}" selected="selected">{{ $circle_name }}</option>
                             @else
                                 <option value="-1">选择环线</option>
                             @endif
@@ -100,7 +100,7 @@
                         <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:88px;">
                             @if($car_id > 0)
                                 <option value="-1">选择车辆</option>
-                                <option value="{{ $car_id }}">{{ $car_name }}</option>
+                                <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>
                             @else
                                 <option value="-1">选择车辆</option>
                             @endif
@@ -109,7 +109,7 @@
                         <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:90px;">
                             @if($driver_id > 0)
                                 <option value="-1">选择驾驶员</option>
-                                <option value="{{ $driver_id }}">{{ $driver_name }}</option>
+                                <option value="{{ $driver_id }}" selected="selected">{{ $driver_name }}</option>
                             @else
                                 <option value="-1">选择驾驶员</option>
                             @endif
@@ -3512,6 +3512,7 @@
                     if($pagination > 1) $obj.page = $pagination;
 
 
+                    console.log(JSON.stringify($obj));
                     if(JSON.stringify($obj) != "{}")
                     {
                         var $url = url_build('',$obj);
@@ -3519,8 +3520,8 @@
                     }
                     else
                     {
-                        $url = "{{ url('/item/order-list-for-all') }}";
-                        if(window.location.search) history.replaceState({page: 1}, "", $url);
+                        {{--$url = "{{ url('/item/order-list-for-all') }}";--}}
+                        {{--if(window.location.search) history.replaceState({page: 1}, "", $url);--}}
                     }
 
                 },
