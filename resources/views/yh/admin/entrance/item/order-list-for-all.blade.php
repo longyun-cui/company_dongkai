@@ -26,7 +26,7 @@
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/order-create') }}">
+                    <a target="_blank" href="{{ url('/item/order-create') }}">
                         <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加订单</button>
                     </a>
                 </div>

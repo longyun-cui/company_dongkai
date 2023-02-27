@@ -46,8 +46,8 @@
             console.log("window.location.pathname = " + window.location.pathname);
             console.log("window.location.search = " + window.location.search);
             var $url = "/item/order-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
-            // window.location.href = $url;
-            window.open($url);
+            window.location.href = $url;
+            // window.open($url);
         });
 
 
