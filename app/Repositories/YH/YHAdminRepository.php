@@ -7692,19 +7692,20 @@ class YHAdminRepository {
         {
             $list =YH_Pricing::select(['id','title as text','price1','price2','price3'])
                 ->where(['item_status'=>1,'item_category'=>1])
-                ->get()->toArray();
+                ->get();
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
             $list =YH_Pricing::select(['id','title as text','price1','price2','price3'])->where('title','like',"%$keyword%")
                 ->where(['item_status'=>1,'item_category'=>1])
-                ->get()->toArray();
+                ->get();
         }
         foreach ($list as $v)
         {
-            $v->text = $v->title.'('.$v->price1.' / '.$v->price2.' / '.$v->price3.')';
+            $v->text = $v->text.' ('.$v->price1.' / '.$v->price2.' / '.$v->price3.')';
         }
+        $list = $list->toArray();
         $unSpecified = ['id'=>0,'text'=>'(清空)'];
         array_unshift($list,$unSpecified);
         return $list;

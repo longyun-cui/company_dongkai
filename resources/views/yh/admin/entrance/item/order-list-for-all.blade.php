@@ -682,7 +682,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2 info-select-set-column-name"></label>
                         <div class="col-md-8 ">
-                            <select class="form-control select2-client" name="info-select-set-column-value" style="width:240px;" id="">
+                            <select class="form-control select2-client" name="info-select-set-column-value" style="width:360px;" id="">
                                 <option data-id="0" value="0">未指定</option>
                             </select>
                         </div>
