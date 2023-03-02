@@ -133,7 +133,7 @@
                     {
                         console.log(data);
                         var temp_window=window.open();
-                        temp_window.location = "{{ env('DOMAIN_ZY_ADMIN') }}/";
+                        temp_window.location = "{{ env('DOMAIN_YH_ADMIN') }}/";
                     }
                 },
                 'json'
@@ -156,7 +156,7 @@
                     {
                         console.log(data);
                         var temp_window=window.open();
-                        temp_window.location = "{{ env('DOMAIN_ZY_STAFF') }}/home";
+                        temp_window.location = "{{ env('DOMAIN_YH_STAFF') }}/home";
                     }
                 },
                 'json'

@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_SUPER_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_YH_SUPER').'layout.layout')
 
 
 @section('head_title')
@@ -9,7 +9,7 @@
 @section('header','')
 @section('description', '超级管理员系统-如未科技')
 @section('breadcrumb')
-    <li><a href="{{ url('/admin') }}"><i class="fa fa-home"></i>首页</a></li>
+    <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="{{ url($list_link) }}"><i class="fa fa-list"></i>{{ $list_text or '内容列表' }}</a></li>
 @endsection
 

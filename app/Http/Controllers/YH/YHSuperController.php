@@ -153,12 +153,33 @@ class YHSuperController extends Controller
 //
 //            }
 
-            Auth::guard('zy_staff')->login($user,true);
+            Auth::guard('yh_admin')->login($user,true);
 
             $return['user'] = $user;
-            $return['url'] = env('DOMAIN_YH_STAFF');
+            $return['url'] = env('DOMAIN_YH_ADMIN');
 
-            if(request()->isMethod('get')) return redirect(env('DOMAIN_YH_STAFF'));
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_YH_ADMIN'));
+            else if(request()->isMethod('post'))
+            {
+                return response_success($return);
+            }
+        }
+        else return response_error([]);
+
+    }
+    // 【用户-管理员】登录
+    public function operate_user_admin_login()
+    {
+        $user_id = request()->get('user_id');
+        $user = YH_User::where('id',$user_id)->first();
+        if($user)
+        {
+            Auth::guard('yh_admin')->login($user,true);
+
+            $return['user'] = $user;
+            $return['url'] = env('DOMAIN_YH_ADMIN');
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_YH_ADMIN'));
             else if(request()->isMethod('post'))
             {
                 return response_success($return);
@@ -177,24 +198,6 @@ class YHSuperController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_user_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_user_list_for_all_datatable(request()->all());
     }
-    // 【用户】【个人用户】返回-列表-视图
-    public function view_user_list_for_individual()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_list_for_individual(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_list_for_individual_datatable(request()->all());
-    }
-    // 【用户】【轻博】返回-列表-视图
-    public function view_user_list_for_doc()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_list_for_doc(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_list_for_doc_datatable(request()->all());
-    }
-    // 【用户】【组织】返回-列表-视图
-    public function view_user_list_for_org()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_list_for_org(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_list_for_org_datatable(request()->all());
-    }
 
 
 
@@ -212,17 +215,11 @@ class YHSuperController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_list_for_all_datatable(request()->all());
     }
-    // 【内容】【原子】返回-列表-视图
-    public function view_item_list_for_atom()
+    // 【内容】【全部】返回-列表-视图
+    public function view_record_list_for_all()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_list_for_atom(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_list_for_atom_datatable(request()->all());
-    }
-    // 【内容】【轻博】返回-列表-视图
-    public function view_item_list_for_doc()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_list_for_doc(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_list_for_doc_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_record_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_record_list_for_all_datatable(request()->all());
     }
 
 

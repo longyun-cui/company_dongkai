@@ -38,11 +38,6 @@ Route::group(['middleware' => ['yh.super.login']], function () {
     /*
      * 用户管理
      */
-    /*
-     * user
-     */
-    Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
-
     Route::match(['get','post'], '/user/user-create', $controller.'@operate_user_user_create');
     Route::match(['get','post'], '/user/user-edit', $controller.'@operate_user_user_edit');
     Route::post('/user/user-delete', $controller.'@operate_user_user_delete');
@@ -53,12 +48,12 @@ Route::group(['middleware' => ['yh.super.login']], function () {
 
 
     Route::match(['get','post'], '/user/user-login', $controller.'@operate_user_user_login');
-    Route::match(['get','post'], '/user/admin-login', $controller.'@operate_user_admin_login');
-    Route::match(['get','post'], '/user/staff-login', $controller.'@operate_user_staff_login');
+    Route::match(['get','post'], '/user/user-admin-login', $controller.'@operate_user_admin_login');
+    Route::match(['get','post'], '/user/user-staff-login', $controller.'@operate_user_staff_login');
 
 
     Route::match(['get','post'], '/user/user-list-for-all', $controller.'@view_user_list_for_all');
-    Route::match(['get','post'], '/user/staff-list-all', $controller.'@view_user_staff_list_for_all');
+    Route::match(['get','post'], '/user/staff-list-for-all', $controller.'@view_user_staff_list_for_all');
 
     Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
     Route::match(['get','post'], '/user/staff-edit', $controller.'@operate_user_staff_edit');
@@ -91,6 +86,7 @@ Route::group(['middleware' => ['yh.super.login']], function () {
 
     Route::match(['get','post'], '/item/item-list', $controller.'@view_item_list');
     Route::match(['get','post'], '/item/item-list-for-all', $controller.'@view_item_list_for_all');
+    Route::match(['get','post'], '/item/record-list-for-all', $controller.'@view_record_list_for_all');
 
 
 

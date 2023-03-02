@@ -71,15 +71,21 @@
             <li class="header">内容管理</li>
 
             <li class="treeview {{ $menu_active_of_item_list_for_all or '' }}">
-                <a href="{{ url('/item/item-list-for-all')}}">
+                <a href="{{ url('/item/order-list-for-all')}}">
                     <i class="fa fa-list text-red"></i>
-                    <span>全部内容</span>
+                    <span>订单列表</span>
                 </a>
             </li>
-            <li class="treeview {{ $menu_active_of_task_list_for_all or '' }}">
-                <a href="{{ url('/item/task-list-for-all')}}">
+            <li class="treeview {{ $menu_active_of_circle_list_for_all or '' }}">
+                <a href="{{ url('/item/circle-list-for-all')}}">
                     <i class="fa fa-list text-red"></i>
-                    <span>任务列表</span>
+                    <span>环线列表</span>
+                </a>
+            </li>
+            <li class="treeview {{ $menu_active_of_record_list_for_all or '' }}">
+                <a href="{{ url('/item/record-list-for-all')}}">
+                    <i class="fa fa-list text-red"></i>
+                    <span>修改记录</span>
                 </a>
             </li>
 
@@ -106,7 +112,7 @@
             <li class="header">平台</li>
 
             <li class="treeview">
-                <a href="{{ env('DOMAIN_ZY_ADMIN') }}" target="_blank">
+                <a href="{{ env('DOMAIN_YH_ADMIN') }}" target="_blank">
                     <i class="fa fa-cube text-default"></i> <span>管理员系统</span>
                 </a>
             </li>

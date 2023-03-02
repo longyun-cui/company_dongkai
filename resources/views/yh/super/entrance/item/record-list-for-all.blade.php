@@ -1,85 +1,43 @@
-@extends(env('TEMPLATE_YH_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_YH_SUPER').'layout.layout')
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
-    {{ $title_text or '线路列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    @if(in_array(env('APP_ENV'),['local'])){{ $local or 'SL.' }}@endif
+    {{ $title_text or '记录列表' }} - 超级管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description'){{ $title_text or '线路列表' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '记录列表' }} - 超级管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-info">
-
-            <div class="box-header with-border" style="margin:8px 0;">
-                <h3 class="box-title">合同到期提醒</h3>
-            </div>
-
-            <div class="box-body" style="font-size:13px;">
-                @foreach($route_list as $route)
-                    <div style="clear:both;line-height:24px;">
-                        <span class="pull-left" style="width:200px;">
-                            <text class="text-green">[{{ $route->id }}]</text>
-                            <b class="font-14px- text-red-">{{ $route->title }}</b>
-                        </span>
-
-                        <span class="pull-left" style="width:200px;">
-                            结束时间 <b class="font-16px text-red">{{ $route->contract_ended_date }}</b>
-                        </span>
-                    </div>
-                @endforeach
-            </div>
-
-            <div class="box-footer">
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="col-md-12">
         <div class="box box-info main-list-body">
 
             <div class="box-header with-border" style="margin:16px 0;">
 
-                <h3 class="box-title">{{ $title_text or '线路列表' }}</h3>
-
-                @if(in_array($me->user_type,[0,1,9,11,19]))
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/route-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加线路</button>
-                    </a>
-                </div>
-                @endif
+                <h3 class="box-title">{{ $title_text or '记录列表' }}</h3>
 
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-route-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-record-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="route-id" placeholder="ID" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="route-name" placeholder="标题" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="record-id" placeholder="ID" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="record-name" placeholder="标题" />
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-route">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-record">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-route">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-record">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -145,7 +103,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">线路【<span class="attachment-set-title"></span>】</h3>
+                <h3 class="box-title">定价【<span class="attachment-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -169,12 +127,12 @@
             <div class="box-body">
 
                 {{ csrf_field() }}
-                <input type="hidden" name="attachment-set-operate" value="item-route-attachment-set" readonly>
+                <input type="hidden" name="attachment-set-operate" value="item-pricing-attachment-set" readonly>
                 <input type="hidden" name="attachment-set-order-id" value="0" readonly>
                 <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
                 <input type="hidden" name="attachment-set-column-key" value="" readonly>
 
-                <input type="hidden" name="operate" value="item-route-attachment-set" readonly>
+                <input type="hidden" name="operate" value="item-pricing-attachment-set" readonly>
                 <input type="hidden" name="order_id" value="0" readonly>
                 <input type="hidden" name="operate_type" value="add" readonly>
                 <input type="hidden" name="column_key" value="attachment" readonly>
@@ -231,14 +189,14 @@
 </div>
 
 
-{{--修改-文本-text-信息--}}
+{{--修改-基本-信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改线路【<span class="info-text-set-title"></span>】</h3>
+                <h3 class="box-title">修改定价【<span class="info-text-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -247,14 +205,14 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-route-info-text-set" readonly>
+                    <input type="hidden" name="info-text-set-operate" value="item-pricing-info-text-set" readonly>
                     <input type="hidden" name="info-text-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-text-set-column-key" value="" readonly>
 
 
                     <div class="form-group">
-                        <label class="control-label col-md-2 info-set-column-name"></label>
+                        <label class="control-label col-md-2 info-text-set-column-name"></label>
                         <div class="col-md-8 ">
                             <input type="text" class="form-control" name="info-text-set-column-value" autocomplete="off" placeholder="" value="">
                             <textarea class="form-control" name="info-textarea-set-column-value" rows="6" cols="100%"></textarea>
@@ -277,14 +235,14 @@
 
     </div>
 </div>
-{{--修改-时间-time-信息--}}
+{{--修改-时间-信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
     <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改线路【<span class="info-time-set-title"></span>】</h3>
+                <h3 class="box-title">修改定价【<span class="info-time-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -293,8 +251,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-route-info-text-set" readonly>
-                    {{--<input type="hidden" name="info-time-set-operate" value="item-route-info-time-set" readonly>--}}
+                    <input type="hidden" name="info-time-set-operate" value="item-pricing-info-time-set" readonly>
                     <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
@@ -332,7 +289,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改线路【<span class="info-radio-set-title"></span>】</h3>
+                <h3 class="box-title">修改定价【<span class="info-radio-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -341,7 +298,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-route-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-operate" value="item-pricing-info-option-set" readonly>
                     <input type="hidden" name="info-radio-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
@@ -372,7 +329,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改线路【<span class="info-select-set-title"></span>】</h3>
+                <h3 class="box-title">修改定价【<span class="info-select-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -381,7 +338,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-route-info-option-set" readonly>
+                    <input type="hidden" name="info-select-set-operate" value="item-pricing-info-option-set" readonly>
                     <input type="hidden" name="info-select-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
@@ -411,89 +368,6 @@
         </div>
 
     </div>
-</div>
-
-
-{{--option--}}
-<div class="option-container _none">
-
-    <div id="trailer_type-option-list">
-        <option value="0">选择箱型</option>
-        <option value="直板">直板</option>
-        <option value="高栏">高栏</option>
-        <option value="平板">平板</option>
-        <option value="冷藏">冷藏</option>
-    </div>
-
-    <div id="trailer_length-option-list">
-        <option value="0">选择车挂尺寸</option>
-        <option value="9.6">9.6</option>
-        <option value="12.5">12.5</option>
-        <option value="15">15</option>
-        <option value="16.5">16.5</option>
-        <option value="17.5">17.5</option>
-    </div>
-
-    <div id="trailer_volume-option-list">
-        <option value="0">选择承载方数</option>
-        <option value="125">125</option>
-        <option value="130">130</option>
-        <option value="135">135</option>
-    </div>
-
-    <div id="trailer_weight-option-list">
-        <option value="0">选择承载重量</option>
-        <option value="13">13吨</option>
-        <option value="20">20吨</option>
-        <option value="25">25吨</option>
-    </div>
-
-    <div id="trailer_axis_count-option-list">
-        <option value="0">选择轴数</option>
-        <option value="1">1轴</option>
-        <option value="2">2轴</option>
-        <option value="3">3轴</option>
-    </div>
-
-
-
-    {{--回单状态--}}
-    <div id="receipt_status-option-list">
-        <option value="-1">选择回单状态</option>
-        <option value="1">等待回单</option>
-        <option value="21">邮寄中</option>
-        <option value="41">已签收，等待确认</option>
-        <option value="100">已完成</option>
-        <option value="101">回单异常</option>
-    </div>
-
-    <div id="receipt_need-option-list">
-
-        <label class="control-label col-md-2">是否需要回单</label>
-        <div class="col-md-8">
-            <div class="btn-group">
-
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="receipt_need" value="0" class="info-set-column"> 不需要
-                        </label>
-                    </span>
-                </button>
-
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="receipt_need" value="1" class="info-set-column"> 需要
-                        </label>
-                    </span>
-                </button>
-
-            </div>
-        </div>
-
-    </div>
-
 </div>
 
 
@@ -606,27 +480,21 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50, 100, 200], ["50", "100", "200"]],
+                "aLengthMenu": [[100, 200, 500], ["100", "200", "500"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/item/route-list-for-all') }}",
+                    'url': "{{ url('/item/record-list-for-all') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="route-id"]').val();
-                        d.name = $('input[name="route-name"]').val();
-                        d.title = $('input[name="route-title"]').val();
-                        d.keyword = $('input[name="route-keyword"]').val();
-                        d.status = $('select[name="route-status"]').val();
-//
-//                        d.created_at_from = $('input[name="created_at_from"]').val();
-//                        d.created_at_to = $('input[name="created_at_to"]').val();
-//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
-//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
-
+                        d.id = $('input[name="record-id"]').val();
+                        d.name = $('input[name="record-name"]').val();
+                        d.title = $('input[name="record-title"]').val();
+                        d.keyword = $('input[name="record-keyword"]').val();
+                        d.status = $('select[name="record-status"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",
@@ -651,7 +519,7 @@
 //                    },
                     {
                         "className": "",
-                        "width": "50px",
+                        "width": "60px",
                         "title": "ID",
                         "data": "id",
                         "orderable": true,
@@ -670,360 +538,454 @@
                         }
                     },
                     {
-                        "width": "160px",
+                        "className": "font-12px",
+                        "width": "80px",
                         "title": "操作",
-                        "data": 'id',
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            var $html_edit = '';
-                            var $html_detail = '';
-                            var $html_record = '';
-                            var $html_able = '';
-                            var $html_delete = '';
-                            var $html_publish = '';
-                            var $html_abandon = '';
-
-                            if(row.item_status == 1)
-                            {
-                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.is_me == 1 && row.active == 0)
-                            {
-                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
-                            }
-                            else
-                            {
-                                $html_publish = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">发布</a>';
-                            }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
-
-                            var html =
-                                '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
-                                $html_able+
-//                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
-//                                    $html_publish+
-                                $html_delete+
-                                $html_record+
-//                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-//                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
-//                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
-                                '';
-                            return html;
-
-                        }
-                    },
-                    {
-                        "width": "60px",
-                        "title": "状态",
-                        "data": "item_status",
+                        "data": "operate_category",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
                             if(data == 1)
                             {
-                                return '<small class="btn-xs btn-success">正常</small>';
+                                if(row.operate_type == 1) return '<small class="btn-xs bg-olive">添加</small>';
+                                else if(row.operate_type == 11) return '<small class="btn-xs bg-orange">修改</small>';
+                                else return '有误';
                             }
-                            else
+                            else if(data == 11) return '<small class="btn-xs bg-blue">发布</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-green">启用</small>';
+                            else if(data == 22) return '<small class="btn-xs bg-red">禁用</small>';
+                            else if(data == 71)
                             {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
+                                if(row.operate_type == 1)
+                                {
+                                    return '<small class="btn-xs bg-purple">附件</small><small class="btn-xs bg-green">添加</small>';
+                                }
+                                else if(row.operate_type == 91)
+                                {
+                                    return '<small class="btn-xs bg-purple">附件</small><small class="btn-xs bg-red">删除</small>';
+                                }
+                                else return '';
+
                             }
+                            else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
+                            else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
+                            else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
+                            else if(data == 103) return '<small class="btn-xs bg-black">永久删除</small>';
+                            else return '有误';
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "200px",
-                        "title": "标题",
-                        "data": "title",
+                        "width": "80px",
+                        "title": "对象",
+                        "data": "operate_object",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
+                                $(nTd).attr('data-id',row.id).attr('data-name','对象');
                                 $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','标题');
+                                $(nTd).attr('data-column-name','对象');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "运价(现金)",
-                        "data": "amount_with_cash",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','运价(现金)');
-                                $(nTd).attr('data-key','amount_with_cash').attr('data-value',data);
-                                $(nTd).attr('data-column-name','运价(现金)');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "运价(带票)",
-                        "data": "amount_with_invoice",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','运价(带票)');
-                                $(nTd).attr('data-key','amount_with_invoice').attr('data-value',data);
-                                $(nTd).attr('data-column-name','运价(带票)');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return data;
-                            else return '--';
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "里程",
-                        "data": "travel_distance",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','里程');
-                                $(nTd).attr('data-key','travel_distance').attr('data-value',data);
-                                $(nTd).attr('data-column-name','里程');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '';
+                            if(data == 11) return '<small class="btn-xs bg-blue">管理员</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-blue">员工</small>';
+                            else if(data == 25) return '<small class="btn-xs bg-blue">驾驶员</small>';
+                            else if(data == 31) return '<small class="btn-xs bg-green">客户</small>';
+                            else if(data == 41) return '<small class="btn-xs bg-green">车辆</small>';
+                            else if(data == 51) return '<small class="btn-xs bg-green">线路</small>';
+                            else if(data == 61) return '<small class="btn-xs bg-green">包油油耗</small>';
+                            else if(data == 71) return '<small class="btn-xs bg-yellow">订单</small>';
+                            else if(data == 77) return '<small class="btn-xs bg-red">环线</small>';
+                            else if(data == 81) return '<small class="btn-xs bg-red">财务</small>';
                             else return data;
                         }
                     },
                     {
-                        "width": "60px",
-                        "title": "时效",
-                        "data": "time_limitation_prescribed",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','时效');
-                                $(nTd).attr('data-key','time_limitation_prescribed').attr('data-value',data);
-                                $(nTd).attr('data-column-name','时效');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '--';
-                            else return data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "出发地",
-                        "data": "departure_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','出发地');
-                                $(nTd).attr('data-key','departure_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','出发地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "经停地",
-                        "data": "stopover_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','经停地');
-                                $(nTd).attr('data-key','stopover_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','经停地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "目的地",
-                        "data": "destination_place",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','目的地');
-                                $(nTd).attr('data-key','destination_place').attr('data-value',data);
-                                $(nTd).attr('data-column-name','目的地');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data == null ? '--' : data;
-                        }
-                    },
-                    {
-                        "className": "text-center",
+                        "className": "",
                         "width": "80px",
-                        "title": "开始日期",
-                        "data": "contract_start_date",
+                        "title": "实例",
+                        "data": "item_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                            if(row.is_published != 0)
-                            {
-                                $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
-                                $(nTd).attr('data-key','contract_start_date').attr('data-value',data);
-                                $(nTd).attr('data-column-name','开始日期');
-                                $(nTd).attr('data-time-type','date');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
                         },
                         render: function(data, type, row, meta) {
-                            if(data)
-                            {
-                                var $date = new Date(data);
-                                var $year = $date.getFullYear();
-                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                                var $day = ('00'+($date.getDate())).slice(-2);
-
-                                var $currentYear = new Date().getFullYear();
-                                if($year == $currentYear) return $month+'-'+$day;
-                                else return $year+'-'+$month+'-'+$day;
-                                return $year;
-                            }
-                            return '--';
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "80px",
-                        "title": "结束日期",
-                        "data": "contract_ended_date",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                            if(row.is_published != 0)
-                            {
-                                $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
-                                $(nTd).attr('data-key','contract_ended_date').attr('data-value',data);
-                                $(nTd).attr('data-column-name','结束日期');
-                                $(nTd).attr('data-time-type','date');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data)
-                            {
-                                var $date = new Date(data);
-                                var $year = $date.getFullYear();
-                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                                var $day = ('00'+($date.getDate())).slice(-2);
-
-                                var $currentYear = new Date().getFullYear();
-                                if($year == $currentYear) return $month+'-'+$day;
-                                else return $year+'-'+$month+'-'+$day;
-                                return $year;
-                            }
-                           return '--';
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "",
-                        "title": "备注",
-                        "data": "remark",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
-                                $(nTd).attr('data-key','remark').attr('data-value',data);
-                                $(nTd).attr('data-column-name','备注');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
+                            if(row.operate_object == 71) return row.order_id;
                             return data;
-                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            // else return '';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "80px",
+                        "title": "属性",
+                        "data": "column_name",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            if(row.operate_object == 11)
+                            {
+
+                            }
+                            else if(row.operate_object == 21)
+                            {
+
+                            }
+                            else if(row.operate_object == 25)
+                            {
+                                if(row.operate_category == 1 || row.operate_category == 72)
+                                {
+                                    if(data == "name") return '名称';
+
+                                    else if(data == "driver_name") return '主驾姓名';
+                                    else if(data == "driver_phone") return '主驾电话';
+                                    else if(data == "driver_title") return '主驾职称';
+                                    else if(data == "driver_entry_time") return '主驾入职时间';
+                                    else if(data == "driver_leave_time") return '主驾离职时间';
+                                    else if(data == "driver_ID") return '主驾身份证号';
+                                    else if(data == "driver_ID_front") return '主驾身份证正页';
+                                    else if(data == "driver_ID_back") return '主驾身份证副页';
+                                    else if(data == "driver_licence") return '主驾驾驶证';
+                                    else if(data == "driver_certification") return '主驾资格证';
+                                    else if(data == "emergency_contact_name") return '主驾紧急联系人';
+                                    else if(data == "emergency_contact_phone") return '主驾紧急联系电话';
+                                    else if(data == "job_performance") return '主驾工作表现';
+
+                                    else if(data == "sub_driver_name") return '副驾姓名';
+                                    else if(data == "sub_driver_phone") return '副驾电话';
+                                    else if(data == "sub_driver_title") return '副驾职称';
+                                    else if(data == "sub_driver_entry_time") return '副驾入职时间';
+                                    else if(data == "sub_driver_leave_time") return '副驾离职时间';
+                                    else if(data == "sub_driver_ID") return '副驾身份证号';
+                                    else if(data == "sub_driver_ID_front") return '副驾身份证正页';
+                                    else if(data == "sub_driver_ID_back") return '副驾身份证副页';
+                                    else if(data == "sub_driver_licence") return '副驾驾驶证';
+                                    else if(data == "sub_driver_certification") return '副驾资格证';
+                                    else if(data == "sub_contact_name") return '副驾紧急联系人';
+                                    else if(data == "sub_contact_phone") return '副驾紧急联系电话';
+                                    else if(data == "sub_job_performance") return '副驾副驾工作表现';
+
+                                    else if(data == "remark") return '备注';
+                                    else return '有误';
+                                }
+                                else if(row.operate_category == 71)
+                                {
+                                    return '';
+
+                                    if(row.operate_type == 1) return '添加';
+                                    else if(row.operate_type == 91) return '删除';
+
+                                    if(data == "attachment") return '附件';
+                                }
+                                else return '';
+                            }
+                            else if(row.operate_object == 31)
+                            {
+
+                            }
+                            else if(row.operate_object == 41)
+                            {
+                                if(row.operate_category == 1)
+                                {
+                                    if(data == "name") return '车牌号';
+                                    else if(data == "driver_id") return '驾驶员';
+                                    else if(data == "trailer_type") return '类型';
+                                    else if(data == "trailer_length") return '尺寸';
+                                    else if(data == "trailer_volume") return '容积';
+                                    else if(data == "trailer_weight") return '载重';
+                                    else if(data == "trailer_axis_count") return '轴数';
+                                    else if(data == "linkman_name") return '司机';
+                                    else if(data == "linkman_phone") return '电话';
+                                    else if(data == "car_type") return '车辆类型';
+                                    else if(data == "car_owner") return '所有人';
+                                    else if(data == "car_function") return '使用性质';
+                                    else if(data == "car_brand") return '品牌';
+                                    else if(data == "car_identification_number") return '车辆识别代码';
+                                    else if(data == "engine_number") return '发动机号';
+                                    else if(data == "locomotive_wheelbase") return '车头轴距';
+                                    else if(data == "main_fuel_tank") return '主油箱';
+                                    else if(data == "auxiliary_fuel_tank") return '副油箱';
+                                    else if(data == "total_mass") return '总质量';
+                                    else if(data == "curb_weight") return '整备质量';
+                                    else if(data == "load_weight") return '核定载重';
+                                    else if(data == "traction_mass") return '准牵引质量';
+                                    else if(data == "overall_size") return '外廓尺寸';
+                                    else if(data == "purchase_date") return '购买日期';
+                                    else if(data == "registration_date") return '注册日期';
+                                    else if(data == "issue_date") return '发证日期';
+                                    else if(data == "inspection_validity") return '检验有效期';
+                                    else if(data == "transportation_license_validity") return '运输证-年检';
+                                    else if(data == "transportation_license_change_time") return '运输证-换证';
+                                    else if(data == "remark") return '备注';
+                                    else return '有误';
+                                }
+                                else if(row.operate_category == 71)
+                                {
+                                    return '';
+
+                                    if(row.operate_type == 1) return '添加';
+                                    else if(row.operate_type == 91) return '删除';
+
+                                    if(data == "attachment") return '附件';
+                                }
+                                else return '';
+                            }
+                            else if(row.operate_object == 51)
+                            {
+                                if(row.operate_category == 1)
+                                {
+                                    if(data == "title") return '标题';
+                                    else if(data == "amount_with_cash") return '运价(现金)';
+                                    else if(data == "amount_with_invoice") return '运价(带票)';
+                                    else if(data == "travel_distance") return '里程';
+                                    else if(data == "time_limitation_prescribed") return '时效';
+                                    else if(data == "departure_place") return '出发地';
+                                    else if(data == "stopover_place") return '经停地';
+                                    else if(data == "destination_place") return '目的地';
+                                    else if(data == "contract_start_date") return '合同开始日期';
+                                    else if(data == "contract_ended_date") return '合同结束日期';
+                                    else if(data == "remark") return '备注';
+                                    else return '有误';
+                                }
+                                else if(row.operate_category == 71)
+                                {
+                                    return '';
+
+                                    if(row.operate_type == 1) return '添加';
+                                    else if(row.operate_type == 91) return '删除';
+
+                                    if(data == "attachment") return '附件';
+                                }
+                                else return '';
+                            }
+                            else if(row.operate_object == 61)
+                            {
+                                if(row.operate_category == 1)
+                                {
+                                    if(data == "title") return '标题';
+                                    else if(data == "price1") return '包油（升）';
+                                    else if(data == "price2") return '空放（升）';
+                                    else if(data == "price3") return '空放-200+（升）';
+                                    else if(data == "remark") return '备注';
+                                    else return '有误';
+                                }
+                                else if(row.operate_category == 71)
+                                {
+                                    return '';
+
+                                    if(row.operate_type == 1) return '添加';
+                                    else if(row.operate_type == 91) return '删除';
+
+                                    if(data == "attachment") return '附件';
+                                }
+                                else return '';
+                            }
+                            else if(row.operate_object == 71)
+                            {
+                                if(row.operate_category == 1)
+                                {
+                                    if(data == "client_id") return '客户';
+                                    else if(data == "route_id") return '固定线路';
+                                    else if(data == "circle_id") return '环线';
+                                    else if(data == "pricing_id") return '包油价';
+                                    else if(data == "car_id") return '车辆';
+                                    else if(data == "trailer_id") return '车挂';
+                                    else if(data == "outside_car") return '车辆';
+                                    else if(data == "outside_trailer") return '车挂';
+                                    else if(data == "driver_id") return '驾驶员';
+                                    else if(data == "travel_distance") return '里程数';
+                                    else if(data == "time_limitation_prescribed") return '时效';
+                                    else if(data == "amount") return '金额';
+                                    else if(data == "deposit") return '定金';
+                                    else if(data == "oil_card_amount") return '油卡';
+                                    else if(data == "outside_car_price") return '请车价';
+                                    else if(data == "invoice_amount") return '开票金额';
+                                    else if(data == "invoice_point") return '票点';
+                                    else if(data == "customer_management_fee") return '客户管理费';
+                                    else if(data == "information_fee") return '信息费';
+                                    else if(data == "time_limitation_deduction") return '时效扣款';
+                                    else if(data == "administrative_fee") return '管理费';
+                                    else if(data == "ETC_price") return 'ETC费用';
+                                    else if(data == "oil_amount") return '万金油量（升）';
+                                    else if(data == "oil_unit_price") return '油价（元）';
+                                    else if(data == "assign_time") return '安排时间';
+                                    else if(data == "container_type") return '箱型';
+                                    else if(data == "subordinate_company") return '所属公司';
+                                    else if(data == "route") return '路线';
+                                    else if(data == "fixed_route") return '固定路线';
+                                    else if(data == "temporary_route") return '临时路线';
+                                    else if(data == "departure_place") return '出发地';
+                                    else if(data == "destination_place") return '目的地';
+                                    else if(data == "stopover_place") return '经停点';
+                                    else if(data == "should_departure_time") return '应出发时间';
+                                    else if(data == "should_arrival_time") return '应到达时间';
+                                    else if(data == "actual_departure_time") return '实际出发时间';
+                                    else if(data == "actual_arrival_time") return '实际到达时间';
+                                    else if(data == "stopover_departure_time") return '实际出发时间';
+                                    else if(data == "stopover_arrival_time") return '实际到达时间';
+                                    else if(data == "driver_name") return '主驾姓名';
+                                    else if(data == "driver_phone") return '主驾电话';
+                                    else if(data == "copilot_name") return '副驾姓名';
+                                    else if(data == "copilot_phone") return '副驾电话';
+                                    else if(data == "trailer_type") return '车挂类型';
+                                    else if(data == "trailer_length") return '车挂尺寸';
+                                    else if(data == "trailer_volume") return '车挂容积';
+                                    else if(data == "trailer_weight") return '车辆载重';
+                                    else if(data == "trailer_axis_count") return '轴数';
+                                    else if(data == "GPS") return 'GPS';
+                                    else if(data == "receipt_address") return '回单地址';
+                                    else if(data == "receipt_status") return '回单状态';
+                                    else if(data == "order_number") return '单号';
+                                    else if(data == "payee_name") return '收款人';
+                                    else if(data == "arrange_people") return '安排人';
+                                    else if(data == "car_managerial_people") return '车辆负责员';
+                                    else if(data == "car_supply") return '车货源';
+                                    else if(data == "weight") return '重量';
+                                    else if(data == "remark") return '备注';
+                                    else return '有误';
+                                }
+                                else if(row.operate_category == 71)
+                                {
+                                    return '';
+
+                                    if(row.operate_type == 1) return '添加';
+                                    else if(row.operate_type == 91) return '删除';
+
+                                    if(data == "attachment") return '附件';
+                                }
+                                else return '';
+                            }
+                            else if(row.operate_object == 77)
+                            {
+                                return '';
+                            }
+                            else return '';
+
+
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "240px",
+                        "title": "修改前",
+                        "data": "before",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.column_name == 'client_id')
+                            {
+                                if(row.before_client_er == null) return '';
+                                else
+                                {
+                                    if(row.before_client_er.short_name != null)
+                                    {
+                                        return '<a href="javascript:void(0);">'+row.before_client_er.short_name+'</a>';
+                                    }
+                                    else return '<a href="javascript:void(0);">'+row.before_client_er.username+'</a>';
+                                }
+                            }
+                            else if(row.column_name == 'route_id')
+                            {
+                                if(row.before_route_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_route_er.title+'</a>';
+                            }
+                            else if(row.column_name == 'pricing_id')
+                            {
+                                if(row.before_pricing_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_pricing_er.title+'</a>';
+                            }
+                            else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
+                            {
+                                if(row.before_car_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_car_er.name+'</a>';
+                            }
+
+                            if(row.column_type == 'datetime' || row.column_type == 'date')
+                            {
+                                if(data)
+                                {
+                                    var $date = new Date(data*1000);
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    var $hour = ('00'+$date.getHours()).slice(-2);
+                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                    var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                                    var $currentYear = new Date().getFullYear();
+                                    if($year == $currentYear)
+                                    {
+                                        if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $month+'-'+$day;
+                                    }
+                                    else
+                                    {
+                                        if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                    }
+                                }
+                                else return '';
+                            }
+
+                            if(row.column_name == 'attachment' && row.operate_category == 71 && row.operate_type == 91)
+                            {
+                                var $cdn = "{{ env('DOMAIN_CDN') }}";
+                                var $src = $cdn = $cdn + "/" + data;
+                                return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
+                            }
+
+                            if(data == 0) return '';
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "240px",
+                        "title": "修改后",
+                        "data": "after",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            if(row.column_type == 'datetime' || row.column_type == 'date')
+                            {
+                                var $date = new Date(data*1000);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+                                var $hour = ('00'+$date.getHours()).slice(-2);
+                                var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear)
+                                {
+                                    if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                    else if(row.column_type == 'date') return $month+'-'+$day;
+                                }
+                                else
+                                {
+                                    if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                    else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                }
+                            }
+
+                            if(row.column_name == 'attachment' && row.operate_category == 71 && row.operate_type == 1)
+                            {
+                                var $cdn = "{{ env('DOMAIN_CDN') }}";
+                                var $src = $cdn = $cdn + "/" + data;
+                                return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
+                            }
+
+                            return data;
                         }
                     },
                     {
                         "className": "text-center",
                         "width": "60px",
-                        "title": "创建人",
+                        "title": "操作人",
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -1032,9 +994,9 @@
                     },
                     {
                         "className": "",
-                        "width": "100px",
-                        "title": "更新时间",
-                        "data": 'updated_at',
+                        "width": "108px",
+                        "title": "操作时间",
+                        "data": "created_at",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
@@ -1047,14 +1009,14 @@
                             var $second = ('00'+$date.getSeconds()).slice(-2);
 
 //                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                         }
-                    },
+                    }
                 ],
                 "drawCallback": function (settings) {
 
@@ -1063,45 +1025,11 @@
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
 
-                    ajax_datatable.$('.tooltips').tooltip({placement: 'top', html: true});
-                    $("a.verify").click(function(event){
-                        event.preventDefault();
-                        var node = $(this);
-                        var tr = node.closest('tr');
-                        var nickname = tr.find('span.nickname').text();
-                        var cert_name = tr.find('span.certificate_type_name').text();
-                        var action = node.attr('data-action');
-                        var certificate_id = node.attr('data-id');
-                        var action_name = node.text();
-
-                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
-                        layer.open({
-                            'title': '警告',
-                            content: tpl
-                                .replace('@action_name', action_name)
-                                .replace('@nickname', nickname)
-                                .replace('@certificate_type_name', cert_name),
-                            btn: ['Yes', 'No'],
-                            yes: function(index) {
-                                layer.close(index);
-                                $.post(
-                                    '/admin/medsci/certificate/user/verify',
-                                    {
-                                        action: action,
-                                        id: certificate_id,
-                                        _token: '{{ csrf_token() }}'
-                                    },
-                                    function(json){
-                                        if(json['response_code'] == 'success') {
-                                            layer.msg('操作成功!', {time: 3500});
-                                            ajax_datatable.ajax.reload();
-                                        } else {
-                                            layer.alert(json['response_data'], {time: 10000});
-                                        }
-                                    }, 'json');
-                            }
-                        });
+                    $('.lightcase-image').lightcase({
+                        maxWidth: 9999,
+                        maxHeight: 9999
                     });
+
                 },
                 "language": { url: '/common/dataTableI18n' },
             });
@@ -1149,7 +1077,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "/item/route-modify-record?id="+$id,
+                    'url': "/item/pricing-modify-record?id="+$id,
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -1245,15 +1173,9 @@
                             if(row.operate_category == 1)
                             {
                                 if(data == "title") return '标题';
-                                else if(data == "amount_with_cash") return '运价(现金)';
-                                else if(data == "amount_with_invoice") return '运价(带票)';
-                                else if(data == "travel_distance") return '里程';
-                                else if(data == "time_limitation_prescribed") return '时效';
-                                else if(data == "departure_place") return '出发地';
-                                else if(data == "stopover_place") return '经停地';
-                                else if(data == "destination_place") return '目的地';
-                                else if(data == "contract_start_date") return '合同开始日期';
-                                else if(data == "contract_ended_date") return '合同结束日期';
+                                else if(data == "price1") return '包油（升）';
+                                else if(data == "price2") return '空放（升）';
+                                else if(data == "price3") return '空放-200+（升）';
                                 else if(data == "remark") return '备注';
                                 else return '有误';
                             }
@@ -1276,6 +1198,33 @@
                         "data": "before",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            if(row.column_name == 'client_id')
+                            {
+                                if(row.before_client_er == null) return '';
+                                else
+                                {
+                                    if(row.before_client_er.short_name != null)
+                                    {
+                                        return '<a href="javascript:void(0);">'+row.before_client_er.short_name+'</a>';
+                                    }
+                                    else return '<a href="javascript:void(0);">'+row.before_client_er.username+'</a>';
+                                }
+                            }
+                            else if(row.column_name == 'route_id')
+                            {
+                                if(row.before_route_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_route_er.title+'</a>';
+                            }
+                            else if(row.column_name == 'pricing_id')
+                            {
+                                if(row.before_pricing_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_pricing_er.title+'</a>';
+                            }
+                            else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
+                            {
+                                if(row.before_car_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_car_er.name+'</a>';
+                            }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {
@@ -1322,33 +1271,6 @@
                         "data": "after",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.column_name == 'client_id')
-                            {
-                                if(row.after_client_er == null) return '';
-                                else
-                                {
-                                    if(row.after_client_er.short_name)
-                                    {
-                                        return '<a href="javascript:void(0);">'+row.after_client_er.short_name+'</a>';
-                                    }
-                                    else return '<a href="javascript:void(0);">'+row.after_client_er.username+'</a>';
-                                }
-                            }
-                            else if(row.column_name == 'route_id')
-                            {
-                                if(row.after_route_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_route_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'pricing_id')
-                            {
-                                if(row.after_pricing_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_pricing_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
-                            {
-                                if(row.after_car_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_car_er.name+'</a>';
-                            }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {
@@ -1430,6 +1352,51 @@
                         maxWidth: 9999,
                         maxHeight: 9999
                     });
+
+                    ajax_datatable_record.$('.tooltips').tooltip({placement: 'top', html: true});
+                    $("a.verify").click(function(event){
+                        event.preventDefault();
+                        var node = $(this);
+                        var tr = node.closest('tr');
+                        var nickname = tr.find('span.nickname').text();
+                        var cert_name = tr.find('span.certificate_type_name').text();
+                        var action = node.attr('data-action');
+                        var certificate_id = node.attr('data-id');
+                        var action_name = node.text();
+
+                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
+                        layer.open({
+                            'title': '警告',
+                            content: tpl
+                                .replace('@action_name', action_name)
+                                .replace('@nickname', nickname)
+                                .replace('@certificate_type_name', cert_name),
+                            btn: ['Yes', 'No'],
+                            yes: function(index) {
+                                layer.close(index);
+                                $.post(
+                                    '/admin/medsci/certificate/user/verify',
+                                    {
+                                        action: action,
+                                        id: certificate_id,
+                                        _token: '{{csrf_token()}}'
+                                    },
+                                    function(json){
+                                        if(json['response_code'] == 'success') {
+                                            layer.msg('操作成功!', {time: 3500});
+                                            ajax_datatable.ajax.reload();
+                                        } else {
+                                            layer.alert(json['response_data'], {time: 10000});
+                                        }
+                                    }, 'json');
+                            }
+                        });
+                    });
+
+//                    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+//                        checkboxClass: 'icheckbox_minimal-blue',
+//                        radioClass   : 'iradio_minimal-blue'
+//                    });
                 },
                 "language": { url: '/common/dataTableI18n' },
             });
@@ -1467,5 +1434,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_YH_ADMIN').'entrance.item.route-script')
+@include(env('TEMPLATE_YH_SUPER').'entrance.item.record-script')
 @endsection

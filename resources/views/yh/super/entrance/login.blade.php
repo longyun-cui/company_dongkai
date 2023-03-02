@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_ZY_SUPER').'layout.auth')
+@extends(env('TEMPLATE_YH_SUPER').'layout.auth')
 
 
 @section('head_title')
@@ -11,7 +11,7 @@
 @section('content')
 <div class="login-box">
     <div class="login-logo">
-        <a href="/"><b>兆益信息</b></a>
+        <a href="/"><b>豫好物流</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">

@@ -36,20 +36,12 @@ Route::group(['prefix'=>'common'], function () {
 });
 
 
-/*
- * 超级管理员
- */
-Route::group(['domain'=>'super.'.env('DOMAIN_ROOT'), 'namespace'=>'Super'], function () {
-    require(__DIR__ . '/Super/route.php');
-});
-
-
 
 
 
 
 /*
- * yh 上海豫好
+ * YH 上海豫好
  */
 Route::group(['domain'=>env('DOMAIN_ROOT'), 'namespace'=>'YH'], function () {
     require(__DIR__ . '/YH/route.php');
@@ -63,23 +55,5 @@ Route::group(['domain'=>env('DOMAIN_YH_ADMIN'), 'namespace'=>'YH'], function () 
 Route::group(['domain'=>env('DOMAIN_YH_STAFF'), 'namespace'=>'YH'], function () {
     require(__DIR__ . '/YH/route-staff.php');
 });
-
-
-
-
-/*
- * 发邮件
- */
-Route::group(['prefix'=>'email'], function () {
-
-    $controller = "TestController";
-
-    //
-//    Route::match(['get','post'], '/test',$controller.'@test');
-    Route::match(['get','post'], '/send',$controller.'@send');
-});
-
-
-
 
 

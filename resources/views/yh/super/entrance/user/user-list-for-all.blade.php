@@ -1,15 +1,16 @@
-@extends(env('TEMPLATE_ZY_SUPER').'layout.layout')
+@extends(env('TEMPLATE_YH_SUPER').'layout.layout')
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local'])){{ $local or '【l】' }}@endif【S】{{ $head_title or '全部用户' }} - 超级管理员后台系统 - 兆益信息
+    @if(in_array(env('APP_ENV'),['local'])){{ $local or 'SL.' }}@endif
+    {{ $title_text or '全部客户' }} - 超级管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description','全部用户 - 超级管理员后台系统 - 兆益信息')
+@section('description','全部用户 - 超级管理员系统 - 豫好物流')
 @section('breadcrumb')
     <li><a href="{{url('/admin')}}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -21,7 +22,7 @@
         <div class="box box-info">
 
             <div class="box-header with-border" style="margin:16px 0;">
-                <h3 class="box-title">全部用户列表</h3>
+                <h3 class="box-title">全部用户</h3>
 
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
@@ -204,24 +205,17 @@
                     {
                         "width": "80px",
                         "title": "用户类型",
-                        "data": 'user_category',
+                        "data": 'user_type',
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data == 0) return 'item';
-                            else if(data == 1) return '<small class="btn-xs bg-primary">个人用户</small>';
-                            else if(data == 9) return '<small class="btn-xs bg-olive">轻博</small>';
-                            else if(data == 11)
-                            {
-                                if(row.user_type == 0) return '<small class="btn-xs bg-purple">组织</small>';
-                                else if(row.user_type == 11) return '<small class="btn-xs bg-purple">总经理</small>';
-                                else if(row.user_type == 21) return '<small class="btn-xs bg-purple">HR经理</small>';
-                                else if(row.user_type == 22) return '<small class="btn-xs bg-purple">HR</small>';
-                                else if(row.user_type == 41) return '<small class="btn-xs bg-purple">销售主管</small>';
-                                else if(row.user_type == 61) return '<small class="btn-xs bg-purple">销售组长</small>';
-                                else if(row.user_type == 88) return '<small class="btn-xs bg-purple">销售员</small>';
-                                else return '<small class="btn-xs bg-purple">组织</small>';
-                            }
-                            else if(data == 88) return '<small class="btn-xs bg-purple">赞助商</small>';
+                            if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
+                            else if(data == 11) return '<small class="btn-xs bg-primary">总经理</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-purple">人事经理</small>';
+                            else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
+                            else if(data == 41) return '<small class="btn-xs bg-orange">财务经理</small>';
+                            else if(data == 42) return '<small class="btn-xs bg-orange">财务</small>';
+                            else if(data == 81) return '<small class="btn-xs bg-olive">业务经理</small>';
+                            else if(data == 88) return '<small class="btn-xs bg-olive">业务员</small>';
                             else return "有误";
                         }
                     },
@@ -337,7 +331,7 @@
 //                    },
                     {
                         "className": "font-12px",
-                        "width": "112px",
+                        "width": "120px",
                         "title": "创建时间",
                         "data": 'created_at',
                         "orderable": true,
@@ -356,9 +350,12 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
-                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            // return $year+'-'+$month+'-'+$day;
+                            // return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            // return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                         }
                     },
                     {
@@ -384,7 +381,7 @@
                         }
                     },
                     {
-                        "width": "440px",
+                        "width": "300px",
                         "title": "操作",
                         "data": "id",
                         "orderable": false,
@@ -413,10 +410,10 @@
                                 $html_able+
 //                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
 //                                '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
-                                '<a class="btn btn-xs bg-maroon item-password-super-change-show" data-id="'+data+'">修改密码</a>'+
+//                                 '<a class="btn btn-xs bg-maroon item-password-super-change-show" data-id="'+data+'">修改密码</a>'+
                                 '<a class="btn btn-xs bg-maroon item-password-super-reset-submit" data-id="'+data+'">重置密码</a>'+
-                                '<a class="btn btn-xs bg-olive item-admin-login-submit" data-id="'+data+'">管理员登录</a>'+
-                                '<a class="btn btn-xs bg-olive item-staff-login-submit" data-id="'+data+'">员工登录</a>'+
+                                '<a class="btn btn-xs bg-olive item-admin-login-submit" data-id="'+data+'">登录</a>'+
+                                // '<a class="btn btn-xs bg-olive item-staff-login-submit" data-id="'+data+'">员工登录</a>'+
                                 '<a class="btn btn-xs bg-navy item-super-delete-submit" data-id="'+data+'" >删除</a>'+
                                 '<a class="btn btn-xs bg-purple item-statistic-submit" data-id="'+data+'">流量统计</a>'+
                                 '';
@@ -492,5 +489,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_ZY_SUPER').'entrance.user.user-script')
+@include(env('TEMPLATE_YH_SUPER').'entrance.user.user-script')
 @endsection

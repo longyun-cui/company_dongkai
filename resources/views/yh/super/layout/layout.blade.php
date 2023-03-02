@@ -8,10 +8,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link rel="shortcut icon" type="image/ico" href="{{ url('zy.ico') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ url('zy.jpg') }}">
-    <link rel="icon" sizes="16x16 32x32 64x64" href="{{ url('zy.ico') }}">
-    <link rel="icon" type="image/png" sizes="196x196" href="{{ url('zy.jpg') }}">
+    <link rel="shortcut icon" type="image/ico" href="{{ url('yh.ico') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ url('yh.jpeg') }}">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="{{ url('yh.ico') }}">
+    <link rel="icon" type="image/png" sizes="196x196" href="{{ url('yh.jpeg') }}">
 
 
     <title>@yield('head_title')</title>
@@ -76,6 +76,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/Swiper/4.2.2/css/swiper.min.css">--}}
     <link rel="stylesheet" href="{{ asset('/resource/component/css/swiper-4.2.2.min.css') }}">
 
+    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/lightcase/2.5.0/css/lightcase.min.css">--}}
+    <link rel="stylesheet" href="{{ asset('/resource/component/css/lightcase-2.5.0.min.css') }}">
+
 
     <link rel="stylesheet" href="{{ asset('/resource/common/css/common.css') }}" media="all" />
     <link rel="stylesheet" href="{{ asset('/resource/common/css/AdminLTE/index.css') }}">
@@ -111,19 +114,19 @@ desired effect
 
 
     {{--main-header--}}
-    @include(env('TEMPLATE_ZY_SUPER').'layout.main-header')
+    @include(env('TEMPLATE_YH_SUPER').'layout.main-header')
 
     {{--main-sidebar--}}
-    @include(env('TEMPLATE_ZY_SUPER').'layout.main-sidebar')
+    @include(env('TEMPLATE_YH_SUPER').'layout.main-sidebar')
 
     {{--main-content--}}
-    @include(env('TEMPLATE_ZY_SUPER').'layout.main-content')
+    @include(env('TEMPLATE_YH_SUPER').'layout.main-content')
 
     {{--main-footer--}}
-    @include(env('TEMPLATE_ZY_SUPER').'layout.main-footer')
+    @include(env('TEMPLATE_YH_SUPER').'layout.main-footer')
 
     {{--control-sidebar--}}
-    @include(env('TEMPLATE_ZY_SUPER').'layout.control-sidebar')
+    @include(env('TEMPLATE_YH_SUPER').'layout.control-sidebar')
 
 
 </div>
@@ -183,6 +186,9 @@ desired effect
 
 {{--<script src="https://cdn.bootcss.com/Swiper/4.2.2/js/swiper.min.js"></script>--}}
 <script src="{{ asset('/resource/component/js/swiper-4.2.2.min.js') }}"></script>
+
+{{--<script src="https://cdn.bootcss.com/lightcase/2.5.0/js/lightcase.min.js"></script>--}}
+<script src="{{ asset('/resource/component/js/lightcase-2.5.0.min.js') }}"></script>
 
 
 <script src="{{ asset('/resource/custom/super/admin/js/index.js') }}"></script>

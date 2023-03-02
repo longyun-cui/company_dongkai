@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\YH;
 
+use App\Models\YH\YH_Record;
 use App\Models\YH\YH_User;
 use App\Models\YH\YH_Item;
 use App\Models\YH\YH_Pivot_Item_Relation;
@@ -735,7 +736,7 @@ class YHSuperRepository {
     {
         $this->get_me();
 
-        $return['sidebar_user_list_for_all_active'] = 'active menu-open';
+        $return['menu_active_of_user_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_YH_SUPER').'entrance.user.user-list-for-all';
         return view($view_blade)->with($return);
     }
@@ -757,190 +758,6 @@ class YHSuperRepository {
 //            ]);
 //            ->where(['userstatus'=>'正常','status'=>1])
 //            ->whereIn('usergroup',['Agent','Agent2']);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【K】【用户】【个人用户】返回-列表-视图
-    public function view_user_list_for_individual($post_data)
-    {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.user.user-list-for-individual')
-            ->with(['sidebar_user_list_for_individual_active'=>'active menu-open']);
-    }
-    // 【K】【用户】【个人用户】返回-列表-数据
-    public function get_user_list_for_individual_datatable($post_data)
-    {
-        $me = Auth::guard("staff_admin")->user();
-        $query = User::select('*')
-            ->with(['district'])
-            ->where(['active'=>1,'user_category'=>1,'user_type'=>1]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【K】【用户】【组织】返回-列表-视图
-    public function view_user_list_for_doc($post_data)
-    {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.user.user-list-for-doc')
-            ->with(['sidebar_user_list_for_doc_active'=>'active menu-open']);
-    }
-    // 【K】【用户】【组织】返回-列表-数据
-    public function get_user_list_for_doc_datatable($post_data)
-    {
-        $me = Auth::guard("staff_admin")->user();
-        $query = User::select('*')
-            ->with(['district'])
-            ->where(['active'=>1,'user_category'=>9]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【K】【用户】【组织】返回-列表-视图
-    public function view_user_list_for_org($post_data)
-    {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.user.user-list-for-org')
-            ->with(['sidebar_user_list_for_org_active'=>'active menu-open']);
-    }
-    // 【K】【用户】【组织】返回-列表-数据
-    public function get_user_list_for_org_datatable($post_data)
-    {
-        $me = Auth::guard("staff_admin")->user();
-        $query = User::select('*')
-            ->with(['district'])
-            ->where(['active'=>1,'user_category'=>11]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【K】【用户】【赞助商】返回-列表-视图
-    public function view_user_list_for_sponsor($post_data)
-    {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.user.user-list-for-sponsor')
-            ->with(['sidebar_user_list_for_sponsor_active'=>'active menu-open']);
-    }
-    // 【K】【用户】【赞助商】返回-列表-数据
-    public function get_user_list_for_sponsor_datatable($post_data)
-    {
-        $me = Auth::guard("staff_admin")->user();
-        $query = User::select('*')
-            ->with(['district'])
-            ->where(['active'=>1,'user_category'=>88]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -1044,95 +861,39 @@ class YHSuperRepository {
         return datatable_response($list, $draw, $total);
     }
 
+
     // 【内容】【全部】返回-列表-视图
-    public function view_item_list_for_atom($post_data)
+    public function view_record_list_for_all($post_data)
     {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.item.item-list-for-atom')
-            ->with([
-                'sidebar_item_list_active'=>'active',
-                'sidebar_item_list_for_atom_active'=>'active'
-            ]);
+        $this->get_me();
+
+        $return['menu_active_of_record_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.item.record-list-for-all';
+        return view($view_blade)->with($return);
     }
     // 【内容】【全部】返回-列表-数据
-    public function get_item_list_for_atom_datatable($post_data)
+    public function get_record_list_for_all_datatable($post_data)
     {
-        $me = Auth::guard('super')->user();
-        $query = Doc_Item::select('*')->withTrashed()
-            ->with('owner','creator')
-            ->where(['owner_id'=>100,'item_category'=>100])
-            ->where('item_type', '!=',0);
+        $this->get_me();
+        $me = $this->me;
+
+        $query = YH_Record::select('*')->withTrashed()
+            ->with('creator');
+//            ->where(['owner_id'=>100,'item_category'=>100])
+//            ->where('item_type', '!=',0);
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['tag'])) $query->where('tag', 'like', "%{$post_data['tag']}%");
 
-        $item_type = isset($post_data['item_type']) ? $post_data['item_type'] : '';
-        if($item_type == "item") $query->where('item_type', 0);
-        else if($item_type == "object") $query->where('item_type', 1);
-        else if($item_type == "people") $query->where('item_type', 11);
-        else if($item_type == "product") $query->where('item_type', 22);
-        else if($item_type == "event") $query->where('item_type', 33);
-        else if($item_type == "conception") $query->where('item_type', 91);
+//        $item_type = isset($post_data['item_type']) ? $post_data['item_type'] : '';
+//        if($item_type == "item") $query->where('item_type', 0);
+//        else if($item_type == "object") $query->where('item_type', 1);
+//        else if($item_type == "people") $query->where('item_type', 11);
+//        else if($item_type == "product") $query->where('item_type', 22);
+//        else if($item_type == "event") $query->where('item_type', 33);
+//        else if($item_type == "conception") $query->where('item_type', 91);
 
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-
-        foreach ($list as $k => $v)
-        {
-//            $list[$k]->description = replace_blank($v->description);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-    // 【内容】【全部】返回-列表-视图
-    public function view_item_list_for_doc($post_data)
-    {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.item.item-list-for-doc')
-            ->with([
-                'sidebar_item_list_active'=>'active',
-                'sidebar_item_list_for_doc_active'=>'active'
-            ]);
-    }
-    // 【内容】【全部】返回-列表-数据
-    public function get_item_list_for_doc_datatable($post_data)
-    {
-        $me = Auth::guard('super')->user();
-        $query = Doc_Item::select('*')->withTrashed()
-            ->with('owner','creator')
-            ->where(['item_category'=>1])
-            ->where('item_type', '!=',0);
-
-        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-        if(!empty($post_data['tag'])) $query->where('tag', 'like', "%{$post_data['tag']}%");
-
-        $item_type = isset($post_data['item_type']) ? $post_data['item_type'] : '';
-        if($item_type == "article") $query->where('item_type', 1);
-        else if($item_type == "menu_type") $query->where('item_type', 11);
-        else if($item_type == "time_line") $query->where('item_type', 18);
-        else if($item_type == "debase") $query->where('item_type', 22);
-        else if($item_type == "vote") $query->where('item_type', 29);
-        else if($item_type == "ask") $query->where('item_type', 31);
 
         $total = $query->count();
 
