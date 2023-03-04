@@ -615,7 +615,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         },
                         render: function(data, type, row, meta) {
-                            if(row.operate_object == 71) return row.order_id;
+                            if(row.operate_object == 71)
+                            {
+                                var $domain = "{{ env('DOMAIN_YH_ADMIN') }}";
+                                return '<a target="_blank" href="'+ $domain +'/item/order-list-for-all?order_id='+ row.order_id +'" data-id="'+ row.order_id +'">'+ row.order_id +'</a><br>';
+                            }
                             return data;
                         }
                     },

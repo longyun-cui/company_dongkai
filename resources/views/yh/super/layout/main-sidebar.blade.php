@@ -117,7 +117,7 @@
                 </a>
             </li>
             <li class="treeview">
-                <a href="{{ env('DOMAIN_ZY_STAFF') }}" target="_blank">
+                <a href="{{ env('DOMAIN_YH_STAFF') }}" target="_blank">
                     <i class="fa fa-cube text-default"></i> <span>员工系统</span>
                 </a>
             </li>
