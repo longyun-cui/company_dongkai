@@ -7781,11 +7781,11 @@ class YHAdminRepository {
 
         $data = Excel::load($attachment_file, function($reader) {
 
-            $reader->takeColumns(40);
-            $reader->limitColumns(40);
+//            $reader->takeColumns(50);
+            $reader->limitColumns(50);
 
-            $reader->takeRows(40);
-            $reader->limitRows(40);
+//            $reader->takeRows(100);
+            $reader->limitRows(100);
 
 //            $reader->ignoreEmpty();
 
