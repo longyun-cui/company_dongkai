@@ -427,7 +427,7 @@ if (!function_exists('upload')) {
     function upload($file, $saveFolder, $patch = 'research')
     {
         $allowedExtensions = [
-            'jpg', 'jpeg', 'png', 'gif', 'csv',
+            'jpg', 'jpeg', 'png', 'gif', 'csv', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'pages', 'numbers', 'key',
         ];
         $extension = $file->getClientOriginalExtension();
 
@@ -469,7 +469,7 @@ if (!function_exists('upload_storage')) {
     function upload_storage($file, $filename = '', $saveFolder = 'research/common')
     {
         $allowedExtensions = [
-            'png', 'jpg', 'jpeg', 'gif', "PNG", "JPG", "JPEG", "GIF", 'csv', 'xls', 'pdf'
+            'png', 'jpg', 'jpeg', 'gif', "PNG", "JPG", "JPEG", "GIF", 'csv', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'pages', 'numbers', 'key',
         ];
         $extension = $file->getClientOriginalExtension();
 
@@ -580,6 +580,7 @@ if (!function_exists('upload_file_storage'))
             'txt', 'pdf', 'csv',
             'png', 'jpg', 'jpeg', 'gif', "PNG", "JPG", "JPEG", "GIF",
             'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx',
+            'pages', 'numbers', 'key',
             'wps', 'dps', 'et',
         ];
         $extension = $file->getClientOriginalExtension();
@@ -643,7 +644,7 @@ if (!function_exists('upload_s')) {
     function upload_s($file, $saveFolder = 'common', $patch = 'research', $filename = '')
     {
         $allowedExtensions = [
-            'png', 'jpg', 'jpeg', 'gif', "PNG", "JPG", "JPEG", "GIF", 'csv', 'xls', 'pdf'
+            'png', 'jpg', 'jpeg', 'gif', "PNG", "JPG", "JPEG", "GIF", 'csv', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'pages', 'numbers', 'key',
         ];
         $extension = $file->getClientOriginalExtension();
 
@@ -688,7 +689,7 @@ if (!function_exists('commonUpload'))
     function commonUpload($file, $saveFolder)
     {
         $allowedExtensions = [
-            'jpg', 'jpeg', 'png', 'gif', 'csv', 'xls', 'pdf'
+            'jpg', 'jpeg', 'png', 'gif', 'csv', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'pages', 'numbers', 'key',
         ];
         $extension = $file->getClientOriginalExtension();
 

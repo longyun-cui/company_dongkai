@@ -4043,136 +4043,6 @@ class YHAdminRepository {
 
 
 
-
-
-
-
-    /*
-     * 任务管理
-     */
-    // 【任务管理】返回-导入任务-视图
-    public function view_item_task_list_import()
-    {
-        $this->get_me();
-        $me = $this->me;
-//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
-
-        $operate_category = 'item';
-        $operate_type = 'item';
-        $operate_type_text = '内容';
-        $title_text = '添加'.$operate_type_text;
-        $list_text = $operate_type_text.'列表';
-        $list_link = '/item/item-list';
-
-        $return['operate'] = 'create';
-        $return['operate_id'] = 0;
-        $return['operate_category'] = $operate_category;
-        $return['operate_type'] = $operate_type;
-        $return['operate_type_text'] = $operate_type_text;
-        $return['title_text'] = $title_text;
-        $return['list_text'] = $list_text;
-        $return['list_link'] = $list_link;
-
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.task-list-import';
-        return view($view_blade)->with($return);
-    }
-    // 【任务管理】保存-导入任务-数据
-    public function operate_item_task_list_import_save($post_data)
-    {
-//        $messages = [
-//            'operate.required' => 'operate.required',
-//            'title.required' => '请输入标题！',
-//        ];
-//        $v = Validator::make($post_data, [
-//            'operate' => 'required',
-//            'title' => 'required',
-//        ], $messages);
-//        if ($v->fails())
-//        {
-//            $messages = $v->errors();
-//            return response_error([],$messages->first());
-//        }
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return response_error([],"用户类型错误！");
-
-        $salesman_id = $post_data["salesman_id"];
-        $salesman = YH_User::find($salesman_id);
-        if($salesman)
-        {
-            if(!in_array($salesman->user_type,[0,1,9,11,19,41,61,88])) return response_error([],"该人员不是销售人员！");
-        }
-        else return response_error([],"该人员不存在！");
-
-        // 附件
-        if(!empty($post_data["attachment"]))
-        {
-
-//            $result = upload_storage($post_data["attachment"]);
-//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
-            $result = upload_file_storage($post_data["attachment"],null,'yh/unique/attachment','');
-            if($result["result"])
-            {
-//                $mine->attachment_name = $result["name"];
-//                $mine->attachment_src = $result["local"];
-//                $mine->save();
-            }
-            else throw new Exception("upload--attachment--fail");
-        }
-
-        $attachment_file = storage_resource_path($result["local"]);
-
-        $data = Excel::load($attachment_file, function($reader) {
-
-//            $data = $reader->all();
-//            $data = $data->toArray();
-
-        })->all();
-        $data = $data->toArray();
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-
-            foreach($data as $key => $value)
-            {
-                $task = new YH_Task;
-
-                $task->item_active = 1;
-                $task->creator_id = $me->id;
-                $task->owner_id = $salesman_id;
-                $task->company = $value['company'];
-                $task->fund = $value['fund'];
-                $task->name = $value['name'];
-                $task->mobile = $value['mobile'];
-                $task->address = $value['address'];
-                $task->city = $value['city'];
-                $task->description = $value['description'];
-
-                $bool = $task->save();
-                if(!$bool) throw new Exception("insert--item--fail");
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-
-
     // 【任务管理】批量-操作（全部操作）
     public function operate_item_task_admin_operate_bulk($post_data)
     {
@@ -7833,6 +7703,360 @@ class YHAdminRepository {
         array_unshift($list,$unSpecified);
         return $list;
     }
+
+
+
+
+    // 【订单管理】返回-导入任务-视图
+    public function view_item_order_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $operate_category = 'item';
+        $operate_type = 'item';
+        $operate_type_text = '订单';
+        $title_text = '导入'.$operate_type_text;
+        $list_text = $operate_type_text.'列表';
+        $list_link = '/item/order-list-for-all';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['operate_category'] = $operate_category;
+        $return['operate_type'] = $operate_type;
+        $return['operate_type_text'] = $operate_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit-for-import';
+        return view($view_blade)->with($return);
+    }
+    // 【订单管理】保存-导入任务-数据
+    public function operate_item_order_import_save($post_data)
+    {
+//        $messages = [
+//            'operate.required' => 'operate.required',
+//            'car_id.required' => '请选择车辆！',
+//        ];
+//        $v = Validator::make($post_data, [
+//            'operate' => 'required',
+//            'car_id' => 'required',
+//        ], $messages);
+//        if ($v->fails())
+//        {
+//            $messages = $v->errors();
+//            return response_error([],$messages->first());
+//        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"你没有操作权限！");
+
+//        $car_id = $post_data["car_id"];
+//        $car = YH_Car::find($car_id);
+//        if($car)
+//        {
+//        }
+//        else return response_error([],"该【车辆】不存在！");
+
+        // 附件
+        if(!empty($post_data["excel-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["excel-file"],null,'yh/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+            }
+            else throw new Exception("upload--attachment--fail");
+        }
+
+        $attachment_file = storage_resource_path($result["local"]);
+
+        $data = Excel::load($attachment_file, function($reader) {
+
+            $reader->takeColumns(40);
+            $reader->limitColumns(40);
+
+            $reader->takeRows(40);
+            $reader->limitRows(40);
+
+//            $reader->ignoreEmpty();
+
+//            $data = $reader->all();
+//            $data = $reader->toArray();
+
+        })->get();
+        $data = $data->toArray();
+
+
+        $order_data = [];
+
+        foreach($data as $key => $value)
+        {
+            $temp_date = [];
+            $temp_date['id'] = $key;
+
+            $car_owner_type_trim = trim($value['car_owner_type_name']);
+            if(!in_array($car_owner_type_trim,['自有','空单','外配','外请'])) continue;
+            else
+            {
+                $temp_date = $value;
+
+                if($car_owner_type_trim == '自有') $car_owner_type = 1;
+                else if($car_owner_type_trim == '空单') $car_owner_type = 11;
+                else if($car_owner_type_trim == '外配') $car_owner_type = 41;
+                else if($car_owner_type_trim == '外请') $car_owner_type = 61;
+                else $car_owner_type = 0;
+                $temp_date['car_owner_type'] = $car_owner_type;
+            }
+
+            // 派车日期
+            $assign_date = trim($value['assign_date']);
+            $assign_timestamp = strtotime($assign_date);
+            if(strtotime(date('Y-m-d', $assign_timestamp)) === $assign_timestamp) $temp_date['assign_time'] = $assign_timestamp;
+            else continue;
+
+            // 客户-使用ID
+//            $client = trim($value['client']);
+//            $temp_date['client_id'] = (!empty($client) && (floor($client) == $client) && $client >= 0) ? $client : 0;
+            // 客户-使用名称
+            $client_username = trim($value['client']);
+            $client = YH_Client::where('username',$client_username)->first();
+            if($client) $temp_date['client_id'] = $client->id;
+            else $temp_date['client_id'] = 0;
+
+            // 环线-使用ID
+//            $circle = trim($value['circle']);
+//            $temp_date['circle_id'] = (!empty($circle) && (floor($circle) == $circle) && $circle >= 0) ? $circle : 0;
+            // 环线-使用名称
+            $circle_title = trim($value['circle']);
+            $circle = YH_Circle::where('title',$circle_title)->first();
+            if($circle) $temp_date['circle_id'] = $circle->id;
+            else $temp_date['circle_id'] = 0;
+
+            // 路线类型
+            $route_type_trim = trim($value['route_type_name']);
+            if(!in_array($route_type_trim,['固定','临时'])) $temp_date['route_type'] = 0;
+            else
+            {
+                if($route_type_trim == '固定') $route_type = 1;
+                else if($route_type_trim == '临时') $route_type = 11;
+                else $route_type = 0;
+                $temp_date['route_type'] = $route_type;
+            }
+
+            // 固定路线-使用ID
+//            $route = trim($value['route']);
+//            $temp_date['route_id'] = (!empty($route) && (floor($route) == $route) && $route >= 0) ? $route : 0;
+            // 固定路线-使用名称
+            $route_title = trim($value['route']);
+            $route = YH_Route::where('title',$route_title)->first();
+            if($route)
+            {
+                $temp_date['route_id'] = $route->id;
+                $temp_date['amount'] = $route->amount_with_cash;
+                $temp_date['departure_place'] = $route->departure_place;
+                $temp_date['stopover_place'] = $route->stopover_place;
+                $temp_date['destination_place'] = $route->destination_place;
+                $temp_date['travel_distance'] = $route->travel_distance;
+                $temp_date['time_limitation_prescribed'] = $route->time_limitation_prescribed;
+            }
+            else $temp_date['route_id'] = 0;
+
+            // 车辆-使用ID
+//            $car = trim($value['car']);
+//            $temp_date['car_id'] = (!empty($car) && (floor($car) == $car) && $car >= 0) ? $car : 0;
+            // 驾驶员-使用名称
+            $car_name = trim($value['car']);
+            $car = YH_Car::where('name',$car_name)->first();
+            if($car) $temp_date['car_id'] = $car->id;
+            else $temp_date['car_id'] = 0;
+
+            // 车挂-使用ID
+//            $trailer = trim($value['trailer']);
+//            $temp_date['trailer_id'] = (!empty($trailer) && (floor($trailer) == $trailer) && $trailer >= 0) ? $trailer : 0;
+            // 车挂-使用名称
+            $trailer_name = trim($value['trailer']);
+            $trailer = YH_Car::where('name',$trailer_name)->first();
+            if($trailer) $temp_date['trailer_id'] = $trailer->id;
+            else $temp_date['trailer_id'] = 0;
+
+            // 驾驶员-使用ID
+//            $driver = trim($value['driver']);
+//            $temp_date['driver_id'] = (!empty($driver) && (floor($driver) == $driver) && $driver >= 0) ? $driver : 0;
+            // 驾驶员-使用名称
+            $driver_name = trim($value['driver']);
+            $driver = YH_Driver::where('driver_name',$driver_name)->first();
+            if($driver)
+            {
+                $temp_date['driver_id'] = $driver->id;
+                $temp_date['driver_name'] = $driver->driver_name;
+                $temp_date['driver_phone'] = $driver->driver_phone;
+                $temp_date['copilot_name'] = $driver->sub_driver_name;
+                $temp_date['copilot_phone'] = $driver->sub_driver_phone;
+            }
+            else $temp_date['driver_id'] = 0;
+
+            // 包油定价-使用ID
+//            $pricing = trim($value['pricing']);
+//            $temp_date['pricing_id'] = (!empty($pricing) && (floor($pricing) == $pricing) && $pricing >= 0) ? $pricing : 0;
+            // 驾驶员-使用名称
+            $pricing_title = trim($value['pricing']);
+            $pricing = YH_Pricing::where('title',$pricing_title)->first();
+            if($pricing) $temp_date['pricing_id'] = $pricing->id;
+            else $temp_date['pricing_id'] = 0;
+
+            // 里程
+            $distance = trim($value['travel_distance']);
+            $temp_date['travel_distance'] = (!empty($distance) && (floor($distance) == $distance) && $distance >= 0) ? $distance : 0;
+
+            // 时效
+            $time = trim($value['time_limitation_prescribed']);
+            $temp_date['time_limitation_prescribed'] = (!empty($time) && (floor($time) == $time) && $time >= 0) ? $time : 0;
+
+            // 运价
+            $amount = trim($value['amount']);
+            $temp_date['amount'] = (!empty($amount) && (floor($amount) == $amount) && $amount >= 0) ? $amount : 0;
+
+            // 油卡
+            $oil_card = trim($value['oil_card_amount']);
+            $temp_date['oil_card_amount'] = (!empty($oil_card) && (floor($oil_card) == $oil_card) && $oil_card >= 0) ? $oil_card : 0;
+
+            // 定金
+            $deposit = trim($value['deposit']);
+            $temp_date['deposit'] = (!empty($deposit) && (floor($deposit) == $deposit) && $deposit >= 0) ? $deposit : 0;
+
+            // 请车价
+            $car_price = trim($value['outside_car_price']);
+            $temp_date['outside_car_price'] = (!empty($car_price) && (floor($car_price) == $car_price) && $car_price >= 0) ? $car_price : 0;
+
+            // 管理费
+            $fee = trim($value['administrative_fee']);
+            $temp_date['administrative_fee'] = (!empty($fee) && (floor($fee) == $fee) && $fee >= 0) ? $fee : 0;
+
+            // 信息费
+            $information = trim($value['information_fee']);
+            $temp_date['information_fee'] = (!empty($information) && (floor($information) == $information) && $information >= 0) ? $information : 0;
+
+            // 客户管理费
+            $customer = trim($value['customer_management_fee']);
+            $temp_date['customer_management_fee'] = (!empty($customer) && (floor($customer) == $customer) && $customer >= 0) ? $customer : 0;
+
+            // ETC费用
+            $ETC_price = trim($value['etc_price']);
+            $temp_date['ETC_price'] = (!empty($ETC_price) && (floor($ETC_price) == $ETC_price) && $ETC_price >= 0) ? $ETC_price : 0;
+
+            // 运价
+            $amount = trim($value['amount']);
+            $temp_date['amount'] = (!empty($amount) && (floor($amount) == $amount) && $amount >= 0) ? $amount : 0;
+
+            // 万金油(升)
+            $oil = trim($value['oil_amount']);
+            $temp_date['oil_amount'] = (!empty($oil) && is_numeric($oil) && $oil >= 0) ? $oil : 0;
+
+            // 油价(元)
+            $oil_unit = trim($value['oil_unit_price']);
+            $temp_date['oil_unit_price'] = (!empty($oil_unit) && is_numeric($oil_unit) && $oil_unit >= 0) ? $oil_unit : 0;
+
+            // GPS
+            $temp_date['GPS'] = $value['gps'];
+
+
+
+            // 是否需要回单
+            $receipt_need_trim = trim($value['receipt_need_name']);
+            if(!in_array($receipt_need_trim,['是','否']))  $temp_date['receipt_need'] = 0;
+            else
+            {
+                if($receipt_need_trim == '固定') $receipt_need = 1;
+                else if($receipt_need_trim == '临时') $receipt_need = 0;
+                else $receipt_need = 0;
+                $temp_date['receipt_need'] = $receipt_need;
+            }
+
+            $order_data[] = $temp_date;
+        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            foreach($order_data as $key => $value)
+            {
+                $order = new YH_Order;
+
+                $order->create_type = 9;
+                $order->creator_id = $me->id;
+                $order->assign_time = $value['assign_time'];  // 需求类型
+                $order->car_owner_type = $value['car_owner_type'];  // 需求类型
+                $order->client_id = $value['client_id'];  // 客户
+                $order->circle_id = $value['circle_id'];  // 环线
+                $order->route_type = $value['route_type'];  // 线路类型
+                $order->route_id = $value['route_id'];  // 固定线路
+                $order->route_temporary = $value['route_temporary'];  // 临时线路
+                $order->departure_place = $value['departure_place'];  // 出发地
+                $order->stopover_place = $value['stopover_place'];  // 经停地
+                $order->destination_place = $value['destination_place'];  // 目的地
+                $order->travel_distance = $value['travel_distance'];  // 里程
+                $order->time_limitation_prescribed = $value['time_limitation_prescribed'];  // 时效
+                $order->amount = $value['amount'];  // 运费
+                $order->oil_card_amount = $value['oil_card_amount'];  // 油卡
+                $order->deposit = $value['deposit'];  // 定金
+                $order->outside_car_price = $value['outside_car_price'];  // 请车价
+                $order->administrative_fee = $value['administrative_fee'];  // 管理费
+                $order->information_fee = $value['information_fee'];  // 信息费
+                $order->customer_management_fee = $value['customer_management_fee'];  // 客户管理费
+                $order->ETC_price = $value['ETC_price'];  // ETC费用
+                $order->oil_amount = $value['oil_amount'];  // 万金油(升)
+                $order->oil_unit_price = $value['oil_unit_price'];  // 油价(元)
+                $order->pricing_id = $value['pricing_id'];  // 包油定价
+                $order->car_id = $value['car_id'];  // 车辆
+                $order->trailer_id = $value['trailer_id'];  // 车挂
+                $order->outside_car = $value['outside_car'];  // 外部车车牌
+                $order->outside_trailer = $value['outside_trailer'];  // 外部车挂
+                $order->driver_id = $value['driver_id'];  // 驾驶员
+                $order->driver_name = $value['driver_name'];  // 主驾姓名
+                $order->driver_phone = $value['driver_phone'];  // 主驾电话
+                $order->copilot_name = $value['copilot_name'];  // 副驾姓名
+                $order->copilot_phone = $value['copilot_phone'];  // 副驾电话
+                $order->receipt_need = $value['receipt_need'];  // 是否需要回单
+                $order->receipt_address = $value['receipt_address'];  // 回单地址
+                $order->GPS = $value['GPS'];  // GPS
+                $order->order_number = $value['order_number'];  // 单号
+                $order->payee_name = $value['payee_name'];  // 收款人
+                $order->arrange_people = $value['arrange_people'];  // 安排人
+                $order->car_supply = $value['car_supply'];  // 车货源
+                $order->remark = $value['remark'];  // 备注
+//                $order->description = $value['description'];  // 备注
+
+                $bool = $order->save();
+                if(!$bool) throw new Exception("insert--order--fail");
+            }
+
+            DB::commit();
+            return response_success(['count'=>count($order_data)]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
 
 
     // 【订单管理】返回-添加-视图

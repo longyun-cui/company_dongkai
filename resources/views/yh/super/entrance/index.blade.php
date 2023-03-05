@@ -3,7 +3,7 @@
 
 @section('head_title')
     @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
-    {{ $title_text or '首页' }} - 超级管理员系统 - {{ config('info.info.short_name') }}
+    S.{{ $title_text or '首页' }} - 超级管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 

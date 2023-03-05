@@ -13,7 +13,7 @@
 @section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
-    <li><a href="{{ url($list_link) }}"><i class="fa fa-list"></i>{{ $list_text or '用户列表' }}</a></li>
+    <li><a href="{{ url($list_link) }}"><i class="fa fa-list"></i>{{ $list_text or '订单列表' }}</a></li>
 @endsection
 @section('content')
 <div class="row">
@@ -308,7 +308,7 @@
 
                 {{--包油定价--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">选择包油定价</label>
+                    <label class="control-label col-md-2">包油定价</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="pricing_id" id="select2-pricing">
                             @if($operate == 'edit' && $data->pricing_id)

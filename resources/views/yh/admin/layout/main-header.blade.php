@@ -63,6 +63,11 @@
                         </li>
                         @endif
                         <li class="header">订单</li>
+                            <li class="header">
+                                <a href="{{ url('/item/order-import') }}">
+                                    <i class="fa fa-file-excel-o text-yellow"></i> 导入订单
+                                </a>
+                            </li>
                         <li class="header">
                             <a href="{{ url('/item/order-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加订单
