@@ -934,7 +934,7 @@
                 $('select[name=info-select-set-column-value]').removeClass('select2-route').removeClass('select2-car').removeClass('select2-driver').removeClass('select2-client').addClass('select2-circle');
                 $('.select2-circle').select2({
                     ajax: {
-                        url: "{{ url('/item/order_select2_circle') }}",
+                        url: "{{ url('/item/order_select2_circle') }}"+"?car_id="+$that.attr("data-car"),
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {

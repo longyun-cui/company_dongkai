@@ -7515,23 +7515,23 @@ class YHAdminRepository {
     //
     public function operate_order_select2_circle($post_data)
     {
-        if(empty($post_data['keyword']))
-        {
-            $list =YH_Circle::select(['id','title as text'])
+
+        $query =YH_Circle::select(['id','title as text']);
 //                ->where(['user_status'=>1,'user_category'=>11])
-//                ->whereIn('user_type',[41,61,88])
-                ->orderBy('id', 'desc')
-                ->get()->toArray();
+//                ->whereIn('user_type',[41,61,88]);
+
+        if(!empty($post_data['car_id']))
+        {
+            $query->where('car_id',$post_data['car_id']);
         }
-        else
+
+        if(!empty($post_data['keyword']))
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Circle::select(['id','title as text'])->where('title','like',"%$keyword%")
-//                ->where(['user_status'=>1,'user_category'=>11])
-//                ->whereIn('user_type',[41,61,88])
-                ->orderBy('id', 'desc')
-                ->get()->toArray();
+            $query->where('title','like',"%$keyword%");
         }
+
+        $list = $query->orderBy('id', 'desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'(清空)'];
         array_unshift($list,$unSpecified);
         return $list;
