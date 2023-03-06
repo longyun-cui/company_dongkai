@@ -1323,8 +1323,8 @@
 //                "scrollY": true,
                 "scrollCollapse": true,
                 "fixedColumns": {
-                    "leftColumns": 8,
-                    "rightColumns": 1
+                    "leftColumns": "@if($is_mobile_equipment) 1 @else 8 @endif",
+                    "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 },
                 "columns": [
 //                    {

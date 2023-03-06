@@ -60,6 +60,10 @@ class YHAdminRepository {
         else $this->auth_check = 0;
 
         view()->share('auth_check',$this->auth_check);
+
+        if(isMobileEquipment()) $is_mobile_equipment = 1;
+        else $is_mobile_equipment = 0;
+        view()->share('is_mobile_equipment',$is_mobile_equipment);
     }
 
 
