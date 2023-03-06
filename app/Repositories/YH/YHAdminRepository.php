@@ -8061,8 +8061,6 @@ class YHAdminRepository {
     }
 
 
-
-
     // 【订单管理】返回-添加-视图
     public function view_item_order_create()
     {
@@ -10133,7 +10131,7 @@ class YHAdminRepository {
 
         $order_id = $post_data["order_id"];
         $order = YH_Order::where('id',$order_id)->lockForUpdate()->first();
-        if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
+        if(!$order) return response_error([],"该【订单】不存在，刷新页面重试！");
 
         // 交易类型 收入 || 支出
         $finance_type = $post_data["finance_type"];
@@ -10158,6 +10156,7 @@ class YHAdminRepository {
             $FinanceRecord_data['finance_category'] = 11;
             $FinanceRecord_data['finance_type'] = $finance_type;
             $FinanceRecord_data['order_id'] = $post_data["order_id"];
+            $FinanceRecord_data['title'] = $post_data["transaction_title"];
             $FinanceRecord_data['transaction_time'] = $transaction_date_timestamp;
             $FinanceRecord_data['transaction_type'] = $post_data["transaction_type"];
             $FinanceRecord_data['transaction_amount'] = $post_data["transaction_amount"];
@@ -10165,7 +10164,6 @@ class YHAdminRepository {
             $FinanceRecord_data['transaction_receipt_account'] = $post_data["transaction_receipt_account"];
             $FinanceRecord_data['transaction_payment_account'] = $post_data["transaction_payment_account"];
             $FinanceRecord_data['transaction_order'] = $post_data["transaction_order"];
-            $FinanceRecord_data['title'] = $post_data["transaction_title"];
             $FinanceRecord_data['description'] = $post_data["transaction_description"];
 
             $mine_data = $post_data;
@@ -11591,6 +11589,223 @@ class YHAdminRepository {
         }
 
     }
+
+
+
+
+    // 【订单管理】返回-导入任务-视图
+    public function view_finance_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $operate_category = 'finance';
+        $operate_type = 'item';
+        $operate_type_text = '财务';
+        $title_text = '导入'.$operate_type_text.'数据';
+        $list_text = $operate_type_text.'列表';
+        $list_link = '/finance/finance-list-for-all';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['operate_category'] = $operate_category;
+        $return['operate_type'] = $operate_type;
+        $return['operate_type_text'] = $operate_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.finance.finance-import';
+        return view($view_blade)->with($return);
+    }
+    // 【订单管理】保存-导入任务-数据
+    public function operate_finance_import_save($post_data)
+    {
+//        $messages = [
+//            'operate.required' => 'operate.required',
+//            'car_id.required' => '请选择车辆！',
+//        ];
+//        $v = Validator::make($post_data, [
+//            'operate' => 'required',
+//            'car_id' => 'required',
+//        ], $messages);
+//        if ($v->fails())
+//        {
+//            $messages = $v->errors();
+//            return response_error([],$messages->first());
+//        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,19,41,42,81,82,88])) return response_error([],"你没有操作权限！");
+
+//        $car_id = $post_data["car_id"];
+//        $car = YH_Car::find($car_id);
+//        if($car)
+//        {
+//        }
+//        else return response_error([],"该【车辆】不存在！");
+
+        // 附件
+        if(!empty($post_data["excel-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["excel-file"],null,'yh/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+            }
+            else throw new Exception("upload--attachment--fail");
+        }
+
+        $attachment_file = storage_resource_path($result["local"]);
+
+        $data = Excel::load($attachment_file, function($reader) {
+
+//            $reader->takeColumns(20);
+            $reader->limitColumns(20);
+
+//            $reader->takeRows(200);
+            $reader->limitRows(200);
+
+//            $reader->ignoreEmpty();
+
+//            $data = $reader->all();
+//            $data = $reader->toArray();
+
+        })->get();
+        $data = $data->toArray();
+
+
+        $finance_data = [];
+
+        foreach($data as $key => $value)
+        {
+            $temp_date = [];
+            $temp_date['id'] = $key;
+
+            // 订单-使用ID
+            $order_id = trim($value['order_id']);
+            $temp_date['order_id'] = (!empty($order_id) && (floor($order_id) == $order_id) && $order_id >= 0) ? $order_id : 0;
+            if(empty($temp_date['order_id']))  continue;
+            $order = YH_Order::find($order_id);
+            if($order) $temp_date['order_id'] = $order->id;
+            else continue;
+
+            // 交易类型
+            $finance_type_name = trim($value['finance_type_name']);
+            if(!in_array($finance_type_name,['收入','支出'])) continue;
+            else
+            {
+                $temp_date = $value;
+
+                if($finance_type_name == '收入') $finance_type = 1;
+                else if($finance_type_name == '支出') $finance_type = 21;
+                else $finance_type = 0;
+                $temp_date['finance_type'] = $finance_type;
+            }
+
+            // 交易日期
+            $transaction_date = trim($value['transaction_date']);
+            $transaction_timestamp = strtotime($transaction_date);
+            if(strtotime(date('Y-m-d', $transaction_timestamp)) === $transaction_timestamp)
+            {
+                $temp_date['transaction_time'] = $transaction_timestamp;
+            }
+            else continue;
+
+            // 交易金额
+            $amount = trim($value['transaction_amount']);
+            $temp_date['transaction_amount'] = (!empty($amount) && (floor($amount) == $amount) && $amount >= 0) ? $amount : 0;
+
+            $finance_data[] = $temp_date;
+        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            foreach($finance_data as $key => $value)
+            {
+
+                $order_id = $value["order_id"];
+                $order = YH_Order::where('id',$order_id)->lockForUpdate()->first();
+//                if(!$order) continue;
+
+                $finance = new YH_Finance;
+
+                $finance->create_type = 9;
+                $finance->creator_id = $me->id;
+                $finance->order_id = $value['order_id'];  // 订单ID
+                $finance->finance_type = $value['finance_type'];  // 交易类型 1收入，21支出
+                $finance->title = $value['title'];  // 名目
+                $finance->transaction_amount = $value['transaction_amount'];  // 交易金额
+                $finance->transaction_time = $value['transaction_time'];  // 交易时间
+                $finance->transaction_type = $value['transaction_type'];  // 支付方式：现金，转账，微信，支付宝
+                $finance->transaction_receipt_account = $value['transaction_receipt_account'];  // 收款账户
+                $finance->transaction_payment_account = $value['transaction_payment_account'];  // 付款账户
+                $finance->transaction_order = $value['transaction_order'];  // 交易单号
+                $finance->remark = $value['remark'];  // 备注
+
+                $bool = $finance->save();
+                if($bool)
+                {
+                    $finance_type = $value['finance_type'];
+                    $transaction_amount = $value['transaction_amount'];
+
+                    if(in_array($me->user_type,[41,42]))
+                    {
+                        if($finance_type == 1)
+                        {
+                            $order->income_total = $order->income_total + $transaction_amount;
+                        }
+                        else if($finance_type == 21)
+                        {
+                            $order->expenditure_total = $order->expenditure_total + $transaction_amount;
+                        }
+                    }
+                    else
+                    {
+                        if($finance_type == 1)
+                        {
+                            $order->income_to_be_confirm = $order->income_to_be_confirm + $transaction_amount;
+                        }
+                        else if($finance_type == 21)
+                        {
+                            $order->expenditure_to_be_confirm = $order->expenditure_to_be_confirm + $transaction_amount;
+                        }
+                    }
+
+                    $bool_1 = $order->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("update--order--fail");
+                }
+                else throw new Exception("insert--finance--fail");
+            }
+
+            DB::commit();
+            return response_success(['count'=>count($finance_data)]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
 
 
 

@@ -15,6 +15,7 @@ class YH_Finance extends Model
         'is_confirmed', 'confirmer_id',
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+        'create_type',
         'admin_id',
         'menu_id', 'item_id', 'order_id',
         'transaction_amount', 'transaction_time', 'transaction_type', 'transaction_account', 'transaction_receipt_account', 'transaction_payment_account', 'transaction_order',

@@ -1135,20 +1135,27 @@ class YHAdminController extends Controller
     /*
      * Finance 财务
      */
-    // 【财务】返回-全部内容-列表-视图
+    // 【财务管理】返回-全部内容-列表-视图
     public function view_finance_list_for_all()
     {
         if(request()->isMethod('get')) return $this->repo->view_finance_record_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_finance_record_list_for_all_datatable(request()->all());
     }
 
+    // 【财务管理】导入
+    public function operate_finance_import()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_import();
+        else if (request()->isMethod('post')) return $this->repo->operate_finance_import_save(request()->all());
+    }
 
-    // 【订单管理】删除
+
+    // 【财务管理】删除
     public function operate_finance_delete()
     {
         return $this->repo->operate_finance_delete(request()->all());
     }
-    // 【订单管理】完成
+    // 【财务管理】完成
     public function operate_finance_confirm()
     {
         return $this->repo->operate_finance_confirm(request()->all());

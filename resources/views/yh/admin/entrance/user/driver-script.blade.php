@@ -75,7 +75,7 @@
         // 【管理员-删除】
         $(".main-content").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"删除"么？', {
+            layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -102,7 +102,7 @@
         // 【管理员-恢复】
         $(".main-content").on('click', ".item-admin-restore-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"恢复"么？', {
+            layer.msg('确定"恢复"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -129,7 +129,7 @@
         // 【管理员-永久删除】
         $(".main-content").on('click', ".item-admin-delete-permanently-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"永久删除"么？', {
+            layer.msg('确定"永久删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -158,7 +158,7 @@
         // 【发布】
         $(".main-content").on('click', ".item-publish-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"发布"么？', {
+            layer.msg('确定"发布"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -187,10 +187,12 @@
         // 【启用】
         $(".main-content").on('click', ".item-admin-enable-submit", function() {
             var $that = $(this);
-            layer.msg('确定"启用"？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"启用"？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
                     $.post(
                         "{{ url('/user/driver-admin-enable') }}",
                         {
@@ -208,16 +210,16 @@
                         },
                         'json'
                     );
-                }
-            });
         });
         // 【禁用】
         $(".main-content").on('click', ".item-admin-disable-submit", function() {
             var $that = $(this);
-            layer.msg('确定"禁用"？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"禁用"？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
                     $.post(
                         "{{ url('/user/driver-admin-disable') }}",
                         {
@@ -235,8 +237,6 @@
                         },
                         'json'
                     );
-                }
-            });
         });
 
 
@@ -286,10 +286,14 @@
             {
                 var $column_value = $('input[name="info-text-set-column-value"]').val();
             }
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
                     $.post(
                         "{{ url('/user/driver-info-text-set') }}",
                         {
@@ -301,7 +305,7 @@
                             column_value: $column_value,
                         },
                         function(data){
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
@@ -319,8 +323,7 @@
                         },
                         'json'
                     );
-                }
-            });
+
         });
 
 
@@ -372,10 +375,14 @@
             {
                 $column_value = $('input[name="info-date-set-column-value"]').val();
             }
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
                     $.post(
                         "{{ url('/user/driver-info-text-set') }}",
                                 {{--"{{ url('/user/driver-info-time-set') }}",--}}
@@ -389,7 +396,7 @@
                             time_type: $time_type
                         },
                         function(data){
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
@@ -404,8 +411,7 @@
                         },
                         'json'
                     );
-                }
-            });
+
         });
 
 
@@ -499,10 +505,14 @@
             var $that = $(this);
             var $column_key = $('input[name="info-select-set-column-key"]').val();
             var $column_value = $('select[name="info-select-set-column-value"]').val();
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
                     $.post(
                         "{{ url('/user/driver-info-select-set') }}",
                         {
@@ -514,7 +524,7 @@
                             column_value: $column_value,
                         },
                         function(data){
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
@@ -532,8 +542,7 @@
                         },
                         'json'
                     );
-                }
-            });
+
         });
 
 
@@ -603,10 +612,12 @@
             // var $column_key = $('input[name="info-attachment-set-column-key"]').val();
             // var $column_value = $('select[name="info-attachment-set-column-value"]').val();
 
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
 
                     var options = {
                         url: "{{ url('/user/driver-info-attachment-set') }}",
@@ -614,7 +625,7 @@
                         dataType: "json",
                         // target: "#div2",
                         success: function (data) {
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
                             else
                             {
@@ -648,8 +659,6 @@
                     };
                     $("#modal-attachment-set-form").ajaxSubmit(options);
 
-                }
-            });
         });
 
 
@@ -720,10 +729,12 @@
             // var $column_key = $('input[name="info-attachment-set-column-key"]').val();
             // var $column_value = $('select[name="info-attachment-set-column-value"]').val();
 
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
 
                     var options = {
                         url: "{{ url('/user/driver-info-attachment-set') }}",
@@ -731,7 +742,7 @@
                         dataType: "json",
                         // target: "#div2",
                         success: function (data) {
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
                             else
                             {
@@ -765,8 +776,6 @@
                     };
                     $("#modal-attachment-set-form").ajaxSubmit(options);
 
-                }
-            });
         });
         // 【附件-attachment-属性】【提交】
         $(".main-content").on('click', "#item-submit-for-attachment-set", function() {
@@ -775,10 +784,12 @@
             var $column_key = $('input[name="info-attachment-set-column-key"]').val();
             var $column_value = $('select[name="info-attachment-set-column-value"]').val();
 
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
 
                     var options = {
                         url: "{{ url('/user/driver-info-attachment-set') }}",
@@ -786,7 +797,7 @@
                         dataType: "json",
                         // target: "#div2",
                         success: function (data) {
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
                             else
                             {
@@ -866,14 +877,12 @@
                     {{--);--}}
 
 
-                }
-            });
         });
 
         // 【附件-attachment-属性】【删除】
         $(".main-content").on('click', ".item-attachment-delete-this", function() {
             var $that = $(this);
-            layer.msg('确定要"删除"么？', {
+            layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){

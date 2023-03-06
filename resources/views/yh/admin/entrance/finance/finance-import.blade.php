@@ -13,7 +13,7 @@
 @section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
-    <li><a href="{{ url($list_link) }}"><i class="fa fa-list"></i>{{ $list_text or '订单列表' }}</a></li>
+    <li><a href="{{ url($list_link) }}"><i class="fa fa-list"></i>{{ $list_text or '财务列表' }}</a></li>
 @endsection
 @section('content')
 <div class="row">
@@ -50,20 +50,6 @@
                     <div class="col-md-8 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="description" rows="3" cols="100%">{{ $data->description or '' }}</textarea>
-                    </div>
-                </div>
-
-                {{--选择车辆--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">选择车辆</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="car_id" id="select2-car">
-                            @if($operate == 'edit' && $data->car_id)
-                                <option data-id="{{ $data->car_id or 0 }}" value="{{ $data->car_id or 0 }}">{{ $data->car_er->name }}</option>
-                            @else
-                                <option data-id="0" value="0">选择车辆</option>
-                            @endif
-                        </select>
                     </div>
                 </div>
 
@@ -148,7 +134,7 @@
 
         $("#edit-item-submit").on('click', function() {
             var options = {
-                url: "/item/order-import",
+                url: "/finance/finance-import",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -161,43 +147,11 @@
 
                         $(".fileinput-remove-button").click();
 
-                        location.href = "/item/order-list-for-all";
+                        location.href = "/finance/finance-list-for-all";
                     }
                 }
             };
             $("#form-edit-item").ajaxSubmit(options);
-        });
-
-
-
-
-        //
-        $('#select2-car').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_car') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
         });
 
     });

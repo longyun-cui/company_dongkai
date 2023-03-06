@@ -15,6 +15,7 @@ class YH_Order extends Model
         'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
         'owner_active', 'is_show', 'is_published', 'is_completed',
         'owner_id', 'creator_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+        'create_type',
         'org_id', 'admin_id',
         'item_id', 'menu_id',
         'order_category', 'order_type',

@@ -445,25 +445,13 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
 
-
-
-
-
-    Route::match(['get','post'], '/item/item-list', $controller.'@view_item_list');
-    Route::match(['get','post'], '/item/item-list-for-all', $controller.'@view_item_list_for_all');
-
-    Route::match(['get','post'], '/item/task-list-for-all', $controller.'@view_task_list_for_all');
-    Route::match(['get','post'], '/item/task-list-for-finished', $controller.'@view_task_list_for_finished');
-
-
-
-
-
-
     /*
-     * statistic
+     * finance 财务管理
      */
     Route::match(['get','post'], '/finance/finance-list-for-all', $controller.'@view_finance_list_for_all');
+    // 导入
+    Route::match(['get','post'], '/finance/finance-import', $controller.'@operate_finance_import');
+    // 导入
     Route::post('/finance/finance-delete', $controller.'@operate_finance_delete');
     Route::post('/finance/finance-confirm', $controller.'@operate_finance_confirm');
 
@@ -475,7 +463,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
     /*
-     * statistic
+     * statistic 数据统计
      */
     Route::match(['get','post'], '/statistic/statistic-list-for-all', $controller.'@view_statistic_list_for_all');
     Route::match(['get','post'], '/statistic/statistic-index', $controller.'@view_statistic_index');

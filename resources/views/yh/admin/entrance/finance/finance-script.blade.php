@@ -41,7 +41,7 @@
         // 【确认】
         $(".main-content").on('click', ".item-confirm-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"确认"么？', {
+            layer.msg('确定"确认"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -69,7 +69,7 @@
         // 【删除】
         $(".main-content").on('click', ".item-delete-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"删除"么？', {
+            layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -136,7 +136,7 @@
         // 【管理员-删除】
         $(".main-content").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"删除"么？', {
+            layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -164,7 +164,7 @@
         // 【管理员-恢复】
         $(".main-content").on('click', ".item-admin-restore-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"恢复"么？', {
+            layer.msg('确定"恢复"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -192,7 +192,7 @@
         // 【管理员-永久删除】
         $(".main-content").on('click', ".item-admin-delete-permanently-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"永久删除"么？', {
+            layer.msg('确定"永久删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -221,10 +221,12 @@
         // 【启用】
         $("#item-main-body").on('click', ".item-admin-enable-submit", function() {
             var $that = $(this);
-            layer.msg('确定"启用"？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"启用"？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
                     $.post(
                         "{{ url('/finance/finance-admin-enable') }}",
                         {
@@ -242,16 +244,16 @@
                         },
                         'json'
                     );
-                }
-            });
         });
         // 【禁用】
         $("#item-main-body").on('click', ".item-admin-disable-submit", function() {
             var $that = $(this);
-            layer.msg('确定"禁用"？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"禁用"？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
                     $.post(
                         "{{ url('/finance/finance-admin-disable') }}",
                         {
@@ -269,8 +271,6 @@
                         },
                         'json'
                     );
-                }
-            });
         });
 
 

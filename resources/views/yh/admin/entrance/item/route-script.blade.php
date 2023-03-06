@@ -48,7 +48,7 @@
         // 【删除】
         $(".main-content").on('click', ".item-delete-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"删除"么？', {
+            layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -75,7 +75,7 @@
         // 【弃用】
         $(".main-content").on('click', ".item-abandon-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"弃用"么？', {
+            layer.msg('确定"弃用"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -102,7 +102,7 @@
         // 【发布】
         $(".main-content").on('click', ".item-publish-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"发布"么？', {
+            layer.msg('确定"发布"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -129,7 +129,7 @@
         // 【完成】
         $(".main-content").on('click', ".item-complete-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"完成"么？', {
+            layer.msg('确定"完成"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -160,7 +160,7 @@
         // 【管理员-删除】
         $(".main-content").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"删除"么？', {
+            layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -187,7 +187,7 @@
         // 【管理员-恢复】
         $(".main-content").on('click', ".item-admin-restore-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"恢复"么？', {
+            layer.msg('确定"恢复"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -214,7 +214,7 @@
         // 【管理员-永久删除】
         $(".main-content").on('click', ".item-admin-delete-permanently-submit", function() {
             var $that = $(this);
-            layer.msg('确定要"永久删除"么？', {
+            layer.msg('确定"永久删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -243,10 +243,12 @@
         // 【管理员-启用】
         $(".main-content").on('click', ".item-admin-enable-submit", function() {
             var $that = $(this);
-            layer.msg('确定"启用"？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"启用"？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
                     $.post(
                         "{{ url('/item/route-admin-enable') }}",
                         {
@@ -264,16 +266,16 @@
                         },
                         'json'
                     );
-                }
-            });
         });
         // 【管理员-禁用】
         $(".main-content").on('click', ".item-admin-disable-submit", function() {
             var $that = $(this);
-            layer.msg('确定"禁用"？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"禁用"？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
                     $.post(
                         "{{ url('/item/route-admin-disable') }}",
                         {
@@ -291,8 +293,6 @@
                         },
                         'json'
                     );
-                }
-            });
         });
 
 
@@ -347,10 +347,14 @@
             {
                 var $column_value = $('input[name="info-text-set-column-value"]').val();
             }
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
                     $.post(
                         "{{ url('/item/route-info-text-set') }}",
                         {
@@ -362,7 +366,7 @@
                             column_value: $column_value,
                         },
                         function(data){
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
@@ -380,8 +384,7 @@
                         },
                         'json'
                     );
-                }
-            });
+
         });
 
 
@@ -430,10 +433,14 @@
             {
                 $column_value = $('input[name="info-date-set-column-value"]').val();
             }
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
                     $.post(
                         "{{ url('/item/route-info-text-set') }}",
                         {{--"{{ url('/item/route-info-time-set') }}",--}}
@@ -447,7 +454,7 @@
                             time_type: $time_type
                         },
                         function(data){
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
@@ -461,8 +468,7 @@
                         },
                         'json'
                     );
-                }
-            });
+
         });
 
 
@@ -506,10 +512,14 @@
             var $that = $(this);
             var $column_key = $('input[name="info-radio-set-column-key"]').val();
             var $column_value = $('#modal-info-radio-set-form').find('input:radio:checked').val();
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
                     $.post(
                         "{{ url('/item/route-info-radio-set') }}",
                         {
@@ -521,7 +531,7 @@
                             column_value: $column_value,
                         },
                         function(data){
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
@@ -539,8 +549,7 @@
                         },
                         'json'
                     );
-                }
-            });
+
         });
 
 
@@ -731,10 +740,14 @@
             var $that = $(this);
             var $column_key = $('input[name="info-select-set-column-key"]').val();
             var $column_value = $('select[name="info-select-set-column-value"]').val();
-            layer.msg('确定"提交"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
                     $.post(
                         "{{ url('/item/route-info-select-set') }}",
                         {
@@ -746,7 +759,7 @@
                             column_value: $column_value,
                         },
                         function(data){
-                            layer.close(index);
+                            // layer.close(index);
                             if(!data.success) layer.msg(data.msg);
 //                            else location.reload();
                             else
@@ -764,8 +777,7 @@
                         },
                         'json'
                     );
-                }
-            });
+
         });
 
 

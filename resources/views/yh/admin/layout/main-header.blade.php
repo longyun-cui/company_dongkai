@@ -26,6 +26,7 @@
                         <i class="fa fa-plus"></i>
                     </a>
                     <ul class="dropdown-menu">
+
                         @if(in_array($me->user_type,[0,1,9,11,19,21,22]))
                         <li class="header">员工</li>
                         <li class="header">
@@ -39,7 +40,8 @@
                             </a>
                         </li>
                         @endif
-                        @if(in_array($me->user_type,[0,1,9,11]))
+
+                        @if(in_array($me->user_type,[0,1,9,11,19]))
                         <li class="header">业务</li>
                         <li class="header">
                             <a href="{{ url('/user/client-create') }}">
@@ -62,12 +64,14 @@
                             </a>
                         </li>
                         @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11,19,81,82,88]))
                         <li class="header">订单</li>
-                            <li class="header">
-                                <a href="{{ url('/item/order-import') }}">
-                                    <i class="fa fa-file-excel-o text-yellow"></i> 导入订单
-                                </a>
-                            </li>
+                        <li class="header">
+                            <a href="{{ url('/item/order-import') }}">
+                                <i class="fa fa-file-excel-o text-yellow"></i> 导入订单
+                            </a>
+                        </li>
                         <li class="header">
                             <a href="{{ url('/item/order-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加订单
@@ -78,12 +82,17 @@
                                 <i class="fa fa-plus text-yellow"></i> 添加环线
                             </a>
                         </li>
-                        <li class="header _none">内容</li>
-                        <li class="header _none">
-                            <a href="{{ url('/item/item-create') }}">
-                                <i class="fa fa-plus text-yellow"></i> 添加内容
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11,19,41,42]))
+                        <li class="header">财务</li>
+                        <li class="header">
+                            <a href="{{ url('/finance/finance-import') }}">
+                                <i class="fa fa-file-excel-o text-red"></i> 导入财务
                             </a>
                         </li>
+                        @endif
+
                         <li class="footer"><a href="#">See All Messages</a></li>
                     </ul>
                 </li>
