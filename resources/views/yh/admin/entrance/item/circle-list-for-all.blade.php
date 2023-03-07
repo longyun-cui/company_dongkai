@@ -837,8 +837,8 @@
                                 var $text = $id + "&nbsp;&nbsp;[" + $assign + "] &nbsp;&nbsp;(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $type + $title;
 
                                 $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a>';
-                                // $html += '<br>';
-                                $html += "&nbsp;&nbsp;";
+                                $html += '<br>';
+                                // $html += "&nbsp;&nbsp;";
                             });
                             return $html;
 //                            return row.people == null ? '未知' :
