@@ -13,6 +13,14 @@
     $(function() {
 
 
+        // 【清空只读文本框】
+        $(".main-content").on('click', ".readonly-clear-this", function() {
+            var $that = $(this);
+            var $parent = $that.parents('.readonly-picker');
+            $parent.find('input').val('');
+        });
+
+
         $('.time_picker').datetimepicker({
             locale: moment.locale('zh-cn'),
             format: "YYYY-MM-DD HH:mm",

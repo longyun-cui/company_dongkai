@@ -22,7 +22,8 @@ class YH_Circle extends Model
         'before_client_id', 'after_client_id', 'before_route_id', 'after_route_id', 'before_car_id', 'after_car_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'time_point', 'time_type', 'start_time', 'end_time', 'address',
+        'time_point', 'time_type', 'start_time', 'ended_time',
+        'address',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
         'published_at'
     ];

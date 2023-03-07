@@ -71,6 +71,29 @@
 {{--                    </div>--}}
 {{--                </div>--}}
 
+                {{--时间--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 时间</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <div class="input-group readonly-picker">
+                                <input type="text" class="form-control date_picker" name="start" placeholder="开始时间" readonly="readonly"
+                                       @if(!empty($data->start_time)) value="{{ date("Y-m-d",$data->start_time) }}" @endif
+                                >
+                                <span class="input-group-addon"><a class="readonly-clear-this"><i class="fa fa-trash"></i></a></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <div class="input-group readonly-picker">
+                                <input type="text" class="form-control date_picker" name="ended" placeholder="结束时间" readonly="readonly"
+                                       @if(!empty($data->ended_time)) value="{{ date("Y-m-d",$data->ended_time) }}" @endif
+                                >
+                                <span class="input-group-addon"><a class="readonly-clear-this"><i class="fa fa-trash"></i></a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
 
 

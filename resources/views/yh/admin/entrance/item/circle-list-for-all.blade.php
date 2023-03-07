@@ -51,6 +51,15 @@
                             @endif
                         </select>
 
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="circle-month" placeholder="选择月份" readonly="readonly" value="" data-default="" style="" />
+
+                        <select class="form-control form-filter" name="circle-isset" style="width:88px;">
+                            <option value ="-1">全部环线</option>
+                            <option value ="1">有订单</option>
+                            <option value ="0">无订单</option>
+                        </select>
+
+
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-circle">
                             <i class="fa fa-search"></i> 搜索
                         </button>
@@ -262,7 +271,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改定价【<span class="info-time-set-title"></span>】</h3>
+                <h3 class="box-title">修改环线【<span class="info-time-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -281,8 +290,8 @@
                     <div class="form-group">
                         <label class="control-label col-md-2 info-time-set-column-name"></label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime">
-                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date">
+                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
+                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
                         </div>
                     </div>
 
@@ -553,6 +562,8 @@
                         d.title = $('input[name="circle-title"]').val();
                         d.keyword = $('input[name="circle-keyword"]').val();
                         d.car = $('select[name="circle-car"]').val();
+                        d.month = $('input[name="circle-month"]').val();
+                        d.isset = $('select[name="circle-isset"]').val();
                         d.status = $('select[name="circle-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
@@ -697,6 +708,96 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "开始时间",
+                        "data": 'start_time',
+                        "orderable": false,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                var $assign_time_value = '';
+                                if(data)
+                                {
+                                    var $date = new Date(data*1000);
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    $assign_time_value = $year+'-'+$month+'-'+$day;
+                                }
+
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','开始时间');
+                                $(nTd).attr('data-key','start_time').attr('data-value',$assign_time_value);
+                                $(nTd).attr('data-column-name','派车日期');
+                                $(nTd).attr('data-time-type','date');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day;
+                            else return $year+'-'+$month+'-'+$day;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "结束时间",
+                        "data": 'ended_time',
+                        "orderable": false,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                var $assign_time_value = '';
+                                if(data)
+                                {
+                                    var $date = new Date(data*1000);
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    $assign_time_value = $year+'-'+$month+'-'+$day;
+                                }
+
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','结束时间');
+                                $(nTd).attr('data-key','ended_time').attr('data-value',$assign_time_value);
+                                $(nTd).attr('data-column-name','结束时间');
+                                $(nTd).attr('data-time-type','date');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day;
+                            else return $year+'-'+$month+'-'+$day;
+                        }
+                    },
+                    {
                         "className": "text-left",
                         "width": "200px",
                         "title": "订单",
@@ -735,7 +836,9 @@
 
                                 var $text = $id + "&nbsp;&nbsp;[" + $assign + "] &nbsp;&nbsp;(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $type + $title;
 
-                                $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a><br>';
+                                $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a>';
+                                // $html += '<br>';
+                                $html += "&nbsp;&nbsp;";
                             });
                             return $html;
 //                            return row.people == null ? '未知' :
@@ -957,6 +1060,8 @@
                     if($('input[name="circle-title"]').val())  $obj.circle_title = $('input[name="circle-title"]').val();
                     if($('input[name="circle-assign"]').val())  $obj.assign = $('input[name="circle-assign"]').val();
                     if($('select[name="circle-car"]').val() > 0)  $obj.car_id = $('select[name="circle-car"]').val();
+                    if($('input[name="circle-month"]').val())  $obj.month = $('input[name="circle-month"]').val();
+                    if($('select[name="circle-isset"]').val() >= 0)  $obj.isset = $('select[name="circle-isset"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 50) $obj.length = $page_length;

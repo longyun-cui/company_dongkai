@@ -446,7 +446,7 @@
             // });
 
                     $.post(
-                        "{{ url('/item/route-info-time-set') }}",
+                        "{{ url('/item/circle-info-time-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),

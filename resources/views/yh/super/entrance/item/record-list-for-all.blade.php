@@ -820,7 +820,9 @@
                                     else if(data == "container_type") return '箱型';
                                     else if(data == "subordinate_company") return '所属公司';
                                     else if(data == "route") return '路线';
-                                    else if(data == "fixed_route") return '固定路线';
+                                    else if(data == "route_fixed") return '固定路线';
+                                    else if(data == "route_temporary") return '临时路线';
+                                    else if(data == "_route") return '固定路线';
                                     else if(data == "temporary_route") return '临时路线';
                                     else if(data == "departure_place") return '出发地';
                                     else if(data == "destination_place") return '目的地';
@@ -865,7 +867,12 @@
                             }
                             else if(row.operate_object == 77)
                             {
-                                return '';
+                                if(data == "title") return '标题';
+                                else if(data == "car_id") return '车辆';
+                                else if(data == "start_time") return '开始时间';
+                                else if(data == "ended_time") return '结束时间';
+                                else if(data == "remark") return '备注';
+                                else return '有误';
                             }
                             else return '';
 
@@ -909,7 +916,8 @@
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {
-                                if(data)
+                                // if(data == 0) return '';
+                                if(parseInt(data))
                                 {
                                     var $date = new Date(data*1000);
                                     var $year = $date.getFullYear();
@@ -955,25 +963,29 @@
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {
-                                var $date = new Date(data*1000);
-                                var $year = $date.getFullYear();
-                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                                var $day = ('00'+($date.getDate())).slice(-2);
-                                var $hour = ('00'+$date.getHours()).slice(-2);
-                                var $minute = ('00'+$date.getMinutes()).slice(-2);
-                                var $second = ('00'+$date.getSeconds()).slice(-2);
+                                if(parseInt(data))
+                                {
+                                    var $date = new Date(data*1000);
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    var $hour = ('00'+$date.getHours()).slice(-2);
+                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                    var $second = ('00'+$date.getSeconds()).slice(-2);
 
-                                var $currentYear = new Date().getFullYear();
-                                if($year == $currentYear)
-                                {
-                                    if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                                    else if(row.column_type == 'date') return $month+'-'+$day;
+                                    var $currentYear = new Date().getFullYear();
+                                    if($year == $currentYear)
+                                    {
+                                        if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $month+'-'+$day;
+                                    }
+                                    else
+                                    {
+                                        if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                    }
                                 }
-                                else
-                                {
-                                    if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                                    else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
-                                }
+                                else return '';
                             }
 
                             if(row.column_name == 'attachment' && row.operate_category == 71 && row.operate_type == 1)

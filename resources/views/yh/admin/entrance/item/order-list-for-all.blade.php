@@ -61,12 +61,13 @@
 
                         <select class="form-control form-filter" name="order-client" style="width:88px;">
                             <option value ="-1">选择客户</option>
+                            <option value="0">[未指定]</option>
                             @foreach($client_list as $v)
                                 <option value ="{{ $v->id }}" @if($v->id == $client_id) selected="selected" @endif>{{ $v->username }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:96px;">
+                        <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:100px;">
                             @if($circle_id > 0)
                                 <option value="-1">选择环线</option>
                                 <option value="{{ $circle_id }}" selected="selected">{{ $circle_name }}</option>
@@ -86,6 +87,7 @@
 
                         <select class="form-control form-filter" name="order-pricing" style="width:88px;">
                             <option value="-1">选择定价</option>
+                            <option value="0">[未指定]</option>
                             @foreach($pricing_list as $v)
                                 <option value ="{{ $v->id }}" @if($v->id == $pricing_id) selected="selected" @endif>{{ $v->title }}</option>
                             @endforeach
@@ -97,7 +99,17 @@
                                 {{--<option value ="{{ $v->id }}">{{ $v->name }}</option>--}}
                             {{--@endforeach--}}
                         {{--</select>--}}
-                        <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:120px;">
+{{--                        <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:120px;">--}}
+{{--                            @if($car_id > 0)--}}
+{{--                                <option value="-1">选择车辆</option>--}}
+{{--                                <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>--}}
+{{--                            @else--}}
+{{--                                <option value="-1">选择车辆</option>--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
+
+
+                        <select class="form-control form-filter order-select2-car" name="order-car" style="width:100px;">
                             @if($car_id > 0)
                                 <option value="-1">选择车辆</option>
                                 <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>
@@ -105,8 +117,17 @@
                                 <option value="-1">选择车辆</option>
                             @endif
                         </select>
+                        <select class="form-control form-filter order-select2-trailer" name="order-trailer" style="width:100px;">
+                            @if($trailer_id > 0)
+                                <option value="-1">选择车挂</option>
+                                <option value="{{ $trailer_id }}" selected="selected">{{ $trailer_name }}</option>
+                            @else
+                                <option value="-1">选择车挂</option>
+                            @endif
+                        </select>
 
-                        <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:96px;">
+
+                        <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:100px;">
                             @if($driver_id > 0)
                                 <option value="-1">选择驾驶员</option>
                                 <option value="{{ $driver_id }}" selected="selected">{{ $driver_name }}</option>
@@ -1302,6 +1323,7 @@
                         d.client = $('select[name="order-client"]').val();
                         d.circle = $('select[name="order-circle"]').val();
                         d.car = $('select[name="order-car"]').val();
+                        d.trailer = $('select[name="order-trailer"]').val();
                         d.route = $('select[name="order-route"]').val();
                         d.pricing = $('select[name="order-pricing"]').val();
                         d.driver = $('select[name="order-driver"]').val();
@@ -3506,6 +3528,7 @@
                     if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
                     if($('select[name="order-pricing"]').val() > 0)  $obj.pricing_id = $('select[name="order-pricing"]').val();
                     if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
+                    if($('select[name="order-trailer"]').val() > 0)  $obj.trailer_id = $('select[name="order-trailer"]').val();
                     if($('select[name="order-driver"]').val() > 0)  $obj.driver_id = $('select[name="order-driver"]').val();
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
 
@@ -3524,8 +3547,8 @@
                     }
                     else
                     {
-                        {{--$url = "{{ url('/item/order-list-for-all') }}";--}}
-                        {{--if(window.location.search) history.replaceState({page: 1}, "", $url);--}}
+                        $url = "{{ url('/item/order-list-for-all') }}";
+                        if(window.location.search) history.replaceState({page: 1}, "", $url);
                     }
 
                 },

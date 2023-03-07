@@ -16,6 +16,7 @@
             });
             $(".order-select2-circle").val(-1).trigger("change");
             $(".order-select2-car").val(-1).trigger("change");
+            $(".order-select2-trailer").val(-1).trigger("change");
             $(".order-select2-driver").val(-1).trigger("change");
 
 //            $('select.form-filter').selectpicker('refresh');
@@ -1378,7 +1379,7 @@
 
 
 
-        //
+        // 全部车辆
         $('.order-list-select2-car').select2({
             ajax: {
                 url: "{{ url('/item/order_list_select2_car') }}",
@@ -1406,7 +1407,65 @@
             minimumInputLength: 0,
             theme: 'classic'
         });
-        //
+
+        // 车辆
+        $('.order-select2-car').select2({
+            ajax: {
+                url: "{{ url('/item/order_select2_car') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+        // 车挂
+        $('.order-select2-trailer').select2({
+            ajax: {
+                url: "{{ url('/item/order_select2_trailer') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+        // 驾驶员
         $('.order-select2-driver').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_driver') }}",
@@ -1436,7 +1495,7 @@
         });
 
 
-        //
+        // 环线
         $('.order-select2-circle').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_circle') }}",

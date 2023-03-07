@@ -7508,7 +7508,7 @@ class YHAdminRepository {
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
-        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7532,7 +7532,7 @@ class YHAdminRepository {
         }
 
         $list = $query->orderBy('id', 'desc')->get()->toArray();
-        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7555,7 +7555,7 @@ class YHAdminRepository {
                 ->where(['item_status'=>1,'item_category'=>1])
                 ->get()->toArray();
         }
-        $unSpecified = ['id'=>0,'text'=>'(清空)','amount_with_cash'=>0,'amount_with_invoice'=>0];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]','amount_with_cash'=>0,'amount_with_invoice'=>0];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7580,7 +7580,7 @@ class YHAdminRepository {
             $v->text = $v->text.' ('.$v->price1.' / '.$v->price2.' / '.$v->price3.')';
         }
         $list = $list->toArray();
-        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7605,7 +7605,7 @@ class YHAdminRepository {
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
-        $unSpecified = ['id'=>0,'text'=>'(清空)','driver_id'=>0,'linkman_name'=>'','linkman_phone'=>''];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]','driver_id'=>0,'linkman_name'=>'','linkman_phone'=>''];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7630,7 +7630,7 @@ class YHAdminRepository {
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
         }
-        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7655,7 +7655,7 @@ class YHAdminRepository {
 //                ->whereIn('item_type',[41,61,88])
                 ->get()->toArray();
         }
-        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7682,7 +7682,7 @@ class YHAdminRepository {
         }
 
         $list = $query->get()->toArray();
-        $unSpecified = ['id'=>0,'text'=>'(清空)'];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7703,7 +7703,7 @@ class YHAdminRepository {
                 ->where(['user_status'=>1])
                 ->get()->toArray();
         }
-        $unSpecified = ['id'=>0,'text'=>'(清空)','driver_name'=>'','driver_phone'=>'','sub_driver_name'=>'','sub_driver_phone'=>''];
+        $unSpecified = ['id'=>0,'text'=>'[未指定]','driver_name'=>'','driver_phone'=>'','sub_driver_name'=>'','sub_driver_phone'=>''];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -9644,6 +9644,22 @@ class YHAdminRepository {
             else $view_data['car_id'] = -1;
         }
         else $view_data['car_id'] = -1;
+        // 车挂
+        if(!empty($post_data['trailer_id']))
+        {
+            if(is_numeric($post_data['trailer_id']) && $post_data['trailer_id'] > 0)
+            {
+                $trailer = YH_Car::select(['id','name'])->find($post_data['trailer_id']);
+                if($trailer)
+                {
+                    $view_data['trailer_id'] = $post_data['trailer_id'];
+                    $view_data['trailer_name'] = $trailer->name;
+                }
+                else $view_data['trailer_id'] = -1;
+            }
+            else $view_data['trailer_id'] = -1;
+        }
+        else $view_data['trailer_id'] = -1;
 
         // 驾驶员
         if(!empty($post_data['driver_id']))
@@ -9744,30 +9760,49 @@ class YHAdminRepository {
         }
 
         // 客户
-        if(!empty($post_data['client']))
+        if(isset($post_data['client']))
         {
-            if(!in_array($post_data['client'],[-1,0]))
+            if(!in_array($post_data['client'],[-1]))
             {
                 $query->where('client_id', $post_data['client']);
             }
         }
 
         // 环线
-        if(!empty($post_data['circle']))
+        if(isset($post_data['circle']))
         {
-            if(!in_array($post_data['circle'],[-1,0]))
+            if(!in_array($post_data['circle'],[-1]))
             {
                 $query->where('circle_id', $post_data['circle']);
             }
         }
 
+        // 全部车辆
+//        if(isset($post_data['car']))
+//        {
+//            if(!in_array($post_data['car'],[-1]))
+//            {
+//
+//                $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car'])->orWhere('trailer_id', $post_data['car']); } );
+//            }
+//        }
+
         // 车辆
-        if(!empty($post_data['car']))
+        if(isset($post_data['car']))
         {
-            if(!in_array($post_data['car'],[-1,0]))
+            if(!in_array($post_data['car'],[-1]))
             {
 
-                $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car'])->orWhere('trailer_id', $post_data['car']); } );
+                $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car']); } );
+            }
+        }
+        // 车挂
+        if(isset($post_data['trailer']))
+        {
+            if(!in_array($post_data['trailer'],[-1]))
+            {
+
+                $query->where(function($query1) use($post_data) { $query1->where('trailer_id', $post_data['trailer']); } );
             }
         }
 
@@ -9789,9 +9824,9 @@ class YHAdminRepository {
         }
 
         // 定价
-        if(!empty($post_data['pricing']))
+        if(isset($post_data['pricing']))
         {
-            if(!in_array($post_data['pricing'],[-1,0]))
+            if(!in_array($post_data['pricing'],[-1]))
             {
                 $query->where('pricing_id', $post_data['pricing']);
             }
@@ -10469,6 +10504,20 @@ class YHAdminRepository {
         }
         else return response_error([],"参数有误！");
 
+        // 开始时间
+        if(!empty($post_data['start']))
+        {
+            $post_data['start_time'] = strtotime($post_data['start']);
+        }
+        else $post_data['start_time'] = 0;
+        // 结束时间
+        if(!empty($post_data['ended']))
+        {
+            $post_data['ended_time'] = strtotime($post_data['ended']);
+            if($post_data['ended_time'] < $post_data['start_time']) return response_error([],"结束时间需要大于开始时间！");
+        }
+        else $post_data['ended_time'] = 0;
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -11134,7 +11183,7 @@ class YHAdminRepository {
                 'order_list'=>function($query) {
                     $query->orderby('assign_time','asc');
                 },
-                'pivot_order_list',
+//                'pivot_order_list',
 //                'pivot_order_list'=>function($query) {
 //                    $query->with('finance_list');
 //                },
@@ -11144,15 +11193,50 @@ class YHAdminRepository {
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 
-        if(!empty($post_data['car']))
+        if(isset($post_data['car']))
         {
-            if(!in_array($post_data['car'],[-1,0]))
+            if(!in_array($post_data['car'],[-1]))
             {
                 $query->where(function($query1) use($post_data){
                     $query1->where('car_id', $post_data['car']);
                 });
             }
         }
+
+        if(!empty($post_data['month']))
+        {
+            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
+            $the_last_month_start_date = date('Y-m-01',$the_last_month_timestamp); // 指定月份-上月-开始时间
+            $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-开始时间
+            $the_last_month_start_datetime = date('Y-m-01 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
+            $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
+            $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
+            $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-月结束时间戳
+
+
+            $query->whereBetween('start_time',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+        }
+
+        if(isset($post_data['isset']))
+        {
+            if(in_array($post_data['isset'],[0,1]))
+            {
+                $isset = $post_data['isset'];
+                if($isset == 1) $query->has('order_list');
+                if($isset == 0) $query->doesntHave('order_list');
+            }
+        }
+
 
 
         $total = $query->count();
