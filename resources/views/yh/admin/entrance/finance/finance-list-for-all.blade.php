@@ -271,6 +271,7 @@
                             var $departure  = (row.order_er.departure_place) ? row.order_er.departure_place : '';
                             var $stopover  = (row.order_er.stopover_place) ? row.order_er.stopover_place : '';
                             var $destination  = (row.order_er.destination_place) ? row.order_er.destination_place : '';
+                            var $car  = (row.order_er.car_er.name) ? row.order_er.car_er.name : '';
 
                             var $date = new Date(row.order_er.assign_time*1000);
                             var $year = $date.getFullYear();
@@ -278,7 +279,7 @@
                             var $day = ('00'+($date.getDate())).slice(-2);
                             var $assign = $year+'-'+$month+'-'+$day;
 
-                            var $text = $id + "&nbsp;&nbsp;[" + $assign + "]&nbsp;&nbsp;" + "(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $title;
+                            var $text = $id + "&nbsp;&nbsp;(" + $car + ")&nbsp;&nbsp;[" + $assign + "]&nbsp;&nbsp;" + "(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $title;
 
                             $html = '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a><br>';
 

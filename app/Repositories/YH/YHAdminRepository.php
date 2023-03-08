@@ -11436,7 +11436,11 @@ class YHAdminRepository {
 
 //        $id  = $post_data["id"];
         $query = YH_Finance::select('*')
-            ->with(['creator','confirmer','order_er']);
+            ->with([
+                'creator',
+                'confirmer',
+                'order_er'=>function($query){ $query->with('car_er'); }
+            ]);
 
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
