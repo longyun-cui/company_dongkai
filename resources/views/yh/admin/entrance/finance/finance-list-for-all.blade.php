@@ -158,6 +158,11 @@
                         d._token = $('meta[name="_token"]').attr('content');
                         d.order_id = $('input[name="order_id"]').val();
                         d.transaction_time = $('input[name="transaction_time"]').val();
+                        d.title = $('input[name="title"]').val();
+                        d.transaction_type = $('input[name="transaction_type"]').val();
+                        d.transaction_receipt_account = $('input[name="transaction_receipt_account"]').val();
+                        d.transaction_payment_account = $('input[name="transaction_payment_account"]').val();
+                        d.transaction_order = $('input[name="transaction_order"]').val();
                         d.transaction_start = $('input[name="transaction_start"]').val();
                         d.transaction_ended= $('input[name="transaction_ended"]').val();
                         d.finance_type = $('select[name="finance_type"]').val();

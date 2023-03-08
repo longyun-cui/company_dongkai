@@ -11486,8 +11486,8 @@ class YHAdminRepository {
         if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
         if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
         if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
-        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_receipt_account', $post_data['transaction_payment_account']);
-        if(!empty($post_data['transaction_order'])) $query->where('transaction_receipt_account', $post_data['transaction_order']);
+        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_payment_account', $post_data['transaction_payment_account']);
+        if(!empty($post_data['transaction_order'])) $query->where('transaction_order', $post_data['transaction_order']);
 
         if(!empty($post_data['transaction_time'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), $post_data['transaction_time']);
         if(!empty($post_data['transaction_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '>=', $post_data['transaction_start']);
