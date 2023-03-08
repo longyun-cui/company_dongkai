@@ -48,9 +48,7 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:80px;" />
-
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" value="{{ $assign }}" readonly="readonly" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:88px;" />
 
                         <select class="form-control form-filter" name="order-staff" style="width:88px;">
                             <option value ="-1">选择员工</option>
@@ -67,7 +65,7 @@
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter order-select2-circle" name="order-circle" style="width:100px;">
+                        <select class="form-control form-filter select2-container order-select2-circle" name="order-circle" style="width:100px;">
                             @if($circle_id > 0)
                                 <option value="-1">选择环线</option>
                                 <option value="{{ $circle_id }}" selected="selected">{{ $circle_name }}</option>
@@ -109,7 +107,7 @@
 {{--                        </select>--}}
 
 
-                        <select class="form-control form-filter order-select2-car" name="order-car" style="width:100px;">
+                        <select class="form-control form-filter select2-container order-select2-car" name="order-car" style="width:100px;">
                             @if($car_id > 0)
                                 <option value="-1">选择车辆</option>
                                 <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>
@@ -117,7 +115,7 @@
                                 <option value="-1">选择车辆</option>
                             @endif
                         </select>
-                        <select class="form-control form-filter order-select2-trailer" name="order-trailer" style="width:100px;">
+                        <select class="form-control form-filter select2-container order-select2-trailer" name="order-trailer" style="width:100px;">
                             @if($trailer_id > 0)
                                 <option value="-1">选择车挂</option>
                                 <option value="{{ $trailer_id }}" selected="selected">{{ $trailer_name }}</option>
@@ -127,7 +125,7 @@
                         </select>
 
 
-                        <select class="form-control form-filter order-select2-driver" name="order-driver" style="width:100px;">
+                        <select class="form-control form-filter select2-container order-select2-driver" name="order-driver" style="width:100px;">
                             @if($driver_id > 0)
                                 <option value="-1">选择驾驶员</option>
                                 <option value="{{ $driver_id }}" selected="selected">{{ $driver_name }}</option>
@@ -166,16 +164,25 @@
                             <option value="101">回单异常</option>
                         </select>
 
+                        <div class="pull-left clear-both">
+                            <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" value="{{ $assign or '' }}" readonly="readonly" style="width:88px;" />
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-order">
-                            <i class="fa fa-circle-o-notch"></i> 刷新
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-order">
-                            <i class="fa fa-circle-o-notch"></i> 重置
-                        </button>
+                            <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-start" placeholder="起始日期" value="{{ $start or '' }}" readonly="readonly" style="width:88px;" />
+                            <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-ended" placeholder="终止日期" value="{{ $ended or '' }}" readonly="readonly" style="width:88px;" />
+
+                            <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
+                                <i class="fa fa-search"></i> 搜索
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-order">
+                                <i class="fa fa-circle-o-notch"></i> 刷新
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-order">
+                                <i class="fa fa-undo"></i> 重置
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-default filter-empty" id="filter-empty-for-order">
+                                <i class="fa fa-remove"></i> 清空重选
+                            </button>
+                        </div>
 
                     </div>
                 </div>
@@ -1316,6 +1323,8 @@
                         d._token = $('meta[name="_token"]').attr('content');
                         d.id = $('input[name="order-id"]').val();
                         d.assign = $('input[name="order-assign"]').val();
+                        d.assign_start = $('input[name="order-start"]').val();
+                        d.assign_ended = $('input[name="order-ended"]').val();
                         d.name = $('input[name="order-name"]').val();
                         d.title = $('input[name="order-title"]').val();
                         d.keyword = $('input[name="order-keyword"]').val();
@@ -3289,6 +3298,7 @@
                                 else if(data == 41) return '<small class="btn-xs bg-blue">已签收</small>';
                                 else if(data == 100) return '<small class="btn-xs bg-olive">已完成</small>';
                                 else if(data == 101) return '<small class="btn-xs bg-red">回单异常</small>';
+                                else return '<small class="btn-xs bg-red">有误</small>';
                             }
                             else return '--';
 
@@ -3526,6 +3536,8 @@
                     var $obj = new Object();
                     if($('input[name="order-id"]').val())  $obj.order_id = $('input[name="order-id"]').val();
                     if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
+                    if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
+                    if($('input[name="order-ended"]').val())  $obj.assign_ended = $('input[name="order-ended"]').val();
                     if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
                     if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
                     if($('select[name="order-circle"]').val() > 0)  $obj.circle_id = $('select[name="order-circle"]').val();

@@ -14,13 +14,24 @@
             $("#datatable-for-circle-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
-            $(".order-select2-car").val(-1).trigger("change");
+            $(".select2-container").val(-1).trigger("change");
 
 //            $('select.form-filter').selectpicker('refresh');
             $("#datatable-for-circle-list").find('select.form-filter option').attr("selected",false);
             $("#datatable-for-circle-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
+        });
+        // 【清空重选】
+        $("#datatable-for-circle-list").on('click', ".filter-empty", function() {
+            $("#datatable-for-circle-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+            $(".select2-container").val(-1).trigger("change");
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#datatable-for-circle-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-circle-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
         $("#datatable-for-circle-list").on('keyup', ".filter-keyup", function(event) {

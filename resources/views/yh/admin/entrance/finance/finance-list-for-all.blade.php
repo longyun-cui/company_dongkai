@@ -39,21 +39,37 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="order_id" placeholder="订单ID" />
-                        <input type="text" class="form-control form-filter date_picker" name="transaction_time" placeholder="交易日期" readonly="readonly" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="order_id" placeholder="订单ID" style="width:88px;" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="名目" style="width:88px;" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="transaction_type" placeholder="支付方式" style="width:88px;" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="transaction_receipt_account" placeholder="收款账户" style="width:88px;" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="transaction_payment_account" placeholder="支出账户" style="width:88px;" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="transaction_order" placeholder="交易单号" style="width:88px;" />
 
                         <select class="form-control form-filter" name="finance_type" style="width:96px;">
-                            <option value ="-1">全部</option>
+                            <option value ="-1">全部收支</option>
                             <option value ="1">收入</option>
                             <option value ="21">支出</option>
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
-                            <i class="fa fa-circle-o-notch"></i> 重置
-                        </button>
+                        <div1 class="clear-both-">
+{{--                            <input type="text" class="form-control form-filter date_picker" name="transaction_time" placeholder="交易日期" readonly="readonly" style="width:80px;" />--}}
+                            <input type="text" class="form-control form-filter date_picker" name="transaction_start" placeholder="起始日期" readonly="readonly" style="width:80px;" />
+                            <input type="text" class="form-control form-filter date_picker" name="transaction_ended" placeholder="终止日期" readonly="readonly" style="width:80px;" />
+
+                            <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance">
+                                <i class="fa fa-search"></i> 搜索
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-finance">
+                                <i class="fa fa-circle-o-notch"></i> 刷新
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-finance">
+                                <i class="fa fa-undo"></i> 重置
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-default filter-empty" id="filter-empty-for-finance">
+                                <i class="fa fa-remove"></i> 清空重选
+                            </button>
+                        </div1>
 
                     </div>
                 </div>
@@ -142,6 +158,8 @@
                         d._token = $('meta[name="_token"]').attr('content');
                         d.order_id = $('input[name="order_id"]').val();
                         d.transaction_time = $('input[name="transaction_time"]').val();
+                        d.transaction_start = $('input[name="transaction_start"]').val();
+                        d.transaction_ended= $('input[name="transaction_ended"]').val();
                         d.finance_type = $('select[name="finance_type"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
@@ -292,7 +310,7 @@
                         "width": "88px",
                         "title": "交易日期",
                         "data": "transaction_time",
-                        "orderable": false,
+                        "orderable": true,
                         render: function(data, type, row, meta) {
 //                            return data;
                             var $date = new Date(data*1000);

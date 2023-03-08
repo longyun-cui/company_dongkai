@@ -5,6 +5,10 @@
         $("#datatable-for-finance-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
+        // 【刷新】
+        $("#datatable-for-finance-list").on('click', ".filter-refresh", function() {
+            $('#datatable_ajax').DataTable().ajax.reload(null,false);
+        });
         // 【重置】
         $("#datatable-for-finance-list").on('click', ".filter-cancel", function() {
             $("#datatable-for-finance-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
@@ -16,6 +20,16 @@
             $("#datatable-for-finance-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
+        });
+        // 【重置】
+        $("#datatable-for-finance-list").on('click', ".filter-empty", function() {
+            $("#datatable-for-finance-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#datatable-for-finance-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-finance-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
         $("#datatable-for-finance-list").on('keyup', ".item-search-keyup", function(event) {

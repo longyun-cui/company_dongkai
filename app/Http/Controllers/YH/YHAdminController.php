@@ -1200,7 +1200,7 @@ class YHAdminController extends Controller
     }
 
 
-    // 【统计】概览
+    // 【统计】导出
     public function operate_statistic_export()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_export(request()->all());
@@ -1208,10 +1208,16 @@ class YHAdminController extends Controller
     }
 
 
-    // 【统计】概览
-    public function operate_statistic_order_export()
+    // 【统计】导出
+    public function operate_statistic_export_for_order()
     {
-        $this->repo->operate_statistic_order_export(request()->all());
+        $this->repo->operate_statistic_export_for_order(request()->all());
+    }
+
+    // 【统计】导出
+    public function operate_statistic_export_for_finance()
+    {
+        $this->repo->operate_statistic_export_for_finance(request()->all());
     }
 
 

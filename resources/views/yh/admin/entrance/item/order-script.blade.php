@@ -14,16 +14,28 @@
             $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
-            $(".order-select2-circle").val(-1).trigger("change");
-            $(".order-select2-car").val(-1).trigger("change");
-            $(".order-select2-trailer").val(-1).trigger("change");
-            $(".order-select2-driver").val(-1).trigger("change");
+            $(".select2-container").val(-1).trigger("change");
+            // $(".order-select2-circle").val(-1).trigger("change");
+            // $(".order-select2-car").val(-1).trigger("change");
+            // $(".order-select2-trailer").val(-1).trigger("change");
+            // $(".order-select2-driver").val(-1).trigger("change");
 
 //            $('select.form-filter').selectpicker('refresh');
             $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
             $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
+        });
+        // 【清空重选】
+        $("#datatable-for-order-list").on('click', ".filter-empty", function() {
+            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+            $(".select2-container").val(-1).trigger("change");
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
         $("#datatable-for-order-list").on('keyup', ".filter-keyup", function(event) {

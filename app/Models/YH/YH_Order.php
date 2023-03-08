@@ -163,6 +163,14 @@ class YH_Order extends Model
     {
         return $this->hasMany('App\Models\YH\YH_Finance','order_id','id');
     }
+    function finance_income_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Finance','order_id','id');
+    }
+    function finance_expense_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Finance','order_id','id');
+    }
 
 
 

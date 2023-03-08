@@ -39,10 +39,10 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="circle-id" placeholder="ID" value="{{ $circle_id or '' }}" style="width:80px;" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="circle-title" placeholder="标题" value="{{ $circle_title or '' }}" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="circle-id" placeholder="ID" value="{{ $circle_id or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="circle-title" placeholder="标题" value="{{ $circle_title or '' }}" style="width:88px;" />
 
-                        <select class="form-control form-filter order-select2-car" name="circle-car" style="width:120px;">
+                        <select class="form-control form-filter select2-container order-select2-car" name="circle-car" style="width:100px;">
                             @if($car_id > 0)
                                 <option value="-1">选择车辆</option>
                                 <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>
@@ -51,7 +51,10 @@
                             @endif
                         </select>
 
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="circle-month" placeholder="选择月份" readonly="readonly" value="" data-default="" style="" />
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="circle-month" placeholder="选择月份" readonly="readonly" value="{{ $month or '' }}" data-default="{{ $month or '' }}" style="width:88px;" />
+
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="circle-start" placeholder="起始日期" value="{{ $start or '' }}" readonly="readonly" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="circle-ended" placeholder="终止日期" value="{{ $ended or '' }}" readonly="readonly" style="width:88px;" />
 
                         <select class="form-control form-filter" name="circle-isset" style="width:88px;">
                             <option value ="-1">全部环线</option>
@@ -66,8 +69,11 @@
                         <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-circle">
                             <i class="fa fa-circle-o-notch"></i> 刷新
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-circle">
-                            <i class="fa fa-circle-o-notch"></i> 重置
+                        <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-circle">
+                            <i class="fa fa-undo"></i> 重置
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-empty" id="filter-empty-for-circle">
+                            <i class="fa fa-remove"></i> 重置
                         </button>
 
                     </div>
@@ -563,6 +569,8 @@
                         d.keyword = $('input[name="circle-keyword"]').val();
                         d.car = $('select[name="circle-car"]').val();
                         d.month = $('input[name="circle-month"]').val();
+                        d.circle_start = $('input[name="circle-start"]').val();
+                        d.circle_ended = $('input[name="circle-ended"]').val();
                         d.isset = $('select[name="circle-isset"]').val();
                         d.status = $('select[name="circle-status"]').val();
 //
@@ -1062,6 +1070,8 @@
                     if($('input[name="circle-assign"]').val())  $obj.assign = $('input[name="circle-assign"]').val();
                     if($('select[name="circle-car"]').val() > 0)  $obj.car_id = $('select[name="circle-car"]').val();
                     if($('input[name="circle-month"]').val())  $obj.month = $('input[name="circle-month"]').val();
+                    if($('input[name="circle-start"]').val())  $obj.circle_start = $('input[name="circle-start"]').val();
+                    if($('input[name="circle-ended"]').val())  $obj.circle_ended = $('input[name="circle-ended"]').val();
                     if($('select[name="circle-isset"]').val() >= 0)  $obj.isset = $('select[name="circle-isset"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少

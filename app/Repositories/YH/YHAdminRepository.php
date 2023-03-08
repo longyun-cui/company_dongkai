@@ -9590,9 +9590,25 @@ class YHAdminRepository {
         if(!empty($post_data['assign']))
         {
             if($post_data['assign']) $view_data['assign'] = $post_data['assign'];
-            else $view_data['assign'] = 1;
+            else $view_data['assign'] = '';
         }
         else $view_data['assign'] = '';
+
+        // 起始时间
+        if(!empty($post_data['assign_start']))
+        {
+            if($post_data['assign_start']) $view_data['start'] = $post_data['assign_start'];
+            else $view_data['start'] = '';
+        }
+        else $view_data['start'] = '';
+
+        // 截止时间
+        if(!empty($post_data['assign_ended']))
+        {
+            if($post_data['assign_ended']) $view_data['ended'] = $post_data['assign_ended'];
+            else $view_data['ended'] = '';
+        }
+        else $view_data['ended'] = '';
 
         // 员工
         if(!empty($post_data['staff_id']))
@@ -9749,6 +9765,8 @@ class YHAdminRepository {
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
         if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), $post_data['assign']);
+        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
+        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
 
         // 员工
@@ -11166,6 +11184,32 @@ class YHAdminRepository {
         }
         else $view_data['car_id'] = -1;
 
+
+        // 月份
+        if(!empty($post_data['month']))
+        {
+            if($post_data['month']) $view_data['month'] = $post_data['month'];
+            else $view_data['month'] = '';
+        }
+        else $view_data['month'] = '';
+
+        // 起始时间
+        if(!empty($post_data['circle_start']))
+        {
+            if($post_data['circle_start']) $view_data['start'] = $post_data['circle_start'];
+            else $view_data['start'] = '';
+        }
+        else $view_data['start'] = '';
+
+        // 截止时间
+        if(!empty($post_data['circle_ended']))
+        {
+            if($post_data['circle_ended']) $view_data['ended'] = $post_data['circle_ended'];
+            else $view_data['ended'] = '';
+        }
+        else $view_data['ended'] = '';
+
+
         $view_data['menu_active_of_circle_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.circle-list-for-all';
         return view($view_blade)->with($view_data);
@@ -11216,17 +11260,10 @@ class YHAdminRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-            $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
-            $the_last_month_start_date = date('Y-m-01',$the_last_month_timestamp); // 指定月份-上月-开始时间
-            $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-开始时间
-            $the_last_month_start_datetime = date('Y-m-01 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
-            $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
-            $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
-            $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-月结束时间戳
-
-
             $query->whereBetween('start_time',[$the_month_start_timestamp,$the_month_ended_timestamp]);
         }
+        if(!empty($post_data['circle_start'])) $query->whereDate(DB::Raw("from_unixtime(start_time)"), '>=', $post_data['circle_start']);
+        if(!empty($post_data['circle_ended'])) $query->whereDate(DB::Raw("from_unixtime(start_time)"), '<=', $post_data['circle_ended']);
 
         if(isset($post_data['isset']))
         {
@@ -11445,9 +11482,16 @@ class YHAdminRepository {
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
         if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
+        if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
+        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_receipt_account', $post_data['transaction_payment_account']);
+        if(!empty($post_data['transaction_order'])) $query->where('transaction_receipt_account', $post_data['transaction_order']);
 
         if(!empty($post_data['transaction_time'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), $post_data['transaction_time']);
+        if(!empty($post_data['transaction_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '>=', $post_data['transaction_start']);
+        if(!empty($post_data['transaction_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['transaction_ended']);
 
 
         if(!empty($post_data['item_type']))
@@ -12579,7 +12623,7 @@ class YHAdminRepository {
     }
 
 
-    // 【流量统计】
+    // 【数据导出】
     public function view_statistic_export()
     {
         $this->get_me();
@@ -12603,57 +12647,35 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-export';
         return view($view_blade)->with($view_data);
     }
-    // 下载
-    public function operate_statistic_order_export($post_data)
+    // 订单
+    public function operate_statistic_export_for_order($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-//        $condition = request()->all();
-//        $return['condition'] = $condition;
-//
-//        $condition['task-list-type'] = 'unfinished';
-//        $parameter_result = http_build_query($condition);
-//        return redirect('/?'.$parameter_result);
 
-        $this_month = date('Y-m');
-        $this_month_start_date = date('Y-m-01'); // 本月开始日期
-        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
-        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
-        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
-        $this_month_start_timestamp = strtotime($this_month_start_datetime); // 本月开始时间戳
-        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
+        if($export_type == "month")
+        {
+            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
 
-        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
-        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
-        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
-        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
-        $last_month_start_timestamp = strtotime($last_month_start_datetime); // 上月开始时间戳
-        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
+            $start_timestamp = $the_month_start_timestamp;
+            $ended_timestamp = $the_month_ended_timestamp;
+        }
+        else
+        {
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start']  : '';
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended']  : '';
+        }
 
-
-        $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
-        $the_month_timestamp = strtotime($the_month);
-
-        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
-        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
-        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
-        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
-        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
-        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
-
-        $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
-        $the_last_month_start_date = date('Y-m-01',$the_last_month_timestamp); // 指定月份-上月-开始时间
-        $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-开始时间
-        $the_last_month_start_datetime = date('Y-m-01 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
-        $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
-        $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
-        $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-月结束时间戳
-
-
-
-        $type = isset($post_data['type']) ? $post_data['type']  : '';
 
         $staff_id = 0;
         $client_id = 0;
@@ -12723,19 +12745,30 @@ class YHAdminRepository {
         $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
 
         // 订单
-        $query = YH_Order::select('id','car_owner_type','creator_id','client_id','circle_id','route_id','pricing_id','car_id','trailer_id','driver_id','amount','oil_card_amount')
-//            ->where('finance_type',1)
+        $query = YH_Order::select('*')
             ->with([
-                'creator'=>function($query){ $query->select('id','name','true_name'); },
-                'client_er'=>function($query){ $query->select('id','username','short_name'); },
-                'circle_er'=>function($query){ $query->select('id','title'); },
-                'route_er'=>function($query){ $query->select('id','title'); },
-                'pricing_er'=>function($query){ $query->select('id','title'); },
-                'car_er'=>function($query){ $query->select('id','name'); },
-                'trailer_er'=>function($query){ $query->select('id','name'); },
-                'driver_er'=>function($query){ $query->select('id','driver_name','driver_phone'); }
-            ])
-            ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+                'creator'=>function($query) { $query->select('id','name','true_name'); },
+                'client_er'=>function($query) { $query->select('id','username','short_name'); },
+                'circle_er'=>function($query) { $query->select('id','title'); },
+                'route_er'=>function($query) { $query->select('id','title'); },
+                'pricing_er'=>function($query) { $query->select('id','title'); },
+                'car_er'=>function($query) { $query->select('id','name'); },
+                'trailer_er'=>function($query) { $query->select('id','name'); },
+                'driver_er'=>function($query) { $query->select('id','driver_name','driver_phone'); },
+                'finance_income_list'=>function($query) { $query->select('id','order_id','finance_type','transaction_time','transaction_amount','title','transaction_type')->where('finance_type',1); },
+                'finance_expense_list'=>function($query) { $query->select('id','order_id','finance_type','transaction_time','transaction_amount','title','transaction_type')->where('finance_type',21); },
+            ]);
+
+        if($export_type == "month")
+        {
+            $query->whereBetween('assign_time',[$start_timestamp,$ended_timestamp]);
+        }
+        else
+        {
+            if(!empty($post_data['order_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"), '>=', $post_data['order_start']);
+            if(!empty($post_data['order_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
+        }
+
 
         if($staff_id) $query->where('creator_id',$staff_id);
         if($client_id) $query->where('client_id',$client_id);
@@ -12746,6 +12779,7 @@ class YHAdminRepository {
         if($driver_id) $query->where('driver_id',$driver_id);
 
         $data = $query->orderBy('assign_time','desc')->orderBy('id','asc')->get()->toArray();
+//        dd($data);
 
         $cellData = [];
         foreach($data as $k => $v)
@@ -12759,41 +12793,101 @@ class YHAdminRepository {
             else $cellData[$k]['order_type_name'] = '有误';
 //            unset($cellData[$k]['car_owner_type']);
 
+            $cellData[$k]['assign_date'] = date('Y-m-d', $v['assign_time']);
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
-//            unset($cellData[$k]['creator']);
-//            unset($cellData[$k]['creator_id']);
-
             $cellData[$k]['client_er_name'] = $v['client_er']['username'];
-//            unset($cellData[$k]['client_er']);
-//            unset($cellData[$k]['client_id']);
-
             $cellData[$k]['circle_er_title'] = $v['circle_er']['title'];
-//            unset($cellData[$k]['circle_er']);
-//            unset($cellData[$k]['circle_id']);
-
             $cellData[$k]['route_er_title'] = $v['route_er']['title'];
-//            unset($cellData[$k]['route_er']);
-//            unset($cellData[$k]['route_id']);
-
             $cellData[$k]['pricing_er_title'] = $v['pricing_er']['title'];
-//            unset($cellData[$k]['pricing_er']);
-//            unset($cellData[$k]['pricing_id']);
-
             $cellData[$k]['car_er_name'] = $v['car_er']['name'];
-//            unset($cellData[$k]['car_er']);
-//            unset($cellData[$k]['car_id']);
-
             $cellData[$k]['trailer_er_name'] = $v['trailer_er']['name'];
-//            unset($cellData[$k]['trailer_er']);
-//            unset($cellData[$k]['trailer_id']);
+            $cellData[$k]['driver_er_name'] = $v['driver_er']['driver_name'];
+            $cellData[$k]['driver_er_phone'] = $v['driver_er']['driver_phone'];
+            $cellData[$k]['departure_place'] = $v['departure_place'];
+            $cellData[$k]['stopover_place'] = $v['stopover_place'];
+            $cellData[$k]['destination_place'] = $v['destination_place'];
+            $cellData[$k]['travel_distance'] = $v['travel_distance'];
+            $cellData[$k]['time_limitation_prescribed'] = $v['time_limitation_prescribed'];
 
-//            if(isset($v['driver_er']))
-//            {
-//            }
-                $cellData[$k]['driver_er_name'] = $v['driver_er']['driver_name'];
-                $cellData[$k]['driver_er_phone'] = $v['driver_er']['driver_phone'];
-//            unset($cellData[$k]['driver_er']);
-//            unset($cellData[$k]['driver_id']);
+//            $cellData[$k]['remark'] = $v['remark'];
+//            $cellData[$k]['remark'] = $v['remark'];
+//            $cellData[$k]['remark'] = $v['remark'];
+//            $cellData[$k]['remark'] = $v['remark'];
+//            $cellData[$k]['remark'] = $v['remark'];
+//            $cellData[$k]['remark'] = $v['remark'];
+
+            // 是否回单
+            if($v['should_departure_time']) $cellData[$k]['should_departure_time'] = date('Y-m-d', $v['should_departure_time']);
+            else $cellData[$k]['should_departure_time'] = '';
+            // 是否回单
+            if($v['should_arrival_time']) $cellData[$k]['should_arrival_time'] = date('Y-m-d', $v['should_arrival_time']);
+            else $cellData[$k]['should_arrival_time'] = '';
+            // 实际出发时间
+            if($v['actual_departure_time']) $cellData[$k]['actual_departure_time'] = date('Y-m-d', $v['actual_departure_time']);
+            else $cellData[$k]['actual_departure_time'] = '';
+            // 经停-到达时间
+            if($v['stopover_arrival_time']) $cellData[$k]['stopover_arrival_time'] = date('Y-m-d', $v['stopover_arrival_time']);
+            else $cellData[$k]['stopover_arrival_time'] = '';
+            // 经停-出发时间
+            if($v['stopover_departure_time']) $cellData[$k]['stopover_departure_time'] = date('Y-m-d', $v['stopover_departure_time']);
+            else $cellData[$k]['stopover_departure_time'] = '';
+            // 实际到达时间
+            if($v['actual_arrival_time']) $cellData[$k]['actual_arrival_time'] = date('Y-m-d', $v['actual_arrival_time']);
+            else $cellData[$k]['actual_arrival_time'] = '';
+
+            $cellData[$k]['order_number'] = $v['order_number'];
+            $cellData[$k]['payee_name'] = $v['payee_name'];
+            $cellData[$k]['car_supply'] = $v['car_supply'];
+            $cellData[$k]['arrange_people'] = $v['arrange_people'];
+            $cellData[$k]['GPS'] = $v['GPS'];
+            // 是否回单
+            if($v['receipt_need'] == 1) $cellData[$k]['receipt_need'] = '需要';
+            else $cellData[$k]['receipt_need'] = '--';
+            // 回单状态
+            if($v['receipt_need'] == 1)
+            {
+                if($v['receipt_status'] == 0) $cellData[$k]['receipt_status'] = '等待回单';
+                else if($v['receipt_status'] == 1) $cellData[$k]['receipt_status'] = '等待回单';
+                else if($v['receipt_status'] == 21) $cellData[$k]['receipt_status'] = '邮寄中';
+                else if($v['receipt_status'] == 41) $cellData[$k]['receipt_status'] = '已签收';
+                else if($v['receipt_status'] == 100) $cellData[$k]['receipt_status'] = '已完成';
+                else if($v['receipt_status'] == 101) $cellData[$k]['receipt_status'] = '已签收';
+                else $cellData[$k]['receipt_status'] = '有误';
+            }
+            else $cellData[$k]['receipt_status'] = '--';
+            // 回单地址
+            $cellData[$k]['receipt_address'] = $v['receipt_address'];
+            $cellData[$k]['remark'] = $v['remark'];
+
+            $cellData[$k]['income'] = count($v['finance_income_list']);
+            $cellData[$k]['expense'] = count($v['finance_expense_list']);
+            // 收入
+            if(count($v['finance_income_list']) > 0)
+            {
+                $income_string = '';
+                foreach($v['finance_income_list'] as $key => $val)
+                {
+                    $string = '[收入]('.date('Y-m-d', $val['transaction_time']).')'.$val['title'].' - '.$val['transaction_amount'].'元('.$val['transaction_type'].')';
+//                    $income_string .= $string." / ";
+                    $cellData[$k]['income'.($key+1)] = $string;
+                }
+//                $cellData[$k]['income'] = $income_string;
+            }
+//            else $cellData[$k]['income'] = '';
+
+            // 支出
+            if(count($v['finance_expense_list']) > 0)
+            {
+                $expense_string = '';
+                foreach($v['finance_expense_list'] as $key => $val)
+                {
+                    $string = '[支出]('.date('Y-m-d', $val['transaction_time']).')'.$val['title'].' - '.$val['transaction_amount'].'元 - ('.$val['transaction_type'].')';
+//                    $expense_string .= $string." / ";
+                    $cellData[$k]['expense'.($key+1)] = $string;
+                }
+//                $cellData[$k]['expense'] = $expense_string;
+            }
+//            else $cellData[$k]['expense'] = '';
 
         }
 //        dd($cellData);
@@ -12802,6 +12896,7 @@ class YHAdminRepository {
         array_unshift($cellData,[
             'id'=>'ID',
             'order_type_name'=>'类型',
+            'assign_date'=>'派车日期',
             'creator_name'=>'创建者',
             'client_er_name'=>'客户',
             'circle_er_title'=>'环线',
@@ -12809,10 +12904,168 @@ class YHAdminRepository {
             'pricing_er_title'=>'包油定价',
             'car_er_name'=>'车辆',
             'trailer_er_name'=>'车挂',
-            'driver_er_name'=>'驾驶员',
+            'driver_er_name'=>'驾驶员姓名',
+            'driver_er_phone'=>'驾驶员电话',
+            'departure_place'=>'出发地',
+            'stopover_place'=>'经停地',
+            'destination_place'=>'目的地',
+            'travel_distance'=>'里程',
+            'time_limitation_prescribed'=>'时效',
+//            'remark'=>'备注',
+//            'remark'=>'备注',
+//            'remark'=>'备注',
+//            'remark'=>'备注',
+//            'remark'=>'备注',
+//            'remark'=>'备注',
+            'should_departure_time'=>'应出发时间',
+            'should_arrival_time'=>'应到达时间',
+            'actual_departure_time'=>'实际出发时间',
+            'stopover_arrival_time'=>'经停-到达时间',
+            'stopover_departure_time'=>'经停-出发时间',
+            'actual_arrival_time'=>'实际到达时间',
+            'order_number'=>'单号',
+            'payee_name'=>'收款人',
+            'car_supply'=>'车货源',
+            'arrange_people'=>'安排人',
+            'GPS'=>'GPS',
+            'receipt_need'=>'是否回单',
+            'receipt_status'=>'回单状态',
+            'receipt_address'=>'回单地址',
+            'remark'=>'备注',
+            'income'=>'收入',
+            'expense'=>'支出',
         ]);
 
-        $title = '【订单】【'.$the_month.'】 - '.date('YmdHis');
+        if($export_type == "month") $title = '【订单】【'.$the_month.'】 - '.date('YmdHis');
+        else
+        {
+            $title = '【订单】【'.$the_start.' - '.$the_ended.'】 - '.date('YmdHis');
+        }
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('all', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
+    }
+    // 财务
+    public function operate_statistic_export_for_finance($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
+        if($export_type == "month")
+        {
+            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $start_timestamp = $the_month_start_timestamp;
+            $ended_timestamp = $the_month_ended_timestamp;
+        }
+        else
+        {
+            $the_start  = isset($post_data['finance_start']) ? $post_data['finance_start']  : '';
+            $the_ended  = isset($post_data['finance_ended']) ? $post_data['finance_ended']  : '';
+        }
+
+
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+
+        // 订单
+        $query = YH_Finance::select('id','finance_type','creator_id','transaction_time','order_id','transaction_amount','title','transaction_type','transaction_receipt_account','transaction_payment_account','transaction_order','remark')
+//            ->where('finance_type',1)
+            ->with([
+                'creator'=>function($query) { $query->select('id','name','true_name'); },
+                'order_er'=>function($query) {
+                    $query->select('*')->with([
+                        'car_er'=>function($query){ $query->select('id','name'); }
+                    ]);
+                }
+            ]);
+
+        if($export_type == "month")
+        {
+            $query->whereBetween('transaction_time',[$start_timestamp,$ended_timestamp]);
+        }
+        else
+        {
+            if(!empty($post_data['finance_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '>=', $post_data['finance_start']);
+            if(!empty($post_data['finance_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['finance_ended']);
+        }
+
+
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,21]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['title'])) $query->where('transaction_type', $post_data['title']);
+        if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
+        if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
+        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_receipt_account', $post_data['transaction_payment_account']);
+        if(!empty($post_data['transaction_order'])) $query->where('transaction_order', $post_data['transaction_order']);
+
+
+        $data = $query->orderBy('transaction_time','desc')->orderBy('id','asc')->get()->toArray();
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+            if($v['finance_type'] == 1) $cellData[$k]['finance_type_name'] = '收入';
+            else if($v['finance_type'] == 21) $cellData[$k]['finance_type_name'] = '支出';
+            else $cellData[$k]['finance_type_name'] = '有误';
+
+            $cellData[$k]['transaction_date'] = date('Y-m-d', $v['transaction_time']);
+            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['order_id'] = $v['order_id'];
+            $cellData[$k]['title'] = $v['title'];
+            $cellData[$k]['transaction_type'] = $v['transaction_type'];
+            $cellData[$k]['transaction_receipt_account'] = $v['transaction_receipt_account'];
+            $cellData[$k]['transaction_payment_account'] = $v['transaction_payment_account'];
+            $cellData[$k]['transaction_order'] = $v['transaction_order'];
+            $cellData[$k]['remark'] = $v['remark'];
+
+        }
+//        dd($cellData);
+
+
+        array_unshift($cellData,[
+            'id'=>'ID',
+            'finance_type_name'=>'类型',
+            'transaction_date'=>'交易时间',
+            'creator_name'=>'创建者',
+            'order_id'=>'订单ID',
+            'transaction_amount'=>'交易金额',
+            'title'=>'名目',
+            'transaction_type'=>'交易方式',
+            'transaction_receipt_account'=>'收款账户',
+            'transaction_payment_account'=>'支出账户',
+            'transaction_order'=>'交易单号',
+            'remark'=>'备注',
+        ]);
+
+        if($export_type == "month") $title = '【财务记录】【'.$the_month.'】 - '.date('YmdHis');
+        else
+        {
+            $title = '【财务记录】【'.$the_start.' - '.$the_ended.'】 - '.date('YmdHis');
+        }
         $file = Excel::create($title, function($excel) use($cellData) {
             $excel->sheet('all', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
