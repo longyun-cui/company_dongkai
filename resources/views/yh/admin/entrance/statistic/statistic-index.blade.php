@@ -199,7 +199,7 @@
     <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
-@include(env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-index-script')
 <script>
     $(function(){
 

@@ -469,6 +469,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/statistic/statistic-index', $controller.'@view_statistic_index');
     Route::match(['get','post'], '/statistic/statistic-user', $controller.'@view_statistic_user');
 
+    Route::match(['get','post'], '/statistic/statistic-export', $controller.'@operate_statistic_export');
+    Route::match(['get','post'], '/statistic/statistic-order-export', $controller.'@operate_statistic_order_export');
+
 
 });
 

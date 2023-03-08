@@ -1200,6 +1200,21 @@ class YHAdminController extends Controller
     }
 
 
+    // 【统计】概览
+    public function operate_statistic_export()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_export(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->operate_statistic_export(request()->all());
+    }
+
+
+    // 【统计】概览
+    public function operate_statistic_order_export()
+    {
+        $this->repo->operate_statistic_order_export(request()->all());
+    }
+
+
 
 
 

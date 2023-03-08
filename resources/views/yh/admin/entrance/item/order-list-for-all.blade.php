@@ -3324,7 +3324,7 @@
                         "className": "",
                         "width": "80px",
                         "title": "附件",
-                        "data": "attachment_list",
+                        "data": "attachment_list_count",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -3338,13 +3338,17 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(!data) return '--';
-                            if(data.length == 0) return '--';
-                            else if(data.length > 0) return '<small class="btn-xs bg-purple">有附件</small>';
+                            if(data > 0) return '<small class="btn-xs bg-purple">有附件</small>';
                             else return '--';
+
+                            // if(!data) return '--';
+                            // if(data.length == 0) return '--';
+                            // else if(data.length > 0) return '<small class="btn-xs bg-purple">有附件</small>';
+                            // else return '--';
+
 //                            var html = '';
-//                            $.each(data,function( key, val ) {
-////                                console.log( key, val, this );
+//                            $.each(data,function( index, element ) {
+////                                console.log( index, element, this );
 //                                html += '<a target="_blank" href="/people?id='+this.id+'">'+this.attachment_name+'</a><br>';
 //                            });
 //                            return html;
@@ -3539,7 +3543,6 @@
                     if($pagination > 1) $obj.page = $pagination;
 
 
-                    console.log(JSON.stringify($obj));
                     if(JSON.stringify($obj) != "{}")
                     {
                         var $url = url_build('',$obj);

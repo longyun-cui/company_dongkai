@@ -151,7 +151,7 @@
 
 
 
-            {{--流量统计--}}
+            {{--数据统计--}}
             <li class="header">数据统计</li>
 
             <li class="treeview {{ $menu_active_of_statistic_index or '' }}">
@@ -159,6 +159,14 @@
                     <i class="fa fa-bar-chart text-green"></i> <span>数据统计</span>
                 </a>
             </li>
+
+            @if(in_array($me->user_type,[0,1,9,11,21,22]))
+            <li class="treeview {{ $menu_active_of_statistic_export or '' }}">
+                <a href="{{ url('/statistic/statistic-export') }}">
+                    <i class="fa fa-bar-chart text-green"></i> <span>数据导出</span>
+                </a>
+            </li>
+            @endif
 {{--            <li class="treeview {{ $menu_active_of_statistic_list_for_client or '' }}">--}}
 {{--                <a href="{{ url('/statistic/statistic-list-for-client') }}">--}}
 {{--                    <i class="fa fa-bar-chart text-green"></i> <span>客户统计</span>--}}

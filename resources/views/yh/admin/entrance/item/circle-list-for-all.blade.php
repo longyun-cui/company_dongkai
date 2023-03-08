@@ -818,9 +818,9 @@
                         },
                         render: function(data, type, row, meta) {
                             var $html = '';
-                            $.each(data,function( key, val ) {
-                               // console.log( key, val, this );
-                               // console.log( key );
+                            var $len = data.length;
+                            $.each(data,function( index, element ) {
+                               // console.log( index, element, this );
                                 var $id = this.id;
                                 var $title = (this.title) ? this.title : '';
                                 var $departure  = (this.departure_place) ? this.departure_place : '';
@@ -839,7 +839,7 @@
 
                                 $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a>';
                                 $html += "&nbsp;&nbsp;&nbsp;&nbsp;";
-                                if(parseInt( key % 2 ) == 1) $html += '<br>';
+                                if( parseInt( index % 2 ) == 1 && (index + 1) != $len ) $html += '<br>';
                             });
                             return $html;
 //                            return row.people == null ? '未知' :
@@ -1074,7 +1074,6 @@
                     if(JSON.stringify($obj) != "{}")
                     {
                         var $url = url_build('',$obj);
-                        console.log($url);
                         history.replaceState({page: 1}, "", $url);
                     }
                     else

@@ -9730,7 +9730,8 @@ class YHAdminRepository {
 
         $query = YH_Order::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with(['creator','owner','client_er','circle_er','route_er','pricing_er','car_er','trailer_er','driver_er','attachment_list']);
+            ->with(['creator','owner','client_er','circle_er','route_er','pricing_er','car_er','trailer_er','driver_er'])
+            ->withCount('attachment_list');
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -12571,6 +12572,250 @@ class YHAdminRepository {
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【流量统计】
+    public function view_statistic_export()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
+        $car_list = YH_Car::select('id','name')->whereIn('item_type',[1,21])->get();
+        $route_list = YH_Route::select('id','title')->get();
+        $pricing_list = YH_Pricing::select('id','title')->get();
+
+        $view_data['staff_list'] = $staff_list;
+        $view_data['client_list'] = $client_list;
+        $view_data['car_list'] = $car_list;
+        $view_data['route_list'] = $route_list;
+        $view_data['pricing_list'] = $pricing_list;
+
+
+        $view_data['menu_active_of_statistic_export'] = 'active menu-open';
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-export';
+        return view($view_blade)->with($view_data);
+    }
+    // 下载
+    public function operate_statistic_order_export($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $condition = request()->all();
+//        $return['condition'] = $condition;
+//
+//        $condition['task-list-type'] = 'unfinished';
+//        $parameter_result = http_build_query($condition);
+//        return redirect('/?'.$parameter_result);
+
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_datetime); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_datetime); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+
+        $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
+        $the_last_month_start_date = date('Y-m-01',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_start_datetime = date('Y-m-01 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
+        $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
+        $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-月结束时间戳
+
+
+
+        $type = isset($post_data['type']) ? $post_data['type']  : '';
+
+        $staff_id = 0;
+        $client_id = 0;
+        $route_id = 0;
+        $pricing_id = 0;
+        $car_id = 0;
+        $trailer_id = 0;
+        $driver_id = 0;
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0]))
+            {
+                $staff_id = $post_data['staff'];
+            }
+        }
+        // 客户
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0]))
+            {
+                $client_id = $post_data['client'];
+            }
+        }
+        // 线路
+        if(!empty($post_data['route']))
+        {
+            if(!in_array($post_data['route'],[-1,0]))
+            {
+                $route_id = $post_data['route'];
+            }
+        }
+        // 定价
+        if(!empty($post_data['pricing']))
+        {
+            if(!in_array($post_data['pricing'],[-1,0]))
+            {
+                $pricing_id = $post_data['pricing'];
+            }
+        }
+        // 车辆
+        if(!empty($post_data['car']))
+        {
+            if(!in_array($post_data['car'],[-1,0]))
+            {
+                $car_id = $post_data['car'];
+            }
+        }
+        // 车挂
+        if(!empty($post_data['trailer']))
+        {
+            if(!in_array($post_data['trailer'],[-1,0]))
+            {
+                $car_id = $post_data['trailer'];
+            }
+        }
+        // 驾驶员
+        if(!empty($post_data['driver']))
+        {
+            if(!in_array($post_data['driver'],[-1,0]))
+            {
+                $driver_id = $post_data['driver'];
+            }
+        }
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+
+        // 订单
+        $query = YH_Order::select('id','car_owner_type','creator_id','client_id','circle_id','route_id','pricing_id','car_id','trailer_id','driver_id','amount','oil_card_amount')
+//            ->where('finance_type',1)
+            ->with([
+                'creator'=>function($query){ $query->select('id','name','true_name'); },
+                'client_er'=>function($query){ $query->select('id','username','short_name'); },
+                'circle_er'=>function($query){ $query->select('id','title'); },
+                'route_er'=>function($query){ $query->select('id','title'); },
+                'pricing_er'=>function($query){ $query->select('id','title'); },
+                'car_er'=>function($query){ $query->select('id','name'); },
+                'trailer_er'=>function($query){ $query->select('id','name'); },
+                'driver_er'=>function($query){ $query->select('id','driver_name','driver_phone'); }
+            ])
+            ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+
+        if($staff_id) $query->where('creator_id',$staff_id);
+        if($client_id) $query->where('client_id',$client_id);
+        if($route_id) $query->where('route_id',$route_id);
+        if($pricing_id) $query->where('pricing_id',$pricing_id);
+        if($car_id) $query->where('car_id',$car_id);
+        if($trailer_id) $query->where('trailer_id',$trailer_id);
+        if($driver_id) $query->where('driver_id',$driver_id);
+
+        $data = $query->orderBy('assign_time','desc')->orderBy('id','asc')->get()->toArray();
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+            if($v['car_owner_type'] == 1) $cellData[$k]['order_type_name'] = '自有';
+            else if($v['car_owner_type'] == 11) $cellData[$k]['order_type_name'] = '空单';
+            else if($v['car_owner_type'] == 41) $cellData[$k]['order_type_name'] = '外配·配货';
+            else if($v['car_owner_type'] == 61) $cellData[$k]['order_type_name'] = '外请·调车';
+            else $cellData[$k]['order_type_name'] = '有误';
+//            unset($cellData[$k]['car_owner_type']);
+
+            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+//            unset($cellData[$k]['creator']);
+//            unset($cellData[$k]['creator_id']);
+
+            $cellData[$k]['client_er_name'] = $v['client_er']['username'];
+//            unset($cellData[$k]['client_er']);
+//            unset($cellData[$k]['client_id']);
+
+            $cellData[$k]['circle_er_title'] = $v['circle_er']['title'];
+//            unset($cellData[$k]['circle_er']);
+//            unset($cellData[$k]['circle_id']);
+
+            $cellData[$k]['route_er_title'] = $v['route_er']['title'];
+//            unset($cellData[$k]['route_er']);
+//            unset($cellData[$k]['route_id']);
+
+            $cellData[$k]['pricing_er_title'] = $v['pricing_er']['title'];
+//            unset($cellData[$k]['pricing_er']);
+//            unset($cellData[$k]['pricing_id']);
+
+            $cellData[$k]['car_er_name'] = $v['car_er']['name'];
+//            unset($cellData[$k]['car_er']);
+//            unset($cellData[$k]['car_id']);
+
+            $cellData[$k]['trailer_er_name'] = $v['trailer_er']['name'];
+//            unset($cellData[$k]['trailer_er']);
+//            unset($cellData[$k]['trailer_id']);
+
+//            if(isset($v['driver_er']))
+//            {
+//            }
+                $cellData[$k]['driver_er_name'] = $v['driver_er']['driver_name'];
+                $cellData[$k]['driver_er_phone'] = $v['driver_er']['driver_phone'];
+//            unset($cellData[$k]['driver_er']);
+//            unset($cellData[$k]['driver_id']);
+
+        }
+//        dd($cellData);
+
+
+        array_unshift($cellData,[
+            'id'=>'ID',
+            'order_type_name'=>'类型',
+            'creator_name'=>'创建者',
+            'client_er_name'=>'客户',
+            'circle_er_title'=>'环线',
+            'route_er_title'=>'路线',
+            'pricing_er_title'=>'包油定价',
+            'car_er_name'=>'车辆',
+            'trailer_er_name'=>'车挂',
+            'driver_er_name'=>'驾驶员',
+        ]);
+
+        $title = '【订单】【'.$the_month.'】 - '.date('YmdHis');
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('all', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
     }
 
 
