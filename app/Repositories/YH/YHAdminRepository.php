@@ -10201,10 +10201,10 @@ class YHAdminRepository {
         {
             $FinanceRecord = new YH_Finance;
 
-            if(in_array($me->user_type,[41,42]))
-            {
-                $FinanceRecord_data['is_confirmed'] = 1;
-            }
+//            if(in_array($me->user_type,[11,19,41,42]))
+//            {
+//                $FinanceRecord_data['is_confirmed'] = 1;
+//            }
 
             $FinanceRecord_data['creator_id'] = $me->id;
             $FinanceRecord_data['finance_category'] = 11;
@@ -10230,7 +10230,8 @@ class YHAdminRepository {
             $bool = $FinanceRecord->fill($FinanceRecord_data)->save();
             if($bool)
             {
-                if(in_array($me->user_type,[41,42]))
+//                if(in_array($me->user_type,[11,19,41,42]))
+                if(in_array($me->user_type,[-1]))
                 {
                     if($finance_type == 1)
                     {
@@ -11816,7 +11817,7 @@ class YHAdminRepository {
         $me = $this->me;
 
         // 权限
-        if(!in_array($me->user_type,[41,42])) return response_error([],"用户类型错误，只有财务人员有权限确认！");
+        if(!in_array($me->user_type,[11,19,41,42])) return response_error([],"用户类型错误，只有总经理和财务人员有权限确认！");
 //        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         // 启动数据库事务
@@ -12015,11 +12016,22 @@ class YHAdminRepository {
         if(!empty($post_data['transaction_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['transaction_ended']);
 
 
+        // 类型：收入 | 支出
         if(!empty($post_data['finance_type']))
         {
             if(in_array($post_data['finance_type'],[1,21]))
             {
                 $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+        // 确认
+        if(isset($post_data['finance_confirm']))
+        {
+            if(in_array($post_data['finance_confirm'],[0,1]))
+            {
+                if($post_data['finance_confirm'] == 1) $query->where('is_confirmed', 1);
+                else if($post_data['finance_confirm'] == 0) $query->where('is_confirmed', '!=', 1);
+
             }
         }
 

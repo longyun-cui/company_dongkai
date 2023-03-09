@@ -52,6 +52,12 @@
                             <option value ="21">支出</option>
                         </select>
 
+                        <select class="form-control form-filter" name="finance-confirm" style="width:96px;">
+                            <option value ="-1">全部记录</option>
+                            <option value ="0">待确认</option>
+                            <option value ="1">已确认</option>
+                        </select>
+
                         <select class="form-control form-filter select2-container finance-select2-car" name="finance-car" style="width:100px;">
                             @if(isset($car_id) && $car_id > 0)
                                 <option value="-1">选择车辆</option>
@@ -535,6 +541,7 @@
                         d.transaction_ended= $('input[name="transaction_ended"]').val();
                         d.car = $('select[name="finance-car"]').val();
                         d.finance_type = $('select[name="finance-type"]').val();
+                        d.finance_confirm = $('select[name="finance-confirm"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
