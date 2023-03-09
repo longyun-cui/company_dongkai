@@ -11983,6 +11983,17 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+        // 员工
+        if(!empty($post_data['staff_id']))
+        {
+            if(is_numeric($post_data['staff_id']) && $post_data['staff_id'] > 0) $view_data['staff_id'] = $post_data['staff_id'];
+            else $view_data['staff_id'] = -1;
+        }
+        else $view_data['staff_id'] = -1;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,41,42,81,82,88])->get();
+        $view_data['staff_list'] = $staff_list;
+
         $view_data["menu_active_statistic_list_for_all"] = 'active';
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.finance.finance-list-for-all';
         return view($view_blade)->with($view_data);
@@ -12032,6 +12043,15 @@ class YHAdminRepository {
                 if($post_data['finance_confirm'] == 1) $query->where('is_confirmed', 1);
                 else if($post_data['finance_confirm'] == 0) $query->where('is_confirmed', '!=', 1);
 
+            }
+        }
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0]))
+            {
+                $query->where('creator_id', $post_data['staff']);
             }
         }
 

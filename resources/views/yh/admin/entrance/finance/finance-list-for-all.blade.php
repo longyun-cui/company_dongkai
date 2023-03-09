@@ -58,6 +58,13 @@
                             <option value ="1">已确认</option>
                         </select>
 
+                        <select class="form-control form-filter" name="finance-staff" style="width:88px;">
+                            <option value ="-1">选择员工</option>
+                            @foreach($staff_list as $v)
+                                <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->true_name }}</option>
+                            @endforeach
+                        </select>
+
                         <select class="form-control form-filter select2-container finance-select2-car" name="finance-car" style="width:100px;">
                             @if(isset($car_id) && $car_id > 0)
                                 <option value="-1">选择车辆</option>
@@ -542,6 +549,7 @@
                         d.car = $('select[name="finance-car"]').val();
                         d.finance_type = $('select[name="finance-type"]').val();
                         d.finance_confirm = $('select[name="finance-confirm"]').val();
+                        d.staff = $('select[name="finance-staff"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
