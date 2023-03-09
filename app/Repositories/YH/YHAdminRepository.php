@@ -11476,7 +11476,7 @@ class YHAdminRepository {
             ->with([
                 'creator',
                 'confirmer',
-                'order_er'=>function($query){ $query->with('car_er'); }
+                'order_er'=>function($query) use($post_data) { $query->with('car_er'); }
             ]);
 
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
@@ -11494,13 +11494,25 @@ class YHAdminRepository {
         if(!empty($post_data['transaction_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['transaction_ended']);
 
 
-        if(!empty($post_data['item_type']))
+        if(!empty($post_data['finance_type']))
         {
-            if(in_array($post_data['item_type'],[1,21]))
+            if(in_array($post_data['finance_type'],[1,21]))
             {
-                $query->where('item_type', $post_data['item_type']);
+                $query->where('finance_type', $post_data['finance_type']);
             }
         }
+
+        // 车辆
+        if(isset($post_data['car']))
+        {
+            if(!in_array($post_data['car'],[-1]))
+            {
+                $query->whereHas('order_er',
+                    function($query) use($post_data) { $query->where('car_id', $post_data['car']); }
+                );
+            }
+        }
+
 
         $total = $query->count();
 

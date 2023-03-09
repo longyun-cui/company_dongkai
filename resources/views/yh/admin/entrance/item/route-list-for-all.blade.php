@@ -579,8 +579,6 @@
 
 
 @section('custom-css')
-    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/lib/css/select2-4.0.5.min.css') }}">
 @endsection
 @section('custom-style')
 <style>
@@ -595,8 +593,6 @@
 
 
 @section('custom-js')
-    {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
-    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
 @endsection
 @section('custom-script')
 <script>

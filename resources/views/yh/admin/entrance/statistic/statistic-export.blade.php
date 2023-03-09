@@ -197,8 +197,6 @@
 
 
 @section('custom-css')
-    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/resource/component/css/select2-4.0.5.min.css') }}">
 @endsection
 @section('custom-style')
 <style>
@@ -214,9 +212,6 @@
 
 
 @section('custom-js')
-    {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
-    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
-    <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
 @include(env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-export-script')

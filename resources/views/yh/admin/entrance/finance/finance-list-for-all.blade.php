@@ -46,10 +46,19 @@
                         <input type="text" class="form-control form-filter item-search-keyup" name="transaction_payment_account" placeholder="支出账户" style="width:88px;" />
                         <input type="text" class="form-control form-filter item-search-keyup" name="transaction_order" placeholder="交易单号" style="width:88px;" />
 
-                        <select class="form-control form-filter" name="finance_type" style="width:96px;">
+                        <select class="form-control form-filter" name="finance-type" style="width:96px;">
                             <option value ="-1">全部收支</option>
                             <option value ="1">收入</option>
                             <option value ="21">支出</option>
+                        </select>
+
+                        <select class="form-control form-filter select2-container finance-select2-car" name="finance-car" style="width:100px;">
+                            @if(isset($car_id) && $car_id > 0)
+                                <option value="-1">选择车辆</option>
+                                <option value="{{ $car_id or 0 }}" selected="selected">{{ $car_name or '' }}</option>
+                            @else
+                                <option value="-1">选择车辆</option>
+                            @endif
                         </select>
 
                         <div1 class="clear-both-">
@@ -165,7 +174,8 @@
                         d.transaction_order = $('input[name="transaction_order"]').val();
                         d.transaction_start = $('input[name="transaction_start"]').val();
                         d.transaction_ended= $('input[name="transaction_ended"]').val();
-                        d.finance_type = $('select[name="finance_type"]').val();
+                        d.car = $('select[name="finance-car"]').val();
+                        d.finance_type = $('select[name="finance-type"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -289,12 +299,12 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
-                            var $id = row.order_er.id;
-                            var $title = (row.order_er.title) ? row.order_er.title : '';
-                            var $departure  = (row.order_er.departure_place) ? row.order_er.departure_place : '';
-                            var $stopover  = (row.order_er.stopover_place) ? row.order_er.stopover_place : '';
-                            var $destination  = (row.order_er.destination_place) ? row.order_er.destination_place : '';
-                            var $car  = (row.order_er.car_er.name) ? row.order_er.car_er.name : '';
+                            var $id = (row.order_er) ? row.order_er.id : data;
+                            var $title = (row.order_er && row.order_er.title) ? row.order_er.title : '';
+                            var $departure  = (row.order_er && row.order_er.departure_place) ? row.order_er.departure_place : '';
+                            var $stopover  = (row.order_er && row.order_er.stopover_place) ? row.order_er.stopover_place : '';
+                            var $destination  = (row.order_er && row.order_er.destination_place) ? row.order_er.destination_place : '';
+                            var $car  = (row.order_er.car_er) ? row.order_er.car_er.name : row.order_er.outside_car;
 
                             var $date = new Date(row.order_er.assign_time*1000);
                             var $year = $date.getFullYear();
