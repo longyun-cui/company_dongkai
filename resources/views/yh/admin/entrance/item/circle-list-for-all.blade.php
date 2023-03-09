@@ -58,8 +58,8 @@
 
                         <select class="form-control form-filter" name="circle-isset" style="width:88px;">
                             <option value ="-1">全部环线</option>
-                            <option value ="1">有订单</option>
-                            <option value ="0">无订单</option>
+                            <option value ="1" @if($isset == "1") selected="selected" @endif>有订单</option>
+                            <option value ="0" @if($isset == "0") selected="selected" @endif>无订单</option>
                         </select>
 
 

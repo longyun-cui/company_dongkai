@@ -11185,6 +11185,14 @@ class YHAdminRepository {
         }
         else $view_data['car_id'] = -1;
 
+        // 有无订单
+        if(isset($post_data['isset']))
+        {
+            if(in_array($post_data['isset'],[0,1])) $view_data['isset'] = $post_data['isset'];
+            else $view_data['isset'] = -1;
+        }
+        else $view_data['isset'] = -1;
+
 
         // 月份
         if(!empty($post_data['month']))
@@ -13085,7 +13093,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-export';
         return view($view_blade)->with($view_data);
     }
-    // 订单
+    // 【数据导出】订单
     public function operate_statistic_export_for_order($post_data)
     {
         $this->get_me();
@@ -13399,7 +13407,7 @@ class YHAdminRepository {
             });
         })->export('xls');
     }
-    // 财务
+    // 【数据导出】财务
     public function operate_statistic_export_for_finance($post_data)
     {
         $this->get_me();

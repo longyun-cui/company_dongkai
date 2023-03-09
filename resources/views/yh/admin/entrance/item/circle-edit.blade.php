@@ -129,16 +129,12 @@
 
 
 @section('custom-css')
-    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/lib/css/select2-4.0.5.min.css') }}">
 @endsection
 
 
 
 
 @section('custom-script')
-{{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
-<script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
 <script>
     $(function() {
 
@@ -150,6 +146,8 @@
 
         // 添加or编辑
         $("#item-edit-submit").on('click', function() {
+            if($.getUrlParam('referrer')) console.log($.getUrlParam('referrer'));
+            if(document.referrer) console.log(document.referrer);
             var options = {
                 url: "{{ url('/item/circle-edit') }}",
                 type: "post",
@@ -163,8 +161,8 @@
 
                         if($.getUrlParam('referrer')) location.href = decodeURIComponent($.getUrlParam('referrer'));
                         if(document.referrer) location.href = document.referrer;
-                        location.href = "{{ url('/item/circle-list-for-all') }}";
-                        // history.go(-1);
+                        {{--location.href = "{{ url('/item/circle-list-for-all') }}";--}}
+                        history.go(-1);
                     }
                 }
             };
