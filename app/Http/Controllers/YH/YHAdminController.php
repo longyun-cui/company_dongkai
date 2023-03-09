@@ -1041,6 +1041,12 @@ class YHAdminController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_circle_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_circle_list_for_all_datatable(request()->all());
     }
+    // 【环线管理】【修改记录】返回-列表-视图
+    public function view_item_circle_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_circle_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_circle_modify_record_datatable(request()->all());
+    }
 
 
     // 【环线管理】返回-财务-数据
@@ -1141,6 +1147,12 @@ class YHAdminController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_finance_record_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_finance_record_list_for_all_datatable(request()->all());
     }
+    // 【财务管理】【修改记录】返回-列表-视图
+    public function view_finance_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_modify_record_datatable(request()->all());
+    }
 
     // 【财务管理】导入
     public function operate_finance_import()
@@ -1159,6 +1171,23 @@ class YHAdminController extends Controller
     public function operate_finance_confirm()
     {
         return $this->repo->operate_finance_confirm(request()->all());
+    }
+
+
+    // 【环线管理】修改-文本-text-信息
+    public function operate_finance_info_text_set()
+    {
+        return $this->repo->operate_finance_info_text_set(request()->all());
+    }
+    // 【环线管理】修改-时间-time-信息
+    public function operate_finance_info_time_set()
+    {
+        return $this->repo->operate_finance_info_time_set(request()->all());
+    }
+    // 【环线管理】修改-选项-option-信息
+    public function operate_finance_info_option_set()
+    {
+        return $this->repo->operate_finance_info_option_set(request()->all());
     }
 
 

@@ -515,6 +515,78 @@
 
     </div>
 </div>
+
+
+
+
+{{--修改列表--}}
+<div class="modal fade modal-main-body" id="modal-body-for-modify-list">
+    <div class="col-md-8 col-md-offset-2 margin-top-32px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改记录</h3>
+                <div class="box-tools pull-right caption _none">
+                    <a href="javascript:void(0);">
+                        <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加记录</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="box-body datatable-body" id="datatable-for-modify-list">
+
+                <div class="row col-md-12 datatable-search-row">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control form-filter filter-keyup" name="modify-keyword" placeholder="关键词" />
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-modify">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-modify">
+                            <i class="fa fa-circle-o-notch"></i> 重置
+                        </button>
+
+                    </div>
+                </div>
+
+                <table class='table table-striped table-bordered' id='datatable_ajax_record'>
+                    <thead>
+                    <tr role='row' class='heading'>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <!-- datatable end -->
+            </div>
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-4 col-sm-8 col-xs-12">
+                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
+                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
+                        <div class="input-group">
+                            <span class="input-group-addon"><input type="checkbox" id="check-all"></span>
+                            <input type="text" class="form-control" name="bulk-detect-rank" id="bulk-detect-rank" placeholder="指定排名">
+                            <span class="input-group-addon btn btn-default" id="set-rank-bulk-submit"><i class="fa fa-check"></i>提交</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
 @endsection
 
 
@@ -622,6 +694,14 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
+                            var $html_edit = '';
+                            var $html_detail = '';
+                            var $html_record = '';
+                            var $html_able = '';
+                            var $html_delete = '';
+                            var $html_publish = '';
+                            var $html_abandon = '';
+
                             if(row.item_status == 1)
                             {
                                 $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
@@ -649,12 +729,15 @@
                                 $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
                             }
 
+                            $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+
                             var html =
                                 '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
 //                                $html_able+
 //                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
 //                                    $html_publish+
                                 $html_delete+
+                                $html_record+
 //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
 //                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
 //                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
@@ -1520,6 +1603,306 @@
     //    $(function () {
     //        TableDatatablesAjax_finance.init();
     //    });
+</script>
+
+
+<script>
+    var TableDatatablesAjax_record = function ($id) {
+        var datatableAjax_record = function ($id) {
+
+            var dt_record = $('#datatable_ajax_record');
+            dt_record.DataTable().destroy();
+            var ajax_datatable_record = dt_record.DataTable({
+                "retrieve": true,
+                "destroy": true,
+//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[20, 50, 200], ["20", "50", "200"]],
+                "bAutoWidth": false,
+                "processing": true,
+                "serverSide": true,
+                "searching": false,
+                "ajax": {
+                    'url': "/item/circle-modify-record?id="+$id,
+                    "type": 'POST',
+                    "dataType" : 'json',
+                    "data": function (d) {
+                        d._token = $('meta[name="_token"]').attr('content');
+                        d.name = $('input[name="modify-name"]').val();
+                        d.title = $('input[name="modify-title"]').val();
+                        d.keyword = $('input[name="modify-keyword"]').val();
+                        d.status = $('select[name="modify-status"]').val();
+                    },
+                },
+                "pagingType": "simple_numbers",
+                "order": [],
+                "orderCellsTop": true,
+                "columns": [
+//                    {
+//                        "className": "font-12px",
+//                        "width": "32px",
+//                        "title": "序号",
+//                        "data": null,
+//                        "targets": 0,
+//                        "orderable": false
+//                    },
+//                    {
+//                        "className": "font-12px",
+//                        "width": "32px",
+//                        "title": "选择",
+//                        "data": "id",
+//                        "orderable": true,
+//                        render: function(data, type, row, meta) {
+//                            return '<label><input type="checkbox" name="bulk-detect-record-id" class="minimal" value="'+data+'"></label>';
+//                        }
+//                    },
+                    {
+                        "className": "font-12px",
+                        "width": "60px",
+                        "title": "ID",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "80px",
+                        "title": "类型",
+                        "data": "operate_category",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(data == 1)
+                            {
+                                if(row.operate_type == 1) return '<small class="btn-xs bg-olive">添加</small>';
+                                else if(row.operate_type == 11) return '<small class="btn-xs bg-orange">修改</small>';
+                                else return '有误';
+                            }
+                            else if(data == 11) return '<small class="btn-xs bg-blue">发布</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-green">启用</small>';
+                            else if(data == 22) return '<small class="btn-xs bg-red">禁用</small>';
+                            else if(data == 71)
+                            {
+                                if(row.operate_type == 1)
+                                {
+                                    return '<small class="btn-xs bg-purple">附件</small><small class="btn-xs bg-green">添加</small>';
+                                }
+                                else if(row.operate_type == 91)
+                                {
+                                    return '<small class="btn-xs bg-purple">附件</small><small class="btn-xs bg-red">删除</small>';
+                                }
+                                else return '';
+
+                            }
+                            else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
+                            else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
+                            else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
+                            else if(data == 103) return '<small class="btn-xs bg-black">永久删除</small>';
+                            else return '有误';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "80px",
+                        "title": "属性",
+                        "data": "column_name",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.operate_category == 1)
+                            {
+                                if(data == "title") return '名目';
+                                else if(data == "transaction_type") return '支付方式';
+                                else if(data == "transaction_receipt_account") return '收款账户';
+                                else if(data == "transaction_payment_account") return '支出账户';
+                                else if(data == "transaction_order") return '交易单号';
+                                else if(data == "transaction_time") return '交易日期';
+                                else if(data == "remark") return '备注';
+                                else return '有误';
+                            }
+                            else if(row.operate_category == 71)
+                            {
+                                return '';
+
+                                if(row.operate_type == 1) return '添加';
+                                else if(row.operate_type == 91) return '删除';
+
+                                if(data == "attachment") return '附件';
+                            }
+                            else return '';
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "240px",
+                        "title": "修改前",
+                        "data": "before",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            if(row.column_type == 'datetime' || row.column_type == 'date')
+                            {
+                                if(data)
+                                {
+                                    var $date = new Date(data*1000);
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    var $hour = ('00'+$date.getHours()).slice(-2);
+                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                    var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                                    var $currentYear = new Date().getFullYear();
+                                    if($year == $currentYear)
+                                    {
+                                        if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $month+'-'+$day;
+                                    }
+                                    else
+                                    {
+                                        if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                    }
+                                }
+                                else return '';
+                            }
+
+                            if(row.column_name == 'attachment' && row.operate_category == 71 && row.operate_type == 91)
+                            {
+                                var $cdn = "{{ env('DOMAIN_CDN') }}";
+                                var $src = $cdn = $cdn + "/" + data;
+                                return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
+                            }
+
+                            if(data == 0) return '';
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "240px",
+                        "title": "修改后",
+                        "data": "after",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            if(row.column_type == 'datetime' || row.column_type == 'date')
+                            {
+                                var $date = new Date(data*1000);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+                                var $hour = ('00'+$date.getHours()).slice(-2);
+                                var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear)
+                                {
+                                    if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                    else if(row.column_type == 'date') return $month+'-'+$day;
+                                }
+                                else
+                                {
+                                    if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                    else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                }
+                            }
+
+                            if(row.column_name == 'attachment' && row.operate_category == 71 && row.operate_type == 1)
+                            {
+                                var $cdn = "{{ env('DOMAIN_CDN') }}";
+                                var $src = $cdn = $cdn + "/" + data;
+                                return '<a class="lightcase-image" data-rel="lightcase" href="'+$src+'">查看图片</a>';
+                            }
+
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
+                        "title": "操作人",
+                        "data": "creator_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "108px",
+                        "title": "操作时间",
+                        "data": "created_at",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                        }
+                    }
+                ],
+                "drawCallback": function (settings) {
+
+//                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+//                    this.api().column(0).nodes().each(function(cell, i) {
+//                        cell.innerHTML =  startIndex + i + 1;
+//                    });
+
+                    $('.lightcase-image').lightcase({
+                        maxWidth: 9999,
+                        maxHeight: 9999
+                    });
+
+                },
+                "language": { url: '/common/dataTableI18n' },
+            });
+
+
+            dt_record.on('click', '.modify-filter-submit', function () {
+                ajax_datatable_record.ajax.reload();
+            });
+
+            dt_record.on('click', '.modify-filter-cancel', function () {
+                $('textarea.form-filter, input.form-filter, select.form-filter', dt).each(function () {
+                    $(this).val("");
+                });
+
+//                $('select.form-filter').selectpicker('refresh');
+                $('select.form-filter option').attr("selected",false);
+                $('select.form-filter').find('option:eq(0)').attr('selected', true);
+
+                ajax_datatable_record.ajax.reload();
+            });
+
+
+//            dt_record.on('click', '#all_checked', function () {
+////                layer.msg(this.checked);
+//                $('input[name="detect-record"]').prop('checked',this.checked);//checked为true时为默认显示的状态
+//            });
+
+
+        };
+        return {
+            init: datatableAjax_record
+        }
+    }();
+    //        $(function () {
+    //            TableDatatablesAjax_record.init();
+    //        });
 </script>
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.circle-script')
 @endsection

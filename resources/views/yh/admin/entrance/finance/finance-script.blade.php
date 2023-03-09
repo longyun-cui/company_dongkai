@@ -290,6 +290,199 @@
 
 
 
+
+
+
+
+        // 【修改-文本-text-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-info-text-set", function() {
+            var $that = $(this);
+            $('.info-text-set-title').html($that.attr("data-id"));
+            $('.info-text-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-text-set-finance-id]').val($that.attr("data-id"));
+            $('input[name=info-text-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-text-set-operate-type]').val($that.attr('data-operate-type'));
+            if($that.attr('data-text-type') == "textarea")
+            {
+                $('input[name=info-text-set-column-value]').val('').hide();
+                $('textarea[name=info-textarea-set-column-value]').text($that.attr("data-value")).show();
+            }
+            else
+            {
+                $('textarea[name=info-textarea-set-column-value]').val('').hide();
+                $('input[name=info-text-set-column-value]').val($that.attr("data-value")).show();
+            }
+
+            $('#item-submit-for-info-text-set').attr('data-text-type',$that.attr('data-text-type'));
+
+            $('#modal-body-for-info-text-set').modal('show');
+        });
+        // 【修改-文本-text-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-info-text-set", function() {
+            var that = $(this);
+            $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+            $('input[name=info-text-set-column-value]').val('');
+            $('textarea[name=info-textarea-set-column-value]').val('');
+        });
+        // 【修改-文本-text-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-info-text-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-text-set-column-key"]').val();
+            if($that.attr('data-text-type') == "textarea")
+            {
+                var $column_value = $('textarea[name="info-textarea-set-column-value"]').val();
+            }
+            else
+            {
+                var $column_value = $('input[name="info-text-set-column-value"]').val();
+            }
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
+            $.post(
+                "{{ url('/finance/finance-info-text-set') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: $('input[name="info-text-set-operate"]').val(),
+                    item_id: $('input[name="info-text-set-finance-id"]').val(),
+                    operate_type: $('input[name="info-text-set-operate-type"]').val(),
+                    column_key: $column_key,
+                    column_value: $column_value,
+                },
+                function(data){
+                    // layer.close(index);
+                    if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                    else
+                    {
+                        $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
+                            $("body").addClass("modal-open");
+                        });
+
+                        $('input[name=info-text-set-column-value]').val('');
+                        $('textarea[name=info-textarea-set-column-value]').text('');
+
+                        $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                        // $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
+                    }
+                },
+                'json'
+            );
+
+        });
+
+
+
+
+        // 【修改-时间-time-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-info-time-set", function() {
+            var $that = $(this);
+            $('.info-time-set-title').html($that.attr("data-id"));
+            $('.info-time-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
+            $('input[name=info-time-set-finance-id]').val($that.attr("data-id"));
+            $('input[name=info-time-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-time-set-time-type]').val($that.attr('data-time-type'));
+            if($that.attr('data-time-type') == "datetime")
+            {
+                $('input[name=info-time-set-column-value]').show();
+                $('input[name=info-date-set-column-value]').hide();
+                $('input[name=info-time-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            }
+            else if($that.attr('data-time-type') == "date")
+            {
+                $('input[name=info-time-set-column-value]').hide();
+                $('input[name=info-date-set-column-value]').show();
+                $('input[name=info-date-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            }
+
+            $('#modal-body-for-info-time-set').modal('show');
+        });
+        // 【修改-时间-time-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-info-time-set", function() {
+            var that = $(this);
+            $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【修改-时间-time-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-info-time-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-time-set-column-key"]').val();
+            var $time_type = $('input[name="info-time-set-time-type"]').val();
+            var $column_value = '';
+            if($time_type == "datetime")
+            {
+                $column_value = $('input[name="info-time-set-column-value"]').val();
+            }
+            else if($time_type == "date")
+            {
+                $column_value = $('input[name="info-date-set-column-value"]').val();
+            }
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
+            $.post(
+                "{{ url('/finance/finance-info-time-set') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: $('input[name="info-time-set-operate"]').val(),
+                    item_id: $('input[name="info-time-set-finance-id"]').val(),
+                    operate_type: $('input[name="info-time-set-operate-type"]').val(),
+                    column_key: $column_key,
+                    column_value: $column_value,
+                    time_type: $time_type
+                },
+                function(data){
+                    // layer.close(index);
+                    if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                    else
+                    {
+                        $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
+                            $("body").addClass("modal-open");
+                        });
+
+                        $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                        // $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
+                    }
+                },
+                'json'
+            );
+
+        });
+
+
+
+
+        // 【修改记录】【显示】
+        $(".main-content").on('click', ".item-modal-show-for-modify", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+
+            TableDatatablesAjax_record.init($id);
+
+            $('#modal-body-for-modify-list').modal('show');
+        });
+
+
+
+
+
+
+
         //
         $('.finance-select2-car').select2({
             ajax: {

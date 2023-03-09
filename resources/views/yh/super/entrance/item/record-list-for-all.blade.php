@@ -601,8 +601,8 @@
                             else if(data == 51) return '<small class="btn-xs bg-green">线路</small>';
                             else if(data == 61) return '<small class="btn-xs bg-green">包油油耗</small>';
                             else if(data == 71) return '<small class="btn-xs bg-yellow">订单</small>';
-                            else if(data == 77) return '<small class="btn-xs bg-red">环线</small>';
-                            else if(data == 81) return '<small class="btn-xs bg-red">财务</small>';
+                            else if(data == 77) return '<small class="btn-xs bg-yellow"><i class="fa fa-refresh"></i> 环线</small>';
+                            else if(data == 88) return '<small class="btn-xs bg-red">财务</small>';
                             else return data;
                         }
                     },
@@ -873,6 +873,30 @@
                                 else if(data == "ended_time") return '结束时间';
                                 else if(data == "remark") return '备注';
                                 else return '有误';
+                            }
+                            else if(row.operate_object == 88)
+                            {
+                                if(row.operate_category == 1)
+                                {
+                                    if(data == "title") return '名目';
+                                    else if(data == "transaction_type") return '支付方式';
+                                    else if(data == "transaction_receipt_account") return '收款账户';
+                                    else if(data == "transaction_payment_account") return '支出账户';
+                                    else if(data == "transaction_order") return '交易单号';
+                                    else if(data == "transaction_time") return '交易日期';
+                                    else if(data == "remark") return '备注';
+                                    else return '有误';
+                                }
+                                else if(row.operate_category == 71)
+                                {
+                                    return '';
+
+                                    if(row.operate_type == 1) return '添加';
+                                    else if(row.operate_type == 91) return '删除';
+
+                                    if(data == "attachment") return '附件';
+                                }
+                                else return '';
                             }
                             else return '';
 

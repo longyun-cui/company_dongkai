@@ -11307,6 +11307,65 @@ class YHAdminRepository {
     }
 
 
+    // 【环线管理】【修改记录】返回-列表-视图
+    public function view_item_circle_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_pricing_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.circle-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【环线管理】【修改记录】返回-列表-数据
+    public function get_item_circle_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Record::select('*')
+            ->with(['creator'])
+            ->where(['operate_object'=>77,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
     // 【环线管理】返回-分析-数据
     public function get_item_circle_analysis($post_data)
     {
@@ -11455,95 +11514,276 @@ class YHAdminRepository {
     /*
      * Finance 财务
      */
-    // 【财务管理】返回-列表-视图
-    public function view_finance_record_list_for_all($post_data)
+    // 【财务管理】【文本】修改-文本-类型
+    public function operate_finance_info_text_set($post_data)
     {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-finance-info-text-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Finance::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【财务记录】不存在，刷新页面重试！");
+
         $this->get_me();
         $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
-        $view_data["menu_active_statistic_list_for_all"] = 'active';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.finance.finance-list-for-all';
-        return view($view_blade)->with($view_data);
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 88;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
     }
-    // 【财务管理】返回-列表-数据
-    public function get_finance_record_list_for_all_datatable($post_data)
+    // 【财务管理】【时间】修改-时间-类型
+    public function operate_finance_info_time_set($post_data)
     {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-finance-info-time-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Finance::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【财务记录】不存在，刷新页面重试！");
+
         $this->get_me();
         $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
-//        $id  = $post_data["id"];
-        $query = YH_Finance::select('*')
-            ->with([
-                'creator',
-                'confirmer',
-                'order_er'=>function($query) use($post_data) { $query->with('car_er'); }
-            ]);
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+        $time_type = $post_data["time_type"];
 
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
-        if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
-        if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
-        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_payment_account', $post_data['transaction_payment_account']);
-        if(!empty($post_data['transaction_order'])) $query->where('transaction_order', $post_data['transaction_order']);
-
-        if(!empty($post_data['transaction_time'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), $post_data['transaction_time']);
-        if(!empty($post_data['transaction_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '>=', $post_data['transaction_start']);
-        if(!empty($post_data['transaction_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['transaction_ended']);
+        $before = $item->$column_key;
 
 
-        if(!empty($post_data['finance_type']))
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
         {
-            if(in_array($post_data['finance_type'],[1,21]))
+            $item->$column_key = strtotime($column_value);
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
             {
-                $query->where('finance_type', $post_data['finance_type']);
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 88;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_type"] = $time_type;
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = strtotime($column_value);
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
             }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
         }
 
-        // 车辆
-        if(isset($post_data['car']))
+    }
+    // 【财务管理】【选项】修改-radio-select-[option]-类型
+    public function operate_finance_info_option_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'car_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
         {
-            if(!in_array($post_data['car'],[-1]))
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-finance-info-option-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = YH_Finance::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【财务记录】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
             {
-                $query->whereHas('order_er',
-                    function($query) use($post_data) { $query->where('car_id', $post_data['car']); }
-                );
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new YH_Record;
+
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 88;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
             }
+
+            DB::commit();
+            return response_success([]);
         }
-
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
+        catch (Exception $e)
         {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
         }
-        else $query->orderBy("id", "desc");
 
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-
-//            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-//            else $list[$k]->is_me = 0;
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
     }
 
 
@@ -11734,6 +11974,160 @@ class YHAdminRepository {
         }
 
     }
+
+
+    // 【财务管理】返回-列表-视图
+    public function view_finance_record_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $view_data["menu_active_statistic_list_for_all"] = 'active';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.finance.finance-list-for-all';
+        return view($view_blade)->with($view_data);
+    }
+    // 【财务管理】返回-列表-数据
+    public function get_finance_record_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $id  = $post_data["id"];
+        $query = YH_Finance::select('*')
+            ->with([
+                'creator',
+                'confirmer',
+                'order_er'=>function($query) use($post_data) { $query->with('car_er'); }
+            ]);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
+        if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
+        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_payment_account', $post_data['transaction_payment_account']);
+        if(!empty($post_data['transaction_order'])) $query->where('transaction_order', $post_data['transaction_order']);
+
+        if(!empty($post_data['transaction_time'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), $post_data['transaction_time']);
+        if(!empty($post_data['transaction_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '>=', $post_data['transaction_start']);
+        if(!empty($post_data['transaction_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['transaction_ended']);
+
+
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,21]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+
+        // 车辆
+        if(isset($post_data['car']))
+        {
+            if(!in_array($post_data['car'],[-1]))
+            {
+                $query->whereHas('order_er',
+                    function($query) use($post_data) { $query->where('car_id', $post_data['car']); }
+                );
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+//            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+//            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+    // 【财务管理】【修改记录】返回-列表-视图
+    public function view_finance_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_pricing_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.finance-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【财务管理】【修改记录】返回-列表-数据
+    public function get_finance_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = YH_Record::select('*')
+            ->with(['creator'])
+            ->where(['operate_object'=>88,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
 
 
 

@@ -358,6 +358,8 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 列表
     Route::match(['get','post'], '/item/circle-list', $controller.'@view_item_circle_list');
     Route::match(['get','post'], '/item/circle-list-for-all', $controller.'@view_item_circle_list_for_all');
+    // 修改-列表
+    Route::match(['get','post'], '/item/circle-modify-record', $controller.'@view_item_circle_modify_record');
 
     Route::match(['get','post'], '/item/circle-analysis', $controller.'@get_item_circle_analysis');
     Route::match(['get','post'], '/item/circle-finance-record', $controller.'@get_item_circle_finance_record');
@@ -449,11 +451,21 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
      * finance 财务管理
      */
     Route::match(['get','post'], '/finance/finance-list-for-all', $controller.'@view_finance_list_for_all');
+    // 修改-列表
+    Route::match(['get','post'], '/finance/finance-modify-record', $controller.'@view_finance_modify_record');
+
     // 导入
     Route::match(['get','post'], '/finance/finance-import', $controller.'@operate_finance_import');
-    // 导入
+    // 确认 & 删除
     Route::post('/finance/finance-delete', $controller.'@operate_finance_delete');
     Route::post('/finance/finance-confirm', $controller.'@operate_finance_confirm');
+
+    // 编辑-单条-信息
+    Route::post('/finance/finance-info-text-set', $controller.'@operate_finance_info_text_set');
+    Route::post('/finance/finance-info-time-set', $controller.'@operate_finance_info_time_set');
+    Route::post('/finance/finance-info-radio-set', $controller.'@operate_finance_info_option_set');
+    Route::post('/finance/finance-info-select-set', $controller.'@operate_finance_info_option_set');
+    Route::post('/finance/finance-info-select2-set', $controller.'@operate_finance_info_option_set');
 
 
 
