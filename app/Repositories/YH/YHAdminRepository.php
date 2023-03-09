@@ -13247,12 +13247,18 @@ class YHAdminRepository {
             $cellData[$k]['travel_distance'] = $v['travel_distance'];
             $cellData[$k]['time_limitation_prescribed'] = $v['time_limitation_prescribed'];
 
-//            $cellData[$k]['remark'] = $v['remark'];
-//            $cellData[$k]['remark'] = $v['remark'];
-//            $cellData[$k]['remark'] = $v['remark'];
-//            $cellData[$k]['remark'] = $v['remark'];
-//            $cellData[$k]['remark'] = $v['remark'];
-//            $cellData[$k]['remark'] = $v['remark'];
+            $cellData[$k]['amount'] = $v['amount'];
+            $cellData[$k]['oil_card_amount'] = $v['oil_card_amount'];
+            $cellData[$k]['deposit'] = $v['deposit'];
+            $cellData[$k]['outside_car_price'] = $v['outside_car_price'];
+            $cellData[$k]['time_limitation_deduction'] = $v['time_limitation_deduction'];
+            $cellData[$k]['administrative_fee'] = $v['administrative_fee'];
+            $cellData[$k]['information_fee'] = $v['information_fee'];
+            $cellData[$k]['customer_management_fee'] = $v['customer_management_fee'];
+            $cellData[$k]['ETC_price'] = $v['ETC_price'];
+            $cellData[$k]['oil_amount'] = $v['oil_amount'];
+            $cellData[$k]['oil_unit_price'] = $v['oil_unit_price'];
+            $cellData[$k]['invoice_point'] = $v['invoice_point'];
 
             // 是否回单
             if($v['should_departure_time']) $cellData[$k]['should_departure_time'] = date('Y-m-d', $v['should_departure_time']);
@@ -13349,12 +13355,18 @@ class YHAdminRepository {
             'destination_place'=>'目的地',
             'travel_distance'=>'里程',
             'time_limitation_prescribed'=>'时效',
-//            'remark'=>'备注',
-//            'remark'=>'备注',
-//            'remark'=>'备注',
-//            'remark'=>'备注',
-//            'remark'=>'备注',
-//            'remark'=>'备注',
+            'amount'=>'运价',
+            'oil_card_amount'=>'油卡',
+            'deposit'=>'定金',
+            'outside_car_price'=>'请车价',
+            'time_limitation_deduction'=>'时效扣款',
+            'administrative_fee'=>'管理费',
+            'information_fee'=>'信息费',
+            'customer_management_fee'=>'客管费',
+            'ETC_price'=>'ETC费用',
+            'oil_amount'=>'万金油(升)',
+            'oil_unit_price'=>'油价(元)',
+            'invoice_point'=>'票点',
             'should_departure_time'=>'应出发时间',
             'should_arrival_time'=>'应到达时间',
             'actual_departure_time'=>'实际出发时间',
