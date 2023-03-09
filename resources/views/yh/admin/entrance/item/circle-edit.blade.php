@@ -160,7 +160,11 @@
                     else
                     {
                         layer.msg(data.msg);
+
+                        if($.getUrlParam('referrer')) location.href = decodeURIComponent($.getUrlParam('referrer'));
+                        if(document.referrer) location.href = document.referrer;
                         location.href = "{{ url('/item/circle-list-for-all') }}";
+                        // history.go(-1);
                     }
                 }
             };
