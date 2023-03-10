@@ -345,7 +345,7 @@
         // 【订单统计】【前一月】
         $(".main-content").on('click', ".month-pick-pre-for-order", function() {
 
-            var $month_dom = $('input[name="comprehensive-month"]');
+            var $month_dom = $('input[name="order-month"]');
             var $the_month = $month_dom.val();
             var $date = new Date($the_month);
             var $year = $date.getFullYear();
@@ -364,13 +364,13 @@
 
             var $pre_month_str = $pre_year+'-'+$pre_month;
             $month_dom.val($pre_month_str);
-            $("#filter-submit-for-comprehensive").click();
+            $("#filter-submit-for-order").click();
 
         });
         // 【订单统计】【后一月】
         $(".main-content").on('click', ".month-pick-next-for-order", function() {
 
-            var $month_dom = $('input[name="comprehensive-month"]');
+            var $month_dom = $('input[name="order-month"]');
             var $the_month_str = $month_dom.val();
 
             var $date = new Date($the_month_str);
@@ -391,7 +391,7 @@
 
             var $next_month_str = $next_year+'-'+$next_month;
             $month_dom.val($next_month_str);
-            $("#filter-submit-for-comprehensive").click();
+            $("#filter-submit-for-order").click();
 
         });
 
