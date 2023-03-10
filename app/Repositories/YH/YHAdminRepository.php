@@ -7515,7 +7515,6 @@ class YHAdminRepository {
     //
     public function operate_order_select2_circle($post_data)
     {
-
         $query =YH_Circle::select(['id','title as text']);
 //                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88]);
@@ -12632,7 +12631,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-item';
         return view($view_blade)->with($view_data);
     }
-    // 返回（后台）主页视图
+    // 【流量统计】返回（后台）主页视图
     public function get_statistic_data($post_data)
     {
         $this->get_me();
@@ -12897,6 +12896,550 @@ class YHAdminRepository {
 
         return response_success($return_data,"");
     }
+    // 【流量统计】返回-综合-数据
+    public function get_statistic_data_for_comprehensive($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $condition = request()->all();
+//        $return['condition'] = $condition;
+//
+//        $condition['task-list-type'] = 'unfinished';
+//        $parameter_result = http_build_query($condition);
+//        return redirect('/?'.$parameter_result);
+
+
+
+        $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
+        $the_last_month_start_date = date('Y-m-01',$the_last_month_timestamp); // 指定月份-上月-开始日期
+        $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-结束日期
+        $the_last_month_start_datetime = date('Y-m-01 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
+        $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
+        $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-月结束时间戳
+
+
+
+        $type = isset($post_data['type']) ? $post_data['type']  : '';
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+
+
+        // 订单统计
+        $order_count_for_all = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->count("*");
+        $order_count_for_unpublished = YH_Order::where('is_published', 0)
+            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->count("*");
+        $order_count_for_published = YH_Order::where('is_published', 1)
+            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->count("*");
+        $order_sum_for_all = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->select(
+                DB::raw('SUM(amount) as amount_sum'),
+                DB::raw('SUM(income_total) as income_total_sum'),
+                DB::raw('SUM(income_to_be_confirm) as income_to_be_confirm_sum'),
+                DB::raw('SUM(oil_card_amount) as oil_card_sum'),
+                DB::raw('SUM(time_limitation_deduction) as deduction_sum'),
+                DB::raw('SUM(expenditure_total) as expenditure_total_sum'),
+                DB::raw('SUM(expenditure_to_be_confirm) as expenditure_to_be_confirm_sum')
+            )
+        ->first()->toArray();
+//        dd($order_sum_for_all);
+
+        $return_data['order_count_for_all'] = number_format($order_count_for_all);
+        $return_data['order_count_for_unpublished'] = number_format($order_count_for_unpublished);
+        $return_data['order_count_for_published'] = number_format($order_count_for_published);
+        $return_data['amount_sum'] = number_format($order_sum_for_all['amount_sum']);
+        $return_data['income_receivable_sum'] = number_format((int)$order_sum_for_all['amount_sum'] - (int)$order_sum_for_all['oil_card_sum'] - (int)$order_sum_for_all['deduction_sum']);
+        $return_data['income_receipts_sum'] = number_format((int)$order_sum_for_all['income_total_sum'] + (int)$order_sum_for_all['income_to_be_confirm_sum']);
+        $return_data['expanse_sum'] = number_format((int)$order_sum_for_all['expenditure_total_sum'] + (int)$order_sum_for_all['expenditure_to_be_confirm_sum']);
+
+
+
+
+
+        // 财务统计
+        $finance_income_sum = YH_Finance::whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->where('finance_type',1)->sum('transaction_amount');
+
+        $finance_expense_sum = YH_Finance::whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->where('finance_type',21)->sum('transaction_amount');
+
+        $return_data['finance_income_sum'] = number_format($finance_income_sum);
+        $return_data['finance_expense_sum'] = number_format($finance_expense_sum);
+        $return_data['finance_profile_sum'] = number_format((int)$finance_income_sum - (int)$finance_expense_sum);
+
+
+
+        return response_success($return_data,"");
+    }
+    // 【流量统计】返回-财务-数据
+    public function get_statistic_data_for_order($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $condition = request()->all();
+//        $return['condition'] = $condition;
+//
+//        $condition['task-list-type'] = 'unfinished';
+//        $parameter_result = http_build_query($condition);
+//        return redirect('/?'.$parameter_result);
+
+
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_datetime); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_datetime); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+
+        $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
+        $the_last_month_start_date = date('Y-m-01',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_start_datetime = date('Y-m-01 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
+        $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
+        $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-月结束时间戳
+
+
+
+        $type = isset($post_data['type']) ? $post_data['type']  : '';
+
+        $staff_id = 0;
+        $client_id = 0;
+        $car_id = 0;
+        $route_id = 0;
+        $pricing_id = 0;
+
+        if($type == 'component')
+        {
+            // 员工
+            if(!empty($post_data['staff']))
+            {
+                if(!in_array($post_data['staff'],[-1,0]))
+                {
+                    $staff_id = $post_data['staff'];
+                }
+            }
+            // 客户
+            if(!empty($post_data['client']))
+            {
+                if(!in_array($post_data['client'],[-1,0]))
+                {
+                    $client_id = $post_data['client'];
+                }
+            }
+            // 车辆
+            if(!empty($post_data['car']))
+            {
+                if(!in_array($post_data['car'],[-1,0]))
+                {
+                    $car_id = $post_data['car'];
+                }
+            }
+            // 线路
+            if(!empty($post_data['route']))
+            {
+                if(!in_array($post_data['route'],[-1,0]))
+                {
+                    $route_id = $post_data['route'];
+                }
+            }
+            // 定价
+            if(!empty($post_data['pricing']))
+            {
+                if(!in_array($post_data['pricing'],[-1,0]))
+                {
+                    $pricing_id = $post_data['pricing'];
+                }
+            }
+        }
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+
+
+        // 车辆统计
+        $car_count_for_all = YH_Car::count("*");
+        $car_count_for_car = YH_Car::where('item_type',1)->count("*");
+        $car_count_for_trailer = YH_Car::where('item_type',21)->count("*");
+        $return['car_count_for_all'] = $car_count_for_all;
+        $return['car_count_for_car'] = $car_count_for_car;
+        $return['car_count_for_trailer'] = $car_count_for_trailer;
+
+
+        // 订单统计
+//        $order_count_for_all = YH_Order::count("*");
+//        $order_count_for_unpublished = YH_Order::where('is_published', 0)->count("*");
+//        $order_count_for_published = YH_Order::where('is_published', 1)->count("*");
+//        $order_count_for_waiting_for_departure = YH_Order::where('is_published', 1)->whereNull('actual_departure_time')->count("*");
+//        $order_count_for_working = YH_Order::where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->count("*");
+//        $order_count_for_waiting_for_receipt = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'),'>','income_total')->count("*");
+//        $order_count_for_received = YH_Order::where('is_published', 1)->whereNotNull('actual_arrival_time')->whereColumn(DB::raw('amount + oil_card_amount - time_limitation_deduction'), '<=', 'income_total')->count("*");
+//
+//
+//        $return['order_count_for_all'] = $order_count_for_all;
+//        $return['order_count_for_unpublished'] = $order_count_for_unpublished;
+//        $return['order_count_for_published'] = $order_count_for_published;
+//        $return['order_count_for_waiting_for_departure'] = $order_count_for_waiting_for_departure;
+//        $return['order_count_for_working'] = $order_count_for_working;
+//        $return['order_count_for_waiting_for_receipt'] = $order_count_for_waiting_for_receipt;
+//        $return['order_count_for_received'] = $order_count_for_received;
+
+
+
+
+        // 订单统计
+
+        // 本月每日订单量
+        $query_for_order_this_month = YH_Order::select('id','assign_time')
+//            ->where('finance_type',1)
+            ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(assign_time,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(assign_time,'%e') as day,
+                    count(*) as sum
+                "));
+
+        if($staff_id) $query_for_order_this_month->where('creator_id',$staff_id);
+        if($client_id) $query_for_order_this_month->where('client_id',$client_id);
+        if($car_id) $query_for_order_this_month->where('car_id',$car_id);
+        if($route_id) $query_for_order_this_month->where('route_id',$route_id);
+        if($pricing_id) $query_for_order_this_month->where('pricing_id',$pricing_id);
+
+
+        $statistics_data_for_order_this_month = $query_for_order_this_month->get()->keyBy('day');
+        $return_data['statistics_data_for_order_this_month'] = $statistics_data_for_order_this_month;
+
+        // 上月每日订单量
+        $query_for_order_last_month = YH_Order::select('id','assign_time')
+//            ->where('finance_type',1)
+            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(assign_time,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(assign_time,'%e') as day,
+                    count(*) as sum
+                "));
+
+        if($staff_id) $query_for_order_last_month->where('creator_id',$staff_id);
+        if($client_id) $query_for_order_last_month->where('client_id',$client_id);
+        if($car_id) $query_for_order_last_month->where('car_id',$car_id);
+        if($route_id) $query_for_order_last_month->where('route_id',$route_id);
+        if($pricing_id) $query_for_order_last_month->where('pricing_id',$pricing_id);
+
+        $statistics_data_for_order_last_month = $query_for_order_last_month->get()->keyBy('day');
+        $return_data['statistics_data_for_order_last_month'] = $statistics_data_for_order_last_month;
+
+
+
+
+        // 财务统计
+
+//        $finance_this_month_income = YH_Finance::select('id')
+//            ->where('finance_type',1)
+//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+//            ->sum("transaction_amount");
+//
+//        $finance_this_month_payout = YH_Finance::select('id')
+//            ->where('finance_type',21)
+//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+//            ->sum("transaction_amount");
+//
+//
+//        $finance_last_month_income = YH_Finance::select('id')
+//            ->where('finance_type',1)
+//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
+//            ->sum("transaction_amount");
+//
+//        $finance_last_month_payout = YH_Finance::select('id')
+//            ->where('finance_type',21)
+//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
+//            ->sum("transaction_amount");
+//
+//
+//        $return_data['finance_this_month_income'] = $finance_this_month_income;
+//        $return_data['finance_this_month_payout'] = $finance_this_month_payout;
+//        $return_data['finance_last_month_income'] = $finance_last_month_income;
+//        $return_data['finance_last_month_payout'] = $finance_last_month_payout;
+
+
+        $query_for_finance = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
+            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(transaction_time,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(transaction_time,'%e') as day,
+                    sum(transaction_amount) as sum,
+                    count(*) as count
+                "));
+
+        if($staff_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($staff_id) {
+                $query->where('creator_id', $staff_id);
+            });
+        }
+        if($client_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($client_id) {
+                $query->where('client_id', $client_id);
+            });
+        }
+        if($car_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($car_id) {
+                $query->where('car_id', $car_id);
+            });
+        }
+        if($route_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($route_id) {
+                $query->where('route_id', $route_id);
+            });
+        }
+        if($pricing_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($pricing_id) {
+                $query->where('pricing_id', $pricing_id);
+            });
+        }
+
+        $query_for_income = clone $query_for_finance;
+        $statistics_data_for_income = $query_for_income->where('finance_type',1)->get()->keyBy('day');
+        $return_data['statistics_data_for_income'] = $statistics_data_for_income;
+
+
+        $query_for_payout = clone $query_for_finance;
+        $statistics_data_for_payout = $query_for_payout->where('finance_type',21)->get()->keyBy('day');
+        $return_data['statistics_data_for_payout'] = $statistics_data_for_payout;
+
+
+        return response_success($return_data,"");
+    }
+    // 【流量统计】返回-财务-数据
+    public function get_statistic_data_for_finance($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $condition = request()->all();
+//        $return['condition'] = $condition;
+//
+//        $condition['task-list-type'] = 'unfinished';
+//        $parameter_result = http_build_query($condition);
+//        return redirect('/?'.$parameter_result);
+
+
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_datetime); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_datetime); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+
+        $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
+        $the_last_month_start_date = date('Y-m-01',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_start_datetime = date('Y-m-01 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
+        $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
+        $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
+        $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-月结束时间戳
+
+
+
+        $type = isset($post_data['type']) ? $post_data['type']  : '';
+
+        $staff_id = 0;
+        $client_id = 0;
+        $car_id = 0;
+        $route_id = 0;
+        $pricing_id = 0;
+
+        if($type == 'component')
+        {
+            // 员工
+            if(!empty($post_data['staff']))
+            {
+                if(!in_array($post_data['staff'],[-1,0]))
+                {
+                    $staff_id = $post_data['staff'];
+                }
+            }
+            // 客户
+            if(!empty($post_data['client']))
+            {
+                if(!in_array($post_data['client'],[-1,0]))
+                {
+                    $client_id = $post_data['client'];
+                }
+            }
+            // 车辆
+            if(!empty($post_data['car']))
+            {
+                if(!in_array($post_data['car'],[-1,0]))
+                {
+                    $car_id = $post_data['car'];
+                }
+            }
+            // 线路
+            if(!empty($post_data['route']))
+            {
+                if(!in_array($post_data['route'],[-1,0]))
+                {
+                    $route_id = $post_data['route'];
+                }
+            }
+            // 定价
+            if(!empty($post_data['pricing']))
+            {
+                if(!in_array($post_data['pricing'],[-1,0]))
+                {
+                    $pricing_id = $post_data['pricing'];
+                }
+            }
+        }
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+
+
+
+        // 财务统计
+
+//        $finance_this_month_income = YH_Finance::select('id')
+//            ->where('finance_type',1)
+//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+//            ->sum("transaction_amount");
+//
+//        $finance_this_month_payout = YH_Finance::select('id')
+//            ->where('finance_type',21)
+//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+//            ->sum("transaction_amount");
+//
+//
+//        $finance_last_month_income = YH_Finance::select('id')
+//            ->where('finance_type',1)
+//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
+//            ->sum("transaction_amount");
+//
+//        $finance_last_month_payout = YH_Finance::select('id')
+//            ->where('finance_type',21)
+//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
+//            ->sum("transaction_amount");
+//
+//
+//        $return_data['finance_this_month_income'] = $finance_this_month_income;
+//        $return_data['finance_this_month_payout'] = $finance_this_month_payout;
+//        $return_data['finance_last_month_income'] = $finance_last_month_income;
+//        $return_data['finance_last_month_payout'] = $finance_last_month_payout;
+
+
+        $query_for_finance = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
+            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(transaction_time,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(transaction_time,'%e') as day,
+                    sum(transaction_amount) as sum,
+                    count(*) as count
+                "));
+
+        if($staff_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($staff_id) {
+                $query->where('creator_id', $staff_id);
+            });
+        }
+        if($client_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($client_id) {
+                $query->where('client_id', $client_id);
+            });
+        }
+        if($car_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($car_id) {
+                $query->where('car_id', $car_id);
+            });
+        }
+        if($route_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($route_id) {
+                $query->where('route_id', $route_id);
+            });
+        }
+        if($pricing_id)
+        {
+            $query_for_finance->whereHas('order_er', function ($query) use ($pricing_id) {
+                $query->where('pricing_id', $pricing_id);
+            });
+        }
+
+        $query_for_income = clone $query_for_finance;
+        $statistics_data_for_income = $query_for_income->where('finance_type',1)->get()->keyBy('day');
+        $return_data['statistics_data_for_income'] = $statistics_data_for_income;
+
+
+        $query_for_payout = clone $query_for_finance;
+        $statistics_data_for_payout = $query_for_payout->where('finance_type',21)->get()->keyBy('day');
+        $return_data['statistics_data_for_payout'] = $statistics_data_for_payout;
+
+
+        return response_success($return_data,"");
+    }
 
 
     // 【流量统计】返回-列表-视图
@@ -13069,6 +13612,15 @@ class YHAdminRepository {
     }
 
 
+
+
+
+
+
+
+    /*
+     * Export 数据导出
+     */
     // 【数据导出】
     public function view_statistic_export()
     {

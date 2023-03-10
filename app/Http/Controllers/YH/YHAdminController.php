@@ -1229,6 +1229,30 @@ class YHAdminController extends Controller
     }
 
 
+    // 【统计】返回-概览-数据
+    public function get_statistic_data_for_comprehensive()
+    {
+        return $this->repo->get_statistic_data_for_comprehensive(request()->all());
+    }
+    // 【统计】返回-订单-数据
+    public function get_statistic_data_for_order()
+    {
+        return $this->repo->get_statistic_data_for_order(request()->all());
+    }
+    // 【统计】返回-财务-数据
+    public function get_statistic_data_for_finance()
+    {
+        return $this->repo->get_statistic_data_for_finance(request()->all());
+    }
+
+
+
+
+
+
+    /*
+     * Export 导出
+     */
     // 【统计】导出
     public function operate_statistic_export()
     {
@@ -1242,7 +1266,6 @@ class YHAdminController extends Controller
     {
         $this->repo->operate_statistic_export_for_order(request()->all());
     }
-
     // 【统计】导出
     public function operate_statistic_export_for_finance()
     {

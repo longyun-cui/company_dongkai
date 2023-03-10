@@ -924,7 +924,8 @@
 
                                 $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a>';
                                 $html += "&nbsp;&nbsp;&nbsp;&nbsp;";
-                                if( parseInt( index % 2 ) == 1 && (index + 1) != $len ) $html += '<br>';
+                                $html += '<br>';
+                                // if( parseInt( index % 2 ) == 1 && (index + 1) != $len ) $html += '<br>';
                             });
                             return $html;
 //                            return row.people == null ? '未知' :

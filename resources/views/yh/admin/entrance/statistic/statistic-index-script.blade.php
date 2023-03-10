@@ -1,8 +1,129 @@
 <script>
     $(function() {
 
-        // 【综合分析】
+        // 【综合概览】【查询】
         $(".main-content").on('click', "#filter-submit-for-comprehensive", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+
+            var $month = $('input[name="comprehensive-month"]').val();
+            $('.statistic-title').html($month+'月');
+
+            var $data = new Object();
+            $.ajax({
+                type:"post",
+                dataType:'json',
+                async:false,
+                url: "{{ url('/statistic/statistic-get-data-for-comprehensive') }}",
+                data: {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    month: $month,
+                    operate:"statistic-get"
+                },
+                success:function(data){
+                    console.log(data);
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        $data = data.data;
+                    }
+                }
+            });
+
+
+
+            $(".order_count_for_all").find('span').html($data.order_count_for_all);
+            $(".order_count_for_unpublished").find('span').html($data.order_count_for_unpublished);
+            $(".order_count_for_published").find('span').html($data.order_count_for_published);
+
+            $(".amount_sum").find('span').html($data.amount_sum);
+            $(".income_receivable_sum").find('span').html($data.income_receivable_sum);
+            $(".income_receipts_sum").find('span').html($data.income_receipts_sum);
+            $(".income_waiting_sum").find('span').html($data.income_waiting_sum);
+            $(".expanse_sum").find('span').html($data.expanse_sum); // 总支出
+
+            $(".finance_income_sum").find('span').html($data.finance_income_sum); // 总支出
+            $(".finance_expense_sum").find('span').html($data.finance_expense_sum); // 总支出
+            $(".finance_profile_sum").find('span').html($data.finance_profile_sum); // 总支出
+
+
+
+        });
+        // 【综合概览】【重置】
+        $("#statistic-for-comprehensive").on('click', ".filter-cancel", function() {
+            $("#statistic-for-comprehensive").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#statistic-for-comprehensive").find('select.form-filter option').attr("selected",false);
+            $("#statistic-for-comprehensive").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+
+            var $month_dom = $('input[name="comprehensive-month"]');
+            var $month_default = $month_dom.attr('data-default')
+            $month_dom.val($month_default);
+            $("#filter-submit-for-comprehensive").click();
+
+        });
+
+        // 【综合概览】【前一月】
+        $(".main-content").on('click', ".month-pick-pre-for-comprehensive", function() {
+
+            var $month_dom = $('input[name="comprehensive-month"]');
+            var $the_month = $month_dom.val();
+            var $date = new Date($the_month);
+            var $year = $date.getFullYear();
+            var $month = $date.getMonth();
+
+            var $pre_year = $year;
+            var $pre_month = $month;
+
+            if(parseInt($month) == 0)
+            {
+                $pre_year = $year - 1;
+                $pre_month = 12;
+            }
+
+            if($pre_month < 10) $pre_month = '0'+$pre_month;
+
+            var $pre_month_str = $pre_year+'-'+$pre_month;
+            $month_dom.val($pre_month_str);
+            $("#filter-submit-for-comprehensive").click();
+
+        });
+        // 【综合概览】【后一月】
+        $(".main-content").on('click', ".month-pick-next-for-comprehensive", function() {
+
+            var $month_dom = $('input[name="comprehensive-month"]');
+            var $the_month_str = $month_dom.val();
+
+            var $date = new Date($the_month_str);
+            var $year = $date.getFullYear();
+            var $month = $date.getMonth();
+
+            var $next_year = $year;
+            var $next_month = $month;
+
+            if(parseInt($month) == 11)
+            {
+                $next_year = $year + 1;
+                $next_month = 1;
+            }
+            else $next_month = $month + 2;
+
+            if($next_month < 10) $next_month = '0'+$next_month;
+
+            var $next_month_str = $next_year+'-'+$next_month;
+            $month_dom.val($next_month_str);
+            $("#filter-submit-for-comprehensive").click();
+
+        });
+
+
+
+
+        // 【订单统计】【查询】
+        $(".main-content").on('click', "#filter-submit-for-order", function() {
             var that = $(this);
             var $id = that.attr("data-id");
 
@@ -204,8 +325,8 @@
 
 
         });
-        // 【重置】
-        $("#statistic-for-comprehensive").on('click', ".filter-cancel", function() {
+        // 【订单统计】【重置】
+        $("#statistic-for-order").on('click', ".filter-cancel", function() {
             $("#statistic-for-comprehensive").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
@@ -221,7 +342,7 @@
 
         });
 
-        // 【前一月】
+        // 【订单统计】【前一月】
         $(".main-content").on('click', ".month-pick-pre-for-comprehensive", function() {
 
             var $month_dom = $('input[name="comprehensive-month"]');
@@ -246,7 +367,7 @@
             $("#filter-submit-for-comprehensive").click();
 
         });
-        // 【后一月】
+        // 【订单统计】【后一月】
         $(".main-content").on('click', ".month-pick-next-for-comprehensive", function() {
 
             var $month_dom = $('input[name="comprehensive-month"]');
@@ -555,6 +676,9 @@
             $("#filter-submit-for-component").click();
 
         });
+
+
+
 
 
 

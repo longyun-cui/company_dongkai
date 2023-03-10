@@ -163,7 +163,7 @@
             @if(in_array($me->user_type,[0,1,9,11,21,22,81,82,88]))
             <li class="treeview {{ $menu_active_of_statistic_export or '' }}">
                 <a href="{{ url('/statistic/statistic-export') }}">
-                    <i class="fa fa-bar-chart text-green"></i> <span>数据导出</span>
+                    <i class="fa fa-download text-green"></i> <span>数据导出</span>
                 </a>
             </li>
             @endif

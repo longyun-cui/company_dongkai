@@ -481,6 +481,16 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/statistic/statistic-index', $controller.'@view_statistic_index');
     Route::match(['get','post'], '/statistic/statistic-user', $controller.'@view_statistic_user');
 
+    Route::post('/statistic/statistic-get-data-for-comprehensive', $controller.'@get_statistic_data_for_comprehensive');
+    Route::post('/statistic/statistic-get-data-for-order', $controller.'@get_statistic_data_for_order');
+    Route::post('/statistic/statistic-get-data-for-finance', $controller.'@get_statistic_data_for_finance');
+
+
+
+
+    /*
+     * export 数据导出
+     */
     Route::match(['get','post'], '/statistic/statistic-export', $controller.'@operate_statistic_export');
     Route::match(['get','post'], '/statistic/statistic-export-for-order', $controller.'@operate_statistic_export_for_order');
     Route::match(['get','post'], '/statistic/statistic-export-for-finance', $controller.'@operate_statistic_export_for_finance');
