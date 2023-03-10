@@ -343,7 +343,7 @@
         });
 
         // 【订单统计】【前一月】
-        $(".main-content").on('click', ".month-pick-pre-for-comprehensive", function() {
+        $(".main-content").on('click', ".month-pick-pre-for-order", function() {
 
             var $month_dom = $('input[name="comprehensive-month"]');
             var $the_month = $month_dom.val();
@@ -368,7 +368,7 @@
 
         });
         // 【订单统计】【后一月】
-        $(".main-content").on('click', ".month-pick-next-for-comprehensive", function() {
+        $(".main-content").on('click', ".month-pick-next-for-order", function() {
 
             var $month_dom = $('input[name="comprehensive-month"]');
             var $the_month_str = $month_dom.val();
