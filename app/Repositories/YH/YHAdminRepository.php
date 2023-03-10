@@ -8721,7 +8721,7 @@ class YHAdminRepository {
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 91;
+                $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 97;
                 $record_data["operate_type"] = 1;
 
@@ -12954,20 +12954,33 @@ class YHAdminRepository {
 
 
         // 订单统计
-//        $order_count_for_all = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
-//            ->count("*");
-        $order_count_for_not_null = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
-            ->where('car_owner_type','!=',11)->count("*");
-        $order_count_for_null = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
-            ->where('car_owner_type',11)->count("*");
 
-        $order_count_for_unpublished = YH_Order::where('is_published', 0)
+        // 订单量
+//        $order_count_for_all = YH_Order::where('item_status','!=',97)
+//            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+//            ->count("*");
+        $order_count_for_not_null = YH_Order::where('item_status','!=',97)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->where('car_owner_type','!=',11)
             ->count("*");
-        $order_count_for_published = YH_Order::where('is_published', 1)
+        $order_count_for_null = YH_Order::where('item_status','!=',97)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->where('car_owner_type',11)
             ->count("*");
-        $order_sum_for_all = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+        $order_count_for_unpublished = YH_Order::where('item_status','!=',97)
+            ->where('car_owner_type','!=',11)
+            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->where('is_published', 0)
+            ->count("*");
+        $order_count_for_published = YH_Order::where('item_status','!=',97)
+            ->where('car_owner_type','!=',11)
+            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->where('is_published', 1)
+            ->count("*");
+
+        // 订单金额
+        $order_sum_for_all = YH_Order::where('item_status','!=',97)
+            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
             ->select(
                 DB::raw('SUM(amount) as amount_sum'),
                 DB::raw('SUM(income_total) as income_total_sum'),
@@ -12978,7 +12991,6 @@ class YHAdminRepository {
                 DB::raw('SUM(expenditure_to_be_confirm) as expenditure_to_be_confirm_sum')
             )
         ->first()->toArray();
-//        dd($order_sum_for_all);
 
 //        $return_data['order_count_for_all'] = number_format($order_count_for_all);
         $return_data['order_count_for_not_null'] = number_format($order_count_for_not_null);
