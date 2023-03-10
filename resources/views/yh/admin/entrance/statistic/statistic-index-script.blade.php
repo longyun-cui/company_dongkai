@@ -32,19 +32,21 @@
 
 
 
-            $(".order_count_for_all").find('span').html($data.order_count_for_all);
-            $(".order_count_for_unpublished").find('span').html($data.order_count_for_unpublished);
-            $(".order_count_for_published").find('span').html($data.order_count_for_published);
+            // $(".order_count_for_all").find('span').html($data.order_count_for_all);
+            $(".order_count_for_not_null").find('b').html($data.order_count_for_not_null);
+            $(".order_count_for_null").find('b').html($data.order_count_for_null);
+            $(".order_count_for_unpublished").find('b').html($data.order_count_for_unpublished);
+            $(".order_count_for_published").find('b').html($data.order_count_for_published);
 
-            $(".amount_sum").find('span').html($data.amount_sum);
-            $(".income_receivable_sum").find('span').html($data.income_receivable_sum);
-            $(".income_receipts_sum").find('span').html($data.income_receipts_sum);
-            $(".income_waiting_sum").find('span').html($data.income_waiting_sum);
-            $(".expanse_sum").find('span').html($data.expanse_sum); // 总支出
+            $(".amount_sum").find('b').html($data.amount_sum);
+            $(".income_receivable_sum").find('b').html($data.income_receivable_sum);
+            $(".income_receipts_sum").find('b').html($data.income_receipts_sum);
+            $(".income_waiting_sum").find('b').html($data.income_waiting_sum);
+            $(".expanse_sum").find('b').html($data.expanse_sum); // 总支出
 
-            $(".finance_income_sum").find('span').html($data.finance_income_sum); // 总支出
-            $(".finance_expense_sum").find('span').html($data.finance_expense_sum); // 总支出
-            $(".finance_profile_sum").find('span').html($data.finance_profile_sum); // 总支出
+            $(".finance_income_sum").find('b').html($data.finance_income_sum); // 总支出
+            $(".finance_expense_sum").find('b').html($data.finance_expense_sum); // 总支出
+            $(".finance_profile_sum").find('b').html($data.finance_profile_sum); // 总支出
 
 
 

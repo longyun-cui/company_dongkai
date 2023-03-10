@@ -906,6 +906,9 @@
             ignoreReadonly: true
         });
 
+
+
+
         // 添加or编辑
         $("#edit-item-submit").on('click', function() {
             var options = {
@@ -920,14 +923,16 @@
                         layer.msg(data.msg);
 
                         if($.getUrlParam('referrer')) location.href = decodeURIComponent($.getUrlParam('referrer'));
-                        if(document.referrer) location.href = document.referrer;
-                        location.href = "{{ url('/item/order-list-for-all') }}";
+                        else if(document.referrer) location.href = document.referrer;
+                        else location.href = "{{ url('/item/order-list-for-all') }}";
                         // history.go(-1);
                     }
                 }
             };
-            $("#form-edit-item").ajaxSubmit(options);
+            // $("#form-edit-item").ajaxSubmit(options);
         });
+
+
 
 
         //

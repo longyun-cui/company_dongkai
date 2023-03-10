@@ -69,14 +69,20 @@
                         </div>
                         <div class="box-body">
                             <ul class="nav nav-stacked">
-                                <li class="order_count_for_all">
-                                    <a href="javascript:void(0);">订单总量 <span class="pull-right badge- bg-blue-"></span></a>
+{{--                                <li class="order_count_for_all">--}}
+{{--                                    <a href="javascript:void(0);">订单总量 <span class="pull-right badge- bg-blue-"></span></a>--}}
+{{--                                </li>--}}
+                                <li class="order_count_for_not_null">
+                                    <a href="javascript:void(0);">订单总量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_null">
+                                    <a href="javascript:void(0);">空单量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_unpublished">
-                                    <a href="javascript:void(0);">已完成订单 <span class="pull-right badge- bg-green-"></span></a>
+                                    <a href="javascript:void(0);">已发布订单 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_published">
-                                    <a href="javascript:void(0);">未完成订单 <span class="pull-right badge- bg-orange-"></span></a>
+                                    <a href="javascript:void(0);">未发布订单 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -95,19 +101,19 @@
                         <div class="box-body">
                             <ul class="nav nav-stacked">
                                 <li class="amount_sum">
-                                    <a href="javascript:void(0);">运价总金额 <span class="pull-right badge- bg-blue-"></span></a>
+                                    <a href="javascript:void(0);">运价总金额 <span class="pull-right"><b class="badge- bg-blue-"></b> 元</span></a>
                                 </li>
                                 <li class="income_receivable_sum">
-                                    <a href="javascript:void(0);">应收账 <span class="pull-right badge- bg-aqua-"></span></a>
+                                    <a href="javascript:void(0);">应收账 <span class="pull-right"><b class="badge- bg-aqua-"></b> 元</span></a>
                                 </li>
                                 <li class="income_receipts_sum">
-                                    <a href="javascript:void(0);">实收款 <span class="pull-right badge- bg-green-"></span></a>
+                                    <a href="javascript:void(0);">实收款 <span class="pull-right"><b class="badge- bg-green-"></b> 元</span></a>
                                 </li>
                                 <li class="income_waiting_sum">
-                                    <a href="javascript:void(0);">待收款 <span class="pull-right badge- bg-green-"></span></a>
+                                    <a href="javascript:void(0);">待收款 <span class="pull-right"><b class="badge bg-red"></b> 元</span></a>
                                 </li>
                                 <li class="expanse_sum">
-                                    <a href="javascript:void(0);">订单总支出 <span class="pull-right badge- bg-green-"></span></a>
+                                    <a href="javascript:void(0);">订单总支出 <span class="pull-right"><b class="badge- bg-aqua-"></b> 元</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -126,13 +132,13 @@
                         <div class="box-body">
                             <ul class="nav nav-stacked">
                                 <li class="finance_income_sum">
-                                    <a href="javascript:void(0);">当月总收入 <span class="pull-right badge- bg-blue-"></span></a>
+                                    <a href="javascript:void(0);">当月总收入 <span class="pull-right"><b class="badge- bg-blue-"></b> 元</span></a>
                                 </li>
                                 <li class="finance_expense_sum">
-                                    <a href="javascript:void(0);">当月总支出 <span class="pull-right badge- bg-aqua-"></span></a>
+                                    <a href="javascript:void(0);">当月总支出 <span class="pull-right"><b class="badge- bg-aqua-"></b> 元</span></a>
                                 </li>
                                 <li class="finance_profile_sum">
-                                    <a href="javascript:void(0);">当月收支盈余 <span class="pull-right badge- bg-green-"></span></a>
+                                    <a href="javascript:void(0);">当月收支盈余 <span class="pull-right"><b class="badge- bg-green-"></b> 元</span></a>
                                 </li>
                             </ul>
                         </div>

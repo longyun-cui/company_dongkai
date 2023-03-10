@@ -26,7 +26,7 @@
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a target="_blank" href="{{ url('/item/order-create') }}">
+                    <a class="item-create-link" target="_blank" href="{{ url('/item/order-create') }}">
                         <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加订单</button>
                     </a>
                 </div>
@@ -152,6 +152,13 @@
                             <option value ="已收款">已收款</option>
                             <option value ="已结束">已结束</option>
                             <option value ="弃用">弃用</option>
+                        </select>
+
+
+                        <select class="form-control form-filter" name="order-is-delay" style="width:88px;">
+                            <option value="-1">是否压车</option>
+                            <option value="1" @if($is_delay == "1") selected="selected" @endif>正常</option>
+                            <option value="9" @if($is_delay == "9") selected="selected" @endif>压车</option>
                         </select>
 
                         <select class="form-control form-filter" name="order-receipt-status" style="width:88px;">
@@ -776,19 +783,34 @@
     </div>
 
 
+    {{--是否压车--}}
+    <div id="is_delay-option-list">
+        <label class="control-label col-md-2">是否需要回单</label>
+        <div class="col-md-8">
+            <div class="btn-group">
 
-    {{--回单状态--}}
-    <div id="receipt_status-option-list">
-        <option value="-1">选择回单状态</option>
-        <option value="1">等待回单</option>
-        <option value="21">邮寄中</option>
-        <option value="41">已签收，等待确认</option>
-        <option value="100">已完成</option>
-        <option value="101">回单异常</option>
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="is_delay" value="1" class="info-set-column"> 正常
+                        </label>
+                    </span>
+                </button>
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="is_delay" value="9" class="info-set-column"> 压车
+                        </label>
+                    </span>
+                </button>
+
+            </div>
+        </div>
     </div>
 
-    <div id="receipt_need-option-list">
 
+    {{--是否需要回单--}}
+    <div id="receipt_need-option-list">
         <label class="control-label col-md-2">是否需要回单</label>
         <div class="col-md-8">
             <div class="btn-group">
@@ -800,7 +822,6 @@
                         </label>
                     </span>
                 </button>
-
                 <button type="button" class="btn">
                     <span class="radio">
                         <label>
@@ -811,7 +832,15 @@
 
             </div>
         </div>
-
+    </div>
+    {{--回单状态--}}
+    <div id="receipt_status-option-list">
+        <option value="-1">选择回单状态</option>
+        <option value="1">等待回单</option>
+        <option value="21">邮寄中</option>
+        <option value="41">已签收，等待确认</option>
+        <option value="100">已完成</option>
+        <option value="101">回单异常</option>
     </div>
 
 </div>
@@ -1334,6 +1363,7 @@
                         d.driver = $('select[name="order-driver"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
+                        d.is_delay = $('select[name="order-is-delay"]').val();
                         d.receipt_status = $('select[name="order-receipt-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
@@ -1702,6 +1732,29 @@
                                 if(row.outside_trailer) trailer_html = row.outside_trailer;
                             }
                             return trailer_html;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "是否压车",
+                        "data": "is_delay",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-radio-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','是否压车');
+                                $(nTd).attr('data-key','is_delay').attr('data-value',data);
+                                $(nTd).attr('data-column-name','是否压车');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 1) return '<small class="btn-xs btn-success">正常</small>';
+                            else if(data == 9) return '<small class="btn-xs btn-danger">压车</small>';
+                            else return '--';
                         }
                     },
                     {
@@ -3543,6 +3596,7 @@
                     if($('select[name="order-trailer"]').val() > 0)  $obj.trailer_id = $('select[name="order-trailer"]').val();
                     if($('select[name="order-driver"]').val() > 0)  $obj.driver_id = $('select[name="order-driver"]').val();
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
+                    if($('select[name="order-is-delay"]').val() > 0)  $obj.is_delay = $('select[name="order-is-delay"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 20) $obj.length = $page_length;
@@ -4138,6 +4192,7 @@
                                 else if(data == "GPS") return 'GPS';
                                 else if(data == "receipt_address") return '回单地址';
                                 else if(data == "receipt_status") return '回单状态';
+                                else if(data == "is_delay") return '是否压车';
                                 else if(data == "order_number") return '单号';
                                 else if(data == "payee_name") return '收款人';
                                 else if(data == "arrange_people") return '安排人';
@@ -4202,6 +4257,13 @@
                             {
                                 if(row.before_driver_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.before_driver_er.driver_name+'</a>';
+                            }
+
+                            if(row.column_name == 'is_delay')
+                            {
+                                if(data == 1) return '正常';
+                                else if(data == 9) return '压车';
+                                else return '--';
                             }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
@@ -4285,6 +4347,13 @@
                             {
                                 if(row.after_driver_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.after_driver_er.driver_name+'</a>';
+                            }
+
+                            if(row.column_name == 'is_delay')
+                            {
+                                if(data == 1) return '正常';
+                                else if(data == 9) return '压车';
+                                else return '--';
                             }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')

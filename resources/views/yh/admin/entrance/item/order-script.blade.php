@@ -57,11 +57,16 @@
 
 
         // 【编辑】
+        $(".main-content").on('click', ".item-create-link", function() {
+            var $that = $(this);
+            var $url = "/item/order-create?&referrer="+encodeURIComponent(window.location.href);
+            // window.location.href = $url;
+            window.open($url);
+        });
+
+        // 【编辑】
         $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);
-            console.log("window.location.href = " + window.location.href);
-            console.log("window.location.pathname = " + window.location.pathname);
-            console.log("window.location.search = " + window.location.search);
             var $url = "/item/order-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
             window.location.href = $url;
             // window.open($url);
@@ -772,9 +777,15 @@
             if($that.attr("data-key") == "receipt_need")
             {
                 var $option_html = $('#receipt_need-option-list').html();
+                $('.radio-box').html($option_html);
+                $('input[name=receipt_need][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
             }
-            $('.radio-box').html($option_html);
-            $('input[name=receipt_need][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
+            else if($that.attr("data-key") == "is_delay")
+            {
+                var $option_html = $('#is_delay-option-list').html();
+                $('.radio-box').html($option_html);
+                $('input[name=is_delay][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
+            }
 
 
             $('#modal-body-for-info-radio-set').modal('show');

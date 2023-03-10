@@ -845,6 +845,7 @@
                                     else if(data == "GPS") return 'GPS';
                                     else if(data == "receipt_address") return '回单地址';
                                     else if(data == "receipt_status") return '回单状态';
+                                    else if(data == "is_delay") return '是否压车';
                                     else if(data == "order_number") return '单号';
                                     else if(data == "payee_name") return '收款人';
                                     else if(data == "arrange_people") return '安排人';
@@ -910,32 +911,12 @@
                         "data": "before",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.column_name == 'client_id')
+
+                            if(row.column_name == 'is_delay')
                             {
-                                if(row.before_client_er == null) return '';
-                                else
-                                {
-                                    if(row.before_client_er.short_name != null)
-                                    {
-                                        return '<a href="javascript:void(0);">'+row.before_client_er.short_name+'</a>';
-                                    }
-                                    else return '<a href="javascript:void(0);">'+row.before_client_er.username+'</a>';
-                                }
-                            }
-                            else if(row.column_name == 'route_id')
-                            {
-                                if(row.before_route_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_route_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'pricing_id')
-                            {
-                                if(row.before_pricing_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_pricing_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
-                            {
-                                if(row.before_car_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_car_er.name+'</a>';
+                                if(data == 1) return '正常';
+                                else if(data == 9) return '压车';
+                                else return '--';
                             }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
@@ -984,6 +965,13 @@
                         "data": "after",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+
+                            if(row.column_name == 'is_delay')
+                            {
+                                if(data == 1) return '正常';
+                                else if(data == 9) return '压车';
+                                else return '--';
+                            }
 
                             if(row.column_type == 'datetime' || row.column_type == 'date')
                             {

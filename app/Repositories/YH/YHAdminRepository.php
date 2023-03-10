@@ -8483,7 +8483,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 61;
+                    $record_data["operate_object"] = 71;
                     $record_data["operate_category"] = 101;
                     $record_data["operate_type"] = 1;
 
@@ -8509,7 +8509,7 @@ class YHAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 61;
+                    $record_data["operate_object"] = 71;
                     $record_data["operate_category"] = 101;
                     $record_data["operate_type"] = 1;
 
@@ -9710,6 +9710,14 @@ class YHAdminRepository {
         }
         else $view_data['circle_id'] = -1;
 
+        // 是否压车
+        if(!empty($post_data['is_delay']))
+        {
+            if(is_numeric($post_data['is_delay']) && $post_data['is_delay'] > 0) $view_data['is_delay'] = $post_data['is_delay'];
+            else $view_data['is_delay'] = -1;
+        }
+        else $view_data['is_delay'] = -1;
+
         // 类型
         if(!empty($post_data['order_type']))
         {
@@ -9865,6 +9873,15 @@ class YHAdminRepository {
             if(!in_array($post_data['order_type'],[-1,0]))
             {
                 $query->where('car_owner_type', $post_data['order_type']);
+            }
+        }
+
+        // 是否压差 [正常|压车]
+        if(!empty($post_data['is_delay']))
+        {
+            if(!in_array($post_data['is_delay'],[-1,0]))
+            {
+                $query->where('is_delay', $post_data['is_delay']);
             }
         }
 
@@ -11229,7 +11246,7 @@ class YHAdminRepository {
         $me = $this->me;
 
         $query = YH_Circle::select('*')
-            ->withTrashed()
+//            ->withTrashed()
 //            ->withCount([''])
             ->with(['creator','car_er',
 //                'order_list',
@@ -12937,8 +12954,13 @@ class YHAdminRepository {
 
 
         // 订单统计
-        $order_count_for_all = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
-            ->count("*");
+//        $order_count_for_all = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+//            ->count("*");
+        $order_count_for_not_null = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->where('car_owner_type','!=',11)->count("*");
+        $order_count_for_null = YH_Order::whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->where('car_owner_type',11)->count("*");
+
         $order_count_for_unpublished = YH_Order::where('is_published', 0)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
             ->count("*");
@@ -12958,13 +12980,26 @@ class YHAdminRepository {
         ->first()->toArray();
 //        dd($order_sum_for_all);
 
-        $return_data['order_count_for_all'] = number_format($order_count_for_all);
+//        $return_data['order_count_for_all'] = number_format($order_count_for_all);
+        $return_data['order_count_for_not_null'] = number_format($order_count_for_not_null);
+        $return_data['order_count_for_null'] = number_format($order_count_for_null);
         $return_data['order_count_for_unpublished'] = number_format($order_count_for_unpublished);
         $return_data['order_count_for_published'] = number_format($order_count_for_published);
+
+        // 总运价
         $return_data['amount_sum'] = number_format($order_sum_for_all['amount_sum']);
-        $return_data['income_receivable_sum'] = number_format((int)$order_sum_for_all['amount_sum'] - (int)$order_sum_for_all['oil_card_sum'] - (int)$order_sum_for_all['deduction_sum']);
-        $return_data['income_receipts_sum'] = number_format((int)$order_sum_for_all['income_total_sum'] + (int)$order_sum_for_all['income_to_be_confirm_sum']);
-        $return_data['expanse_sum'] = number_format((int)$order_sum_for_all['expenditure_total_sum'] + (int)$order_sum_for_all['expenditure_to_be_confirm_sum']);
+        // 应收款
+        $income_receivable_sum = $order_sum_for_all['amount_sum'] + $order_sum_for_all['oil_card_sum'] - $order_sum_for_all['deduction_sum'];
+        $return_data['income_receivable_sum'] = number_format($income_receivable_sum);
+        // 实收款
+        $income_receipts_sum = $order_sum_for_all['income_total_sum'] + $order_sum_for_all['income_to_be_confirm_sum'];
+        $return_data['income_receipts_sum'] = number_format($income_receipts_sum);
+        // 待收款
+        $income_waiting_sum = $income_receivable_sum - $income_receipts_sum;
+        $return_data['income_waiting_sum'] = number_format($income_waiting_sum);
+        // 总支出
+        $expanse_sum = (int)$order_sum_for_all['expenditure_total_sum'] + (int)$order_sum_for_all['expenditure_to_be_confirm_sum'];
+        $return_data['expanse_sum'] = number_format($expanse_sum);
 
 
 
