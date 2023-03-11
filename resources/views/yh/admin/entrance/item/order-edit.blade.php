@@ -929,7 +929,7 @@
                     }
                 }
             };
-            // $("#form-edit-item").ajaxSubmit(options);
+            $("#form-edit-item").ajaxSubmit(options);
         });
 
 
