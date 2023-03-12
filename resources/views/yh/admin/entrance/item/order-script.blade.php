@@ -57,6 +57,12 @@
 
 
         // 【编辑】
+        $(".main-content").on('click', ".item-create-show", function() {
+            var $that = $(this);
+            $('#modal-body-for-order-create').modal('show');
+        });
+
+        // 【编辑】
         $(".main-content").on('click', ".item-create-link", function() {
             var $that = $(this);
             var $url = "/item/order-create?&referrer="+encodeURIComponent(window.location.href);
@@ -867,7 +873,11 @@
 
 
             $('select[name=info-select-set-column-value]').removeClass('select2-car').removeClass('select2-client');
-            if($that.attr("data-key") == "receipt_status")
+            if($that.attr("data-key") == "car_owner_type")
+            {
+                var $option_html = $('#car_owner_type-option-list').html();
+            }
+            else if($that.attr("data-key") == "receipt_status")
             {
                 var $option_html = $('#receipt_status-option-list').html();
             }

@@ -26,7 +26,10 @@
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a class="item-create-link" target="_blank" href="{{ url('/item/order-create') }}">
+{{--                    <a class="item-create-link">--}}
+{{--                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加订单</button>--}}
+{{--                    </a>--}}
+                    <a class="item-create-show">
                         <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加订单</button>
                     </a>
                 </div>
@@ -200,6 +203,72 @@
                         <tr role='row' class='heading'>
                         </tr>
                     </thead>
+
+                    <tfoot>
+                        <tr role='row'>
+                            <th>ID</th>
+                            <th>订单状态</th>
+                            <th>创建人</th>
+                            <th>派车日期</th>
+                            <th>客户</th>
+                            <th>线路</th>
+                            <th>车辆</th>
+                            <th>车挂</th>
+                            <th>是否压车</th>
+                            <th>环线</th>
+                            <th>包油油耗</th>
+                            <th>驾驶员</th>
+                            <th>主驾</th>
+                            <th>出发地</th>
+                            <th>经停地</th>
+                            <th>目的地</th>
+                            <th>里程</th>
+                            <th>时效</th>
+                            <th>订单类型</th>
+                            <th>状态</th>
+                            <th>应收款</th>
+                            <th>欠款</th>
+                            <th>已收款</th>
+                            <th>待入账</th>
+                            <th>已支出</th>
+                            <th>待出账</th>
+                            <th>利润·实时</th>
+                            <th>运价</th>
+                            <th>油卡</th>
+                            <th>订金</th>
+                            <th>请车价</th>
+                            <th>时效扣款</th>
+                            <th>管理费</th>
+                            <th>信息费</th>
+                            <th>客管费</th>
+                            <th>ETC</th>
+                            <th>万金油(升)</th>
+                            <th>油价(元)</th>
+                            <th>票点</th>
+                            <th>副驾</th>
+                            <th>副驾电话</th>
+                            <th>应出发时间</th>
+                            <th>应到达时间</th>
+                            <th>实际出发</th>
+                            <th>经停-到达</th>
+                            <th>经停-出发</th>
+                            <th>实际到达</th>
+                            <th>行程</th>
+                            <th>单号</th>
+                            <th>收款人</th>
+                            <th>车货源</th>
+                            <th>安排人</th>
+                            <th>GPS</th>
+                            <th>是否回单</th>
+                            <th>回单状态</th>
+                            <th>回单地址</th>
+                            <th>附件</th>
+                            <th>备注</th>
+                            <th>修改时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </tfoot>
+
                     <tbody>
                     </tbody>
                 </table>
@@ -783,6 +852,16 @@
     </div>
 
 
+    {{--订单类型--}}
+    <div id="car_owner_type-option-list">
+        <option value="0">选择订单类型</option>
+        <option value="1">自有</option>
+        <option value="11">空单</option>
+        <option value="41">外配·配货</option>
+        <option value="61">外请·调车</option>
+    </div>
+
+
     {{--是否压车--}}
     <div id="is_delay-option-list">
         <label class="control-label col-md-2">是否需要回单</label>
@@ -1225,6 +1304,26 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+
+
+
+{{--添加订单--}}
+<div class="modal fade modal-main-body" id="modal-body-for-order-create">
+    <div class="col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px">
+                <h3 class="box-title">添加订单</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            @include(env('TEMPLATE_YH_ADMIN').'component.order-create')
+
+        </div>
     </div>
 </div>
 
@@ -2023,6 +2122,17 @@
                         "title": "订单类型",
                         "data": "car_owner_type",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','订单类型');
+                                $(nTd).attr('data-key','car_owner_type').attr('data-value',data);
+                                $(nTd).attr('data-column-name','订单类型');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 1)
                             {
@@ -4477,4 +4587,6 @@
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script')
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script-for-info')
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script-for-finance')
+
+@include(env('TEMPLATE_YH_ADMIN').'component.order-create-script')
 @endsection

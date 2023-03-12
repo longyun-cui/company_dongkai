@@ -85,6 +85,27 @@
                         <tr role='row' class='heading'>
                         </tr>
                     </thead>
+
+                    <tfoot>
+                        <tr role='row'>
+                            <th>ID</th>
+                            <th>操作</th>
+                            <th>车辆</th>
+                            <th>标题</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>订单</th>
+                            <th>总里程</th>
+                            <th>收入</th>
+                            <th>支出</th>
+                            <th>利润</th>
+                            <th>利润率</th>
+                            <th>备注</th>
+                            <th>创建人</th>
+                            <th>更新时间</th>
+                        </tr>
+                    </tfoot>
+
                     <tbody>
                     </tbody>
                 </table>
