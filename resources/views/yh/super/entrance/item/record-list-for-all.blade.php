@@ -458,7 +458,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:1380px; }
+    .tableArea table { min-width:800px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
@@ -538,6 +538,38 @@
                         }
                     },
                     {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "对象",
+                        "data": "operate_object",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','对象');
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','对象');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 11) return '<small class="btn-xs bg-blue">管理员</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-blue">员工</small>';
+                            else if(data == 25) return '<small class="btn-xs bg-blue">驾驶员</small>';
+                            else if(data == 31) return '<small class="btn-xs bg-green">客户</small>';
+                            else if(data == 41) return '<small class="btn-xs bg-green">车辆</small>';
+                            else if(data == 51) return '<small class="btn-xs bg-green">线路</small>';
+                            else if(data == 61) return '<small class="btn-xs bg-green">包油油耗</small>';
+                            else if(data == 71) return '<small class="btn-xs bg-yellow">订单</small>';
+                            else if(data == 77) return '<small class="btn-xs bg-yellow"><i class="fa fa-refresh"></i> 环线</small>';
+                            else if(data == 88) return '<small class="btn-xs bg-red">财务</small>';
+                            else return data;
+                        }
+                    },
+                    {
                         "className": "font-12px",
                         "width": "80px",
                         "title": "操作",
@@ -572,38 +604,6 @@
                             else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
                             else if(data == 103) return '<small class="btn-xs bg-black">永久删除</small>';
                             else return '有误';
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "80px",
-                        "title": "对象",
-                        "data": "operate_object",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','对象');
-                                $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','对象');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == 11) return '<small class="btn-xs bg-blue">管理员</small>';
-                            else if(data == 21) return '<small class="btn-xs bg-blue">员工</small>';
-                            else if(data == 25) return '<small class="btn-xs bg-blue">驾驶员</small>';
-                            else if(data == 31) return '<small class="btn-xs bg-green">客户</small>';
-                            else if(data == 41) return '<small class="btn-xs bg-green">车辆</small>';
-                            else if(data == 51) return '<small class="btn-xs bg-green">线路</small>';
-                            else if(data == 61) return '<small class="btn-xs bg-green">包油油耗</small>';
-                            else if(data == 71) return '<small class="btn-xs bg-yellow">订单</small>';
-                            else if(data == 77) return '<small class="btn-xs bg-yellow"><i class="fa fa-refresh"></i> 环线</small>';
-                            else if(data == 88) return '<small class="btn-xs bg-red">财务</small>';
-                            else return data;
                         }
                     },
                     {
