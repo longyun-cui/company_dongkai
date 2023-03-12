@@ -181,17 +181,21 @@
                     <div class="col-md-8">
                         <div class="btn-group">
 
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
+{{--                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))--}}
                                 <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="car_owner_type" value="1" checked="checked"> 自有
+                                        @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
+                                            <input type="radio" name="car_owner_type" value="1" checked="checked"> 自有
+                                        @else
+                                            <input type="radio" name="car_owner_type" value="1"> 自有
+                                        @endif
                                     </label>
                                 </span>
                                 </button>
-                            @endif
+{{--                            @endif--}}
 
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 11))
+{{--                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 11))--}}
                                 <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
@@ -203,9 +207,9 @@
                                     </label>
                                 </span>
                                 </button>
-                            @endif
+{{--                            @endif--}}
 
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 41))
+{{--                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 41))--}}
                                 <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
@@ -217,9 +221,9 @@
                                     </label>
                                 </span>
                                 </button>
-                            @endif
+{{--                            @endif--}}
 
-                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 61))
+{{--                            @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 61))--}}
                                 <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
@@ -231,11 +235,38 @@
                                     </label>
                                 </span>
                                 </button>
-                            @endif
+{{--                            @endif--}}
 
                         </div>
                     </div>
                 </div>
+
+                {{--自有车辆--}}
+                @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
+                    <div class="form-group inside-car">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 自有车辆</label>
+                        <div class="col-md-8 ">
+                            <div class="col-sm-6 col-md-6 padding-0">
+                                <select class="form-control" name="car_id" id="select2-car">
+                                    @if($operate == 'edit' && $data->car_id)
+                                        <option data-id="{{ $data->car_id or 0 }}" value="{{ $data->car_id or 0 }}">{{ $data->car_er->name }}</option>
+                                    @else
+                                        <option data-id="0" value="0">选择车辆</option>
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-6 padding-0">
+                                <select class="form-control" name="trailer_id" id="select2-trailer">
+                                    @if($operate == 'edit' && $data->trailer_id)
+                                        <option data-id="{{ $data->trailer_id or 0 }}" value="{{ $data->trailer_id or 0 }}">{{ $data->trailer_er->name }}</option>
+                                    @else
+                                        <option data-id="0" value="0">选择车挂</option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
 
                 {{--运费金额 & 油卡--}}
@@ -319,33 +350,6 @@
                         </select>
                     </div>
                 </div>
-
-                {{--自有车辆--}}
-                @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
-                <div class="form-group inside-car">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 自有车辆</label>
-                    <div class="col-md-8 ">
-                        <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control" name="car_id" id="select2-car">
-                                @if($operate == 'edit' && $data->car_id)
-                                    <option data-id="{{ $data->car_id or 0 }}" value="{{ $data->car_id or 0 }}">{{ $data->car_er->name }}</option>
-                                @else
-                                    <option data-id="0" value="0">选择车辆</option>
-                                @endif
-                            </select>
-                        </div>
-                        <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control" name="trailer_id" id="select2-trailer">
-                                @if($operate == 'edit' && $data->trailer_id)
-                                    <option data-id="{{ $data->trailer_id or 0 }}" value="{{ $data->trailer_id or 0 }}">{{ $data->trailer_er->name }}</option>
-                                @else
-                                    <option data-id="0" value="0">选择车挂</option>
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                @endif
 
 
                 {{--驾驶员--}}

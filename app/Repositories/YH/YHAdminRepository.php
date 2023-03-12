@@ -8174,7 +8174,7 @@ class YHAdminRepository {
             $mine = YH_Order::find($operate_id);
             if(!$mine) return response_error([],"该订单不存在，刷新页面重试！");
 
-            if(in_array($me->user_type,[82,88]) && $mine->creater_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+            if(in_array($me->user_type,[82,88]) && $mine->creator_id != $me->id) return response_error([],"该【订单】不是你的，你不能操作！");
         }
         else return response_error([],"参数有误！");
 

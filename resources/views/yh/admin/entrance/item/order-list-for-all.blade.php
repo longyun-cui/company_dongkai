@@ -1312,7 +1312,7 @@
 
 {{--添加订单--}}
 <div class="modal fade modal-main-body" id="modal-body-for-order-create">
-    <div class="col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
+    <div class="col-md-9 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px">
