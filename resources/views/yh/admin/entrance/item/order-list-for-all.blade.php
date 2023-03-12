@@ -264,6 +264,7 @@
                             <th>回单地址</th>
                             <th>附件</th>
                             <th>备注</th>
+                            <th>创建时间</th>
                             <th>修改时间</th>
                             <th>操作</th>
                         </tr>
@@ -3545,6 +3546,32 @@
                             return data;
 //                            if(data) return '<small class="btn-xs bg-yellow">查看</small>';
 //                            else return '';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "100px",
+                        "title": "创建时间",
+                        "data": 'created_at',
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
                     },
                     {
