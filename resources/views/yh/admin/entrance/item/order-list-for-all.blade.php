@@ -157,9 +157,6 @@
                             <option value ="弃用">弃用</option>
                         </select>
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-remark" placeholder="备注" value="" style="width:88px;" />
-
-
                         <select class="form-control form-filter" name="order-is-delay" style="width:88px;">
                             <option value="-1">是否压车</option>
                             <option value="1" @if($is_delay == "1") selected="selected" @endif>正常</option>
@@ -175,6 +172,9 @@
                             <option value="100">已完成</option>
                             <option value="101">回单异常</option>
                         </select>
+
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-remark" placeholder="备注" value="" style="width:88px;" />
+
 
                         <div class="pull-left clear-both">
                             <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" value="{{ $assign or '' }}" readonly="readonly" style="width:88px;" />
