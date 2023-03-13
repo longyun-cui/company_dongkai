@@ -1311,6 +1311,99 @@
 </div>
 
 
+{{--修改-财务-文本-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-finance-text-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改财务记录【<span class="finance-text-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-finance-text-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="finance-text-set-operate" value="item-finance-info-text-set" readonly>
+                    <input type="hidden" name="finance-text-set-finance-id" value="0" readonly>
+                    <input type="hidden" name="finance-text-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="finance-text-set-column-key" value="" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 finance-text-set-column-name"></label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-text-set-column-value" autocomplete="off" placeholder="" value="">
+                            <textarea class="form-control" name="finance-textarea-set-column-value" rows="6" cols="100%"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-finance-text-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-finance-text-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{--修改-财务-时间-信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-finance-time-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">修改财务记录【<span class="finance-time-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-finance-time-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="finance-time-set-operate" value="item-finance-info-time-set" readonly>
+                    <input type="hidden" name="finance-time-set-finance-id" value="0" readonly>
+                    <input type="hidden" name="finance-time-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="finance-time-set-column-key" value="" readonly>
+                    <input type="hidden" name="finance-time-set-time-type" value="" readonly>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2 finance-time-set-column-name"></label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control form-filter time_picker" name="finance-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
+                            <input type="text" class="form-control form-filter date_picker" name="finance-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-finance-time-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-finance-time-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 
 
 {{--添加订单--}}
@@ -3935,6 +4028,28 @@
                         "title": "交易时间",
                         "data": "transaction_time",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            // if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                var $time_value = '';
+                                if(data)
+                                {
+                                    var $date = new Date(data*1000);
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    $time_value = $year+'-'+$month+'-'+$day;
+                                }
+
+                                $(nTd).addClass('modal-show-for-finance-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','交易时间');
+                                $(nTd).attr('data-key','transaction_time').attr('data-value',$time_value);
+                                $(nTd).attr('data-column-name','交易时间');
+                                $(nTd).attr('data-time-type','date');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             var $date = new Date(data*1000);
                             var $year = $date.getFullYear();
@@ -3965,7 +4080,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "60px",
                         "title": "确认者",
                         "data": "confirmer_id",
                         "orderable": false,
@@ -3975,7 +4090,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "120px",
+                        "width": "100px",
                         "title": "确认时间",
                         "data": "confirmed_at",
                         "orderable": false,
@@ -4017,6 +4132,18 @@
                         "title": "费用名目",
                         "data": "title",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            // if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-finance-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','费用名目');
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','费用名目');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -4027,6 +4154,18 @@
                         "title": "支付方式",
                         "data": "transaction_type",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            // if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-finance-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','支付方式');
+                                $(nTd).attr('data-key','transaction_type').attr('data-value',data);
+                                $(nTd).attr('data-column-name','支付方式');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -4037,6 +4176,18 @@
                         "title": "收款账户",
                         "data": "transaction_receipt_account",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            // if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-finance-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','收款账户');
+                                $(nTd).attr('data-key','transaction_receipt_account').attr('data-value',data);
+                                $(nTd).attr('data-column-name','收款账户');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -4047,6 +4198,18 @@
                         "title": "支出账户",
                         "data": "transaction_payment_account",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            // if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-finance-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','支出账户');
+                                $(nTd).attr('data-key','transaction_payment_account').attr('data-value',data);
+                                $(nTd).attr('data-column-name','支出账户');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -4067,6 +4230,18 @@
                         "title": "交易单号",
                         "data": "transaction_order",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            // if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-finance-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','交易单号');
+                                $(nTd).attr('data-key','transaction_order').attr('data-value',data);
+                                $(nTd).attr('data-column-name','交易单号');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -4077,6 +4252,18 @@
                         "title": "备注",
                         "data": "description",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            // if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-finance-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
+                                $(nTd).attr('data-key','description').attr('data-value',data);
+                                $(nTd).attr('data-column-name','备注');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return data;
                         }

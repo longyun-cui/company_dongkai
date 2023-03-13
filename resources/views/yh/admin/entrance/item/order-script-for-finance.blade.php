@@ -199,5 +199,180 @@
 
 
 
+
+
+        // 【修改-财务-文本-text-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-finance-text-set", function() {
+            var $that = $(this);
+            $('.finance-text-set-title').html($that.attr("data-id"));
+            $('.finance-text-set-column-name').html($that.attr("data-name"));
+            $('input[name=finance-text-set-finance-id]').val($that.attr("data-id"));
+            $('input[name=finance-text-set-column-key]').val($that.attr("data-key"));
+            $('input[name=finance-text-set-operate-type]').val($that.attr('data-operate-type'));
+            if($that.attr('data-text-type') == "textarea")
+            {
+                $('input[name=finance-text-set-column-value]').val('').hide();
+                $('textarea[name=finance-textarea-set-column-value]').text($that.attr("data-value")).show();
+            }
+            else
+            {
+                $('textarea[name=finance-textarea-set-column-value]').val('').hide();
+                $('input[name=finance-text-set-column-value]').val($that.attr("data-value")).show();
+            }
+
+            $('#item-submit-for-finance-text-set').attr('data-text-type',$that.attr('data-text-type'));
+
+            $('#modal-body-for-finance-text-set').modal('show');
+        });
+        // 【修改-财务-文本-text-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-finance-text-set", function() {
+            var that = $(this);
+            $('#modal-body-for-finance-text-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+            $('input[name=finance-text-set-column-value]').val('');
+            $('textarea[name=finance-textarea-set-column-value]').val('');
+        });
+        // 【修改-财务-文本-text-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-finance-text-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="finance-text-set-column-key"]').val();
+            if($that.attr('data-text-type') == "textarea")
+            {
+                var $column_value = $('textarea[name="finance-textarea-set-column-value"]').val();
+            }
+            else
+            {
+                var $column_value = $('input[name="finance-text-set-column-value"]').val();
+            }
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
+            $.post(
+                "{{ url('/finance/finance-info-text-set') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: $('input[name="finance-text-set-operate"]').val(),
+                    item_id: $('input[name="finance-text-set-finance-id"]').val(),
+                    operate_type: $('input[name="finance-text-set-operate-type"]').val(),
+                    column_key: $column_key,
+                    column_value: $column_value,
+                },
+                function(data){
+                    // layer.close(index);
+                    if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                    else
+                    {
+                        $('#modal-body-for-finance-text-set').modal('hide').on("hidden.bs.modal", function () {
+                            $("body").addClass("modal-open");
+                        });
+
+                        $('input[name=finance-text-set-column-value]').val('');
+                        $('textarea[name=finance-textarea-set-column-value]').text('');
+
+
+                        // $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                        $('#datatable_ajax_finance').DataTable().ajax.reload(null, false);
+                    }
+                },
+                'json'
+            );
+
+        });
+
+
+
+
+        // 【修改-财务-时间-time-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-finance-time-set", function() {
+            var $that = $(this);
+            $('.finance-time-set-title').html($that.attr("data-id"));
+            $('.finance-time-set-column-name').html($that.attr("data-name"));
+            $('input[name=finance-time-set-operate-type]').val($that.attr('data-operate-type'));
+            $('input[name=finance-time-set-finance-id]').val($that.attr("data-id"));
+            $('input[name=finance-time-set-column-key]').val($that.attr("data-key"));
+            $('input[name=finance-time-set-time-type]').val($that.attr('data-time-type'));
+            if($that.attr('data-time-type') == "datetime")
+            {
+                $('input[name=finance-time-set-column-value]').show();
+                $('input[name=finance-date-set-column-value]').hide();
+                $('input[name=finance-time-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            }
+            else if($that.attr('data-time-type') == "date")
+            {
+                $('input[name=finance-time-set-column-value]').hide();
+                $('input[name=finance-date-set-column-value]').show();
+                $('input[name=finance-date-set-column-value]').val($that.attr("data-value")).attr('data-time-type',$that.attr('data-time-type'));
+            }
+
+            $('#modal-body-for-finance-time-set').modal('show');
+        });
+        // 【修改-财务-时间-time-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-finance-time-set", function() {
+            var that = $(this);
+            $('#modal-body-for-finance-time-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【修改-财务-时间-time-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-finance-time-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="finance-time-set-column-key"]').val();
+            var $time_type = $('input[name="finance-time-set-time-type"]').val();
+            var $column_value = '';
+            if($time_type == "datetime")
+            {
+                $column_value = $('input[name="finance-time-set-column-value"]').val();
+            }
+            else if($time_type == "date")
+            {
+                $column_value = $('input[name="finance-date-set-column-value"]').val();
+            }
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
+            $.post(
+                "{{ url('/finance/finance-info-time-set') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: $('input[name="finance-time-set-operate"]').val(),
+                    item_id: $('input[name="finance-time-set-finance-id"]').val(),
+                    operate_type: $('input[name="finance-time-set-operate-type"]').val(),
+                    column_key: $column_key,
+                    column_value: $column_value,
+                    time_type: $time_type
+                },
+                function(data){
+                    // layer.close(index);
+                    if(!data.success) layer.msg(data.msg);
+//                            else location.reload();
+                    else
+                    {
+                        $('#modal-body-for-finance-time-set').modal('hide').on("hidden.bs.modal", function () {
+                            $("body").addClass("modal-open");
+                        });
+
+                        // $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                        $('#datatable_ajax_finance').DataTable().ajax.reload(null, false);
+
+                    }
+                },
+                'json'
+            );
+
+        });
+
+
     });
 </script>
