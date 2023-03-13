@@ -157,6 +157,8 @@
                             <option value ="弃用">弃用</option>
                         </select>
 
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-remark" placeholder="备注" value="" style="width:88px;" />
+
 
                         <select class="form-control form-filter" name="order-is-delay" style="width:88px;">
                             <option value="-1">是否压车</option>
@@ -1447,6 +1449,7 @@
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
                         d.id = $('input[name="order-id"]').val();
+                        d.remark = $('input[name="order-remark"]').val();
                         d.assign = $('input[name="order-assign"]').val();
                         d.assign_start = $('input[name="order-start"]').val();
                         d.assign_ended = $('input[name="order-ended"]').val();
@@ -1480,7 +1483,7 @@
 //                "scrollY": true,
                 "scrollCollapse": true,
                 "fixedColumns": {
-                    "leftColumns": "@if($is_mobile_equipment) 1 @else 8 @endif",
+                    "leftColumns": "@if($is_mobile_equipment) 1 @else 9 @endif",
                     "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 },
                 "columns": [
