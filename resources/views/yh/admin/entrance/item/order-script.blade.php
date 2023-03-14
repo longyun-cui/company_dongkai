@@ -1,6 +1,7 @@
 <script>
     $(function() {
 
+
         // 【搜索】
         $("#datatable-for-order-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
@@ -130,7 +131,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -157,7 +161,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -184,7 +191,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -211,7 +221,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -242,7 +255,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -269,7 +285,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -296,7 +315,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -327,7 +349,10 @@
                         },
                         function(data){
                             // layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -354,7 +379,10 @@
                         },
                         function(data){
                             // layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
@@ -487,8 +515,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-//                            else location.reload();
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#modal-body-for-travel-set').modal('hide').on("hidden.bs.modal", function () {
@@ -653,8 +683,10 @@
                         },
                         function(data){
                             // layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-//                            else location.reload();
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#modal-body-for-info-text-set').modal('hide').on("hidden.bs.modal", function () {
@@ -745,8 +777,10 @@
                         },
                         function(data){
                             // layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-//                            else location.reload();
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#modal-body-for-info-time-set').modal('hide').on("hidden.bs.modal", function () {
@@ -829,8 +863,10 @@
                         },
                         function(data){
                             // layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-//                            else location.reload();
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#modal-body-for-info-radio-set').modal('hide').on("hidden.bs.modal", function () {
@@ -1183,8 +1219,10 @@
                         },
                         function(data){
                             // layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-//                            else location.reload();
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#modal-body-for-info-select-set').modal('hide').on("hidden.bs.modal", function () {
@@ -1268,14 +1306,36 @@
             //     }
             // });
 
+
+            var index1 = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在上传</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
                     var options = {
                         url: "{{ url('/item/order-info-attachment-set') }}",
                         type: "post",
                         dataType: "json",
                         // target: "#div2",
                         success: function (data) {
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+
+                            // layer.close(index);
+                            layer.closeAll('loading');
+
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
 //                                $('#modal-body-for-attachment').modal('hide').on("hidden.bs.modal", function () {
@@ -1310,44 +1370,15 @@
 //                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
 //                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
                             }
+                        },
+                        error: function (res) {
+                            layer.closeAll('loading');
+                            layer.msg("上传失败");
+                        },
+                        complete: function () {
                         }
                     };
                     $("#modal-attachment-set-form").ajaxSubmit(options);
-
-
-
-//                    var formData = new FormData();
-//                    formData.append('attachment_file', fileItem);
-//                    formData.append('operate', $('input[name="attachment-set-operate"]').val());
-//                    formData.append('order_id', $('input[name="attachment-set-order-id"]').val());
-
-                    {{--$.post(--}}
-                        {{--"{{ url('/item/order-info-attachment-set') }}",--}}
-                        {{--{--}}
-                            {{--_token: $('meta[name="_token"]').attr('content'),--}}
-                            {{--operate: $('input[name="attachment-set-operate"]').val(),--}}
-                            {{--order_id: $('input[name="attachment-set-order-id"]').val(),--}}
-                            {{--operate_type: $('input[name="attachment-set-operate-type"]').val(),--}}
-                            {{--attachment_file: $blob--}}
-                        {{--},--}}
-                        {{--function(data){--}}
-                            {{--layer.close(index);--}}
-                            {{--if(!data.success) layer.msg(data.msg);--}}
-{{--//                            else location.reload();--}}
-                            {{--else--}}
-                            {{--{--}}
-                                {{--layer.close(index);--}}
-                                {{--$('#modal-body-for-attachment-set').modal('hide').on("hidden.bs.modal", function () {--}}
-                                    {{--$("body").addClass("modal-open");--}}
-                                {{--});--}}
-
-                                {{--$('#datatable_ajax').DataTable().ajax.reload(null, false);--}}
-{{--//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);--}}
-                            {{--}--}}
-                        {{--},--}}
-                        {{--'json'--}}
-                    {{--);--}}
-
 
 
         });
@@ -1368,7 +1399,10 @@
                         },
                         function(data){
                             // layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $that.parents('.attachment-option').remove();

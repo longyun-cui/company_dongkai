@@ -49,7 +49,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null, false);
@@ -77,7 +80,10 @@
                         },
                         function(data){
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
                                 $('#datatable_ajax').DataTable().ajax.reload(null, false);
@@ -175,10 +181,14 @@
                             transaction_description: $('textarea[name="finance-create-transaction-description"]').val(),
                         },
                         function(data){
-                            if(!data.success) layer.msg(data.msg);
-//                            else location.reload();
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
+                                // location.reload();
+
                                 layer.close(index);
                                 $('#modal-body-for-finance-create').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
@@ -265,10 +275,14 @@
                 },
                 function(data){
                     // layer.close(index);
-                    if(!data.success) layer.msg(data.msg);
-//                            else location.reload();
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
                     else
                     {
+                        // location.reload();
+
                         $('#modal-body-for-finance-text-set').modal('hide').on("hidden.bs.modal", function () {
                             $("body").addClass("modal-open");
                         });
@@ -355,10 +369,14 @@
                 },
                 function(data){
                     // layer.close(index);
-                    if(!data.success) layer.msg(data.msg);
-//                            else location.reload();
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
                     else
                     {
+                        // location.reload();
+
                         $('#modal-body-for-finance-time-set').modal('hide').on("hidden.bs.modal", function () {
                             $("body").addClass("modal-open");
                         });

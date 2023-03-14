@@ -58,6 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     {{--<![endif]-->--}}
     {{--<link href="https://cdn.bootcss.com/bootstrap-modal/2.2.6/css/bootstrap-modal.min.css" rel="stylesheet">--}}
 
+
     <link rel="stylesheet" href="{{ asset('/AdminLTE/plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('/resource/component/css/jquery.dataTables-1.13.1.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resource/component/css/fixedColumns.dataTables.min.css') }}">
@@ -168,8 +169,9 @@ desired effect
 
 {{--<script src="https://cdn.bootcss.com/bootstrap-modal/2.2.6/js/bootstrap-modal.min.js"></script>--}}
 
-{{--<script src="https://cdn.bootcss.com/layer/3.0.3/layer.min.js"></script>--}}
-<script src="{{ asset('/resource/component/js/layer-3.0.3.min.js') }}"></script>
+
+<script src="{{ asset('/resource/component/js/layer-3.5.1/layer.js') }}"></script>
+
 
 {{--<script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>--}}
 <script src="{{ asset('/resource/component/js/fileinput-4.4.8.min.js') }}"></script>
