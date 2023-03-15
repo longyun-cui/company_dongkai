@@ -25,7 +25,7 @@ use QrCode, Excel;
 
 class YHAdminRepository {
 
-    private $evn;
+    private $env;
     private $auth_check;
     private $me;
     private $me_admin;
@@ -9863,18 +9863,18 @@ class YHAdminRepository {
         }
 
         // 驾驶员
-        if(!empty($post_data['driver']))
+        if(isset($post_data['driver']))
         {
-            if(!in_array($post_data['driver'],[-1,0]))
+            if(!in_array($post_data['driver'],[-1]))
             {
                 $query->where('driver_id', $post_data['driver']);
             }
         }
 
         // 订单类型 [自有|空单|配货|调车]
-        if(!empty($post_data['order_type']))
+        if(isset($post_data['order_type']))
         {
-            if(!in_array($post_data['order_type'],[-1,0]))
+            if(!in_array($post_data['order_type'],[-1]))
             {
                 $query->where('car_owner_type', $post_data['order_type']);
             }
