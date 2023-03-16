@@ -1019,7 +1019,7 @@
         // echarts show
         var $statistics_option_for_order = {
             title: {
-                text: '每日订单收入【'+$the_month_str+' / '+$pre_month_str+'】',
+                text: '每日订单【'+$the_month_str+' / '+$pre_month_str+'】',
                 left: 'center'
             },
             tooltip : {
