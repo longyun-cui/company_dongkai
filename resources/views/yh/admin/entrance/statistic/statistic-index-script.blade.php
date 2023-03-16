@@ -1092,7 +1092,7 @@
                 },
                 {
                     gridIndex: 1,
-                    name: '订单金额',
+                    name: '订单收入',
                     type: 'value',
                     // inverse: true
                 }
