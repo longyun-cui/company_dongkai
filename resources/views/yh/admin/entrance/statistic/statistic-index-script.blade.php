@@ -21,8 +21,10 @@
                     operate:"statistic-get"
                 },
                 success:function(data){
-                    console.log(data);
-                    if(!data.success) layer.msg(data.msg);
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
                     else
                     {
                         $data = data.data;
@@ -48,7 +50,7 @@
             $(".finance_expense_sum").find('b').html($data.finance_expense_sum); // 总支出
             $(".finance_profile_sum").find('b').html($data.finance_profile_sum); // 总支出
 
-            statistic_get_data_for_order($month, "myChart-for-comprehensive-order-quantity", "myChart-for-comprehensive-order-income");
+            statistic_get_data_for_order($month, "myChart-for-comprehensive-order", "myChart-for-comprehensive-order-quantity", "myChart-for-comprehensive-order-income");
             statistic_get_data_for_finance($month, "myChart-for-comprehensive-finance");
 
         });
@@ -860,8 +862,34 @@
     });
 
 
-    function statistic_get_data_for_order($month, $target_quantity ,$target_income)
+
+
+    function statistic_get_data_for_order($month, $target, $target_quantity ,$target_income)
     {
+        var $month_arr = $month.split('-');
+        var $the_year = $month_arr[0];
+        var $the_month = $month_arr[1];
+
+        var $the_month_str = $the_year+'.'+$the_month+'月';
+
+
+        var $pre_year = '';
+        var $pre_month = '';
+
+        if(parseInt($the_month) == 1)
+        {
+            $pre_year = parseInt($the_year) - 1;
+            $pre_month = 12;
+        }
+        else
+        {
+            $pre_year = $the_year;
+            $pre_month = parseInt($the_month) - 1;
+            if($pre_month < 10) $pre_month = '0' + $pre_month;
+        }
+        var $pre_month_str = $pre_year+'.'+$pre_month+'月';
+
+
         var $data = new Object();
         $.ajax({
             type:"post",
@@ -874,7 +902,10 @@
                 operate:"statistic-index"
             },
             success:function(data){
-                if(!data.success) layer.msg(data.msg);
+                if(!data.success)
+                {
+                    layer.msg(data.msg);
+                }
                 else
                 {
                     $data = data.data;
@@ -898,7 +929,8 @@
         // echarts show
         var $statistics_option_for_order_quantity = {
             title: {
-                text: '每日订单量【'+$month+'/上月】'
+                text: '每日订单量【'+$the_month_str+' / '+$pre_month_str+'】',
+                left: 'center'
             },
             tooltip : {
                 trigger: 'axis',
@@ -910,19 +942,22 @@
                 }
             },
             legend: {
-                data: [$month,'上月']
+                data: [$the_month_str, $pre_month_str],
+                left: 20
             },
             toolbox: {
                 feature: {
                     saveAsImage: {}
                 }
             },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
+            grid: [
+                {
+                    left: '8%',
+                    right: '4%',
+                    bottom: '0%',
+                    // containLabel: true
+                }
+            ],
             xAxis: [
                 {
                     type: 'category',
@@ -940,7 +975,7 @@
             ],
             series: [
                 {
-                    name: $month,
+                    name: $the_month_str,
                     type: 'line',
                     label: {
                         normal: {
@@ -952,7 +987,7 @@
                     data: $order_this_month_quantity_res
                 },
                 {
-                    name: '上月',
+                    name: $pre_month_str,
                     type: 'line',
                     label: {
                         normal: {
@@ -965,8 +1000,8 @@
                 }
             ]
         };
-        var $myChart_for_order_quantity = echarts.init(document.getElementById($target_quantity));
-        $myChart_for_order_quantity.setOption($statistics_option_for_order_quantity);
+        // var $myChart_for_order_quantity = echarts.init(document.getElementById($target_quantity));
+        // $myChart_for_order_quantity.setOption($statistics_option_for_order_quantity);
 
 
         // 每日订单金额
@@ -982,9 +1017,10 @@
         });
 
         // echarts show
-        var $statistics_option_for_order_income = {
+        var $statistics_option_for_order = {
             title: {
-                text: '每日订单收入【'+$month+'/上月】'
+                text: '每日订单收入【'+$the_month_str+' / '+$pre_month_str+'】',
+                left: 'center'
             },
             tooltip : {
                 trigger: 'axis',
@@ -996,38 +1032,102 @@
                 }
             },
             legend: {
-                data: [$month,'上月']
+                data: [$the_month_str, $pre_month_str],
+                left: 20
             },
             toolbox: {
                 feature: {
                     saveAsImage: {}
                 }
             },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
+            axisPointer: {
+                link: [
+                    {
+                        xAxisIndex: 'all'
+                    }
+                ]
             },
+            grid: [
+                {
+                    left: '8%',
+                    right: '4%',
+                    top: '12%',
+                    height: '30%'
+                    // containLabel: true
+                },
+                {
+                    left: '8%',
+                    right: '4%',
+                    top: '50%',
+                    height: '40%'
+                    // containLabel: true
+                }
+            ],
             xAxis: [
                 {
                     type: 'category',
                     boundaryGap: false,
+                    axisLine: { onZero: true },
                     axisLabel: { interval:0 },
                     data: [
                         1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
                     ]
+                },
+                {
+                    gridIndex: 1,
+                    type: 'category',
+                    boundaryGap: false,
+                    axisLine: { onZero: true },
+                    axisLabel: { interval:0 },
+                    data: [
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
+                    ],
+                    position: 'top'
                 }
             ],
             yAxis: [
                 {
+                    name: '订单量',
                     type: 'value'
+                },
+                {
+                    gridIndex: 1,
+                    name: '订单金额',
+                    type: 'value',
+                    // inverse: true
                 }
             ],
             series: [
                 {
-                    name: $month,
+                    name: $the_month_str,
                     type: 'line',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    itemStyle: { normal: { label : { show: true } } },
+                    data: $order_this_month_quantity_res
+                },
+                {
+                    name: $pre_month_str,
+                    type: 'line',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    itemStyle: { normal: { label : { show: true } } },
+                    data: $order_last_month_quantity_res
+                },
+                {
+                    name: $the_month_str,
+                    type: 'line',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    symbolSize: 8,
                     label: {
                         normal: {
                             show: true,
@@ -1038,8 +1138,11 @@
                     data: $order_this_month_income_res
                 },
                 {
-                    name: '上月',
+                    name: $pre_month_str,
                     type: 'line',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    symbolSize: 8,
                     label: {
                         normal: {
                             show: true,
@@ -1051,8 +1154,8 @@
                 }
             ]
         };
-        var $myChart_for_order_income = echarts.init(document.getElementById($target_income));
-        $myChart_for_order_income.setOption($statistics_option_for_order_income);
+        var $myChart_for_order = echarts.init(document.getElementById($target));
+        $myChart_for_order.setOption($statistics_option_for_order);
     }
 
 
@@ -1070,7 +1173,10 @@
                 operate:"statistic-get-data-for-finance"
             },
             success:function(data){
-                if(!data.success) layer.msg(data.msg);
+                if(!data.success)
+                {
+                    layer.msg(data.msg);
+                }
                 else
                 {
                     $data = data.data;
@@ -1094,7 +1200,8 @@
 
         var $statistics_option_for_finance = {
             title: {
-                text: '每日收支【收入总额/支出总额】'
+                text: '每日收支【收入总额/支出总额】',
+                left: 'center'
             },
             tooltip: {
                 trigger: 'axis',
@@ -1102,23 +1209,64 @@
                     type: 'line',
                     label: {
                         backgroundColor: '#6a7985'
-                    }
+                    },
+                    animation: false
                 }
             },
             legend: {
-                data: ['收入','支出']
+                data: ['收入','支出'],
+                left: 10
             },
             toolbox: {
                 feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    restore: {},
                     saveAsImage: {}
                 }
             },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
+            axisPointer: {
+                link: [
+                    {
+                        xAxisIndex: 'all'
+                    }
+                ]
             },
+            // dataZoom: [
+            //     {
+            //         show: true,
+            //         realtime: true,
+            //         start: 30,
+            //         end: 70,
+            //         xAxisIndex: [0, 1]
+            //     },
+            //     {
+            //         type: 'inside',
+            //         realtime: true,
+            //         start: 30,
+            //         end: 70,
+            //         xAxisIndex: [0, 1]
+            //     }
+            // ],
+            grid: [
+                {
+                    left: '8%',
+                    right: '2%',
+                    top: '12%',
+                    // bottom: '45%',
+                    height: '35%',
+                    // containLabel: true
+                },
+                {
+                    left: '8%',
+                    right: '2%',
+                    top: '55%',
+                    height: '35%',
+                    // bottom: '8%',
+                    // containLabel: true
+                }
+            ],
             xAxis: [
                 {
                     type: 'category',
@@ -1127,17 +1275,35 @@
                     data: [
                         1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
                     ]
+                },
+                {
+                    gridIndex: 1,
+                    type: 'category',
+                    boundaryGap: false,
+                    axisLabel: { interval:0 },
+                    data: [
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
+                    ],
+                    position: 'top'
                 }
             ],
             yAxis: [
                 {
+                    name: '收入',
                     type: 'value'
+                },
+                {
+                    gridIndex: 1,
+                    name: '支出',
+                    type: 'value',
+                    inverse: true
                 }
             ],
             series: [
                 {
                     name: '收入',
                     type: 'line',
+                    symbolSize: 8,
                     label: {
                         normal: {
                             show: true,
@@ -1150,6 +1316,9 @@
                 {
                     name: '支出',
                     type: 'line',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    symbolSize: 8,
                     label: {
                         normal: {
                             show: true,

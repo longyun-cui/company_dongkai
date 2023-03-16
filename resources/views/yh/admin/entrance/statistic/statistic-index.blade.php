@@ -143,6 +143,8 @@
                 </div>
 
             </div>
+            <div class="box-footer with-border" style="margin:8px 0;">
+            </div>
 
 
 
@@ -153,14 +155,21 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="myChart" id="myChart-for-comprehensive-order" style="height:600px;"></div>
+                    </div>
+                </div>
+                <div class="row margin-top-32px _none">
+                    <div class="col-md-12">
                         <div class="myChart" id="myChart-for-comprehensive-order-quantity"></div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row margin-top-32px _none">
                     <div class="col-md-12">
                         <div class="myChart" id="myChart-for-comprehensive-order-income"></div>
                     </div>
                 </div>
+            </div>
+            <div class="box-footer with-border" style="margin:8px 0;">
             </div>
 
 
@@ -172,9 +181,11 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-comprehensive-finance"></div>
+                        <div class="myChart" id="myChart-for-comprehensive-finance" style="height:500px;"></div>
                     </div>
                 </div>
+            </div>
+            <div class="box-footer with-border" style="margin:8px 0;">
             </div>
 
 
