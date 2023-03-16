@@ -47,6 +47,34 @@
         });
 
 
+        // 【完整显示】
+        $(".main-content").on('click', "#order-show-for-full", function() {
+            $('#datatable_ajax').dataTable().fnSetColumnVis(12, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(13, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(14, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(15, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(16, true);
+        });
+        // 【简要显示】
+        $(".main-content").on('click', "#order-show-for-brief", function() {
+            $('#datatable_ajax').dataTable().fnSetColumnVis(12, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(13, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(14, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(15, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(16, true);
+        });
+        // 【简要显示】
+        $(".main-content").on('click', "#order-show-for-finance", function() {
+            $('#datatable_ajax').dataTable().fnSetColumnVis(12, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(13, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(14, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(15, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(16, false);
+        });
+
+
+
+
 
 
         // 【提示】

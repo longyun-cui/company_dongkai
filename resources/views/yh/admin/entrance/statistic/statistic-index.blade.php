@@ -20,12 +20,6 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body">
 
-            <div class="box-header with-border" style="margin:8px 0;">
-
-                <h3 class="box-title">综合统计</h3>
-
-            </div>
-
 
             <div class="box-body datatable-body item-main-body" id="statistic-for-comprehensive">
 
@@ -56,6 +50,9 @@
             </div>
 
 
+            <div class="box-header with-border" style="margin:8px 0;">
+                <h3 class="box-title">【综合概览】</h3>
+            </div>
             <div class="box-body">
 
                 <div class="col-xs-12 col-sm-6 col-md-4">
@@ -148,23 +145,50 @@
             </div>
 
 
+
+
+            <div class="box-header with-border" style="margin:8px 0;">
+                <h3 class="box-title">【订单统计】</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="myChart" id="myChart-for-comprehensive-order-quantity"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="myChart" id="myChart-for-comprehensive-order-income"></div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="box-header with-border" style="margin:8px 0;">
+                <h3 class="box-title">【财务统计】</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="myChart" id="myChart-for-comprehensive-finance"></div>
+                    </div>
+                </div>
+            </div>
+
+
+
             <div class="box-body _none">
 
 
                 <div class="box-header with-border" style="margin:0;text-align:center;">
                     <h3 class="box-title statistic-title"></h3>
                 </div>
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-comprehensive-order"></div>
-                    </div>
-                </div>
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-comprehensive-finance"></div>
-                    </div>
-                </div>
 
+            </div>
+
+            <div class="box-footer with-border" style="margin:8px 0;">
             </div>
 
         </div>
@@ -181,55 +205,63 @@
                 <h3 class="box-title">订单统计</h3>
             </div>
 
-            <div class="box-body datatable-body item-main-body" id="statistic-for-component">
+            <div class="box-body datatable-body item-main-body" id="statistic-for-order">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre-for-component">
+                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
 
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="component-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="order-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
 
-                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next-for-component">
+                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
 
-                        <select class="form-control form-filter" name="component-staff">
+                        <select class="form-control form-filter" name="order-staff">
                             <option value ="-1">选择员工</option>
                             @foreach($staff_list as $v)
                                 <option value ="{{ $v->id }}">{{ $v->true_name }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="component-client">
+                        <select class="form-control form-filter" name="order-client">
                             <option value ="-1">选择客户</option>
                             @foreach($client_list as $v)
                                 <option value ="{{ $v->id }}">{{ $v->username }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="component-route">
+                        <select class="form-control form-filter" name="order-route">
                             <option value="-1">选择线路</option>
                             @foreach($route_list as $v)
                                 <option value ="{{ $v->id }}">{{ $v->title }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="component-pricing">
+                        <select class="form-control form-filter" name="order-pricing">
                             <option value="-1">选择定价</option>
                             @foreach($pricing_list as $v)
                                 <option value ="{{ $v->id }}">{{ $v->title }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter select2-container select2-car" name="component-car">
+                        <select class="form-control form-filter select2-container select2-car" name="order-car">
                             <option value="-1">选择车辆</option>
                         </select>
 
-                        <select class="form-control form-filter" name="component-type">
+                        <select class="form-control form-filter select2-container select2-trailer" name="order-trailer">
+                            <option value="-1">选择车挂</option>
+                        </select>
+
+                        <select class="form-control form-filter select2-container select2-driver" name="order-driver">
+                            <option value="-1">选择驾驶员</option>
+                        </select>
+
+                        <select class="form-control form-filter" name="order-type">
                             <option value ="-1">订单类型</option>
                             <option value ="1">自有</option>
                             <option value ="11">空单</option>
@@ -238,10 +270,10 @@
                         </select>
 
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-component">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-component">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-order">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -253,76 +285,10 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-car-order"></div>
+                        <div class="myChart" id="myChart-for-order-quantity"></div>
                     </div>
                     <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-car-finance"></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-{{--车辆统计--}}
-<div class="row">
-    <div class="col-md-12">
-        <div class="box box-warning">
-
-            <div class="box-header with-border" style="margin:8px 0;">
-                <h3 class="box-title">订单统计</h3>
-            </div>
-
-            <div class="box-body datatable-body item-main-body" id="statistic-for-component">
-
-                <div class="row col-md-12 datatable-search-row">
-                    <div class="input-group">
-
-                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre-for-component">
-                            <i class="fa fa-chevron-left"></i>
-                        </button>
-
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="component-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-
-                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next-for-component">
-                            <i class="fa fa-chevron-right"></i>
-                        </button>
-
-
-                        <select class="form-control form-filter select2-container select2-car" name="component-car">
-                            <option value="-1">选择车辆</option>
-                        </select>
-
-                        <select class="form-control form-filter" name="component-type">
-                            <option value ="-1">订单类型</option>
-                            <option value ="1">自有</option>
-                            <option value ="11">空单</option>
-                            <option value ="41">外配·配货</option>
-                            <option value ="61">外请·调车</option>
-                        </select>
-
-
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-component">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-component">
-                            <i class="fa fa-circle-o-notch"></i> 重置
-                        </button>
-
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-car-order"></div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-car-finance"></div>
+                        <div class="myChart" id="myChart-for-order-income"></div>
                     </div>
                 </div>
             </div>
@@ -333,7 +299,7 @@
 
 
 {{--财务统计--}}
-<div class="row">
+<div class="row _none">
     <div class="col-md-12">
         <div class="box box-warning">
 
@@ -341,81 +307,32 @@
                 <h3 class="box-title">财务统计</h3>
             </div>
 
-            <div class="box-body datatable-body item-main-body" id="statistic-for-component">
+            <div class="box-body datatable-body item-main-body" id="statistic-for-finance">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre-for-component">
+                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre-for-finance">
                             <i class="fa fa-chevron-left"></i>
                         </button>
 
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="component-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="finance-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
 
-                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next-for-component">
+                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next-for-finance">
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
 
-                        <select class="form-control form-filter" name="component-staff">
-                            <option value ="-1">选择员工</option>
-                            @foreach($staff_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->true_name }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter" name="component-client">
-                            <option value ="-1">选择客户</option>
-                            @foreach($client_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->username }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter" name="component-route">
-                            <option value="-1">选择线路</option>
-                            @foreach($route_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter" name="component-pricing">
-                            <option value="-1">选择定价</option>
-                            @foreach($pricing_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter select2-container select2-car" name="component-car">
-                            <option value="-1">选择车辆</option>
-                        </select>
-
-                        <select class="form-control form-filter" name="component-type">
-                            <option value ="-1">订单类型</option>
-                            <option value ="1">自有</option>
-                            <option value ="11">空单</option>
-                            <option value ="41">外配·配货</option>
-                            <option value ="61">外请·调车</option>
-                        </select>
-
-
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-component">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance">
                             <i class="fa fa-search"></i> 搜索
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-component">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-finance">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
                     </div>
                 </div>
 
-            </div>
-
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-car-finance"></div>
-                    </div>
-                </div>
             </div>
 
         </div>

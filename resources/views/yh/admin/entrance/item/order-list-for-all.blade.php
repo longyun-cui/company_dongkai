@@ -194,6 +194,16 @@
                             <button type="button" class="form-control btn btn-flat btn-default filter-empty" id="filter-empty-for-order">
                                 <i class="fa fa-remove"></i> 清空重选
                             </button>
+
+                            <button type="button" class="form-control btn btn-flat btn-danger" id="order-show-for-finance">
+                                <i class="fa fa-rmb"></i> 财务显示
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-primary" id="order-show-for-brief">
+                                <i class="fa fa-ellipsis-h"></i> 简略显示
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-success" id="order-show-for-full">
+                                <i class="fa fa-bars"></i> 完整显示
+                            </button>
                         </div>
 
                     </div>
@@ -1579,6 +1589,14 @@
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 9 @endif",
                     "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 },
+                "showRefresh": true,
+                "columnDefs": [
+                    {
+                        "targets": [12, 13],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ],
                 "columns": [
 //                    {
 //                        "width": "32px",
@@ -2028,19 +2046,40 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','驾驶员');
-                                $(nTd).attr('data-key','driver_id').attr('data-value',data);
-                                if(row.driver_er == null) $(nTd).attr('data-option-name','未指定');
-                                else $(nTd).attr('data-option-name',row.driver_er.driver_name);
-                                $(nTd).attr('data-column-name','驾驶员');
-                                if(row.driver_id) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-select2-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','驾驶员');
+                                    $(nTd).attr('data-key','driver_id').attr('data-value',data);
+                                    if(row.driver_er == null) $(nTd).attr('data-option-name','未指定');
+                                    else $(nTd).attr('data-option-name',row.driver_er.driver_name);
+                                    $(nTd).attr('data-column-name','驾驶员');
+                                    if(row.driver_id) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
+                                else if(row.car_owner_type == 61)
+                                {
+                                    $(nTd).addClass('modal-show-for-info-text-set');
+                                    $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名');
+                                    $(nTd).attr('data-key','driver_name').attr('data-value',data);
+                                    $(nTd).attr('data-column-name','主驾姓名');
+                                    $(nTd).attr('data-text-type','text');
+                                    if(data) $(nTd).attr('data-operate-type','edit');
+                                    else $(nTd).attr('data-operate-type','add');
+                                }
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(row.driver_er == null) return '--';
-                            else return '<a href="javascript:void(0);">'+row.driver_er.driver_name+'</a>';
+
+                            if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
+                            {
+                                if(row.driver_er == null) return '--';
+                                else return '<a href="javascript:void(0);">'+row.driver_er.driver_name+'</a>';
+                            }
+                            else if(row.car_owner_type == 61)
+                            {
+                                return row.driver_name;
+                            }
                         }
                     },
                     {
@@ -2067,6 +2106,36 @@
                             // if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
                             // {
                             //     if(row.car_er != null) return row.car_er.linkman_name;
+                            //     else return data;
+                            // }
+                            // else return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "100px",
+                        "title": "主驾电话",
+                        "data": "driver_phone",
+                        "visible" : false,
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
+                                $(nTd).attr('data-key','driver_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','主驾电话');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // if(data) return data;
+                            // if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
+                            // {
+                            //     if(row.car_er != null) return row.car_er.linkman_phone;
                             //     else return data;
                             // }
                             // else return data;
