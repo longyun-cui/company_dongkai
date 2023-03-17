@@ -268,9 +268,7 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 请车价 & 管理费</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <input type="text" class="form-control" name="outside_car_price" placeholder="请车价" value="{{ $data->outside_car_price or 0 }}" id="order-out-car-price"
-                                   @if($operate == 'edit' && $data->route_id > 0) readonly="readonly" @endif
-                            >
+                            <input type="text" class="form-control" name="outside_car_price" placeholder="请车价" value="{{ $data->outside_car_price or 0 }}" id="order-out-car-price">
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
                             <input type="text" class="form-control" name="administrative_fee" placeholder="管理费" value="{{ $data->administrative_fee or 0 }}">

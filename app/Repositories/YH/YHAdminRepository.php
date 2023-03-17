@@ -11936,7 +11936,14 @@ class YHAdminRepository {
         // 判断操作权限
         if(!in_array($me->user_type,[0,1,9,11,19,41,42,81,82,88])) return response_error([],"用户类型错误！");
 //        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
-        if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
+        if(in_array($me->user_type,[0,1,9,11,19]))
+        {
+
+        }
+        else
+        {
+            if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
+        }
 //        if($item->is_confirmed == 1 && !in_array($me->user_type,[41,42])) return response_error([],"已确认不能删除！");
 
         // 启动数据库事务
