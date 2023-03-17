@@ -11877,17 +11877,19 @@ class YHAdminRepository {
                 if(!$bool_1) throw new Exception("update--order--fail");
 
 
-//                $record = new YH_Record;
-//
-//                $record_data["record_category"] = 41;
-//                $record_data["record_type"] = 100;
-//                $record_data["creator_id"] = $me->id;
-//                $record_data["order_id"] = $id;
-//                $record_data["operate_category"] = 1;
-//                $record_data["operate_type"] = 1;
-//
-//                $bool_1 = $record->fill($record_data)->save();
-//                if(!$bool_1) throw new Exception("insert--record--fail");
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $id;
+                $record_data["operate_object"] = 88;
+                $record_data["operate_category"] = 99;
+                $record_data["operate_type"] = 1;
+
+                $bool_2 = $record->fill($record_data)->save();
+                if(!$bool_2) throw new Exception("insert--record--fail");
             }
 
             DB::commit();
@@ -11926,7 +11928,7 @@ class YHAdminRepository {
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Finance::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【财务记录】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -11935,7 +11937,7 @@ class YHAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,19,41,42,81,82,88])) return response_error([],"用户类型错误！");
 //        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
         if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
-        if($item->is_confirmed == 1 && !in_array($me->user_type,[41,42])) return response_error([],"已确认不能删除！");
+//        if($item->is_confirmed == 1 && !in_array($me->user_type,[41,42])) return response_error([],"已确认不能删除！");
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -11975,17 +11977,20 @@ class YHAdminRepository {
                 $bool_1 = $order->save();
                 if(!$bool_1) throw new Exception("update--order--fail");
 
-//                $record = new YH_Record;
-//
-//                $record_data["record_category"] = 1;
-//                $record_data["record_type"] = 99;
-//                $record_data["creator_id"] = $me->id;
-//                $record_data["order_id"] = $item_id;
-//                $record_data["operate_category"] = 1;
-//                $record_data["operate_type"] = 99;
-//
-//                $bool_1 = $record->fill($record_data)->save();
-//                if(!$bool_1) throw new Exception("insert--record--fail");
+
+                $record = new YH_Record;
+
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $item_id;
+                $record_data["operate_object"] = 88;
+                $record_data["operate_category"] = 101;
+                $record_data["operate_type"] = 1;
+
+                $bool_2 = $record->fill($record_data)->save();
+                if(!$bool_2) throw new Exception("insert--record--fail");
             }
 
             DB::commit();
