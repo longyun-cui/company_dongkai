@@ -385,16 +385,40 @@
 
         // 添加or编辑
         $("#edit-item-submit").on('click', function() {
+
             var options = {
                 url: "{{ url('/item/order-edit') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
+                // clearForm: true,
+                // restForm: true,
                 success: function (data) {
-                    if(!data.success) layer.msg(data.msg);
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
                     else
                     {
                         layer.msg(data.msg);
+
+                        // 重置输入框
+                        $("#form-edit-item").find(".select2-container").val(0).trigger("change");
+                        $("#form-edit-item").find('input[type=text]').each(function () {
+                            $(this).val($(this).attr('data-default'));
+                        });
+                        $('#order-price').removeAttr('readonly');
+                        $("#form-edit-item").find('input[name=departure_place]').removeAttr('readonly');
+                        $("#form-edit-item").find('input[name=destination_place]').removeAttr('readonly');
+                        $("#form-edit-item").find('input[name=stopover_place]').removeAttr('readonly');
+                        $("#form-edit-item").find('input[name=travel_distance]').removeAttr('readonly');
+                        $("#form-edit-item").find('input[name=time_limitation_prescribed]').removeAttr('readonly');
+
+                        $("#form-edit-item").find("input[name=car_owner_type][value='1']").click();
+                        $("#form-edit-item").find("input[name=route_type][value='1']").click();
+                        $("#form-edit-item").find("input[name=receipt_need][value='0']").click();
+
+
                         $('#modal-body-for-order-create').modal('hide').on("hidden.bs.modal", function () {
                             $("body").addClass("modal-open");
                         });
@@ -402,7 +426,7 @@
                     }
                 }
             };
-            $("#form-edit-item").ajaxSubmit(options);
+            // $("#form-edit-item").ajaxSubmit(options);
         });
 
     });

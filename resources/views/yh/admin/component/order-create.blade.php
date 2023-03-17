@@ -2,10 +2,10 @@
 <div class="box-body">
 
     {{ csrf_field() }}
-    <input type="hidden" name="operate" value="{{ $operate or 'create' }}" readonly>
-    <input type="hidden" name="operate_id" value="{{ $operate_id or 0 }}" readonly>
-    <input type="hidden" name="operate_category" value="{{ $operate_category or 'ITEM' }}" readonly>
-    <input type="hidden" name="operate_type" value="{{ $operate_type or 'order' }}" readonly>
+    <input type="hidden" name="operate" value="{{ $operate or 'create' }}" data-default="{{ $operate or 'create' }}" readonly>
+    <input type="hidden" name="operate_id" value="{{ $operate_id or 0 }}" data-default="{{ $operate_id or 0 }}" readonly>
+    <input type="hidden" name="operate_category" value="{{ $operate_category or 'ITEM' }}" data-default="{{ $operate_category or 'ITEM' }}" readonly>
+    <input type="hidden" name="operate_type" value="{{ $operate_type or 'order' }}" data-default="{{ $operate_type or 'order' }}" readonly>
 
 
     {{--自定义标题--}}
@@ -20,7 +20,7 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户 & 派车时间</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <select class="form-control" name="client_id" id="select2-client" style="width:100%;">
+                <select class="form-control select2-container" name="client_id" id="select2-client" style="width:100%;">
                     <option data-id="0" value="0">未指定</option>
                 </select>
             </div>
@@ -50,7 +50,7 @@
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 环线</label>
         <div class="col-md-8 ">
-            <select class="form-control" name="circle_id" id="select2-circle" style="width:100%;">
+            <select class="form-control select2-container" name="circle_id" id="select2-circle" style="width:100%;">
                 <option data-id="0" value="0">未指定</option>
             </select>
         </div>
@@ -91,7 +91,7 @@
         <div class="form-group route-fixed-box">
             <label class="control-label col-md-2"><sup class="text-red">*</sup> 固定线路</label>
             <div class="col-md-8 ">
-                <select class="form-control" name="route_id" id="select2-route" style="width:100%;">
+                <select class="form-control select2-container" name="route_id" id="select2-route" style="width:100%;">
                     <option data-id="0" value="0">未指定</option>
                 </select>
             </div>
@@ -160,10 +160,10 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 运费金额 & 油卡</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="amount" placeholder="金额" value="0" id="order-price" readonly="readonly">
+                <input type="text" class="form-control" name="amount" placeholder="金额" value="0" data-default="0" id="order-price">
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="oil_card_amount" placeholder="油卡" value="0">
+                <input type="text" class="form-control" name="oil_card_amount" placeholder="油卡" value="0" data-default="0">
             </div>
         </div>
     </div>
@@ -171,7 +171,7 @@
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 订金</label>
         <div class="col-md-8 ">
-            <input type="text" class="form-control" name="deposit" placeholder="订金" value="0">
+            <input type="text" class="form-control" name="deposit" placeholder="订金" value="0" data-default="0">
         </div>
     </div>
     {{--请车价 & 管理费--}}
@@ -179,10 +179,10 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 请车价 & 管理费</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="outside_car_price" placeholder="请车价" value="0" id="order-out-car-price" readonly="readonly">
+                <input type="text" class="form-control" name="outside_car_price" placeholder="请车价" value="0" data-default="0" id="order-out-car-price">
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="administrative_fee" placeholder="管理费" value="0">
+                <input type="text" class="form-control" name="administrative_fee" placeholder="管理费" value="0" data-default="0">
             </div>
         </div>
     </div>
@@ -191,10 +191,10 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 信息费 & 客户管理费</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="information_fee" placeholder="信息费" value="0">
+                <input type="text" class="form-control" name="information_fee" placeholder="信息费" value="0" data-default="0">
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="customer_management_fee" placeholder="客户管理费" value="0">
+                <input type="text" class="form-control" name="customer_management_fee" placeholder="客户管理费" value="0" data-default="0">
             </div>
         </div>
     </div>
@@ -202,7 +202,7 @@
     <div class="form-group">
         <label class="control-label col-md-2">ETC费用</label>
         <div class="col-md-8 ">
-            <input type="text" class="form-control" name="ETC_price" placeholder="ETC费用" value="0">
+            <input type="text" class="form-control" name="ETC_price" placeholder="ETC费用" value="0" data-default="0">
         </div>
     </div>
     {{--万金油 & 油价--}}
@@ -210,10 +210,10 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 万金油(升) & 油价(元)</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="oil_amount" placeholder="万金油(升) " value="0">
+                <input type="text" class="form-control" name="oil_amount" placeholder="万金油(升) " value="0" data-default="0">
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="oil_unit_price" placeholder="油价(元)" value="0">
+                <input type="text" class="form-control" name="oil_unit_price" placeholder="油价(元)" value="0" data-default="0">
             </div>
         </div>
     </div>
@@ -223,7 +223,7 @@
     <div class="form-group">
         <label class="control-label col-md-2">包油定价</label>
         <div class="col-md-8 ">
-            <select class="form-control" name="pricing_id" id="select2-pricing" style="width:100%;">
+            <select class="form-control select2-container" name="pricing_id" id="select2-pricing" style="width:100%;">
                 <option data-id="0" value="0">未指定</option>
             </select>
         </div>
@@ -234,12 +234,12 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 自有车辆</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <select class="form-control" name="car_id" id="select2-car" style="width:100%;">
+                <select class="form-control select2-container" name="car_id" id="select2-car" style="width:100%;">
                     <option data-id="0" value="0">选择车辆</option>
                 </select>
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <select class="form-control" name="trailer_id" id="select2-trailer" style="width:100%;">
+                <select class="form-control select2-container" name="trailer_id" id="select2-trailer" style="width:100%;">
                     <option data-id="0" value="0">选择车挂</option>
                 </select>
             </div>
@@ -488,10 +488,10 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 里程(公里) & 时效(小时)</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="0">
+                <input type="text" class="form-control" name="travel_distance" placeholder="里程" value="0" data-default="0">
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="0">
+                <input type="text" class="form-control" name="time_limitation_prescribed" placeholder="时效" value="0" data-default="0">
             </div>
         </div>
     </div>
