@@ -1002,7 +1002,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction);
+                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee);
                             });
                             return $amount;
                         }
@@ -1059,7 +1059,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
+                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
                             });
                             return $amount;
                         }
@@ -1087,8 +1087,8 @@
                             var $amount = 0;
                             var $profit = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction);
-                                $profit += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
+                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee);
+                                $profit += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
                             });
                             return (($profit/$amount).toFixed(2)*100) + '%';
                         }

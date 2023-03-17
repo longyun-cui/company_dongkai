@@ -2401,7 +2401,7 @@
                             {
                                 return '--';
                             }
-                            var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction);
+                            var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee);
                             return $receivable;
                         }
                     },
@@ -2414,7 +2414,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                var $receivable = parseInt(row.amount) - parseInt(row.time_limitation_deduction) - parseInt(row.income_total);
+                                var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee) - parseInt(row.income_total);
                                 if($receivable > 0)
                                 {
                                     $(nTd).addClass('color-red _bold');
@@ -2425,7 +2425,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
-                            var $to_be_collected = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.income_total);
+                            var $to_be_collected = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee) - parseInt(row.income_total);
                             return $to_be_collected;
                         }
                     },
