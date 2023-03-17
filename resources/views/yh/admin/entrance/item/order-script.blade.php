@@ -75,6 +75,62 @@
 
 
 
+        // 【综合概览】【前一天】
+        $(".main-content").on('click', ".date-pick-pre-for-order", function() {
+
+            var $assign_dom = $('input[name="order-assign"]');
+            var $the_date = $assign_dom.val();
+
+            if($the_date)
+            {
+
+                var $pre_date = getNextDate($the_date, -1);
+                $assign_dom.val($pre_date);
+            }
+            else
+            {
+                var $date = new Date();
+                var $year = $date.getFullYear();
+                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                var $day = ('00'+($date.getDate())).slice(-2);
+
+                var $pre_date = $year+'-'+$month+'-'+$day;
+                $assign_dom.val($pre_date);
+                console.log($pre_date);
+            }
+
+            $("#datatable-for-order-list").find(".filter-submit").click();
+
+        });
+        // 【综合概览】【后一添】
+        $(".main-content").on('click', ".date-pick-next-for-order", function() {
+
+            var $assign_dom = $('input[name="order-assign"]');
+            var $the_date = $assign_dom.val();
+
+            if($the_date)
+            {
+
+                var $pre_date = getNextDate($the_date, 1);
+                $assign_dom.val($pre_date);
+            }
+            else
+            {
+                var $date = new Date();
+                var $year = $date.getFullYear();
+                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                var $day = ('00'+($date.getDate())).slice(-2);
+
+                var $pre_date = $year+'-'+$month+'-'+$day;
+                $assign_dom.val($pre_date);
+                console.log($pre_date);
+            }
+
+            $("#datatable-for-order-list").find(".filter-submit").click();
+
+        });
+
+
 
 
         // 【提示】

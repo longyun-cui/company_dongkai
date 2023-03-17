@@ -177,7 +177,13 @@
 
 
                         <div class="pull-left clear-both">
+                            <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
                             <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" value="{{ $assign or '' }}" readonly="readonly" style="width:88px;" />
+                            <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
 
                             <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-start" placeholder="起始日期" value="{{ $start or '' }}" readonly="readonly" style="width:88px;" />
                             <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-ended" placeholder="终止日期" value="{{ $ended or '' }}" readonly="readonly" style="width:88px;" />
@@ -1521,6 +1527,7 @@
 <style>
     .tableArea table { min-width:4600px; }
     .tableArea table#datatable_ajax_finance { min-width:1600px; }
+    .datatable-search-row .input-group .date-picker-btn { width:30px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
