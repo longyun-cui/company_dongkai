@@ -8181,8 +8181,7 @@ class YHAdminRepository {
         if(!empty($post_data['car_id']))
         {
             $car = YH_Car::find($post_data['car_id']);
-            if($car) $post_data['driver_id'] = $car->driver_id;
-            else return response_error([],"选择【车辆】不存在，刷新页面重试！");
+            if(!$car) return response_error([],"选择【车辆】不存在，刷新页面重试！");
         }
 
         if(!empty($post_data['circle_id']))

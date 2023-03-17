@@ -88,14 +88,14 @@
 
 
     {{--固定线路--}}
-        <div class="form-group route-fixed-box">
-            <label class="control-label col-md-2"><sup class="text-red">*</sup> 固定线路</label>
-            <div class="col-md-8 ">
-                <select class="form-control select2-container" name="route_id" id="select2-route" style="width:100%;">
-                    <option data-id="0" value="0">未指定</option>
-                </select>
-            </div>
+    <div class="form-group route-fixed-box">
+        <label class="control-label col-md-2"><sup class="text-red">*</sup> 固定线路</label>
+        <div class="col-md-8 ">
+            <select class="form-control select2-container" name="route_id" id="select2-route" style="width:100%;">
+                <option data-id="0" value="0">未指定</option>
+            </select>
         </div>
+    </div>
 
     {{--固定线路--}}
     <div class="form-group _none">
@@ -247,20 +247,6 @@
     </div>
 
 
-    {{--驾驶员--}}
-{{--                <div class="form-group">--}}
-{{--                    <label class="control-label col-md-2">选择驾驶员</label>--}}
-{{--                    <div class="col-md-8 ">--}}
-{{--                        <select class="form-control" name="driver_id" id="select2-driver">--}}
-{{--                            @if($operate == 'edit' && $data->driver_id)--}}
-{{--                                <option data-id="{{ $data->driver_id or 0 }}" value="{{ $data->driver_id or 0 }}">{{ $data->driver_er->driver_name }}</option>--}}
-{{--                            @else--}}
-{{--                                <option data-id="0" value="0">未指定</option>--}}
-{{--                            @endif--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-
 
     {{--外请或外派车辆--}}
     <div class="form-group outside-car" style="display:none">
@@ -402,6 +388,17 @@
     {{--@endif--}}
 
 
+
+
+    {{--驾驶员--}}
+    <div class="form-group">
+        <label class="control-label col-md-2">驾驶员</label>
+        <div class="col-md-8 ">
+            <select class="form-control select2-container" name="driver_id" id="select2-driver" style="width:100%;">
+                <option data-id="0" value="0">未指定</option>
+            </select>
+        </div>
+    </div>
     {{--主驾--}}
     <div class="form-group">
         <label class="control-label col-md-2">主驾</label>

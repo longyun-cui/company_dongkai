@@ -241,33 +241,6 @@
                     </div>
                 </div>
 
-                {{--自有车辆--}}
-                @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
-                    <div class="form-group inside-car">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 自有车辆</label>
-                        <div class="col-md-8 ">
-                            <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control" name="car_id" id="select2-car">
-                                    @if($operate == 'edit' && $data->car_id)
-                                        <option data-id="{{ $data->car_id or 0 }}" value="{{ $data->car_id or 0 }}">{{ $data->car_er->name }}</option>
-                                    @else
-                                        <option data-id="0" value="0">选择车辆</option>
-                                    @endif
-                                </select>
-                            </div>
-                            <div class="col-sm-6 col-md-6 padding-0">
-                                <select class="form-control" name="trailer_id" id="select2-trailer">
-                                    @if($operate == 'edit' && $data->trailer_id)
-                                        <option data-id="{{ $data->trailer_id or 0 }}" value="{{ $data->trailer_id or 0 }}">{{ $data->trailer_er->name }}</option>
-                                    @else
-                                        <option data-id="0" value="0">选择车挂</option>
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
 
                 {{--运费金额 & 油卡--}}
                 <div class="form-group">
@@ -352,19 +325,6 @@
                 </div>
 
 
-                {{--驾驶员--}}
-{{--                <div class="form-group">--}}
-{{--                    <label class="control-label col-md-2">选择驾驶员</label>--}}
-{{--                    <div class="col-md-8 ">--}}
-{{--                        <select class="form-control" name="driver_id" id="select2-driver">--}}
-{{--                            @if($operate == 'edit' && $data->driver_id)--}}
-{{--                                <option data-id="{{ $data->driver_id or 0 }}" value="{{ $data->driver_id or 0 }}">{{ $data->driver_er->driver_name }}</option>--}}
-{{--                            @else--}}
-{{--                                <option data-id="0" value="0">未指定</option>--}}
-{{--                            @endif--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
 
 
                 {{--外请或外派车辆--}}
@@ -510,6 +470,46 @@
                 {{--</div>--}}
                 {{--@endif--}}
 
+                {{--自有车辆--}}
+                @if($operate == 'create' || ($operate == 'edit' && $data->car_owner_type == 1))
+                <div class="form-group inside-car">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 自有车辆</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <select class="form-control" name="car_id" id="select2-car">
+                                @if($operate == 'edit' && $data->car_id)
+                                    <option data-id="{{ $data->car_id or 0 }}" value="{{ $data->car_id or 0 }}">{{ $data->car_er->name }}</option>
+                                @else
+                                    <option data-id="0" value="0">选择车辆</option>
+                                @endif
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <select class="form-control" name="trailer_id" id="select2-trailer">
+                                @if($operate == 'edit' && $data->trailer_id)
+                                    <option data-id="{{ $data->trailer_id or 0 }}" value="{{ $data->trailer_id or 0 }}">{{ $data->trailer_er->name }}</option>
+                                @else
+                                    <option data-id="0" value="0">选择车挂</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                {{--驾驶员--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">选择驾驶员</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="driver_id" id="select2-driver">
+                            @if($operate == 'edit' && $data->driver_id)
+                                <option data-id="{{ $data->driver_id or 0 }}" value="{{ $data->driver_id or 0 }}">{{ $data->driver_er->driver_name or '' }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
 
                 {{--主驾--}}
                 <div class="form-group">
@@ -1125,6 +1125,7 @@
             templateSelection: function(data, container) {
                 if(data.driver_er)
                 {
+                    $(data.element).attr("data-id",data.driver_id);
                     $(data.element).attr("data-name",data.driver_er.driver_name);
                     $(data.element).attr("data-phone",data.driver_er.driver_phone);
                     $(data.element).attr("data-sub-name",data.driver_er.sub_driver_name);
@@ -1132,6 +1133,7 @@
                 }
                 else
                 {
+                    $(data.element).attr("data-id",data.driver_id);
                     $(data.element).attr("data-name",data.linkman_name);
                     $(data.element).attr("data-phone",data.linkman_phone);
                     $(data.element).attr("data-sub-name",'');
@@ -1152,6 +1154,14 @@
                 $('input[name=copilot_name]').val($(this).find('option:selected').attr('data-sub-name'));
                 $('input[name=copilot_phone]').val($(this).find('option:selected').attr('data-sub-phone'));
             }
+
+            var $driver_id = $(this).find('option:selected').attr('data-id');
+            var $driver_name = $(this).find('option:selected').attr('data-name');
+            var option = new Option($driver_name, $driver_id);
+            option.selected = true;
+            console.log(option);
+            $("#form-edit-item").find("select[name=driver_id]").append(option);
+            $("#form-edit-item").find("select[name=driver_id]").trigger("change");
         });
         //
         $('#select2-trailer').select2({

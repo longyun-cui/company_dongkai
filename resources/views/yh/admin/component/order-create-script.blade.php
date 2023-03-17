@@ -276,6 +276,7 @@
             templateSelection: function(data, container) {
                 if(data.driver_er)
                 {
+                    $(data.element).attr("data-id",data.driver_id);
                     $(data.element).attr("data-name",data.driver_er.driver_name);
                     $(data.element).attr("data-phone",data.driver_er.driver_phone);
                     $(data.element).attr("data-sub-name",data.driver_er.sub_driver_name);
@@ -283,6 +284,7 @@
                 }
                 else
                 {
+                    $(data.element).attr("data-id",data.driver_id);
                     $(data.element).attr("data-name",data.linkman_name);
                     $(data.element).attr("data-phone",data.linkman_phone);
                     $(data.element).attr("data-sub-name",'');
@@ -303,6 +305,16 @@
                 $('input[name=copilot_name]').val($(this).find('option:selected').attr('data-sub-name'));
                 $('input[name=copilot_phone]').val($(this).find('option:selected').attr('data-sub-phone'));
             }
+
+            var $driver_id = $(this).find('option:selected').attr('data-id');
+            var $driver_name = $(this).find('option:selected').attr('data-name');
+            var option = new Option($driver_name, $driver_id);
+            option.selected = true;
+            $("#form-edit-item").find("select[name=driver_id]").append(option);
+            $("#form-edit-item").find("select[name=driver_id]").trigger("change");
+
+
+            // $("#form-edit-item").find("select[name=driver_id]").append($('<option>', {value: $driver_id, text: $driver_name}));
         });
         //
         $('#select2-trailer').select2({
@@ -426,7 +438,7 @@
                     }
                 }
             };
-            // $("#form-edit-item").ajaxSubmit(options);
+            $("#form-edit-item").ajaxSubmit(options);
         });
 
     });
