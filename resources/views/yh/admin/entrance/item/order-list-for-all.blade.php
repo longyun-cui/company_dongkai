@@ -188,6 +188,9 @@
                             <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-start" placeholder="起始日期" value="{{ $start or '' }}" readonly="readonly" style="width:88px;" />
                             <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-ended" placeholder="终止日期" value="{{ $ended or '' }}" readonly="readonly" style="width:88px;" />
 
+                            <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
+                                <i class="fa fa-remove"></i> 清空重选
+                            </button>
                             <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
                                 <i class="fa fa-search"></i> 搜索
                             </button>
@@ -197,17 +200,14 @@
                             <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-order">
                                 <i class="fa fa-undo"></i> 重置
                             </button>
-                            <button type="button" class="form-control btn btn-flat btn-default filter-empty" id="filter-empty-for-order">
-                                <i class="fa fa-remove"></i> 清空重选
-                            </button>
 
-                            <button type="button" class="form-control btn btn-flat btn-danger" id="order-show-for-finance">
+                            <button type="button" class="form-control btn btn-flat bg-red" id="order-show-for-finance">
                                 <i class="fa fa-rmb"></i> 财务显示
                             </button>
-                            <button type="button" class="form-control btn btn-flat btn-primary" id="order-show-for-brief">
+                            <button type="button" class="form-control btn btn-flat bg-purple" id="order-show-for-brief">
                                 <i class="fa fa-ellipsis-h"></i> 简略显示
                             </button>
-                            <button type="button" class="form-control btn btn-flat btn-success" id="order-show-for-full">
+                            <button type="button" class="form-control btn btn-flat bg-olive" id="order-show-for-full">
                                 <i class="fa fa-bars"></i> 完整显示
                             </button>
                         </div>
