@@ -262,10 +262,28 @@
         // 【发布】
         $(".main-content").on('click', ".item-publish-submit", function() {
             var $that = $(this);
-            layer.msg('确定"发布"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
+            // layer.msg('确定"发布"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在发布</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
                     $.post(
                         "{{ url('/item/order-publish') }}",
                         {
@@ -274,20 +292,22 @@
                             item_id: $that.attr('data-id')
                         },
                         function(data){
-                            layer.close(index);
+
+                            // layer.close(index);
+                            layer.closeAll('loading');
+
                             if(!data.success)
                             {
                                 layer.msg(data.msg);
                             }
                             else
                             {
+                                layer.msg("发布成功！");
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
                     );
-                }
-            });
         });
         // 【完成】
         $(".main-content").on('click', ".item-complete-submit", function() {
@@ -1391,7 +1411,7 @@
             // });
 
 
-            var index1 = layer.load(1, {
+            var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
                 content: '<span class="loadtip">正在上传</span>',
                 success: function (layer) {
@@ -1441,7 +1461,10 @@
                                         order_id: $('#modal-attachment-set-form input[name=order_id]').val()
                                     },
                                     success:function(data){
-                                        if(!data.success) layer.msg(data.msg);
+                                        if(!data.success)
+                                        {
+                                            layer.msg(data.msg);
+                                        }
                                         else
                                         {
                                             $data = data.data;
@@ -1540,7 +1563,7 @@
 
 
 
-        // 全部车辆
+        // select2-全部车辆
         $('.order-list-select2-car').select2({
             ajax: {
                 url: "{{ url('/item/order_list_select2_car') }}",
@@ -1569,7 +1592,7 @@
             theme: 'classic'
         });
 
-        // 车辆
+        // select2-车辆
         $('.order-select2-car').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_car') }}",
@@ -1597,7 +1620,7 @@
             minimumInputLength: 0,
             theme: 'classic'
         });
-        // 车挂
+        // select2-车挂
         $('.order-select2-trailer').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_trailer') }}",
@@ -1626,7 +1649,7 @@
             theme: 'classic'
         });
 
-        // 驾驶员
+        // select2-驾驶员
         $('.order-select2-driver').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_driver') }}",
@@ -1655,8 +1678,7 @@
             theme: 'classic'
         });
 
-
-        // 环线
+        // select2-环线
         $('.order-select2-circle').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_circle') }}",
@@ -1684,6 +1706,7 @@
             minimumInputLength: 0,
             theme: 'classic'
         });
+
 
 
 

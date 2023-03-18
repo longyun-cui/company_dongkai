@@ -59,6 +59,22 @@
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在确认</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
                     $.post(
                         "{{ url('/finance/finance-confirm') }}",
                         {
@@ -67,10 +83,17 @@
                             item_id: $that.attr('data-id')
                         },
                         function(data){
+
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            layer.closeAll('loading');
+
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
+                                layer.msg("确认成功！");
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
                             }
                         },
@@ -87,6 +110,22 @@
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在删除</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
                     $.post(
                         "{{ url('/finance/finance-delete') }}",
                         {
@@ -95,10 +134,17 @@
                             item_id: $that.attr('data-id')
                         },
                         function(data){
+
                             layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                            layer.closeAll('loading');
+
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
                             else
                             {
+                                layer.msg("删除成功！");
                                 $('#datatable_ajax').DataTable().ajax.reload(null,false);
                             }
                         },

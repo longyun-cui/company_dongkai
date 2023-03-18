@@ -11839,6 +11839,10 @@ class YHAdminRepository {
 
         $item = YH_Finance::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        else
+        {
+            if($item->is_confirmed == 1) return response_error([],"该记录已经确认过，刷新页面重试！");
+        }
 
         $this->get_me();
         $me = $this->me;
@@ -11859,7 +11863,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $order = YH_Order::find($item->order_id);
+                $order = YH_Order::lockForUpdate()->find($item->order_id);
                 if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
 
                 if($item->finance_type == 1)
@@ -11955,7 +11959,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("finance--delete--fail");
             else
             {
-                $order = YH_Order::find($item->order_id);
+                $order = YH_Order::lockForUpdate()->find($item->order_id);
                 if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
 
                 if($item->is_confirmed == 0)
