@@ -237,6 +237,7 @@
                             <th>包油油耗</th>
                             <th>驾驶员</th>
                             <th>主驾</th>
+                            <th>主驾电话</th>
                             <th>出发地</th>
                             <th>经停地</th>
                             <th>目的地</th>
@@ -263,6 +264,14 @@
                             <th>万金油(升)</th>
                             <th>油价(元)</th>
                             <th>票点</th>
+                            <th>空单（路线）</th>
+                            <th>空-里程</th>
+                            <th>空-包油价</th>
+                            <th>空-包油金额</th>
+                            <th>空-加油方式</th>
+                            <th>空-加油金额</th>
+                            <th>空-过路-现金</th>
+                            <th>空-过路-ETC</th>
                             <th>副驾</th>
                             <th>副驾电话</th>
                             <th>应出发时间</th>
@@ -2807,6 +2816,182 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','票点');
                                 $(nTd).attr('data-key','invoice_point').attr('data-value',data);
                                 $(nTd).attr('data-column-name','票点');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "120px",
+                        "title": "空单（线路）",
+                        "data": "empty_route",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单');
+                                $(nTd).attr('data-key','empty_route').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空单');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "空-里程",
+                        "data": "empty_distance",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-里程数');
+                                $(nTd).attr('data-key','empty_distance').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空单-里程数');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "空-包油",
+                        "data": "empty_oil_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-包油价');
+                                $(nTd).attr('data-key','empty_oil_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空单-包油价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "空-包油金额",
+                        "data": "empty_oil_amount",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-包油金额');
+                                $(nTd).attr('data-key','empty_oil_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空单-包油金额');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "空-加油方式",
+                        "data": "empty_refueling_pay_type",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-加油方式');
+                                $(nTd).attr('data-key','empty_refueling_pay_type').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空单-加油方式');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "空-加油金额",
+                        "data": "empty_refueling_charge",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-加油费');
+                                $(nTd).attr('data-key','empty_refueling_charge').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空单-加油费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "空-过路-现金",
+                        "data": "empty_toll_cash",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-过路（现金）');
+                                $(nTd).attr('data-key','empty_toll_cash').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空单-过路（现金）');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "空-过路-ETC",
+                        "data": "empty_toll_ETC",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-过路非（ETC）');
+                                $(nTd).attr('data-key','empty_toll_ETC').attr('data-value',data);
+                                $(nTd).attr('data-column-name','空单-过路费（ETC）');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
