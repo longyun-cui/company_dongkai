@@ -12060,6 +12060,7 @@ class YHAdminRepository {
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
         if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['transaction_amount'])) $query->where('transaction_amount', $post_data['transaction_amount']);
         if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
         if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
         if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_payment_account', $post_data['transaction_payment_account']);

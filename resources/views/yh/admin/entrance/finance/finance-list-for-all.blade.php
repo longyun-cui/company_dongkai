@@ -41,6 +41,7 @@
 
                         <input type="text" class="form-control form-filter item-search-keyup" name="order_id" placeholder="订单ID" style="width:88px;" />
                         <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="名目" style="width:88px;" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="transaction_amount" placeholder="金额" style="width:88px;" />
                         <input type="text" class="form-control form-filter item-search-keyup" name="transaction_type" placeholder="支付方式" style="width:88px;" />
                         <input type="text" class="form-control form-filter item-search-keyup" name="transaction_receipt_account" placeholder="收款账户" style="width:88px;" />
                         <input type="text" class="form-control form-filter item-search-keyup" name="transaction_payment_account" placeholder="支出账户" style="width:88px;" />
@@ -540,6 +541,7 @@
                         d.order_id = $('input[name="order_id"]').val();
                         d.transaction_time = $('input[name="transaction_time"]').val();
                         d.title = $('input[name="title"]').val();
+                        d.transaction_amount = $('input[name="transaction_amount"]').val();
                         d.transaction_type = $('input[name="transaction_type"]').val();
                         d.transaction_receipt_account = $('input[name="transaction_receipt_account"]').val();
                         d.transaction_payment_account = $('input[name="transaction_payment_account"]').val();
