@@ -437,16 +437,17 @@
                         $("#form-edit-item").find('input[type=text]').each(function () {
                             $(this).val($(this).attr('data-default'));
                         });
+
+                        $("#form-edit-item").find("input[name=car_owner_type][value='1']").click();
+                        $("#form-edit-item").find("input[name=route_type][value='1']").click();
+                        $("#form-edit-item").find("input[name=receipt_need][value='0']").click();
+
                         $('#order-price').removeAttr('readonly');
                         $("#form-edit-item").find('input[name=departure_place]').removeAttr('readonly');
                         $("#form-edit-item").find('input[name=destination_place]').removeAttr('readonly');
                         $("#form-edit-item").find('input[name=stopover_place]').removeAttr('readonly');
                         $("#form-edit-item").find('input[name=travel_distance]').removeAttr('readonly');
                         $("#form-edit-item").find('input[name=time_limitation_prescribed]').removeAttr('readonly');
-
-                        $("#form-edit-item").find("input[name=car_owner_type][value='1']").click();
-                        $("#form-edit-item").find("input[name=route_type][value='1']").click();
-                        $("#form-edit-item").find("input[name=receipt_need][value='0']").click();
 
 
                         $('#modal-body-for-order-create').modal('hide').on("hidden.bs.modal", function () {

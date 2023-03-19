@@ -4410,7 +4410,8 @@
                         "data": "transaction_amount",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if((data > 0) && (data <= 10)) return '<samll class="text-red">'+data+'</samll>';
+                            if(row.finance_type == 1) return '<b class="text-olive">'+data+'</b>';
+                            else if(row.finance_type == 21) return '<b class="text-red">'+data+'</b>';
                             else return data;
                         }
                     },
