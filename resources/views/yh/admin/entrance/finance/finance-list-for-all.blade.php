@@ -781,9 +781,9 @@
                         "data": "transaction_amount",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.finance_type == 1) return '<b class="text-olive">'+data+'</b>';
-                            else if(row.finance_type == 21) return '<b class="text-red">'+data+'</b>';
-                            else return data;
+                            if(row.finance_type == 1) return '<b class="text-olive">'+parseFloat(data)+'</b>';
+                            else if(row.finance_type == 21) return '<b class="text-red">'+parseFloat(data)+'</b>';
+                            else return parseFloat(data);
                         }
                     },
                     {
