@@ -11931,8 +11931,8 @@ class YHAdminRepository {
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Finance::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【财务记录】不存在，刷新页面重试！");
+        $item = YH_Finance::find($item_id);
+        if(!$item) return response_error([],"该【财务记录】不存在或已删除，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
