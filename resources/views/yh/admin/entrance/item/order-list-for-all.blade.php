@@ -2826,7 +2826,7 @@
                         }
                     },
                     {
-                        "className": "",
+                        "className": "color-blue",
                         "width": "120px",
                         "title": "空单（线路）",
                         "data": "empty_route",
@@ -2844,6 +2844,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            if(data) return '--';
                             return data;
                         }
                     },
@@ -2932,6 +2933,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            if(data) return '--';
                             return data;
                         }
                     },
