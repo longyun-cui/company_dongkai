@@ -1265,9 +1265,21 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">费用名目</label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="finance-create-transaction-title" placeholder="费用名目" value="">
+                            <input type="text" class="form-control" name="finance-create-transaction-title" placeholder="费用名目" value="" list="_transaction_title">
                         </div>
                     </div>
+                    <datalist id="_transaction_title">
+                        <option value="运费" />
+                        <option value="油卡" />
+                        <option value="信息费" />
+                        <option value="ETC" />
+                        <option value="ETC主单" />
+                        <option value="ETC空单" />
+                        <option value="油费" />
+                        <option value="过路费" />
+                        <option value="修车费" />
+                        <option value="尿素费" />
+                    </datalist>
                     {{--金额--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">金额</label>
@@ -1279,23 +1291,38 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">支付方式</label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="finance-create-transaction-type" placeholder="支付方式" value="">
+                            <input type="text" class="form-control" name="finance-create-transaction-type" placeholder="支付方式" value="" list="_transaction_type">
                         </div>
                     </div>
+                    <datalist id="_transaction_type">
+                        <option value="微信" />
+                        <option value="支付宝" />
+                        <option value="银行卡" />
+                        <option value="现金" />
+                        <option value="ETC帐户挂" />
+                        <option value="万金油" />
+                        <option value="APP" />
+                    </datalist>
                     {{--收款账号--}}
                     <div class="form-group income-show-">
                         <label class="control-label col-md-2">收款账号</label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="finance-create-transaction-receipt-account" placeholder="收款账号" value="">
+                            <input type="text" class="form-control search-input" id="keyword" name="finance-create-transaction-receipt-account" placeholder="收款账号" value="" list="_transaction_receipt_account" autocomplete="on">
                         </div>
                     </div>
+                    <datalist id="_transaction_receipt_account">
+                        <option value="" class="" />
+                    </datalist>
                     {{--支出账号--}}
                     <div class="form-group income-show-">
                         <label class="control-label col-md-2">支出账号</label>
                         <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="finance-create-transaction-payment-account" placeholder="支出账号" value="">
+                            <input type="text" class="form-control search-input" id="keywords" name="finance-create-transaction-payment-account" placeholder="支出账号" value="" list="_transaction_payment_account" autocomplete="on">
                         </div>
                     </div>
+                    <datalist id="_transaction_payment_account">
+                        <option value="" class="etc_account" />
+                    </datalist>
                     {{--交易账号--}}
                     {{--<div class="form-group income-show-">--}}
                         {{--<label class="control-label col-md-2">交易账号</label>--}}
@@ -2802,7 +2829,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
 //                    {
@@ -2846,7 +2873,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2914,7 +2941,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -4002,6 +4029,9 @@
                             var $html_abandon = '';
                             var $html_completed = '';
 
+                            var $car_etc = '';
+                            if(row.car_er != null) var $car_etc = row.car_er.ETC_account;
+
                             if(row.item_status == 1)
                             {
                                 $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
@@ -4023,7 +4053,7 @@
                             {
                                 $html_detail = '<a class="btn btn-xs bg-primary item-modal-show-for-detail" data-id="'+data+'">详情</a>';
 //                                $html_travel = '<a class="btn btn-xs bg-olive item-modal-show-for-travel" data-id="'+data+'">行程</a>';
-                                $html_finance = '<a class="btn btn-xs bg-orange item-modal-show-for-finance" data-id="'+data+'">财务</a>';
+                                $html_finance = '<a class="btn btn-xs bg-orange item-modal-show-for-finance" data-id="'+data+'" data-etc="'+$car_etc+'">财务</a>';
                                 $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                                 if(row.is_completed == 1)
@@ -4410,9 +4440,9 @@
                         "data": "transaction_amount",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.finance_type == 1) return '<b class="text-olive">'+data+'</b>';
-                            else if(row.finance_type == 21) return '<b class="text-red">'+data+'</b>';
-                            else return data;
+                            if(row.finance_type == 1) return '<b class="text-olive">'+parseFloat(data)+'</b>';
+                            else if(row.finance_type == 21) return '<b class="text-red">'+parseFloat(data)+'</b>';
+                            else return parseFloat(data);
                         }
                     },
                     {

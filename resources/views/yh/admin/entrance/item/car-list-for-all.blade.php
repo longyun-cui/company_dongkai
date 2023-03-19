@@ -1059,6 +1059,28 @@
                     },
                     {
                         "className": "text-center",
+                        "width": "180px",
+                        "title": "ETC卡号",
+                        "data": "ETC_account",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','ETC_account').attr('data-value',data);
+                                $(nTd).attr('data-column-name','ETC卡号');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
                         "width": "160px",
                         "title": "车辆类型",
                         "data": "car_type",

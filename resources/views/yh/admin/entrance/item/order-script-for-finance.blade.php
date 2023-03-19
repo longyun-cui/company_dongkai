@@ -72,7 +72,7 @@
 
         // 【财务记录】添加-显示
         $(".main-content").on('click', ".modal-show-for-finance-create", function() {
-            var that = $(this);
+            var $that = $(this);
 
             $('#modal-body-for-finance-create').modal({show: true,backdrop: 'static'});
             $('.modal-backdrop').each(function() {

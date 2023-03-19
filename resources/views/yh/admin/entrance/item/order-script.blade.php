@@ -652,15 +652,21 @@
         });
         // 【财务记录】【显示】
         $(".main-content").on('click', ".item-modal-show-for-finance", function() {
-            var that = $(this);
-            var $id = that.attr("data-id");
-            var $keyword = that.attr("data-keyword");
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+            var $keyword = $that.attr("data-keyword");
 
             $('input[name="finance-create-order-id"]').val($id);
             $('.finance-create-order-id').html($id);
             $('.finance-create-order-title').html($keyword);
 
             TableDatatablesAjax_finance.init($id);
+
+            var $etc_account = $that.attr('data-etc');
+            console.log($etc_account);
+            $('.etc_account').val($etc_account);
+            // $('#_transaction_receipt_account').append(new Option($etc_account,$etc_account));
+
 
             $('#modal-body-for-finance-list').modal('show');
         });
