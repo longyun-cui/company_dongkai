@@ -251,6 +251,7 @@
                             <th>待入账</th>
                             <th>已支出</th>
                             <th>待出账</th>
+                            <th>利润·预估</th>
                             <th>利润·实时</th>
                             <th>运价</th>
                             <th>油卡</th>
@@ -1534,7 +1535,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:4600px; }
+    .tableArea table { min-width:5000px; }
     .tableArea table#datatable_ajax_finance { min-width:1600px; }
     .datatable-search-row .input-group .date-picker-btn { width:30px; }
 
@@ -2512,6 +2513,29 @@
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
                             return data;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "利润·预估",
+                        "data": "id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee);
+                                var $profit = $receivable - parseInt(row.expenditure_total);
+                                if($profit > 0) $(nTd).addClass('color-green');
+                                else if($profit < 0) $(nTd).addClass('color-red');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0) return '--';
+                            var $profit = 0;
+                            var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee);
+                            $profit = $receivable - parseInt(row.expenditure_total);
+                            return $profit;
                         }
                     },
                     {
