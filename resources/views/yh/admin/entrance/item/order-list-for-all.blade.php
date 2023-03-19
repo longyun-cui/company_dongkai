@@ -2844,8 +2844,9 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return '--';
-                            return data;
+                            if(data) return data;
+                            else return '--';
+
                         }
                     },
                     {
@@ -2933,8 +2934,8 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data) return '--';
-                            return data;
+                            if(data) return data;
+                            else return '--';
                         }
                     },
                     {
