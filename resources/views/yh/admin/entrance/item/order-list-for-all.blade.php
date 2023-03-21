@@ -1300,6 +1300,7 @@
                         <option value="银行卡" />
                         <option value="现金" />
                         <option value="ETC帐户挂" />
+                        <option value="ETC挂" />
                         <option value="万金油" />
                         <option value="APP" />
                     </datalist>
@@ -1311,7 +1312,15 @@
                         </div>
                     </div>
                     <datalist id="_transaction_receipt_account">
-                        <option value="" class="" />
+                        <option value="崔微信：13325937059" class="" />
+                        <option value="邓微信：18157357678" class="" />
+                        <option value="范微信：13352338286" class="" />
+                        <option value="施微信：13375736765" class="" />
+                        <option value="工行7001-金13472749605" class="" />
+                        <option value="农商3641-金13472749605" class="" />
+                        <option value="中行5872-金13472749605" class="" />
+                        <option value="工行9753-朱13356085499" class="" />
+                        <option value="工行3612-邓18157357678" class="" />
                     </datalist>
                     {{--支出账号--}}
                     <div class="form-group income-show-">
@@ -1322,6 +1331,15 @@
                     </div>
                     <datalist id="_transaction_payment_account">
                         <option value="" class="etc_account" />
+                        <option value="崔微信：13325937059" class="" />
+                        <option value="邓微信：18157357678" class="" />
+                        <option value="范微信：13352338286" class="" />
+                        <option value="施微信：13375736765" class="" />
+                        <option value="工行7001-金13472749605" class="" />
+                        <option value="农商3641-金13472749605" class="" />
+                        <option value="中行5872-金13472749605" class="" />
+                        <option value="工行9753-朱13356085499" class="" />
+                        <option value="工行3612-邓18157357678" class="" />
                     </datalist>
                     {{--交易账号--}}
                     {{--<div class="form-group income-show-">--}}
