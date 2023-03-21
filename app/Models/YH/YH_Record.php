@@ -17,9 +17,11 @@ class YH_Record extends Model
         'org_id', 'admin_id',
         'item_id', 'order_id',
         'column', 'column_type', 'column_name',
-        'before', 'after', 'before_id', 'after_id',
+        'before', 'after',
+        'before_id', 'after_id',
         'before_client_id', 'after_client_id',
         'before_route_id', 'after_route_id',
+        'before_empty_route_id', 'after_empty_route_id',
         'before_car_id', 'after_car_id',
         'before_driver_id', 'after_driver_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
@@ -86,6 +88,16 @@ class YH_Record extends Model
     function after_route_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Route','after_route_id','id');
+    }
+    // 线路
+    function before_empty_route_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Route','before_empty_route_id','id');
+    }
+    // 线路
+    function after_empty_route_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Route','after_empty_route_id','id');
     }
     // 定价
     function before_pricing_er()

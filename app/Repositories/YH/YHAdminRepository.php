@@ -9205,6 +9205,11 @@ class YHAdminRepository {
                         $record_data["before_driver_id"] = $before;
                         $record_data["after_driver_id"] = $column_value;
                     }
+                    else if($column_key == 'empty_route_id')
+                    {
+                        $record_data["before_empty_route_id"] = $before;
+                        $record_data["after_empty_route_id"] = $column_value;
+                    }
 
                     $bool_1 = $record->fill($record_data)->save();
                     if($bool_1)
@@ -9755,7 +9760,7 @@ class YHAdminRepository {
 
         $query = YH_Order::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with(['creator','owner','client_er','circle_er','route_er','pricing_er','car_er','trailer_er','driver_er'])
+            ->with(['creator','owner','client_er','circle_er','route_er','pricing_er','car_er','trailer_er','driver_er','empty_route_er'])
             ->withCount('attachment_list');
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
@@ -10319,7 +10324,15 @@ class YHAdminRepository {
 
         $id  = $post_data["id"];
         $query = YH_Record::select('*')
-            ->with(['creator','before_client_er','after_client_er','before_route_er','after_route_er','before_pricing_er','after_pricing_er','before_car_er','after_car_er','before_driver_er','after_driver_er'])
+            ->with([
+                'creator',
+                'before_client_er','after_client_er',
+                'before_route_er','after_route_er',
+                'before_empty_route_er','after_empty_route_er',
+                'before_pricing_er','after_pricing_er',
+                'before_car_er','after_car_er',
+                'before_driver_er','after_driver_er'
+            ])
             ->where(['order_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");

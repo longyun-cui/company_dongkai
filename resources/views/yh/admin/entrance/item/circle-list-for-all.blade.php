@@ -814,6 +814,56 @@
                         }
                     },
                     {
+                        "className": "text-left",
+                        "width": "200px",
+                        "title": "订单",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                                $(nTd).attr('data-key','remark').attr('data-value',data);
+                                $(nTd).attr('data-column-name','订单');
+                                $(nTd).attr('data-text-type','textarea');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $html = '';
+                            var $len = data.length;
+                            $.each(data,function( index, element ) {
+                               // console.log( index, element, this );
+                                var $id = this.id;
+                                var $title = (this.title) ? this.title : '';
+                                var $departure  = (this.departure_place) ? this.departure_place : '';
+                                var $stopover  = (this.stopover_place) ? this.stopover_place : '';
+                                var $destination  = (this.destination_place) ? this.destination_place : '';
+                                var $type  = '';
+                                if(this.car_owner_type == 11) $type = '[空单]';
+
+                                var $date = new Date(this.assign_time*1000);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+                                var $assign = $year+'-'+$month+'-'+$day;
+
+                                var $text = $id + "&nbsp;&nbsp;[" + $assign + "] &nbsp;&nbsp;(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $type + $title;
+
+                                $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a>';
+                                $html += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                                $html += '<br>';
+                                // if( parseInt( index % 2 ) == 1 && (index + 1) != $len ) $html += '<br>';
+                            });
+                            return $html;
+//                            return row.people == null ? '未知' :
+//                                '<a target="_blank" href="/people?id='+row.people.encode_id+'">'+row.people.name+'</a>';
+                        }
+                    },
+                    {
                         "className": "text-center",
                         "width": "80px",
                         "title": "开始时间",
@@ -904,71 +954,6 @@
                         }
                     },
                     {
-                        "className": "text-left",
-                        "width": "200px",
-                        "title": "订单",
-                        "data": "order_list",
-                        // "data": "pivot_order_list",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
-                                $(nTd).attr('data-key','remark').attr('data-value',data);
-                                $(nTd).attr('data-column-name','订单');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var $html = '';
-                            var $len = data.length;
-                            $.each(data,function( index, element ) {
-                               // console.log( index, element, this );
-                                var $id = this.id;
-                                var $title = (this.title) ? this.title : '';
-                                var $departure  = (this.departure_place) ? this.departure_place : '';
-                                var $stopover  = (this.stopover_place) ? this.stopover_place : '';
-                                var $destination  = (this.destination_place) ? this.destination_place : '';
-                                var $type  = '';
-                                if(this.car_owner_type == 11) $type = '[空单]';
-
-                                var $date = new Date(this.assign_time*1000);
-                                var $year = $date.getFullYear();
-                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                                var $day = ('00'+($date.getDate())).slice(-2);
-                                var $assign = $year+'-'+$month+'-'+$day;
-
-                                var $text = $id + "&nbsp;&nbsp;[" + $assign + "] &nbsp;&nbsp;(" + $departure + "-" + $stopover + "-" + $destination + ")&nbsp;&nbsp;" + $type + $title;
-
-                                $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a>';
-                                $html += "&nbsp;&nbsp;&nbsp;&nbsp;";
-                                $html += '<br>';
-                                // if( parseInt( index % 2 ) == 1 && (index + 1) != $len ) $html += '<br>';
-                            });
-                            return $html;
-//                            return row.people == null ? '未知' :
-//                                '<a target="_blank" href="/people?id='+row.people.encode_id+'">'+row.people.name+'</a>';
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "60px",
-                        "title": "总里程",
-                        "data": "order_list",
-                        // "data": "pivot_order_list",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            var $amount = 0;
-                            $.each(data,function( key, val ) {
-                                $amount += parseInt(this.travel_distance);
-                            });
-                            return $amount;
-                        }
-                    },
-                    {
                         "className": "_bold",
                         "width": "60px",
                         "title": "天数",
@@ -984,6 +969,21 @@
                                 return ($day_diff + 1) + '天';
                             }
                             else return "--";
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "总里程",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseInt(this.travel_distance);
+                            });
+                            return $amount;
                         }
                     },
                     {

@@ -43,7 +43,7 @@ class YH_Order extends Model
         'stopover_departure_time', 'stopover_arrival_time',
         'stopover_1_departure_time', 'stopover_1_arrival_time',
         'stopover_2_departure_time', 'stopover_2_arrival_time',
-        'empty_route', 'empty_distance', 'empty_oil_price', 'empty_oil_amount', 'empty_refueling_pay_type', 'empty_refueling_charge', 'empty_toll_cash', 'empty_toll_ETC',
+        'empty_route', 'empty_route_type', 'empty_route_id', 'empty_route_temporary', 'empty_distance', 'empty_oil_price', 'empty_oil_amount', 'empty_refueling_pay_type', 'empty_refueling_charge', 'empty_toll_cash', 'empty_toll_ETC',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'is_delay',
         'subordinate_company', 'order_number', 'payee_name', 'arrange_people', 'car_supply', 'car_managerial_people',
         'driver', 'copilot', 'driver_name', 'copilot_name', 'driver_phone', 'copilot_phone', 'weight',
@@ -109,6 +109,11 @@ class YH_Order extends Model
     function route_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Route','route_id','id');
+    }
+    // 固定线路
+    function empty_route_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_Route','empty_route_id','id');
     }
 
 

@@ -265,7 +265,8 @@
                             <th>万金油(升)</th>
                             <th>油价(元)</th>
                             <th>票点</th>
-                            <th>空单（路线）</th>
+                            <th>空单-固定</th>
+                            <th>空单-临时</th>
                             <th>空-里程</th>
                             <th>空-包油价</th>
                             <th>空-包油金额</th>
@@ -1892,7 +1893,7 @@
                                     if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
                                     else $(nTd).attr('data-option-name',row.route_er.title);
                                     $(nTd).attr('data-column-name','固定线路');
-                                    if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                                    if(row.route_id) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
                                 else if(data == 11)
@@ -1902,7 +1903,7 @@
                                     $(nTd).attr('data-key','route_temporary').attr('data-value',row.route_temporary);
                                     if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
                                     $(nTd).attr('data-column-name','临时线路');
-                                    if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                                    if(row.route_id) $(nTd).attr('data-operate-type','edit');
                                     else $(nTd).attr('data-operate-type','add');
                                 }
                             }
@@ -2894,11 +2895,82 @@
                             return parseFloat(data);
                         }
                     },
+                    // {
+                    //     "className": "",
+                    //     "width": "60px",
+                    //     "title": "空单(线路类型)",
+                    //     "data": "empty_route_type",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-radio-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','空单(线路类型)');
+                    //             $(nTd).attr('data-key','empty_route_type').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','空单(线路类型)');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data == 1) return '<small class="btn-xs btn-success">固</small>';
+                    //         else if(data == 11) return '<small class="btn-xs btn-danger">临</small>';
+                    //         else return '--';
+                    //     }
+                    // },
                     {
-                        "className": "color-blue",
+                        "className": "text-center",
                         "width": "120px",
-                        "title": "空单（线路）",
-                        "data": "empty_route",
+                        "title": "空单-固定",
+                        "data": "empty_route_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单固定线路');
+                                $(nTd).attr('data-key','empty_route_id').attr('data-value',row.empty_route_id);
+                                if(row.empty_route_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.empty_route_er.title);
+                                $(nTd).attr('data-column-name','空单固定线路');
+                                if(row.empty_route_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+
+                                // if(data == 1)
+                                // {
+                                // }
+                                // else if(data == 11)
+                                // {
+                                //     $(nTd).addClass('modal-show-for-info-text-set');
+                                //     $(nTd).attr('data-id',row.id).attr('data-name','临时线路');
+                                //     $(nTd).attr('data-key','route_temporary').attr('data-value',row.route_temporary);
+                                //     if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
+                                //     $(nTd).attr('data-column-name','临时线路');
+                                //     if(row.route_temporary) $(nTd).attr('data-operate-type','edit');
+                                //     else $(nTd).attr('data-operate-type','add');
+                                // }
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.empty_route_er == null) return '--';
+                            else return '<a href="javascript:void(0);">'+row.empty_route_er.title+'</a>';
+
+                            // if(data == 1)
+                            // {
+                            // }
+                            // else if(data == 11)
+                            // {
+                            //     if(row.route_temporary) return '[临]' + row.route_temporary;
+                            //     else return '[临时]';
+                            // }
+                            // else return '有误';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "80px",
+                        "title": "空单-临时",
+                        "data": "empty_route_temporary",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -4853,6 +4925,10 @@
                                 else if(data == "trailer_volume") return '车挂容积';
                                 else if(data == "trailer_weight") return '车辆载重';
                                 else if(data == "trailer_axis_count") return '轴数';
+                                else if(data == "empty_route") return '空单-线路';
+                                else if(data == "empty_route_type") return '空单-线路类型';
+                                else if(data == "empty_route_id") return '空单-固定线路';
+                                else if(data == "empty_route_temporary") return '空单-临时线路';
                                 else if(data == "GPS") return 'GPS';
                                 else if(data == "receipt_address") return '回单地址';
                                 else if(data == "receipt_status") return '回单状态';
@@ -4906,6 +4982,11 @@
                             {
                                 if(row.before_route_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.before_route_er.title+'</a>';
+                            }
+                            else if(row.column_name == 'emtpy_route_id')
+                            {
+                                if(row.before_emtpy_route_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_emtpy_route_er.title+'</a>';
                             }
                             else if(row.column_name == 'pricing_id')
                             {
@@ -4996,6 +5077,11 @@
                             {
                                 if(row.after_route_er == null) return '';
                                 else return '<a href="javascript:void(0);">'+row.after_route_er.title+'</a>';
+                            }
+                            else if(row.column_name == 'empty_route_id')
+                            {
+                                if(row.after_empty_route_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.after_empty_route_er.title+'</a>';
                             }
                             else if(row.column_name == 'pricing_id')
                             {
