@@ -12942,26 +12942,25 @@ class YHAdminRepository {
         $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
         $the_month_timestamp = strtotime($the_month);
 
-        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_start_date = date('Y-m-1',$the_month_timestamp); // 指定月份-开始日期
         $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
-        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_start_datetime = date('Y-m-1 00:00:00',$the_month_timestamp); // 本月开始时间
         $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
         $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
         $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-        $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
-        $the_last_month_start_date = date('Y-m-01',$the_last_month_timestamp); // 指定月份-上月-开始日期
-        $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-结束日期
-        $the_last_month_start_datetime = date('Y-m-01 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
-        $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
-        $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
-        $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-月结束时间戳
+//        $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
+//        $the_last_month_start_date = date('Y-m-1',$the_last_month_timestamp); // 指定月份-上月-开始日期
+//        $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-结束日期
+//        $the_last_month_start_datetime = date('Y-m-1 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
+//        $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
+//        $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
+//        $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-结束时间戳
 
 
 
         $type = isset($post_data['type']) ? $post_data['type']  : '';
 
-        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
 
 
         // 订单统计
