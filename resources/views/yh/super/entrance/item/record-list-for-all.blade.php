@@ -720,6 +720,9 @@
                                     else if(data == "traction_mass") return '准牵引质量';
                                     else if(data == "overall_size") return '外廓尺寸';
                                     else if(data == "purchase_date") return '购买日期';
+                                    else if(data == "purchase_price") return '购买价格';
+                                    else if(data == "sale_date") return '出售日期';
+                                    else if(data == "sale_price") return '出售价格';
                                     else if(data == "registration_date") return '注册日期';
                                     else if(data == "issue_date") return '发证日期';
                                     else if(data == "inspection_validity") return '检验有效期';

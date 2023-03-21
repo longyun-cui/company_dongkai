@@ -1424,6 +1424,87 @@
                     {
                         "className": "text-center",
                         "width": "80px",
+                        "title": "购买价格",
+                        "data": "purchase_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','purchase_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','购买价格(元)');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            return '--';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "出售日期",
+                        "data": "sale_date",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','sale_date').attr('data-value',data);
+                                $(nTd).attr('data-column-name','出售日期');
+                                $(nTd).attr('data-time-type','date');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            if(data)
+                            {
+                                var $date = new Date(data);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) return $month+'-'+$day;
+                                else return $year+'-'+$month+'-'+$day;
+                                return $year;
+                            }
+                            return '--';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
+                        "title": "出售价格",
+                        "data": "sale_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+//                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.name);
+                                $(nTd).attr('data-key','sale_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','出售价格(元)');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data) return data;
+                            return '--';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "80px",
                         "title": "注册日期",
                         "data": "registration_date",
                         "orderable": false,
@@ -1867,6 +1948,9 @@
                                 else if(data == "traction_mass") return '准牵引质量';
                                 else if(data == "overall_size") return '外廓尺寸';
                                 else if(data == "purchase_date") return '购买日期';
+                                else if(data == "purchase_price") return '购买价格';
+                                else if(data == "sale_date") return '出售日期';
+                                else if(data == "sale_price") return '出售价格';
                                 else if(data == "registration_date") return '注册日期';
                                 else if(data == "issue_date") return '发证日期';
                                 else if(data == "inspection_validity") return '检验有效期';
