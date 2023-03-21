@@ -12939,15 +12939,6 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-//        $condition = request()->all();
-//        $return['condition'] = $condition;
-//
-//        $condition['task-list-type'] = 'unfinished';
-//        $parameter_result = http_build_query($condition);
-//        return redirect('/?'.$parameter_result);
-
-
-
         $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
         $the_month_timestamp = strtotime($the_month);
 
@@ -12980,27 +12971,27 @@ class YHAdminRepository {
 //            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
 //            ->count("*");
         $order_count_for_not_null = YH_Order::where('item_status','!=',97)
-            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->where('car_owner_type','!=',11)
             ->count("*");
         $order_count_for_null = YH_Order::where('item_status','!=',97)
-            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->where('car_owner_type',11)
             ->count("*");
         $order_count_for_unpublished = YH_Order::where('item_status','!=',97)
             ->where('car_owner_type','!=',11)
-            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->where('is_published', 0)
             ->count("*");
         $order_count_for_published = YH_Order::where('item_status','!=',97)
             ->where('car_owner_type','!=',11)
-            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->where('is_published', 1)
             ->count("*");
 
         // 订单金额
         $order_sum_for_all = YH_Order::where('item_status','!=',97)
-            ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
+            ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->select(
                 DB::raw('SUM(amount) as amount_sum'),
                 DB::raw('SUM(income_total) as income_total_sum'),
