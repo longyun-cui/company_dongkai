@@ -252,7 +252,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改定价【<span class="info-text-set-title"></span>】</h3>
+                <h3 class="box-title">修改环线 <span class="info-text-set-title"></span></h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -298,7 +298,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改环线【<span class="info-time-set-title"></span>】</h3>
+                <h3 class="box-title">修改环线 <span class="info-time-set-title"></span></h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -345,7 +345,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改定价【<span class="info-radio-set-title"></span>】</h3>
+                <h3 class="box-title">修改环线 <span class="info-radio-set-title"></span></h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -385,7 +385,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改定价【<span class="info-select-set-title"></span>】</h3>
+                <h3 class="box-title">修改环线 <span class="info-select-set-title"></span></h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -617,7 +617,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:1380px; }
+    .tableArea table { min-width:1800px; }
     .tableArea table#datatable_ajax_finance { min-width:1800px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
@@ -834,9 +834,9 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','开始时间');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
                                 $(nTd).attr('data-key','start_time').attr('data-value',$assign_time_value);
-                                $(nTd).attr('data-column-name','派车日期');
+                                $(nTd).attr('data-column-name','开始时间');
                                 $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -879,7 +879,7 @@
                                 }
 
                                 $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','结束时间');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
                                 $(nTd).attr('data-key','ended_time').attr('data-value',$assign_time_value);
                                 $(nTd).attr('data-column-name','结束时间');
                                 $(nTd).attr('data-time-type','date');
@@ -914,9 +914,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','订单');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
                                 $(nTd).attr('data-key','remark').attr('data-value',data);
-                                $(nTd).attr('data-column-name','备注');
+                                $(nTd).attr('data-column-name','订单');
                                 $(nTd).attr('data-text-type','textarea');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -960,18 +960,6 @@
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attribute-list');
-                                $(nTd).attr('data-id',row.id).attr('data-name','总里程');
-                                $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','总里程');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
@@ -981,9 +969,27 @@
                         }
                     },
                     {
+                        "className": "_bold",
+                        "width": "60px",
+                        "title": "天数",
+                        "data": "id",
+                        // "data": "pivot_order_list",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.start_time && row.ended_time)
+                            {
+                                var $time_diff = row.ended_time - row.start_time;
+                                // 计算相差的天数
+                                var $day_diff = Math.floor($time_diff / (24 * 3600));
+                                return ($day_diff + 1) + '天';
+                            }
+                            else return "--";
+                        }
+                    },
+                    {
                         "className": "",
                         "width": "60px",
-                        "title": "收入",
+                        "title": "总收入",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -991,9 +997,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-attribute-list');
-                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
                                 $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','标题');
+                                $(nTd).attr('data-column-name','总收入');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1010,7 +1016,7 @@
                     {
                         "className": "",
                         "width": "60px",
-                        "title": "支出",
+                        "title": "总支出",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -1019,9 +1025,9 @@
                             {
                                 $(nTd).addClass('color-red');
                                 $(nTd).addClass('modal-show-for-attribute-list');
-                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
                                 $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','标题');
+                                $(nTd).attr('data-column-name','总支出');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1048,7 +1054,7 @@
                                 $(nTd).addClass('color-green');
                                 $(nTd).addClass('modal-show-for-analysis');
                                 // $(nTd).addClass('modal-show-for-attribute-list');
-                                $(nTd).attr('data-id',row.id).attr('data-name','利润');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
                                 $(nTd).attr('data-key','title').attr('data-value',data);
                                 $(nTd).attr('data-column-name','利润');
                                 $(nTd).attr('data-text-type','text');
@@ -1067,6 +1073,47 @@
                     {
                         "className": "_bold",
                         "width": "60px",
+                        "title": "日利润",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('color-green');
+                                $(nTd).addClass('modal-show-for-analysis');
+                                // $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','利润');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+
+                            $day_diff = 0;
+                            if(row.start_time && row.ended_time)
+                            {
+                                var $time_diff = row.ended_time - row.start_time;
+                                // 计算相差的天数
+                                $day_diff = Math.floor($time_diff / (24 * 3600)) + 1;
+                            }
+                            else return "--";
+
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
+                            });
+
+                            if(!$amount || !data) return "0";
+                            return (($amount/$day_diff).toFixed(0));
+                        }
+                    },
+                    {
+                        "className": "_bold",
+                        "width": "60px",
                         "title": "利润率",
                         "data": "order_list",
                         // "data": "pivot_order_list",
@@ -1074,10 +1121,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
+                                $(nTd).addClass('color-red');
                                 $(nTd).addClass('modal-show-for-analysis');
-                                $(nTd).attr('data-id',row.id).attr('data-name','标题');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
                                 $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','标题');
+                                $(nTd).attr('data-column-name','利润率');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1090,7 +1138,100 @@
                                 $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee);
                                 $profit += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
                             });
+                            if(!$amount) return '--';
                             return (($profit/$amount).toFixed(2)*100) + '%';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "油费",
+                        "data": "oil_cost",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                                $(nTd).attr('data-key','oil_cost').attr('data-value',data);
+                                $(nTd).attr('data-column-name','油费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "过路费",
+                        "data": "toll_cost",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                                $(nTd).attr('data-key','toll_cost').attr('data-value',data);
+                                $(nTd).attr('data-column-name','过路费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
+                        }
+                    },
+                    {
+                        "className": "_bold",
+                        "width": "60px",
+                        "title": "油耗",
+                        "data": "oil_cost",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('color-green');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(row.order_list, function( key, val ) {
+                                $amount += parseInt(this.travel_distance);
+                            });
+
+                            if(!$amount || !data) return "0";
+                            return ((data/$amount).toFixed(2));
+                        }
+                    },
+                    {
+                        "className": "_bold",
+                        "width": "60px",
+                        "title": "路单价",
+                        "data": "toll_cost",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('color-green');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(row.order_list, function( key, val ) {
+                                $amount += parseInt(this.travel_distance);
+                            });
+
+                            if(!$amount || !data) return "0";
+                            return ((data/$amount).toFixed(2));
                         }
                     },
                     {
@@ -1103,7 +1244,7 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
                                 $(nTd).attr('data-key','remark').attr('data-value',data);
                                 $(nTd).attr('data-column-name','备注');
                                 $(nTd).attr('data-text-type','textarea');

@@ -322,8 +322,9 @@
         // 【修改-文本-text-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-text-set", function() {
             var $that = $(this);
-            $('.info-text-set-title').html($that.attr("data-id"));
-            $('.info-text-set-column-name').html($that.attr("data-name"));
+            var $title = '【' + $that.attr("data-id") + '】【' + $that.attr("data-name") + '】';
+            $('.info-text-set-title').html($title);
+            $('.info-text-set-column-name').html($that.attr("data-column-name"));
             $('input[name=info-text-set-item-id]').val($that.attr("data-id"));
             $('input[name=info-text-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-text-set-operate-type]').val($that.attr('data-operate-type'));
@@ -408,8 +409,9 @@
         // 【修改-时间-time-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-time-set", function() {
             var $that = $(this);
-            $('.info-time-set-title').html($that.attr("data-id"));
-            $('.info-time-set-column-name').html($that.attr("data-name"));
+            var $title = '【' + $that.attr("data-id") + '】【' + $that.attr("data-name") + '】';
+            $('.info-time-set-title').html($title);
+            $('.info-time-set-column-name').html($that.attr("data-column-name"));
             $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
             $('input[name=info-time-set-item-id]').val($that.attr("data-id"));
             $('input[name=info-time-set-column-key]').val($that.attr("data-key"));
@@ -496,8 +498,9 @@
             $('select[name=info-radio-set-column-value]').find('option:not(:first)').remove();
 
             var $that = $(this);
-            $('.info-radio-set-title').html($that.attr("data-id"));
-            $('.info-radio-set-column-name').html($that.attr("data-name"));
+            var $title = '【' + $that.attr("data-id") + '】【' + $that.attr("data-name") + '】';
+            $('.info-radio-set-title').html($title);
+            $('.info-radio-set-column-name').html($that.attr("data-column-name"));
             $('input[name=info-radio-set-item-id]').val($that.attr("data-id"));
             $('input[name=info-radio-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-radio-set-operate-type]').val($that.attr('data-operate-type'));
@@ -578,8 +581,9 @@
             $('select[name=info-select-set-column-value]').find('option:not(:first)').remove();
 
             var $that = $(this);
-            $('.info-select-set-title').html($that.attr("data-id"));
-            $('.info-select-set-column-name').html($that.attr("data-name"));
+            var $title = '【' + $that.attr("data-id") + '】【' + $that.attr("data-name") + '】';
+            $('.info-select-set-title').html($title);
+            $('.info-select-set-column-name').html($that.attr("data-column-name"));
             $('input[name=info-select-set-item-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
@@ -633,8 +637,9 @@
             $('select[name=info-select-set-column-value]').find('option:not(:first)').remove();
 
             var $that = $(this);
-            $('.info-select-set-title').html($that.attr("data-id"));
-            $('.info-select-set-column-name').html($that.attr("data-name"));
+            var $title = '【' + $that.attr("data-id") + '】【' + $that.attr("data-name") + '】';
+            $('.info-select-set-title').html($title);
+            $('.info-select-set-column-name').html($that.attr("data-column-name"));
             $('input[name=info-select-set-item-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
