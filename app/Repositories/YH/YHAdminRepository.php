@@ -11554,8 +11554,19 @@ class YHAdminRepository {
 
 
         $query = YH_Finance::select('*')
-            ->with(['creator','confirmer','owner','order_er'])
-            ->whereIn('order_id',$order_list_array);
+            ->with([
+                'creator',
+                'confirmer',
+                'owner',
+                'order_er'
+            ])
+            ->whereIn('order_id',$order_list_array)
+            ->whereHas('order_er',
+                function($query) use($post_data) { $query->where('item_status','!=',97); }
+            );
+
+
+
 
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 
