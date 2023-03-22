@@ -925,11 +925,6 @@ class YHAdminController extends Controller
         return $this->repo->operate_item_order_delete(request()->all());
     }
     // 【订单管理】发布
-    public function operate_item_order_abandon()
-    {
-        return $this->repo->operate_item_order_abandon(request()->all());
-    }
-    // 【订单管理】发布
     public function operate_item_order_publish()
     {
         return $this->repo->operate_item_order_publish(request()->all());
@@ -938,6 +933,16 @@ class YHAdminController extends Controller
     public function operate_item_order_complete()
     {
         return $this->repo->operate_item_order_complete(request()->all());
+    }
+    // 【订单管理】弃用
+    public function operate_item_order_abandon()
+    {
+        return $this->repo->operate_item_order_abandon(request()->all());
+    }
+    // 【订单管理】复用
+    public function operate_item_order_reuse()
+    {
+        return $this->repo->operate_item_order_reuse(request()->all());
     }
 
 

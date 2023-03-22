@@ -4162,7 +4162,8 @@
 
                                     if(row.item_status == 97)
                                     {
-                                        $html_abandon = '<a class="btn btn-xs btn-default disabled">弃用</a>';
+                                        // $html_abandon = '<a class="btn btn-xs btn-default disabled">弃用</a>';
+                                        $html_abandon = '<a class="btn btn-xs bg-teal item-reuse-submit" data-id="'+data+'">复用</a>';
                                     }
                                     else $html_abandon = '<a class="btn btn-xs bg-gray item-abandon-submit" data-id="'+data+'">弃用</a>';
                                 }
@@ -4862,6 +4863,7 @@
 
                             }
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
+                            else if(data == 98) return '<small class="btn-xs bg-teal">复用</small>';
                             else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
                             else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
                             else if(data == 103) return '<small class="btn-xs bg-black">永久删除</small>';

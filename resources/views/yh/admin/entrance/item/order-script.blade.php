@@ -259,6 +259,36 @@
                 }
             });
         });
+        // 【复用】
+        $(".main-content").on('click', ".item-reuse-submit", function() {
+            var $that = $(this);
+            layer.msg('确定"复用"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-reuse') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-reuse",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
         // 【发布】
         $(".main-content").on('click', ".item-publish-submit", function() {
             var $that = $(this);

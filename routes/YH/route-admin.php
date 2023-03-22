@@ -292,9 +292,10 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/order-enable', $controller.'@operate_item_order_enable');
     Route::post('/item/order-disable', $controller.'@operate_item_order_disable');
     // 发布 & 完成 & 备注
-    Route::post('/item/order-abandon', $controller.'@operate_item_order_abandon');
     Route::post('/item/order-publish', $controller.'@operate_item_order_publish');
     Route::post('/item/order-complete', $controller.'@operate_item_order_complete');
+    Route::post('/item/order-abandon', $controller.'@operate_item_order_abandon');
+    Route::post('/item/order-reuse', $controller.'@operate_item_order_reuse');
     Route::post('/item/order-remark-edit', $controller.'@operate_item_order_remark_edit');
 
     // 列表
