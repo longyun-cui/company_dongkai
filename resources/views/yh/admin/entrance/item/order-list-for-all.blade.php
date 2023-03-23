@@ -2124,7 +2124,7 @@
                                 {
                                     $(nTd).addClass('modal-show-for-info-text-set');
                                     $(nTd).attr('data-id',row.id).attr('data-name','主驾姓名');
-                                    $(nTd).attr('data-key','driver_name').attr('data-value',data);
+                                    $(nTd).attr('data-key','driver_name').attr('data-value',row.driver_name);
                                     $(nTd).attr('data-column-name','主驾姓名');
                                     $(nTd).attr('data-text-type','text');
                                     if(data) $(nTd).attr('data-operate-type','edit');
@@ -2143,6 +2143,7 @@
                             {
                                 return row.driver_name;
                             }
+                            else return data;
                         }
                     },
                     {
