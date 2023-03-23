@@ -13739,7 +13739,8 @@ class YHAdminRepository {
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['client_er_name'] = $v['client_er']['username'];
             $cellData[$k]['circle_er_title'] = $v['circle_er']['title'];
-            $cellData[$k]['route_er_title'] = $v['route_er']['title'];
+            if($v['route_er']) $cellData[$k]['route_er_title'] = $v['route_er']['title'];
+            else $cellData[$k]['route_er_title'] = $v['route_temporary'];
             $cellData[$k]['pricing_er_title'] = $v['pricing_er']['title'];
             $cellData[$k]['car_er_name'] = $v['car_er']['name'];
             $cellData[$k]['trailer_er_name'] = $v['trailer_er']['name'];
@@ -13848,7 +13849,7 @@ class YHAdminRepository {
             'creator_name'=>'创建者',
             'client_er_name'=>'客户',
             'circle_er_title'=>'环线',
-            'route_er_title'=>'路线',
+            'route_er_title'=>'线路',
             'pricing_er_title'=>'包油定价',
             'car_er_name'=>'车辆',
             'trailer_er_name'=>'车挂',
