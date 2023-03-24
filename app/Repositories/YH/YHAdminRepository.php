@@ -13767,10 +13767,10 @@ class YHAdminRepository {
             $cellData[$k]['oil_unit_price'] = $v['oil_unit_price'];
             $cellData[$k]['invoice_point'] = $v['invoice_point'];
 
-            // 是否回单
+            // 应出发时间
             if($v['should_departure_time']) $cellData[$k]['should_departure_time'] = date('Y-m-d', $v['should_departure_time']);
             else $cellData[$k]['should_departure_time'] = '';
-            // 是否回单
+            // 应到达时间
             if($v['should_arrival_time']) $cellData[$k]['should_arrival_time'] = date('Y-m-d', $v['should_arrival_time']);
             else $cellData[$k]['should_arrival_time'] = '';
             // 实际出发时间
@@ -13894,11 +13894,40 @@ class YHAdminRepository {
             'expense'=>'支出',
         ]);
 
-        if($export_type == "month") $title = '【订单】【'.$the_month.'】 - '.date('YmdHis');
+        $month_title = '';
+        $time_title = '';
+        if($export_type == "month")
+        {
+            $month_title = '【'.$the_month.'月】';
+        }
         else
         {
-            $title = '【订单】【'.$the_start.' - '.$the_ended.'】 - '.date('YmdHis');
+            if($the_start && $the_ended)
+            {
+                $time_title = '【'.$the_start.' - '.$the_ended.'】';
+            }
+            else if($the_start)
+            {
+                $time_title = '【'.$the_start.'】';
+            }
+            else if($the_ended)
+            {
+                $time_title = '【'.$the_ended.'】';
+            }
         }
+
+        $car_title = '';
+        if($car_id)
+        {
+            if($cellData[1]['car_er_name'])
+            {
+                $car_name = $cellData[1]['car_er_name'];
+                $car_title = '【'.$car_name.'】';
+            }
+        }
+
+        $title = '【订单】'.$car_title.$month_title.$time_title.' - '.date('YmdHis');
+
         $file = Excel::create($title, function($excel) use($cellData) {
             $excel->sheet('all', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
