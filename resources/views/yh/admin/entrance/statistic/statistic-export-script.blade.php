@@ -130,14 +130,14 @@
             if($('input[name="order-month"]').val())  $obj.month = $('input[name="order-month"]').val();
             if($('input[name="order-start"]').val())  $obj.order_start = $('input[name="order-start"]').val();
             if($('input[name="order-ended"]').val())  $obj.order_ended = $('input[name="order-ended"]').val();
-            if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
-            if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
-            if($('select[name="order-circle"]').val() > 0)  $obj.circle_id = $('select[name="order-circle"]').val();
+            if($('select[name="order-staff"]').val() > 0)  $obj.staff = $('select[name="order-staff"]').val();
+            if($('select[name="order-client"]').val() > 0)  $obj.client = $('select[name="order-client"]').val();
+            if($('select[name="order-circle"]').val() > 0)  $obj.circle = $('select[name="order-circle"]').val();
             if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
-            if($('select[name="order-pricing"]').val() > 0)  $obj.pricing_id = $('select[name="order-pricing"]').val();
-            if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
-            if($('select[name="order-trailer"]').val() > 0)  $obj.trailer_id = $('select[name="order-trailer"]').val();
-            if($('select[name="order-driver"]').val() > 0)  $obj.driver_id = $('select[name="order-driver"]').val();
+            if($('select[name="order-pricing"]').val() > 0)  $obj.pricing = $('select[name="order-pricing"]').val();
+            if($('select[name="order-car"]').val() > 0)  $obj.car = $('select[name="order-car"]').val();
+            if($('select[name="order-trailer"]').val() > 0)  $obj.trailer = $('select[name="order-trailer"]').val();
+            if($('select[name="order-driver"]').val() > 0)  $obj.driver = $('select[name="order-driver"]').val();
 
             var $url = url_build('/statistic/statistic-export-for-order',$obj);
             window.open($url);
@@ -187,6 +187,51 @@
 
             // $('input[name="order-month"]').val('');
             var $month_dom = $('input[name="order-month"]');
+            var $month_default = $month_dom.attr('data-default')
+            $month_dom.val($month_default);
+        });
+
+
+
+
+
+        /*
+            环线
+         */
+        // 【导出】
+        $(".main-content").on('click', ".filter-submit-for-circle", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $export_type = that.attr("data-type");
+
+            var $month = $('input[name="order-month"]').val();
+
+            var $obj = new Object();
+            $obj.export_type = $export_type;
+            if($('input[name="circle-month"]').val())  $obj.month = $('input[name="circle-month"]').val();
+            if($('input[name="circle-start"]').val())  $obj.order_start = $('input[name="circle-start"]').val();
+            if($('input[name="circle-ended"]').val())  $obj.order_ended = $('input[name="circle-ended"]').val();
+            if($('select[name="circle-circle"]').val() > 0)  $obj.circle_id = $('select[name="circle-circle"]').val();
+            if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
+
+            var $url = url_build('/statistic/statistic-export-for-circle',$obj);
+            window.open($url);
+
+        });
+        // 【清空重选】
+        $("#export-for-circle").on('click', ".filter-empty", function() {
+            $("#export-for-circle").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#export-for-circle").find('select.form-filter option').attr("selected",false);
+            $("#export-for-circle").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+
+            $(".select2-container").val(-1).trigger("change");
+
+            // $('input[name="order-month"]').val('');
+            var $month_dom = $('input[name="circle-month"]');
             var $month_default = $month_dom.attr('data-default')
             $month_dom.val($month_default);
         });

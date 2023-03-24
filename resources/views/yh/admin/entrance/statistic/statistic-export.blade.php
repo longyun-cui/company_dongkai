@@ -124,6 +124,69 @@
 </div>
 
 
+{{--环线--}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-warning">
+
+            <div class="box-header with-border" style="margin:8px 0;">
+                <h3 class="box-title">订单导出</h3>
+            </div>
+
+            <div class="box-body datatable-body item-main-body" id="export-for-circle">
+
+                <div class="row col-md-12 datatable-search-row">
+                    <div class="input-group">
+
+                        <select class="form-control form-filter select2-container select2-circle" name="circle-circle" style="width:100px;">
+                            <option value="-1">选择环线</option>
+                        </select>
+
+                        <select class="form-control form-filter select2-container select2-car" name="circle-car" style="width:100px;">
+                            <option value="-1">选择车辆</option>
+                        </select>
+
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="circle-start" placeholder="起始日期" readonly="readonly" value="" data-default="" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="circle-ended" placeholder="终止日期" readonly="readonly" value="" data-default="" style="width:88px;" />
+
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit filter-submit-for-circle" data-type="">
+                            <i class="fa fa-download"></i> 导出
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-empty" id="filter-empty-for-circle">
+                            <i class="fa fa-remove"></i> 清空重选
+                        </button>
+
+
+                        <div class="month-picker-box clear-both">
+                            <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <input type="text" class="form-control form-filter filter-keyup month-picker month_picker" name="circle-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                            <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                            <button type="button" class="form-control btn btn-flat btn-success filter-submit filter-submit-for-circle" data-type="month">
+                                <i class="fa fa-download"></i> 按月导出
+                            </button>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="box-body">
+                <div class="row">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 {{--财务--}}
 <div class="row">
     <div class="col-md-12">
