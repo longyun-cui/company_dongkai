@@ -2458,8 +2458,8 @@
                             {
                                 return '--';
                             }
-                            var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee);
-                            return $receivable;
+                            var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
+                            return parseFloat($receivable);
                         }
                     },
                     {
@@ -2471,7 +2471,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee) - parseInt(row.income_total);
+                                var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
                                 if($receivable > 0)
                                 {
                                     $(nTd).addClass('color-red _bold');
@@ -2482,8 +2482,8 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
-                            var $to_be_collected = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee) - parseInt(row.income_total);
-                            return $to_be_collected;
+                            var $to_be_collected = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
+                            return parseFloat($to_be_collected);
                         }
                     },
                     {
@@ -2502,7 +2502,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2521,7 +2521,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2540,7 +2540,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2559,7 +2559,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2571,8 +2571,8 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee);
-                                var $profit = $receivable - parseInt(row.expenditure_total);
+                                var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
+                                var $profit = $receivable - parseFloat(row.expenditure_total);
                                 if($profit > 0) $(nTd).addClass('color-green');
                                 else if($profit < 0) $(nTd).addClass('color-red');
                             }
@@ -2580,8 +2580,8 @@
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
                             var $profit = 0;
-                            var $receivable = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.customer_management_fee);
-                            $profit = $receivable - parseInt(row.expenditure_total);
+                            var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
+                            $profit = $receivable - parseFloat(row.expenditure_total);
                             return $profit;
                         }
                     },
@@ -2594,7 +2594,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                var $profit = parseInt(row.income_total) - parseInt(row.expenditure_total);
+                                var $profit = parseFloat(row.income_total) - parseFloat(row.expenditure_total);
                                 if($profit > 0) $(nTd).addClass('color-green');
                                 else if($profit < 0) $(nTd).addClass('color-red');
                             }
@@ -2602,7 +2602,7 @@
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
                             var $profit = 0;
-                            $profit = parseInt(row.income_total) - parseInt(row.expenditure_total);
+                            $profit = parseFloat(row.income_total) - parseFloat(row.expenditure_total);
                             return $profit;
                         }
                     },
@@ -2629,7 +2629,7 @@
 //                            }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2651,7 +2651,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2673,7 +2673,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2695,7 +2695,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2717,7 +2717,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2739,7 +2739,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2761,7 +2761,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2783,7 +2783,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2805,7 +2805,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -2827,7 +2827,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -3054,7 +3054,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -3099,7 +3099,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -3112,16 +3112,16 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','空单-过路（现金）');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-过路费（现金）');
                                 $(nTd).attr('data-key','empty_toll_cash').attr('data-value',data);
-                                $(nTd).attr('data-column-name','空单-过路（现金）');
+                                $(nTd).attr('data-column-name','空单-过路费（现金）');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -3134,7 +3134,7 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','空单-过路非（ETC）');
+                                $(nTd).attr('data-id',row.id).attr('data-name','空单-过路费（ETC）');
                                 $(nTd).attr('data-key','empty_toll_ETC').attr('data-value',data);
                                 $(nTd).attr('data-column-name','空单-过路费（ETC）');
                                 $(nTd).attr('data-text-type','text');
@@ -3143,7 +3143,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return parseFloat(data);
                         }
                     },
 //                    {
@@ -4154,7 +4154,7 @@
                                 }
                                 else
                                 {
-                                    var $to_be_collected = parseInt(row.amount) + parseInt(row.oil_card_amount) - parseInt(row.time_limitation_deduction) - parseInt(row.income_total);
+                                    var $to_be_collected = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.income_total);
                                     if($to_be_collected > 0)
                                     {
                                         $html_completed = '<a class="btn btn-xs btn-default disabled">完成</a>';

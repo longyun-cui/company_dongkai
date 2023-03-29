@@ -7710,7 +7710,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】返回-导入任务-视图
+    // 【订单管理】返回-导入-视图
     public function view_item_order_import()
     {
         $this->get_me();
@@ -7736,7 +7736,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit-for-import';
         return view($view_blade)->with($return);
     }
-    // 【订单管理】保存-导入任务-数据
+    // 【订单管理】保存-导入-数据
     public function operate_item_order_import_save($post_data)
     {
 //        $messages = [
@@ -7917,59 +7917,80 @@ class YHAdminRepository {
             else $temp_date['pricing_id'] = 0;
 
             // 里程
-            $distance = trim($value['travel_distance']);
-            $temp_date['travel_distance'] = (!empty($distance) && (floor($distance) == $distance) && $distance >= 0) ? $distance : 0;
+            $temp_date['travel_distance'] = floatval($value['travel_distance']);
 
             // 时效
-            $time = trim($value['time_limitation_prescribed']);
-            $temp_date['time_limitation_prescribed'] = (!empty($time) && (floor($time) == $time) && $time >= 0) ? $time : 0;
+            $temp_date['time_limitation_prescribed'] = floatval($value['time_limitation_prescribed']);
 
             // 运价
-            $amount = trim($value['amount']);
-            $temp_date['amount'] = (!empty($amount) && (floor($amount) == $amount) && $amount >= 0) ? $amount : 0;
+            // 运价
+            $temp_date['amount'] = floatval($value['amount']);
 
             // 油卡
-            $oil_card = trim($value['oil_card_amount']);
-            $temp_date['oil_card_amount'] = (!empty($oil_card) && (floor($oil_card) == $oil_card) && $oil_card >= 0) ? $oil_card : 0;
+            $temp_date['oil_card_amount'] = floatval($value['oil_card_amount']);
 
             // 定金
-            $deposit = trim($value['deposit']);
-            $temp_date['deposit'] = (!empty($deposit) && (floor($deposit) == $deposit) && $deposit >= 0) ? $deposit : 0;
+            $temp_date['deposit'] = floatval($value['deposit']);
 
             // 请车价
-            $car_price = trim($value['outside_car_price']);
-            $temp_date['outside_car_price'] = (!empty($car_price) && (floor($car_price) == $car_price) && $car_price >= 0) ? $car_price : 0;
+            $temp_date['outside_car_price'] = floatval($value['outside_car_price']);
 
             // 管理费
-            $fee = trim($value['administrative_fee']);
-            $temp_date['administrative_fee'] = (!empty($fee) && (floor($fee) == $fee) && $fee >= 0) ? $fee : 0;
+            $temp_date['administrative_fee'] = floatval($value['administrative_fee']);
 
             // 信息费
-            $information = trim($value['information_fee']);
-            $temp_date['information_fee'] = (!empty($information) && (floor($information) == $information) && $information >= 0) ? $information : 0;
+            $temp_date['information_fee'] = floatval($value['information_fee']);
 
             // 客户管理费
-            $customer = trim($value['customer_management_fee']);
-            $temp_date['customer_management_fee'] = (!empty($customer) && (floor($customer) == $customer) && $customer >= 0) ? $customer : 0;
+            $temp_date['customer_management_fee'] = floatval($value['customer_management_fee']);
 
             // ETC费用
-            $ETC_price = trim($value['etc_price']);
-            $temp_date['ETC_price'] = (!empty($ETC_price) && (floor($ETC_price) == $ETC_price) && $ETC_price >= 0) ? $ETC_price : 0;
+            $temp_date['ETC_price'] = floatval($value['etc_price']);
 
-            // 运价
-            $amount = trim($value['amount']);
-            $temp_date['amount'] = (!empty($amount) && (floor($amount) == $amount) && $amount >= 0) ? $amount : 0;
 
             // 万金油(升)
-            $oil = trim($value['oil_amount']);
-            $temp_date['oil_amount'] = (!empty($oil) && is_numeric($oil) && $oil >= 0) ? $oil : 0;
+            $temp_date['oil_amount'] = floatval($value['oil_amount']);
 
             // 油价(元)
-            $oil_unit = trim($value['oil_unit_price']);
-            $temp_date['oil_unit_price'] = (!empty($oil_unit) && is_numeric($oil_unit) && $oil_unit >= 0) ? $oil_unit : 0;
+            $temp_date['oil_unit_price'] = floatval($value['oil_unit_price']);
 
             // GPS
-            $temp_date['GPS'] = $value['gps'];
+            $temp_date['GPS'] = trim($value['gps']);
+
+
+            // 空单-固定路线  [string]
+            $empty_route_title = trim($value['empty_route_title']);
+            $empty_route = YH_Route::where('title',$empty_route_title)->first();
+            if($empty_route)
+            {
+                $temp_date['empty_route_id'] = $empty_route->id;
+            }
+            else $temp_date['empty_route_id'] = 0;
+
+            // 空单-临时路线  [string]
+            $temp_date['empty_route_temporary'] = trim($value['empty_route_temporary']);
+
+            // 空单-里程
+            $temp_date['empty_distance'] = floatval($value['empty_distance']);
+
+            // 空单-包油-单价(元)  [float]
+            $temp_date['empty_oil_price'] = floatval($value['empty_oil_price']);
+
+            // 空单-包油-金额(元)
+            $temp_date['empty_oil_amount'] = floatval($value['empty_oil_amount']);
+
+            // 空单-加油方式  [string]
+            $temp_date['empty_refueling_pay_type'] = trim($value['empty_refueling_pay_type']);
+
+            // 空单-加油金额
+            $temp_date['empty_refueling_charge'] = floatval($value['empty_refueling_charge']);
+
+            // 空单-过路费-现金
+            $temp_date['empty_toll_cash'] = floatval($value['empty_toll_cash']);
+
+            // 空单-过路费-ETC
+            $temp_date['empty_toll_ETC'] = floatval($value['empty_toll_etc']);
+
 
 
 
@@ -8041,6 +8062,17 @@ class YHAdminRepository {
                 $order->remark = $value['remark'];  // 备注
 //                $order->description = $value['description'];  // 备注
 
+                $order->empty_route_id = $value['empty_route_id'];  // 空单-固定路线
+                $order->empty_route_temporary = $value['empty_route_temporary'];  // 空单-临时路线
+                $order->empty_distance = $value['empty_distance'];  // 空单-里程
+                $order->empty_oil_price = $value['empty_oil_price'];  // 空单-包油-单价(元)
+                $order->empty_oil_amount = $value['empty_oil_amount'];  // 空单-包油-金额(元)
+                $order->empty_refueling_pay_type = $value['empty_refueling_pay_type'];  // 空单-加油金额
+                $order->empty_refueling_charge = $value['empty_refueling_charge'];  // 空单-加油金额
+                $order->empty_toll_cash = $value['empty_toll_cash'];  // 空单-过路费-现金
+                $order->empty_toll_ETC = $value['empty_toll_ETC'];  // 空单-过路费-ETC
+
+
                 $bool = $order->save();
                 if(!$bool) throw new Exception("insert--order--fail");
             }
@@ -8058,6 +8090,8 @@ class YHAdminRepository {
         }
 
     }
+
+
 
 
     // 【订单管理】返回-添加-视图
@@ -12302,7 +12336,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】返回-导入任务-视图
+    // 【订单管理】返回-导入-视图
     public function view_finance_import()
     {
         $this->get_me();
@@ -12328,7 +12362,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.finance.finance-import';
         return view($view_blade)->with($return);
     }
-    // 【订单管理】保存-导入任务-数据
+    // 【订单管理】保存-导入-数据
     public function operate_finance_import_save($post_data)
     {
 //        $messages = [
@@ -13591,6 +13625,353 @@ class YHAdminRepository {
     }
     // 【数据导出】订单
     public function operate_statistic_export_for_order($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
+        if($export_type == "month")
+        {
+            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $start_timestamp = $the_month_start_timestamp;
+            $ended_timestamp = $the_month_ended_timestamp;
+        }
+        else
+        {
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start']  : '';
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended']  : '';
+        }
+
+
+        $staff_id = 0;
+        $client_id = 0;
+        $route_id = 0;
+        $pricing_id = 0;
+        $car_id = 0;
+        $trailer_id = 0;
+        $driver_id = 0;
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0]))
+            {
+                $staff_id = $post_data['staff'];
+            }
+        }
+        // 客户
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0]))
+            {
+                $client_id = $post_data['client'];
+            }
+        }
+        // 线路
+        if(!empty($post_data['route']))
+        {
+            if(!in_array($post_data['route'],[-1,0]))
+            {
+                $route_id = $post_data['route'];
+            }
+        }
+        // 定价
+        if(!empty($post_data['pricing']))
+        {
+            if(!in_array($post_data['pricing'],[-1,0]))
+            {
+                $pricing_id = $post_data['pricing'];
+            }
+        }
+        // 车辆
+        if(!empty($post_data['car']))
+        {
+            if(!in_array($post_data['car'],[-1,0]))
+            {
+                $car_id = $post_data['car'];
+            }
+        }
+        // 车挂
+        if(!empty($post_data['trailer']))
+        {
+            if(!in_array($post_data['trailer'],[-1,0]))
+            {
+                $car_id = $post_data['trailer'];
+            }
+        }
+        // 驾驶员
+        if(!empty($post_data['driver']))
+        {
+            if(!in_array($post_data['driver'],[-1,0]))
+            {
+                $driver_id = $post_data['driver'];
+            }
+        }
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+
+//        dd($car_id);
+
+        // 订单
+        $query = YH_Order::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select('id','name','true_name'); },
+                'client_er'=>function($query) { $query->select('id','username','short_name'); },
+                'circle_er'=>function($query) { $query->select('id','title'); },
+                'route_er'=>function($query) { $query->select('id','title'); },
+                'pricing_er'=>function($query) { $query->select('id','title'); },
+                'car_er'=>function($query) { $query->select('id','name'); },
+                'trailer_er'=>function($query) { $query->select('id','name'); },
+                'driver_er'=>function($query) { $query->select('id','driver_name','driver_phone'); },
+                'finance_income_list'=>function($query) { $query->select('id','order_id','finance_type','transaction_time','transaction_amount','title','transaction_type')->where('finance_type',1); },
+                'finance_expense_list'=>function($query) { $query->select('id','order_id','finance_type','transaction_time','transaction_amount','title','transaction_type')->where('finance_type',21); },
+            ]);
+
+        if($export_type == "month")
+        {
+            $query->whereBetween('assign_time',[$start_timestamp,$ended_timestamp]);
+        }
+        else
+        {
+            if(!empty($post_data['order_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"), '>=', $post_data['order_start']);
+            if(!empty($post_data['order_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
+        }
+
+
+        if($staff_id) $query->where('creator_id',$staff_id);
+        if($client_id) $query->where('client_id',$client_id);
+        if($route_id) $query->where('route_id',$route_id);
+        if($pricing_id) $query->where('pricing_id',$pricing_id);
+        if($car_id) $query->where('car_id',$car_id);
+        if($trailer_id) $query->where('trailer_id',$trailer_id);
+        if($driver_id) $query->where('driver_id',$driver_id);
+
+        $data = $query->orderBy('assign_time','desc')->orderBy('id','asc')->get()->toArray();
+//        dd($data);
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+            if($v['car_owner_type'] == 1) $cellData[$k]['order_type_name'] = '自有';
+            else if($v['car_owner_type'] == 11) $cellData[$k]['order_type_name'] = '空单';
+            else if($v['car_owner_type'] == 41) $cellData[$k]['order_type_name'] = '外配·配货';
+            else if($v['car_owner_type'] == 61) $cellData[$k]['order_type_name'] = '外请·调车';
+            else $cellData[$k]['order_type_name'] = '有误';
+//            unset($cellData[$k]['car_owner_type']);
+
+            $cellData[$k]['assign_date'] = date('Y-m-d', $v['assign_time']);
+            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['client_er_name'] = $v['client_er']['username'];
+            $cellData[$k]['circle_er_title'] = $v['circle_er']['title'];
+            $cellData[$k]['route_er_title'] = $v['route_er']['title'];
+            $cellData[$k]['route_temporary'] = $v['route_temporary'];
+            $cellData[$k]['pricing_er_title'] = $v['pricing_er']['title'];
+            $cellData[$k]['car_er_name'] = $v['car_er']['name'];
+            $cellData[$k]['trailer_er_name'] = $v['trailer_er']['name'];
+            $cellData[$k]['driver_er_name'] = $v['driver_er']['driver_name'];
+            $cellData[$k]['driver_er_phone'] = $v['driver_er']['driver_phone'];
+            $cellData[$k]['departure_place'] = $v['departure_place'];
+            $cellData[$k]['stopover_place'] = $v['stopover_place'];
+            $cellData[$k]['destination_place'] = $v['destination_place'];
+            $cellData[$k]['travel_distance'] = $v['travel_distance'];
+            $cellData[$k]['time_limitation_prescribed'] = $v['time_limitation_prescribed'];
+
+            $cellData[$k]['amount'] = $v['amount'];
+            $cellData[$k]['oil_card_amount'] = $v['oil_card_amount'];
+            $cellData[$k]['deposit'] = $v['deposit'];
+            $cellData[$k]['outside_car_price'] = $v['outside_car_price'];
+            $cellData[$k]['time_limitation_deduction'] = $v['time_limitation_deduction'];
+            $cellData[$k]['administrative_fee'] = $v['administrative_fee'];
+            $cellData[$k]['information_fee'] = $v['information_fee'];
+            $cellData[$k]['customer_management_fee'] = $v['customer_management_fee'];
+            $cellData[$k]['ETC_price'] = $v['ETC_price'];
+            $cellData[$k]['oil_amount'] = $v['oil_amount'];
+            $cellData[$k]['oil_unit_price'] = $v['oil_unit_price'];
+            $cellData[$k]['invoice_point'] = $v['invoice_point'];
+
+            // 应出发时间
+            if($v['should_departure_time']) $cellData[$k]['should_departure_time'] = date('Y-m-d', $v['should_departure_time']);
+            else $cellData[$k]['should_departure_time'] = '';
+            // 应到达时间
+            if($v['should_arrival_time']) $cellData[$k]['should_arrival_time'] = date('Y-m-d', $v['should_arrival_time']);
+            else $cellData[$k]['should_arrival_time'] = '';
+            // 实际出发时间
+            if($v['actual_departure_time']) $cellData[$k]['actual_departure_time'] = date('Y-m-d', $v['actual_departure_time']);
+            else $cellData[$k]['actual_departure_time'] = '';
+            // 经停-到达时间
+            if($v['stopover_arrival_time']) $cellData[$k]['stopover_arrival_time'] = date('Y-m-d', $v['stopover_arrival_time']);
+            else $cellData[$k]['stopover_arrival_time'] = '';
+            // 经停-出发时间
+            if($v['stopover_departure_time']) $cellData[$k]['stopover_departure_time'] = date('Y-m-d', $v['stopover_departure_time']);
+            else $cellData[$k]['stopover_departure_time'] = '';
+            // 实际到达时间
+            if($v['actual_arrival_time']) $cellData[$k]['actual_arrival_time'] = date('Y-m-d', $v['actual_arrival_time']);
+            else $cellData[$k]['actual_arrival_time'] = '';
+
+            $cellData[$k]['order_number'] = $v['order_number'];
+            $cellData[$k]['payee_name'] = $v['payee_name'];
+            $cellData[$k]['car_supply'] = $v['car_supply'];
+            $cellData[$k]['arrange_people'] = $v['arrange_people'];
+            $cellData[$k]['GPS'] = $v['GPS'];
+            // 是否回单
+            if($v['receipt_need'] == 1) $cellData[$k]['receipt_need'] = '需要';
+            else $cellData[$k]['receipt_need'] = '--';
+            // 回单状态
+            if($v['receipt_need'] == 1)
+            {
+                if($v['receipt_status'] == 0) $cellData[$k]['receipt_status'] = '等待回单';
+                else if($v['receipt_status'] == 1) $cellData[$k]['receipt_status'] = '等待回单';
+                else if($v['receipt_status'] == 21) $cellData[$k]['receipt_status'] = '邮寄中';
+                else if($v['receipt_status'] == 41) $cellData[$k]['receipt_status'] = '已签收';
+                else if($v['receipt_status'] == 100) $cellData[$k]['receipt_status'] = '已完成';
+                else if($v['receipt_status'] == 101) $cellData[$k]['receipt_status'] = '已签收';
+                else $cellData[$k]['receipt_status'] = '有误';
+            }
+            else $cellData[$k]['receipt_status'] = '--';
+            // 回单地址
+            $cellData[$k]['receipt_address'] = $v['receipt_address'];
+            $cellData[$k]['remark'] = $v['remark'];
+
+            $cellData[$k]['income'] = count($v['finance_income_list']);
+            $cellData[$k]['expense'] = count($v['finance_expense_list']);
+            // 收入
+            if(count($v['finance_income_list']) > 0)
+            {
+                $income_string = '';
+                foreach($v['finance_income_list'] as $key => $val)
+                {
+                    $string = '[收入]('.date('Y-m-d', $val['transaction_time']).')'.$val['title'].' - '.$val['transaction_amount'].'元('.$val['transaction_type'].')';
+//                    $income_string .= $string." / ";
+                    $cellData[$k]['income'.($key+1)] = $string;
+                }
+//                $cellData[$k]['income'] = $income_string;
+            }
+//            else $cellData[$k]['income'] = '';
+
+            // 支出
+            if(count($v['finance_expense_list']) > 0)
+            {
+                $expense_string = '';
+                foreach($v['finance_expense_list'] as $key => $val)
+                {
+                    $string = '[支出]('.date('Y-m-d', $val['transaction_time']).')'.$val['title'].' - '.$val['transaction_amount'].'元 - ('.$val['transaction_type'].')';
+//                    $expense_string .= $string." / ";
+                    $cellData[$k]['expense'.($key+1)] = $string;
+                }
+//                $cellData[$k]['expense'] = $expense_string;
+            }
+//            else $cellData[$k]['expense'] = '';
+
+        }
+//        dd($cellData);
+
+
+        array_unshift($cellData,[
+            'id'=>'ID',
+            'order_type_name'=>'类型',
+            'assign_date'=>'派车日期',
+            'creator_name'=>'创建者',
+            'client_er_name'=>'客户',
+            'circle_er_title'=>'环线',
+            'route_er_title'=>'固定线路',
+            'route_temporary'=>'临时线路',
+            'pricing_er_title'=>'包油定价',
+            'car_er_name'=>'车辆',
+            'trailer_er_name'=>'车挂',
+            'driver_er_name'=>'驾驶员姓名',
+            'driver_er_phone'=>'驾驶员电话',
+            'departure_place'=>'出发地',
+            'stopover_place'=>'经停地',
+            'destination_place'=>'目的地',
+            'travel_distance'=>'里程',
+            'time_limitation_prescribed'=>'时效',
+            'amount'=>'运价',
+            'oil_card_amount'=>'油卡',
+            'deposit'=>'定金',
+            'outside_car_price'=>'请车价',
+            'time_limitation_deduction'=>'时效扣款',
+            'administrative_fee'=>'管理费',
+            'information_fee'=>'信息费',
+            'customer_management_fee'=>'客管费',
+            'ETC_price'=>'ETC费用',
+            'oil_amount'=>'万金油(升)',
+            'oil_unit_price'=>'油价(元)',
+            'invoice_point'=>'票点',
+            'should_departure_time'=>'应出发时间',
+            'should_arrival_time'=>'应到达时间',
+            'actual_departure_time'=>'实际出发时间',
+            'stopover_arrival_time'=>'经停-到达时间',
+            'stopover_departure_time'=>'经停-出发时间',
+            'actual_arrival_time'=>'实际到达时间',
+            'order_number'=>'单号',
+            'payee_name'=>'收款人',
+            'car_supply'=>'车货源',
+            'arrange_people'=>'安排人',
+            'GPS'=>'GPS',
+            'receipt_need'=>'是否回单',
+            'receipt_status'=>'回单状态',
+            'receipt_address'=>'回单地址',
+            'remark'=>'备注',
+            'income'=>'收入',
+            'expense'=>'支出',
+        ]);
+
+        $month_title = '';
+        $time_title = '';
+        if($export_type == "month")
+        {
+            $month_title = '【'.$the_month.'月】';
+        }
+        else
+        {
+            if($the_start && $the_ended)
+            {
+                $time_title = '【'.$the_start.' - '.$the_ended.'】';
+            }
+            else if($the_start)
+            {
+                $time_title = '【'.$the_start.'】';
+            }
+            else if($the_ended)
+            {
+                $time_title = '【'.$the_ended.'】';
+            }
+        }
+
+        $car_title = '';
+        if($car_id)
+        {
+            if($cellData[1]['car_er_name'])
+            {
+                $car_name = $cellData[1]['car_er_name'];
+                $car_title = '【'.$car_name.'】';
+            }
+        }
+
+        $title = '【订单】'.$car_title.$month_title.$time_title.' - '.date('YmdHis');
+
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('all', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
+    }
+    // 【数据导出】订单
+    public function operate_statistic_export_for_circle($post_data)
     {
         $this->get_me();
         $me = $this->me;

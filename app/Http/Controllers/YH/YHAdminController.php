@@ -1266,12 +1266,17 @@ class YHAdminController extends Controller
     }
 
 
-    // 【统计】导出
+    // 【统计】订单-导出
     public function operate_statistic_export_for_order()
     {
         $this->repo->operate_statistic_export_for_order(request()->all());
     }
-    // 【统计】导出
+    // 【统计】环线-导出
+    public function operate_statistic_export_for_circle()
+    {
+        $this->repo->operate_statistic_export_for_circle(request()->all());
+    }
+    // 【统计】财务-导出
     public function operate_statistic_export_for_finance()
     {
         $this->repo->operate_statistic_export_for_finance(request()->all());

@@ -856,7 +856,7 @@
                                 $html += '<a target="_blank" href="/item/order-list-for-all?order_id='+$id+'" data-id="'+$id+'">'+$text+'</a>';
                                 $html += "&nbsp;&nbsp;&nbsp;&nbsp;";
                                 $html += '<br>';
-                                // if( parseInt( index % 2 ) == 1 && (index + 1) != $len ) $html += '<br>';
+                                // if( parseFloat( index % 2 ) == 1 && (index + 1) != $len ) $html += '<br>';
                             });
                             return $html;
 //                            return row.people == null ? '未知' :
@@ -981,7 +981,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.travel_distance);
+                                $amount += parseFloat(this.travel_distance);
                             });
                             return $amount;
                         }
@@ -1008,7 +1008,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee);
+                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee);
                             });
                             return $amount;
                         }
@@ -1036,7 +1036,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.expenditure_total) + parseInt(this.expenditure_to_be_confirm);
+                                $amount += parseFloat(this.expenditure_total) + parseFloat(this.expenditure_to_be_confirm);
                             });
                             return $amount;
                         }
@@ -1065,7 +1065,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
+                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
                             });
                             return $amount;
                         }
@@ -1104,7 +1104,7 @@
 
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
+                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
                             });
 
                             if(!$amount || !data) return "0";
@@ -1135,8 +1135,8 @@
                             var $amount = 0;
                             var $profit = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee);
-                                $profit += parseInt(this.amount) + parseInt(this.oil_card_amount) - parseInt(this.time_limitation_deduction) - parseInt(this.customer_management_fee) - parseInt(this.expenditure_total) - parseInt(this.expenditure_to_be_confirm);
+                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee);
+                                $profit += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
                             });
                             if(!$amount) return '--';
                             return (($profit/$amount).toFixed(2)*100) + '%';
@@ -1205,7 +1205,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(row.order_list, function( key, val ) {
-                                $amount += parseInt(this.travel_distance);
+                                $amount += parseFloat(this.travel_distance);
                             });
 
                             if(!$amount || !data) return "0";
@@ -1227,7 +1227,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(row.order_list, function( key, val ) {
-                                $amount += parseInt(this.travel_distance);
+                                $amount += parseFloat(this.travel_distance);
                             });
 
                             if(!$amount || !data) return "0";
