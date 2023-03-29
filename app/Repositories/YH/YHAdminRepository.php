@@ -12332,11 +12332,7 @@ class YHAdminRepository {
 
 
 
-
-
-
-
-    // 【订单管理】返回-导入-视图
+    // 【财务管理】返回-导入-视图
     public function view_finance_import()
     {
         $this->get_me();
@@ -12362,7 +12358,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.finance.finance-import';
         return view($view_blade)->with($return);
     }
-    // 【订单管理】保存-导入-数据
+    // 【财务管理】保存-导入-数据
     public function operate_finance_import_save($post_data)
     {
 //        $messages = [
@@ -12463,8 +12459,7 @@ class YHAdminRepository {
             else continue;
 
             // 交易金额
-            $amount = trim($value['transaction_amount']);
-            $temp_date['transaction_amount'] = (!empty($amount) && (floor($amount) == $amount) && $amount >= 0) ? $amount : 0;
+            $temp_date['transaction_amount'] = floatval($value['transaction_amount']);
 
             $finance_data[] = $temp_date;
         }
