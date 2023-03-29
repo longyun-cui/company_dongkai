@@ -605,6 +605,7 @@
                             else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
                             else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
                             else if(data == 103) return '<small class="btn-xs bg-black">永久删除</small>';
+                            else if(data == 109) return '<small class="btn-xs bg-fuchsia">导出</small>';
                             else return '有误';
                         }
                     },

@@ -13624,6 +13624,18 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+        $record = new YH_Record;
+
+        $record_data["record_object"] = 21;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 71;
+        $record_data["operate_category"] = 109;
+        $record_data["operate_type"] = 1;
+
+        $record->fill($record_data)->save();
+
 
         $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
         if($export_type == "month")
@@ -13728,6 +13740,7 @@ class YHAdminRepository {
                 'car_er'=>function($query) { $query->select('id','name'); },
                 'trailer_er'=>function($query) { $query->select('id','name'); },
                 'driver_er'=>function($query) { $query->select('id','driver_name','driver_phone'); },
+                'empty_route_er'=>function($query) { $query->select('id','title'); },
                 'finance_income_list'=>function($query) { $query->select('id','order_id','finance_type','transaction_time','transaction_amount','title','transaction_type')->where('finance_type',1); },
                 'finance_expense_list'=>function($query) { $query->select('id','order_id','finance_type','transaction_time','transaction_amount','title','transaction_type')->where('finance_type',21); },
             ]);
@@ -13814,6 +13827,16 @@ class YHAdminRepository {
             // 实际到达时间
             if($v['actual_arrival_time']) $cellData[$k]['actual_arrival_time'] = date('Y-m-d', $v['actual_arrival_time']);
             else $cellData[$k]['actual_arrival_time'] = '';
+
+            $cellData[$k]['empty_route_er_title'] = $v['empty_route_er']['title'];
+            $cellData[$k]['empty_route_temporary'] = $v['empty_route_temporary'];
+            $cellData[$k]['empty_distance'] = $v['empty_distance'];
+            $cellData[$k]['empty_oil_price'] = $v['empty_oil_price'];
+            $cellData[$k]['empty_oil_amount'] = $v['empty_oil_amount'];
+            $cellData[$k]['empty_refueling_pay_type'] = $v['empty_refueling_pay_type'];
+            $cellData[$k]['empty_refueling_charge'] = $v['empty_refueling_charge'];
+            $cellData[$k]['empty_toll_cash'] = $v['empty_toll_cash'];
+            $cellData[$k]['empty_toll_ETC'] = $v['empty_toll_ETC'];
 
             $cellData[$k]['order_number'] = $v['order_number'];
             $cellData[$k]['payee_name'] = $v['payee_name'];
@@ -13910,6 +13933,17 @@ class YHAdminRepository {
             'stopover_arrival_time'=>'经停-到达时间',
             'stopover_departure_time'=>'经停-出发时间',
             'actual_arrival_time'=>'实际到达时间',
+
+            'empty_route_er_title'=>'空单-固定路线',
+            'empty_route_temporary'=>'空单-临时路线',
+            'empty_distance'=>'空单-里程',
+            'empty_oil_price'=>'空单-包油-单价',
+            'empty_oil_amount'=>'空单-包油-金额',
+            'empty_refueling_pay_type'=>'空单-加油方式',
+            'empty_refueling_charge'=>'空单-加油金额',
+            'empty_toll_cash'=>'空单-过路费-现金',
+            'empty_toll_ETC'=>'空单-过路费-ETC',
+
             'order_number'=>'单号',
             'payee_name'=>'收款人',
             'car_supply'=>'车货源',
@@ -13964,6 +13998,7 @@ class YHAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
+
     }
     // 【数据导出】订单
     public function operate_statistic_export_for_circle($post_data)
