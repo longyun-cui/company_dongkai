@@ -14086,7 +14086,7 @@ class YHAdminRepository {
         $data = $query->orderBy('id','desc')->get();
         $data_all = $data->toArray();
         $data = $data->groupBy('car_id')->toArray();
-        dd($data);
+//        dd($data);
 
 
         $sheetData = [];
