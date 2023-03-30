@@ -92,14 +92,22 @@
                             <th>操作</th>
                             <th>车辆</th>
                             <th>标题</th>
+                            <th>订单</th>
                             <th>开始时间</th>
                             <th>结束时间</th>
-                            <th>订单</th>
+                            <th>总天数</th>
                             <th>总里程</th>
-                            <th>收入</th>
-                            <th>支出</th>
+                            <th>总运价</th>
+                            <th>总扣款</th>
+                            <th>总收入</th>
+                            <th>总支出</th>
                             <th>利润</th>
+                            <th>日利润</th>
                             <th>利润率</th>
+                            <th>油费</th>
+                            <th>过路费</th>
+                            <th>油耗</th>
+                            <th>路单价</th>
                             <th>备注</th>
                             <th>创建人</th>
                             <th>更新时间</th>
@@ -617,7 +625,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { min-width:1800px; }
+    .tableArea table { min-width:2000px; }
     .tableArea table#datatable_ajax_finance { min-width:1800px; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
@@ -982,6 +990,60 @@
                             var $amount = 0;
                             $.each(data,function( key, val ) {
                                 $amount += parseFloat(this.travel_distance);
+                            });
+                            return $amount;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "总运价",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','总收入');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount);
+                            });
+                            return $amount;
+                        }
+                    },
+                    {
+                        "className": "",
+                        "width": "60px",
+                        "title": "总扣款",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','总收入');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
                             });
                             return $amount;
                         }

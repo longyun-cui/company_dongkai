@@ -204,7 +204,8 @@
             var $id = that.attr("data-id");
             var $export_type = that.attr("data-type");
 
-            var $month = $('input[name="order-month"]').val();
+            var $month = $('input[name="circle-month"]').val();
+            var $car = $('input[name="circle-car"]').val();
 
             var $obj = new Object();
             $obj.export_type = $export_type;
@@ -212,7 +213,7 @@
             if($('input[name="circle-start"]').val())  $obj.order_start = $('input[name="circle-start"]').val();
             if($('input[name="circle-ended"]').val())  $obj.order_ended = $('input[name="circle-ended"]').val();
             if($('select[name="circle-circle"]').val() > 0)  $obj.circle_id = $('select[name="circle-circle"]').val();
-            if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
+            if($('select[name="circle-car"]').val() > 0)  $obj.car = $('select[name="circle-car"]').val();
 
             var $url = url_build('/statistic/statistic-export-for-circle',$obj);
             window.open($url);
