@@ -13764,7 +13764,9 @@ class YHAdminRepository {
         if($trailer_id) $query->where('trailer_id',$trailer_id);
         if($driver_id) $query->where('driver_id',$driver_id);
 
-        $data = $query->orderBy('assign_time','desc')->orderBy('id','asc')->get()->toArray();
+        $data = $query->orderBy('assign_time','desc')->orderBy('id','asc')->get();
+        $data = $data->toArray();
+//        $data = $data->groupBy('car_id')->toArray();
 //        dd($data);
 
         $cellData = [];
@@ -13893,7 +13895,7 @@ class YHAdminRepository {
 //            else $cellData[$k]['expense'] = '';
 
         }
-//        dd($cellData);
+        dd(1);
 
 
         array_unshift($cellData,[
@@ -14081,80 +14083,87 @@ class YHAdminRepository {
 
 
 
-        $data = $query->orderBy('id','desc')->orderBy('start_time','desc')->get()->toArray();
-//        dd($data);
+        $data = $query->orderBy('id','desc')->get();
+        $data_all = $data->toArray();
+        $data = $data->groupBy('car_id')->toArray();
+        dd($data);
 
-        $cellData = [];
-        foreach($data as $k => $v)
+
+        $sheetData = [];
+        foreach($data as $ki => $vi)
         {
-            $cell['id'] = $v['id'];
-            $cell['creator_name'] = $v['creator']['true_name'];
-            $cell['car_er_name'] = $v['car_er']['name'];
-            $cell['title'] = $v['title'];
-            $cell['order_id'] = 0;
-            $cell['order_title'] = '';
-
-            $cell['start_time'] = date('Y-m-d', $v['start_time']);
-            $cell['ended_time'] = date('Y-m-d', $v['ended_time']);
-
-            $order_list = [];
-            $amount = 0;
-            $amount = 0;
-            $cost = 0;
-            if(count($v['order_list']) > 0)
+            $cellData = [];
+            foreach($vi as $k => $v)
             {
-                foreach($v['order_list'] as $key => $val)
+                $cell['id'] = $v['id'];
+                $cell['creator_name'] = $v['creator']['true_name'];
+                $cell['car_er_name'] = $v['car_er']['name'];
+                $cell['title'] = $v['title'];
+                $cell['order_id'] = 0;
+                $cell['order_title'] = '';
+
+                $cell['start_time'] = date('Y-m-d', $v['start_time']);
+                $cell['ended_time'] = date('Y-m-d', $v['ended_time']);
+
+                $order_list = [];
+                $amount = 0;
+                $amount = 0;
+                $cost = 0;
+                if(count($v['order_list']) > 0)
                 {
+                    foreach($v['order_list'] as $key => $val)
+                    {
 
-                    $order_cell['id'] = '';
-                    $order_cell['creator_name'] = '';
-                    $order_cell['car_er_name'] = $v['car_er']['name'];
-                    $order_cell['title'] = $v['title'];
-                    $order_cell['order_id'] = $val['id'];
+                        $order_cell['id'] = '';
+                        $order_cell['creator_name'] = '';
+                        $order_cell['car_er_name'] = $v['car_er']['name'];
+                        $order_cell['title'] = $v['title'];
+                        $order_cell['order_id'] = $val['id'];
 
-                    if($val['car_owner_type'] == 11) $type = '[空单]';
-                    else $type = '';
-                    $assign = date('Y-m-d', $val['assign_time']);
-                    $departure = $val['departure_place'];
-                    $stopover = $val['stopover_place'];
-                    $destination = $val['destination_place'];
-                    $title = "[" . $assign . "] (" . $departure . "-" . $stopover . "-" . $destination . ") " . $type;
-                    $order_cell['order_title'] = $title;
+                        if($val['car_owner_type'] == 11) $type = '[空单]';
+                        else $type = '';
+                        $assign = date('Y-m-d', $val['assign_time']);
+                        $departure = $val['departure_place'];
+                        $stopover = $val['stopover_place'];
+                        $destination = $val['destination_place'];
+                        $title = "[" . $assign . "] (" . $departure . "-" . $stopover . "-" . $destination . ") " . $type;
+                        $order_cell['order_title'] = $title;
 
-                    $order_cell['start_time'] = '';
-                    $order_cell['ended_time'] = '';
+                        $order_cell['start_time'] = '';
+                        $order_cell['ended_time'] = '';
 
-                    $order_cell['amount_total'] = '';
-                    $order_cell['cost_total'] = '';
+                        $order_cell['amount_total'] = '';
+                        $order_cell['cost_total'] = '';
 
-                    $order_cell['remark'] = '';
+                        $order_cell['remark'] = '';
 
-                    $order_list[] = $order_cell;
+                        $order_list[] = $order_cell;
 
-                    // 总计
-                    $amount += $val['amount'] + $val['oil_card_amount'];
-                    $cost += $val['expenditure_total'] + $val['oil_card_amount'];
+                        // 总计
+                        $amount += $val['amount'] + $val['oil_card_amount'];
+                        $cost += $val['expenditure_total'] + $val['oil_card_amount'];
+                    }
                 }
-            }
 
-            $cell['amount_total'] = floatval($amount);
-            $cell['cost_total'] = floatval($cost);
-            $cell['remark'] = $v['remark'];
+                $cell['amount_total'] = floatval($amount);
+                $cell['cost_total'] = floatval($cost);
+                $cell['remark'] = $v['remark'];
 
-            $cellData[] = $cell;
-            if(count($order_list) > 0)
-            {
-                foreach($order_list as $value)
+                $cellData[] = $cell;
+                if(count($order_list) > 0)
                 {
-                    $cellData[] = $value;
+                    foreach($order_list as $value)
+                    {
+                        $cellData[] = $value;
+                    }
                 }
+                $cellData[] = [];
+                $cellData[] = [];
             }
-            $cellData[] = [];
-            $cellData[] = [];
+            $sheetData[] = $cellData;
         }
 
-
-        array_unshift($cellData,[
+        $table_title = [
             'id'=>'ID',
             'creator_name'=>'创建者',
             'car_er_name'=>'车辆',
@@ -14166,8 +14175,9 @@ class YHAdminRepository {
             'amount_total'=>'收入',
             'cost_total'=>'支出',
             'remark'=>'备注',
-        ]);
-//        dd($cellData);
+        ];
+//        array_unshift($cellData,$table_title);
+//        dd($sheetData);
 
         $month_title = '';
         $time_title = '';
@@ -14181,14 +14191,8 @@ class YHAdminRepository {
             {
                 $time_title = '【'.$the_start.' - '.$the_ended.'】';
             }
-            else if($the_start)
-            {
-                $time_title = '【'.$the_start.'】';
-            }
-            else if($the_ended)
-            {
-                $time_title = '【'.$the_ended.'】';
-            }
+            else if($the_start) $time_title = '【'.$the_start.'】';
+            else if($the_ended) $time_title = '【'.$the_ended.'】';
         }
 
         $car_title = '';
@@ -14203,13 +14207,35 @@ class YHAdminRepository {
 
         $title = '【环线】'.$car_title.$month_title.$time_title.' - '.date('YmdHis');
 
-        $file = Excel::create($title, function($excel) use($cellData) {
-            $excel->sheet('all', function($sheet) use($cellData) {
+
+//        $cellData = collect($sheetData)->collapse()->toArray();
+
+
+
+        $file = Excel::create($title, function($excel) use($sheetData,$table_title) {
+
+            $cellData = collect($sheetData)->collapse()->toArray();
+            array_unshift($cellData, $table_title);
+            $excel->sheet('全部环线', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
                 $sheet->setWidth('F', 30);
             });
+
+            foreach($sheetData as $key => $val)
+            {
+
+                $title = $val[0]['car_er_name'];
+                array_unshift($val, $table_title);
+                $excel->sheet($title, function($sheet) use($val) {
+                    $sheet->rows($val);
+                    $sheet->setAutoSize(false);
+                    $sheet->freezeFirstRow();
+                    $sheet->setWidth('F', 30);
+                });
+            }
+
         })->export('xls');
     }
     // 【数据导出】财务
