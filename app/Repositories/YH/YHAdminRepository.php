@@ -13898,7 +13898,7 @@ class YHAdminRepository {
         dd(1);
 
 
-        array_unshift($cellData,[
+        $title_row = [
             'id'=>'ID',
             'order_type_name'=>'类型',
             'assign_date'=>'派车日期',
@@ -13957,7 +13957,8 @@ class YHAdminRepository {
             'remark'=>'备注',
             'income'=>'收入',
             'expense'=>'支出',
-        ]);
+        ];
+        array_unshift($cellData, $title_row);
 
         $month_title = '';
         $time_title = '';
@@ -13994,12 +13995,13 @@ class YHAdminRepository {
         $title = '【订单】'.$car_title.$month_title.$time_title.' - '.date('YmdHis');
 
         $file = Excel::create($title, function($excel) use($cellData) {
-            $excel->sheet('all', function($sheet) use($cellData) {
+            $excel->sheet('全部订单', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
+
 
     }
     // 【数据导出】订单
@@ -14163,7 +14165,7 @@ class YHAdminRepository {
             $sheetData[] = $cellData;
         }
 
-        $table_title = [
+        $circle_title_row = [
             'id'=>'ID',
             'creator_name'=>'创建者',
             'car_er_name'=>'车辆',
@@ -14176,7 +14178,7 @@ class YHAdminRepository {
             'cost_total'=>'支出',
             'remark'=>'备注',
         ];
-//        array_unshift($cellData,$table_title);
+//        array_unshift($cellData,$circle_title_row);
 //        dd($sheetData);
 
         $month_title = '';
@@ -14212,10 +14214,10 @@ class YHAdminRepository {
 
 
 
-        $file = Excel::create($title, function($excel) use($sheetData,$table_title) {
+        $file = Excel::create($title, function($excel) use($sheetData,$circle_title_row) {
 
             $cellData = collect($sheetData)->collapse()->toArray();
-            array_unshift($cellData, $table_title);
+            array_unshift($cellData, $circle_title_row);
             $excel->sheet('全部环线', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
                 $sheet->setAutoSize(false);
@@ -14227,7 +14229,7 @@ class YHAdminRepository {
             {
 
                 $title = $val[0]['car_er_name'];
-                array_unshift($val, $table_title);
+                array_unshift($val, $circle_title_row);
                 $excel->sheet($title, function($sheet) use($val) {
                     $sheet->rows($val);
                     $sheet->setAutoSize(false);
