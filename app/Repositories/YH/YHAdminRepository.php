@@ -13844,10 +13844,20 @@ class YHAdminRepository {
             $cellData[$k]['route_er_title'] = $v['route_er']['title'];
             $cellData[$k]['route_temporary'] = $v['route_temporary'];
             $cellData[$k]['pricing_er_title'] = $v['pricing_er']['title'];
-            $cellData[$k]['car_er_name'] = $v['car_er']['name'];
-            $cellData[$k]['trailer_er_name'] = $v['trailer_er']['name'];
-            $cellData[$k]['driver_er_name'] = $v['driver_er']['driver_name'];
-            $cellData[$k]['driver_er_phone'] = $v['driver_er']['driver_phone'];
+            if($v['car_owner_type'] == 61)
+            {
+                $cellData[$k]['car_er_name'] = $v['outside_car'];
+                $cellData[$k]['trailer_er_name'] = $v['outside_trailer'];
+                $cellData[$k]['driver_er_name'] = $v['driver_name'];
+                $cellData[$k]['driver_er_phone'] = $v['driver_phone'];
+            }
+            else
+            {
+                $cellData[$k]['car_er_name'] = $v['car_er']['name'];
+                $cellData[$k]['trailer_er_name'] = $v['trailer_er']['name'];
+                $cellData[$k]['driver_er_name'] = $v['driver_er']['driver_name'];
+                $cellData[$k]['driver_er_phone'] = $v['driver_er']['driver_phone'];
+            }
             $cellData[$k]['departure_place'] = $v['departure_place'];
             $cellData[$k]['stopover_place'] = $v['stopover_place'];
             $cellData[$k]['destination_place'] = $v['destination_place'];
@@ -14059,7 +14069,7 @@ class YHAdminRepository {
 
 
     }
-    // 【数据导出】订单
+    // 【数据导出】环线
     public function operate_statistic_export_for_circle($post_data)
     {
         $this->get_me();
