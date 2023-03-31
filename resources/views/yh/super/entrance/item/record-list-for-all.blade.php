@@ -1019,6 +1019,16 @@
                     {
                         "className": "text-center",
                         "width": "60px",
+                        "title": "IP",
+                        "data": "ip",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "60px",
                         "title": "操作人",
                         "data": "creator_id",
                         "orderable": false,
