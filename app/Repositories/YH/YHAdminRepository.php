@@ -13895,7 +13895,6 @@ class YHAdminRepository {
 //            else $cellData[$k]['expense'] = '';
 
         }
-        dd(1);
 
 
         $title_row = [
