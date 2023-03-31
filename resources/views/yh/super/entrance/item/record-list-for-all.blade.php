@@ -1018,7 +1018,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "100px",
                         "title": "IP",
                         "data": "ip",
                         "orderable": false,
