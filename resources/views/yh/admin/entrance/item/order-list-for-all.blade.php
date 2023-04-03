@@ -233,6 +233,8 @@
                             <th>车辆</th>
                             <th>车挂</th>
                             <th>是否压车</th>
+                            <th>固定线路</th>
+                            <th>临时线路</th>
                             <th>环线</th>
                             <th>包油油耗</th>
                             <th>驾驶员</th>
@@ -1655,7 +1657,7 @@
                 "showRefresh": true,
                 "columnDefs": [
                     {
-                        "targets": [12, 13],
+                        "targets": [9, 10, 14, 15],
                         "visible": false,
                         "searchable": false
                     }
@@ -2032,6 +2034,53 @@
                             if(data == 1) return '<small class="btn-xs btn-success">正常</small>';
                             else if(data == 9) return '<small class="btn-xs btn-danger">压车</small>';
                             else return '--';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "固定线路",
+                        "data": "route_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','固定线路');
+                                $(nTd).attr('data-key','route_id').attr('data-value',row.route_id);
+                                if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
+                                else $(nTd).attr('data-option-name',row.route_er.title);
+                                $(nTd).attr('data-column-name','固定线路');
+                                if(row.route_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.route_er == null) return '--';
+                            else return '<a href="javascript:void(0);">'+row.route_er.title+'</a>';
+                        }
+                    },
+                    {
+                        "className": "text-center",
+                        "width": "120px",
+                        "title": "临时线路",
+                        "data": "route_temporary",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','临时线路');
+                                $(nTd).attr('data-key','route_temporary').attr('data-value',row.route_temporary);
+                                if(row.route_er == null) $(nTd).attr('data-option-name','未指定');
+                                $(nTd).attr('data-column-name','临时线路');
+                                if(row.route_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.route_temporary) return '' + row.route_temporary;
+                            else return '';
                         }
                     },
                     {
@@ -4907,9 +4956,9 @@
                                 else if(data == "assign_time") return '安排时间';
                                 else if(data == "container_type") return '箱型';
                                 else if(data == "subordinate_company") return '所属公司';
-                                else if(data == "route") return '路线';
-                                else if(data == "fixed_route") return '固定路线';
-                                else if(data == "temporary_route") return '临时路线';
+                                else if(data == "route") return '线路';
+                                else if(data == "fixed_route") return '固定线路';
+                                else if(data == "temporary_route") return '临时线路';
                                 else if(data == "departure_place") return '出发地';
                                 else if(data == "destination_place") return '目的地';
                                 else if(data == "stopover_place") return '经停点';

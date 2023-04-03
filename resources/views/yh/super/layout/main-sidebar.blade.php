@@ -70,16 +70,10 @@
             {{--内容管理--}}
             <li class="header">内容管理</li>
 
-            <li class="treeview {{ $menu_active_of_item_list_for_all or '' }}">
-                <a href="{{ url('/item/order-list-for-all')}}">
+            <li class="treeview {{ $menu_active_of_statistic_index or '' }}">
+                <a href="{{ url('/statistic/statistic-index')}}">
                     <i class="fa fa-list text-red"></i>
-                    <span>订单列表</span>
-                </a>
-            </li>
-            <li class="treeview {{ $menu_active_of_circle_list_for_all or '' }}">
-                <a href="{{ url('/item/circle-list-for-all')}}">
-                    <i class="fa fa-list text-red"></i>
-                    <span>环线列表</span>
+                    <span>操作统计</span>
                 </a>
             </li>
             <li class="treeview {{ $menu_active_of_record_list_for_all or '' }}">

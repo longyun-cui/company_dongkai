@@ -88,6 +88,12 @@ Route::group(['middleware' => ['yh.super.login']], function () {
     Route::match(['get','post'], '/item/item-list-for-all', $controller.'@view_item_list_for_all');
     Route::match(['get','post'], '/item/record-list-for-all', $controller.'@view_record_list_for_all');
 
+    Route::match(['get','post'], '/statistic/statistic-index', $controller.'@view_statistic_index');
+
+    Route::post('/statistic/statistic-get-data-for-comprehensive', $controller.'@get_statistic_data_for_comprehensive');
+    Route::post('/statistic/statistic-get-data-for-order', $controller.'@get_statistic_data_for_order');
+    Route::post('/statistic/statistic-get-data-for-finance', $controller.'@get_statistic_data_for_finance');
+
 
 
 });
