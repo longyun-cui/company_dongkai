@@ -3,14 +3,14 @@
 
 @section('head_title')
     @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
-    {{ $title_text or '统计' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '统计' }} - SUPER - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description','统计 - 管理员后台系统 - 兆益信息')
+@section('description'){{ $title_text or '统计' }} - 超级管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>

@@ -10,7 +10,7 @@
 
 
 @section('header','')
-@section('description','统计 - 管理员后台系统 - 兆益信息')
+@section('description'){{ $title_text or '统计' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
