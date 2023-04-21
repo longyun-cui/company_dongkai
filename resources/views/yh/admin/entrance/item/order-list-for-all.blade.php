@@ -4426,7 +4426,8 @@
                                 {
                                     $html_confirm = '<a class="btn btn-xs btn-default disabled">确认</a>';
 
-                                    if(row.confirmer_id == 0 || row.confirmer_id == row.creator_id)
+                                    // if(row.confirmer_id == 0 || row.confirmer_id == row.creator_id)
+                                    if(row.confirmer_id == 0 || row.confirmer_id == row.creator_id || "{{ $me->id or 0 }}" == row.confirmer_id || "{{ $me->id }}" == row.creator_id)
                                     {
                                         $html_delete = '<a class="btn btn-xs bg-navy item-finance-delete-submit" data-id="'+data+'">删除</a>';
                                     }
