@@ -2632,7 +2632,7 @@
                             var $profit = 0;
                             var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
                             $profit = $receivable - parseFloat(row.expenditure_total);
-                            return $profit.toFixed(2);
+                            return parseFloat($profit.toFixed(2));
                         }
                     },
                     {
@@ -2653,7 +2653,7 @@
                             if(row.is_published == 0) return '--';
                             var $profit = 0;
                             $profit = parseFloat(row.income_total) - parseFloat(row.expenditure_total);
-                            return $profit.toFixed(2);
+                            return parseFloat($profit.toFixed(2));
                         }
                     },
                     {
