@@ -34,6 +34,7 @@ table.dataTable thead>tr>td.sorting_asc_disabled,
 table.dataTable thead>tr>td.sorting_desc_disabled { padding-right:0; }
 table.dataTable .btn-group-xs>.btn, .btn-xs { line-height:1.4; }
 .table-hover>tbody>tr:hover { background-color: #bbccff; }
+.table-hover>tbody>tr:hover td { background-color: #bbccff; }
 
 
 

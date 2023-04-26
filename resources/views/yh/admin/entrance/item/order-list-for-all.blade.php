@@ -218,16 +218,29 @@
                 <div class="tableArea">
                 <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
                     <thead>
-                        <tr role='row' class='heading'>
+                        <tr>
+                            <th colspan="14" rowspan="2">基本信息</th>
+                            <th colspan="11" rowspan="2">基本信息</th>
+                            <th colspan="23" class="bg-fee">费用信息</th>
+                            <th colspan="8" rowspan="2" class="bg-finance">财务信息</th>
+                            <th colspan="9" rowspan="2" class="bg-empty">空单</th>
+                            <th colspan="7" rowspan="2" class="bg-journey">行程</th>
+                            <th colspan="9" rowspan="2">其他信息</th>
+                            <th colspan="3" rowspan="2">时间与操作</th>
                         </tr>
-                    </thead>
-
-                    <tfoot>
+                        <tr>
+                            <th colspan="3" class="bg-fee">运费</th>
+                            <th colspan="3" class="bg-fee">扣款</th>
+                            <th colspan="4" class="bg-fee">收款</th>
+                            <th colspan="8" class="bg-fee">支出</th>
+                            <th colspan="5" class="bg-fee">请车</th>
+                        </tr>
                         <tr role='row'>
                             <th>ID</th>
                             <th>订单状态</th>
                             <th>创建人</th>
                             <th>派车日期</th>
+                            <th>订单类型</th>
                             <th>客户</th>
                             <th>线路</th>
                             <th>车辆</th>
@@ -237,16 +250,47 @@
                             <th>临时线路</th>
                             <th>环线</th>
                             <th>包油油耗</th>
+
                             <th>驾驶员</th>
                             <th>主驾</th>
                             <th>主驾电话</th>
+                            <th>副驾</th>
+                            <th>副驾电话</th>
                             <th>出发地</th>
                             <th>经停地</th>
                             <th>目的地</th>
                             <th>里程</th>
                             <th>时效</th>
-                            <th>订单类型</th>
                             <th>状态</th>
+
+                            <th>运价</th>
+                            <th>油卡</th>
+                            <th>订金</th>
+
+                            <th>报销</th>
+                            <th>时效扣款</th>
+                            <th>管理费</th>
+
+                            <th>实收</th>
+                            <th>日期</th>
+                            <th>尾款</th>
+                            <th>日期</th>
+
+                            <th>信息费</th>
+                            <th>客管费</th>
+                            <th>ETC</th>
+                            <th>万金油(升)</th>
+                            <th>油价(元)</th>
+                            <th>包邮费</th>
+                            <th>开票额</th>
+                            <th>票点</th>
+
+                            <th>请车价</th>
+                            <th>到付</th>
+                            <th>日期</th>
+                            <th>尾款</th>
+                            <th>日期</th>
+
                             <th>应收款</th>
                             <th>欠款</th>
                             <th>已收款</th>
@@ -255,18 +299,7 @@
                             <th>待出账</th>
                             <th>利润·预估</th>
                             <th>利润·实时</th>
-                            <th>运价</th>
-                            <th>油卡</th>
-                            <th>订金</th>
-                            <th>请车价</th>
-                            <th>时效扣款</th>
-                            <th>管理费</th>
-                            <th>信息费</th>
-                            <th>客管费</th>
-                            <th>ETC</th>
-                            <th>万金油(升)</th>
-                            <th>油价(元)</th>
-                            <th>票点</th>
+
                             <th>空单-固定</th>
                             <th>空单-临时</th>
                             <th>空-里程</th>
@@ -276,8 +309,7 @@
                             <th>空-加油金额</th>
                             <th>空-过路-现金</th>
                             <th>空-过路-ETC</th>
-                            <th>副驾</th>
-                            <th>副驾电话</th>
+
                             <th>应出发时间</th>
                             <th>应到达时间</th>
                             <th>实际出发</th>
@@ -285,6 +317,7 @@
                             <th>经停-出发</th>
                             <th>实际到达</th>
                             <th>行程</th>
+
                             <th>单号</th>
                             <th>收款人</th>
                             <th>车货源</th>
@@ -295,6 +328,108 @@
                             <th>回单地址</th>
                             <th>附件</th>
                             <th>备注</th>
+
+                            <th>创建时间</th>
+                            <th>修改时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr role='row'>
+                            <th>ID</th>
+                            <th>订单状态</th>
+                            <th>创建人</th>
+                            <th>派车日期</th>
+                            <th>订单类型</th>
+                            <th>客户</th>
+                            <th>线路</th>
+                            <th>车辆</th>
+                            <th>车挂</th>
+                            <th>是否压车</th>
+                            <th>固定线路</th>
+                            <th>临时线路</th>
+                            <th>环线</th>
+                            <th>包油油耗</th>
+
+                            <th>驾驶员</th>
+                            <th>主驾</th>
+                            <th>主驾电话</th>
+                            <th>副驾</th>
+                            <th>副驾电话</th>
+                            <th>出发地</th>
+                            <th>经停地</th>
+                            <th>目的地</th>
+                            <th>里程</th>
+                            <th>时效</th>
+                            <th>状态</th>
+
+                            <th>运价</th>
+                            <th>油卡</th>
+                            <th>订金</th>
+
+                            <th>报销</th>
+                            <th>时效扣款</th>
+                            <th>管理费</th>
+
+                            <th>实收</th>
+                            <th>日期</th>
+                            <th>尾款</th>
+                            <th>日期</th>
+
+                            <th>信息费</th>
+                            <th>客管费</th>
+                            <th>ETC</th>
+                            <th>万金油(升)</th>
+                            <th>油价(元)</th>
+                            <th>包邮费</th>
+                            <th>开票额</th>
+                            <th>票点</th>
+
+                            <th>请车价</th>
+                            <th>到付</th>
+                            <th>日期</th>
+                            <th>尾款</th>
+                            <th>日期</th>
+
+                            <th>应收款</th>
+                            <th>欠款</th>
+                            <th>已收款</th>
+                            <th>待入账</th>
+                            <th>已支出</th>
+                            <th>待出账</th>
+                            <th>利润·预估</th>
+                            <th>利润·实时</th>
+
+                            <th>空单-固定</th>
+                            <th>空单-临时</th>
+                            <th>空-里程</th>
+                            <th>空-包油价</th>
+                            <th>空-包油金额</th>
+                            <th>空-加油方式</th>
+                            <th>空-加油金额</th>
+                            <th>空-过路-现金</th>
+                            <th>空-过路-ETC</th>
+
+                            <th>应出发时间</th>
+                            <th>应到达时间</th>
+                            <th>实际出发</th>
+                            <th>经停-到达</th>
+                            <th>经停-出发</th>
+                            <th>实际到达</th>
+                            <th>行程</th>
+
+                            <th>单号</th>
+                            <th>收款人</th>
+                            <th>车货源</th>
+                            <th>安排人</th>
+                            <th>GPS</th>
+                            <th>是否回单</th>
+                            <th>回单状态</th>
+                            <th>回单地址</th>
+                            <th>附件</th>
+                            <th>备注</th>
+
                             <th>创建时间</th>
                             <th>修改时间</th>
                             <th>操作</th>
@@ -1589,6 +1724,11 @@
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
+    .bg-fee { background:#FABEFB; }
+    .bg-fee-2 { background:#FAA4FB; }
+    .bg-finance { background:#DAF7A6; }
+    .bg-empty { background:#F5F9B4; }
+    .bg-journey { background:#B4F9EF; }
 </style>
 @endsection
 
@@ -1604,13 +1744,13 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[20,50,100,200])) {{ $length.',' }} @endif 20, 50, 100, 200], [ @if(!in_array($length,[20,50,100,200])) {{ $length.',' }} @endif "20", "50", "100", "200"]],
+//                "aLengthMenu": [[15, 50, 200, 500, -1], ["15", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[ @if(!in_array($length,[15, 50, 100, 200])) {{ $length.',' }} @endif 15, 50, 100, 200], [ @if(!in_array($length,[15, 50, 100, 200])) {{ $length.',' }} @endif "15", "50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "iDisplayStart": {{ ($page - 1) * $length }},
-                "iDisplayLength": {{ $length or 20 }},
+                "iDisplayLength": {{ $length or 15 }},
                 "ajax": {
                     'url': "{{ url('/item/order-list-for-all') }}",
                     "type": 'POST',
@@ -1652,21 +1792,22 @@
 //                "scrollY": true,
                 "scrollCollapse": true,
                 "fixedColumns": {
-                    "leftColumns": "@if($is_mobile_equipment) 1 @else 9 @endif",
+                    "leftColumns": "@if($is_mobile_equipment) 1 @else 10 @endif",
                     "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 },
                 "showRefresh": true,
                 "columnDefs": [
                     {
-                        "targets": [9, 10, 14, 15],
+                        // "targets": [10, 11, 15, 16],
+                        "targets": [],
                         "visible": false,
                         "searchable": false
                     }
                 ],
                 "columns": [
 //                    {
-//                        "width": "32px",
 //                        "title": "选择",
+//                        "width": "32px",
 //                        "data": "id",
 //                        "orderable": false,
 //                        render: function(data, type, row, meta) {
@@ -1674,16 +1815,16 @@
 //                        }
 //                    },
 //                    {
-//                        "width": "32px",
 //                        "title": "序号",
+//                        "width": "32px",
 //                        "data": null,
 //                        "targets": 0,
 //                        "orderable": false
 //                    },
                     {
+                        "title": "ID",
                         "className": "",
                         "width": "50px",
-                        "title": "ID",
                         "data": "id",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -1692,9 +1833,9 @@
                         }
                     },
                     {
+                        "title": "订单状态",
                         "className": "",
                         "width": "60px",
-                        "title": "订单状态",
                         "data": "id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1783,9 +1924,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "60px",
                         "title": "创建人",
+                        "className": "",
+                        "width": "60px",
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -1793,9 +1934,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
                         "title": "派车日期",
+                        "className": "text-center",
+                        "width": "72px",
                         "data": 'assign_time',
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -1838,9 +1979,46 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "100px",
+                        "title": "订单类型",
+                        "className": "",
+                        "width": "72px",
+                        "data": "car_owner_type",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','订单类型');
+                                $(nTd).attr('data-key','car_owner_type').attr('data-value',data);
+                                $(nTd).attr('data-column-name','订单类型');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 1)
+                            {
+                                return '<small class="btn-xs bg-green">自有</small>';
+                            }
+                            else if(data == 11)
+                            {
+                                return '<small class="btn-xs bg-teal">空单</small>';
+                            }
+                            else if(data == 41)
+                            {
+                                return '<small class="btn-xs bg-blue">外配·配货</small>';
+                            }
+                            else if(data == 61)
+                            {
+                                return '<small class="btn-xs bg-purple">外请·调车</small>';
+                            }
+                            else return "有误";
+                        }
+                    },
+                    {
                         "title": "客户",
+                        "className": "",
+                        "width": "80px",
                         "data": "client_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1880,9 +2058,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "120px",
                         "title": "线路",
+                        "className": "",
+                        "width": "120px",
                         "data": "route_type",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1926,9 +2104,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
                         "title": "车辆",
+                        "className": "",
+                        "width": "72px",
                         "data": "car_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1971,9 +2149,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
                         "title": "车挂",
+                        "className": "",
+                        "width": "72px",
                         "data": "trailer_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2015,9 +2193,9 @@
                         }
                     },
                     {
+                        "title": "是否压车",
                         "className": "",
                         "width": "60px",
-                        "title": "是否压车",
                         "data": "is_delay",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2038,11 +2216,12 @@
                         }
                     },
                     {
+                        "title": "固定线路",
                         "className": "text-center",
                         "width": "120px",
-                        "title": "固定线路",
                         "data": "route_id",
                         "orderable": false,
+                        "visible" : false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2062,11 +2241,12 @@
                         }
                     },
                     {
+                        "title": "临时线路",
                         "className": "text-center",
                         "width": "120px",
-                        "title": "临时线路",
                         "data": "route_temporary",
                         "orderable": false,
+                        "visible" : false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2085,9 +2265,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
                         "title": "环线",
+                        "className": "",
+                        "width": "72px",
                         "data": "circle_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2115,9 +2295,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "120px",
                         "title": "包油油耗",
+                        "className": "",
+                        "width": "100px",
                         "data": "pricing_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2150,10 +2330,11 @@
                             }
                         }
                     },
+
                     {
-                        "className": "text-center",
-                        "width": "80px",
                         "title": "驾驶员",
+                        "className": "",
+                        "width": "60px",
                         "data": "driver_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2197,11 +2378,12 @@
                         }
                     },
                     {
+                        "title": "主驾",
                         "className": "",
                         "width": "60px",
-                        "title": "主驾",
                         "data": "driver_name",
                         "orderable": false,
+                        "visible" : false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2226,12 +2408,12 @@
                         }
                     },
                     {
+                        "title": "主驾电话",
                         "className": "",
                         "width": "100px",
-                        "title": "主驾电话",
                         "data": "driver_phone",
-                        "visible" : false,
                         "orderable": false,
+                        "visible" : false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -2256,9 +2438,55 @@
                         }
                     },
                     {
+                        "title": "副驾",
+                        "className": "",
+                        "width": "60px",
+                        "data": "copilot_name",
+                        "orderable": false,
+                        "visible" : false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾姓名');
+                                $(nTd).attr('data-key','copilot_name').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾姓名');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "副驾电话",
+                        "className": "",
+                        "width": "100px",
+                        "data": "copilot_phone",
+                        "orderable": false,
+                        "visible" : false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','副驾电话');
+                                $(nTd).attr('data-key','copilot_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','副驾电话');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "出发地",
                         "className": "text-center",
                         "width": "60px",
-                        "title": "出发地",
                         "data": "departure_place",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2278,9 +2506,9 @@
                         }
                     },
                     {
+                        "title": "经停地",
                         "className": "text-center",
                         "width": "60px",
-                        "title": "经停地",
                         "data": "stopover_place",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2300,9 +2528,9 @@
                         }
                     },
                     {
+                        "title": "目的地",
                         "className": "text-center",
                         "width": "60px",
-                        "title": "目的地",
                         "data": "destination_place",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2322,9 +2550,9 @@
                         }
                     },
                     {
+                        "title": "里程",
                         "className": "text-center",
                         "width": "60px",
-                        "title": "里程",
                         "data": "travel_distance",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2345,9 +2573,9 @@
                         }
                     },
                     {
+                        "title": "时效",
                         "className": "text-center",
                         "width": "60px",
-                        "title": "时效",
                         "data": "time_limitation_prescribed",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2367,76 +2595,10 @@
                             else return data;
                         }
                     },
-                    // {
-                    //     "className": "",
-                    //     "width": "100px",
-                    //     "title": "主驾电话",
-                    //     "data": "driver_phone",
-                    //     "orderable": false,
-                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                    //         if(row.is_completed != 1 && row.item_status != 97)
-                    //         {
-                    //             $(nTd).addClass('modal-show-for-info-text-set');
-                    //             $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
-                    //             $(nTd).attr('data-key','driver_phone').attr('data-value',data);
-                    //             $(nTd).attr('data-column-name','主驾电话');
-                    //             $(nTd).attr('data-text-type','text');
-                    //             if(data) $(nTd).attr('data-operate-type','edit');
-                    //             else $(nTd).attr('data-operate-type','add');
-                    //         }
-                    //     },
-                    //     render: function(data, type, row, meta) {
-                    //         return data;
-                    //         // if(data) return data;
-                    //         // if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
-                    //         // {
-                    //         //     if(row.car_er != null) return row.car_er.linkman_phone;
-                    //         //     else return data;
-                    //         // }
-                    //         // else return data;
-                    //     }
-                    // },
                     {
-                        "className": "text-center",
-                        "width": "80px",
-                        "title": "订单类型",
-                        "data": "car_owner_type",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','订单类型');
-                                $(nTd).attr('data-key','car_owner_type').attr('data-value',data);
-                                $(nTd).attr('data-column-name','订单类型');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == 1)
-                            {
-                                return '<small class="btn-xs bg-green">自有</small>';
-                            }
-                            else if(data == 11)
-                            {
-                                return '<small class="btn-xs bg-teal">空单</small>';
-                            }
-                            else if(data == 41)
-                            {
-                                return '<small class="btn-xs bg-blue">外配·配货</small>';
-                            }
-                            else if(data == 61)
-                            {
-                                return '<small class="btn-xs bg-purple">外请·调车</small>';
-                            }
-                            else return "有误";
-                        }
-                    },
-                    {
+                        "title": "状态",
                         "className": "",
                         "width": "80px",
-                        "title": "状态",
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -2489,177 +2651,40 @@
 
                         }
                     },
+
+                    // {
+                    //     "className": "",
+                    //     "width": "100px",
+                    //     "title": "主驾电话",
+                    //     "data": "driver_phone",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-text-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','主驾电话');
+                    //             $(nTd).attr('data-key','driver_phone').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','主驾电话');
+                    //             $(nTd).attr('data-text-type','text');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //         // if(data) return data;
+                    //         // if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
+                    //         // {
+                    //         //     if(row.car_er != null) return row.car_er.linkman_phone;
+                    //         //     else return data;
+                    //         // }
+                    //         // else return data;
+                    //     }
+                    // },
                     {
-                        "className": "",
-                        "width": "50px",
-                        "title": "应收款",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                $(nTd).addClass('color-green');
-                                $(nTd).addClass('item-show-for-finance');
-                                $(nTd).attr('data-id',row.id).attr('data-type','all');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.is_published == 0)
-                            {
-                                return '--';
-                            }
-                            var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
-                            return parseFloat($receivable);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "50px",
-                        "title": "欠款",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
-                                if($receivable > 0)
-                                {
-                                    $(nTd).addClass('color-red _bold');
-                                    $(nTd).addClass('item-show-for-finance');
-                                    $(nTd).attr('data-id',row.id).attr('data-type','all');
-                                }
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.is_published == 0) return '--';
-                            var $to_be_collected = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
-                            return parseFloat($to_be_collected);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "50px",
-                        "title": "已收款",
-                        "data": "income_total",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                $(nTd).addClass('color-blue');
-                                $(nTd).addClass('item-show-for-finance-income');
-                                $(nTd).attr('data-id',row.id).attr('data-type','income');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.is_published == 0) return '--';
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "50px",
-                        "title": "待入账",
-                        "data": "income_to_be_confirm",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                $(nTd).addClass('color-red _bold');
-                                $(nTd).addClass('item-show-for-finance-income');
-                                $(nTd).attr('data-id',row.id).attr('data-type','income');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.is_published == 0) return '--';
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "50px",
-                        "title": "已支出",
-                        "data": "expenditure_total",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                $(nTd).addClass('color-purple');
-                                $(nTd).addClass('item-show-for-finance-expenditure');
-                                $(nTd).attr('data-id',row.id).attr('data-type','expenditure');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.is_published == 0) return '--';
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "50px",
-                        "title": "待出账",
-                        "data": "expenditure_to_be_confirm",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                $(nTd).addClass('color-red _bold');
-                                $(nTd).addClass('item-show-for-finance-expenditure');
-                                $(nTd).attr('data-id',row.id).attr('data-type','expenditure');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.is_published == 0) return '--';
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "利润·预估",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
-                                var $profit = $receivable - parseFloat(row.expenditure_total);
-                                if($profit > 0) $(nTd).addClass('color-green');
-                                else if($profit < 0) $(nTd).addClass('color-red');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.is_published == 0) return '--';
-                            var $profit = 0;
-                            var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
-                            $profit = $receivable - parseFloat(row.expenditure_total);
-                            return parseFloat($profit.toFixed(2));
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "80px",
-                        "title": "利润·实时",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_published != 0)
-                            {
-                                var $profit = parseFloat(row.income_total) - parseFloat(row.expenditure_total);
-                                if($profit > 0) $(nTd).addClass('color-green');
-                                else if($profit < 0) $(nTd).addClass('color-red');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.is_published == 0) return '--';
-                            var $profit = 0;
-                            $profit = parseFloat(row.income_total) - parseFloat(row.expenditure_total);
-                            return parseFloat($profit.toFixed(2));
-                        }
-                    },
-                    {
-                        "className": "_bold",
-                        "width": "50px",
                         "title": "运价",
+                        "className": "bg-fee _bold",
+                        "width": "50px",
                         "data": "amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2683,9 +2708,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "50px",
                         "title": "油卡",
+                        "className": "bg-fee",
+                        "width": "50px",
                         "data": "oil_card_amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2705,9 +2730,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "订金",
+                        "className": "bg-fee",
+                        "width": "60px",
                         "data": "deposit",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2726,32 +2751,11 @@
                             return parseFloat(data);
                         }
                     },
+
                     {
+                        "title": "报销",
                         "className": "",
                         "width": "60px",
-                        "title": "请车价",
-                        "data": "outside_car_price",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
-                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','请车价');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "60px",
-                        "title": "时效扣款",
                         "data": "time_limitation_deduction",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2771,53 +2775,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
-                        "title": "管理费",
-                        "data": "administrative_fee",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','管理费');
-                                $(nTd).attr('data-key','administrative_fee').attr('data-value',data);
-                                $(nTd).attr('data-column-name','管理费');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "50px",
-                        "title": "信息费",
-                        "data": "information_fee",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','信息费');
-                                $(nTd).attr('data-key','information_fee').attr('data-value',data);
-                                $(nTd).attr('data-column-name','信息费');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "50px",
                         "title": "客管费",
+                        "className": "",
+                        "width": "50px",
                         "data": "customer_management_fee",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2837,18 +2797,41 @@
                         }
                     },
                     {
+                        "title": "时效扣款",
                         "className": "",
                         "width": "60px",
-                        "title": "ETC",
-                        "data": "ETC_price",
+                        "data": "time_limitation_deduction",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','ETC');
-                                $(nTd).attr('data-key','ETC_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','ETC');
+                                $(nTd).attr('data-id',row.id).attr('data-name','时效扣款');
+                                $(nTd).attr('data-key','time_limitation_deduction').attr('data-value',data);
+                                $(nTd).attr('data-column-name','时效扣款');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+
+                    {
+                        "title": "实收",
+                        "className": "bg-fee",
+                        "width": "50px",
+                        "data": "income_real_first_amount",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','实收金额');
+                                $(nTd).attr('data-key','income_real_first_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','实收金额');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2859,9 +2842,120 @@
                         }
                     },
                     {
+                        "title": "日期",
+                        "className": "bg-fee",
+                        "width": "50px",
+                        "data": "income_real_first_time",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','实收日期');
+                                $(nTd).attr('data-key','income_real_first_time').attr('data-value',data);
+                                $(nTd).attr('data-column-name','实收日期');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "尾款",
+                        "className": "bg-fee",
+                        "width": "50px",
+                        "data": "income_real_final_amount",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','尾款金额');
+                                $(nTd).attr('data-key','income_real_first_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','尾款金额');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "日期",
+                        "className": "bg-fee",
+                        "width": "50px",
+                        "data": "income_real_final_time",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','尾款日期');
+                                $(nTd).attr('data-key','income_real_final_time').attr('data-value',data);
+                                $(nTd).attr('data-column-name','尾款日期');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+
+                    {
+                        "title": "管理费",
                         "className": "",
                         "width": "60px",
+                        "data": "administrative_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','管理费');
+                                $(nTd).attr('data-key','administrative_fee').attr('data-value',data);
+                                $(nTd).attr('data-column-name','管理费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "信息费",
+                        "className": "",
+                        "width": "50px",
+                        "data": "information_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','信息费');
+                                $(nTd).attr('data-key','information_fee').attr('data-value',data);
+                                $(nTd).attr('data-column-name','信息费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
                         "title": "万金油(升)",
+                        "className": "",
+                        "width": "60px",
                         "data": "oil_amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2881,9 +2975,9 @@
                         }
                     },
                     {
+                        "title": "油价(元)",
                         "className": "",
                         "width": "60px",
-                        "title": "油价(元)",
                         "data": "oil_unit_price",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2902,32 +2996,76 @@
                             return parseFloat(data);
                         }
                     },
-//                    {
-//                        "className": "",
-//                        "width": "50px",
-//                        "title": "开票额",
-//                        "data": "invoice_amount",
-//                        "orderable": false,
-//                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-//                            if(row.is_published != 0 && row.item_status != 97)
-//                            {
-//                                $(nTd).addClass('modal-show-for-info-text-set');
-//                                $(nTd).attr('data-id',row.id).attr('data-name','开票额');
-//                                $(nTd).attr('data-key','invoice_amount').attr('data-value',data);
-//                                $(nTd).attr('data-column-name','开票额');
-//                                $(nTd).attr('data-text-type','text');
-//                                if(data) $(nTd).attr('data-operate-type','edit');
-//                                else $(nTd).attr('data-operate-type','add');
-//                            }
-//                        },
-//                        render: function(data, type, row, meta) {
-//                            return data;
-//                        }
-//                    },
                     {
+                        "title": "包邮费",
+                        "className": "",
+                        "width": "60px",
+                        "data": "oil_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','包邮费');
+                                $(nTd).attr('data-key','oil_fee').attr('data-value',data);
+                                $(nTd).attr('data-column-name','包邮费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "ETC",
+                        "className": "",
+                        "width": "60px",
+                        "data": "ETC_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','ETC');
+                                $(nTd).attr('data-key','ETC_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','ETC');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "开票额",
                         "className": "",
                         "width": "50px",
+                        "data": "invoice_amount",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','开票额');
+                                $(nTd).attr('data-key','invoice_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','开票额');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
                         "title": "票点",
+                        "className": "",
+                        "width": "50px",
                         "data": "invoice_point",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -2946,6 +3084,286 @@
                             return parseFloat(data);
                         }
                     },
+
+                    {
+                        "title": "外请-车费",
+                        "className": "bg-fee",
+                        "width": "60px",
+                        "data": "outside_car_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
+                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "到付",
+                        "className": "bg-fee",
+                        "width": "60px",
+                        "data": "outside_car_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
+                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "日期",
+                        "className": "bg-fee",
+                        "width": "60px",
+                        "data": "outside_car_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
+                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "尾款",
+                        "className": "bg-fee",
+                        "width": "60px",
+                        "data": "outside_car_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
+                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "日期",
+                        "className": "bg-fee",
+                        "width": "60px",
+                        "data": "outside_car_price",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
+                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+
+                    {
+                        "title": "应收款",
+                        "className": "bg-finance",
+                        "width": "50px",
+                        "data": "id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('color-green');
+                                $(nTd).addClass('item-show-for-finance');
+                                $(nTd).attr('data-id',row.id).attr('data-type','all');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0)
+                            {
+                                return '--';
+                            }
+                            var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
+                            return parseFloat($receivable);
+                        }
+                    },
+                    {
+                        "title": "欠款",
+                        "className": "bg-finance",
+                        "width": "50px",
+                        "data": "id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
+                                if($receivable > 0)
+                                {
+                                    $(nTd).addClass('color-red _bold');
+                                    $(nTd).addClass('item-show-for-finance');
+                                    $(nTd).attr('data-id',row.id).attr('data-type','all');
+                                }
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0) return '--';
+                            var $to_be_collected = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
+                            return parseFloat($to_be_collected);
+                        }
+                    },
+                    {
+                        "title": "已收款",
+                        "className": "bg-finance",
+                        "width": "50px",
+                        "data": "income_total",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('color-blue');
+                                $(nTd).addClass('item-show-for-finance-income');
+                                $(nTd).attr('data-id',row.id).attr('data-type','income');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0) return '--';
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "待入账",
+                        "className": "bg-finance",
+                        "width": "50px",
+                        "data": "income_to_be_confirm",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('color-red _bold');
+                                $(nTd).addClass('item-show-for-finance-income');
+                                $(nTd).attr('data-id',row.id).attr('data-type','income');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0) return '--';
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "已支出",
+                        "className": "bg-finance",
+                        "width": "50px",
+                        "data": "expenditure_total",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('color-purple');
+                                $(nTd).addClass('item-show-for-finance-expenditure');
+                                $(nTd).attr('data-id',row.id).attr('data-type','expenditure');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0) return '--';
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "待出账",
+                        "className": "bg-finance",
+                        "width": "50px",
+                        "data": "expenditure_to_be_confirm",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                $(nTd).addClass('color-red _bold');
+                                $(nTd).addClass('item-show-for-finance-expenditure');
+                                $(nTd).attr('data-id',row.id).attr('data-type','expenditure');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0) return '--';
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "利润·预估",
+                        "className": "bg-finance",
+                        "width": "80px",
+                        "data": "id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
+                                var $profit = $receivable - parseFloat(row.expenditure_total);
+                                if($profit > 0) $(nTd).addClass('color-green');
+                                else if($profit < 0) $(nTd).addClass('color-red');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0) return '--';
+                            var $profit = 0;
+                            var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee);
+                            $profit = $receivable - parseFloat(row.expenditure_total);
+                            return parseFloat($profit.toFixed(2));
+                        }
+                    },
+                    {
+                        "title": "利润·实时",
+                        "className": "bg-finance",
+                        "width": "80px",
+                        "data": "id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_published != 0)
+                            {
+                                var $profit = parseFloat(row.income_total) - parseFloat(row.expenditure_total);
+                                if($profit > 0) $(nTd).addClass('color-green');
+                                else if($profit < 0) $(nTd).addClass('color-red');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.is_published == 0) return '--';
+                            var $profit = 0;
+                            $profit = parseFloat(row.income_total) - parseFloat(row.expenditure_total);
+                            return parseFloat($profit.toFixed(2));
+                        }
+                    },
+
                     // {
                     //     "className": "",
                     //     "width": "60px",
@@ -2970,9 +3388,9 @@
                     //     }
                     // },
                     {
-                        "className": "text-center",
-                        "width": "120px",
                         "title": "空单-固定",
+                        "className": "bg-empty",
+                        "width": "120px",
                         "data": "empty_route_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3018,9 +3436,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "80px",
                         "title": "空单-临时",
+                        "className": "bg-empty",
+                        "width": "80px",
                         "data": "empty_route_temporary",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3042,9 +3460,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "空-里程",
+                        "className": "bg-empty",
+                        "width": "60px",
                         "data": "empty_distance",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3064,9 +3482,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "空-包油",
+                        "className": "bg-empty",
+                        "width": "60px",
                         "data": "empty_oil_price",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3086,9 +3504,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "空-包油金额",
+                        "className": "bg-empty",
+                        "width": "60px",
                         "data": "empty_oil_amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3108,9 +3526,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "80px",
                         "title": "空-加油方式",
+                        "className": "bg-empty",
+                        "width": "80px",
                         "data": "empty_refueling_pay_type",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3131,9 +3549,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "80px",
                         "title": "空-加油金额",
+                        "className": "bg-empty",
+                        "width": "80px",
                         "data": "empty_refueling_charge",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3153,9 +3571,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "80px",
                         "title": "空-过路-现金",
+                        "className": "bg-empty",
+                        "width": "80px",
                         "data": "empty_toll_cash",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3175,9 +3593,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "80px",
                         "title": "空-过路-ETC",
+                        "className": "bg-empty",
+                        "width": "80px",
                         "data": "empty_toll_ETC",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3197,9 +3615,9 @@
                         }
                     },
 //                    {
-//                        "className": "text-center",
-//                        "width": "80px",
 //                        "title": "需求类型",
+//                        "className": "",
+//                        "width": "80px",
 //                        "data": "order_type",
 //                        "orderable": false,
 //                        render: function(data, type, row, meta) {
@@ -3227,8 +3645,9 @@
 //                        }
 //                    },
 //                    {
-//                        "width": "120px",
 //                        "title": "线路",
+//                        "className": "",
+//                        "width": "120px",
 //                        "data": "route",
 //                        "orderable": false,
 //                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3248,9 +3667,9 @@
 //                        }
 //                    },
 //                    {
-//                        "className": "text-center",
-//                        "width": "120px",
 //                        "title": "行程",
+//                        "className": "",
+//                        "width": "120px",
 //                        "data": "id",
 //                        "orderable": false,
 //                        render: function(data, type, row, meta) {
@@ -3260,50 +3679,6 @@
 //                            return row.departure_place + $stopover_html + '--' + row.destination_place;
 //                        }
 //                    },
-                    {
-                        "className": "",
-                        "width": "60px",
-                        "title": "副驾",
-                        "data": "copilot_name",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','副驾姓名');
-                                $(nTd).attr('data-key','copilot_name').attr('data-value',data);
-                                $(nTd).attr('data-column-name','副驾姓名');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "className": "",
-                        "width": "100px",
-                        "title": "副驾电话",
-                        "data": "copilot_phone",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','副驾电话');
-                                $(nTd).attr('data-key','copilot_phone').attr('data-value',data);
-                                $(nTd).attr('data-column-name','副驾电话');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
                     // {
                     //     "className": "text-center",
                     //     "width": "40px",
@@ -3470,9 +3845,9 @@
                     //     }
                     // },
                     {
-                        "className": "order-info-time-edit",
-                        "width": "100px",
                         "title": "应出发时间",
+                        "className": "order-info-time-edit bg-journey",
+                        "width": "100px",
                         "data": 'should_departure_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3522,9 +3897,9 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "100px",
                         "title": "应到达时间",
+                        "className": "bg-journey",
+                        "width": "100px",
                         "data": 'should_arrival_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3575,9 +3950,9 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "100px",
                         "title": "实际出发",
+                        "className": "bg-journey",
+                        "width": "100px",
                         "data": 'actual_departure_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3627,9 +4002,9 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "100px",
                         "title": "经停-到达",
+                        "className": "bg-journey",
+                        "width": "100px",
                         "data": 'stopover_arrival_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3680,9 +4055,9 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "100px",
                         "title": "经停-出发",
+                        "className": "bg-journey",
+                        "width": "100px",
                         "data": 'stopover_departure_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3733,9 +4108,9 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "100px",
                         "title": "实际到达",
+                        "className": "bg-journey",
+                        "width": "100px",
                         "data": 'actual_arrival_time',
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3788,9 +4163,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "200px",
                         "title": "行程",
+                        "className": "bg-journey",
+                        "width": "200px",
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -3806,9 +4181,9 @@
                         }
                     },
                     {
+                        "title": "单号",
                         "className": "",
                         "width": "120px",
-                        "title": "单号",
                         "data": "order_number",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3828,9 +4203,9 @@
                         }
                     },
                     {
+                        "title": "收款人",
                         "className": "",
                         "width": "80px",
-                        "title": "收款人",
                         "data": "payee_name",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3850,9 +4225,9 @@
                         }
                     },
                     {
+                        "title": "车货源",
                         "className": "",
                         "width": "80px",
-                        "title": "车货源",
                         "data": "car_supply",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3872,9 +4247,9 @@
                         }
                     },
                     {
+                        "title": "安排人",
                         "className": "",
                         "width": "80px",
-                        "title": "安排人",
                         "data": "arrange_people",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3894,9 +4269,9 @@
                         }
                     },
                     // {
+                    //     "title": "车负责人",
                     //     "className": "",
                     //     "width": "80px",
-                    //     "title": "车负责人",
                     //     "data": "car_managerial_people",
                     //     "orderable": false,
                     //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3938,9 +4313,9 @@
                     //     }
                     // },
                     {
+                        "title": "GPS",
                         "className": "",
                         "width": "80px",
-                        "title": "GPS",
                         "data": "GPS",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3960,9 +4335,9 @@
                         }
                     },
                     {
+                        "title": "是否回单",
                         "className": "",
                         "width": "60px",
-                        "title": "是否回单",
                         "data": "receipt_need",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -3982,9 +4357,9 @@
                         }
                     },
                     {
+                        "title": "回单状态",
                         "className": "",
                         "width": "80px",
-                        "title": "回单状态",
                         "data": "receipt_status",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -4017,9 +4392,9 @@
                         }
                     },
                     {
+                        "title": "回单地址",
                         "className": "",
                         "width": "100px",
-                        "title": "回单地址",
                         "data": "receipt_address",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -4043,9 +4418,9 @@
                         }
                     },
                     {
+                        "title": "附件",
                         "className": "",
                         "width": "80px",
-                        "title": "附件",
                         "data": "attachment_list_count",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -4077,9 +4452,9 @@
                         }
                     },
                     {
+                        "title": "备注",
                         "className": "text-left",
                         "width": "200px",
-                        "title": "备注",
                         "data": "remark",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -4101,9 +4476,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "100px",
                         "title": "创建时间",
+                        "className": "",
+                        "width": "100px",
                         "data": 'created_at',
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -4127,9 +4502,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "100px",
                         "title": "修改时间",
+                        "className": "",
+                        "width": "100px",
                         "data": 'updated_at',
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -4153,9 +4528,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "150px",
                         "title": "操作",
+                        "className": "",
+                        "width": "150px",
                         "data": 'id',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -4292,7 +4667,7 @@
                     if($('select[name="order-is-delay"]').val() > 0)  $obj.is_delay = $('select[name="order-is-delay"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != 20) $obj.length = $page_length;
+                    if($page_length != 15) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
                     var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($pagination > 1) $obj.page = $pagination;
@@ -4942,20 +5317,30 @@
                                 else if(data == "driver_id") return '驾驶员';
                                 else if(data == "travel_distance") return '里程数';
                                 else if(data == "time_limitation_prescribed") return '时效';
+                                else if(data == "assign_time") return '安排时间';
                                 else if(data == "amount") return '金额';
                                 else if(data == "deposit") return '定金';
                                 else if(data == "oil_card_amount") return '油卡';
-                                else if(data == "outside_car_price") return '请车价';
                                 else if(data == "invoice_amount") return '开票金额';
                                 else if(data == "invoice_point") return '票点';
+                                else if(data == "reimbursable_amount") return '报销费';
                                 else if(data == "customer_management_fee") return '客户管理费';
-                                else if(data == "information_fee") return '信息费';
                                 else if(data == "time_limitation_deduction") return '时效扣款';
+                                else if(data == "information_fee") return '信息费';
                                 else if(data == "administrative_fee") return '管理费';
-                                else if(data == "ETC_price") return 'ETC费用';
                                 else if(data == "oil_amount") return '万金油量（升）';
                                 else if(data == "oil_unit_price") return '油价（元）';
-                                else if(data == "assign_time") return '安排时间';
+                                else if(data == "oil_fee") return '包邮费';
+                                else if(data == "ETC_price") return 'ETC费用';
+                                else if(data == "income_real_first_amount") return '实收金额';
+                                else if(data == "income_real_first_time") return '实收日期';
+                                else if(data == "income_real_final_amount") return '实收尾款金额';
+                                else if(data == "income_real_final_time") return '实收尾款日期';
+                                else if(data == "outside_car_price") return '外请车-费用';
+                                else if(data == "outside_car_first_amount") return '外请车-到付金额';
+                                else if(data == "outside_car_first_time") return '外请车-到付日期';
+                                else if(data == "outside_car_final_amount") return '外请车-尾款金额';
+                                else if(data == "outside_car_final_time") return '外请车-尾款日期';
                                 else if(data == "container_type") return '箱型';
                                 else if(data == "subordinate_company") return '所属公司';
                                 else if(data == "route") return '线路';

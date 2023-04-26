@@ -49,33 +49,33 @@
 
         // 【完整显示】
         $(".main-content").on('click', "#order-show-for-full", function() {
-            $('#datatable_ajax').dataTable().fnSetColumnVis(9, true);
             $('#datatable_ajax').dataTable().fnSetColumnVis(10, true);
-            $('#datatable_ajax').dataTable().fnSetColumnVis(14, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(11, true);
             $('#datatable_ajax').dataTable().fnSetColumnVis(15, true);
             $('#datatable_ajax').dataTable().fnSetColumnVis(16, true);
             $('#datatable_ajax').dataTable().fnSetColumnVis(17, true);
             $('#datatable_ajax').dataTable().fnSetColumnVis(18, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(19, true);
         });
         // 【简要显示】
         $(".main-content").on('click', "#order-show-for-brief", function() {
-            $('#datatable_ajax').dataTable().fnSetColumnVis(9, false);
             $('#datatable_ajax').dataTable().fnSetColumnVis(10, false);
-            $('#datatable_ajax').dataTable().fnSetColumnVis(14, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(11, false);
             $('#datatable_ajax').dataTable().fnSetColumnVis(15, false);
-            $('#datatable_ajax').dataTable().fnSetColumnVis(16, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(16, false);
             $('#datatable_ajax').dataTable().fnSetColumnVis(17, true);
             $('#datatable_ajax').dataTable().fnSetColumnVis(18, true);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(19, true);
         });
         // 【财务显示】
         $(".main-content").on('click', "#order-show-for-finance", function() {
-            $('#datatable_ajax').dataTable().fnSetColumnVis(9, false);
             $('#datatable_ajax').dataTable().fnSetColumnVis(10, false);
-            $('#datatable_ajax').dataTable().fnSetColumnVis(14, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(11, false);
             $('#datatable_ajax').dataTable().fnSetColumnVis(15, false);
             $('#datatable_ajax').dataTable().fnSetColumnVis(16, false);
             $('#datatable_ajax').dataTable().fnSetColumnVis(17, false);
             $('#datatable_ajax').dataTable().fnSetColumnVis(18, false);
+            $('#datatable_ajax').dataTable().fnSetColumnVis(19, false);
         });
 
 
