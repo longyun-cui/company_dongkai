@@ -824,6 +824,7 @@
                                     else if(data == "oil_unit_price") return '油价（元）';
                                     else if(data == "oil_fee") return '包邮费';
                                     else if(data == "ETC_price") return 'ETC费用';
+                                    else if(data == "others_fee") return '其他费用';
                                     else if(data == "income_real_first_amount") return '实收金额';
                                     else if(data == "income_real_first_time") return '实收日期';
                                     else if(data == "income_real_final_amount") return '实收尾款金额';

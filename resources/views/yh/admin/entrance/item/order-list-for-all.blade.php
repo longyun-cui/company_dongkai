@@ -218,22 +218,30 @@
                 <div class="tableArea">
                 <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
                     <thead>
+{{--                        <tr>--}}
+{{--                            <th colspan="14" rowspan="2">基本信息</th>--}}
+{{--                            <th colspan="11" rowspan="2">基本信息</th>--}}
+{{--                            <th colspan="24" class="bg-fee">费用信息</th>--}}
+{{--                            <th colspan="8" rowspan="2" class="bg-finance">财务信息</th>--}}
+{{--                            <th colspan="9" rowspan="2" class="bg-empty">空单</th>--}}
+{{--                            <th colspan="7" rowspan="2" class="bg-journey">行程</th>--}}
+{{--                            <th colspan="10" rowspan="2">其他信息</th>--}}
+{{--                            <th colspan="3" rowspan="2">时间与操作</th>--}}
+{{--                        </tr>--}}
                         <tr>
-                            <th colspan="14" rowspan="2">基本信息</th>
-                            <th colspan="11" rowspan="2">基本信息</th>
-                            <th colspan="23" class="bg-fee">费用信息</th>
-                            <th colspan="8" rowspan="2" class="bg-finance">财务信息</th>
-                            <th colspan="9" rowspan="2" class="bg-empty">空单</th>
-                            <th colspan="7" rowspan="2" class="bg-journey">行程</th>
-                            <th colspan="9" rowspan="2">其他信息</th>
-                            <th colspan="3" rowspan="2">时间与操作</th>
-                        </tr>
-                        <tr>
+                            <th colspan="14">基本信息</th>
+                            <th colspan="11">基本信息</th>
                             <th colspan="3" class="bg-fee">运费</th>
-                            <th colspan="3" class="bg-fee">扣款</th>
+                            <th colspan="3" class="bg-fee-2">扣款</th>
                             <th colspan="4" class="bg-fee">收款</th>
-                            <th colspan="8" class="bg-fee">支出</th>
-                            <th colspan="5" class="bg-fee">请车</th>
+                            <th colspan="9" class="bg-fee-2">支出</th>
+                            <th colspan="5" class="bg-fee">外请车</th>
+                            <th colspan="8"  class="bg-finance">财务信息</th>
+                            <th colspan="9" class="bg-empty">空单</th>
+                            <th colspan="7" class="bg-journey">行程</th>
+                            <th colspan="10">其他信息</th>
+                            <th colspan="2">时间</th>
+                            <th rowspan="2">操作</th>
                         </tr>
                         <tr role='row'>
                             <th>ID</th>
@@ -276,14 +284,15 @@
                             <th>尾款</th>
                             <th>日期</th>
 
-                            <th>信息费</th>
-                            <th>客管费</th>
                             <th>ETC</th>
                             <th>万金油(升)</th>
                             <th>油价(元)</th>
                             <th>包邮费</th>
+                            <th>信息费</th>
+                            <th>客管费</th>
                             <th>开票额</th>
                             <th>票点</th>
+                            <th>其他费用</th>
 
                             <th>请车价</th>
                             <th>到付</th>
@@ -331,7 +340,6 @@
 
                             <th>创建时间</th>
                             <th>修改时间</th>
-                            <th>操作</th>
                         </tr>
                     </thead>
 
@@ -377,14 +385,15 @@
                             <th>尾款</th>
                             <th>日期</th>
 
-                            <th>信息费</th>
-                            <th>客管费</th>
                             <th>ETC</th>
                             <th>万金油(升)</th>
                             <th>油价(元)</th>
                             <th>包邮费</th>
+                            <th>信息费</th>
+                            <th>客管费</th>
                             <th>开票额</th>
                             <th>票点</th>
+                            <th>其他费用</th>
 
                             <th>请车价</th>
                             <th>到付</th>
@@ -1721,14 +1730,15 @@
     .tableArea table { min-width:5000px; }
     .tableArea table#datatable_ajax_finance { min-width:1600px; }
     .datatable-search-row .input-group .date-picker-btn { width:30px; }
+    .table-hover>tbody>tr:hover td { background-color: #bbccff; }
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
-    .bg-fee { background:#FABEFB; }
-    .bg-fee-2 { background:#FAA4FB; }
-    .bg-finance { background:#DAF7A6; }
-    .bg-empty { background:#F5F9B4; }
-    .bg-journey { background:#B4F9EF; }
+    .bg-fee-2 { background:#C3FAF7; }
+    .bg-fee { background:#8FEBE5; }
+    .bg-finance { background:#E2FCAB; }
+    .bg-empty { background:#F6C5FC; }
+    .bg-journey { background:#F5F9B4; }
 </style>
 @endsection
 
@@ -2692,7 +2702,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','运价');
-                                $(nTd).attr('data-key','amount').attr('data-value',data);
+                                $(nTd).attr('data-key','amount').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','运价');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2718,7 +2728,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','油卡');
-                                $(nTd).attr('data-key','oil_card_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','oil_card_amount').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','油卡');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2740,7 +2750,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','订金');
-                                $(nTd).attr('data-key','deposit').attr('data-value',data);
+                                $(nTd).attr('data-key','deposit').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','订金');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2754,17 +2764,17 @@
 
                     {
                         "title": "报销",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "60px",
-                        "data": "time_limitation_deduction",
+                        "data": "reimbursable_amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','时效扣款');
-                                $(nTd).attr('data-key','time_limitation_deduction').attr('data-value',data);
-                                $(nTd).attr('data-column-name','时效扣款');
+                                $(nTd).attr('data-id',row.id).attr('data-name','报销费用');
+                                $(nTd).attr('data-key','reimbursable_amount').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','报销费用');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -2776,7 +2786,7 @@
                     },
                     {
                         "title": "客管费",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "50px",
                         "data": "customer_management_fee",
                         "orderable": false,
@@ -2785,7 +2795,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户管理费');
-                                $(nTd).attr('data-key','customer_management_fee').attr('data-value',data);
+                                $(nTd).attr('data-key','customer_management_fee').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','客户管理费');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2798,7 +2808,7 @@
                     },
                     {
                         "title": "时效扣款",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "60px",
                         "data": "time_limitation_deduction",
                         "orderable": false,
@@ -2807,7 +2817,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','时效扣款');
-                                $(nTd).attr('data-key','time_limitation_deduction').attr('data-value',data);
+                                $(nTd).attr('data-key','time_limitation_deduction').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','时效扣款');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2830,7 +2840,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','实收金额');
-                                $(nTd).attr('data-key','income_real_first_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','income_real_first_amount').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','实收金额');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2874,7 +2884,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','尾款金额');
-                                $(nTd).attr('data-key','income_real_first_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','income_real_final_amount').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','尾款金额');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2909,52 +2919,8 @@
                     },
 
                     {
-                        "title": "管理费",
-                        "className": "",
-                        "width": "60px",
-                        "data": "administrative_fee",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','管理费');
-                                $(nTd).attr('data-key','administrative_fee').attr('data-value',data);
-                                $(nTd).attr('data-column-name','管理费');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "title": "信息费",
-                        "className": "",
-                        "width": "50px",
-                        "data": "information_fee",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','信息费');
-                                $(nTd).attr('data-key','information_fee').attr('data-value',data);
-                                $(nTd).attr('data-column-name','信息费');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return parseFloat(data);
-                        }
-                    },
-                    {
                         "title": "万金油(升)",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "60px",
                         "data": "oil_amount",
                         "orderable": false,
@@ -2963,7 +2929,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','万金油(升)');
-                                $(nTd).attr('data-key','oil_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','oil_amount').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','万金油(升)');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2976,7 +2942,7 @@
                     },
                     {
                         "title": "油价(元)",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "60px",
                         "data": "oil_unit_price",
                         "orderable": false,
@@ -2985,7 +2951,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','油价(元)');
-                                $(nTd).attr('data-key','oil_unit_price').attr('data-value',data);
+                                $(nTd).attr('data-key','oil_unit_price').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','油价(元)');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -2998,7 +2964,7 @@
                     },
                     {
                         "title": "包邮费",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "60px",
                         "data": "oil_fee",
                         "orderable": false,
@@ -3007,7 +2973,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','包邮费');
-                                $(nTd).attr('data-key','oil_fee').attr('data-value',data);
+                                $(nTd).attr('data-key','oil_fee').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','包邮费');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -3020,7 +2986,7 @@
                     },
                     {
                         "title": "ETC",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "60px",
                         "data": "ETC_price",
                         "orderable": false,
@@ -3029,7 +2995,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','ETC');
-                                $(nTd).attr('data-key','ETC_price').attr('data-value',data);
+                                $(nTd).attr('data-key','ETC_price').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','ETC');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -3041,8 +3007,52 @@
                         }
                     },
                     {
+                        "title": "管理费",
+                        "className": "bg-fee-2",
+                        "width": "60px",
+                        "data": "administrative_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','管理费');
+                                $(nTd).attr('data-key','administrative_fee').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','管理费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "信息费",
+                        "className": "bg-fee-2",
+                        "width": "50px",
+                        "data": "information_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','信息费');
+                                $(nTd).attr('data-key','information_fee').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','信息费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
                         "title": "开票额",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "50px",
                         "data": "invoice_amount",
                         "orderable": false,
@@ -3051,7 +3061,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','开票额');
-                                $(nTd).attr('data-key','invoice_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','invoice_amount').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','开票额');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -3064,7 +3074,7 @@
                     },
                     {
                         "title": "票点",
-                        "className": "",
+                        "className": "bg-fee-2",
                         "width": "50px",
                         "data": "invoice_point",
                         "orderable": false,
@@ -3073,8 +3083,30 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','票点');
-                                $(nTd).attr('data-key','invoice_point').attr('data-value',data);
+                                $(nTd).attr('data-key','invoice_point').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','票点');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "其他费用",
+                        "className": "bg-fee-2",
+                        "width": "50px",
+                        "data": "others_fee",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','其他费用');
+                                $(nTd).attr('data-key','others_fee').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','其他费用');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -3095,8 +3127,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
-                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','外请-车费');
+                                $(nTd).attr('data-key','outside_car_price').attr('data-value',parseFloat(data));
                                 $(nTd).attr('data-column-name','请车价');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -3111,15 +3143,15 @@
                         "title": "到付",
                         "className": "bg-fee",
                         "width": "60px",
-                        "data": "outside_car_price",
+                        "data": "outside_car_first_amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
-                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-id',row.id).attr('data-name','外请-到付金额');
+                                $(nTd).attr('data-key','outside_car_first_amount').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','外请-到付金额');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -3133,37 +3165,37 @@
                         "title": "日期",
                         "className": "bg-fee",
                         "width": "60px",
-                        "data": "outside_car_price",
+                        "data": "outside_car_first_time",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
-                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-id',row.id).attr('data-name','外请-到付日期');
+                                $(nTd).attr('data-key','outside_car_first_time').attr('data-value',data);
+                                $(nTd).attr('data-column-name','外请-到付日期');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return parseFloat(data);
+                            return data;
                         }
                     },
                     {
                         "title": "尾款",
                         "className": "bg-fee",
                         "width": "60px",
-                        "data": "outside_car_price",
+                        "data": "outside_car_final_amount",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
-                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-id',row.id).attr('data-name','外请车-尾款金额');
+                                $(nTd).attr('data-key','outside_car_final_amount').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','外请车-尾款金额');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -3177,22 +3209,22 @@
                         "title": "日期",
                         "className": "bg-fee",
                         "width": "60px",
-                        "data": "outside_car_price",
+                        "data": "outside_car_final_time",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','请车价');
-                                $(nTd).attr('data-key','outside_car_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','请车价');
+                                $(nTd).attr('data-id',row.id).attr('data-name','外请车-尾款日期');
+                                $(nTd).attr('data-key','outside_car_final_time').attr('data-value',data);
+                                $(nTd).attr('data-column-name','外请车-尾款日期');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return parseFloat(data);
+                            return data;
                         }
                     },
 
@@ -5332,6 +5364,7 @@
                                 else if(data == "oil_unit_price") return '油价（元）';
                                 else if(data == "oil_fee") return '包邮费';
                                 else if(data == "ETC_price") return 'ETC费用';
+                                else if(data == "others_fee") return '其他费用';
                                 else if(data == "income_real_first_amount") return '实收金额';
                                 else if(data == "income_real_first_time") return '实收日期';
                                 else if(data == "income_real_final_amount") return '实收尾款金额';

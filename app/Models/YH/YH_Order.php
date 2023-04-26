@@ -27,6 +27,7 @@ class YH_Order extends Model
         'driver_fine',
         'information_fee',
         'ETC_price', 'oil_amount', 'oil_unit_price', 'oil_fee',
+        'others_fee',
         'income_real_first_amount', 'income_real_first_time', 'income_real_final_amount', 'income_real_final_time',
         'outside_car_price', 'outside_car_first_amount', 'outside_car_first_time', 'outside_car_final_amount', 'outside_car_final_time',
         'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
