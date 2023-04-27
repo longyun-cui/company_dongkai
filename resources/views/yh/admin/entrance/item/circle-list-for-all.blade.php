@@ -630,6 +630,11 @@
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
+    .bg-info { background:#CBFB9D; }
+    .bg-fee { background:#8FEBE5; }
+    .bg-profile { background:#E2FCAB; }
+    .bg-cost { background:#F6C5FC; }
+    .bg-journey { background:#C3FAF7; }
 </style>
 @endsection
 
@@ -697,9 +702,9 @@
 //                        "orderable": false
 //                    },
                     {
+                        "title": "ID",
                         "className": "",
                         "width": "50px",
-                        "title": "ID",
                         "data": "id",
                         "orderable": true,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -717,8 +722,8 @@
                         }
                     },
                     {
-                        "width": "80px",
                         "title": "操作",
+                        "width": "80px",
                         "data": 'id',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -776,9 +781,9 @@
                         }
                     },
                     {
+                        "title": "车辆",
                         "className": "",
                         "width": "80px",
-                        "title": "车辆",
                         "data": "car_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -799,9 +804,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "120px",
                         "title": "标题",
+                        "className": "",
+                        "width": "100px",
                         "data": "title",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -822,9 +827,9 @@
                         }
                     },
                     {
+                        "title": "订单信息",
                         "className": "text-left",
                         "width": "200px",
-                        "title": "订单",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -872,9 +877,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
                         "title": "开始时间",
+                        "className": "bg-info",
+                        "width": "80px",
                         "data": 'start_time',
                         "orderable": false,
                         "orderSequence": ["desc", "asc"],
@@ -917,9 +922,9 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "80px",
                         "title": "结束时间",
+                        "className": "bg-info",
+                        "width": "80px",
                         "data": 'ended_time',
                         "orderable": false,
                         "orderSequence": ["desc", "asc"],
@@ -962,9 +967,9 @@
                         }
                     },
                     {
-                        "className": "_bold",
-                        "width": "60px",
                         "title": "天数",
+                        "className": "bg-info _bold",
+                        "width": "60px",
                         "data": "id",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -980,9 +985,9 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "总里程",
+                        "className": "bg-info _bold",
+                        "width": "72px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -991,13 +996,13 @@
                             $.each(data,function( key, val ) {
                                 $amount += parseFloat(this.travel_distance);
                             });
-                            return $amount;
+                            return $amount + '公里';
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "总运价",
+                        "className": "bg-fee",
+                        "width": "60px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -1018,13 +1023,14 @@
                             $.each(data,function( key, val ) {
                                 $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount);
                             });
-                            return $amount;
+                            // return $amount;
+                            return parseFloat($amount.toFixed(2));
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "总扣款",
+                        "className": "bg-fee",
+                        "width": "60px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -1043,15 +1049,16 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
+                                $amount += parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
                             });
-                            return $amount;
+                            // return $amount;
+                            return parseFloat($amount.toFixed(2));
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "总收入",
+                        "className": "bg-fee",
+                        "width": "60px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -1068,17 +1075,22 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            var $income = 0;
+                            var $deduction = 0;
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee);
+                                $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
+                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
+                                $amount += parseFloat($income) - parseFloat($deduction);
                             });
-                            return $amount;
+                            // return $amount;
+                            return parseFloat($amount.toFixed(2));
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "总支出",
+                        "className": "bg-fee",
+                        "width": "60px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -1098,15 +1110,46 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.expenditure_total) + parseFloat(this.expenditure_to_be_confirm);
+                                $amount += parseFloat(this.oil_fee) + parseFloat(this.ETC_price) + parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
                             });
-                            return $amount;
+                            // return $amount;
+                            return parseFloat($amount.toFixed(2));
                         }
                     },
                     {
-                        "className": "_bold",
+                        "title": "已支出",
+                        "className": "",
                         "width": "60px",
+                        "data": "order_list",
+                        // "data": "pivot_order_list",
+                        "orderable": false,
+                        "visible" : false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('color-red');
+                                $(nTd).addClass('modal-show-for-attribute-list');
+                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                                $(nTd).attr('data-key','title').attr('data-value',data);
+                                $(nTd).attr('data-column-name','总支出');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseFloat(this.expenditure_total) + parseFloat(this.expenditure_to_be_confirm);
+                            });
+                            // return $amount;
+                            return parseFloat($amount.toFixed(2));
+                        }
+                    },
+                    {
                         "title": "利润",
+                        "className": "bg-profile _bold",
+                        "width": "60px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -1125,17 +1168,26 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            var $income = 0;
+                            var $deduction = 0;
+                            var $expense = 0;
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
+                                // $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
+                                $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
+                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
+                                $expense = parseFloat(this.oil_fee) + parseFloat(this.ETC_price) + parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
+                                $amount += parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
+
                             });
-                            return $amount;
+                            // return $amount;
+                            return parseFloat($amount.toFixed(2));
                         }
                     },
                     {
-                        "className": "_bold",
-                        "width": "60px",
                         "title": "日利润",
+                        "className": "bg-profile _bold",
+                        "width": "60px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -1164,9 +1216,17 @@
                             }
                             else return "--";
 
+                            var $income = 0;
+                            var $deduction = 0;
+                            var $expense = 0;
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
+                                // $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
+
+                                $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
+                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
+                                $expense = parseFloat(this.oil_fee) + parseFloat(this.ETC_price) + parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
+                                $amount += parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
                             });
 
                             if(!$amount || !data) return "0";
@@ -1174,9 +1234,9 @@
                         }
                     },
                     {
-                        "className": "_bold",
-                        "width": "60px",
                         "title": "利润率",
+                        "className": "bg-profile _bold",
+                        "width": "60px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,
@@ -1194,45 +1254,57 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            var $income = 0;
+                            var $deduction = 0;
+                            var $expense = 0;
                             var $amount = 0;
                             var $profit = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee);
-                                $profit += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
+                                // $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee);
+                                // $profit += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
+
+                                $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
+                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
+                                $expense = parseFloat(this.oil_fee) + parseFloat(this.ETC_price) + parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
+                                $amount += parseFloat($income) - parseFloat($deduction);
+                                $profit += parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
                             });
                             if(!$amount) return '--';
                             return (($profit/$amount).toFixed(2)*100) + '%';
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "油费",
-                        "data": "oil_cost",
+                        "className": "bg-cost",
+                        "width": "60px",
+                        "data": "order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
-                                $(nTd).attr('data-key','oil_cost').attr('data-value',data);
-                                $(nTd).attr('data-column-name','油费');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
+                            // if(row.is_completed != 1 && row.item_status != 97)
+                            // {
+                            //     $(nTd).addClass('modal-show-for-info-text-set');
+                            //     $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                            //     $(nTd).attr('data-key','oil_cost').attr('data-value',data);
+                            //     $(nTd).attr('data-column-name','油费');
+                            //     $(nTd).attr('data-text-type','text');
+                            //     if(data) $(nTd).attr('data-operate-type','edit');
+                            //     else $(nTd).attr('data-operate-type','add');
+                            // }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
-                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            // else return '';
+                            // return data;
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseFloat(this.oil_fee);
+                            });
+                            return parseFloat($amount.toFixed(2));
                         }
                     },
                     {
-                        "className": "",
-                        "width": "60px",
                         "title": "过路费",
-                        "data": "toll_cost",
+                        "className": "bg-cost",
+                        "width": "60px",
+                        "data": "order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1247,38 +1319,20 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
-                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            // else return '';
+                            // return data;
+                            var $amount = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseFloat(this.ETC_price);
+                            });
+                            return parseFloat($amount.toFixed(2));
                         }
                     },
                     {
-                        "className": "_bold",
-                        "width": "60px",
                         "title": "油耗",
-                        "data": "oil_cost",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('color-green');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var $amount = 0;
-                            $.each(row.order_list, function( key, val ) {
-                                $amount += parseFloat(this.travel_distance);
-                            });
-
-                            if(!$amount || !data) return "0";
-                            return ((data/$amount).toFixed(2));
-                        }
-                    },
-                    {
-                        "className": "_bold",
+                        "className": "bg-cost _bold",
                         "width": "60px",
-                        "title": "路单价",
-                        "data": "toll_cost",
+                        // "data": "oil_cost",
+                        "data": "order_list",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1288,18 +1342,45 @@
                         },
                         render: function(data, type, row, meta) {
                             var $amount = 0;
-                            $.each(row.order_list, function( key, val ) {
-                                $amount += parseFloat(this.travel_distance);
+                            var $distance = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseFloat(this.oil_fee);
+                                $distance += parseFloat(this.travel_distance);
                             });
 
-                            if(!$amount || !data) return "0";
-                            return ((data/$amount).toFixed(2));
+                            if(!$amount || !$distance) return "0";
+                            return parseFloat(($amount/$distance).toFixed(2));
                         }
                     },
                     {
+                        "title": "路单价",
+                        "className": "bg-cost _bold",
+                        "width": "60px",
+                        // "data": "toll_cost",
+                        "data": "order_list",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('color-green');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $amount = 0;
+                            var $distance = 0;
+                            $.each(data,function( key, val ) {
+                                $amount += parseFloat(this.ETC_price);
+                                $distance += parseFloat(this.travel_distance);
+                            });
+
+                            if(!$amount || !$distance) return "0";
+                            return parseFloat(($amount/$distance).toFixed(2));
+                        }
+                    },
+                    {
+                        "title": "备注",
                         "className": "",
                         "width": "",
-                        "title": "备注",
                         "data": "remark",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1321,9 +1402,9 @@
                         }
                     },
                     {
+                        "title": "创建人",
                         "className": "",
                         "width": "60px",
-                        "title": "创建人",
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -1331,9 +1412,9 @@
                         }
                     },
                     {
+                        "title": "更新时间",
                         "className": "",
                         "width": "100px",
-                        "title": "更新时间",
                         "data": 'updated_at',
                         "orderable": false,
                         render: function(data, type, row, meta) {
