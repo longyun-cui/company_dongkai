@@ -2,7 +2,6 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local'])){{ $local or 'L.' }}@endif
     S.{{ $title_text or '记录列表' }} - SUPER - {{ config('info.info.short_name') }}
 @endsection
 

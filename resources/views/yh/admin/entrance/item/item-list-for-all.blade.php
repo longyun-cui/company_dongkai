@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local'])){{ $local or '【l】' }}@endif{{ $title_text or '全部内容' }} - 管理员后台系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '全部内容' }} - 管理员后台系统 - {{ config('info.info.short_name') }}
 @endsection
 
 

@@ -8,10 +8,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link rel="shortcut icon" type="image/ico" href="{{ url('yh.ico') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ url('yh.jpeg') }}">
-    <link rel="icon" sizes="16x16 32x32 64x64" href="{{ url('yh.ico') }}">
-    <link rel="icon" type="image/png" sizes="196x196" href="{{ url('yh.jpeg') }}">
+    <link rel="shortcut icon" type="image/ico" href="{{ env('YH_FAVICON') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ env('YH_FAVICON') }}">
+    <link rel="icon" sizes="16x16 32x32 64x64" href="{{ env('YH_FAVICON') }}">
+    <link rel="icon" type="image/png" sizes="196x196" href="{{ env('YH_FAVICON') }}">
 
 
     <title>@yield('head_title')</title>

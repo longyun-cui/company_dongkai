@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local']))[l]@endif A.{{ $title_text }} - 管理员后台系统 - 兆益信息
+    A.{{ $title_text }} - 管理员后台系统 - 兆益信息
 @endsection
 
 

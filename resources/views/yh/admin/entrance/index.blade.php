@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local']))L.@endif
+    {{--@if(in_array(env('APP_ENV'),['local']))L.@endif--}}
     {{ $head_title or '首页' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
