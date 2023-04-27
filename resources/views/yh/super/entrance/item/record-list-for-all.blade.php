@@ -9,7 +9,7 @@
 
 
 @section('header','')
-@section('description'){{ $title_text or '记录列表' }} - 超级管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '记录列表' }} - SUPER - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection

@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    @if(in_array(env('APP_ENV'),['local'])){{ $local or '【l】' }}@endif{{ $head_title or '编辑基本资料' }} - 管理员后台系统 - 兆益信息
+    {{ $head_title or '编辑基本资料' }} - 管理员后台系统 - 兆益信息
 @endsection
 @section('meta_author')@endsection
 @section('meta_title')@endsection
