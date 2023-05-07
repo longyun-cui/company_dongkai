@@ -722,7 +722,7 @@
                     },
                     {
                         "title": "操作",
-                        "width": "80px",
+                        "width": "120px",
                         "data": 'id',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -828,7 +828,7 @@
                     {
                         "title": "订单信息",
                         "className": "text-left",
-                        "width": "200px",
+                        "width": "300px",
                         "data": "order_list",
                         // "data": "pivot_order_list",
                         "orderable": false,

@@ -597,7 +597,7 @@
                         }
                     },
                     {
-                        "width": "80px",
+                        "width": "120px",
                         "title": "操作",
                         "data": 'id',
                         "orderable": false,
@@ -673,7 +673,7 @@
                         }
                     },
                     {
-                        "width": "240px",
+                        "width": "300px",
                         "title": "订单",
                         "data": "order_id",
                         "orderable": false,

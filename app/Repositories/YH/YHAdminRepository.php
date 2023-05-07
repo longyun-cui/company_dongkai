@@ -14378,7 +14378,7 @@ class YHAdminRepository {
         if(!empty($post_data['transaction_order'])) $query->where('transaction_order', $post_data['transaction_order']);
 
 
-        $data = $query->orderBy('transaction_time','desc')->orderBy('id','asc')->get()->toArray();
+        $data = $query->orderBy('id','desc')->get()->toArray();
 
         $cellData = [];
         foreach($data as $k => $v)
@@ -14392,6 +14392,20 @@ class YHAdminRepository {
             $cellData[$k]['transaction_date'] = date('Y-m-d', $v['transaction_time']);
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['order_id'] = $v['order_id'];
+            $cellData[$k]['order_name'] = $v['order_id'];
+
+            $title = $v['order_er']['title'] ? $v['order_er']['title'] : '';
+            $departure = $v['order_er']['departure_place'];
+            $stopover = $v['order_er']['stopover_place'];
+            $destination = $v['order_er']['destination_place'];
+            $car = $v['order_er']['car_er'] ? $v['order_er']['car_er']['name'] : $v['order_er']['outside_car'];
+            $assign = date("Y-m-d", $v['order_er']['assign_time']);
+
+            $cellData[$k]['order_name'] = $car . " [" . $assign . "] (" . $departure . "-" . $stopover . "-" . $destination . ")  " . $title;
+            $cellData[$k]['car_name'] = $car;
+            $cellData[$k]['assign_time'] = $assign;
+
+            $cellData[$k]['transaction_amount'] = $v['transaction_amount'];
             $cellData[$k]['title'] = $v['title'];
             $cellData[$k]['transaction_type'] = $v['transaction_type'];
             $cellData[$k]['transaction_receipt_account'] = $v['transaction_receipt_account'];
@@ -14409,6 +14423,9 @@ class YHAdminRepository {
             'transaction_date'=>'交易时间',
             'creator_name'=>'创建者',
             'order_id'=>'订单ID',
+            'order_name'=>'订单详情',
+            'car_name'=>'订单车辆',
+            'assign_time'=>'订单时间',
             'transaction_amount'=>'交易金额',
             'title'=>'名目',
             'transaction_type'=>'交易方式',

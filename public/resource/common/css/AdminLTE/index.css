@@ -9,7 +9,7 @@
 .datatable-body .btn-xs { padding:1px 2px; }
 
 
-th, td { white-space: nowrap; }
+th { white-space: nowrap; }
 
 table.dataTable thead th,
 table.dataTable thead td,
@@ -17,7 +17,7 @@ table.dataTable tfoot th,
 table.dataTable tfoot td { text-align:center; }
 
 table.dataTable tbody th,
-table.dataTable tbody td { padding:10px 4px; }
+table.dataTable tbody td { padding:8px 4px; }
 
 table.dataTable thead > tr > th { padding-left:0; }
 table.dataTable thead > tr > th.text-left { padding-left:4px; }
@@ -98,14 +98,16 @@ table.dataTable .text-right { text-align:right; }
 
 .radio label { width:100%; height:100%; }
 
+.btn-group .btn-group-body { padding:1px 6px; margin-right:0; }
+.btn-group>.btn+.dropdown-toggle { padding:1px 4px; margin-left:-1px; }
+
 .dropdown-menu li a { cursor:pointer; }
 
 .form-horizontal .checkbox, .form-horizontal .radio { padding-top:2px; min-height:24px; }
 
-
 .navbar-nav>.notifications-menu>.dropdown-menu>li .menu,
 .navbar-nav>.messages-menu>.dropdown-menu>li .menu,
-.navbar-nav>.tasks-menu>.dropdown-menu>li .menu { max-height:320px; }
+.navbar-nav>.tasks-menu>.dropdown-menu>li .menu { max-height: 320px; }
 
 .file-preview { padding:0; }
 .file-drop-zone-title { padding:40px 10px; }
