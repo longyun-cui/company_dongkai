@@ -14312,6 +14312,19 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+        $record = new YH_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 21;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 88;
+        $record_data["operate_category"] = 109;
+        $record_data["operate_type"] = 1;
+
+        $record->fill($record_data)->save();
+
 
         $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
         if($export_type == "month")
