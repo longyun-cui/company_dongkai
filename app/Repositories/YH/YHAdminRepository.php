@@ -14346,7 +14346,8 @@ class YHAdminRepository {
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'order_er'=>function($query) {
                     $query->select('*')->with([
-                        'car_er'=>function($query){ $query->select('id','name'); }
+                        'car_er'=>function($query){ $query->select('id','name'); },
+                        'route_er'=>function($query){ $query->select('id','title'); }
                     ]);
                 }
             ]);
@@ -14389,10 +14390,8 @@ class YHAdminRepository {
             else if($v['finance_type'] == 21) $cellData[$k]['finance_type_name'] = '支出';
             else $cellData[$k]['finance_type_name'] = '有误';
 
-            $cellData[$k]['transaction_date'] = date('Y-m-d', $v['transaction_time']);
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['order_id'] = $v['order_id'];
-            $cellData[$k]['order_name'] = $v['order_id'];
 
             $title = $v['order_er']['title'] ? $v['order_er']['title'] : '';
             $departure = $v['order_er']['departure_place'];
@@ -14404,7 +14403,9 @@ class YHAdminRepository {
             $cellData[$k]['order_name'] = $car . " [" . $assign . "] (" . $departure . "-" . $stopover . "-" . $destination . ")  " . $title;
             $cellData[$k]['car_name'] = $car;
             $cellData[$k]['assign_time'] = $assign;
+            $cellData[$k]['route'] = $v['order_er']['route_er'] ? $v['order_er']['route_er']['title'] : '[临]'.$v['order_er']['route_temporary'];
 
+            $cellData[$k]['transaction_date'] = date('Y-m-d', $v['transaction_time']);
             $cellData[$k]['transaction_amount'] = $v['transaction_amount'];
             $cellData[$k]['title'] = $v['title'];
             $cellData[$k]['transaction_type'] = $v['transaction_type'];
@@ -14420,12 +14421,13 @@ class YHAdminRepository {
         array_unshift($cellData,[
             'id'=>'ID',
             'finance_type_name'=>'类型',
-            'transaction_date'=>'交易时间',
             'creator_name'=>'创建者',
             'order_id'=>'订单ID',
             'order_name'=>'订单详情',
             'car_name'=>'订单车辆',
             'assign_time'=>'订单时间',
+            'route'=>'线路',
+            'transaction_date'=>'交易时间',
             'transaction_amount'=>'交易金额',
             'title'=>'名目',
             'transaction_type'=>'交易方式',
@@ -14435,11 +14437,29 @@ class YHAdminRepository {
             'remark'=>'备注',
         ]);
 
-        if($export_type == "month") $title = '【财务记录】【'.$the_month.'】 - '.date('YmdHis');
+        $month_title = '';
+        $time_title = '';
+        if($export_type == "month")
+        {
+            $month_title = '【'.$the_month.'月】';
+        }
         else
         {
-            $title = '【财务记录】【'.$the_start.' - '.$the_ended.'】 - '.date('YmdHis');
+            if($the_start && $the_ended)
+            {
+                $time_title = '【'.$the_start.' - '.$the_ended.'】';
+            }
+            else if($the_start) $time_title = '【'.$the_start.'】';
+            else if($the_ended) $time_title = '【'.$the_ended.'】';
         }
+
+        $title = '【财务记录】'.$month_title.$time_title.' - '.date('YmdHis');
+
+//        if($export_type == "month") $title = '【财务记录】【'.$the_month.'】 - '.date('YmdHis');
+//        else
+//        {
+//            $title = '【财务记录】【'.$the_start.' - '.$the_ended.'】 - '.date('YmdHis');
+//        }
         $file = Excel::create($title, function($excel) use($cellData) {
             $excel->sheet('all', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
