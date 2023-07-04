@@ -14,7 +14,7 @@ class YH_Order extends Model
         'active', 'status', 'category', 'type', 'form', 'sort',
         'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
         'owner_active', 'is_show', 'is_published', 'is_completed',
-        'owner_id', 'creator_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+        'owner_id', 'creator_id', 'verifier_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'create_type',
         'org_id', 'admin_id',
         'item_id', 'menu_id',
@@ -25,15 +25,18 @@ class YH_Order extends Model
         'reimbursable_amount', 'customer_management_fee', 'time_limitation_deduction',
         'administrative_fee',
         'driver_fine',
-        'information_fee',
+        'information_fee', 'information_fee_description',
         'ETC_price', 'oil_amount', 'oil_unit_price', 'oil_fee',
-        'others_fee',
-        'income_real_first_amount', 'income_real_first_time', 'income_real_final_amount', 'income_real_final_time',
+        'ETC_main_cost', 'ETC_east_cost', 'ETC_south_cost',
+        'oil_main_cost', 'oil_east_cost', 'oil_south_cost',
+        'shipping_cost', 'urea_cost', 'salary_cost', 'others_cost',
+        'income_real_first_amount', 'income_real_first_time', 'income_real_final_amount', 'income_real_final_time', 'income_result',
         'outside_car_price', 'outside_car_first_amount', 'outside_car_first_time', 'outside_car_final_amount', 'outside_car_final_time',
         'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
-        'travel_distance', 'time_limitation_prescribed',
+        'travel_distance', 'travel_main_distance', 'travel_east_distance', 'travel_south_distance',
+        'time_limitation_prescribed',
         'circle_id',
-        'route_type', 'route_id', 'route', 'route_fixed', 'route_temporary',
+        'route_type', 'route_id', 'route', 'route_fixed', 'route_temporary', 'route_east', 'route_south',
         'pricing_id',
         'client_id',
         'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type',
@@ -78,12 +81,17 @@ class YH_Order extends Model
     {
         return $this->belongsTo('App\Models\YH\YH_User','creator_id','id');
     }
-    // 创作者
+    // 更改者
     function updater()
     {
         return $this->belongsTo('App\Models\YH\YH_User','updater_id','id');
     }
-    // 创作者
+    // 审核者
+    function verifier()
+    {
+        return $this->belongsTo('App\Models\YH\YH_User','verifier_id','id');
+    }
+    // 完成者
     function completer()
     {
         return $this->belongsTo('App\Models\YH\YH_User','completer_id','id');

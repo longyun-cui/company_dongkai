@@ -1048,7 +1048,7 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
+                                $amount += parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee) + parseFloat(this.others_deduction);
                             });
                             // return $amount;
                             return parseFloat($amount.toFixed(2));
@@ -1079,7 +1079,7 @@
                             var $amount = 0;
                             $.each(data,function( key, val ) {
                                 $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
-                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
+                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee) + parseFloat(this.others_deduction);
                                 $amount += parseFloat($income) - parseFloat($deduction);
                             });
                             // return $amount;
@@ -1109,42 +1109,43 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.oil_fee) + parseFloat(this.ETC_price) + parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
+                                $amount += parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
+                                // $amount += parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
                             });
                             // return $amount;
                             return parseFloat($amount.toFixed(2));
                         }
                     },
-                    {
-                        "title": "已支出",
-                        "className": "",
-                        "width": "60px",
-                        "data": "order_list",
-                        // "data": "pivot_order_list",
-                        "orderable": false,
-                        "visible" : false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('color-red');
-                                $(nTd).addClass('modal-show-for-attribute-list');
-                                $(nTd).attr('data-id',row.id).attr('data-name',row.title);
-                                $(nTd).attr('data-key','title').attr('data-value',data);
-                                $(nTd).attr('data-column-name','总支出');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            var $amount = 0;
-                            $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.expenditure_total) + parseFloat(this.expenditure_to_be_confirm);
-                            });
-                            // return $amount;
-                            return parseFloat($amount.toFixed(2));
-                        }
-                    },
+                    // {
+                    //     "title": "已支出",
+                    //     "className": "",
+                    //     "width": "60px",
+                    //     "data": "order_list",
+                    //     // "data": "pivot_order_list",
+                    //     "orderable": false,
+                    //     "visible" : false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('color-red');
+                    //             $(nTd).addClass('modal-show-for-attribute-list');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name',row.title);
+                    //             $(nTd).attr('data-key','title').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','总支出');
+                    //             $(nTd).attr('data-text-type','text');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         var $amount = 0;
+                    //         $.each(data,function( key, val ) {
+                    //             $amount += parseFloat(this.expenditure_total) + parseFloat(this.expenditure_to_be_confirm);
+                    //         });
+                    //         // return $amount;
+                    //         return parseFloat($amount.toFixed(2));
+                    //     }
+                    // },
                     {
                         "title": "利润",
                         "className": "bg-profile _bold",
@@ -1174,8 +1175,11 @@
                             $.each(data,function( key, val ) {
                                 // $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
                                 $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
-                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
-                                $expense = parseFloat(this.oil_fee) + parseFloat(this.ETC_price) + parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
+
+                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee) + parseFloat(this.others_deduction);
+
+                                $expense = parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
+
                                 $amount += parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
 
                             });
@@ -1223,8 +1227,8 @@
                                 // $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
 
                                 $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
-                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
-                                $expense = parseFloat(this.oil_fee) + parseFloat(this.ETC_price) + parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
+                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee) + parseFloat(this.others_deduction);
+                                $expense = parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
                                 $amount += parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
                             });
 
@@ -1262,14 +1266,16 @@
                                 // $amount += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee);
                                 // $profit += parseFloat(this.amount) + parseFloat(this.oil_card_amount) - parseFloat(this.time_limitation_deduction) - parseFloat(this.customer_management_fee) - parseFloat(this.expenditure_total) - parseFloat(this.expenditure_to_be_confirm);
 
-                                $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
-                                $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee);
-                                $expense = parseFloat(this.oil_fee) + parseFloat(this.ETC_price) + parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
-                                $amount += parseFloat($income) - parseFloat($deduction);
-                                $profit += parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
+                                $income += parseFloat(this.amount) + parseFloat(this.oil_card_amount);
+                                $deduction += parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee) + parseFloat(this.others_deduction);
+                                $expense += parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
+
                             });
-                            if(!$amount) return '--';
-                            return (($profit/$amount).toFixed(2)*100) + '%';
+                            $amount = parseFloat($income) - parseFloat($deduction);
+                            $profit = parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
+                            if(!$income) return '--';
+                            // return $profit / $income;
+                            return parseFloat(($profit) * 100 / ($income)).toFixed(2) + '%';
                         }
                     },
                     {
@@ -1294,7 +1300,7 @@
                             // return data;
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.oil_fee);
+                                $amount += parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost);
                             });
                             return parseFloat($amount.toFixed(2));
                         }
@@ -1321,7 +1327,7 @@
                             // return data;
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.ETC_price);
+                                $amount += parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost);
                             });
                             return parseFloat($amount.toFixed(2));
                         }
@@ -1343,7 +1349,7 @@
                             var $amount = 0;
                             var $distance = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.oil_fee);
+                                $amount += parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost);
                                 $distance += parseFloat(this.travel_distance);
                             });
 
@@ -1368,7 +1374,7 @@
                             var $amount = 0;
                             var $distance = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.ETC_price);
+                                $amount += parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost);
                                 $distance += parseFloat(this.travel_distance);
                             });
 

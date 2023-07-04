@@ -9911,7 +9911,7 @@ class YHAdminRepository {
 
         $query = YH_Order::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with(['creator','owner','client_er','circle_er','route_er','pricing_er','car_er','trailer_er','driver_er','empty_route_er'])
+            ->with(['creator','owner','verifier','client_er','circle_er','route_er','pricing_er','car_er','trailer_er','driver_er','empty_route_er'])
             ->withCount('attachment_list');
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
