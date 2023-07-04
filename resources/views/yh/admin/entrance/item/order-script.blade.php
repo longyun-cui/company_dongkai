@@ -367,6 +367,36 @@
                 }
             });
         });
+        // 【审核】
+        $(".main-content").on('click', ".item-verify-submit", function() {
+            var $that = $(this);
+            layer.msg('确定"审核"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-verify') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-verify",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
 
 
 

@@ -57,7 +57,7 @@ class YH_Order extends Model
         'company', 'fund', 'mobile', 'city', 'address',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at', 'completed_at'
+        'published_at', 'completed_at', 'verified_at'
     ];
     protected $dateFormat = 'U';
 

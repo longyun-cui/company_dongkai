@@ -228,7 +228,7 @@
 {{--                            <th colspan="3" rowspan="2">时间与操作</th>--}}
 {{--                        </tr>--}}
                         <tr>
-                            <th colspan="12">基本信息</th>
+                            <th colspan="13">基本信息</th>
                             <th colspan="8" class="bg-route">线路</th>
                             <th colspan="3" class="bg-">派车</th>
                             <th colspan="6" class="bg-fee">运费</th>
@@ -248,13 +248,14 @@
                             <th>ID</th>
                             <th>订单状态</th>
                             <th>订单类型</th>
-                            <th>创建人</th>
-                            <th>审核人</th>
+                            <th>订单</th>
                             <th>派车日期</th>
                             <th>车辆</th>
                             <th>车挂</th>
                             <th>驾驶员</th>
                             <th>客户</th>
+                            <th>创建人</th>
+                            <th>审核人</th>
                             <th>是否压车</th>
                             <th>备注</th>
 
@@ -1913,6 +1914,73 @@
                         }
                     },
                     {
+                        "title": "订单",
+                        "className": "text-center",
+                        "width": "180px",
+                        "data": 'id',
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '';
+
+                            var $time = '';
+                            if(row.assign_time)
+                            {
+                                var $date = new Date((row.assign_time)*1000);
+                                var $year = $date.getFullYear();
+                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                var $day = ('00'+($date.getDate())).slice(-2);
+                                var $hour = ('00'+$date.getHours()).slice(-2);
+                                var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                var $second = ('00'+$date.getSeconds()).slice(-2);
+
+                                var $currentYear = new Date().getFullYear();
+                                if($year == $currentYear) $time = $month+'-'+$day;
+                                else $time = $year+'-'+$month+'-'+$day;
+                            }
+                            else $time = '--';
+
+
+                            var $client = '';
+                            if(row.client_er == null)
+                            {
+                                if(row.car_owner_type == 11) $client = '--';
+                                else $client = '未指定';
+                            }
+                            else {
+                                if(row.client_er.short_name)
+                                {
+//                                    return '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.short_name+'</a>';
+                                    $client = '<a href="javascript:void(0);">'+row.client_er.short_name+'</a>';
+                                }
+                                else
+                                {
+//                                    return '<a target="_blank" href="/user/'+row.client_er.id+'">'+row.client_er.username+'</a>';
+                                    $client = '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                                }
+                            }
+
+
+                            var car_html = '';
+                            if(row.car_owner_type == 1 || row.car_owner_type == 11 || row.car_owner_type == 41)
+                            {
+                                if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
+                            }
+                            else
+                            {
+                                if(row.outside_car) car_html = row.outside_car;
+                            }
+                            if(row.car_er != null) car_html = '<a href="javascript:void(0);">'+row.car_er.name+'</a>';
+
+                            return $time + ' - ' + $client + ' - ' + car_html;
+                        }
+                    },
+                    {
                         "title": "派车日期",
                         "className": "text-center",
                         "width": "72px",
@@ -2151,7 +2219,7 @@
                         "data": "verifier_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.verifier == null ? '--' : '<a target="_blank" href="/user/'+row.verifier.id+'">'+row.verifier.true_name+'</a>';
+                            return row.verifier == null ? '--' : '<a href="javascript:void(0);">'+row.verifier.true_name+'</a>';
                         }
                     },
                     {
@@ -4970,7 +5038,7 @@
                     {
                         "title": "操作",
                         "className": "",
-                        "width": "150px",
+                        "width": "180px",
                         "data": 'id',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -4984,6 +5052,7 @@
                             var $html_publish = '';
                             var $html_abandon = '';
                             var $html_completed = '';
+                            var $html_verified = '';
 
                             var $car_etc = '';
                             if(row.car_er != null) var $car_etc = row.car_er.ETC_account;
@@ -5003,7 +5072,8 @@
                                 $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
                                 $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
                                 $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
-                                $html_delete = '<a class="btn btn-xs bg-gray item-delete-submit" data-id="'+data+'">删除</a>';
+                                $html_verified = '<a class="btn btn-xs btn-default disabled">审核</a>';
+                                $html_delete = '<a class="btn btn-xs bg-black item-delete-submit" data-id="'+data+'">删除</a>';
                             }
                             else
                             {
@@ -5034,7 +5104,18 @@
                                     else $html_abandon = '<a class="btn btn-xs bg-gray item-abandon-submit" data-id="'+data+'">弃用</a>';
                                 }
 
+                                // 审核
+                                if(row.verifier_id == 0)
+                                {
+                                    $html_verified = '<a class="btn btn-xs bg-teal item-verify-submit" data-id="'+data+'">审核</a>';
+                                }
+                                else
+                                {
+                                    $html_verified = '<a class="btn btn-xs bg-aqua-gradient disabled">已审</a>';
+                                }
+
                             }
+
 
 
 //                            if(row.deleted_at == null)
@@ -5072,6 +5153,7 @@
                                 $html_travel+
                                 $html_finance+
                                 $html_record+
+                                $html_verified+
                                 $html_delete+
                                 $html_abandon+
 //                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+

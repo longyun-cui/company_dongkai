@@ -944,6 +944,11 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_item_order_reuse(request()->all());
     }
+    // 【内容】审核
+    public function operate_item_order_verify()
+    {
+        return $this->repo->operate_item_order_verify(request()->all());
+    }
 
 
 
