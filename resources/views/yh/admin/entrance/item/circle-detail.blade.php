@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '订单列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '环线' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')订单列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')环线 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -18,215 +18,213 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body">
 
+
+            <div class="box-header with-border" style="margin:8px 0;">
+                <h3 class="box-title">【{{ $circle->title or '--' }}】</h3>
+            </div>
+            <div class="box-body">
+
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="box box-primary box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">基本信息</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <ul class="nav nav-stacked">
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        环线 <span class="pull-right"><b class="badge- bg-blue-">{{ $circle->title or '--' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        开始 <span class="pull-right"><b class="badge bg-blue">{{ date_show($circle->start_time) }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        结束 <span class="pull-right"><b class="badge bg-blue">{{ date_show($circle->ended_time) }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        行程 <span class="pull-right"><b class="badge bg-green">{{ date_difference($circle->start_time, $circle->ended_time) }}</b> 天</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        里程 <span class="pull-right"><b class="badge bg-blue">{{ $circle->distance_total or '' }}</b> 公里</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="box box-success box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">财务概览</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <ul class="nav nav-stacked">
+                                <li class="amount_sum">
+                                    <a href="javascript:void(0);">
+                                        总运价 <span class="pull-right"><b class="badge- bg-blue-">{{ $circle->income_total or '0' }}</b> 元</span>
+                                    </a>
+                                </li>
+                                <li class="income_receivable_sum">
+                                    <a href="javascript:void(0);">
+                                        总扣款 <span class="pull-right"><b class="badge- bg-aqua-">{{ $circle->deduction_total or '0' }}</b> 元</span>
+                                    </a>
+                                </li>
+                                <li class="income_receipts_sum">
+                                    <a href="javascript:void(0);">
+                                        总收入 <span class="pull-right"><b class="badge- bg-green-">{{ $circle->receivable_total or '0' }}</b> 元</span>
+                                    </a>
+                                </li>
+                                <li class="income_waiting_sum">
+                                    <a href="javascript:void(0);">
+                                        总支出 <span class="pull-right"><b class="badge bg-red">{{ $circle->expense_total or '0' }}</b> 元</span>
+                                    </a>
+                                </li>
+                                <li class="expanse_sum">
+                                    <a href="javascript:void(0);">
+                                        利润 <span class="pull-right"><b class="badge- bg-aqua-">{{ $circle->profit_total or '0' }}</b> 元</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="box box-warning box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">成本概览</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <ul class="nav nav-stacked">
+                                <li class="finance_income_sum">
+                                    <a href="javascript:void(0);">
+                                        油费 / 油耗
+                                        <span class="pull-right">
+                                            <b class="badge- bg-blue-">{{ $circle->oil_total or '0' }}</b> 元 --
+                                            <b class="badge bg-green">{{ $circle->oil_unit or '--' }}</b> 元/公里
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="finance_expense_sum">
+                                    <a href="javascript:void(0);">
+                                        过路费 / 路单价
+                                        <span class="pull-right">
+                                            <b class="badge- bg-blue-">{{ $circle->toll_total or '0' }}</b> 元 --
+                                            <b class="badge bg-blue">{{ $circle->toll_unit or '--' }}</b> 元/公里
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="box-footer with-border" style="margin:8px 0;">
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row _none">
+    <div class="col-md-12">
+        <div class="box box-info">
+
+            <div class="box-header with-border" style="margin:8px 0;">
+                <h3 class="box-title">环线信息</h3>
+            </div>
+
+            <div class="box-body" style="font-size:13px;">
+                <div style="clear:both;line-height:24px;">
+                    <span class="pull-left" style="width:120px;">
+                        <text class="text-green">[环线]</text>
+                        <b class="font-14px text-red-">{{ $circle->title }}</b>
+                    </span>
+
+                    <span class="pull-left" style="width:120px;">
+                        <text class="text-blue">[开始]</text>
+                        <b class="font-14px text-red">{{ date_show($circle->start_time) }}</b>
+                    </span>
+
+
+                    <span class="pull-left" style="width:120px;">
+                        <text class="text-green">[结束]</text>
+                        <b class="font-14px text-red">{{ date_show($circle->ended_time) }}</b>
+                    </span>
+
+                    <span class="pull-left" style="width:120px;">
+                        <text class="text-green">[总时间]</text>
+                        <b class="font-14px text-red">{{ date_difference($circle->start_time, $circle->ended_time) }} 天</b>
+                    </span>
+
+                    <span class="pull-left" style="width:160px;">
+                        <text class="text-green">[总里程]</text>
+                        <b class="font-14px text-red">{{ $circle->distance_total }} 公里</b>
+                    </span>
+
+                    <span class="pull-left" style="width:160px;">
+                        <text class="text-green">[总收入]</text>
+                        <b class="font-14px text-red">{{ $circle->income_total }} 元</b>
+                    </span>
+
+                    <span class="pull-left" style="width:160px;">
+                        <text class="text-green">[总扣款]</text>
+                        <b class="font-14px text-red">{{ $circle->deduction_total }} 元</b>
+                    </span>
+
+
+                </div>
+            </div>
+
+            <div class="box-footer">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-info main-list-body">
+
             <div class="box-header with-border" style="margin:16px 0;">
 
                 <h3 class="box-title">订单列表</h3>
-
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-{{--                    <a class="item-create-link">--}}
-{{--                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加订单</button>--}}
-{{--                    </a>--}}
-                    <a class="item-create-show">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加订单</button>
-                    </a>
-                </div>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
 
             </div>
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-order-list">
 
-                <div class="row col-md-12 datatable-search-row">
-                    <div class="input-group">
-
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:88px;" />
-
-                        <select class="form-control form-filter" name="order-staff" style="width:88px;">
-                            <option value ="-1">选择员工</option>
-                            @foreach($staff_list as $v)
-                                <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->true_name }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter" name="order-client" style="width:88px;">
-                            <option value ="-1">选择客户</option>
-                            <option value="0">[未指定]</option>
-                            @foreach($client_list as $v)
-                                <option value ="{{ $v->id }}" @if($v->id == $client_id) selected="selected" @endif>{{ $v->username }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter select2-container order-select2-circle" name="order-circle" style="width:100px;">
-                            @if($circle_id > 0)
-                                <option value="-1">选择环线</option>
-                                <option value="{{ $circle_id }}" selected="selected">{{ $circle_name }}</option>
-                            @else
-                                <option value="-1">选择环线</option>
-                            @endif
-                        </select>
-
-                        <select class="form-control form-filter" name="order-route" style="width:88px;">
-                            <option value="-1">选择线路</option>
-                            <option value="-9">[临时线路]</option>
-                            <option value="0">[未指定]</option>
-                            @foreach($route_list as $v)
-                                <option value ="{{ $v->id }}" @if($v->id == $route_id) selected="selected" @endif>{{ $v->title }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter" name="order-pricing" style="width:88px;">
-                            <option value="-1">选择定价</option>
-                            <option value="0">[未指定]</option>
-                            @foreach($pricing_list as $v)
-                                <option value ="{{ $v->id }}" @if($v->id == $pricing_id) selected="selected" @endif>{{ $v->title }}</option>
-                            @endforeach
-                        </select>
-
-                        {{--<select class="form-control form-filter" name="order-car" style="width:88px;">--}}
-                            {{--<option value ="-1">选择车辆</option>--}}
-                            {{--@foreach($car_list as $v)--}}
-                                {{--<option value ="{{ $v->id }}">{{ $v->name }}</option>--}}
-                            {{--@endforeach--}}
-                        {{--</select>--}}
-{{--                        <select class="form-control form-filter order-list-select2-car" name="order-car" style="width:120px;">--}}
-{{--                            @if($car_id > 0)--}}
-{{--                                <option value="-1">选择车辆</option>--}}
-{{--                                <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>--}}
-{{--                            @else--}}
-{{--                                <option value="-1">选择车辆</option>--}}
-{{--                            @endif--}}
-{{--                        </select>--}}
-
-
-                        <select class="form-control form-filter select2-container order-select2-car" name="order-car" style="width:100px;">
-                            @if($car_id > 0)
-                                <option value="-1">选择车辆</option>
-                                <option value="{{ $car_id }}" selected="selected">{{ $car_name }}</option>
-                            @else
-                                <option value="-1">选择车辆</option>
-                            @endif
-                        </select>
-                        <select class="form-control form-filter select2-container order-select2-trailer" name="order-trailer" style="width:100px;">
-                            @if($trailer_id > 0)
-                                <option value="-1">选择车挂</option>
-                                <option value="{{ $trailer_id }}" selected="selected">{{ $trailer_name }}</option>
-                            @else
-                                <option value="-1">选择车挂</option>
-                            @endif
-                        </select>
-
-
-                        <select class="form-control form-filter select2-container order-select2-driver" name="order-driver" style="width:100px;">
-                            @if($driver_id > 0)
-                                <option value="-1">选择驾驶员</option>
-                                <option value="{{ $driver_id }}" selected="selected">{{ $driver_name }}</option>
-                            @else
-                                <option value="-1">选择驾驶员</option>
-                            @endif
-                        </select>
-
-                        <select class="form-control form-filter" name="order-type" style="width:88px;">
-                            <option value ="-1">订单类型</option>
-                            <option value ="1" @if($order_type == "1") selected="selected" @endif>自有</option>
-                            <option value ="11" @if($order_type == "11") selected="selected" @endif>空单</option>
-                            <option value ="41" @if($order_type == "41") selected="selected" @endif>外配·配货</option>
-                            <option value ="61" @if($order_type == "61") selected="selected" @endif>外请·调车</option>
-                        </select>
-
-                        <select class="form-control form-filter" name="order-status" style="width:88px;">
-                            <option value ="-1">订单状态</option>
-                            <option value ="未发布">未发布</option>
-                            <option value ="待发车">待发车</option>
-                            <option value ="进行中">进行中</option>
-                            <option value ="已到达">已到达</option>
-                            <option value ="待收款">待收款</option>
-                            <option value ="已收款">已收款</option>
-                            <option value ="已结束">已结束</option>
-                            <option value ="弃用">弃用</option>
-                        </select>
-
-                        <select class="form-control form-filter" name="order-is-delay" style="width:88px;">
-                            <option value="-1">是否压车</option>
-                            <option value="1" @if($is_delay == "1") selected="selected" @endif>正常</option>
-                            <option value="9" @if($is_delay == "9") selected="selected" @endif>压车</option>
-                        </select>
-
-                        <select class="form-control form-filter" name="order-receipt-status" style="width:88px;">
-                            <option value="-1">回单状态</option>
-                            <option value="199">需要回单</option>
-                            <option value="1">等待回单</option>
-                            <option value="21">邮寄中</option>
-                            <option value="41">已签收，等待确认</option>
-                            <option value="100">已完成</option>
-                            <option value="101">回单异常</option>
-                        </select>
-
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-remark" placeholder="备注" value="" style="width:88px;" />
-
-
-                        <div class="pull-left clear-both">
-                            <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
-                                <i class="fa fa-chevron-left"></i>
-                            </button>
-                            <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="派车时间" value="{{ $assign or '' }}" readonly="readonly" style="width:88px;" />
-                            <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
-                                <i class="fa fa-chevron-right"></i>
-                            </button>
-
-                            <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-start" placeholder="起始日期" value="{{ $start or '' }}" readonly="readonly" style="width:88px;" />
-                            <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-ended" placeholder="终止日期" value="{{ $ended or '' }}" readonly="readonly" style="width:88px;" />
-
-                            <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
-                                <i class="fa fa-remove"></i> 清空重选
-                            </button>
-                            <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
-                                <i class="fa fa-search"></i> 搜索
-                            </button>
-                            <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-order">
-                                <i class="fa fa-circle-o-notch"></i> 刷新
-                            </button>
-                            <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-order">
-                                <i class="fa fa-undo"></i> 重置
-                            </button>
-
-                            <button type="button" class="form-control btn btn-flat bg-red" id="order-show-for-finance">
-                                <i class="fa fa-rmb"></i> 财务显示
-                            </button>
-                            <button type="button" class="form-control btn btn-flat bg-purple" id="order-show-for-brief">
-                                <i class="fa fa-ellipsis-h"></i> 简略显示
-                            </button>
-                            <button type="button" class="form-control btn btn-flat bg-olive" id="order-show-for-full">
-                                <i class="fa fa-bars"></i> 完整显示
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
 
                 <div class="tableArea">
                 <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
                     <thead>
-{{--                        <tr>--}}
-{{--                            <th colspan="14" rowspan="2">基本信息</th>--}}
-{{--                            <th colspan="11" rowspan="2">基本信息</th>--}}
-{{--                            <th colspan="24" class="bg-fee">费用信息</th>--}}
-{{--                            <th colspan="8" rowspan="2" class="bg-finance">财务信息</th>--}}
-{{--                            <th colspan="9" rowspan="2" class="bg-empty">空单</th>--}}
-{{--                            <th colspan="7" rowspan="2" class="bg-journey">行程</th>--}}
-{{--                            <th colspan="10" rowspan="2">其他信息</th>--}}
-{{--                            <th colspan="3" rowspan="2">时间与操作</th>--}}
-{{--                        </tr>--}}
                         <tr>
                             <th colspan="13">基本信息</th>
                             <th colspan="8" class="bg-route">线路</th>
@@ -1697,39 +1695,38 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-//                "aLengthMenu": [[15, 50, 200, 500, -1], ["15", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[15, 50, 100, 200])) {{ $length.',' }} @endif 15, 50, 100, 200], [ @if(!in_array($length,[15, 50, 100, 200])) {{ $length.',' }} @endif "15", "50", "100", "200"]],
+               "aLengthMenu": [[15, 50, 200, 500, -1], ["15", "50", "200", "500", "全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
-                "iDisplayStart": {{ ($page - 1) * $length }},
-                "iDisplayLength": {{ $length or 15 }},
+                "iDisplayStart": 0,
+                "iDisplayLength": -1,
                 "ajax": {
-                    'url': "{{ url('/item/order-list-for-all') }}",
+                    'url': "{{ url('/item/order-list-for-all?circle_id='.$circle->id) }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="order-id"]').val();
-                        d.remark = $('input[name="order-remark"]').val();
-                        d.assign = $('input[name="order-assign"]').val();
-                        d.assign_start = $('input[name="order-start"]').val();
-                        d.assign_ended = $('input[name="order-ended"]').val();
-                        d.name = $('input[name="order-name"]').val();
-                        d.title = $('input[name="order-title"]').val();
-                        d.keyword = $('input[name="order-keyword"]').val();
-                        d.staff = $('select[name="order-staff"]').val();
-                        d.client = $('select[name="order-client"]').val();
-                        d.circle = $('select[name="order-circle"]').val();
-                        d.car = $('select[name="order-car"]').val();
-                        d.trailer = $('select[name="order-trailer"]').val();
-                        d.route = $('select[name="order-route"]').val();
-                        d.pricing = $('select[name="order-pricing"]').val();
-                        d.driver = $('select[name="order-driver"]').val();
-                        d.status = $('select[name="order-status"]').val();
-                        d.order_type = $('select[name="order-type"]').val();
-                        d.is_delay = $('select[name="order-is-delay"]').val();
-                        d.receipt_status = $('select[name="order-receipt-status"]').val();
+                        // d.id = $('input[name="order-id"]').val();
+                        // d.remark = $('input[name="order-remark"]').val();
+                        // d.assign = $('input[name="order-assign"]').val();
+                        // d.assign_start = $('input[name="order-start"]').val();
+                        // d.assign_ended = $('input[name="order-ended"]').val();
+                        // d.name = $('input[name="order-name"]').val();
+                        // d.title = $('input[name="order-title"]').val();
+                        // d.keyword = $('input[name="order-keyword"]').val();
+                        // d.staff = $('select[name="order-staff"]').val();
+                        // d.client = $('select[name="order-client"]').val();
+                        d.circle = "{{ $circle->id or 0 }}";
+                        // d.car = $('select[name="order-car"]').val();
+                        // d.trailer = $('select[name="order-trailer"]').val();
+                        // d.route = $('select[name="order-route"]').val();
+                        // d.pricing = $('select[name="order-pricing"]').val();
+                        // d.driver = $('select[name="order-driver"]').val();
+                        // d.status = $('select[name="order-status"]').val();
+                        // d.order_type = $('select[name="order-type"]').val();
+                        // d.is_delay = $('select[name="order-is-delay"]').val();
+                        // d.receipt_status = $('select[name="order-receipt-status"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -3623,7 +3620,10 @@
                             {
                                 var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
 
-                                var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc) + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost) + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost) + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
+                                var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                    + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
+                                    + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
+                                    + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
 
                                 var $profit = parseFloat($receivable) - parseFloat($expenditure);
                                 if($profit > 0) $(nTd).addClass('color-green');
@@ -3713,7 +3713,6 @@
                             var $income = parseFloat(row.income_real_first_amount) + parseFloat(row.income_real_final_amount);
 
                             var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
-                                + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
                                 + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
                                 + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
                                 + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
@@ -5192,26 +5191,27 @@
 //                    });
 
                     var $obj = new Object();
-                    if($('input[name="order-id"]').val())  $obj.order_id = $('input[name="order-id"]').val();
-                    if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
-                    if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
-                    if($('input[name="order-ended"]').val())  $obj.assign_ended = $('input[name="order-ended"]').val();
-                    if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
-                    if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
-                    if($('select[name="order-circle"]').val() > 0)  $obj.circle_id = $('select[name="order-circle"]').val();
-                    if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
-                    if($('select[name="order-pricing"]').val() > 0)  $obj.pricing_id = $('select[name="order-pricing"]').val();
-                    if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
-                    if($('select[name="order-trailer"]').val() > 0)  $obj.trailer_id = $('select[name="order-trailer"]').val();
-                    if($('select[name="order-driver"]').val() > 0)  $obj.driver_id = $('select[name="order-driver"]').val();
-                    if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
+                    $obj.circle_id = {{ $circle->id }};
+                    // if($('input[name="order-id"]').val())  $obj.order_id = $('input[name="order-id"]').val();
+                    // if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
+                    // if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
+                    // if($('input[name="order-ended"]').val())  $obj.assign_ended = $('input[name="order-ended"]').val();
+                    // if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
+                    // if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
+                    // if($('select[name="order-circle"]').val() > 0)  $obj.circle_id = $('select[name="order-circle"]').val();
+                    // if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
+                    // if($('select[name="order-pricing"]').val() > 0)  $obj.pricing_id = $('select[name="order-pricing"]').val();
+                    // if($('select[name="order-car"]').val() > 0)  $obj.car_id = $('select[name="order-car"]').val();
+                    // if($('select[name="order-trailer"]').val() > 0)  $obj.trailer_id = $('select[name="order-trailer"]').val();
+                    // if($('select[name="order-driver"]').val() > 0)  $obj.driver_id = $('select[name="order-driver"]').val();
+                    // if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
                     if($('select[name="order-is-delay"]').val() > 0)  $obj.is_delay = $('select[name="order-is-delay"]').val();
 
-                    var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != 15) $obj.length = $page_length;
-                    var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
-                    var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
-                    if($pagination > 1) $obj.page = $pagination;
+                    // var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
+                    // if($page_length != 15) $obj.length = $page_length;
+                    // var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
+                    // var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
+                    // if($pagination > 1) $obj.page = $pagination;
 
 
                     if(JSON.stringify($obj) != "{}")

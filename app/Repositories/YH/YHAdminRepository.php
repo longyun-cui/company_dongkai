@@ -11383,6 +11383,69 @@ class YHAdminRepository {
 
 
     // 【环线管理】返回-列表-视图
+    public function view_item_circle_detail($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $circle_id = $post_data['circle_id'];
+
+        $circle = YH_Circle::select('*')
+//            ->withTrashed()
+//            ->withCount([''])
+            ->with(['creator','car_er',
+//                'order_list',
+                'order_list'=>function($query) {
+                    $query->where('item_status','!=',97)->orderby('assign_time','asc');
+                },
+//                'pivot_order_list',
+//                'pivot_order_list'=>function($query) {
+//                    $query->with('finance_list');
+//                },
+            ])->find($circle_id);
+
+
+        $circle->distance_total = 0;
+        $circle->income_total = 0;
+        $circle->deduction_total = 0;
+        $circle->receivable_total = 0;
+        $circle->expense_total = 0;
+        $circle->profit_total = 0;
+        $circle->toll_total = 0;
+        $circle->toll_unit = 0;
+        $circle->oil_total = 0;
+        $circle->oil_unit = 0;
+        foreach($circle->order_list as $k => $v)
+        {
+            $circle->distance_total += $v->travel_main_distance + $v->travel_east_distance + $v->travel_south_distance;
+            $circle->income_total += $v->amount + $v->oil_card_amount;
+            $circle->deduction_total += $v->time_limitation_deduction + $v->customer_management_fee + $v->others_deduction;
+            $circle->expense_total += $v->toll_main_etc + $v->toll_east_etc + $v->toll_south_etc
+                + $v->toll_main_cash + $v->toll_east_cash + $v->toll_south_cash
+                + $v->oil_main_cost + $v->oil_east_cost + $v->oil_south_cost
+                + $v->shipping_cost + $v->urea_cost + $v->maintenance_cost
+                + $v->salary_cost + $v->others_cost;
+            $circle->toll_total += $v->toll_main_etc + $v->toll_east_etc + $v->toll_south_etc
+                + $v->toll_main_cash + $v->toll_east_cash + $v->toll_south_cash;
+            $circle->oil_total += $v->oil_main_cost + $v->oil_east_cost + $v->oil_south_cost;
+        }
+        $circle->receivable_total = $circle->income_total - $circle->deduction_total;
+        $circle->profit_total = $circle->receivable_total - $circle->expense_total;
+        if($circle->distance_total > 0)
+        {
+            $circle->toll_unit = round(($circle->toll_total / $circle->distance_total),2);
+            $circle->oil_unit = round(($circle->oil_total / $circle->distance_total),2);
+        }
+
+        $view_data['title_text'] = "【环线】".$circle->title;
+        $view_data['circle'] = $circle;
+//        dd($view_data);
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.circle-detail';
+        return view($view_blade)->with($view_data);
+    }
+
+    // 【环线管理】返回-列表-视图
     public function view_item_circle_list_for_all($post_data)
     {
         $this->get_me();

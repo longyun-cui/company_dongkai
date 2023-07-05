@@ -360,6 +360,8 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 列表
     Route::match(['get','post'], '/item/circle-list', $controller.'@view_item_circle_list');
     Route::match(['get','post'], '/item/circle-list-for-all', $controller.'@view_item_circle_list_for_all');
+
+    Route::match(['get','post'], '/item/circle-detail', $controller.'@view_item_circle_detail');
     // 修改-列表
     Route::match(['get','post'], '/item/circle-modify-record', $controller.'@view_item_circle_modify_record');
 

@@ -722,7 +722,7 @@
                     },
                     {
                         "title": "操作",
-                        "width": "120px",
+                        "width": "160px",
                         "data": 'id',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -734,6 +734,7 @@
                             var $html_delete = '';
                             var $html_publish = '';
                             var $html_abandon = '';
+                            var $html_detail = '';
 
                             if(row.item_status == 1)
                             {
@@ -764,6 +765,8 @@
 
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
+                            $html_detail = '<a class="btn btn-xs bg-teal item-detail-link" data-id="'+data+'">详情</a>';
+
                             var html =
                                 '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
 //                                $html_able+
@@ -771,6 +774,7 @@
 //                                    $html_publish+
                                 $html_delete+
                                 $html_record+
+                                $html_detail+
 //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
 //                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
 //                                    '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
@@ -1109,7 +1113,11 @@
                         render: function(data, type, row, meta) {
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
+                                $amount += parseFloat(this.toll_main_etc) + parseFloat(this.toll_east_etc) + parseFloat(this.toll_south_etc)
+                                    + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost)
+                                    + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost)
+                                    + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
+
                                 // $amount += parseFloat(this.information_fee) + parseFloat(this.administrative_fee) + parseFloat(this.others_fee);
                             });
                             // return $amount;
@@ -1178,7 +1186,10 @@
 
                                 $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee) + parseFloat(this.others_deduction);
 
-                                $expense = parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
+                                $expense = parseFloat(this.toll_main_etc) + parseFloat(this.toll_east_etc) + parseFloat(this.toll_south_etc)
+                                    + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost)
+                                    + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost)
+                                    + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
 
                                 $amount += parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
 
@@ -1228,7 +1239,7 @@
 
                                 $income = parseFloat(this.amount) + parseFloat(this.oil_card_amount);
                                 $deduction = parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee) + parseFloat(this.others_deduction);
-                                $expense = parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
+                                $expense = parseFloat(this.toll_main_etc) + parseFloat(this.toll_east_etc) + parseFloat(this.toll_south_etc) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
                                 $amount += parseFloat($income) - parseFloat($deduction) - parseFloat($expense);
                             });
 
@@ -1268,7 +1279,7 @@
 
                                 $income += parseFloat(this.amount) + parseFloat(this.oil_card_amount);
                                 $deduction += parseFloat(this.reimbursable_amount) + parseFloat(this.time_limitation_deduction) + parseFloat(this.customer_management_fee) + parseFloat(this.others_deduction);
-                                $expense += parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
+                                $expense += parseFloat(this.toll_main_etc) + parseFloat(this.toll_east_etc) + parseFloat(this.toll_south_etc) + parseFloat(this.oil_main_cost) + parseFloat(this.oil_east_cost) + parseFloat(this.oil_south_cost) + parseFloat(this.shipping_cost) + parseFloat(this.urea_cost) + parseFloat(this.maintenance_cost) + parseFloat(this.salary_cost) + parseFloat(this.others_cost);
 
                             });
                             $amount = parseFloat($income) - parseFloat($deduction);
@@ -1327,7 +1338,7 @@
                             // return data;
                             var $amount = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost);
+                                $amount += parseFloat(this.toll_main_etc) + parseFloat(this.toll_east_etc) + parseFloat(this.toll_south_etc);
                             });
                             return parseFloat($amount.toFixed(2));
                         }
@@ -1374,7 +1385,7 @@
                             var $amount = 0;
                             var $distance = 0;
                             $.each(data,function( key, val ) {
-                                $amount += parseFloat(this.etc_main_cost) + parseFloat(this.etc_east_cost) + parseFloat(this.etc_south_cost);
+                                $amount += parseFloat(this.toll_main_etc) + parseFloat(this.toll_east_etc) + parseFloat(this.toll_south_etc);
                                 $distance += parseFloat(this.travel_distance);
                             });
 

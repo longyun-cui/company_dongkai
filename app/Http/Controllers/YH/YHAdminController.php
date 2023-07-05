@@ -1046,6 +1046,12 @@ class YHAdminController extends Controller
      * 环线管理
      */
     // 【环线管理】返回-列表-视图
+    public function view_item_circle_detail()
+    {
+        return $this->repo->view_item_circle_detail(request()->all());
+    }
+
+    // 【环线管理】返回-列表-视图
     public function view_item_circle_list_for_all()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_circle_list_for_all(request()->all());

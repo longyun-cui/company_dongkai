@@ -59,6 +59,17 @@
         });
 
 
+        // 【详情】
+        $(".main-content").on('click', ".item-detail-link", function() {
+            var $that = $(this);
+
+            // var $url = "/item/order-create?&referrer="+encodeURIComponent(window.location.href);
+            var $url = "/item/circle-detail?circle_id="+$that.attr('data-id');
+            // window.location.href = $url;
+            window.open($url);
+        });
+
+
 
 
         // 【删除】

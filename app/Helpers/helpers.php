@@ -109,7 +109,43 @@ if(!function_exists('date_show'))
 {
     function date_show($stamp)
     {
-        return date("Y-m-j",$stamp);
+//        return date("Y-m-d",$stamp);
+
+        global $today_start_unix;	//今天开始；
+        global $today_ended_unix;	//今天结束；
+
+        global $yesterday_start_unix;	//昨天开始；
+        global $yesterday_ended_unix;	//昨天结束；
+
+        global $beforeday_start_unix;	//前天开始；
+        global $beforeday_ended_unix;	//前天结束；
+
+        global $tomorrow_start_unix;	//明天开始；
+        global $tomorrow_ended_unix;	//明天结束；
+
+        global $afterday_start_unix;	//后天开始；
+        global $afterday_ended_unix;	//后天结束；
+
+        global $this_year_start_unix;	//今年开始；
+        global $this_year_ended_unix;	//今年结束；
+
+        time_init();
+
+        if( ($this_year_start_unix <= $stamp) && ($stamp <= $this_year_ended_unix) ) {
+            return date("n月j日",$stamp);
+        } else {
+            return date("Y-n-j",$stamp);
+        }
+
+    }
+}
+// 处理数据 返回 Data Show
+if(!function_exists('date_difference'))
+{
+    function date_difference($stamp1, $stamp2)
+    {
+        $diff = intval(($stamp2 - $stamp1) / 86400);
+        return $diff + 1;
     }
 }
 
