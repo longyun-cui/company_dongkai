@@ -11412,6 +11412,7 @@ class YHAdminRepository {
         $circle->receivable_total = 0;
         $circle->expense_total = 0;
         $circle->profit_total = 0;
+        $circle->profit_rate = 0;
         $circle->toll_total = 0;
         $circle->toll_unit = 0;
         $circle->oil_total = 0;
@@ -11432,6 +11433,8 @@ class YHAdminRepository {
         }
         $circle->receivable_total = $circle->income_total - $circle->deduction_total;
         $circle->profit_total = $circle->receivable_total - $circle->expense_total;
+        $circle->profit_rate = round(($circle->profit_total * 100 / $circle->income_total),2);
+
         if($circle->distance_total > 0)
         {
             $circle->toll_unit = round(($circle->toll_total / $circle->distance_total),2);

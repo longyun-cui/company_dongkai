@@ -42,22 +42,22 @@
                                 </li>
                                 <li class="">
                                     <a href="javascript:void(0);">
-                                        开始 <span class="pull-right"><b class="badge bg-blue">{{ date_show($circle->start_time) }}</b></span>
+                                        开始 <span class="pull-right"><b class="badge- bg-blue-">{{ date_show($circle->start_time) }}</b></span>
                                     </a>
                                 </li>
                                 <li class="">
                                     <a href="javascript:void(0);">
-                                        结束 <span class="pull-right"><b class="badge bg-blue">{{ date_show($circle->ended_time) }}</b></span>
+                                        结束 <span class="pull-right"><b class="badge- bg-blue-">{{ date_show($circle->ended_time) }}</b></span>
                                     </a>
                                 </li>
                                 <li class="">
                                     <a href="javascript:void(0);">
-                                        行程 <span class="pull-right"><b class="badge bg-green">{{ date_difference($circle->start_time, $circle->ended_time) }}</b> 天</span>
+                                        行程 <span class="pull-right"><b class="badge bg-blue">{{ date_difference($circle->start_time, $circle->ended_time) }}</b> 天</span>
                                     </a>
                                 </li>
                                 <li class="">
                                     <a href="javascript:void(0);">
-                                        里程 <span class="pull-right"><b class="badge bg-blue">{{ $circle->distance_total or '' }}</b> 公里</span>
+                                        里程 <span class="pull-right"><b class="badge bg-green">{{ $circle->distance_total or '' }}</b> 公里</span>
                                     </a>
                                 </li>
                             </ul>
@@ -93,12 +93,17 @@
                                 </li>
                                 <li class="income_waiting_sum">
                                     <a href="javascript:void(0);">
-                                        总支出 <span class="pull-right"><b class="badge bg-red">{{ $circle->expense_total or '0' }}</b> 元</span>
+                                        总支出 <span class="pull-right"><b class="badge- bg-red-">{{ $circle->expense_total or '0' }}</b> 元</span>
                                     </a>
                                 </li>
                                 <li class="expanse_sum">
                                     <a href="javascript:void(0);">
-                                        利润 <span class="pull-right"><b class="badge- bg-aqua-">{{ $circle->profit_total or '0' }}</b> 元</span>
+                                        利润 <span class="pull-right"><b class="badge bg-green">{{ $circle->profit_total or '0' }}</b> 元</span>
+                                    </a>
+                                </li>
+                                <li class="expanse_sum">
+                                    <a href="javascript:void(0);">
+                                        利润率 <span class="pull-right"><b class="badge bg-aqua">{{ $circle->profit_rate or '--' }}</b> %</span>
                                     </a>
                                 </li>
                             </ul>
@@ -3764,7 +3769,7 @@
                                 + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
 
                             var $profit = parseFloat($receivable) - parseFloat($expenditure);
-                            return ($profit/$income).toFixed(2) * 100 + '%';
+                            return ($profit * 100/$income).toFixed(2) + '%';
                         }
                     },
                     {

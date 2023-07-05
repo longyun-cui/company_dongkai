@@ -3763,7 +3763,7 @@
                                 + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
 
                             var $profit = parseFloat($receivable) - parseFloat($expenditure);
-                            return ($profit/$income).toFixed(2) * 100 + '%';
+                            return ($profit * 100/$income).toFixed(2) + '%';
                         }
                     },
                     {
