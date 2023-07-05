@@ -232,7 +232,7 @@
                             <th colspan="6" class="bg-fee">运费</th>
                             <th colspan="3" class="bg-fee-2">扣款</th>
                             <th colspan="6" class="bg-fee">收款</th>
-                            <th colspan="12" class="bg-fee-2">支出</th>
+                            <th colspan="15" class="bg-fee-2">支出</th>
                             <th colspan="5" class="bg-fee">外请车</th>
                             <th colspan="6"  class="bg-finance">财务信息</th>
 {{--                            <th colspan="9" class="bg-empty">空单</th>--}}
@@ -295,13 +295,17 @@
                             <th>日期</th>
 
                             {{--支出--}}
-                            <th>ETC-主单</th>
-                            <th>ETC-华东</th>
-                            <th>ETC-华南</th>
+                            <th>主单-ETC</th>
+                            <th>主单-现金</th>
+                            <th>主单-油费</th>
 
-                            <th>油费-主单</th>
-                            <th>油费-华东</th>
-                            <th>油费-华南</th>
+                            <th>华东-ETC</th>
+                            <th>华东-现金</th>
+                            <th>华东-油费</th>
+
+                            <th>华南-ETC</th>
+                            <th>华南-现金</th>
+                            <th>华南-油费</th>
 
                             <th>船费</th>
                             <th>尿素费</th>
@@ -3130,7 +3134,7 @@
 
                     // 支出
                     {
-                        "title": "ETC-主单",
+                        "title": "主单-ETC",
                         "className": "bg-fee-2",
                         "width": "60px",
                         "data": "toll_main_etc",
@@ -3139,9 +3143,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','ETC-主单');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主单-ETC');
                                 $(nTd).attr('data-key','toll_main_etc').attr('data-value',parseFloat(data));
-                                $(nTd).attr('data-column-name','ETC-主单');
+                                $(nTd).attr('data-column-name','主单-ETC');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -3152,18 +3156,18 @@
                         }
                     },
                     {
-                        "title": "ETC-华东",
+                        "title": "主单-现金",
                         "className": "bg-fee-2",
                         "width": "60px",
-                        "data": "toll_east_etc",
+                        "data": "toll_main_cash",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','ETC-华东');
-                                $(nTd).attr('data-key','toll_east_etc').attr('data-value',parseFloat(data));
-                                $(nTd).attr('data-column-name','ETC-华东');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主单-现金');
+                                $(nTd).attr('data-key','toll_main_cash').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','主单-现金');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -3174,29 +3178,7 @@
                         }
                     },
                     {
-                        "title": "ETC-华南",
-                        "className": "bg-fee-2",
-                        "width": "60px",
-                        "data": "toll_south_etc",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','ETC-华南');
-                                $(nTd).attr('data-key','toll_south_etc').attr('data-value',parseFloat(data));
-                                $(nTd).attr('data-column-name','ETC-华南');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "title": "油费-主单",
+                        "title": "主单-油费",
                         "className": "bg-fee-2",
                         "width": "60px",
                         "data": "oil_main_cost",
@@ -3205,9 +3187,32 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','油费-主单');
+                                $(nTd).attr('data-id',row.id).attr('data-name','主单-油费');
                                 $(nTd).attr('data-key','oil_main_cost').attr('data-value',parseFloat(data));
-                                $(nTd).attr('data-column-name','油费-主单');
+                                $(nTd).attr('data-column-name','主单-油费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+
+                    {
+                        "title": "华东-ETC",
+                        "className": "bg-fee",
+                        "width": "60px",
+                        "data": "toll_east_etc",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','华东-ETC');
+                                $(nTd).attr('data-key','toll_east_etc').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','华东-ETC');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -3218,8 +3223,30 @@
                         }
                     },
                     {
-                        "title": "油费-华东",
-                        "className": "bg-fee-2",
+                        "title": "华东-现金",
+                        "className": "bg-fee",
+                        "width": "60px",
+                        "data": "toll_east_cash",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','华东-现金');
+                                $(nTd).attr('data-key','toll_east_cash').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','华东-现金');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "华东-油费",
+                        "className": "bg-fee",
                         "width": "60px",
                         "data": "oil_east_cost",
                         "orderable": false,
@@ -3227,9 +3254,32 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','油费-华东');
+                                $(nTd).attr('data-id',row.id).attr('data-name','华东-油费');
                                 $(nTd).attr('data-key','oil_east_cost').attr('data-value',parseFloat(data));
-                                $(nTd).attr('data-column-name','油费-华东');
+                                $(nTd).attr('data-column-name','华东-油费');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+
+                    {
+                        "title": "华南-ETC",
+                        "className": "bg-fee-2",
+                        "width": "60px",
+                        "data": "toll_south_etc",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','华南-ETC');
+                                $(nTd).attr('data-key','toll_south_etc').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','华南-ETC');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -3240,7 +3290,29 @@
                         }
                     },
                     {
-                        "title": "油费-华南",
+                        "title": "华南-现金",
+                        "className": "bg-fee-2",
+                        "width": "60px",
+                        "data": "toll_south_cash",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','华南-现金');
+                                $(nTd).attr('data-key','toll_south_cash').attr('data-value',parseFloat(data));
+                                $(nTd).attr('data-column-name','华南-现金');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "华南-油费",
                         "className": "bg-fee-2",
                         "width": "60px",
                         "data": "oil_south_cost",
@@ -3249,9 +3321,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','油费-华南');
+                                $(nTd).attr('data-id',row.id).attr('data-name','华南-油费');
                                 $(nTd).attr('data-key','oil_south_cost').attr('data-value',parseFloat(data));
-                                $(nTd).attr('data-column-name','油费-华南');
+                                $(nTd).attr('data-column-name','华南-油费');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -3261,6 +3333,7 @@
                             return parseFloat(data);
                         }
                     },
+
                     {
                         "title": "船费",
                         "className": "bg-fee-2",
@@ -3381,7 +3454,11 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '';
-                            var $total = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc) + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost) + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost) + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
+                            var $total = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
+                                + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
+                                + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
+                                + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
                             return parseFloat($total);
                         }
                     },
@@ -3565,6 +3642,7 @@
 
                             if(row.is_published == 0) return '';
                             var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
                                 + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
                                 + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
                                 + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
@@ -3621,6 +3699,7 @@
                                 var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
 
                                 var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                    + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
                                     + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
                                     + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
                                     + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
@@ -3637,6 +3716,7 @@
                             var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
 
                             var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
                                 + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
                                 + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
                                 + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
@@ -3659,6 +3739,7 @@
                                 var $receivable = $income - $deduction;
 
                                 var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                    + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
                                     + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
                                     + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
                                     + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
@@ -3677,6 +3758,7 @@
                             var $receivable = $income - $deduction;
 
                             var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
                                 + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
                                 + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
                                 + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
@@ -3697,6 +3779,7 @@
                                 var $income = parseFloat(row.income_real_first_amount) + parseFloat(row.income_real_final_amount);
 
                                 var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                    + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
                                     + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
                                     + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
                                     + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
@@ -3713,6 +3796,7 @@
                             var $income = parseFloat(row.income_real_first_amount) + parseFloat(row.income_real_final_amount);
 
                             var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
+                                + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
                                 + parseFloat(row.oil_main_cost) + parseFloat(row.oil_east_cost) + parseFloat(row.oil_south_cost)
                                 + parseFloat(row.shipping_cost) + parseFloat(row.urea_cost) + parseFloat(row.maintenance_cost)
                                 + parseFloat(row.salary_cost) + parseFloat(row.others_cost);
