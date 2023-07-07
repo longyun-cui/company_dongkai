@@ -365,6 +365,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     // 修改-列表
     Route::match(['get','post'], '/item/circle-modify-record', $controller.'@view_item_circle_modify_record');
 
+    Route::match(['get','post'], '/item/circle-detail-analysis', $controller.'@get_item_circle_detail_analysis');
     Route::match(['get','post'], '/item/circle-analysis', $controller.'@get_item_circle_analysis');
     Route::match(['get','post'], '/item/circle-finance-record', $controller.'@get_item_circle_finance_record');
 

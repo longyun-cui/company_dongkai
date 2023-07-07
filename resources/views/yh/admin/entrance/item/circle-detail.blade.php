@@ -154,6 +154,7 @@
     </div>
 </div>
 
+
 <div class="row _none">
     <div class="col-md-12">
         <div class="box box-info">
@@ -240,7 +241,6 @@
                             <th colspan="15" class="bg-fee-2">支出</th>
                             <th colspan="5" class="bg-fee">外请车</th>
                             <th colspan="6"  class="bg-finance">财务信息</th>
-{{--                            <th colspan="9" class="bg-empty">空单</th>--}}
                             <th colspan="12" class="bg-journey">行程</th>
                             <th colspan="10">其他信息</th>
                             <th colspan="2">时间</th>
@@ -319,14 +319,6 @@
                             <th>其他费用</th>
                             <th>支出总计</th>
 
-{{--                            <th>万金油(升)</th>--}}
-{{--                            <th>油价(元)</th>--}}
-{{--                            <th>包邮费</th>--}}
-{{--                            <th>客管费</th>--}}
-{{--                            <th>开票额</th>--}}
-{{--                            <th>票点</th>--}}
-{{--                            <th>其他费用</th>--}}
-
                             {{--请车--}}
                             <th>请车价</th>
                             <th>到付</th>
@@ -340,21 +332,9 @@
                             <th>欠款</th>
                             <th>收款结果</th>
                             <th>已支出</th>
-{{--                            <th>待入账</th>--}}
-{{--                            <th>待出账</th>--}}
                             <th>利润·预估</th>
                             <th>利润·实时</th>
                             <th>利润率</th>
-
-{{--                            <th>空单-固定</th>--}}
-{{--                            <th>空单-临时</th>--}}
-{{--                            <th>空-里程</th>--}}
-{{--                            <th>空-包油价</th>--}}
-{{--                            <th>空-包油金额</th>--}}
-{{--                            <th>空-加油方式</th>--}}
-{{--                            <th>空-加油金额</th>--}}
-{{--                            <th>空-过路-现金</th>--}}
-{{--                            <th>空-过路-ETC</th>--}}
 
                             <th>出发地</th>
                             <th>经停地</th>
@@ -374,7 +354,6 @@
                             <th>主驾电话</th>
                             <th>副驾</th>
                             <th>副驾电话</th>
-{{--                            <th>状态</th>--}}
 
                             <th>单号</th>
                             <th>GPS</th>
@@ -385,12 +364,9 @@
                             <th>备注</th>
 
                             <th>创建时间</th>
-{{--                            <th>修改时间</th>--}}
                         </tr>
                     </thead>
 
-{{--                    <tfoot>--}}
-{{--                    </tfoot>--}}
 
                     <tbody>
                     </tbody>
@@ -432,6 +408,41 @@
             </div>
 
         </div>
+    </div>
+</div>
+
+
+{{--分析--}}
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="box box-info form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">财务分析</h3>
+            </div>
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="echart-overview" style="width:800px;height:400px;"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="echart-expenditure-rate" style="width:480px;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
     </div>
 </div>
 
@@ -3701,7 +3712,9 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
+                                var $income = parseFloat(row.amount) + parseFloat(row.oil_card_amount);
+                                var $deduction = parseFloat(row.time_limitation_deduction) + parseFloat(row.customer_management_fee) + parseFloat(row.others_deduction);
+                                var $receivable = $income - $deduction;
 
                                 var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
                                     + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
@@ -3716,9 +3729,10 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
-                            var $profit = 0;
 
-                            var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
+                            var $income = parseFloat(row.amount) + parseFloat(row.oil_card_amount);
+                            var $deduction = parseFloat(row.time_limitation_deduction) + parseFloat(row.customer_management_fee) + parseFloat(row.others_deduction);
+                            var $receivable = $income - $deduction;
 
                             var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
                                 + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
@@ -5280,7 +5294,7 @@
 //                    });
 
                     var $obj = new Object();
-                    $obj.circle_id = {{ $circle->id }};
+                    $obj.circle_id = "{{ $circle->id }}";
                     // if($('input[name="order-id"]').val())  $obj.order_id = $('input[name="order-id"]').val();
                     // if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
                     // if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
@@ -6293,6 +6307,179 @@
 //        $(function () {
 //            TableDatatablesAjax_record.init();
 //        });
+</script>
+
+
+<script>
+    $(function() {
+        // 【数据分析】【显示】
+        //     var $that = $(this);
+            var $id = "{{ $circle->id }}";
+            var $keyword = "123";
+
+            var $data = new Object();
+            $.ajax({
+                type:"post",
+                dataType:'json',
+                async:false,
+                url: "{{ url('/item/circle-detail-analysis') }}",
+                data: {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate:"item-get",
+                    circle_id: $id
+                },
+                success:function(data){
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        $data = data.data;
+                    }
+                }
+            });
+
+
+            var $overview = $data.overview;
+            var $option_overview = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['收入', '扣款', '支出', '利润']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisTick: {
+                            show: false
+                        },
+                        data: $overview.title
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '收入',
+                        type: 'bar',
+                        stack: 'Total',
+                        label: {
+                            show: true,
+                            position: 'inside'
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: $overview.income
+                    },
+                    {
+                        name: '扣款',
+                        type: 'bar',
+                        stack: 'Total',
+                        label: {
+                            show: true,
+                            position: 'inside'
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: $overview.deduction
+                    },
+                    {
+                        name: '支出',
+                        type: 'bar',
+                        stack: 'Total',
+                        label: {
+                            show: true,
+                            position: 'inside'
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: $overview.expenses
+                    },
+                    {
+                        name: '利润',
+                        type: 'bar',
+                        label: {
+                            show: true,
+                            position: 'inside'
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: $overview.profit
+                    }
+                ]
+            };
+            var $myChart_overview = echarts.init(document.getElementById('echart-overview'));
+            $myChart_overview.setOption($option_overview);
+
+
+            // 支出占比
+            var $expenditure_rate = $data.expenditure_rate;
+            var $option_expenditure_rate = {
+                title : {
+                    text: '支出占比',
+                    subtext: '支出占比',
+                    x:'center'
+                },
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient : 'vertical',
+                    x : 'left',
+                    data: $expenditure_rate
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {
+                            show: true,
+                            type: ['pie', 'funnel'],
+                            option: {
+                                funnel: {
+                                    x: '25%',
+                                    width: '50%',
+                                    funnelAlign: 'left',
+                                    max: 1548
+                                }
+                            }
+                        },
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                series : [
+                    {
+                        name:'支出占比',
+                        type:'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data: $expenditure_rate
+                    }
+                ]
+            };
+            var $myChart_expenditure_rate = echarts.init(document.getElementById('echart-expenditure-rate'));
+            $myChart_expenditure_rate.setOption($option_expenditure_rate);
+
+    });
 </script>
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script')
 @include(env('TEMPLATE_YH_ADMIN').'entrance.item.order-script-for-info')

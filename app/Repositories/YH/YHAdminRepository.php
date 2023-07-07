@@ -11697,6 +11697,102 @@ class YHAdminRepository {
 
 
     // 【环线管理】返回-分析-数据
+    public function get_item_circle_detail_analysis($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $circle_id  = $post_data["circle_id"];
+
+//        $pivot_order_list = YH_Pivot_Circle_Order::select('order_id')
+//            ->withTrashed()
+//            ->where('circle_id',$circle_id)->get();
+//        $order_id_list = $pivot_order_list->pluck('order_id')->toArray();
+
+        $order_list = YH_Order::select('id')
+            ->withTrashed()
+            ->where('circle_id',$circle_id)->get();
+        $order_id_list = $order_list->pluck('id')->toArray();
+
+
+        $this_month = date('Y-m');
+        $this_month_year = date('Y');
+        $this_month_month = date('m');
+        $last_month = date('Y-m',strtotime('last month'));
+        $last_month_year = date('Y',strtotime('last month'));
+        $last_month_month = date('m',strtotime('last month'));
+
+
+        // 总览
+        $order_list = YH_Order::select('*')
+            ->whereIn('id',$order_id_list)
+            ->get();
+        $overview = [];
+
+        $expense_toll = 0;
+        $expense_oil = 0;
+        $expense_shipping = 0;
+        $expense_urea = 0;
+        $expense_maintenance = 0;
+        $expense_salary = 0;
+        $expense_others = 0;
+
+        foreach($order_list as $k => $v)
+        {
+            $overview['title'][$k] = $v->id;
+
+            $income = $v->amount + $v->oil_card_amount;
+            $deduction = $v->time_limitation_deduction + $v->customer_management_fee + $v->time_limitation_deduction;
+            $expenses = $v->toll_main_etc + $v->toll_east_etc + $v->toll_south_etc
+                + $v->toll_main_cash + $v->toll_east_cash + $v->toll_south_cash
+                + $v->oil_main_cost + $v->oil_east_cost + $v->oil_south_cost
+                + $v->shipping_cost + $v->urea_cost - $v->maintenance_cost
+                + $v->salary_cost + $v->others_cost;
+
+            $overview['income'][$k] = intval($income);
+            $overview['deduction'][$k] = intval(0 - $deduction);
+            $overview['expenses'][$k] = intval(0 - $expenses);
+            $overview['profit'][$k] = intval($income - $deduction - $expenses);
+
+            $expense_toll += $v->toll_main_etc + $v->toll_east_etc + $v->toll_south_etc
+                + $v->toll_main_cash + $v->toll_east_cash + $v->toll_south_cash;
+            $expense_oil += $v->oil_main_cost + $v->oil_east_cost + $v->oil_south_cost;
+            $expense_shipping += $v->shipping_cost;
+            $expense_urea += $v->urea_cost;
+            $expense_maintenance += $v->maintenance_cost;
+            $expense_salary += $v->salary_cost;
+            $expense_others += $v->others_cost;
+        }
+        $return_data["overview"] = $overview;
+//        dd($order_list->toArray());
+
+        $expenditure_rate[] = (object) array("name" => "过路费", "value" => $expense_toll);
+        $expenditure_rate[] = (object) array("name" => "油费", "value" => $expense_oil);
+        $expenditure_rate[] = (object) array("name" => "船费", "value" => $expense_shipping);
+        $expenditure_rate[] = (object) array("name" => "尿素", "value" => $expense_urea);
+        $expenditure_rate[] = (object) array("name" => "维修费", "value" => $expense_maintenance);
+        $expenditure_rate[] = (object) array("name" => "工资", "value" => $expense_salary);
+        $expenditure_rate[] = (object) array("name" => "其他", "value" => $expense_others);
+
+        // 支出【占比】
+//        $expenditure_rate = YH_Finance::groupBy('title')
+//            ->select('title',DB::raw("
+//                    sum(transaction_amount) as value,
+//                    count(*) as count
+//                "))
+//            ->whereIn('order_id',['600224'])
+//            ->get();
+//        foreach($expenditure_rate as $k => $v)
+//        {
+//            $expenditure_rate[$k]->name = $v->title;
+//        }
+//        dd($expenditure_rate);
+        $return_data["expenditure_rate"] = $expenditure_rate;
+
+        return response_success($return_data,"");
+    }
+
+    // 【环线管理】返回-分析-数据
     public function get_item_circle_analysis($post_data)
     {
         $this->get_me();

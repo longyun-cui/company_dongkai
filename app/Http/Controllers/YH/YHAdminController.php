@@ -1065,7 +1065,12 @@ class YHAdminController extends Controller
     }
 
 
-    // 【环线管理】返回-财务-数据
+    // 【环线管理】返回-财务-分析
+    public function get_item_circle_detail_analysis()
+    {
+        return $this->repo->get_item_circle_detail_analysis(request()->all());
+    }
+    // 【环线管理】返回-财务-分析
     public function get_item_circle_analysis()
     {
         return $this->repo->get_item_circle_analysis(request()->all());

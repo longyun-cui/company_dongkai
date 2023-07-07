@@ -3695,7 +3695,9 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_published != 0)
                             {
-                                var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
+                                var $income = parseFloat(row.amount) + parseFloat(row.oil_card_amount);
+                                var $deduction = parseFloat(row.time_limitation_deduction) + parseFloat(row.customer_management_fee) + parseFloat(row.others_deduction);
+                                var $receivable = $income - $deduction;
 
                                 var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
                                     + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
@@ -3710,9 +3712,10 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.is_published == 0) return '--';
-                            var $profit = 0;
 
-                            var $receivable = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.customer_management_fee) - parseFloat(row.income_total);
+                            var $income = parseFloat(row.amount) + parseFloat(row.oil_card_amount);
+                            var $deduction = parseFloat(row.time_limitation_deduction) + parseFloat(row.customer_management_fee) + parseFloat(row.others_deduction);
+                            var $receivable = $income - $deduction;
 
                             var $expenditure = parseFloat(row.toll_main_etc) + parseFloat(row.toll_east_etc) + parseFloat(row.toll_south_etc)
                                 + parseFloat(row.toll_main_cash) + parseFloat(row.toll_east_cash) + parseFloat(row.toll_south_cash)
