@@ -576,7 +576,8 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
-                            if(data == 1)
+                            if(data == 0) return '<small class="btn-xs bg-blue">访问</small>';
+                            else if(data == 1)
                             {
                                 if(row.operate_type == 1) return '<small class="btn-xs bg-olive">添加</small>';
                                 else if(row.operate_type == 11) return '<small class="btn-xs bg-orange">修改</small>';
@@ -617,6 +618,8 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         },
                         render: function(data, type, row, meta) {
+                            if(data == 0) return '--';
+
                             if(row.operate_object == 71)
                             {
                                 var $domain = "{{ env('DOMAIN_YH_ADMIN') }}";

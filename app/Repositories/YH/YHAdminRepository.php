@@ -9786,13 +9786,21 @@ class YHAdminRepository {
 
 
         // 显示数量
+        if(!empty($post_data['record']))
+        {
+            if($post_data['record'] == 'record')
+            {
+                $this->record_for_user_operate(21,11,1,$me->id,0,71,0);
+            }
+        }
+
+        // 显示数量
         if(!empty($post_data['length']))
         {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
             else $view_data['length'] = 15;
         }
         else $view_data['length'] = 15;
-
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -11441,7 +11449,7 @@ class YHAdminRepository {
             $circle->oil_unit = round(($circle->oil_total / $circle->distance_total),2);
         }
 
-        $view_data['title_text'] = "【环线】".$circle->title;
+        $view_data['title_text'] = "".$circle->title;
         $view_data['circle'] = $circle;
 //        dd($view_data);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.circle-detail';
@@ -14804,7 +14812,7 @@ class YHAdminRepository {
      */
 
 
-    // 【K】【访问记录】
+    // 【访问记录】
     public function record($post_data)
     {
         $record = new K_Record();
@@ -14821,6 +14829,30 @@ class YHAdminRepository {
 
         $post_data["ip"] = Get_IP();
         $bool = $record->fill($post_data)->save();
+        if($bool) return true;
+        else return false;
+    }
+
+
+    // 【访问记录】
+    public function record_for_user_operate($record_object,$record_category,$record_type,$creator_id,$item_id,$operate_object,$operate_category,$operate_type = 0,$column_key = '',$before = '',$after = '')
+    {
+        $record = new YH_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = $record_object;
+        $record_data["record_category"] = $record_category;
+        $record_data["record_type"] = $record_type;
+        $record_data["creator_id"] = $creator_id;
+        $record_data["item_id"] = $item_id;
+        $record_data["operate_object"] = $operate_object;
+        $record_data["operate_category"] = $operate_category;
+        $record_data["operate_type"] = $operate_type;
+        $record_data["column_name"] = $column_key;
+        $record_data["before"] = $before;
+        $record_data["after"] = $after;
+
+        $bool = $record->fill($record_data)->save();
         if($bool) return true;
         else return false;
     }
