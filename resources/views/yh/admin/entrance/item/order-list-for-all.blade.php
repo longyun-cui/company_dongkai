@@ -75,25 +75,33 @@
                             @endif
                         </select>
 
-                        <select class="form-control form-filter" name="order-status" style="width:88px;">
-                            <option value ="-1">工单状态</option>
-                            <option value ="未发布">未发布</option>
+                        <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
+                            <option value ="-1">审核状态</option>
                             <option value ="待审核">待审核</option>
                             <option value ="已审核">已审核</option>
                         </select>
 
-                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">
-                            <option value="-1">是否+V</option>
-                            <option value="1" @if($is_wx == "1") selected="selected" @endif>是</option>
-                            <option value="0" @if($is_wx == "0") selected="selected" @endif>否</option>
-                        </select>
-
                         <select class="form-control form-filter" name="order-inspected-result" style="width:88px;">
-                            <option value="-1">审核状态</option>
+                            <option value="-1">审核结果</option>
                             @foreach(config('info.inspected_result') as $v)
                                 <option value ="{{ $v }}" @if($v == $client_id) selected="selected" @endif>{{ $v }}</option>
                             @endforeach
                         </select>
+
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
+
+{{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
+{{--                            <option value="-1">是否+V</option>--}}
+{{--                            <option value="1" @if($is_wx == "1") selected="selected" @endif>是</option>--}}
+{{--                            <option value="0" @if($is_wx == "0") selected="selected" @endif>否</option>--}}
+{{--                        </select>--}}
+
+{{--                        <select class="form-control form-filter" name="order-is-repeat" style="width:88px;">--}}
+{{--                            <option value="-1">是否重复</option>--}}
+{{--                            <option value="1" @if($is_repeat >= 1) selected="selected" @endif>是</option>--}}
+{{--                            <option value="0" @if($is_repeat == 0) selected="selected" @endif>否</option>--}}
+{{--                        </select>--}}
 
                         <input type="text" class="form-control form-filter filter-keyup" name="order-description" placeholder="通话小结" value="" style="width:120px;" />
 
@@ -679,6 +687,7 @@
                         d._token = $('meta[name="_token"]').attr('content');
                         d.id = $('input[name="order-id"]').val();
                         d.remark = $('input[name="order-remark"]').val();
+                        d.description = $('input[name="order-description"]').val();
                         d.assign = $('input[name="order-assign"]').val();
                         d.assign_start = $('input[name="order-start"]').val();
                         d.assign_ended = $('input[name="order-ended"]').val();
@@ -689,8 +698,12 @@
                         d.porject = $('select[name="order-project"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
-                        d.is_delay = $('select[name="order-is-delay"]').val();
-                        d.receipt_status = $('select[name="order-receipt-status"]').val();
+                        d.client_name = $('input[name="order-client-name"]').val();
+                        d.client_phone = $('input[name="order-client-phone"]').val();
+                        d.is_wx = $('select[name="order-is-wx"]').val();
+                        d.is_repeat = $('select[name="order-is-repeat"]').val();
+                        d.inspected_status = $('select[name="order-inspected-status"]').val();
+                        d.inspected_result = $('select[name="order-inspected-result"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -706,7 +719,7 @@
 //                "scrollY": true,
                 "scrollCollapse": true,
                 "fixedColumns": {
-                    "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
+                    "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
                     "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 },
                 "showRefresh": true,
@@ -801,7 +814,7 @@
                     {
                         "title": "创建人",
                         "className": "",
-                        "width": "80px",
+                        "width": "88px",
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -1001,7 +1014,7 @@
                     {
                         "title": "渠道来源",
                         "className": "",
-                        "width": "80px",
+                        "width": "60px",
                         "data": "channel_source",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1011,6 +1024,28 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');
                                 $(nTd).attr('data-key','channel_source').attr('data-value',data);
                                 $(nTd).attr('data-column-name','渠道来源');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '--';
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "所在城市",
+                        "className": "",
+                        "width": "60px",
+                        "data": "location_city",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
+                                $(nTd).attr('data-key','location_city').attr('data-value',data);
+                                $(nTd).attr('data-column-name','所在城市');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1047,7 +1082,7 @@
                     {
                         "title": "审核人",
                         "className": "",
-                        "width": "80px",
+                        "width": "88px",
                         "data": "inspector_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -1124,7 +1159,7 @@
                     {
                         "title": "操作",
                         "className": "",
-                        "width": "180px",
+                        "width": "160px",
                         "data": 'id',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -1139,6 +1174,7 @@
                             var $html_abandon = '';
                             var $html_completed = '';
                             var $html_verified = '';
+                            var $html_inspected = '';
 
 
                             if(row.item_status == 1)
@@ -1157,7 +1193,6 @@
                                 $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
                                 $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
                                 $html_verified = '<a class="btn btn-xs btn-default disabled">验证</a>';
-                                $html_inspected = '<a class="btn btn-xs btn-default disabled">审核</a>';
                                 $html_delete = '<a class="btn btn-xs bg-black item-delete-submit" data-id="'+data+'">删除</a>';
                             }
                             else
@@ -1199,14 +1234,17 @@
                                 }
 
                                 // 审核
-                                if(row.inspector_id == 0)
+                                if("{{ $me->user_type or 0 }}" == 71 || "{{ $me->user_type or 0 }}" == 77)
                                 {
-                                    $html_inspected = '<a class="btn btn-xs bg-teal item-inspect-submit" data-id="'+data+'">审核</a>';
-                                }
-                                else
-                                {
-                                    // $html_inspected = '<a class="btn btn-xs bg-aqua-gradient disabled">已审</a>';
-                                    $html_inspected = '<a class="btn btn-xs bg-teal item-inspect-submit" data-id="'+data+'">再审</a>';
+                                    if(row.inspector_id == 0)
+                                    {
+                                        $html_inspected = '<a class="btn btn-xs bg-teal item-inspect-submit" data-id="'+data+'">审核</a>';
+                                    }
+                                    else
+                                    {
+                                        // $html_inspected = '<a class="btn btn-xs bg-aqua-gradient disabled">已审</a>';
+                                        $html_inspected = '<a class="btn btn-xs bg-blue item-inspect-submit" data-id="'+data+'">再审</a>';
+                                    }
                                 }
 
                             }
@@ -1241,14 +1279,14 @@
                             var $html =
 //                                    $html_able+
 //                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
-                                $html_completed+
+//                                 $html_completed+
                                 $html_edit+
                                 $html_publish+
 //                                $html_detail+
                                 // $html_verified+
                                 $html_inspected+
-                                $html_record+
                                 $html_delete+
+                                $html_record+
                                 // $html_abandon+
 //                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
 //                                '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
@@ -1275,7 +1313,8 @@
                     if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
                     if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
-                    if($('select[name="order-is-delay"]').val() > 0)  $obj.is_delay = $('select[name="order-is-delay"]').val();
+                    if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
+                    if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 20) $obj.length = $page_length;

@@ -49,18 +49,11 @@
                         <input type="text" class="form-control" name="true_name" placeholder="请输入真实名称" value="{{ $data->true_name or '' }}">
                     </div>
                 </div>
-                {{--手机号--}}
+                {{--登录手机--}}
                 <div class="form-group _none">
-                    <label class="control-label col-md-2">手机号</label>
+                    <label class="control-label col-md-2">登录手机</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="mobile" placeholder="请输入手机号" value="{{ $data->mobile or '' }}">
-                    </div>
-                </div>
-                {{--固定电话--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">固定电话</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="telephone" placeholder="请输入固定电话" value="{{ $data->telephone or '' }}">
                     </div>
                 </div>
                 {{--邮箱--}}
@@ -71,7 +64,7 @@
                     </div>
                 </div>
                 {{--QQ--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">QQ</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="QQ_number" placeholder="请输入QQ" value="{{ $data->QQ_number or '' }}">

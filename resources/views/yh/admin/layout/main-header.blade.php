@@ -27,68 +27,37 @@
                     </a>
                     <ul class="dropdown-menu">
 
-                        @if(in_array($me->user_type,[0,1,9,11,19,21,22]))
+                        {{--员工管理--}}
+                        @if(in_array($me->user_type,[0,1,9,11]))
                         <li class="header">员工</li>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11]))
                         <li class="header">
                             <a href="{{ url('/user/staff-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加员工
                             </a>
                         </li>
-                        <li class="header">
-                            <a href="{{ url('/user/driver-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加驾驶员
-                            </a>
-                        </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,19]))
+
+                        {{--业务管理--}}
+                        @if(in_array($me->user_type,[0,1,9,11,88]))
                         <li class="header">业务</li>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11]))
                         <li class="header">
-                            <a href="{{ url('/user/client-create') }}">
-                                <i class="fa fa-plus text-green"></i> 添加客户
-                            </a>
-                        </li>
-                        <li class="header">
-                            <a href="{{ url('/item/car-create') }}">
-                                <i class="fa fa-plus text-green"></i> 添加车辆
-                            </a>
-                        </li>
-                        <li class="header">
-                            <a href="{{ url('/item/route-create') }}">
-                                <i class="fa fa-plus text-green"></i> 添加线路
-                            </a>
-                        </li>
-                        <li class="header">
-                            <a href="{{ url('/item/pricing-create') }}">
-                                <i class="fa fa-plus text-green"></i> 添加定价
+                            <a href="{{ url('/item/project-create') }}">
+                                <i class="fa fa-plus text-yellow"></i> 添加项目
                             </a>
                         </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,19,81,82,88]))
-                        <li class="header">订单</li>
-                        <li class="header">
-                            <a href="{{ url('/item/order-import') }}">
-                                <i class="fa fa-file-excel-o text-yellow"></i> 导入订单
-                            </a>
-                        </li>
+                        @if(in_array($me->user_type,[0,1,9,88]))
                         <li class="header">
                             <a href="{{ url('/item/order-create') }}">
-                                <i class="fa fa-plus text-yellow"></i> 添加订单
-                            </a>
-                        </li>
-                        <li class="header">
-                            <a href="{{ url('/item/circle-create') }}">
-                                <i class="fa fa-plus text-yellow"></i> 添加环线
-                            </a>
-                        </li>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,11,19,41,42]))
-                        <li class="header">财务</li>
-                        <li class="header">
-                            <a href="{{ url('/finance/finance-import') }}">
-                                <i class="fa fa-file-excel-o text-red"></i> 导入财务
+                                <i class="fa fa-plus text-yellow"></i> 添加工单
                             </a>
                         </li>
                         @endif
@@ -98,7 +67,7 @@
                 </li>
 
                 <!-- Messages: style can be found in dropdown.less-->
-                <li class="dropdown messages-menu">
+                <li class="dropdown messages-menu _none">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-envelope-o"></i>
@@ -134,7 +103,7 @@
                 <!-- /.messages-menu -->
 
                 <!-- Notifications Menu -->
-                <li class="dropdown notifications-menu">
+                <li class="dropdown notifications-menu _none">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
@@ -156,8 +125,9 @@
                         <li class="footer"><a href="#">View all</a></li>
                     </ul>
                 </li>
+
                 <!-- Tasks Menu -->
-                <li class="dropdown tasks-menu">
+                <li class="dropdown tasks-menu _none">
                     <!-- Menu Toggle Button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-flag-o"></i>
@@ -192,6 +162,7 @@
                         </li>
                     </ul>
                 </li>
+
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->
@@ -245,8 +216,9 @@
                         </li>
                     </ul>
                 </li>
+
                 <!-- Control Sidebar Toggle Button -->
-                <li>
+                <li class="_none">
                     <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                 </li>
             </ul>

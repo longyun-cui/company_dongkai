@@ -1323,6 +1323,12 @@ class YHAdminController extends Controller
 
 
 
+    // 【内容】【全部】返回-列表-视图
+    public function view_record_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_record_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_record_list_for_all_datatable(request()->all());
+    }
 
 
 

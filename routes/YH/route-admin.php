@@ -508,5 +508,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/statistic/statistic-export-for-finance', $controller.'@operate_statistic_export_for_finance');
 
 
+
+    Route::match(['get','post'], '/item/record-list-for-all', $controller.'@view_record_list_for_all');
+
+
 });
 

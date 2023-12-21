@@ -51,10 +51,21 @@
         <div class="col-md-8 ">
             <select class="form-control" name="channel_source" id="select2-container">
                 <option value="">选择渠道</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                @foreach(config('info.channel_source') as $v)
+                    <option value ="{{ $v }}">{{ $v }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    {{--所在城市--}}
+    <div class="form-group">
+        <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
+        <div class="col-md-8 ">
+            <select class="form-control" name="location_city" id="select2-container">
+                <option value="">所在城市</option>
+                @foreach(config('info.location_city') as $v)
+                    <option value ="{{ $v }}">{{ $v }}</option>
+                @endforeach
             </select>
         </div>
     </div>

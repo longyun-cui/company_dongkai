@@ -297,12 +297,12 @@
                     {
                         "className": "",
                         "width": "100px",
-                        "title": "昵称",
+                        "title": "用户名",
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return '<a target="_blank" href="/user/'+data+'">'+row.nickname+'</a>';
-                            if(row.nickname) return row.nickname;
+                            if(row.username) return row.username;
                             else return '--';
                         }
                     },

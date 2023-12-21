@@ -55,8 +55,8 @@
             </li>
 
 
-            @if(in_array($me->user_type,[0,1,9,11]))
             {{--用户管理--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
             <li class="header">员工管理</li>
 
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
@@ -71,15 +71,9 @@
 
 
 
+            @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
             <li class="header">业务管理</li>
-            <li class="header _none">工单管理</li>
-
-            <li class="treeview {{ $menu_active_of_client_list_for_all or '' }} _none">
-                <a href="{{ url('/user/client-list-for-all')}}">
-                    <i class="fa fa-user text-green"></i>
-                    <span>客户列表</span>
-                </a>
-            </li>
+            @endif
 
             @if(in_array($me->user_type,[0,1,9,11]))
             <li class="treeview {{ $menu_active_of_project_list_for_all or '' }} _none1">
@@ -90,12 +84,14 @@
             </li>
             @endif
 
+            @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
             <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
                 <a href="{{ url('/item/order-list-for-all')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>工单列表</span>
                 </a>
             </li>
+            @endif
 
 
 
@@ -109,23 +105,13 @@
                 </a>
             </li>
 
-            @if(in_array($me->user_type,[0,1,9,11,21,22,81,82,88]))
+            @if(in_array($me->user_type,[0,1,9,11,71,77]))
             <li class="treeview {{ $menu_active_of_statistic_export or '' }}">
                 <a href="{{ url('/statistic/statistic-export') }}">
                     <i class="fa fa-download text-green"></i> <span>数据导出</span>
                 </a>
             </li>
             @endif
-{{--            <li class="treeview {{ $menu_active_of_statistic_list_for_client or '' }}">--}}
-{{--                <a href="{{ url('/statistic/statistic-list-for-client') }}">--}}
-{{--                    <i class="fa fa-bar-chart text-green"></i> <span>客户统计</span>--}}
-{{--                </a>--}}
-{{--            </li>--}}
-{{--            <li class="treeview {{ $menu_active_of_statistic_list_for_car or '' }}">--}}
-{{--                <a href="{{ url('/statistic/statistic-list-for-car') }}">--}}
-{{--                    <i class="fa fa-bar-chart text-green"></i> <span>车辆统计</span>--}}
-{{--                </a>--}}
-{{--            </li>--}}
 
 
 

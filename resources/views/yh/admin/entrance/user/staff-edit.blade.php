@@ -171,9 +171,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-2">昵称</label>
+                    <label class="control-label col-md-2">用户名</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="nickname" placeholder="昵称" value="{{ $data->nickname or '' }}">
+                        <input type="text" class="form-control" name="username" placeholder="用户名" value="{{ $data->username or '' }}">
                     </div>
                 </div>
                 {{--描述--}}

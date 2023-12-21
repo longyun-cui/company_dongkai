@@ -131,16 +131,16 @@
             if($('input[name="order-start"]').val())  $obj.order_start = $('input[name="order-start"]').val();
             if($('input[name="order-ended"]').val())  $obj.order_ended = $('input[name="order-ended"]').val();
             if($('select[name="order-staff"]').val() > 0)  $obj.staff = $('select[name="order-staff"]').val();
-            if($('select[name="order-client"]').val() > 0)  $obj.client = $('select[name="order-client"]').val();
-            if($('select[name="order-circle"]').val() > 0)  $obj.circle = $('select[name="order-circle"]').val();
+            if($('select[name="order-project"]').val() > 0)  $obj.project = $('select[name="order-project"]').val();
             if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
             if($('select[name="order-pricing"]').val() > 0)  $obj.pricing = $('select[name="order-pricing"]').val();
-            if($('select[name="order-car"]').val() > 0)  $obj.car = $('select[name="order-car"]').val();
-            if($('select[name="order-trailer"]').val() > 0)  $obj.trailer = $('select[name="order-trailer"]').val();
-            if($('select[name="order-driver"]').val() > 0)  $obj.driver = $('select[name="order-driver"]').val();
 
             var $url = url_build('/statistic/statistic-export-for-order',$obj);
             window.open($url);
+
+            setTimeout(function(){
+                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+            }, 1000);
 
             {{--var $data = new Object();--}}
             {{--$.ajax({--}}
@@ -194,188 +194,10 @@
 
 
 
-
-        /*
-            环线
-         */
-        // 【导出】
-        $(".main-content").on('click', ".filter-submit-for-circle", function() {
-            var that = $(this);
-            var $id = that.attr("data-id");
-            var $export_type = that.attr("data-type");
-
-            var $month = $('input[name="circle-month"]').val();
-            var $car = $('input[name="circle-car"]').val();
-
-            var $obj = new Object();
-            $obj.export_type = $export_type;
-            if($('input[name="circle-month"]').val())  $obj.month = $('input[name="circle-month"]').val();
-            if($('input[name="circle-start"]').val())  $obj.order_start = $('input[name="circle-start"]').val();
-            if($('input[name="circle-ended"]').val())  $obj.order_ended = $('input[name="circle-ended"]').val();
-            if($('select[name="circle-circle"]').val() > 0)  $obj.circle_id = $('select[name="circle-circle"]').val();
-            if($('select[name="circle-car"]').val() > 0)  $obj.car = $('select[name="circle-car"]').val();
-
-            var $url = url_build('/statistic/statistic-export-for-circle',$obj);
-            window.open($url);
-
-        });
-        // 【清空重选】
-        $("#export-for-circle").on('click', ".filter-empty", function() {
-            $("#export-for-circle").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
-                $(this).val("");
-            });
-
-//            $('select.form-filter').selectpicker('refresh');
-            $("#export-for-circle").find('select.form-filter option').attr("selected",false);
-            $("#export-for-circle").find('select.form-filter').find('option:eq(0)').attr('selected', true);
-
-            $(".select2-container").val(-1).trigger("change");
-
-            // $('input[name="order-month"]').val('');
-            var $month_dom = $('input[name="circle-month"]');
-            var $month_default = $month_dom.attr('data-default')
-            $month_dom.val($month_default);
-        });
-
-
-
-
-        /*
-            财务
-         */
-        // 【导出】
-        $(".main-content").on('click', ".filter-submit-for-finance", function() {
-            var that = $(this);
-            var $id = that.attr("data-id");
-            var $export_type = that.attr("data-type");
-
-            var $month = $('input[name="order-month"]').val();
-
-            var $obj = new Object();
-            $obj.export_type = $export_type;
-            if($('select[name="finance-type"]').val() > 0)  $obj.finance_type = $('select[name="finance-type"]').val();
-            if($('input[name="finance-month"]').val())  $obj.month = $('input[name="finance-month"]').val();
-            if($('input[name="finance-start"]').val())  $obj.finance_start = $('input[name="finance-start"]').val();
-            if($('input[name="finance-ended"]').val())  $obj.finance_ended = $('input[name="finance-ended"]').val();
-            if($('input[name="finance-order_id"]').val())  $obj.order_id = $('input[name="finance-order_id"]').val();
-            if($('input[name="finance-title"]').val())  $obj.title = $('input[name="finance-title"]').val();
-            if($('input[name="finance-transaction_type"]').val())  $obj.transaction_type = $('select[name="finance-transaction_type"]').val();
-            if($('input[name="finance-transaction_receipt_account"]').val())  $obj.transaction_receipt_account = $('select[name="finance-transaction_receipt_account"]').val();
-            if($('input[name="finance-transaction_payment_account"]').val())  $obj.transaction_payment_account = $('select[name="finance-transaction_payment_account"]').val();
-            if($('input[name="finance-transaction_order"]').val())  $obj.transaction_order = $('select[name="finance-transaction_order"]').val();
-
-            var $url = url_build('/statistic/statistic-export-for-finance',$obj);
-            window.open($url);
-
-
-        });
-        // 【清空重选】
-        $("#export-for-finance").on('click', ".filter-empty", function() {
-            $("#export-for-finance").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
-                $(this).val("");
-            });
-
-//            $('select.form-filter').selectpicker('refresh');
-            $("#export-for-finance").find('select.form-filter option').attr("selected",false);
-            $("#export-for-finance").find('select.form-filter').find('option:eq(0)').attr('selected', true);
-
-            // $('input[name="finance-month"]').val('');
-            var $month_dom = $('input[name="finance-month"]');
-            var $month_default = $month_dom.attr('data-default')
-            $month_dom.val($month_default);
-        });
-
-
-
-
         //
-        $('.select2-circle').select2({
+        $('.select2-project').select2({
             ajax: {
-                url: "{{ url('/item/order_select2_circle') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-        //
-        $('.select2-car').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_car') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-        //
-        $('.select2-trailer').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_trailer') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-        //
-        $('.select2-driver').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_driver') }}",
+                url: "{{ url('/item/item_select2_project') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

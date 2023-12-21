@@ -81,18 +81,28 @@
                     </div>
                 </div>
 
-
-
                 {{--渠道来源--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道来源</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="channel_source" id="select2-container">
                             <option value="">选择渠道</option>
-                            <option value="1" @if($data->channel_source == 1) selected="selected" @endif>1</option>
-                            <option value="2" @if($data->channel_source == 2) selected="selected" @endif>2</option>
-                            <option value="3" @if($data->channel_source == 3) selected="selected" @endif>3</option>
-                            <option value="4" @if($data->channel_source == 4) selected="selected" @endif>4</option>
+                            @foreach(config('info.channel_source') as $v)
+                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->channel_source) selected="selected" @endif>{{ $v }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                {{--所在城市--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="location_city" id="select2-container">
+                            <option value="">所在城市</option>
+                            @foreach(config('info.location_city') as $v)
+                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->location_city) selected="selected" @endif>{{ $v }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -243,69 +253,6 @@
         });
 
 
-        // 【选择车辆所属】
-        $("#form-edit-item").on('click', "input[name=car_owner_type]", function() {
-            // checkbox
-//            if($(this).is(':checked'))
-//            {
-//                $('.time-show').show();
-//            }
-//            else
-//            {
-//                $('.time-show').hide();
-//            }
-            // radio
-            var $value = $(this).val();
-            if($value == 1 || $value == 11 || $value == 41)
-            {
-                $('.inside-car').show();
-                $('.outside-car').hide();
-            }
-            else
-            {
-                $('.outside-car').show();
-                $('.inside-car').hide();
-            }
-        });
-
-        // 【选择线路类型】
-        $("#form-edit-item").on('click', "input[name=route_type]", function() {
-            // radio
-            var $value = $(this).val();
-            if($value == 1)
-            {
-                $('.route-fixed-box').show();
-                $('.route-temporary-box').hide();
-
-
-                var $select2_route_val = $('#select2-route').val();
-                console.log($select2_route_val);
-                var $select2_route_selected = $('#select2-route').find('option:selected');
-                if($select2_route_selected.val() > 0)
-                {
-                    $('#order-price').attr('readonly','readonly').val($select2_route_selected.attr('data-price'));
-                    $('input[name=departure_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-departure'));
-                    $('input[name=destination_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-destination'));
-                    $('input[name=stopover_place]').attr('readonly','readonly').val($select2_route_selected.attr('data-stopover'));
-                    $('input[name=travel_distance]').attr('readonly','readonly').val($select2_route_selected.attr('data-distance'));
-                    $('input[name=time_limitation_prescribed]').attr('readonly','readonly').val($select2_route_selected.attr('data-prescribed'));
-                }
-            }
-            else
-            {
-                $('.route-temporary-box').show();
-                $('.route-fixed-box').hide();
-
-                $('#order-price').removeAttr('readonly');
-                $('input[name=departure_place]').removeAttr('readonly');
-                $('input[name=destination_place]').removeAttr('readonly');
-                $('input[name=stopover_place]').removeAttr('readonly');
-                $('input[name=travel_distance]').removeAttr('readonly');
-                $('input[name=time_limitation_prescribed]').removeAttr('readonly');
-            }
-        });
-
-
         $('input[name=assign_date]').datetimepicker({
             locale: moment.locale('zh-cn'),
             format: "YYYY-MM-DD",
@@ -339,9 +286,12 @@
                     {
                         layer.msg(data.msg);
 
-                        if($.getUrlParam('referrer')) location.href = decodeURIComponent($.getUrlParam('referrer'));
-                        else if(document.referrer) location.href = document.referrer;
-                        else location.href = "{{ url('/item/order-list-for-all') }}";
+                        location.href = "{{ url('/item/order-list-for-all') }}";
+
+                        {{--if($.getUrlParam('referrer')) location.href = decodeURIComponent($.getUrlParam('referrer'));--}}
+                        {{--else if(document.referrer) location.href = document.referrer;--}}
+                        {{--else location.href = "{{ url('/item/order-list-for-all') }}";--}}
+
                         // history.go(-1);
                     }
                 }
@@ -382,66 +332,6 @@
         });
 
 
-
-
-        //
-        $('#select2-client').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_client') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-
-
-        //
-        $('#select2-circle').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_circle') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
 
 
         //
@@ -509,178 +399,6 @@
                 $('input[name=stopover_place]').removeAttr('readonly');
                 $('input[name=travel_distance]').removeAttr('readonly');
                 $('input[name=time_limitation_prescribed]').removeAttr('readonly');
-            }
-        });
-
-
-        //
-        $('#select2-pricing').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_pricing') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-
-
-        //
-        $('#select2-car').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_car') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            templateSelection: function(data, container) {
-                if(data.driver_er)
-                {
-                    $(data.element).attr("data-id",data.driver_id);
-                    $(data.element).attr("data-name",data.driver_er.driver_name);
-                    $(data.element).attr("data-phone",data.driver_er.driver_phone);
-                    $(data.element).attr("data-sub-name",data.driver_er.sub_driver_name);
-                    $(data.element).attr("data-sub-phone",data.driver_er.sub_driver_phone);
-                }
-                else
-                {
-                    $(data.element).attr("data-id",data.driver_id);
-                    $(data.element).attr("data-name",data.linkman_name);
-                    $(data.element).attr("data-phone",data.linkman_phone);
-                    $(data.element).attr("data-sub-name",'');
-                    $(data.element).attr("data-sub-phone",'');
-                }
-                return data.text;
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-        $("#select2-car").on("select2:select",function(){
-            var $id = $(this).val();
-            if($id > 0)
-            {
-                $('input[name=driver_name]').val($(this).find('option:selected').attr('data-name'));
-                $('input[name=driver_phone]').val($(this).find('option:selected').attr('data-phone'));
-                $('input[name=copilot_name]').val($(this).find('option:selected').attr('data-sub-name'));
-                $('input[name=copilot_phone]').val($(this).find('option:selected').attr('data-sub-phone'));
-            }
-
-            var $driver_id = $(this).find('option:selected').attr('data-id');
-            var $driver_name = $(this).find('option:selected').attr('data-name');
-            var option = new Option($driver_name, $driver_id);
-            option.selected = true;
-            console.log(option);
-            $("#form-edit-item").find("select[name=driver_id]").append(option);
-            $("#form-edit-item").find("select[name=driver_id]").trigger("change");
-        });
-        //
-        $('#select2-trailer').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_trailer') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-
-
-        //
-        $('#select2-driver').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_driver') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            templateSelection: function(data, container) {
-                $(data.element).attr("data-name",data.driver_name);
-                $(data.element).attr("data-phone",data.driver_phone);
-                $(data.element).attr("data-sub-name",data.sub_driver_name);
-                $(data.element).attr("data-sub-phone",data.sub_driver_phone);
-                return data.text;
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-        $("#select2-driver").on("select2:select",function(){
-            var $id = $(this).val();
-            if($id > 0)
-            {
-                $('input[name=driver_name]').val($(this).find('option:selected').attr('data-name'));
-                $('input[name=driver_phone]').val($(this).find('option:selected').attr('data-phone'));
-                $('input[name=copilot_name]').val($(this).find('option:selected').attr('data-sub-name'));
-                $('input[name=copilot_phone]').val($(this).find('option:selected').attr('data-sub-phone'));
             }
         });
 
