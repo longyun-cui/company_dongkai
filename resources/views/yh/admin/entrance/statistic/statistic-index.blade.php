@@ -72,16 +72,16 @@
                                     <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_accepted">
-                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_refused">
-                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_repeated">
                                     <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_rate">
-                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge- bg-blue-"></b> %</span></a>
+                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -106,16 +106,16 @@
                                     <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_month_for_accepted">
-                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_month_for_refused">
-                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_month_for_repeated">
                                     <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_month_for_rate">
-                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge- bg-blue-"></b> %</span></a>
+                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -140,16 +140,16 @@
                                     <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_accepted">
-                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_refused">
-                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_repeated">
                                     <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_rate">
-                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge- bg-blue-"></b> %</span></a>
+                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>
