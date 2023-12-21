@@ -9708,7 +9708,7 @@ class YHAdminRepository {
     /*
      * Statistic 流量统计
      */
-    // 【流量统计】
+    // 【统计】
     public function view_statistic_index()
     {
         $this->get_me();
@@ -9732,7 +9732,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-index';
         return view($view_blade)->with($view_data);
     }
-    // 【流量统计】
+    // 【统计】
     public function view_statistic_user($post_data)
     {
         $this->get_me();
@@ -9826,7 +9826,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-user';
         return view($view_blade)->with($view_data);
     }
-    // 【流量统计】
+    // 【统计】
     public function view_statistic_item($post_data)
     {
         $messages = [
@@ -9943,7 +9943,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-item';
         return view($view_blade)->with($view_data);
     }
-    // 【流量统计】返回（后台）主页视图
+    // 【统计】返回（后台）主页视图
     public function get_statistic_data($post_data)
     {
         $this->get_me();
@@ -10203,7 +10203,7 @@ class YHAdminRepository {
 
         return response_success($return_data,"");
     }
-    // 【流量统计】返回-综合-数据
+    // 【统计】返回-综合-数据
     public function get_statistic_data_for_comprehensive($post_data)
     {
         $this->get_me();
@@ -10236,6 +10236,7 @@ class YHAdminRepository {
 
 
         // 工单统计
+        // 总量
         $order_count_for_all = YH_Order::select('*')->count("*");
         $order_count_for_unpublished = YH_Order::where('is_published', 0)->count("*");
         $order_count_for_published = YH_Order::where('is_published', 1)->count("*");
@@ -10243,7 +10244,7 @@ class YHAdminRepository {
         $order_count_for_inspected = YH_Order::where('is_published', 1)->where('inspected_status', '<>', 0)->count("*");
         $order_count_for_accepted = YH_Order::where('is_published', 1)->where('inspected_result','通过')->count("*");
         $order_count_for_refused = YH_Order::where('is_published', 1)->where('inspected_result','拒绝')->count("*");
-        $order_count_for_repeated = YH_Order::where('is_published', 1)->where('inspected_result','内部通过')->count("*");
+        $order_count_for_repeated = YH_Order::where('is_published', 1)->where('inspected_result','重复')->count("*");
         $order_count_for_accepted_inside = YH_Order::where('is_published', 1)->where('inspected_result','内部通过')->count("*");
         $order_count_for_repeat = YH_Order::where('is_published', 1)->where('is_repeat','>',0)->count("*");
 
@@ -10252,13 +10253,88 @@ class YHAdminRepository {
         $return_data['order_count_for_accepted'] = $order_count_for_accepted;
         $return_data['order_count_for_refused'] = $order_count_for_refused;
         $return_data['order_count_for_repeated'] = $order_count_for_repeated;
-        $return_data['order_count_for_rate'] = round(($order_count_for_accepted * 100 / $order_count_for_inspected),2);
+        if($order_count_for_inspected)
+        {
+            $return_data['order_count_for_rate'] = round(($order_count_for_accepted * 100 / $order_count_for_inspected),2);
+        }
+        else $return_data['order_count_for_rate'] = 0;
+
+
+        // 当天
+        $order_count_of_today_for_all = YH_Order::select('*')
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_unpublished = YH_Order::where('is_published', 0)
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_published = YH_Order::where('is_published', 1)
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_waiting_for_inspect = YH_Order::where('is_published', 1)->where('inspected_status', 0)
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_inspected = YH_Order::where('is_published', 1)->where('inspected_status', '<>', 0)
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_accepted = YH_Order::where('is_published', 1)->where('inspected_result','通过')
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_refused = YH_Order::where('is_published', 1)->where('inspected_result','拒绝')
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_repeated = YH_Order::where('is_published', 1)->where('inspected_result','重复')
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_accepted_inside = YH_Order::where('is_published', 1)->where('inspected_result','内部通过')
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),date('Y-m-d'))->count("*");
+        $order_count_of_today_for_repeat = YH_Order::where('is_published', 1)->where('is_repeat','>',0)->count("*");
+
+
+
+
+
+        $return_data['order_count_of_today_for_all'] = $order_count_of_today_for_all;
+        $return_data['order_count_of_today_for_inspected'] = $order_count_of_today_for_inspected;
+        $return_data['order_count_of_today_for_accepted'] = $order_count_of_today_for_accepted;
+        $return_data['order_count_of_today_for_refused'] = $order_count_of_today_for_refused;
+        $return_data['order_count_of_today_for_repeated'] = $order_count_of_today_for_repeated;
+        if($order_count_of_today_for_inspected)
+        {
+            $return_data['order_count_of_today_for_rate'] = round(($order_count_of_today_for_accepted * 100 / $order_count_of_today_for_inspected),2);
+        }
+        else $return_data['order_count_of_today_for_rate'] = 0;
+
+
+        // 当月
+        $order_count_of_month_for_all = YH_Order::select('*')
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_unpublished = YH_Order::where('is_published', 0)
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_published = YH_Order::where('is_published', 1)
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_waiting_for_inspect = YH_Order::where('is_published', 1)->where('inspected_status', 0)
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_inspected = YH_Order::where('is_published', 1)->where('inspected_status', '<>', 0)
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_accepted = YH_Order::where('is_published', 1)->where('inspected_result','通过')
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_refused = YH_Order::where('is_published', 1)->where('inspected_result','拒绝')
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_repeated = YH_Order::where('is_published', 1)->where('inspected_result','重复')
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_accepted_inside = YH_Order::where('is_published', 1)->where('inspected_result','内部通过')
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_repeat = YH_Order::where('is_published', 1)->where('is_repeat','>',0)
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+
+        $return_data['order_count_of_month_for_all'] = $order_count_of_month_for_all;
+        $return_data['order_count_of_month_for_inspected'] = $order_count_of_month_for_inspected;
+        $return_data['order_count_of_month_for_accepted'] = $order_count_of_month_for_accepted;
+        $return_data['order_count_of_month_for_refused'] = $order_count_of_month_for_refused;
+        $return_data['order_count_of_month_for_repeated'] = $order_count_of_month_for_repeated;
+        if($order_count_of_month_for_inspected)
+        {
+            $return_data['order_count_of_month_for_rate'] = round(($order_count_of_month_for_accepted * 100 / $order_count_of_month_for_inspected),2);
+        }
+        else $return_data['order_count_of_month_for_rate'] = 0;
 
 
 
         return response_success($return_data,"");
     }
-    // 【流量统计】返回-财务-数据
+    // 【统计】返回-财务-数据
     public function get_statistic_data_for_order($post_data)
     {
         $this->get_me();
@@ -10419,7 +10495,7 @@ class YHAdminRepository {
 
         return response_success($return_data,"");
     }
-    // 【流量统计】返回-财务-数据
+    // 【统计】返回-财务-数据
     public function get_statistic_data_for_finance($post_data)
     {
         $this->get_me();
@@ -10506,6 +10582,111 @@ class YHAdminRepository {
 
 
         return response_success($return_data,"");
+    }
+
+
+    // 【统计】客服
+    public function get_statistic_data_for_customer_service($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = YH_User::select('*')
+            ->with([
+                'superior' => function($query) { $query->select(['id','username','true_name']); }
+            ])
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[88])
+            ->withCount([
+                'order_list as order_count_for_all'=>function($query) {
+                    $query->where('is_published', 1);
+                },
+                'order_list as order_count_for_accepted'=>function($query) {
+                    $query->where('inspected_result', '通过');
+                },
+                'order_list as order_count_for_refused'=>function($query) {
+                    $query->where('inspected_result', '拒绝');
+                },
+                'order_list as order_count_for_repeated'=>function($query) {
+                    $query->where('inspected_result', '重复');
+                },
+                'order_list as order_count_for_accepted_inside'=>function($query) {
+                    $query->where('inspected_result', '内部通过');
+                }
+            ]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("superior_id", "asc")->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            if($v->order_count_for_all > 0)
+            {
+                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            }
+            else $list[$k]->order_rate_for_accepted = 0;
+        }
+//        dd($list->toArray());
+
+        $grouped = $list->groupBy('superior_id');
+        foreach ($grouped as $k => $v)
+        {
+            $order_sum_for_all = 0;
+            $order_sum_for_accepted = 0;
+            $order_sum_for_refused = 0;
+            $order_sum_for_repeated = 0;
+            $order_sum_for_accepted_inside = 0;
+
+            foreach ($v as $key => $val)
+            {
+                $order_sum_for_all += $val->order_count_for_all;
+                $order_sum_for_accepted += $val->order_count_for_accepted;
+                $order_sum_for_refused += $val->order_count_for_refused;
+                $order_sum_for_repeated += $val->order_count_for_repeated;
+                $order_sum_for_accepted_inside += $val->order_count_for_accepted_inside;
+            }
+
+
+            foreach ($v as $key => $val)
+            {
+                $v[$key]->merge = 0;
+                $v[$key]->order_sum_for_all = $order_sum_for_all;
+                $v[$key]->order_sum_for_accepted = $order_sum_for_accepted;
+                $v[$key]->order_sum_for_refused = $order_sum_for_refused;
+                $v[$key]->order_sum_for_repeated = $order_sum_for_repeated;
+                $v[$key]->order_sum_for_accepted_inside = $order_sum_for_accepted_inside;
+
+                if($order_sum_for_all > 0)
+                {
+                    $v[$key]->order_average_rate_for_accepted = round(($order_sum_for_accepted * 100 / $order_sum_for_all),2);
+                }
+                else $v[$key]->order_average_rate_for_accepted = 0;
+            }
+
+            $v[0]->merge = count($v);
+        }
+
+        return datatable_response($list, $draw, $total);
     }
 
 

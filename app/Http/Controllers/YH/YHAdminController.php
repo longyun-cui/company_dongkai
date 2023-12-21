@@ -1288,6 +1288,11 @@ class YHAdminController extends Controller
     {
         return $this->repo->get_statistic_data_for_finance(request()->all());
     }
+    // 【统计】返回-财务-数据
+    public function get_statistic_data_for_customer_service()
+    {
+        return $this->repo->get_statistic_data_for_customer_service(request()->all());
+    }
 
 
 

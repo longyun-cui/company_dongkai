@@ -496,6 +496,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/statistic/statistic-get-data-for-order', $controller.'@get_statistic_data_for_order');
     Route::post('/statistic/statistic-get-data-for-finance', $controller.'@get_statistic_data_for_finance');
 
+    Route::post('/statistic/statistic-get-data-for-customer-service', $controller.'@get_statistic_data_for_customer_service');
+    Route::post('/statistic/statistic-get-data-for-inspector', $controller.'@get_statistic_data_for_inspector');
+
 
 
 

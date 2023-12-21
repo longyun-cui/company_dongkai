@@ -79,7 +79,7 @@ class YH_User extends Authenticatable
     {
         return $this->hasMany('App\Models\YH\YH_User','superior_id','id');
     }
-    // 下级
+    // 下级的下级
     function through_subordinate_er()
     {
         return $this->hasManyThrough(
@@ -90,6 +90,13 @@ class YH_User extends Authenticatable
             'id',
             'id'
         );
+    }
+
+
+    // 工单
+    function order_list()
+    {
+        return $this->hasMany('App\Models\YH\YH_Order','creator_id','id');
     }
 
 

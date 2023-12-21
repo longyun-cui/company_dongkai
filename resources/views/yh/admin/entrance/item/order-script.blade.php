@@ -408,11 +408,11 @@
                     '<option value ="-1">选择审核状态</option>'+
                     '<option value ="通过">通过</option>'+
                     '<option value ="拒绝">拒绝</option>'+
+                    '<option value ="重复">重复</option>'+
                     '<option value ="内部通过">内部通过</option>'+
                     '<option value ="二次待审">二次待审</option>'+
                     '<option value ="已审未提">已审未提</option>'+
                     '<option value ="回访重提">回访重提</option>'+
-                    '<option value ="重复">重复</option>'+
                     '</select>'
                 ,yes: function(index){
                     $.post(
@@ -601,81 +601,6 @@
 
 
 
-
-
-
-        // 【行程管理】
-        $(".main-content").on('click', ".item-modal-show-for-travel", function() {
-            var that = $(this);
-            var $that = $(this);
-            var $data = new Object();
-            $.ajax({
-                type:"post",
-                dataType:'json',
-                async:false,
-                url: "{{ url('/item/order-get') }}",
-                data: {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-get",
-                    order_id: $that.attr('data-id')
-                },
-                success:function(data){
-                    if(!data.success) layer.msg(data.msg);
-                    else
-                    {
-                        $data = data.data;
-                    }
-                }
-            });
-            $('input[name=order_id]').val($that.attr('data-id'));
-//            $('.item-travel-should-departure-time').html($that.attr('data-user-id'));
-
-            $('.item-travel-should-departure-time').html($data.should_departure_time_html);
-            $('.item-travel-should-arrival-time').html($data.should_arrival_time_html);
-
-
-            if($data.is_actual_departure == 1) $('.item-travel-actual-departure-time').html($data.actual_departure_time_html);
-            else
-            {
-                $actual_departure_html = '<a class="btn btn-xs item-travel-time-set-show" data-type="actual_departure">添加实际出发时间</a>';
-                $('.item-travel-actual-departure-time').html($actual_departure_html);
-            }
-
-            if($data.is_actual_arrival == 1) $('.item-travel-actual-arrival-time').html($data.actual_arrival_time_html);
-            else
-            {
-                $actual_arrival_html = '<a class="btn btn-xs item-travel-time-set-show" data-type="actual_arrival">添加实际到达时间</a>';
-                $('.item-travel-actual-arrival-time').html($actual_arrival_html);
-            }
-
-
-            if($data.is_stopover == 1)
-            {
-                $('.item-travel-stopover-container').show();
-
-                if($data.is_stopover_arrival == 1) $('.item-travel-stopover-arrival-time').html($data.stopover_arrival_time_html);
-                else
-                {
-                    $stopover_arrival_html = '<a class="btn btn-xs item-travel-time-set-show" data-type="stopover_arrival">添加经停到达时间</a>';
-                    $('.item-travel-stopover-arrival-time').html($stopover_arrival_html);
-                }
-
-                if($data.is_stopover_departure == 1) $('.item-travel-stopover-departure-time').html($data.stopover_departure_time_html);
-                else
-                {
-                    $stopover_departure_html = '<a class="btn btn-xs item-travel-time-set-show" data-type="stopover_departure">添加经停出发时间</a>';
-                    $('.item-travel-stopover-departure-time').html($stopover_departure_html);
-                }
-            }
-            else $('.item-travel-stopover-container').hide();
-
-            $order_id = $that.attr('data-id');
-            $('input[name="travel-set-order-id"]').val($order_id);
-            $('.travel-set-order-id').html($order_id);
-
-            $('#modal-body-for-travel-detail').modal('show');
-        });
-
         // 【设置行程时间】【显示】
         $(".main-content").on('click', ".item-travel-time-set-show", function() {
             var $that = $(this);
@@ -739,80 +664,6 @@
             });
         });
 
-
-
-
-
-
-
-
-        // 【财务记录】【跳转】
-        $(".main-content").on('click', ".item-data-finance-link", function() {
-            var that = $(this);
-            window.open("/admin/business/keyword-detect-record?id="+that.attr('data-id'));
-        });
-        // 【财务记录】【显示】
-        $(".main-content").on('click', ".item-modal-show-for-finance", function() {
-            var $that = $(this);
-            var $id = $that.attr("data-id");
-            var $keyword = $that.attr("data-keyword");
-
-            $('input[name="finance-create-order-id"]').val($id);
-            $('.finance-create-order-id').html($id);
-            $('.finance-create-order-title').html($keyword);
-
-            TableDatatablesAjax_finance.init($id);
-
-            var $etc_account = $that.attr('data-etc');
-            console.log($etc_account);
-            $('.etc_account').val($etc_account);
-            // $('#_transaction_receipt_account').append(new Option($etc_account,$etc_account));
-
-
-            $('#modal-body-for-finance-list').modal('show');
-        });
-        // 【财务记录】【显示】
-        $(".main-content").on('dblclick', ".item-show-for-finance", function() {
-            var that = $(this);
-            var $id = that.attr("data-id");
-            var $keyword = that.attr("data-keyword");
-
-            $('input[name="finance-create-order-id"]').val($id);
-            $('.finance-create-order-id').html($id);
-            $('.finance-create-order-title').html($keyword);
-
-            TableDatatablesAjax_finance.init($id);
-
-            $('#modal-body-for-finance-list').modal('show');
-        });
-        // 【财务-收入-记录】【显示】
-        $(".main-content").on('dblclick', ".item-show-for-finance-income", function() {
-            var that = $(this);
-            var $id = that.attr("data-id");
-            var $keyword = that.attr("data-keyword");
-
-            $('input[name="finance-create-order-id"]').val($id);
-            $('.finance-create-order-id').html($id);
-            $('.finance-create-order-title').html($keyword);
-
-            TableDatatablesAjax_finance.init($id,"income");
-
-            $('#modal-body-for-finance-list').modal('show');
-        });
-        // 【财务-支出-记录】【显示】
-        $(".main-content").on('dblclick', ".item-show-for-finance-expenditure", function() {
-            var that = $(this);
-            var $id = that.attr("data-id");
-            var $keyword = that.attr("data-keyword");
-
-            $('input[name="finance-create-order-id"]').val($id);
-            $('.finance-create-order-id').html($id);
-            $('.finance-create-order-title').html($keyword);
-
-            TableDatatablesAjax_finance.init($id,"expenditure");
-
-            $('#modal-body-for-finance-list').modal('show');
-        });
 
 
 
@@ -1210,43 +1061,12 @@
                     theme: 'classic'
                 });
             }
-            if($that.attr("data-key") == "circle_id")
-            {
-                $('select[name=info-select-set-column-value]').removeClass('select2-route').removeClass('select2-car').removeClass('select2-driver').removeClass('select2-client').addClass('select2-circle');
-                $('.select2-circle').select2({
-                    ajax: {
-                        url: "{{ url('/item/order_select2_circle') }}"+"?car_id="+$that.attr("data-car"),
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-
-                            params.page = params.page || 1;
-                            return {
-                                results: data,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    minimumInputLength: 0,
-                    theme: 'classic'
-                });
-            }
-            else if($that.attr("data-key") == "route_id")
+            else if($that.attr("data-key") == "project_id")
             {
                 $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-circle').removeClass('select2-car').removeClass('select2-driver').removeClass('select2-pricing').addClass('select2-route');
                 $('.select2-route').select2({
                     ajax: {
-                        url: "{{ url('/item/order_select2_route') }}",
+                        url: "{{ url('/item/item_select2_project') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -1272,162 +1092,6 @@
                     theme: 'classic'
                 });
             }
-            else if($that.attr("data-key") == "empty_route_id")
-            {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-circle').removeClass('select2-car').removeClass('select2-driver').removeClass('select2-pricing').addClass('select2-route');
-                $('.select2-route').select2({
-                    ajax: {
-                        url: "{{ url('/item/order_select2_route') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-
-                            params.page = params.page || 1;
-                            return {
-                                results: data,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    minimumInputLength: 0,
-                    theme: 'classic'
-                });
-            }
-            else if($that.attr("data-key") == "pricing_id")
-            {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-circle').removeClass('select2-car').removeClass('select2-driver').removeClass('select2-route').addClass('select2-pricing');
-                $('.select2-pricing').select2({
-                    ajax: {
-                        url: "{{ url('/item/order_select2_pricing') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-
-                            params.page = params.page || 1;
-                            return {
-                                results: data,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    minimumInputLength: 0,
-                    theme: 'classic'
-                });
-            }
-            else if($that.attr("data-key") == "car_id")
-            {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-circle').removeClass('select2-driver').removeClass('select2-route').removeClass('select2-pricing').addClass('select2-car');
-                $('.select2-car').select2({
-                    ajax: {
-                        url: "{{ url('/item/order_list_select2_car?car_type=car') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-
-                            params.page = params.page || 1;
-                            return {
-                                results: data,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    minimumInputLength: 0,
-                    theme: 'classic'
-                });
-            }
-            else if($that.attr("data-key") == "trailer_id")
-            {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-circle').removeClass('select2-driver').removeClass('select2-route').removeClass('select2-pricing').addClass('select2-car');
-                $('.select2-car').select2({
-                    ajax: {
-                        url: "{{ url('/item/order_list_select2_car?car_type=trailer') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-
-                            params.page = params.page || 1;
-                            return {
-                                results: data,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    minimumInputLength: 0,
-                    theme: 'classic'
-                });
-            }
-            else if($that.attr("data-key") == "driver_id")
-            {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-circle').removeClass('select2-car').removeClass('select2-route').removeClass('select2-pricing').addClass('select2-driver');
-                $('.select2-driver').select2({
-                    ajax: {
-                        url: "{{ url('/item/order_select2_driver') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-
-                            params.page = params.page || 1;
-                            return {
-                                results: data,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    minimumInputLength: 0,
-                    theme: 'classic'
-                });
-            }
-            x
         });
         // 【修改-select-属性】【取消】
         $(".main-content").on('click', "#item-cancel-for-info-select-set", function() {

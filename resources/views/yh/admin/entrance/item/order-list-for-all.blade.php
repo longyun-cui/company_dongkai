@@ -857,8 +857,8 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','客户');
-                                $(nTd).attr('data-key','client_id').attr('data-value',data);
+                                $(nTd).attr('data-id',row.id).attr('data-name','项目');
+                                $(nTd).attr('data-key','project_id').attr('data-value',data);
                                 if(row.project_er == null) $(nTd).attr('data-option-name','未指定');
                                 else {
                                     $(nTd).attr('data-option-name',row.project_er.title);
@@ -954,13 +954,13 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
-                                $(nTd).attr('data-key','client_phone').attr('data-value',data);
-                                $(nTd).attr('data-column-name','客户电话');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                // $(nTd).addClass('modal-show-for-info-text-set');
+                                // $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
+                                // $(nTd).attr('data-key','client_phone').attr('data-value',data);
+                                // $(nTd).attr('data-column-name','客户电话');
+                                // $(nTd).attr('data-text-type','text');
+                                // if(data) $(nTd).attr('data-operate-type','edit');
+                                // else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -976,12 +976,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-radio-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
-                                $(nTd).attr('data-key','is_repeat').attr('data-value',data);
-                                $(nTd).attr('data-column-name','是否重复');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                // $(nTd).addClass('modal-show-for-info-radio-set');
+                                // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
+                                // $(nTd).attr('data-key','is_repeat').attr('data-value',data);
+                                // $(nTd).attr('data-column-name','是否重复');
+                                // if(data) $(nTd).attr('data-operate-type','edit');
+                                // else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -998,12 +998,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-radio-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
-                                $(nTd).attr('data-key','is_wx').attr('data-value',data);
-                                $(nTd).attr('data-column-name','是否+V');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                // $(nTd).addClass('modal-show-for-info-radio-set');
+                                // $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
+                                // $(nTd).attr('data-key','is_wx').attr('data-value',data);
+                                // $(nTd).attr('data-column-name','是否+V');
+                                // if(data) $(nTd).attr('data-operate-type','edit');
+                                // else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -1058,7 +1058,7 @@
                     {
                         "title": "通话小结",
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "data": "description",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -1074,9 +1074,9 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
-//                            if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-//                            else return '';
+                            // return data;
+                           if(data) return '<small class="btn-xs bg-yellow">双击查看</small>';
+                           else return '';
                         }
                     },
                     {

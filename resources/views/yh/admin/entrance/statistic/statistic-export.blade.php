@@ -491,7 +491,7 @@
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
                         }
                     },
                     {

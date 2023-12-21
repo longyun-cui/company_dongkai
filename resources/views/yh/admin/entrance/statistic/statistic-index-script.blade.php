@@ -54,7 +54,7 @@
             $(".order_count_of_month_for_rate").find('b').html($data.order_count_of_month_for_rate);
 
             statistic_get_data_for_order($month, "myChart-for-comprehensive-order", "myChart-for-comprehensive-order-quantity", "myChart-for-comprehensive-order-income");
-            statistic_get_data_for_finance($month, "myChart-for-comprehensive-finance");
+            // statistic_get_data_for_finance($month, "myChart-for-comprehensive-finance");
 
         });
         // 【综合概览】【重置】
