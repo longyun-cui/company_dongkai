@@ -14,51 +14,21 @@ class YH_Order extends Model
         'active', 'status', 'category', 'type', 'form', 'sort',
         'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
         'owner_active', 'is_show', 'is_published', 'is_completed',
-        'owner_id', 'creator_id', 'verifier_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+        'owner_id', 'creator_id', 'verifier_id', 'inspector_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'create_type',
         'org_id', 'admin_id',
         'item_id', 'menu_id',
         'order_category', 'order_type',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'amount', 'deposit', 'oil_card_amount',
-        'invoice_amount', 'invoice_point',
-        'reimbursable_amount', 'customer_management_fee', 'time_limitation_deduction',
-        'administrative_fee',
-        'driver_fine',
-        'information_fee', 'information_fee_description',
-        'ETC_price', 'oil_amount', 'oil_unit_price', 'oil_fee',
-        'toll_main_etc', 'toll_east_etc', 'toll_south_etc',
-        'toll_main_cash', 'toll_east_cash', 'toll_south_cash',
-        'oil_main_cost', 'oil_east_cost', 'oil_south_cost',
-        'shipping_cost', 'urea_cost', 'salary_cost', 'others_cost',
-        'income_real_first_amount', 'income_real_first_time', 'income_real_final_amount', 'income_real_final_time', 'income_result',
-        'outside_car_price', 'outside_car_first_amount', 'outside_car_first_time', 'outside_car_final_amount', 'outside_car_final_time',
-        'income_total', 'expenditure_total', 'income_to_be_confirm', 'expenditure_to_be_confirm',
-        'travel_distance', 'travel_main_distance', 'travel_east_distance', 'travel_south_distance',
-        'time_limitation_prescribed',
-        'circle_id',
-        'route_type', 'route_id', 'route', 'route_fixed', 'route_temporary', 'route_east', 'route_south',
-        'pricing_id',
-        'client_id',
-        'car_owner_type', 'car_id', 'trailer_id', 'container_id', 'container_type',
-        'outside_car', 'outside_trailer',
-        'trailer_type', 'trailer_length', 'trailer_volume', 'trailer_weight', 'trailer_axis_count',
-        'driver_id', 'sub_driver_id',
-        'departure_place', 'destination_place', 'stopover_place', 'stopover_place_1', 'stopover_place_2',
+        'project_id',
+        'client_name', 'client_phone', 'is_repeat',
+        'channel_source', 'is_wx',
         'assign_time',
-        'should_departure_time', 'should_arrival_time',
-        'actual_departure_time', 'actual_arrival_time',
-        'stopover_departure_time', 'stopover_arrival_time',
-        'stopover_1_departure_time', 'stopover_1_arrival_time',
-        'stopover_2_departure_time', 'stopover_2_arrival_time',
-        'empty_route', 'empty_route_type', 'empty_route_id', 'empty_route_temporary', 'empty_distance', 'empty_oil_price', 'empty_oil_amount', 'empty_refueling_pay_type', 'empty_refueling_charge', 'empty_toll_cash', 'empty_toll_ETC',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'is_delay',
-        'subordinate_company', 'order_number', 'payee_name', 'arrange_people', 'car_supply', 'car_managerial_people',
-        'driver', 'copilot', 'driver_name', 'copilot_name', 'driver_phone', 'copilot_phone', 'weight',
         'company', 'fund', 'mobile', 'city', 'address',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at', 'completed_at', 'verified_at'
+        'published_at', 'completed_at', 'verified_at', 'inspected_at'
     ];
     protected $dateFormat = 'U';
 
@@ -87,10 +57,15 @@ class YH_Order extends Model
     {
         return $this->belongsTo('App\Models\YH\YH_User','updater_id','id');
     }
-    // 审核者
+    // 验证者
     function verifier()
     {
         return $this->belongsTo('App\Models\YH\YH_User','verifier_id','id');
+    }
+    // 审核者
+    function inspector()
+    {
+        return $this->belongsTo('App\Models\YH\YH_User','inspector_id','id');
     }
     // 完成者
     function completer()
@@ -101,6 +76,13 @@ class YH_Order extends Model
     function user()
     {
         return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
+    }
+
+
+    // 项目
+    function project_er()
+    {
+        return $this->belongsTo('App\Models\YH\DK_Project','project_id','id');
     }
 
 
@@ -140,17 +122,17 @@ class YH_Order extends Model
     // 车辆
     function car_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','car_id','id');
+        return $this->belongsTo('App\Models\YH\DK_Project','car_id','id');
     }
     // 车挂
     function trailer_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','trailer_id','id');
+        return $this->belongsTo('App\Models\YH\DK_Project','trailer_id','id');
     }
     // 车厢
     function container_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','container_id','id');
+        return $this->belongsTo('App\Models\YH\DK_Project','container_id','id');
     }
 
 

@@ -185,9 +185,9 @@
                 "orderCellsTop": true,
                 "columns": [
                     {
+                        "title": "ID",
                         "className": "font-12px",
                         "width": "50px",
-                        "title": "ID",
                         "data": "id",
                         "orderable": true,
                         render: function(data, type, row, meta) {
@@ -195,8 +195,8 @@
                         }
                     },
                     {
-                        "width": "240px",
                         "title": "操作",
+                        "width": "240px",
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -230,7 +230,7 @@
 
                             var html =
                                 $html_edit+
-                                '<a class="btn btn-xs bg-maroon item-password-admin-change-show" data-id="'+data+'" data-name="'+row.username+'">修改密码</a>'+
+                                // '<a class="btn btn-xs bg-maroon item-password-admin-change-show" data-id="'+data+'" data-name="'+row.username+'">修改密码</a>'+
                                 '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
                                 $html_able+
                                 $html_delete+
@@ -241,8 +241,8 @@
                         }
                     },
                     {
-                        "width": "80px",
                         "title": "状态",
+                        "width": "80px",
                         "data": "active",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -263,8 +263,8 @@
                         }
                     },
                     {
+                        "title": "员工职位",
                         "width": "80px",
-                        "title": "用户类型",
                         "data": 'user_type',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -274,15 +274,18 @@
                             else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
                             else if(data == 41) return '<small class="btn-xs bg-orange">财务经理</small>';
                             else if(data == 42) return '<small class="btn-xs bg-orange">财务</small>';
-                            else if(data == 81) return '<small class="btn-xs bg-olive">业务经理</small>';
-                            else if(data == 88) return '<small class="btn-xs bg-olive">业务员</small>';
+                            else if(data == 71) return '<small class="btn-xs bg-purple">质检经理</small>';
+                            else if(data == 77) return '<small class="btn-xs bg-purple">质检员</small>';
+                            else if(data == 81) return '<small class="btn-xs bg-olive">客服·经理</small>';
+                            else if(data == 84) return '<small class="btn-xs bg-olive">客服·主管</small>';
+                            else if(data == 88) return '<small class="btn-xs bg-olive">客服</small>';
                             else return "有误";
                         }
                     },
                     {
+                        "title": "姓名",
                         "className": "",
                         "width": "100px",
-                        "title": "姓名",
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -304,28 +307,28 @@
                         }
                     },
                     {
+                        "title": "登录手机",
                         "className": "",
                         "width": "100px",
-                        "title": "登录手机",
                         "data": "mobile",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
-//                    {
-//                        "className": "text-left",
-//                        "width":"128px",
-//                        "title": "负责人",
-//                        "data": "id",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            if(row.principal) {
-//                                return '<a target="_blank" href="/user/'+data+'">'+row.principal.username+'</a>';
-//                            }
-//                            else return '--';
-//                        }
-//                    },
+                   {
+                       "title": "上级",
+                       "className": "text-left",
+                       "width":"100px",
+                       "data": "id",
+                       "orderable": false,
+                       render: function(data, type, row, meta) {
+                           if(row.superior) {
+                               return '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
+                           }
+                           else return '--';
+                       }
+                   },
                     {
                         "className": "text-center",
                         "width": "",

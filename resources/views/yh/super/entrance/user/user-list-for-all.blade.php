@@ -194,8 +194,8 @@
                 "orderCellsTop": true,
                 "columns": [
                     {
-                        "width": "48px",
                         "title": "ID",
+                        "width": "48px",
                         "data": "id",
                         "orderable": true,
                         render: function(data, type, row, meta) {
@@ -203,8 +203,70 @@
                         }
                     },
                     {
-                        "width": "80px",
+                        "title": "操作",
+                        "width": "300px",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.user_status == 1)
+                            {
+                                $html_able =
+                                    '<a class="btn btn-xs btn-danger user-super-disable-submit" data-id="'+data+'">禁用</a>';
+                            }
+                            else
+                            {
+                                $html_able = '<a class="btn btn-xs btn-success user-super-enable-submit" data-id="'+data+'">启用</a>';
+                            }
+
+                            if(row.user_category == 1)
+                            {
+                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
+                            }
+                            else
+                            {
+                                $html_edit = '<a class="btn btn-xs btn-primary item-super-edit-submit" data-id="'+data+'">编辑</a>';
+                            }
+
+                            var html =
+                                $html_edit+
+                                $html_able+
+                                // '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
+                                // '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
+                                // '<a class="btn btn-xs bg-maroon item-password-super-change-show" data-id="'+data+'">修改密码</a>'+
+                                '<a class="btn btn-xs bg-maroon item-password-super-reset-submit" data-id="'+data+'">重置密码</a>'+
+                                '<a class="btn btn-xs bg-olive item-admin-login-submit" data-id="'+data+'">登录</a>'+
+                                // '<a class="btn btn-xs bg-olive item-staff-login-submit" data-id="'+data+'">员工登录</a>'+
+                                '<a class="btn btn-xs bg-navy item-super-delete-submit" data-id="'+data+'" >删除</a>'+
+                                '<a class="btn btn-xs bg-purple item-statistic-submit" data-id="'+data+'">流量统计</a>'+
+                                '';
+                            return html;
+                        }
+                    },
+                    {
+                        "title": "状态",
+                        "width": "64px",
+                        "data": "active",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.user_status == 1)
+                            {
+                                return '<small class="btn-xs btn-success">正常</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs btn-danger">已封禁</small>';
+                            }
+                        }
+                    },
+                    {
                         "title": "用户类型",
+                        "width": "80px",
                         "data": 'user_type',
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -214,15 +276,18 @@
                             else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
                             else if(data == 41) return '<small class="btn-xs bg-orange">财务经理</small>';
                             else if(data == 42) return '<small class="btn-xs bg-orange">财务</small>';
-                            else if(data == 81) return '<small class="btn-xs bg-olive">业务经理</small>';
-                            else if(data == 88) return '<small class="btn-xs bg-olive">业务员</small>';
+                            else if(data == 71) return '<small class="btn-xs bg-purple">质检经理</small>';
+                            else if(data == 77) return '<small class="btn-xs bg-purple">质检员</small>';
+                            else if(data == 81) return '<small class="btn-xs bg-olive">客服·经理</small>';
+                            else if(data == 84) return '<small class="btn-xs bg-olive">客服·主管</small>';
+                            else if(data == 88) return '<small class="btn-xs bg-olive">客服</small>';
                             else return "有误";
                         }
                     },
                     {
-                        "className": "text-left",
-                        "width": "",
                         "title": "名称",
+                        "className": "text-left",
+                        "width": "120px",
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -230,9 +295,9 @@
                         }
                     },
                     {
-                        "className": "text-left",
-                        "width": "",
                         "title": "真实姓名",
+                        "className": "text-left",
+                        "width": "120px",
                         "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -240,9 +305,9 @@
                         }
                     },
                     {
-                        "className": "text-left",
-                        "width": "96px",
                         "title": "手机号",
+                        "className": "text-left",
+                        "width": "120px",
                         "data": "mobile",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -289,8 +354,8 @@
 //                        }
 //                    },
                     {
-                        "width": "40px",
                         "title": "浏览",
+                        "width": "40px",
                         "data": "visit_num",
                         "orderable": true,
                         render: function(data, type, row, meta) {
@@ -298,8 +363,8 @@
                         }
                     },
                     {
-                        "width": "40px",
                         "title": "分享",
+                        "width": "40px",
                         "data": "share_num",
                         "orderable": true,
                         render: function(data, type, row, meta) {
@@ -356,68 +421,6 @@
                             // return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                        }
-                    },
-                    {
-                        "width": "64px",
-                        "title": "状态",
-                        "data": "active",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(row.user_status == 1)
-                            {
-                                return '<small class="btn-xs btn-success">正常</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">已封禁</small>';
-                            }
-                        }
-                    },
-                    {
-                        "width": "300px",
-                        "title": "操作",
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.user_status == 1)
-                            {
-                                $html_able =
-                                    '<a class="btn btn-xs btn-danger user-super-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success user-super-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.user_category == 1)
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
-                            }
-                            else
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-super-edit-submit" data-id="'+data+'">编辑</a>';
-                            }
-
-                            var html =
-                                $html_edit+
-                                $html_able+
-//                                '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
-//                                '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
-//                                 '<a class="btn btn-xs bg-maroon item-password-super-change-show" data-id="'+data+'">修改密码</a>'+
-                                '<a class="btn btn-xs bg-maroon item-password-super-reset-submit" data-id="'+data+'">重置密码</a>'+
-                                '<a class="btn btn-xs bg-olive item-admin-login-submit" data-id="'+data+'">登录</a>'+
-                                // '<a class="btn btn-xs bg-olive item-staff-login-submit" data-id="'+data+'">员工登录</a>'+
-                                '<a class="btn btn-xs bg-navy item-super-delete-submit" data-id="'+data+'" >删除</a>'+
-                                '<a class="btn btn-xs bg-purple item-statistic-submit" data-id="'+data+'">流量统计</a>'+
-                                '';
-                            return html;
                         }
                     }
                 ],

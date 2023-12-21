@@ -55,10 +55,10 @@
             </li>
 
 
+            @if(in_array($me->user_type,[0,1,9,11]))
             {{--用户管理--}}
             <li class="header">员工管理</li>
 
-            @if(in_array($me->user_type,[0,1,9,11,21,22]))
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
                 <a href="{{ url('/user/staff-list-for-all') }}">
                     <i class="fa fa-user text-blue"></i>
@@ -67,86 +67,35 @@
             </li>
             @endif
 
-            <li class="treeview {{ $menu_active_of_driver_list_for_all or '' }}">
-                <a href="{{ url('/user/driver-list-for-all') }}">
-                    <i class="fa fa-user text-blue"></i>
-                    <span>驾驶员列表</span>
-                </a>
-            </li>
-
 
 
 
 
             <li class="header">业务管理</li>
+            <li class="header _none">工单管理</li>
 
-            <li class="treeview {{ $menu_active_of_client_list_for_all or '' }}">
+            <li class="treeview {{ $menu_active_of_client_list_for_all or '' }} _none">
                 <a href="{{ url('/user/client-list-for-all')}}">
                     <i class="fa fa-user text-green"></i>
                     <span>客户列表</span>
                 </a>
             </li>
-            <li class="treeview {{ $menu_active_of_car_list_for_all or '' }}">
-                <a href="{{ url('/item/car-list-for-all')}}">
-                    <i class="fa fa-truck text-green"></i>
-                    <span>车辆列表</span>
+
+            @if(in_array($me->user_type,[0,1,9,11]))
+            <li class="treeview {{ $menu_active_of_project_list_for_all or '' }} _none1">
+                <a href="{{ url('/item/project-list-for-all')}}">
+                    <i class="fa fa-cube text-green"></i>
+                    <span>项目列表</span>
                 </a>
             </li>
-            <li class="treeview {{ $menu_active_of_route_list_for_all or '' }}">
-                <a href="{{ url('/item/route-list-for-all')}}">
-                    <i class="fa fa-map text-green"></i>
-                    <span>线路列表</span>
-                </a>
-            </li>
-            <li class="treeview {{ $menu_active_of_pricing_list_for_all or '' }}">
-                <a href="{{ url('/item/pricing-list-for-all')}}">
-                    <i class="fa fa-rmb text-green"></i>
-                    <span>定价列表</span>
-                </a>
-            </li>
-
-
-
-
-
-            <li class="header">订单管理</li>
+            @endif
 
             <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
                 <a href="{{ url('/item/order-list-for-all')}}">
                     <i class="fa fa-file-text text-yellow"></i>
-                    <span>订单列表</span>
+                    <span>工单列表</span>
                 </a>
             </li>
-            <li class="treeview {{ $menu_active_of_circle_list_for_all or '' }}">
-                <a href="{{ url('/item/circle-list-for-all')}}">
-                    <i class="fa fa-refresh text-yellow"></i>
-                    <span>环线列表</span>
-                </a>
-            </li>
-
-
-
-
-            <li class="header">财务管理</li>
-
-            <li class="treeview {{ $menu_active_of_finance_list_for_all or '' }}">
-                <a href="{{ url('/finance/finance-list-for-all')}}">
-                    <i class="fa fa-list text-red"></i>
-                    <span>全部记录</span>
-                </a>
-            </li>
-            {{--<li class="treeview {{ $menu_active_of_finance_list_for_income or '' }}">--}}
-                {{--<a href="{{ url('/finance/finance-list-for-income')}}">--}}
-                    {{--<i class="fa fa-list text-red"></i>--}}
-                    {{--<span>支出记录</span>--}}
-                {{--</a>--}}
-            {{--</li>--}}
-            {{--<li class="treeview {{ $menu_active_of_finance_list_for_expense or '' }}">--}}
-                {{--<a href="{{ url('/finance/finance-list-for-expense')}}">--}}
-                    {{--<i class="fa fa-list text-red"></i>--}}
-                    {{--<span>收入记录</span>--}}
-                {{--</a>--}}
-            {{--</li>--}}
 
 
 

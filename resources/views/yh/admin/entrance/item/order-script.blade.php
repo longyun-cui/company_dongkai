@@ -367,7 +367,7 @@
                 }
             });
         });
-        // 【审核】
+        // 【验证】
         $(".main-content").on('click', ".item-verify-submit", function() {
             var $that = $(this);
             layer.msg('确定"审核"么？', {
@@ -383,6 +383,49 @@
                         },
                         function(data){
                             layer.close(index);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+        // 【审核】
+        $(".main-content").on('click', ".item-inspect-submit", function() {
+            var $that = $(this);
+            layer.open({
+                time: 0
+                ,btn: ['确定', '取消']
+                ,title: '选择审核状态！'
+                ,content: '<select class="form-control form-filter" name="inspected-result" style="width:160px;">'+
+                    '<option value ="-1">选择审核状态</option>'+
+                    '<option value ="通过">通过</option>'+
+                    '<option value ="拒绝">拒绝</option>'+
+                    '<option value ="内部通过">内部通过</option>'+
+                    '<option value ="二次待审">二次待审</option>'+
+                    '<option value ="已审未提">已审未提</option>'+
+                    '<option value ="回访重提">回访重提</option>'+
+                    '<option value ="重复">重复</option>'+
+                    '</select>'
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/order-inspect') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-inspect",
+                            item_id: $that.attr('data-id'),
+                            inspected_result: $('select[name="inspected-result"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            // layer.form.render();
                             if(!data.success)
                             {
                                 layer.msg(data.msg);
@@ -1658,125 +1701,10 @@
 
 
 
-        // select2-全部车辆
-        $('.order-list-select2-car').select2({
-            ajax: {
-                url: "{{ url('/item/order_list_select2_car') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-
-        // select2-车辆
-        $('.order-select2-car').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_car') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-        // select2-车挂
-        $('.order-select2-trailer').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_trailer') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-
-        // select2-驾驶员
-        $('.order-select2-driver').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_driver') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-
         // select2-环线
-        $('.order-select2-circle').select2({
+        $('.order-select2-project').select2({
             ajax: {
-                url: "{{ url('/item/order_select2_circle') }}",
+                url: "{{ url('/item/item_select2_project') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

@@ -113,12 +113,12 @@ class YH_Record extends Model
     // 车辆
     function before_car_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','before_car_id','id');
+        return $this->belongsTo('App\Models\YH\DKProject','before_car_id','id');
     }
     // 车辆
     function after_car_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','after_car_id','id');
+        return $this->belongsTo('App\Models\YH\DKProject','after_car_id','id');
     }
     // 驾驶员
     function before_driver_er()

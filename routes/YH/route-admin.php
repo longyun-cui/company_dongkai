@@ -40,6 +40,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
      */
     Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
     Route::match(['get','post'], '/user/user_select2_sales', $controller.'@operate_user_select2_sales');
+    Route::match(['get','post'], '/user/user_select2_superior', $controller.'@operate_user_select2_superior');
 
     // 【用户-员工管理】创建 & 修改
     Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
@@ -145,8 +146,8 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
      * 车辆管理
      */
     // 创建 & 修改
-    Route::match(['get','post'], '/item/car-create', $controller.'@operate_item_car_create');
-    Route::match(['get','post'], '/item/car-edit', $controller.'@operate_item_car_edit');
+    Route::match(['get','post'], '/item/project-create', $controller.'@operate_item_project_create');
+    Route::match(['get','post'], '/item/project-edit', $controller.'@operate_item_project_edit');
 
     // 编辑-信息
     Route::post('/item/car-info-text-set', $controller.'@operate_item_car_info_text_set');
@@ -160,16 +161,16 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/car-info-attachment-delete', $controller.'@operate_item_car_info_attachment_delete');
 
     // 删除 & 恢复
-    Route::post('/item/car-admin-delete', $controller.'@operate_item_car_admin_delete');
-    Route::post('/item/car-admin-restore', $controller.'@operate_item_car_admin_restore');
-    Route::post('/item/car-admin-delete-permanently', $controller.'@operate_item_car_admin_delete_permanently');
+    Route::post('/item/project-admin-delete', $controller.'@operate_item_car_admin_delete');
+    Route::post('/item/project-admin-restore', $controller.'@operate_item_car_admin_restore');
+    Route::post('/item/project-admin-delete-permanently', $controller.'@operate_item_car_admin_delete_permanently');
     // 启用 & 禁用
-    Route::post('/item/car-admin-enable', $controller.'@operate_item_car_admin_enable');
-    Route::post('/item/car-admin-disable', $controller.'@operate_item_car_admin_disable');
+    Route::post('/item/project-admin-enable', $controller.'@operate_item_car_admin_enable');
+    Route::post('/item/project-admin-disable', $controller.'@operate_item_car_admin_disable');
 
     // 列表
-    Route::match(['get','post'], '/item/car-list', $controller.'@view_item_car_list');
-    Route::match(['get','post'], '/item/car-list-for-all', $controller.'@view_item_car_list_for_all');
+    Route::match(['get','post'], '/item/project-list', $controller.'@view_item_project_list');
+    Route::match(['get','post'], '/item/project-list-for-all', $controller.'@view_item_project_list_for_all');
 
     // 车辆-修改信息
     Route::match(['get','post'], '/item/car-modify-record', $controller.'@view_item_car_modify_record');
@@ -265,6 +266,10 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
      * 订单管理
      */
     // select2
+    Route::match(['get','post'], '/item/item_select2_user', $controller.'@operate_item_select2_user');
+    Route::match(['get','post'], '/item/item_select2_project', $controller.'@operate_item_select2_project');
+
+    Route::match(['get','post'], '/item/order_select2_project', $controller.'@operate_order_select2_project');
     Route::match(['get','post'], '/item/order_select2_client', $controller.'@operate_order_select2_client');
     Route::match(['get','post'], '/item/order_select2_car', $controller.'@operate_order_select2_car');
     Route::match(['get','post'], '/item/order_select2_circle', $controller.'@operate_order_select2_circle');
@@ -293,6 +298,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/order-disable', $controller.'@operate_item_order_disable');
     // 发布 & 完成 & 备注
     Route::post('/item/order-verify', $controller.'@operate_item_order_verify');
+    Route::post('/item/order-inspect', $controller.'@operate_item_order_inspect');
     Route::post('/item/order-publish', $controller.'@operate_item_order_publish');
     Route::post('/item/order-complete', $controller.'@operate_item_order_complete');
     Route::post('/item/order-abandon', $controller.'@operate_item_order_abandon');

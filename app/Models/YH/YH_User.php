@@ -17,7 +17,7 @@ class YH_User extends Authenticatable
 
     protected $fillable = [
         'active', 'status', 'user_active', 'user_status', 'user_category', 'user_group', 'user_type', 'category', 'group', 'type',
-        'creator_id', 'parent_id', 'p_id',
+        'creator_id', 'parent_id', 'p_id', 'superior_id',
         'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
         'mobile', 'telephone', 'email', 'password',
         'wx_unionid',
@@ -67,6 +67,31 @@ class YH_User extends Authenticatable
     {
         return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
     }
+
+
+    // 上级
+    function superior()
+    {
+        return $this->belongsTo('App\Models\YH\YH_User','superior_id','id');
+    }
+    // 下级
+    function subordinate_er()
+    {
+        return $this->hasMany('App\Models\YH\YH_User','superior_id','id');
+    }
+    // 下级
+    function through_subordinate_er()
+    {
+        return $this->hasManyThrough(
+            'App\Models\YH\YH_User',
+            'App\Models\YH\YH_User',
+            'superior_id',
+            'superior_id',
+            'id',
+            'id'
+        );
+    }
+
 
 
 

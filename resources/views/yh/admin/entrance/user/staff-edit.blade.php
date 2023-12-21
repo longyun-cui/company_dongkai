@@ -58,14 +58,14 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 21))
+                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 71))
                                 <button type="button" class="btn">
                                     <span class="radio">
                                         <label>
-                                            @if($operate == 'edit' && $data->user_type == 21)
-                                                <input type="radio" name="user_type" value=21 checked="checked"> M.人事经理
+                                            @if($operate == 'edit' && $data->user_type == 71)
+                                                <input type="radio" name="user_type" value="71" checked="checked"> 质检经理
                                             @else
-                                                <input type="radio" name="user_type" value=21> M.人事经理
+                                                <input type="radio" name="user_type" value="71" checked="checked"> 质检经理
                                             @endif
                                         </label>
                                     </span>
@@ -73,47 +73,15 @@
                             @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,21]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 22))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            @if($operate == 'edit' && $data->user_type == 22)
-                                                <input type="radio" name="user_type" value=22 checked="checked"> 人事
-                                            @else
-                                                <input type="radio" name="user_type" value=22> 人事
-                                            @endif
-                                        </label>
-                                    </span>
-                                </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,21,22]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 41))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            @if($operate == 'edit' && $data->user_type == 41)
-                                                <input type="radio" name="user_type" value="41" checked="checked"> M.财务经理
-                                            @else
-                                                <input type="radio" name="user_type" value="41"> M.财务经理
-                                            @endif
-                                        </label>
-                                    </span>
-                                </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,21,22]))
-                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 42))
+                            @if(in_array($me->user_type, [0,1,11]))
+                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 77))
                                     <button type="button" class="btn">
                                         <span class="radio">
                                             <label>
-                                                @if($operate == 'edit' && $data->user_type == 42)
-                                                    <input type="radio" name="user_type" value="42" checked="checked"> 财务人员
+                                                @if($operate == 'edit' && $data->user_type == 77)
+                                                    <input type="radio" name="user_type" value="77" checked="checked"> 质检员
                                                 @else
-                                                    <input type="radio" name="user_type" value="42"> 财务人员
+                                                    <input type="radio" name="user_type" value="77"> 质检员
                                                 @endif
                                             </label>
                                         </span>
@@ -121,15 +89,15 @@
                                 @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,21,22]))
+                            @if(in_array($me->user_type, [0,1,11]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 81))
                                 <button type="button" class="btn">
                                     <span class="radio">
                                         <label>
                                             @if($operate == 'edit' && $data->user_type == 81)
-                                                <input type="radio" name="user_type" value="81" checked="checked"> M.业务经理
+                                                <input type="radio" name="user_type" value="81" checked="checked"> 客服经理
                                             @else
-                                                <input type="radio" name="user_type" value="81"> M.业务经理
+                                                <input type="radio" name="user_type" value="81"> 客服经理
                                             @endif
                                         </label>
                                     </span>
@@ -137,15 +105,31 @@
                             @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,21,22]))
+                            @if(in_array($me->user_type, [0,1,11]))
+                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 84))
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label>
+                                            @if($operate == 'edit' && $data->user_type == 84)
+                                                <input type="radio" name="user_type" value="84" checked="checked"> 客服主管
+                                            @else
+                                                <input type="radio" name="user_type" value="84"> 客服主管
+                                            @endif
+                                        </label>
+                                    </span>
+                                </button>
+                            @endif
+                            @endif
+
+                            @if(in_array($me->user_type, [0,1,11]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 88))
                                 <button type="button" class="btn">
                                     <span class="radio">
                                         <label>
                                             @if($operate == 'edit' && $data->user_type == 88)
-                                                <input type="radio" name="user_type" value="88" checked="checked"> 业务员
+                                                <input type="radio" name="user_type" value="88" checked="checked"> 客服
                                             @else
-                                                <input type="radio" name="user_type" value="88" checked="checked"> 业务员
+                                                <input type="radio" name="user_type" value="88"> 客服
                                             @endif
                                         </label>
                                     </span>
@@ -154,6 +138,20 @@
                             @endif
 
                         </div>
+                    </div>
+                </div>
+
+                {{--上级--}}
+                <div class="form-group superior-box">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 上级</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="superior_id" id="select2-superior" data-type="">
+                            @if($operate == 'edit' && $data->superior_id)
+                                <option data-id="{{ $data->superior_id or 0 }}" value="{{ $data->superior_id or 0 }}">{{ $data->superior->true_name }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
                     </div>
                 </div>
 
@@ -265,7 +263,7 @@
 
 @section('custom-css')
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('/lib/css/select2-4.0.5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/resource/component/css/select2-4.0.5.min.css') }}">
 @endsection
 
 
@@ -273,7 +271,7 @@
 
 @section('custom-script')
 {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
-<script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
+<script src="{{ asset('/resource/component/js/select2-4.0.5.min.js') }}"></script>
 <script>
     $(function() {
 
@@ -300,6 +298,143 @@
             };
             $("#form-edit-item").ajaxSubmit(options);
         });
+
+
+        // 【选择车辆所属】
+        $("#form-edit-item").on('click', "input[name=user_type]", function() {
+            // checkbox
+//            if($(this).is(':checked'))
+//            {
+//                $('.time-show').show();
+//            }
+//            else
+//            {
+//                $('.time-show').hide();
+//            }
+
+            // $("#select2-superior").find("option[value=0]").attr("selected",true);
+            // radio
+            var $value = $(this).val();
+            console.log($value);
+            if($value == 77 || $value == 84 || $value == 88)
+            {
+                $('.superior-box').show();
+            }
+            else
+            {
+                $('.superior-box').hide();
+            }
+
+            if($value == 77)
+            {
+                $('#select2-superior').prop('data-type','inspector');
+            }
+            else if($value == 84)
+            {
+                $('#select2-superior').prop('data-type','customer_service_supervisor');
+            }
+            else if($value == 88)
+            {
+                $('#select2-superior').prop('data-type','customer_service');
+            }
+            else
+            {
+                $('#select2-superior').prop('data-type','');
+            }
+            console.log($('#select2-superior').prop('data-type'));
+
+            //
+            $('#select2-superior').select2({
+                ajax: {
+                    url: "{{ url('/user/user_select2_superior') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            keyword: params.term, // search term
+                            page: params.page,
+                            type: $('#select2-superior').prop('data-type')
+                        };
+                    },
+                    processResults: function (data, params) {
+
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+        });
+
+        //
+        $('#select2-superior').select2({
+            ajax: {
+                url: "{{ url('/user/user_select2_superior') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page,
+                        type: $('#select2-superior').prop('data-type')
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+        var $user_type = $("input[name=user_type]").val();
+
+        if($user_type == 77 || $user_type == 84 || $user_type == 88)
+        {
+            $('.superior-box').show();
+        }
+        else
+        {
+            $('.superior-box').hide();
+        }
+
+        if($user_type == 77)
+        {
+            $('#select2-superior').prop('data-type','inspector');
+        }
+        else if($user_type == 84)
+        {
+            $('#select2-superior').prop('data-type','customer_service_supervisor');
+        }
+        else if($user_type == 88)
+        {
+            $('#select2-superior').prop('data-type','customer_service');
+        }
+        else
+        {
+            $('#select2-superior').prop('data-type','');
+        }
+
+        console.log($('#select2-superior').prop('data-type'));
+        console.log($("input[name=user_type]").val())
+        console.log($("#select2-superior").find('option:checked').val());
 
     });
 </script>

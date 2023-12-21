@@ -91,6 +91,38 @@
 
 
         //
+        $('#select2-project').select2({
+            ajax: {
+                url: "{{ url('/item/item_select2_project') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+
+
+
+        //
         $('#select2-client').select2({
             ajax: {
                 url: "{{ url('/item/order_select2_client') }}",
@@ -394,8 +426,19 @@
 
 
 
+        // 【添加工单】取消
+        $(".main-content").on('click', "#edit-item-cancel", function() {
+            var that = $(this);
+            $('input[name=detect-set-id]').val(0);
+            $('.assign_date').html('');
+            $('input[name=detect-set-rank]').val('');
 
-        // 添加or编辑
+            $('#modal-body-for-order-create').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+
+        // 【添加工单】提交
         $("#edit-item-submit").on('click', function() {
 
             var $index = layer.load(1, {

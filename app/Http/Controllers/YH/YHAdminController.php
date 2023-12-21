@@ -123,6 +123,12 @@ class YHAdminController extends Controller
         return $this->repo->operate_user_select2_sales(request()->all());
     }
 
+    // 【用户】SELECT2 Superior 上级
+    public function operate_user_select2_superior()
+    {
+        return $this->repo->operate_user_select2_superior(request()->all());
+    }
+
     // 【用户-员工管理】添加
     public function operate_user_staff_create()
     {
@@ -541,10 +547,10 @@ class YHAdminController extends Controller
      * 车辆管理
      */
     // 【车辆管理】返回-列表-视图（全部任务）
-    public function view_item_car_list_for_all()
+    public function view_item_project_list_for_all()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_car_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_car_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_project_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_project_list_for_all_datatable(request()->all());
     }
     // 【车辆管理】【修改记录】返回-列表-视图（全部任务）
     public function view_item_car_modify_record()
@@ -555,16 +561,16 @@ class YHAdminController extends Controller
 
 
     // 【车辆管理】添加
-    public function operate_item_car_create()
+    public function operate_item_project_create()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_car_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_car_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_project_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_project_save(request()->all());
     }
     // 【车辆管理】编辑
-    public function operate_item_car_edit()
+    public function operate_item_project_edit()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_car_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_car_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_project_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_project_save(request()->all());
     }
 
 
@@ -840,6 +846,18 @@ class YHAdminController extends Controller
 
 
     // 【订单管理】SELECT2 Client 客户
+    public function operate_item_select2_user()
+    {
+        return $this->repo->operate_item_select2_user(request()->all());
+    }
+    // 【订单管理】SELECT2 Client 项目
+    public function operate_item_select2_project()
+    {
+        return $this->repo->operate_item_select2_project(request()->all());
+    }
+
+
+    // 【订单管理】SELECT2 Client 客户
     public function operate_order_select2_client()
     {
         return $this->repo->operate_order_select2_client(request()->all());
@@ -944,10 +962,15 @@ class YHAdminController extends Controller
     {
         return $this->repo->operate_item_order_reuse(request()->all());
     }
-    // 【内容】审核
+    // 【内容】验证
     public function operate_item_order_verify()
     {
         return $this->repo->operate_item_order_verify(request()->all());
+    }
+    // 【内容】审核
+    public function operate_item_order_inspect()
+    {
+        return $this->repo->operate_item_order_inspect(request()->all());
     }
 
 

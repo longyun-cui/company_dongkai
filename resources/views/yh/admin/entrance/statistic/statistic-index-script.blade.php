@@ -32,23 +32,26 @@
                 }
             });
 
+            $(".order_count_for_all").find('b').html($data.order_count_for_all);
+            $(".order_count_for_inspected").find('b').html($data.order_count_for_inspected);
+            $(".order_count_for_accepted").find('b').html($data.order_count_for_accepted);
+            $(".order_count_for_refused").find('b').html($data.order_count_for_refused);
+            $(".order_count_for_repeated").find('b').html($data.order_count_for_repeated);
+            $(".order_count_for_rate").find('b').html($data.order_count_for_rate);
 
+            $(".order_count_of_today_for_all").find('b').html($data.order_count_of_today_for_all);
+            $(".order_count_of_today_for_inspected").find('b').html($data.order_count_of_today_for_inspected);
+            $(".order_count_of_today_for_accepted").find('b').html($data.order_count_of_today_for_accepted);
+            $(".order_count_of_today_for_refused").find('b').html($data.order_count_of_today_for_refused);
+            $(".order_count_of_today_for_repeated").find('b').html($data.order_count_of_today_for_repeated);
+            $(".order_count_of_today_for_rate").find('b').html($data.order_count_of_today_for_rate);
 
-            // $(".order_count_for_all").find('span').html($data.order_count_for_all);
-            $(".order_count_for_not_null").find('b').html($data.order_count_for_not_null);
-            $(".order_count_for_null").find('b').html($data.order_count_for_null);
-            $(".order_count_for_unpublished").find('b').html($data.order_count_for_unpublished);
-            $(".order_count_for_published").find('b').html($data.order_count_for_published);
-
-            $(".amount_sum").find('b').html($data.amount_sum);
-            $(".income_receivable_sum").find('b').html($data.income_receivable_sum);
-            $(".income_receipts_sum").find('b').html($data.income_receipts_sum);
-            $(".income_waiting_sum").find('b').html($data.income_waiting_sum);
-            $(".expanse_sum").find('b').html($data.expanse_sum); // 总支出
-
-            $(".finance_income_sum").find('b').html($data.finance_income_sum); // 总支出
-            $(".finance_expense_sum").find('b').html($data.finance_expense_sum); // 总支出
-            $(".finance_profile_sum").find('b').html($data.finance_profile_sum); // 总支出
+            $(".order_count_of_month_for_all").find('b').html($data.order_count_of_month_for_all);
+            $(".order_count_of_month_for_inspected").find('b').html($data.order_count_of_month_for_inspected);
+            $(".order_count_of_month_for_accepted").find('b').html($data.order_count_of_month_for_accepted);
+            $(".order_count_of_month_for_refused").find('b').html($data.order_count_of_month_for_refused);
+            $(".order_count_of_month_for_repeated").find('b').html($data.order_count_of_month_for_repeated);
+            $(".order_count_of_month_for_rate").find('b').html($data.order_count_of_month_for_rate);
 
             statistic_get_data_for_order($month, "myChart-for-comprehensive-order", "myChart-for-comprehensive-order-quantity", "myChart-for-comprehensive-order-income");
             statistic_get_data_for_finance($month, "myChart-for-comprehensive-finance");

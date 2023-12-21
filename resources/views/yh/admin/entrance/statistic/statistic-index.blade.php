@@ -57,7 +57,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <div class="box box-success box-solid">
                         <div class="box-header with-border">
-                            <h3 class="box-title">订单量概览</h3>
+                            <h3 class="box-title">今日概览</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
@@ -65,20 +65,23 @@
                         </div>
                         <div class="box-body">
                             <ul class="nav nav-stacked">
-{{--                                <li class="order_count_for_all">--}}
-{{--                                    <a href="javascript:void(0);">订单总量 <span class="pull-right badge- bg-blue-"></span></a>--}}
-{{--                                </li>--}}
-                                <li class="order_count_for_not_null">
-                                    <a href="javascript:void(0);">订单总量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                <li class="order_count_of_today_for_all">
+                                    <a href="javascript:void(0);">工单总量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_for_null">
-                                    <a href="javascript:void(0);">空单量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                <li class="order_count_of_today_for_inspected">
+                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_for_unpublished">
-                                    <a href="javascript:void(0);">已发布订单 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                <li class="order_count_of_today_for_accepted">
+                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_for_published">
-                                    <a href="javascript:void(0);">未发布订单 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                <li class="order_count_of_today_for_refused">
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_today_for_repeated">
+                                    <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_today_for_rate">
+                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge- bg-blue-"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -88,7 +91,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <div class="box box-success box-solid">
                         <div class="box-header with-border">
-                            <h3 class="box-title">订单金额概览</h3>
+                            <h3 class="box-title">当月概览</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
@@ -96,20 +99,23 @@
                         </div>
                         <div class="box-body">
                             <ul class="nav nav-stacked">
-                                <li class="amount_sum">
-                                    <a href="javascript:void(0);">运价总金额 <span class="pull-right"><b class="badge- bg-blue-"></b> 元</span></a>
+                                <li class="order_count_of_month_for_all">
+                                    <a href="javascript:void(0);">工单总量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="income_receivable_sum">
-                                    <a href="javascript:void(0);">应收账 <span class="pull-right"><b class="badge- bg-aqua-"></b> 元</span></a>
+                                <li class="order_count_of_month_for_inspected">
+                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="income_receipts_sum">
-                                    <a href="javascript:void(0);">实收款 <span class="pull-right"><b class="badge- bg-green-"></b> 元</span></a>
+                                <li class="order_count_of_month_for_accepted">
+                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="income_waiting_sum">
-                                    <a href="javascript:void(0);">待收款 <span class="pull-right"><b class="badge bg-red"></b> 元</span></a>
+                                <li class="order_count_of_month_for_refused">
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="expanse_sum">
-                                    <a href="javascript:void(0);">订单总支出 <span class="pull-right"><b class="badge- bg-aqua-"></b> 元</span></a>
+                                <li class="order_count_of_month_for_repeated">
+                                    <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_month_for_rate">
+                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge- bg-blue-"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -117,9 +123,9 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-6 col-md-4">
-                    <div class="box box-warning box-solid">
+                    <div class="box box-success box-solid">
                         <div class="box-header with-border">
-                            <h3 class="box-title">财务概览</h3>
+                            <h3 class="box-title">总量概览</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
@@ -127,14 +133,23 @@
                         </div>
                         <div class="box-body">
                             <ul class="nav nav-stacked">
-                                <li class="finance_income_sum">
-                                    <a href="javascript:void(0);">当月总收入 <span class="pull-right"><b class="badge- bg-blue-"></b> 元</span></a>
+                                <li class="order_count_for_all">
+                                    <a href="javascript:void(0);">工单总量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="finance_expense_sum">
-                                    <a href="javascript:void(0);">当月总支出 <span class="pull-right"><b class="badge- bg-aqua-"></b> 元</span></a>
+                                <li class="order_count_for_inspected">
+                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
                                 </li>
-                                <li class="finance_profile_sum">
-                                    <a href="javascript:void(0);">当月收支盈余 <span class="pull-right"><b class="badge- bg-green-"></b> 元</span></a>
+                                <li class="order_count_for_accepted">
+                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_refused">
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_repeated">
+                                    <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_rate">
+                                    <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge- bg-blue-"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -174,23 +189,7 @@
 
 
 
-            <div class="box-header with-border" style="margin:8px 0;">
-                <h3 class="box-title">【财务统计】</h3>
-            </div>
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="myChart" id="myChart-for-comprehensive-finance" style="height:500px;"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="box-footer with-border" style="margin:8px 0;">
-            </div>
-
-
-
             <div class="box-body _none">
-
 
                 <div class="box-header with-border" style="margin:0;text-align:center;">
                     <h3 class="box-title statistic-title"></h3>
@@ -343,6 +342,70 @@
                     </div>
                 </div>
 
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-info main-list-body">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+
+                <h3 class="box-title">员工看板</h3>
+
+
+            </div>
+
+
+            <div class="box-body datatable-body item-main-body" id="datatable-for-order-list">
+
+                <div class="tableArea">
+                    <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
+                        <thead>
+
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
+                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
+                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
+                        <div class="input-group">
+                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
+                            <select name="bulk-operate-status" class="form-control form-filter">
+                                <option value ="-1">请选择操作类型</option>
+                                <option value ="启用">启用</option>
+                                <option value ="禁用">禁用</option>
+                                <option value ="删除">删除</option>
+                                <option value ="彻底删除">彻底删除</option>
+                            </select>
+                            <span class="input-group-addon btn btn-default" id="operate-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
+                            <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-9">
+                        <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>
+                    </div>
+                </div>
             </div>
 
         </div>

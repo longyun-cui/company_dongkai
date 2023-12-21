@@ -6,9 +6,9 @@
         'info' => [
             'website' => '',
             'website_name' => '',
-            'name' => '上海豫好科技有限公司',
-            'short_name' => '上海豫好',
-            'brand' => '上海豫好',
+            'name' => '上海如哉网络科技有限公司',
+            'short_name' => '董凯',
+            'brand' => '董凯',
             'description' => '',
             'slogan' => '上海钢琴租售',
             'favicon' => '/favicon-240.png',
@@ -24,6 +24,15 @@
             'wb_address' => '',
         ],
 
+        'inspected_result' => [
+            '通过',
+            '拒绝',
+            '内部通过',
+            '二次待审',
+            '已审未提',
+            '回访重提',
+            '重复'
+        ],
 
     ];
 

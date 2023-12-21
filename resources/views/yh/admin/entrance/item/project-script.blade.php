@@ -31,7 +31,7 @@
         // 【编辑】
         $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);
-            window.location.href = "/item/car-edit?id="+$that.attr('data-id');
+            window.location.href = "/item/project-edit?id="+$that.attr('data-id');
         });
 
 
@@ -80,10 +80,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/car-admin-delete') }}",
+                        "{{ url('/item/project-admin-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "car-admin-delete",
+                            operate: "project-admin-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -107,7 +107,7 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/car-admin-restore') }}",
+                        "{{ url('/item/project-admin-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "car-admin-restore",
@@ -134,7 +134,7 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/car-admin-delete-permanently') }}",
+                        "{{ url('/item/project-admin-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "car-admin-delete-permanently",
@@ -194,7 +194,7 @@
             //     }
             // });
                     $.post(
-                        "{{ url('/item/car-admin-enable') }}",
+                        "{{ url('/item/project-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "car-admin-enable",
@@ -221,7 +221,7 @@
             //     }
             // });
                     $.post(
-                        "{{ url('/item/car-admin-disable') }}",
+                        "{{ url('/item/project-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "car-admin-disable",

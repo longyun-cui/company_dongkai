@@ -82,17 +82,17 @@ class YH_Route extends Model
     // 车辆
     function car_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','car_id','id');
+        return $this->belongsTo('App\Models\YH\DKProject','car_id','id');
     }
     // 车挂
     function trailer_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','trailer_id','id');
+        return $this->belongsTo('App\Models\YH\DKProject','trailer_id','id');
     }
     // 车厢
     function container_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','container_id','id');
+        return $this->belongsTo('App\Models\YH\DKProject','container_id','id');
     }
 
 

@@ -750,7 +750,7 @@ class YHSuperRepository {
         $query = YH_User::select('*')
 //            ->with(['district'])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
 //            ->with('ep','parent','fund')
 //            ->withCount([

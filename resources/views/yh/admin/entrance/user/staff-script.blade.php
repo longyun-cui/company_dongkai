@@ -236,12 +236,10 @@
         // 【启用】
         $("#item-main-body").on('click', ".item-admin-enable-submit", function() {
             var $that = $(this);
-            // layer.msg('确定"启用"？', {
-            //     time: 0
-            //     ,btn: ['确定', '取消']
-            //     ,yes: function(index){
-            //     }
-            // });
+            layer.msg('确定"启用"？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
                     $.post(
                         "{{ url('/user/staff-admin-enable') }}",
                         {
@@ -259,16 +257,16 @@
                         },
                         'json'
                     );
+                }
+            });
         });
         // 【禁用】
         $("#item-main-body").on('click', ".item-admin-disable-submit", function() {
             var $that = $(this);
-            // layer.msg('确定"禁用"？', {
-            //     time: 0
-            //     ,btn: ['确定', '取消']
-            //     ,yes: function(index){
-            //     }
-            // });
+            layer.msg('确定"禁用"？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
                     $.post(
                         "{{ url('/user/staff-admin-disable') }}",
                         {
@@ -286,7 +284,10 @@
                         },
                         'json'
                     );
+                }
+            });
         });
+
 
     });
 </script>

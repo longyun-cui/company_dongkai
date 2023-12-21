@@ -3,11 +3,11 @@ namespace App\Models\YH;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class YH_Car extends Model
+class DK_Project extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "yh_car";
+    protected $table = "dk_project";
     protected $fillable = [
         'active', 'status', 'item_active', 'item_status', 'item_category', 'item_type', 'category', 'type', 'sort',
         'owner_active',
@@ -69,6 +69,12 @@ class YH_Car extends Model
 
 
 
+
+    // 审核员
+    function inspector_er()
+    {
+        return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
+    }
 
     // 驾驶员
     function driver_er()

@@ -75,7 +75,7 @@ class YH_Circle extends Model
     // 车辆
     function car_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Car','car_id','id');
+        return $this->belongsTo('App\Models\YH\DKProject','car_id','id');
     }
 
 
