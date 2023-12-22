@@ -759,6 +759,98 @@
                         }
                     },
                     {
+                        "title": "工单状态",
+                        "className": "",
+                        "width": "60px",
+                        "data": "id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
+                                $(nTd).attr('data-key','attachment_list').attr('data-value',row.attachment_list);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+//                            return data;
+
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.item_status == 97)
+                            {
+                                return '<small class="btn-xs bg-navy">已弃用</small>';
+                            }
+
+                            if(row.is_published == 0)
+                            {
+                                return '<small class="btn-xs bg-teal">未发布</small>';
+                            }
+                            else
+                            {
+                                if(row.is_completed == 1)
+                                {
+                                    return '<small class="btn-xs bg-olive">已结束</small>';
+                                }
+                            }
+
+                            if(row.inspected_at)
+                            {
+                                return '<small class="btn-xs bg-blue">已审核</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs bg-teal">待审核</small>';
+                            }
+
+                        }
+                    },
+                    {
+                        "title": "审核结果",
+                        "data": "inspected_result",
+                        "className": "text-center",
+                        "width": "64px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','审核结果');
+                                $(nTd).attr('data-key','inspected_result').attr('data-value',data);
+                                $(nTd).attr('data-column-name','审核结果');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!row.inspected_at) return '--';
+                            var $result_html = '';
+                            if(data == "通过" || data == "内部通过")
+                            {
+                                $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                            }
+                            else if(data == "拒绝")
+                            {
+                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                            }
+                            else if(data == "重复")
+                            {
+                                $result_html = '<small class="btn-xs bg-yellow">重复</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
+                            }
+                            return $result_html;
+                        }
+                    },
+                    {
                         "title": "创建人",
                         "data": "creator_id",
                         "className": "",
@@ -1061,98 +1153,6 @@
                             var $currentYear = new Date().getFullYear();
                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                             else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                        }
-                    },
-                    {
-                        "title": "审核结果",
-                        "data": "inspected_result",
-                        "className": "text-center",
-                        "width": "80px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','审核结果');
-                                $(nTd).attr('data-key','inspected_result').attr('data-value',data);
-                                $(nTd).attr('data-column-name','审核结果');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!row.inspected_at) return '--';
-                            var $result_html = '';
-                            if(data == "通过" || data == "内部通过")
-                            {
-                                $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
-                            }
-                            else if(data == "拒绝")
-                            {
-                                $result_html = '<small class="btn-xs bg-red">拒绝</small>';
-                            }
-                            else if(data == "重复")
-                            {
-                                $result_html = '<small class="btn-xs bg-yellow">重复</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
-                            }
-                            return $result_html;
-                        }
-                    },
-                    {
-                        "title": "工单状态",
-                        "className": "",
-                        "width": "60px",
-                        "data": "id",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
-                                $(nTd).attr('data-key','attachment_list').attr('data-value',row.attachment_list);
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-//                            return data;
-
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(row.item_status == 97)
-                            {
-                                return '<small class="btn-xs bg-navy">已弃用</small>';
-                            }
-
-                            if(row.is_published == 0)
-                            {
-                                return '<small class="btn-xs bg-teal">未发布</small>';
-                            }
-                            else
-                            {
-                                if(row.is_completed == 1)
-                                {
-                                    return '<small class="btn-xs bg-olive">已结束</small>';
-                                }
-                            }
-
-                            if(row.inspected_at)
-                            {
-                                return '<small class="btn-xs bg-blue">已审核</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs bg-teal">待审核</small>';
-                            }
-
                         }
                     },
                     {
