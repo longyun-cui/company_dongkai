@@ -101,14 +101,14 @@
 
             <li class="treeview {{ $menu_active_of_statistic_index or '' }}">
                 <a href="{{ url('/statistic/statistic-index') }}">
-                    <i class="fa fa-bar-chart text-green"></i> <span>数据统计</span>
+                    <i class="fa fa-pie-chart text-green"></i> <span>数据统计</span>
                 </a>
             </li>
 
             @if(in_array($me->user_type,[0,1,9,11,81,84]))
                 <li class="treeview {{ $menu_active_of_statistic_customer_service or '' }}">
                     <a href="{{ url('/statistic/statistic-customer-service') }}">
-                        <i class="fa fa-download text-green"></i> <span>客服看板</span>
+                        <i class="fa fa-bar-chart text-green"></i> <span>客服看板</span>
                     </a>
                 </li>
             @endif
@@ -116,7 +116,7 @@
             @if(in_array($me->user_type,[0,1,9,11,71]))
                 <li class="treeview {{ $menu_active_of_statistic_inspector or '' }}">
                     <a href="{{ url('/statistic/statistic-inspector') }}">
-                        <i class="fa fa-download text-green"></i> <span>审核员看板</span>
+                        <i class="fa fa-bar-chart text-green"></i> <span>审核员看板</span>
                     </a>
                 </li>
             @endif
