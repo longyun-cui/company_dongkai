@@ -10806,7 +10806,7 @@ class YHAdminRepository {
 
             $query->withCount([
                 'order_list_for_inspector as order_count_for_inspected'=>function($query) use($the_day) {
-                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_status', '<>', 0);
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_day)->where('inspected_status', '<>', 0);
                 }
             ]);
         }
@@ -10824,7 +10824,7 @@ class YHAdminRepository {
 
             $query->withCount([
                 'order_list_for_inspector as order_count_for_inspected'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_status', '<>', 0);
+                    $query->whereBetween('inspected_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_status', '<>', 0);
                 }
             ]);
         }
