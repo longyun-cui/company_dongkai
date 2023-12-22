@@ -6545,6 +6545,21 @@ class YHAdminRepository {
         }
         else $view_data['project_id'] = -1;
 
+        // 客户姓名
+        if(!empty($post_data['client_name']))
+        {
+            if($post_data['client_name']) $view_data['client_name'] = $post_data['client_name'];
+            else $view_data['client_name'] = '';
+        }
+        else $view_data['client_'] = '';
+        // 客户电话
+        if(!empty($post_data['client_phone']))
+        {
+            if($post_data['client_phone']) $view_data['client_phone'] = $post_data['client_phone'];
+            else $view_data['client_phone'] = '';
+        }
+        else $view_data['client_phone'] = '';
+
         // 是否+V
         if(!empty($post_data['is_wx']))
         {
@@ -6678,78 +6693,15 @@ class YHAdminRepository {
             }
         }
 
-        // 环线
-        if(isset($post_data['circle']))
+        // 项目
+        if(isset($post_data['project']))
         {
-            if(!in_array($post_data['circle'],[-1]))
+            if(!in_array($post_data['project'],[-1]))
             {
-                $query->where('circle_id', $post_data['circle']);
+                $query->where('project_id', $post_data['project']);
             }
         }
 
-        // 全部车辆
-//        if(isset($post_data['car']))
-//        {
-//            if(!in_array($post_data['car'],[-1]))
-//            {
-//
-//                $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car'])->orWhere('trailer_id', $post_data['car']); } );
-//            }
-//        }
-
-        // 车辆
-        if(isset($post_data['car']))
-        {
-            if(!in_array($post_data['car'],[-1]))
-            {
-
-                $query->where(function($query1) use($post_data) { $query1->where('car_id', $post_data['car']); } );
-            }
-        }
-        // 车挂
-        if(isset($post_data['trailer']))
-        {
-            if(!in_array($post_data['trailer'],[-1]))
-            {
-
-                $query->where(function($query1) use($post_data) { $query1->where('trailer_id', $post_data['trailer']); } );
-            }
-        }
-
-        // 线路
-        if(isset($post_data['route']))
-        {
-            if(!in_array($post_data['route'],[-1]))
-            {
-                if($post_data['route'] == -9)
-                {
-                    $query->where('route_type', 11);
-                }
-                else if($post_data['route'] == 0)
-                {
-                    $query->where('route_type', 1)->where('route_id', 0);
-                }
-                else $query->where('route_id', $post_data['route']);
-            }
-        }
-
-        // 定价
-        if(isset($post_data['pricing']))
-        {
-            if(!in_array($post_data['pricing'],[-1]))
-            {
-                $query->where('pricing_id', $post_data['pricing']);
-            }
-        }
-
-        // 驾驶员
-        if(isset($post_data['driver']))
-        {
-            if(!in_array($post_data['driver'],[-1]))
-            {
-                $query->where('driver_id', $post_data['driver']);
-            }
-        }
 
         // 订单类型 [自有|空单|配货|调车]
         if(isset($post_data['order_type']))
@@ -6760,12 +6712,12 @@ class YHAdminRepository {
             }
         }
 
-        // 是否压差 [正常|压车]
-        if(!empty($post_data['is_delay']))
+        // 是否+V
+        if(!empty($post_data['is_wx']))
         {
-            if(!in_array($post_data['is_delay'],[-1,0]))
+            if(!in_array($post_data['is_wx'],[-1]))
             {
-                $query->where('is_delay', $post_data['is_delay']);
+                $query->where('is_wx', $post_data['is_wx']);
             }
         }
 

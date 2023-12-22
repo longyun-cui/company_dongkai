@@ -59,12 +59,12 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-                        <select class="form-control form-filter" name="order-staff" style="width:88px;">
-                            <option value ="-1">选择员工</option>
-                            @foreach($staff_list as $v)
-                                <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->true_name }}</option>
-                            @endforeach
-                        </select>
+{{--                        <select class="form-control form-filter" name="order-staff" style="width:88px;">--}}
+{{--                            <option value ="-1">选择员工</option>--}}
+{{--                            @foreach($staff_list as $v)--}}
+{{--                                <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->true_name }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
 
                         <select class="form-control form-filter select2-container order-select2-project" name="order-project" style="width:100px;">
                             @if($project_id > 0)
@@ -694,7 +694,7 @@
                         d.title = $('input[name="order-title"]').val();
                         d.keyword = $('input[name="order-keyword"]').val();
                         d.staff = $('select[name="order-staff"]').val();
-                        d.porject = $('select[name="order-project"]').val();
+                        d.project = $('select[name="order-project"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
                         d.client_name = $('input[name="order-client-name"]').val();
@@ -1311,6 +1311,8 @@
                     if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
                     if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
                     if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
+                    if($('input[name="order-client-name"]').val())  $obj.client_name = $('input[name="order-client-name"]').val();
+                    if($('input[name="order-client-phone"]').val())  $obj.client_phone = $('input[name="order-client-phone"]').val();
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
                     if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();

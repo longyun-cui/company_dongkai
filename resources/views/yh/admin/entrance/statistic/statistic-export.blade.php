@@ -30,12 +30,12 @@
                     <div class="input-group">
 
 
-                        <select class="form-control form-filter" name="order-staff" style="width:88px;">
-                            <option value ="-1">选择员工</option>
-                            @foreach($staff_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->true_name }}</option>
-                            @endforeach
-                        </select>
+{{--                        <select class="form-control form-filter" name="order-staff" style="width:88px;">--}}
+{{--                            <option value ="-1">选择员工</option>--}}
+{{--                            @foreach($staff_list as $v)--}}
+{{--                                <option value ="{{ $v->id }}">{{ $v->true_name }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
 
 {{--                        <select class="form-control form-filter" name="order-client" style="width:88px;">--}}
 {{--                            <option value ="-1">选择客户</option>--}}
@@ -122,6 +122,7 @@
         </div>
     </div>
 </div>
+
 
 {{--导出记录--}}
 <div class="row">
