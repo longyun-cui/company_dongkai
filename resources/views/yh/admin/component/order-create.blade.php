@@ -29,7 +29,7 @@
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 日期</label>
         <div class="col-md-8 ">
-            <input type="text" class="form-control" name="assign_date" placeholder="日期" readonly="readonly" value="{{ date('Y-m-d') }}">
+            <input type="text" class="form-control" name="assign_date" placeholder="日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}">
         </div>
     </div>
 
