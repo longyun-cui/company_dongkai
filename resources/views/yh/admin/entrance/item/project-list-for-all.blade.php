@@ -570,7 +570,8 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea .main-table { min-width:1400px; }
+    .tableArea table { width:100% !important; min-width:1200px; }
+    .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
 </style>
 @endsection
 
@@ -604,12 +605,6 @@
                         d.status = $('select[name="car-status"]').val();
                         d.car_type = $('select[name="car-type"]').val();
                         d.work_status = $('select[name="work_status"]').val();
-//
-//                        d.created_at_from = $('input[name="created_at_from"]').val();
-//                        d.created_at_to = $('input[name="created_at_to"]').val();
-//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
-//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
-
                     },
                 },
                 "pagingType": "simple_numbers",

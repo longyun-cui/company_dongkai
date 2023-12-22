@@ -70,6 +70,8 @@
                     </tbody>
                 </table>
                 <!-- datatable end -->
+
+
             </div>
 
             <div class="box-footer">
@@ -186,9 +188,9 @@
                 "columns": [
                     {
                         "title": "ID",
-                        "className": "font-12px",
-                        "width": "50px",
                         "data": "id",
+                        "className": "font-12px",
+                        "width": "60px",
                         "orderable": true,
                         render: function(data, type, row, meta) {
                             return data;
@@ -196,8 +198,8 @@
                     },
                     {
                         "title": "操作",
-                        "width": "240px",
                         "data": "id",
+                        "width": "240px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.user_status == 1)
@@ -264,8 +266,8 @@
                     },
                     {
                         "title": "员工职位",
-                        "width": "80px",
                         "data": 'user_type',
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
@@ -284,9 +286,9 @@
                     },
                     {
                         "title": "姓名",
+                        "data": "id",
                         "className": "",
                         "width": "100px",
-                        "data": "id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
@@ -295,10 +297,10 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "100px",
                         "title": "用户名",
                         "data": "id",
+                        "className": "",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return '<a target="_blank" href="/user/'+data+'">'+row.nickname+'</a>';
@@ -308,9 +310,9 @@
                     },
                     {
                         "title": "登录手机",
+                        "data": "mobile",
                         "className": "",
                         "width": "100px",
-                        "data": "mobile",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -318,9 +320,9 @@
                     },
                    {
                        "title": "上级",
+                       "data": "id",
                        "className": "text-left",
                        "width":"100px",
-                       "data": "id",
                        "orderable": false,
                        render: function(data, type, row, meta) {
                            if(row.superior) {
@@ -330,10 +332,10 @@
                        }
                    },
                     {
-                        "className": "text-center",
-                        "width": "",
                         "title": "备注",
                         "data": "remark",
+                        "className": "text-center",
+                        "width": "",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -354,10 +356,10 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "60px",
                         "title": "创建人",
                         "data": "creator_id",
+                        "className": "font-12px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 0) return '未知';
@@ -365,10 +367,10 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "108px",
                         "title": "创建时间",
                         "data": 'created_at',
+                        "className": "font-12px",
+                        "width": "120px",
                         "orderable": true,
                         render: function(data, type, row, meta) {
 //                            return data;
