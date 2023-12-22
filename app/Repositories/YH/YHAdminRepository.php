@@ -10585,7 +10585,16 @@ class YHAdminRepository {
     }
 
 
-    // 【统计】客服
+    // 【统计】客服看板
+    public function view_statistic_customer_service()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $view_data['menu_active_of_statistic_customer_service'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-customer-service';
+        return view($view_blade)->with($view_data);
+    }
     public function get_statistic_data_for_customer_service($post_data)
     {
         $this->get_me();
@@ -10596,8 +10605,81 @@ class YHAdminRepository {
                 'superior' => function($query) { $query->select(['id','username','true_name']); }
             ])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[88])
-            ->withCount([
+            ->whereIn('user_type',[88]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        // 客服经理
+        if($me->user_type == 81)
+        {
+            $subordinates_array = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $sub_subordinates_array = YH_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
+
+            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
+        }
+        else if($me->user_type == 84)
+        {
+            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+        }
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'day')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query->withCount([
+                'order_list as order_count_for_all'=>function($query) use($the_day) {
+                    $query->where('is_published', 1)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                },
+                'order_list as order_count_for_accepted'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '通过');
+                },
+                'order_list as order_count_for_refused'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '拒绝');
+                },
+                'order_list as order_count_for_repeated'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '重复');
+                },
+                'order_list as order_count_for_accepted_inside'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '内部通过');
+                }
+            ]);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query->withCount([
+                'order_list as order_count_for_all'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->where('is_published', 1)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+                },
+                'order_list as order_count_for_accepted'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '通过');
+                },
+                'order_list as order_count_for_refused'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '拒绝');
+                },
+                'order_list as order_count_for_repeated'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '重复');
+                },
+                'order_list as order_count_for_accepted_inside'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '内部通过');
+                }
+            ]);
+
+        }
+        else
+        {
+            $query->withCount([
                 'order_list as order_count_for_all'=>function($query) {
                     $query->where('is_published', 1);
                 },
@@ -10614,8 +10696,7 @@ class YHAdminRepository {
                     $query->where('inspected_result', '内部通过');
                 }
             ]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        }
 
         $total = $query->count();
 
@@ -10688,6 +10769,138 @@ class YHAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
+    // 【统计】客服看板
+    public function view_statistic_inspector()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $view_data['menu_active_of_statistic_inspector'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-inspector';
+        return view($view_blade)->with($view_data);
+    }
+    public function get_statistic_data_for_inspector($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = YH_User::select('*')
+            ->with([
+                'superior' => function($query) { $query->select(['id','username','true_name']); }
+            ])
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[77]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        // 审核经理
+        if($me->user_type == 71)
+        {
+            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+        }
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'day')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query->withCount([
+                'order_list_for_inspector as order_count_for_inspected'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_status', '<>', 0);
+                }
+            ]);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query->withCount([
+                'order_list_for_inspector as order_count_for_inspected'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_status', '<>', 0);
+                }
+            ]);
+        }
+        else
+        {
+            $query->withCount([
+                'order_list_for_inspector as order_count_for_inspected'=>function($query) {
+                    $query->where('inspected_status', '<>', 0);
+                }
+            ]);
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("superior_id", "asc")->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+//            if($v->order_count_for_all > 0)
+//            {
+//                $list[$k]->order_rate_for_inspected = round(($v->order_count_for_inspected * 100 / $v->order_count_for_all),2);
+//            }
+//            else $list[$k]->order_rate_for_inspected = 0;
+        }
+//        dd($list->toArray());
+
+        $grouped = $list->groupBy('superior_id');
+        foreach ($grouped as $k => $v)
+        {
+            $order_sum_for_all = 0;
+            $order_sum_for_inspected = 0;
+
+            foreach ($v as $key => $val)
+            {
+//                $order_sum_for_all += $val->order_count_for_all;
+                $order_sum_for_inspected += $val->order_count_for_inspected;
+            }
+
+
+            foreach ($v as $key => $val)
+            {
+                $v[$key]->merge = 0;
+//                $v[$key]->order_sum_for_all = $order_sum_for_all;
+                $v[$key]->order_sum_for_inspected = $order_sum_for_inspected;
+
+//                if($order_sum_for_all > 0)
+//                {
+//                    $v[$key]->order_average_rate_for_inspected = round(($order_sum_for_inspected * 100 / $order_sum_for_all),2);
+//                }
+//                else $v[$key]->order_average_rate_for_inspected = 0;
+            }
+
+            $v[0]->merge = count($v);
+        }
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
 
 
     // 【流量统计】返回-列表-视图
