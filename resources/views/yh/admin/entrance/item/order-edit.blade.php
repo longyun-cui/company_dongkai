@@ -73,12 +73,25 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户信息</label>
                     <div class="col-md-8 ">
-                        <div class="col-sm-5 col-md-5 padding-0">
+                        <div class="col-sm-6 col-md-6 padding-0">
                             <input type="text" class="form-control" name="client_name" placeholder="客户姓名" value="{{ $data->client_name or '' }}">
                         </div>
-                        <div class="col-sm-7 col-md-7 padding-0">
+                        <div class="col-sm-6 col-md-6 padding-0">
                             <input type="text" class="form-control" name="client_phone" placeholder="客户电话" value="{{ $data->client_phone or '' }}">
                         </div>
+                    </div>
+                </div>
+
+                {{--团队大区--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">团队大区</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="team_district" id="">
+                            <option value="">选择大区</option>
+                            @foreach(config('info.team_district') as $v)
+                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->team_district) selected="selected" @endif>{{ $v }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -86,7 +99,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">渠道来源</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="channel_source" id="select2-container">
+                        <select class="form-control" name="channel_source" id="">
                             <option value="">选择渠道</option>
                             @foreach(config('info.channel_source') as $v)
                                 <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->channel_source) selected="selected" @endif>{{ $v }}</option>
@@ -99,12 +112,22 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">所在城市</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="location_city" id="select2-container">
-                            <option value="">所在城市</option>
-                            @foreach(config('info.location_city') as $v)
-                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->location_city) selected="selected" @endif>{{ $v }}</option>
-                            @endforeach
-                        </select>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <select class="form-control" name="location_city" id="select-city">
+                                <option value="">所在城市</option>
+                                @foreach(config('info.location_city') as $k => $v)
+                                    <option value="{{ $k }}" data-index="{{ $loop->index }}" @if($operate == 'edit' && $k == $data->location_city) selected="selected" @endif>{{ $k }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <select class="form-control" name="location_district" id="select-district">
+                                <option value="">所在区域</option>
+                                @foreach(config('info.location_city') as $k => $v)
+                                    <option value ="{{ $k }}" @if($operate == 'edit' && $k == $data->location_city) selected="selected" @endif>{{ $k }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -338,74 +361,6 @@
 
 
 
-
-        //
-        $('#select2-route').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_route') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-//                    var $o = [];
-//                    var $lt = data;
-//                    $.each($lt, function(i,item) {
-//                        item.id = item.id;
-//                        item.text = item.text;
-//                        item.data_id = item.text;
-//                        $o.push(item);
-//                    });
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            templateSelection: function(data, container) {
-                $(data.element).attr("data-price",data.amount_with_cash);
-                $(data.element).attr("data-departure",data.departure_place);
-                $(data.element).attr("data-destination",data.destination_place);
-                $(data.element).attr("data-stopover",data.stopover_place);
-                $(data.element).attr("data-distance",data.travel_distance);
-                $(data.element).attr("data-prescribed",data.time_limitation_prescribed);
-                return data.text;
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-        $("#select2-route").on("select2:select",function(){
-            var $id = $(this).val();
-            var $price = $(this).find('option:selected').attr('data-price');
-            if($id > 0)
-            {
-                $('#order-price').attr('readonly','readonly').val($price);
-                $('input[name=departure_place]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-departure'));
-                $('input[name=destination_place]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-destination'));
-                $('input[name=stopover_place]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-stopover'));
-                $('input[name=travel_distance]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-distance'));
-                $('input[name=time_limitation_prescribed]').attr('readonly','readonly').val($(this).find('option:selected').attr('data-prescribed'));
-            }
-            else
-            {
-                $('#order-price').removeAttr('readonly');
-                $('input[name=departure_place]').removeAttr('readonly');
-                $('input[name=destination_place]').removeAttr('readonly');
-                $('input[name=stopover_place]').removeAttr('readonly');
-                $('input[name=travel_distance]').removeAttr('readonly');
-                $('input[name=time_limitation_prescribed]').removeAttr('readonly');
-            }
-        });
 
     });
 </script>

@@ -38,18 +38,30 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户信息</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="client_name" placeholder="客户姓名" value="" data-default="" id="order-price">
+                <input type="text" class="form-control" name="client_name" placeholder="客户姓名" value="" data-default="">
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
                 <input type="text" class="form-control" name="client_phone" placeholder="客户电话" value="" data-default="">
             </div>
         </div>
     </div>
+    {{--团队大区--}}
+    <div class="form-group">
+        <label class="control-label col-md-2">团队大区</label>
+        <div class="col-md-8 ">
+            <select class="form-control" name="team_district" id="">
+                <option value="">选择大区</option>
+                @foreach(config('info.team_district') as $v)
+                    <option value ="{{ $v }}">{{ $v }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
     {{--渠道来源--}}
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道来源</label>
         <div class="col-md-8 ">
-            <select class="form-control" name="channel_source" id="select2-container">
+            <select class="form-control" name="channel_source" id="">
                 <option value="">选择渠道</option>
                 @foreach(config('info.channel_source') as $v)
                     <option value ="{{ $v }}">{{ $v }}</option>
@@ -61,12 +73,19 @@
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
         <div class="col-md-8 ">
-            <select class="form-control" name="location_city" id="select2-container">
-                <option value="">所在城市</option>
-                @foreach(config('info.location_city') as $v)
-                    <option value ="{{ $v }}">{{ $v }}</option>
-                @endforeach
-            </select>
+            <div class="col-sm-6 col-md-6 padding-0">
+                <select class="form-control" name="location_city" id="select-city">
+                    <option value="">选择城市</option>
+                    @foreach(config('info.location_city') as $k => $v)
+                        <option value ="{{ $k }}" data-index="{{ $loop->index }}">{{ $k }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-6 padding-0">
+                <select class="form-control" name="location_district" id="select-district">
+                    <option value="">选择区域</option>
+                </select>
+            </div>
         </div>
     </div>
     {{--是否+V--}}

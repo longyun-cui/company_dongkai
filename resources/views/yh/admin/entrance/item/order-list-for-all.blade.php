@@ -1051,6 +1051,28 @@
                         }
                     },
                     {
+                        "title": "团队大区",
+                        "data": "team_district",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','团队大区');
+                                $(nTd).attr('data-key','team_district').attr('data-value',data);
+                                $(nTd).attr('data-column-name','团队大区');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '--';
+                            return data;
+                        }
+                    },
+                    {
                         "title": "渠道来源",
                         "data": "channel_source",
                         "className": "",
@@ -1059,7 +1081,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).addClass('modal-show-for-info-select-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');
                                 $(nTd).attr('data-key','channel_source').attr('data-value',data);
                                 $(nTd).attr('data-column-name','渠道来源');
@@ -1076,12 +1098,12 @@
                         "title": "所在城市",
                         "data": "location_city",
                         "className": "",
-                        "width": "60px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).addClass('modal-show-for-info-select-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
                                 $(nTd).attr('data-key','location_city').attr('data-value',data);
                                 $(nTd).attr('data-column-name','所在城市');
@@ -1091,7 +1113,10 @@
                         },
                         render: function(data, type, row, meta) {
                             if(!data) return '--';
-                            return data;
+                            else {
+                                if(!row.location_district) return data;
+                                else return data+' - '+row.location_district;
+                            }
                         }
                     },
                     {
