@@ -22,7 +22,7 @@ class YH_Order extends Model
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'project_id',
         'client_name', 'client_phone', 'is_repeat',
-        'channel_source', 'location_city', 'is_wx',
+        'channel_source', 'location_city', 'is_wx', 'wx_id',
         'assign_time',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'is_delay',
         'company', 'fund', 'mobile', 'city', 'address',

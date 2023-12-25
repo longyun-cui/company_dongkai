@@ -6,8 +6,32 @@
             var that = $(this);
             var $id = that.attr("data-id");
 
+            var $date = $('input[name="comprehensive-date"]').val();
             var $month = $('input[name="comprehensive-month"]').val();
             $('.statistic-title').html($month+'月');
+
+            var $project_id = $('select[name="comprehensive-project"]').val();
+            var $project_text = $('select[name="comprehensive-project"]').find("option:selected").text();
+
+            var $obj = new Object();
+            if($('input[name="comprehensive-date"]').val())  $obj.date = $('input[name="comprehensive-date"]').val();
+            if($('input[name="comprehensive-month"]').val())  $obj.month = $('input[name="comprehensive-month"]').val();
+            if($('select[name="comprehensive-project"]').val() > 0)  $obj.project_id = $('select[name="comprehensive-project"]').val();
+
+            if(JSON.stringify($obj) != "{}")
+            {
+                var $url = url_build('',$obj);
+                history.replaceState({page: 1}, "", $url);
+            }
+            else
+            {
+                $url = "{{ url('/statistic/statistic-index') }}";
+                if(window.location.search) history.replaceState({page: 1}, "", $url);
+            }
+
+            $('.comprehensive-day-title').html($date);
+            $('.comprehensive-month-title').html($month);
+            if($project_id > 0)  $('.comprehensive-title').html('【'+$project_text+'】');
 
             var $data = new Object();
             $.ajax({
@@ -17,7 +41,9 @@
                 url: "{{ url('/statistic/statistic-get-data-for-comprehensive') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
+                    date: $date,
                     month: $month,
+                    project: $project_id,
                     operate:"statistic-get"
                 },
                 success:function(data){
@@ -53,7 +79,7 @@
             $(".order_count_of_month_for_repeated").find('b').html($data.order_count_of_month_for_repeated);
             $(".order_count_of_month_for_rate").find('b').html($data.order_count_of_month_for_rate);
 
-            statistic_get_data_for_order($month, "myChart-for-comprehensive-order", "myChart-for-comprehensive-order-quantity", "myChart-for-comprehensive-order-income");
+            // statistic_get_data_for_order($month, "myChart-for-comprehensive-order", "myChart-for-comprehensive-order-quantity", "myChart-for-comprehensive-order-income");
             // statistic_get_data_for_finance($month, "myChart-for-comprehensive-finance");
 
         });
@@ -70,6 +96,13 @@
             var $month_dom = $('input[name="comprehensive-month"]');
             var $month_default = $month_dom.attr('data-default')
             $month_dom.val($month_default);
+
+            var $date_dom = $('input[name="comprehensive-date"]');
+            var $date_default = $date_dom.attr('data-default')
+            $date_dom.val($date_default);
+
+            $('.comprehensive-title').html('【综合概览】');
+
             $("#filter-submit-for-comprehensive").click();
 
         });
@@ -123,6 +156,50 @@
 
             var $next_month_str = $next_year+'-'+$next_month;
             $month_dom.val($next_month_str);
+            $("#filter-submit-for-comprehensive").click();
+
+        });
+
+        // 【综合概览】【前一天】
+        $(".main-content").on('click', ".date-pick-pre-for-comprehensive", function() {
+
+            var $date_dom = $('input[name="comprehensive-date"]');
+            var $the_date_str = $date_dom.val();
+
+            var $date = new Date($the_date_str);
+            var $time = $date.getTime();
+            var $yesterday_time = $time - (24*60*60*1000);
+
+            var $yesterday = new Date($yesterday_time);
+            var $yesterday_year = $yesterday.getFullYear();
+            var $yesterday_month = ('00'+($yesterday.getMonth()+1)).slice(-2);
+            var $yesterday_day = ('00'+($yesterday.getDate())).slice(-2);
+
+            var $yesterday_date_str = $yesterday_year + '-' + $yesterday_month + '-' + $yesterday_day;
+            $date_dom.val($yesterday_date_str);
+
+
+            $("#filter-submit-for-comprehensive").click();
+
+        });
+        // 【综合概览】【后一天】
+        $(".main-content").on('click', ".date-pick-next-for-comprehensive", function() {
+
+            var $date_dom = $('input[name="comprehensive-date"]');
+            var $the_date_str = $date_dom.val();
+
+            var $date = new Date($the_date_str);
+            var $time = $date.getTime();
+            var $tomorrow_time = $time + (24*60*60*1000);
+
+            var $tomorrow = new Date($tomorrow_time);
+            var $tomorrow_year = $tomorrow.getFullYear();
+            var $tomorrow_month = ('00'+($tomorrow.getMonth()+1)).slice(-2);
+            var $tomorrow_day = ('00'+($tomorrow.getDate())).slice(-2);
+
+            var $tomorrow_date_str = $tomorrow_year + '-' + $tomorrow_month + '-' + $tomorrow_day;
+            $date_dom.val($tomorrow_date_str);
+
             $("#filter-submit-for-comprehensive").click();
 
         });

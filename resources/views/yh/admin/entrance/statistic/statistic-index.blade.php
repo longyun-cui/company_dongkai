@@ -25,15 +25,34 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
+
+
+                        {{--按天查看--}}
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-comprehensive">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="comprehensive-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-comprehensive">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+
+                        {{--按月查看--}}
                         <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre-for-comprehensive">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-
                         <input type="text" class="form-control form-filter filter-keyup month_picker" name="comprehensive-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" style="" />
-
                         <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next-for-comprehensive">
                             <i class="fa fa-chevron-right"></i>
                         </button>
+
+                        <select class="form-control form-filter select2-container item-select2-project" name="comprehensive-project" style="width:120px;">
+                            @if(isset($project_id) && $project_id > 0)
+                                <option value="-1">选择项目</option>s
+                                <option value="{{ $project_id  }}" selected="selected">{{ $project_title }}</option>
+                            @else
+                                <option value="-1">选择项目</option>
+                            @endif
+                        </select>
 
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-comprehensive">
@@ -50,14 +69,14 @@
 
 
             <div class="box-header with-border" style="margin:8px 0;">
-                <h3 class="box-title">【综合概览】</h3>
+                <h3 class="box-title comprehensive-title">【综合概览】</h3>
             </div>
             <div class="box-body">
 
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <div class="box box-success box-solid">
                         <div class="box-header with-border">
-                            <h3 class="box-title">今日概览</h3>
+                            <h3 class="box-title comprehensive-day-title">今日概览</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
@@ -91,7 +110,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <div class="box box-success box-solid">
                         <div class="box-header with-border">
-                            <h3 class="box-title">当月概览</h3>
+                            <h3 class="box-title comprehensive-month-title">当月概览</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>
@@ -317,8 +336,10 @@
 @section('custom-style')
 <style>
     .myChart { width:100%;height:240px; }
+    .datatable-search-row .input-group .time-picker-btn { width:30px; }
     .datatable-search-row .input-group .month-picker-btn { width:30px; }
-    .datatable-search-row .input-group .month_picker { width:90px;text-align:center; }
+    .datatable-search-row .input-group .month_picker,
+    .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
     .datatable-search-row .input-group select { width:100px; }
     .datatable-search-row .input-group .select2-container { width:120px; }
 </style>

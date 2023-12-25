@@ -84,7 +84,7 @@
 
                 {{--渠道来源--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道来源</label>
+                    <label class="control-label col-md-2">渠道来源</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="channel_source" id="select2-container">
                             <option value="">选择渠道</option>
@@ -97,7 +97,7 @@
 
                 {{--所在城市--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
+                    <label class="control-label col-md-2">所在城市</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="location_city" id="select2-container">
                             <option value="">所在城市</option>
@@ -113,7 +113,6 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 是否+V</label>
                     <div class="col-md-8 ">
                         <div class="btn-group">
-
                             <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
@@ -125,7 +124,6 @@
                                     </label>
                                 </span>
                             </button>
-
                             <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
@@ -137,8 +135,14 @@
                                     </label>
                                 </span>
                             </button>
-
                         </div>
+                    </div>
+                </div>
+                {{--微信号--}}
+                <div class="form-group wx_box">
+                    <label class="control-label col-md-2">微信号</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name=wx_id placeholder="微信号" value="{{ $data->wx_id or '' }}">
                     </div>
                 </div>
 

@@ -91,6 +91,13 @@
             </div>
         </div>
     </div>
+    {{--微信号--}}
+    <div class="form-group wx_box">
+        <label class="control-label col-md-2">微信号</label>
+        <div class="col-md-8 ">
+            <input type="text" class="form-control" name=wx_id placeholder="微信号" value="">
+        </div>
+    </div>
 
     {{--通话小结--}}
     <div class="form-group">
