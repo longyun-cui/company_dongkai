@@ -5577,6 +5577,7 @@ class YHAdminRepository {
 
         $inspected_result = $post_data["inspected_result"];
         if(!in_array($inspected_result,config('info.inspected_result'))) return response_error([],"审核结果非法！");
+        $inspected_description = $post_data["inspected_description"];
 
         $before = $item->inspected_result;
 
@@ -5587,6 +5588,7 @@ class YHAdminRepository {
             $item->inspector_id = $me->id;
             $item->inspected_status = 1;
             $item->inspected_result = $inspected_result;
+            if($inspected_description) $item->inspected_description = $inspected_description;
             $item->inspected_at = time();
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");
@@ -5603,6 +5605,7 @@ class YHAdminRepository {
                 $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 92;
                 $record_data["operate_type"] = 1;
+                $record_data["description"] = $inspected_description;
 
                 $record_data["before"] = $before;
                 $record_data["after"] = $inspected_result;
@@ -5665,6 +5668,10 @@ class YHAdminRepository {
         if($column_key == "client_phone")
         {
             if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+        }
+        else if($column_key == "inspected_description")
+        {
+            if(!in_array($me->user_type,[0,1,11,71,77])) return response_error([],"你没有操作权限！");
         }
         else
         {

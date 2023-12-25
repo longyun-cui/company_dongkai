@@ -1123,7 +1123,7 @@
                         "title": "通话小结",
                         "data": "description",
                         "className": "",
-                        "width": "100px",
+                        "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1178,6 +1178,30 @@
                             var $currentYear = new Date().getFullYear();
                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                             else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                        }
+                    },
+                    {
+                        "title": "审核说明",
+                        "data": "inspected_description",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','审核说明');
+                                $(nTd).attr('data-key','inspected_description').attr('data-value',data);
+                                $(nTd).attr('data-column-name','审核说明');
+                                $(nTd).attr('data-text-type','textarea');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            if(data) return '<small class="btn-xs bg-yellow">双击查看</small>';
+                            else return '';
                         }
                     },
                     {
@@ -1514,6 +1538,7 @@
                                 else if(data == "client_name") return '客户电话';
                                 else if(data == "client_phone") return '客户电话';
                                 else if(data == "description") return '通话小结';
+                                else if(data == "inspected_description") return '审核说明';
                                 else return '有误';
                             }
                             else if(row.operate_category == 71)

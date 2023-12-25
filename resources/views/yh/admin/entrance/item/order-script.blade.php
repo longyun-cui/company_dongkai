@@ -413,7 +413,8 @@
                     '<option value ="二次待审">二次待审</option>'+
                     '<option value ="已审未提">已审未提</option>'+
                     '<option value ="回访重提">回访重提</option>'+
-                    '</select>'
+                    '</select>'+
+                    '<textarea class="form-control" name="inspected-description" placeholder="审核说明" rows="3"></textarea>'
                 ,yes: function(index){
                     $.post(
                         "{{ url('/item/order-inspect') }}",
@@ -421,7 +422,8 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "order-inspect",
                             item_id: $that.attr('data-id'),
-                            inspected_result: $('select[name="inspected-result"]').val()
+                            inspected_result: $('select[name="inspected-result"]').val(),
+                            inspected_description: $('textarea[name="inspected-description"]').val()
                         },
                         function(data){
                             layer.close(index);
