@@ -124,7 +124,7 @@ class YHAdminRepository {
 
 
 
-        // 本月每日订单量
+        // 本月每日工单量
         $query_this_month = YH_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
@@ -135,7 +135,7 @@ class YHAdminRepository {
                     count(*) as sum
                 "));
 
-        // 上月每日订单量
+        // 上月每日工单量
         $query_last_month = YH_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$last_month_start_timestamp,$last_month_ended_timestamp])
@@ -4064,7 +4064,7 @@ class YHAdminRepository {
 
 
     /*
-     * 订单管理
+     * 工单管理
      */
     //
     public function operate_item_select2_user($post_data)
@@ -4347,7 +4347,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】返回-导入-视图
+    // 【工单管理】返回-导入-视图
     public function view_item_order_import()
     {
         $this->get_me();
@@ -4356,7 +4356,7 @@ class YHAdminRepository {
 
         $operate_category = 'item';
         $operate_type = 'item';
-        $operate_type_text = '订单';
+        $operate_type_text = '工单';
         $title_text = '导入'.$operate_type_text;
         $list_text = $operate_type_text.'列表';
         $list_link = '/item/order-list-for-all';
@@ -4373,7 +4373,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit-for-import';
         return view($view_blade)->with($return);
     }
-    // 【订单管理】保存-导入-数据
+    // 【工单管理】保存-导入-数据
     public function operate_item_order_import_save($post_data)
     {
 //        $messages = [
@@ -4731,13 +4731,13 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】返回-添加-视图
+    // 【工单管理】返回-添加-视图
     public function view_item_order_create()
     {
         $this->get_me();
 
         $item_type = 'item';
-        $item_type_text = '订单';
+        $item_type_text = '工单';
         $title_text = '添加'.$item_type_text;
         $list_text = $item_type_text.'列表';
         $list_link = '/item/car-list-for-all';
@@ -4754,7 +4754,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit';
         return view($view_blade)->with($return);
     }
-    // 【订单管理】返回-编辑-视图
+    // 【工单管理】返回-编辑-视图
     public function view_item_order_edit()
     {
         $this->get_me();
@@ -4764,7 +4764,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit';
 
         $item_type = 'item';
-        $item_type_text = '订单';
+        $item_type_text = '工单';
         $title_text = '编辑'.$item_type_text;
         $list_text = $item_type_text.'列表';
         $list_link = '/item/car-list-for-all';
@@ -4806,7 +4806,7 @@ class YHAdminRepository {
             else return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
         }
     }
-    // 【订单管理】保存数据
+    // 【工单管理】保存数据
     public function operate_item_order_save($post_data)
     {
 //        dd($post_data);
@@ -4847,7 +4847,7 @@ class YHAdminRepository {
             $mine = YH_Order::find($operate_id);
             if(!$mine) return response_error([],"该工单不存在，刷新页面重试！");
 
-            if(in_array($me->user_type,[88]) && $mine->creator_id != $me->id) return response_error([],"该【订单】不是你的，你不能操作！");
+            if(in_array($me->user_type,[88]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
 
             $is_repeat = YH_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->where('id','<>',$operate_id)->count("*");
         }
@@ -4915,7 +4915,7 @@ class YHAdminRepository {
 
     }
 
-    // 【订单管理】获取-详情-数据
+    // 【工单管理】获取-详情-数据
     public function operate_item_order_get($post_data)
     {
         $messages = [
@@ -4938,7 +4938,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -4966,7 +4966,7 @@ class YHAdminRepository {
         return response_success($item,"");
 
     }
-    // 【订单管理】获取-详情-视图
+    // 【工单管理】获取-详情-视图
     public function operate_item_order_get_html($post_data)
     {
         $messages = [
@@ -4989,7 +4989,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5042,7 +5042,7 @@ class YHAdminRepository {
         return response_success(['html'=>$html],"");
 
     }
-    // 【订单管理】获取-附件-视图
+    // 【工单管理】获取-附件-视图
     public function operate_item_order_get_attachment_html($post_data)
     {
         $messages = [
@@ -5065,7 +5065,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Order::with(['attachment_list'])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5079,7 +5079,7 @@ class YHAdminRepository {
     }
 
 
-    // 【订单管理】删除
+    // 【工单管理】删除
     public function operate_item_order_delete($post_data)
     {
         $messages = [
@@ -5188,7 +5188,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】发布
+    // 【工单管理】发布
     public function operate_item_order_publish($post_data)
     {
         $messages = [
@@ -5257,7 +5257,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】完成
+    // 【工单管理】完成
     public function operate_item_order_complete($post_data)
     {
         $messages = [
@@ -5330,7 +5330,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】弃用
+    // 【工单管理】弃用
     public function operate_item_order_abandon($post_data)
     {
         $messages = [
@@ -5401,7 +5401,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】复用
+    // 【工单管理】复用
     public function operate_item_order_reuse($post_data)
     {
         $messages = [
@@ -5472,7 +5472,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】验证
+    // 【工单管理】验证
     public function operate_item_order_verify($post_data)
     {
 //        dd($post_data);
@@ -5543,7 +5543,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】审核
+    // 【工单管理】审核
     public function operate_item_order_inspect($post_data)
     {
 //        dd($post_data);
@@ -5626,7 +5626,7 @@ class YHAdminRepository {
     }
 
 
-    // 【订单管理】【文本】修改-文本-类型
+    // 【工单管理】【文本】修改-文本-类型
     public function operate_item_order_info_text_set($post_data)
     {
         $messages = [
@@ -5649,7 +5649,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【订单】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5662,13 +5662,13 @@ class YHAdminRepository {
         $before = $item->$column_key;
 
 
-        if($column_key == "amount")
+        if($column_key == "client_phone")
         {
-            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
         }
         else
         {
-            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,81,84,88])) return response_error([],"你没有操作权限！");
         }
 
 
@@ -5726,7 +5726,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】【时间】修改-时间-类型
+    // 【工单管理】【时间】修改-时间-类型
     public function operate_item_order_info_time_set($post_data)
     {
         $messages = [
@@ -5749,7 +5749,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5891,7 +5891,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】【选项】修改-radio-select-[option]-类型
+    // 【工单管理】【选项】修改-radio-select-[option]-类型
     public function operate_item_order_info_option_set($post_data)
     {
         $messages = [
@@ -5914,7 +5914,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【订单】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -6115,7 +6115,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】【附件】添加
+    // 【工单管理】【附件】添加
     public function operate_item_order_info_attachment_set($post_data)
     {
         $messages = [
@@ -6138,7 +6138,7 @@ class YHAdminRepository {
         if(intval($order_id) !== 0 && !$order_id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Order::withTrashed()->find($order_id);
-        if(!$item) return response_error([],"该【订单】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -6264,7 +6264,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】【附件】删除
+    // 【工单管理】【附件】删除
     public function operate_item_order_info_attachment_delete($post_data)
     {
         $messages = [
@@ -6341,7 +6341,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】【修改信息】设置-行程时间
+    // 【工单管理】【修改信息】设置-行程时间
     public function operate_item_order_travel_set($post_data)
     {
         $messages = [
@@ -6364,7 +6364,7 @@ class YHAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = YH_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该订单不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -6444,7 +6444,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】返回-列表-视图
+    // 【工单管理】返回-列表-视图
     public function view_item_order_list_for_all($post_data)
     {
         $this->get_me();
@@ -6478,7 +6478,7 @@ class YHAdminRepository {
 
 
 
-        // 订单ID
+        // 工单ID
         if(!empty($post_data['order_id']))
         {
             if(is_numeric($post_data['order_id']) && $post_data['order_id'] > 0) $view_data['order_id'] = $post_data['order_id'];
@@ -6603,7 +6603,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($view_data);
     }
-    // 【订单管理】返回-列表-数据
+    // 【工单管理】返回-列表-数据
     public function get_item_order_list_for_all_datatable($post_data)
     {
         $this->get_me();
@@ -6703,7 +6703,7 @@ class YHAdminRepository {
         }
 
 
-        // 订单类型 [自有|空单|配货|调车]
+        // 工单类型 [自有|空单|配货|调车]
         if(isset($post_data['order_type']))
         {
             if(!in_array($post_data['order_type'],[-1]))
@@ -6919,7 +6919,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】【财务往来记录】返回-列表-视图
+    // 【工单管理】【财务往来记录】返回-列表-视图
     public function view_item_order_finance_record($post_data)
     {
         $this->get_me();
@@ -6932,7 +6932,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【订单管理】【财务往来记录】返回-列表-数据
+    // 【工单管理】【财务往来记录】返回-列表-数据
     public function get_item_order_finance_record_datatable($post_data)
     {
         $this->get_me();
@@ -6998,7 +6998,7 @@ class YHAdminRepository {
         return datatable_response($list, $draw, $total);
     }
 
-    // 【订单管理】添加-财务数据-保存数据
+    // 【工单管理】添加-财务数据-保存数据
     public function operate_item_order_finance_record_create($post_data)
     {
 //        dd($post_data);
@@ -7042,7 +7042,7 @@ class YHAdminRepository {
 
         $order_id = $post_data["order_id"];
         $order = YH_Order::where('id',$order_id)->lockForUpdate()->first();
-        if(!$order) return response_error([],"该【订单】不存在，刷新页面重试！");
+        if(!$order) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         // 交易类型 收入 || 支出
         $finance_type = $post_data["finance_type"];
@@ -7136,7 +7136,7 @@ class YHAdminRepository {
 
 
 
-    // 【订单管理】【修改记录】返回-列表-视图
+    // 【工单管理】【修改记录】返回-列表-视图
     public function view_item_order_modify_record($post_data)
     {
         $this->get_me();
@@ -7149,7 +7149,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【订单管理】【修改记录】返回-列表-数据
+    // 【工单管理】【修改记录】返回-列表-数据
     public function get_item_order_modify_record_datatable($post_data)
     {
         $this->get_me();
@@ -7533,7 +7533,7 @@ class YHAdminRepository {
             else
             {
                 $order = YH_Order::lockForUpdate()->find($item->order_id);
-                if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
+                if(!$order) return response_error([],"该工单不存在，刷新页面重试！");
 
                 if($item->finance_type == 1)
                 {
@@ -7579,7 +7579,7 @@ class YHAdminRepository {
         }
 
     }
-    // 【订单管理】删除
+    // 【工单管理】删除
     public function operate_finance_delete($post_data)
     {
         $messages = [
@@ -7630,7 +7630,7 @@ class YHAdminRepository {
             else
             {
                 $order = YH_Order::lockForUpdate()->find($item->order_id);
-                if(!$order) return response_error([],"该订单不存在，刷新页面重试！");
+                if(!$order) return response_error([],"该工单不存在，刷新页面重试！");
 
                 if($item->is_confirmed == 0)
                 {
@@ -7971,7 +7971,7 @@ class YHAdminRepository {
             $temp_date = [];
             $temp_date['id'] = $key;
 
-            // 订单-使用ID
+            // 工单-使用ID
             $order_id = trim($value['order_id']);
             $temp_date['order_id'] = (!empty($order_id) && (floor($order_id) == $order_id) && $order_id >= 0) ? $order_id : 0;
             if(empty($temp_date['order_id']))  continue;
@@ -8023,7 +8023,7 @@ class YHAdminRepository {
 
                 $finance->create_type = 9;
                 $finance->creator_id = $me->id;
-                $finance->order_id = $value['order_id'];  // 订单ID
+                $finance->order_id = $value['order_id'];  // 工单ID
                 $finance->finance_type = $value['finance_type'];  // 交易类型 1收入，21支出
                 $finance->title = $value['title'];  // 名目
                 $finance->transaction_amount = $value['transaction_amount'];  // 交易金额
@@ -8465,9 +8465,9 @@ class YHAdminRepository {
 
 
 
-        // 订单统计
+        // 工单统计
 
-        // 本月每日订单量
+        // 本月每日工单量
         $query_for_order_this_month = YH_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
@@ -8488,7 +8488,7 @@ class YHAdminRepository {
         $statistics_data_for_order_this_month = $query_for_order_this_month->get()->keyBy('day');
         $return_data['statistics_data_for_order_this_month'] = $statistics_data_for_order_this_month;
 
-        // 上月每日订单量
+        // 上月每日工单量
         $query_for_order_last_month = YH_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
@@ -8845,10 +8845,10 @@ class YHAdminRepository {
         $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
 
 
-        // 订单统计
+        // 工单统计
 
 
-        // 本月每日订单量
+        // 本月每日工单量
         $query_for_order_this_month = YH_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
@@ -8872,7 +8872,7 @@ class YHAdminRepository {
         $statistics_data_for_order_this_month = $query_for_order_this_month->get()->keyBy('day');
         $return_data['statistics_data_for_order_this_month'] = $statistics_data_for_order_this_month;
 
-        // 上月每日订单量
+        // 上月每日工单量
         $query_for_order_last_month = YH_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
@@ -9511,7 +9511,7 @@ class YHAdminRepository {
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-export';
         return view($view_blade)->with($view_data);
     }
-    // 【数据导出】订单
+    // 【数据导出】工单
     public function operate_statistic_export_for_order($post_data)
     {
         $this->get_me();
@@ -9604,7 +9604,7 @@ class YHAdminRepository {
 
 //        dd($car_id);
 
-        // 订单
+        // 工单
         $query = YH_Order::select('*')
             ->with([
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
@@ -9816,7 +9816,7 @@ class YHAdminRepository {
 
 //        dd($car_id);
 
-        // 订单
+        // 工单
         $query = YH_Circle::select('*')
             ->with([
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
@@ -9926,8 +9926,8 @@ class YHAdminRepository {
             'creator_name'=>'创建者',
             'car_er_name'=>'车辆',
             'title'=>'环线',
-            'order_id'=>'订单ID',
-            'order_title'=>'订单',
+            'order_id'=>'工单ID',
+            'order_title'=>'工单',
             'start_time'=>'开始时间',
             'ended_time'=>'结束时间',
             'amount_total'=>'收入',
@@ -10042,7 +10042,7 @@ class YHAdminRepository {
 
         $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
 
-        // 订单
+        // 工单
         $query = YH_Finance::select('id','finance_type','creator_id','transaction_time','order_id','transaction_amount','title','transaction_type','transaction_receipt_account','transaction_payment_account','transaction_order','remark')
 //            ->where('finance_type',1)
             ->with([
@@ -10125,10 +10125,10 @@ class YHAdminRepository {
             'id'=>'ID',
             'finance_type_name'=>'类型',
             'creator_name'=>'创建者',
-            'order_id'=>'订单ID',
-            'order_name'=>'订单详情',
-            'car_name'=>'订单车辆',
-            'assign_time'=>'订单时间',
+            'order_id'=>'工单ID',
+            'order_name'=>'工单详情',
+            'car_name'=>'工单车辆',
+            'assign_time'=>'工单时间',
             'route'=>'线路',
             'transaction_date'=>'交易时间',
             'transaction_amount'=>'交易金额',

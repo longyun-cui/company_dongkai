@@ -895,7 +895,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).addClass('modal-show-for-info-select2-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','项目');
                                 $(nTd).attr('data-key','project_id').attr('data-value',data);
                                 if(row.project_er == null) $(nTd).attr('data-option-name','未指定');
@@ -937,10 +937,10 @@
                                     $assign_time_value = $year+'-'+$month+'-'+$day;
                                 }
 
-                                $(nTd).addClass('modal-show-for-info-time-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','派车日期');
+                                $(nTd).addClass('modal-show-for-info-time-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','提交日期');
                                 $(nTd).attr('data-key','assign_time').attr('data-value',$assign_time_value);
-                                $(nTd).attr('data-column-name','派车日期');
+                                $(nTd).attr('data-column-name','提交日期');
                                 $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -993,13 +993,13 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                // $(nTd).addClass('modal-show-for-info-text-set');
-                                // $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
-                                // $(nTd).attr('data-key','client_phone').attr('data-value',data);
-                                // $(nTd).attr('data-column-name','客户电话');
-                                // $(nTd).attr('data-text-type','text');
-                                // if(data) $(nTd).attr('data-operate-type','edit');
-                                // else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
+                                $(nTd).attr('data-key','client_phone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','客户电话');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -1510,79 +1510,10 @@
                             if(row.operate_category == 1)
                             {
                                 if(data == "client_id") return '客户';
-                                else if(data == "route_id") return '固定线路';
-                                else if(data == "circle_id") return '环线';
-                                else if(data == "pricing_id") return '包油价';
-                                else if(data == "car_id") return '车辆';
-                                else if(data == "trailer_id") return '车挂';
-                                else if(data == "outside_car") return '车辆';
-                                else if(data == "outside_trailer") return '车挂';
-                                else if(data == "driver_id") return '驾驶员';
-                                else if(data == "travel_distance") return '里程数';
-                                else if(data == "time_limitation_prescribed") return '时效';
-                                else if(data == "assign_time") return '安排时间';
-                                else if(data == "amount") return '金额';
-                                else if(data == "deposit") return '定金';
-                                else if(data == "oil_card_amount") return '油卡';
-                                else if(data == "invoice_amount") return '开票金额';
-                                else if(data == "invoice_point") return '票点';
-                                else if(data == "reimbursable_amount") return '报销费';
-                                else if(data == "customer_management_fee") return '客户管理费';
-                                else if(data == "time_limitation_deduction") return '时效扣款';
-                                else if(data == "information_fee") return '信息费';
-                                else if(data == "administrative_fee") return '管理费';
-                                else if(data == "oil_amount") return '万金油量（升）';
-                                else if(data == "oil_unit_price") return '油价（元）';
-                                else if(data == "oil_fee") return '包邮费';
-                                else if(data == "ETC_price") return 'ETC费用';
-                                else if(data == "others_fee") return '其他费用';
-                                else if(data == "income_real_first_amount") return '实收金额';
-                                else if(data == "income_real_first_time") return '实收日期';
-                                else if(data == "income_real_final_amount") return '实收尾款金额';
-                                else if(data == "income_real_final_time") return '实收尾款日期';
-                                else if(data == "outside_car_price") return '外请车-费用';
-                                else if(data == "outside_car_first_amount") return '外请车-到付金额';
-                                else if(data == "outside_car_first_time") return '外请车-到付日期';
-                                else if(data == "outside_car_final_amount") return '外请车-尾款金额';
-                                else if(data == "outside_car_final_time") return '外请车-尾款日期';
-                                else if(data == "container_type") return '箱型';
-                                else if(data == "subordinate_company") return '所属公司';
-                                else if(data == "route") return '线路';
-                                else if(data == "fixed_route") return '固定线路';
-                                else if(data == "temporary_route") return '临时线路';
-                                else if(data == "departure_place") return '出发地';
-                                else if(data == "destination_place") return '目的地';
-                                else if(data == "stopover_place") return '经停点';
-                                else if(data == "should_departure_time") return '应出发时间';
-                                else if(data == "should_arrival_time") return '应到达时间';
-                                else if(data == "actual_departure_time") return '实际出发时间';
-                                else if(data == "actual_arrival_time") return '实际到达时间';
-                                else if(data == "stopover_departure_time") return '实际出发时间';
-                                else if(data == "stopover_arrival_time") return '实际到达时间';
-                                else if(data == "driver_name") return '主驾姓名';
-                                else if(data == "driver_phone") return '主驾电话';
-                                else if(data == "copilot_name") return '副驾姓名';
-                                else if(data == "copilot_phone") return '副驾电话';
-                                else if(data == "trailer_type") return '车挂类型';
-                                else if(data == "trailer_length") return '车挂尺寸';
-                                else if(data == "trailer_volume") return '车挂容积';
-                                else if(data == "trailer_weight") return '车辆载重';
-                                else if(data == "trailer_axis_count") return '轴数';
-                                else if(data == "empty_route") return '空单-线路';
-                                else if(data == "empty_route_type") return '空单-线路类型';
-                                else if(data == "empty_route_id") return '空单-固定线路';
-                                else if(data == "empty_route_temporary") return '空单-临时线路';
-                                else if(data == "GPS") return 'GPS';
-                                else if(data == "receipt_address") return '回单地址';
-                                else if(data == "receipt_status") return '回单状态';
-                                else if(data == "is_delay") return '是否压车';
-                                else if(data == "order_number") return '单号';
-                                else if(data == "payee_name") return '收款人';
-                                else if(data == "arrange_people") return '安排人';
-                                else if(data == "car_managerial_people") return '车辆负责员';
-                                else if(data == "car_supply") return '车货源';
-                                else if(data == "weight") return '重量';
-                                else if(data == "remark") return '备注';
+                                else if(data == "project_id") return '项目';
+                                else if(data == "client_name") return '客户电话';
+                                else if(data == "client_phone") return '客户电话';
+                                else if(data == "description") return '通话小结';
                                 else return '有误';
                             }
                             else if(row.operate_category == 71)
