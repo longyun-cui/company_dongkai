@@ -6642,12 +6642,16 @@ class YHAdminRepository {
         {
             $subordinates = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
             $subordinates_subordinates = YH_User::select('id')->whereIn('superior_id',$subordinates)->get()->pluck('id')->toArray();
-            $query->whereIn('creator_id',$subordinates_subordinates);
+            $subordinates_list = array_merge($subordinates_subordinates,$subordinates);
+            $subordinates_list[] = $me->id;
+            $query->whereIn('creator_id',$subordinates_list);
         }
         // 客服主管
         if($me->user_type == 84)
         {
             $subordinates = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $subordinates[] = $me->id;
+            dd($subordinates);
             $query->whereIn('creator_id',$subordinates);
         }
         // 客服
