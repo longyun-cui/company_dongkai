@@ -4830,7 +4830,7 @@ class YHAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,88])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
