@@ -6651,7 +6651,6 @@ class YHAdminRepository {
         {
             $subordinates = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
             $subordinates[] = $me->id;
-            dd($subordinates);
             $query->whereIn('creator_id',$subordinates);
         }
         // 客服
