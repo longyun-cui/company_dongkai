@@ -553,10 +553,10 @@ class YHAdminController extends Controller
         else if(request()->isMethod('post')) return $this->repo->get_item_project_list_for_all_datatable(request()->all());
     }
     // 【车辆管理】【修改记录】返回-列表-视图（全部任务）
-    public function view_item_car_modify_record()
+    public function view_item_project_modify_record()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_car_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_car_modify_record_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_project_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_project_modify_record_datatable(request()->all());
     }
 
 
@@ -607,30 +607,30 @@ class YHAdminController extends Controller
 
 
     // 【车辆管理】删除
-    public function operate_item_car_admin_delete()
+    public function operate_item_project_admin_delete()
     {
-        return $this->repo->operate_item_car_admin_delete(request()->all());
+        return $this->repo->operate_item_project_admin_delete(request()->all());
     }
     // 【车辆管理】恢复
-    public function operate_item_car_admin_restore()
+    public function operate_item_project_admin_restore()
     {
-        return $this->repo->operate_item_car_admin_restore(request()->all());
+        return $this->repo->operate_item_project_admin_restore(request()->all());
     }
     // 【车辆管理】永久删除
-    public function operate_item_car_admin_delete_permanently()
+    public function operate_item_project_admin_delete_permanently()
     {
-        return $this->repo->operate_item_car_admin_delete_permanently(request()->all());
+        return $this->repo->operate_item_project_admin_delete_permanently(request()->all());
     }
 
     // 【车辆管理】启用
-    public function operate_item_car_admin_enable()
+    public function operate_item_project_admin_enable()
     {
-        return $this->repo->operate_item_car_admin_enable(request()->all());
+        return $this->repo->operate_item_project_admin_enable(request()->all());
     }
     // 【车辆管理】禁用
-    public function operate_item_car_admin_disable()
+    public function operate_item_project_admin_disable()
     {
-        return $this->repo->operate_item_car_admin_disable(request()->all());
+        return $this->repo->operate_item_project_admin_disable(request()->all());
     }
 
 

@@ -43,7 +43,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/item/car-get') }}",
+                url: "{{ url('/item/project-get') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -110,7 +110,7 @@
                         "{{ url('/item/project-admin-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "car-admin-restore",
+                            operate: "project-admin-restore",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -137,7 +137,7 @@
                         "{{ url('/item/project-admin-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "car-admin-delete-permanently",
+                            operate: "project-admin-delete-permanently",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -197,7 +197,7 @@
                         "{{ url('/item/project-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "car-admin-enable",
+                            operate: "project-admin-enable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -224,7 +224,7 @@
                         "{{ url('/item/project-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "car-admin-disable",
+                            operate: "project-admin-disable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){

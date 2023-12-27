@@ -3496,7 +3496,7 @@ class YHAdminRepository {
 
 
     // 【车辆管理】管理员-删除
-    public function operate_item_car_admin_delete($post_data)
+    public function operate_item_project_admin_delete($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3513,7 +3513,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'car-admin-delete') return response_error([],"参数【operate】有误！");
+        if($operate != 'project-admin-delete') return response_error([],"参数【operate】有误！");
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
@@ -3550,7 +3550,7 @@ class YHAdminRepository {
 
     }
     // 【车辆管理】管理员-恢复
-    public function operate_item_car_admin_restore($post_data)
+    public function operate_item_project_admin_restore($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3567,7 +3567,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'car-admin-restore') return response_error([],"参数【operate】有误！");
+        if($operate != 'project-admin-restore') return response_error([],"参数【operate】有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
@@ -3603,7 +3603,7 @@ class YHAdminRepository {
 
     }
     // 【车辆管理】管理员-彻底删除
-    public function operate_item_car_admin_delete_permanently($post_data)
+    public function operate_item_project_admin_delete_permanently($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3620,7 +3620,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'car-admin-delete-permanently') return response_error([],"参数【operate】有误！");
+        if($operate != 'project-admin-delete-permanently') return response_error([],"参数【operate】有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
@@ -3658,7 +3658,7 @@ class YHAdminRepository {
 
     }
     // 【车辆管理】管理员-启用
-    public function operate_item_car_admin_enable($post_data)
+    public function operate_item_project_admin_enable($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3675,7 +3675,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'car-admin-enable') return response_error([],"参数【operate】有误！");
+        if($operate != 'project-admin-enable') return response_error([],"参数【operate】有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
@@ -3709,7 +3709,7 @@ class YHAdminRepository {
 
     }
     // 【车辆管理】管理员-禁用
-    public function operate_item_car_admin_disable($post_data)
+    public function operate_item_project_admin_disable($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3726,7 +3726,7 @@ class YHAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'car-admin-disable') return response_error([],"参数【operate】有误！");
+        if($operate != 'project-admin-disable') return response_error([],"参数【operate】有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
@@ -3995,7 +3995,7 @@ class YHAdminRepository {
 
 
     // 【车辆管理】【修改记录】返回-列表-视图
-    public function view_item_car_modify_record($post_data)
+    public function view_item_project_modify_record($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -4008,7 +4008,7 @@ class YHAdminRepository {
         return view($view_blade)->with($return);
     }
     // 【车辆管理】【修改记录】返回-列表-数据
-    public function get_item_car_modify_record_datatable($post_data)
+    public function get_item_project_modify_record_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -4098,6 +4098,7 @@ class YHAdminRepository {
         if(empty($post_data['keyword']))
         {
             $list =DK_Project::select(['id','title as text'])
+                ->where('item_status',1)
 //                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
@@ -4105,9 +4106,11 @@ class YHAdminRepository {
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Client::select(['id','title as text'])->where('title','like',"%$keyword%")
+            $list =YH_Client::select(['id','title as text'])
+                ->where('item_status',1)
 //                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
+                ->where('title','like',"%$keyword%")
                 ->get()->toArray();
         }
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];

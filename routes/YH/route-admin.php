@@ -156,24 +156,24 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/car-info-select-set', $controller.'@operate_item_car_info_option_set');
     Route::post('/item/car-info-select2-set', $controller.'@operate_item_car_info_option_set');
     // 编辑-附件
-    Route::match(['get','post'], '/item/car-get-attachment-html', $controller.'@operate_item_car_get_attachment_html');
-    Route::post('/item/car-info-attachment-set', $controller.'@operate_item_car_info_attachment_set');
-    Route::post('/item/car-info-attachment-delete', $controller.'@operate_item_car_info_attachment_delete');
+    Route::match(['get','post'], '/item/project-get-attachment-html', $controller.'@operate_item_project_get_attachment_html');
+    Route::post('/item/project-info-attachment-set', $controller.'@operate_item_project_info_attachment_set');
+    Route::post('/item/project-info-attachment-delete', $controller.'@operate_item_project_info_attachment_delete');
 
     // 删除 & 恢复
-    Route::post('/item/project-admin-delete', $controller.'@operate_item_car_admin_delete');
-    Route::post('/item/project-admin-restore', $controller.'@operate_item_car_admin_restore');
-    Route::post('/item/project-admin-delete-permanently', $controller.'@operate_item_car_admin_delete_permanently');
+    Route::post('/item/project-admin-delete', $controller.'@operate_item_project_admin_delete');
+    Route::post('/item/project-admin-restore', $controller.'@operate_item_project_admin_restore');
+    Route::post('/item/project-admin-delete-permanently', $controller.'@operate_item_project_admin_delete_permanently');
     // 启用 & 禁用
-    Route::post('/item/project-admin-enable', $controller.'@operate_item_car_admin_enable');
-    Route::post('/item/project-admin-disable', $controller.'@operate_item_car_admin_disable');
+    Route::post('/item/project-admin-enable', $controller.'@operate_item_project_admin_enable');
+    Route::post('/item/project-admin-disable', $controller.'@operate_item_project_admin_disable');
 
     // 列表
     Route::match(['get','post'], '/item/project-list', $controller.'@view_item_project_list');
     Route::match(['get','post'], '/item/project-list-for-all', $controller.'@view_item_project_list_for_all');
 
     // 车辆-修改信息
-    Route::match(['get','post'], '/item/car-modify-record', $controller.'@view_item_car_modify_record');
+    Route::match(['get','post'], '/item/project-modify-record', $controller.'@view_item_project_modify_record');
 
 
 
