@@ -103,7 +103,7 @@
 {{--                            <option value="0" @if($is_repeat == 0) selected="selected" @endif>否</option>--}}
 {{--                        </select>--}}
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-description" placeholder="通话小结" value="" style="width:120px;" />
+{{--                        <input type="text" class="form-control form-filter filter-keyup" name="order-description" placeholder="通话小结" value="" style="width:120px;" />--}}
 
                         <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
                             <i class="fa fa-remove"></i> 清空重选
