@@ -2,26 +2,26 @@
     $(function() {
 
         // 【搜索】
-        $("#datatable-for-car-list").on('click', ".filter-submit", function() {
+        $("#datatable-for-department-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#datatable-for-car-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-car-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-department-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-department-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-car-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-car-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-department-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-department-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $("#datatable-for-car-list").on('keyup', ".item-search-keyup", function(event) {
+        $("#datatable-for-department-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-car-list").find(".filter-submit").click();
+                $("#datatable-for-department-list").find(".filter-submit").click();
             }
         });
 
@@ -295,7 +295,7 @@
             // });
 
                     $.post(
-                        "{{ url('/item/car-info-text-set') }}",
+                        "{{ url('/department/department-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-text-set-operate"]').val(),
@@ -384,8 +384,8 @@
             // });
 
                     $.post(
-                        "{{ url('/item/car-info-text-set') }}",
-                        {{--"{{ url('/item/car-info-time-set') }}",--}}
+                        "{{ url('/department/department-info-text-set') }}",
+                        {{--"{{ url('/department/department-info-time-set') }}",--}}
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),
@@ -437,7 +437,7 @@
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
 
-            $('select[name=info-select-set-column-value]').removeClass('select2-car').removeClass('select2-client');
+            $('select[name=info-select-set-column-value]').removeClass('select2-department').removeClass('select2-client');
             if($that.attr("data-key") == "receipt_status")
             {
                 var $option_html = $('#receipt_status-option-list').html();
@@ -483,6 +483,7 @@
             $('.info-select-set-column-name').html($that.attr("data-name"));
             $('input[name=info-select-set-item-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-select-set-column-key]').prop('data-department-type',$that.attr("data-department-type"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
             $('select[name=info-select-set-column-value]').find('option').eq(0).val($that.attr("data-value"));
@@ -493,49 +494,19 @@
             $('#modal-body-for-info-select-set').modal('show');
 
 
-            if($that.attr("data-key") == "client_id")
+            if($that.attr("data-key") == "leader_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-driver').addClass('select2-client');
-                $('.select2-client').select2({
+                $('select[name=info-select-set-column-value]').addClass('select2-leader');
+                $('.select2-leader').select2({
                     ajax: {
-                        url: "{{ url('/item/car_select2_client') }}",
+                        url: "{{ url('/department/department_select2_leader') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
                             return {
                                 keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
-
-                            params.page = params.page || 1;
-                            return {
-                                results: data,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    minimumInputLength: 0,
-                    theme: 'classic'
-                });
-            }
-            else if($that.attr("data-key") == "driver_id")
-            {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').addClass('select2-driver');
-                $('.select2-driver').select2({
-                    ajax: {
-                        url: "{{ url('/item/order_select2_driver') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
+                                page: params.page,
+                                type: $('input[name=info-select-set-column-key]').prop('data-department-type')
                             };
                         },
                         processResults: function (data, params) {
@@ -578,7 +549,7 @@
             // });
 
                     $.post(
-                        "{{ url('/item/car-info-select-set') }}",
+                        "{{ url('/department/department-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
@@ -618,7 +589,7 @@
 
             $('.attachment-set-title').html($that.attr("data-id"));
             $('.info-set-column-name').html($that.attr("data-name"));
-            $('input[name=attachment-set-car-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-department-id]').val($that.attr("data-id"));
             $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
             $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
             $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
@@ -635,7 +606,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/item/car-get-attachment-html') }}",
+                url: "{{ url('/department/department-get-attachment-html') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -690,7 +661,7 @@
             });
 
                     var options = {
-                        url: "{{ url('/item/car-info-attachment-set') }}",
+                        url: "{{ url('/department/department-info-attachment-set') }}",
                         type: "post",
                         dataType: "json",
                         // target: "#div2",
@@ -717,7 +688,7 @@
                                     type:"post",
                                     dataType:'json',
                                     async:false,
-                                    url: "{{ url('/item/car-get-attachment-html') }}",
+                                    url: "{{ url('/department/department-get-attachment-html') }}",
                                     data: {
                                         _token: $('meta[name="_token"]').attr('content'),
                                         operate:"item-get",
@@ -757,10 +728,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/car-info-attachment-delete') }}",
+                        "{{ url('/department/department-info-attachment-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "car-attachment-delete",
+                            operate: "department-attachment-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){

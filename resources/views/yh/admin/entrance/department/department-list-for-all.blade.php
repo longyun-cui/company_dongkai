@@ -35,7 +35,7 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-car-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-department-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
@@ -141,7 +141,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-car-info-text-set" readonly>
+                    <input type="hidden" name="info-text-set-operate" value="item-department-info-text-set" readonly>
                     <input type="hidden" name="info-text-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-text-set-column-key" value="" readonly>
@@ -185,8 +185,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-car-info-text-set" readonly>
-                    {{--<input type="hidden" name="info-time-set-operate" value="item-car-info-time-set" readonly>--}}
+                    <input type="hidden" name="info-time-set-operate" value="item-department-info-text-set" readonly>
+                    {{--<input type="hidden" name="info-time-set-operate" value="item-department-info-time-set" readonly>--}}
                     <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
@@ -233,8 +233,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-car-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-car-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-operate" value="item-department-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-department-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
 
@@ -273,7 +273,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-car-info-option-set" readonly>
+                    <input type="hidden" name="info-select-set-operate" value="department-info-option-set" readonly>
                     <input type="hidden" name="info-select-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
@@ -337,12 +337,12 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="attachment-set-operate" value="item-car-attachment-set" readonly>
-                    <input type="hidden" name="attachment-set-car-id" value="0" readonly>
+                    <input type="hidden" name="attachment-set-operate" value="item-department-attachment-set" readonly>
+                    <input type="hidden" name="attachment-set-department-id" value="0" readonly>
                     <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
                     <input type="hidden" name="attachment-set-column-key" value="" readonly>
 
-                    <input type="hidden" name="operate" value="item-car-attachment-set" readonly>
+                    <input type="hidden" name="operate" value="item-department-attachment-set" readonly>
                     <input type="hidden" name="item_id" value="0" readonly>
                     <input type="hidden" name="operate_type" value="add" readonly>
                     <input type="hidden" name="column_key" value="attachment" readonly>
@@ -614,7 +614,7 @@
 //                "scrollY": true,
                 "scrollCollapse": true,
                 "fixedColumns": {
-                    "leftColumns": "@if($is_mobile_equipment) 1 @else 5 @endif",
+                    "leftColumns": "@if($is_mobile_equipment) 1 @else 1 @endif",
                     "rightColumns": "0"
                 },
                 "columns": [
@@ -749,39 +749,76 @@
                         }
                     },
                     {
-                        "title": "部门名称",
+                        "title": "大区名称",
+                        "data": "superior_department_id",
+                        "className": "",
+                        "width":"100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.department_type == 11)
+                            {
+                                return '<a href="javascript:void(0);">'+row.name+'</a>';
+                            }
+                            else if(row.department_type == 21)
+                            {
+                                if(row.superior_department_er) {
+                                    return '<a href="javascript:void(0);">'+row.superior_department_er.name+'</a>';
+                                }
+                                else return '--';
+                            }
+                        }
+                    },
+                    {
+                        "title": "小组名称",
                         "data": "name",
                         "className": "text-center",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "上级部门",
-                        "data": "superior_department_id",
-                        "className": "text-left",
-                        "width":"100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.superior_department_er) {
-                                return '<a href="javascript:void(0);">'+row.superior_department_er.name+'</a>';
+                            if(row.department_type == 11)
+                            {
+                                return '--';
                             }
-                            else return '--';
+                            else if(row.department_type == 21)
+                            {
+                                return '<a href="javascript:void(0);">'+data+'</a>';
+                            }
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "240px",
                         "title": "负责人",
                         "data": "leader_id",
+                        "className": "text-center",
+                        "width": "240px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','负责人');
+                                $(nTd).attr('data-key','leader_id').attr('data-value',data);
+                                if(row.leader == null) $(nTd).attr('data-option-name','未指定');
+                                else {
+                                    $(nTd).attr('data-option-name',row.leader.username);
+                                }
+                                $(nTd).attr('data-column-name','负责人');
+                                if(row.project_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+
+                                if(row.department_type == 11)
+                                {
+                                    $(nTd).attr('data-department-type','manager');
+                                }
+                                else if(row.department_type == 21)
+                                {
+                                    $(nTd).attr('data-department-type','supervisor');
+                                }
+
+                            }
                         },
                         render: function(data, type, row, meta) {
                             if(row.leader == null) return '--';
-                            else return '<a href="javascript:void(0);">'+row.leader.true_name+' </a>';
+                            else return '<a href="javascript:void(0);">'+row.leader.username+' </a>';
                         }
                     },
                     {
@@ -1040,22 +1077,6 @@
                                 else if(data == "trailer_axis_count") return '轴数';
                                 else if(data == "linkman_name") return '司机';
                                 else if(data == "linkman_phone") return '电话';
-                                else if(data == "car_type") return '车辆类型';
-                                else if(data == "car_owner") return '所有人';
-                                else if(data == "car_function") return '使用性质';
-                                else if(data == "car_brand") return '品牌';
-                                else if(data == "car_identification_number") return '车辆识别代码';
-                                else if(data == "engine_number") return '发动机号';
-                                else if(data == "locomotive_wheelbase") return '车头轴距';
-                                else if(data == "main_fuel_tank") return '主油箱';
-                                else if(data == "auxiliary_fuel_tank") return '副油箱';
-                                else if(data == "total_mass") return '总质量';
-                                else if(data == "curb_weight") return '整备质量';
-                                else if(data == "load_weight") return '核定载重';
-                                else if(data == "traction_mass") return '准牵引质量';
-                                else if(data == "overall_size") return '外廓尺寸';
-                                else if(data == "purchase_date") return '购买日期';
-                                else if(data == "purchase_price") return '购买价格';
                                 else if(data == "sale_date") return '出售日期';
                                 else if(data == "sale_price") return '出售价格';
                                 else if(data == "registration_date") return '注册日期';
@@ -1136,32 +1157,13 @@
                         "data": "after",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.column_name == 'client_id')
+                            if(row.column_name == 'leader_id')
                             {
-                                if(row.after_client_er == null) return '';
+                                if(row.after_leader == null) return '';
                                 else
                                 {
-                                    if(row.after_client_er.short_name)
-                                    {
-                                        return '<a href="javascript:void(0);">'+row.after_client_er.short_name+'</a>';
-                                    }
-                                    else return '<a href="javascript:void(0);">'+row.after_client_er.username+'</a>';
+                                    return '<a href="javascript:void(0);">'+row.after_leader.username+'</a>';
                                 }
-                            }
-                            else if(row.column_name == 'route_id')
-                            {
-                                if(row.after_route_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_route_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'pricing_id')
-                            {
-                                if(row.after_pricing_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_pricing_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
-                            {
-                                if(row.after_car_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_car_er.name+'</a>';
                             }
                             else if(row.column_name == 'driver_id')
                             {

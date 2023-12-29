@@ -44,6 +44,13 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/department/department-create', $controller.'@operate_department_create');
     Route::match(['get','post'], '/department/department-edit', $controller.'@operate_department_edit');
 
+    // 编辑-信息
+    Route::post('/department/department-info-text-set', $controller.'@operate_department_info_text_set');
+    Route::post('/department/department-info-time-set', $controller.'@operate_department_info_time_set');
+    Route::post('/department/department-info-radio-set', $controller.'@operate_department_info_option_set');
+    Route::post('/department/department-info-select-set', $controller.'@operate_department_info_option_set');
+    Route::post('/department/department-info-select2-set', $controller.'@operate_department_info_option_set');
+
     // 删除 & 恢复
     Route::post('/department/department-admin-delete', $controller.'@operate_department_admin_delete');
     Route::post('/department/department-admin-restore', $controller.'@operate_department_admin_restore');

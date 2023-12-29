@@ -142,6 +142,38 @@ class DKAdminController extends Controller
     }
 
 
+    // 【部门管理】修改-文本-text-信息
+    public function operate_department_info_text_set()
+    {
+        return $this->repo->operate_department_info_text_set(request()->all());
+    }
+    // 【部门管理】修改-时间-time-信息
+    public function operate_department_info_time_set()
+    {
+        return $this->repo->operate_department_info_time_set(request()->all());
+    }
+    // 【部门管理】修改-选项-option-信息
+    public function operate_department_info_option_set()
+    {
+        return $this->repo->operate_department_info_option_set(request()->all());
+    }
+    // 【部门管理】添加-附件-attachment-信息
+    public function operate_department_info_attachment_set()
+    {
+        return $this->repo->operate_department_info_attachment_set(request()->all());
+    }
+    // 【部门管理】删除-附件-attachment-信息
+    public function operate_v_info_attachment_delete()
+    {
+        return $this->repo->operate_department_info_attachment_delete(request()->all());
+    }
+    // 【部门管理】获取-附件-attachment-信息
+    public function operate_department_get_attachment_html()
+    {
+        return $this->repo->operate_department_get_attachment_html(request()->all());
+    }
+
+
     // 【部门管理】删除
     public function operate_department_admin_delete()
     {

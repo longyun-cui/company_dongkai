@@ -432,37 +432,37 @@
             theme: 'classic'
         });
 
-        var $user_type = $("input[name=user_type]").val();
+        // var $user_type = $("input[name=user_type]").val();
+        //
+        // if($user_type == 77 || $user_type == 84 || $user_type == 88)
+        // {
+        //     $('.superior-box').show();
+        // }
+        // else
+        // {
+        //     $('.superior-box').hide();
+        // }
+        //
+        // if($user_type == 77)
+        // {
+        //     $('#select2-superior').prop('data-type','inspector');
+        // }
+        // else if($user_type == 84)
+        // {
+        //     $('#select2-superior').prop('data-type','customer_service_supervisor');
+        // }
+        // else if($user_type == 88)
+        // {
+        //     $('#select2-superior').prop('data-type','customer_service');
+        // }
+        // else
+        // {
+        //     $('#select2-superior').prop('data-type','');
+        // }
 
-        if($user_type == 77 || $user_type == 84 || $user_type == 88)
-        {
-            $('.superior-box').show();
-        }
-        else
-        {
-            $('.superior-box').hide();
-        }
-
-        if($user_type == 77)
-        {
-            $('#select2-superior').prop('data-type','inspector');
-        }
-        else if($user_type == 84)
-        {
-            $('#select2-superior').prop('data-type','customer_service_supervisor');
-        }
-        else if($user_type == 88)
-        {
-            $('#select2-superior').prop('data-type','customer_service');
-        }
-        else
-        {
-            $('#select2-superior').prop('data-type','');
-        }
-
-        console.log($('#select2-superior').prop('data-type'));
-        console.log($("input[name=user_type]").val())
-        console.log($("#select2-superior").find('option:checked').val());
+        // console.log($("input[name=user_type]").val())
+        // console.log($('#select2-superior').prop('data-type'));
+        // console.log($("#select2-superior").find('option:checked').val());
 
 
 
@@ -496,6 +496,30 @@
                 $('.department-box').hide();
             }
         });
+
+        var $user_type = $("input[name=user_type]").val();
+
+        if($user_type == 81 || $user_type == 84 || $user_type == 88)
+        {
+            $('.department-box').show();
+        }
+        else
+        {
+            $('.department-box').hide();
+        }
+
+        if($user_type == 81)
+        {
+            $('.department-group-box').hide();
+        }
+        else if($user_type == 84)
+        {
+            $('.department-group-box').show();
+        }
+        else if($user_type == 88)
+        {
+            $('.department-group-box').show();
+        }
 
 
         //
@@ -531,9 +555,16 @@
             if($id > 0)
             {
                 //
-                //得到select标签对象,Jquery写法
-                var $select = $('#select2-department-group')[0];
-                $select.length = 0;
+                // 清空原有选项 得到select标签对象 Jquery写法
+                // var $select = $('#select2-department-group')[0];
+                // $select.length = 0;
+
+                $('#select2-department-group').html(''); // 清空原有选项
+
+                // 去除选中值
+                // $('#select2-department-group').val(null).trigger('change');
+                // $('#select2-department-group').val("").trigger('change');
+
                 $('#select2-department-group').select2({
                     ajax: {
                         url: "{{ url('/user/user_select2_department?type=group') }}",
