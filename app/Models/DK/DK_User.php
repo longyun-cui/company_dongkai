@@ -17,10 +17,11 @@ class DK_User extends Authenticatable
 
     protected $fillable = [
         'active', 'status', 'user_active', 'user_status', 'user_category', 'user_group', 'user_type', 'category', 'group', 'type',
-        'creator_id', 'parent_id', 'p_id', 'superior_id',
+        'creator_id', 'parent_id', 'p_id',
         'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
         'mobile', 'telephone', 'email', 'password',
         'wx_unionid',
+        'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id', 'superior_id',
         'district_category', 'district_type', 'district_id',
         'introduction_id', 'advertising_id',
         'QQ_number',
@@ -69,12 +70,12 @@ class DK_User extends Authenticatable
     }
 
 
-    // 上级
+    // 上级领导
     function superior()
     {
         return $this->belongsTo('App\Models\DK\DK_User','superior_id','id');
     }
-    // 下级
+    // 属下员工
     function subordinate_er()
     {
         return $this->hasMany('App\Models\DK\DK_User','superior_id','id');
@@ -90,6 +91,18 @@ class DK_User extends Authenticatable
             'id',
             'id'
         );
+    }
+
+
+    // 部门-大区
+    function department_district_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Department','department_district_id','id');
+    }
+    // 部门-小组
+    function department_group_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Department','department_group_id','id');
     }
 
 

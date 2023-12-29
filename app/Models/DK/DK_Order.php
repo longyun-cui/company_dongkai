@@ -20,7 +20,7 @@ class DK_Order extends Model
         'item_id', 'menu_id',
         'order_category', 'order_type',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'project_id',
+        'project_id', 'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id',
         'assign_time',
         'client_name', 'client_phone',
         'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id', 'is_repeat',
@@ -86,6 +86,29 @@ class DK_Order extends Model
         return $this->belongsTo('App\Models\DK\DK_Project','project_id','id');
     }
 
+    // 大区经理
+    function department_manager_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_User','department_manager_id','id');
+    }
+
+    // 小组主管
+    function department_supervisor_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_User','department_supervisor_id','id');
+    }
+
+    // 部门-大区
+    function department_district_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Department','department_district_id','id');
+    }
+
+    // 部门-大区
+    function department_group_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Department','department_group_id','id');
+    }
 
 
 

@@ -114,6 +114,79 @@ class DKAdminController extends Controller
 
 
     /*
+     * 部门管理
+     */
+    // 【用户】SELECT2 Leader 负责人
+    public function operate_department_select2_leader()
+    {
+        return $this->repo->operate_department_select2_leader(request()->all());
+    }
+    // 【用户】SELECT2 Superior 上级部门
+    public function operate_department_select2_superior_department()
+    {
+        return $this->repo->operate_department_select2_superior_department(request()->all());
+    }
+
+
+    // 【部门管理】添加
+    public function operate_department_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_department_save(request()->all());
+    }
+    // 【部门管理】编辑
+    public function operate_department_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_department_save(request()->all());
+    }
+
+
+    // 【部门管理】删除
+    public function operate_department_admin_delete()
+    {
+        return $this->repo->operate_department_admin_delete(request()->all());
+    }
+    // 【部门管理】恢复
+    public function operate_department_admin_restore()
+    {
+        return $this->repo->operate_department_admin_restore(request()->all());
+    }
+    // 【部门管理】永久删除
+    public function operate_department_admin_delete_permanently()
+    {
+        return $this->repo->operate_item_project_admin_delete_permanently(request()->all());
+    }
+
+    // 【部门管理】启用
+    public function operate_department_admin_enable()
+    {
+        return $this->repo->operate_item_project_admin_enable(request()->all());
+    }
+    // 【部门管理】禁用
+    public function operate_department_admin_disable()
+    {
+        return $this->repo->operate_item_project_admin_disable(request()->all());
+    }
+
+
+    // 【部门管理】返回-列表-视图（全部任务）
+    public function view_department_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_department_list_for_all_datatable(request()->all());
+    }
+    // 【部门管理】【修改记录】返回-列表-视图（全部任务）
+    public function view_department_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_department_modify_record_datatable(request()->all());
+    }
+
+
+
+
+    /*
      * USER-STAFF 用户-员工管理
      *
      */
@@ -128,6 +201,15 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_user_select2_superior(request()->all());
     }
+
+    // 【用户】SELECT2 Superior 上级
+    public function operate_user_select2_department()
+    {
+        return $this->repo->operate_user_select2_department(request()->all());
+    }
+
+
+
 
     // 【用户-员工管理】添加
     public function operate_user_staff_create()

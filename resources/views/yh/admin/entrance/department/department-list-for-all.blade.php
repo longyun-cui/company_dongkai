@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '项目列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '部门列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')项目列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')部门列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -20,14 +20,14 @@
 
             <div class="box-header with-border" style="margin:16px 0;">
 
-                <h3 class="box-title">{{ $title_text or '项目列表' }}</h3>
+                <h3 class="box-title">{{ $title_text or '部门列表' }}</h3>
 
                 @if(in_array($me->user_type,[0,1,9,11,19]))
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/project-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加项目</button>
+                    <a href="{{ url('/department/department-create') }}">
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加部门</button>
                     </a>
                 </div>
                 @endif
@@ -40,7 +40,7 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="project-title" placeholder="名称" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="department-title" placeholder="名称" />
 
                         {{--<select class="form-control form-filter" name="owner" style="width:96px;">--}}
                             {{--<option value ="-1">选择员工</option>--}}
@@ -57,11 +57,11 @@
 {{--                            <option value ="19">非工作状态</option>--}}
 {{--                        </select>--}}
 
-{{--                        <select class="form-control form-filter" name="project-type" style="width:96px;">--}}
-{{--                            <option value ="-1">全部</option>--}}
-{{--                            <option value ="1">车辆</option>--}}
-{{--                            <option value ="21">车挂</option>--}}
-{{--                        </select>--}}
+                        <select class="form-control form-filter" name="department-type" style="width:96px;">
+                            <option value ="-1">全部</option>
+                            <option value ="11">大区</option>
+                            <option value ="21">组</option>
+                        </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
@@ -593,17 +593,17 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/item/project-list-for-all') }}",
+                    'url': "{{ url('/department/department-list-for-all') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="project-id"]').val();
-                        d.name = $('input[name="project-name"]').val();
-                        d.title = $('input[name="project-title"]').val();
-                        d.keyword = $('input[name="project-keyword"]').val();
-                        d.status = $('select[name="project-status"]').val();
-                        d.car_type = $('select[name="project-type"]').val();
+                        d.id = $('input[name="department-id"]').val();
+                        d.name = $('input[name="department-name"]').val();
+                        d.title = $('input[name="department-title"]').val();
+                        d.keyword = $('input[name="department-keyword"]').val();
+                        d.status = $('select[name="department-status"]').val();
+                        d.department_type = $('select[name="department-type"]').val();
                         d.work_status = $('select[name="work_status"]').val();
                     },
                 },
@@ -737,8 +737,20 @@
                         }
                     },
                     {
-                        "title": "项目名称",
-                        "data": "title",
+                        "title": "部门名称",
+                        "data": 'department_type',
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
+                            else if(data == 11) return '<small class="btn-xs bg-primary">大区</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-purple">小组</small>';
+                            else return "有误";
+                        }
+                    },
+                    {
+                        "title": "部门名称",
+                        "data": "name",
                         "className": "text-center",
                         "width": "120px",
                         "orderable": false,
@@ -746,41 +758,37 @@
                             return data;
                         }
                     },
-                    // {
-                    //     "className": "text-center",
-                    //     "width": "240px",
-                    //     "title": "质检员",
-                    //     "data": "user_id",
-                    //     "orderable": false,
-                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                    //     },
-                    //     render: function(data, type, row, meta) {
-                    //         if(row.inspector_er == null) return '--';
-                    //         else return '<a href="javascript:void(0);">'+row.inspector_er.username+' </a>';
-                    //     }
-                    // },
                     {
-                        "title": "质检员",
-                        "data": "pivot_project_user",
-                        "className": "text-center",
-                        "width": "240px",
+                        "title": "上级部门",
+                        "data": "superior_department_id",
+                        "className": "text-left",
+                        "width":"100px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        },
                         render: function(data, type, row, meta) {
-                            var html = '';
-                            $.each(data,function( key, val ) {
-//                                console.log( key, val, this );
-                                html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
-                            });
-                            return html;
+                            if(row.superior_department_er) {
+                                return '<a href="javascript:void(0);">'+row.superior_department_er.name+'</a>';
+                            }
+                            else return '--';
                         }
                     },
                     {
                         "className": "text-center",
-                        "width": "",
+                        "width": "240px",
+                        "title": "负责人",
+                        "data": "leader_id",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.leader == null) return '--';
+                            else return '<a href="javascript:void(0);">'+row.leader.true_name+' </a>';
+                        }
+                    },
+                    {
                         "title": "备注",
                         "data": "remark",
+                        "className": "text-center",
+                        "width": "",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1323,5 +1331,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_YH_ADMIN').'entrance.item.project-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.department.department-script')
 @endsection

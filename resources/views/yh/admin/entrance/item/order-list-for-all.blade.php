@@ -640,7 +640,8 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { width:100% !important; min-width:1380px; }
+    .tableArea table { min-width:1380px; }
+    /*.tableArea table { width:100% !important; min-width:1380px; }*/
     /*.tableArea table tr th, .tableArea table tr td { white-space:nowrap; }*/
 
     .datatable-search-row .input-group .date-picker-btn { width:30px; }
@@ -1073,28 +1074,6 @@
                         }
                     },
                     {
-                        "title": "团队大区",
-                        "data": "team_district",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','团队大区');
-                                $(nTd).attr('data-key','team_district').attr('data-value',data);
-                                $(nTd).attr('data-column-name','团队大区');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '--';
-                            return data;
-                        }
-                    },
-                    {
                         "title": "渠道来源",
                         "data": "channel_source",
                         "className": "",
@@ -1163,6 +1142,73 @@
                             // return data;
                            if(data) return '<small class="btn-xs bg-yellow">双击查看</small>';
                            else return '';
+                        }
+                    },
+                    {
+                        "title": "部门",
+                        "data": "department_district_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','团队大区');
+                                $(nTd).attr('data-key','team_district').attr('data-value',data);
+                                $(nTd).attr('data-column-name','团队大区');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '--';
+
+                            var $district = row.department_district_er == null ? '' : row.department_district_er.name;
+                            var $group = row.department_group_er == null ? '' : ' - ' + row.department_group_er.name;
+                            return '<a href="javascript:void(0);">'+$district + $group+'</a>';
+                        }
+                    },
+                    {
+                        "title": "部门经理",
+                        "data": "department_manager_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','团队大区');
+                                $(nTd).attr('data-key','department_manager_id').attr('data-value',data);
+                                $(nTd).attr('data-column-name','团队大区');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return row.department_manager_er == null ? '--' : '<a href="javascript:void(0);">'+row.department_manager_er.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "title": "部门经理",
+                        "data": "department_supervisor_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','部门经理');
+                                $(nTd).attr('data-key','department_supervisor_id').attr('data-value',data);
+                                $(nTd).attr('data-column-name','部门经理');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return row.department_supervisor_er == null ? '--' : '<a href="javascript:void(0);">'+row.department_supervisor_er.true_name+'</a>';
                         }
                     },
                     {

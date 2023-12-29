@@ -1,19 +1,21 @@
 <?php
 namespace App\Repositories\DK;
 
-use App\Models\DK\DK_Pivot_User_Project;
+use App\Models\DK\DK_Department;
 use App\Models\DK\DK_User;
 use App\Models\DK\YH_UserExt;
+use App\Models\DK\DK_Project;
+use App\Models\DK\DK_Pivot_User_Project;
+use App\Models\DK\DK_Order;
+use App\Models\DK\DK_Record;
+
 use App\Models\DK\YH_Driver;
 use App\Models\DK\YH_Client;
-use App\Models\DK\DK_Project;
 use App\Models\DK\YH_Route;
 use App\Models\DK\YH_Pricing;
-use App\Models\DK\DK_Order;
 use App\Models\DK\YH_Circle;
 use App\Models\DK\YH_Attachment;
 use App\Models\DK\YH_Finance;
-use App\Models\DK\DK_Record;
 use App\Models\DK\YH_Item;
 use App\Models\DK\YH_Task;
 use App\Models\DK\YH_Pivot_Circle_Order;
@@ -437,6 +439,635 @@ class DKAdminRepository {
 
 
 
+
+
+
+
+
+
+
+    /*
+     * 部门管理
+     */
+
+
+    //
+    public function operate_department_select2_leader($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $query =DK_User::select(['id','true_name as text'])
+                ->where(['user_status'=>1]);
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query =DK_User::select(['id','true_name as text'])->where('username','like',"%$keyword%")
+                ->where(['user_status'=>1]);
+        }
+
+        if(!empty($post_data['type']))
+        {
+            $type = $post_data['type'];
+            if($type == 'manager') $query->where(['user_type'=>81]);
+            else if($type == 'supervisor') $query->where(['user_type'=>84]);
+            else $query->where(['user_type'=>81]);
+        }
+        else $query->where(['user_type'=>81]);
+
+        $list = $query->orderBy('id','desc')->get()->toArray();
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        return $list;
+    }
+    //
+    public function operate_department_select2_superior_department($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $query =DK_Department::select(['id','name as text'])
+                ->where(['item_status'=>1]);
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query =DK_Department::select(['id','name as text'])->where('name','like',"%$keyword%")
+                ->where(['item_status'=>1]);
+        }
+
+        if(!empty($post_data['type']))
+        {
+            $type = $post_data['type'];
+            if($type == 'district') $query->where(['department_type'=>11]);
+            else if($type == 'group') $query->where(['department_type'=>21]);
+            else $query->where(['department_type'=>11]);
+        }
+        else $query->where(['department_type'=>11]);
+
+        $list = $query->orderBy('id','desc')->get()->toArray();
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        return $list;
+    }
+
+
+    // 【部门管理】返回-添加-视图
+    public function view_department_create()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+
+        $item_type = 'item';
+        $item_type_text = '部门';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/department/department-list-for-all';
+
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.department.department-edit';
+        return view($view_blade)->with([
+            'operate'=>'create',
+            'operate_id'=>0,
+            'category'=>'item',
+            'type'=>$item_type,
+            'item_type_text'=>$item_type_text,
+            'title_text'=>$title_text,
+            'list_text'=>$list_text,
+            'list_link'=>$list_link,
+        ]);
+    }
+    // 【部门管理】返回-编辑-视图
+    public function view_department_edit()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+
+        $id = request("id",0);
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.department.department-edit';
+
+        $item_type = 'item';
+        $item_type_text = '部门';
+        $title_text = '编辑'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/department/department-list-for-all';
+
+        if($id == 0)
+        {
+            return view($view_blade)->with([
+                'operate'=>'create',
+                'operate_id'=>0,
+                'category'=>'item',
+                'type'=>$item_type,
+                'item_type_text'=>$item_type_text,
+                'title_text'=>$title_text,
+                'list_text'=>$list_text,
+                'list_link'=>$list_link,
+            ]);
+        }
+        else
+        {
+            $mine = DK_Department::with('leader')->find($id);
+            if($mine)
+            {
+//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+                $mine->custom = json_decode($mine->custom);
+                $mine->custom2 = json_decode($mine->custom2);
+                $mine->custom3 = json_decode($mine->custom3);
+
+                return view($view_blade)->with([
+                    'operate'=>'edit',
+                    'operate_id'=>$id,
+                    'data'=>$mine,
+                    'category'=>'item',
+                    'type'=>$item_type,
+                    'item_type_text'=>$item_type_text,
+                    'title_text'=>$title_text,
+                    'list_text'=>$list_text,
+                    'list_link'=>$list_link,
+                ]);
+            }
+            else return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+        }
+    }
+    // 【部门管理】保存数据
+    public function operate_department_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'name.required' => '请输入部门名称！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'name' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_Department::select('id')->where('name',$post_data["name"])->count();
+            if($is_exist) return response_error([],"该【项目】已存在，请勿重复添加！");
+
+            $mine = new DK_Department;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = DK_Department::find($operate_id);
+            if(!$mine) return response_error([],"该【部门】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['category']);
+            unset($mine_data['type']);
+
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("insert--car--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【部门管理】管理员-删除
+    public function operate_department_admin_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'department-admin-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_Project::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("car--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【部门管理】管理员-恢复
+    public function operate_department_admin_restore($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'operate.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'department-admin-restore') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_Project::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->restore();
+            if(!$bool) throw new Exception("car--restore--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【部门管理】管理员-彻底删除
+    public function operate_department_admin_delete_permanently($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'department-admin-delete-permanently') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_Project::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item_copy = $item;
+
+            $bool = $item->forceDelete();
+            if(!$bool) throw new Exception("car--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【部门管理】管理员-启用
+    public function operate_department_admin_enable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'department-admin-enable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_Project::find($id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 1;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--car--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【部门管理】管理员-禁用
+    public function operate_department_admin_disable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'department-admin-disable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_Project::find($id);
+        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 9;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--car--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【部门管理】返回-列表-视图
+    public function view_department_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_department_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.department.department-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【部门管理】返回-列表-数据
+    public function get_department_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_Department::select('*')
+            ->withTrashed()
+            ->with(['creator','leader','superior_department_er']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        // 部门类型 [大区|组]
+        if(!empty($post_data['department_type']))
+        {
+            if(!in_array($post_data['department_type'],[-1,0]))
+            {
+                $query->where('item_type', $post_data['department_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【部门管理】【修改记录】返回-列表-视图
+    public function view_department_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_car_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.car-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【部门管理】【修改记录】返回-列表-数据
+    public function get_department_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Record::select('*')
+            ->with(['creator','before_driver_er','after_driver_er'])
+            ->where(['operate_object'=>41,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     /*
      * 用户系统
      */
@@ -540,6 +1171,39 @@ class DKAdminRepository {
         array_unshift($list,$unSpecified);
         return $list;
     }
+    //
+    public function operate_user_select2_department($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $query =DK_Department::select(['id','name as text'])
+                ->where(['item_status'=>1]);
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query =DK_Department::select(['id','name as text'])->where('name','like',"%$keyword%")
+                ->where(['item_status'=>1]);
+        }
+
+        if(!empty($post_data['type']))
+        {
+            $type = $post_data['type'];
+            if($type == 'district') $query->where(['department_type'=>11]);
+            else if($type == 'group')
+            {
+                $id = $post_data['superior_id'];
+                $query->where(['department_type'=>21,'superior_department_id'=>$id]);
+            }
+        }
+        else $query->where(['department_type'=>11]);
+
+        $list = $query->orderBy('id','desc')->get()->toArray();
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        return $list;
+    }
+
 
     // 【用户-员工管理】返回-添加-视图
     public function view_user_staff_create()
@@ -656,6 +1320,7 @@ class DKAdminRepository {
         }
         else return response_error([],"参数有误！");
 
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -671,6 +1336,17 @@ class DKAdminRepository {
             unset($mine_data['operate_id']);
             unset($mine_data['category']);
             unset($mine_data['type']);
+
+            if($post_data["user_type"] == 71 || $post_data["user_type"] == 77)
+            {
+                unset($mine_data['department_district_id']);
+                unset($mine_data['department_group_id']);
+            }
+            else if($post_data["user_type"] == 81)
+            {
+                unset($mine_data['department_group_id']);
+            }
+
 
             $bool = $mine->fill($mine_data)->save();
             if($bool)
@@ -1158,7 +1834,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $query = DK_User::select('*')
-            ->with(['creator','superior'])
+            ->with(['creator','superior','department_district_er','department_group_er'])
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,42,61,71,77,81,82,84,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -3797,40 +4473,7 @@ class DKAdminRepository {
 
         $query = DK_Project::select('*')
             ->withTrashed()
-//            ->withCount([
-//                'car_order_list as car_on_the_road'=>function($query) {
-//                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                },
-//                'trailer_order_list as trailer_on_the_road'=>function($query) {
-//                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                },
-//                'car_order_list as car_future'=>function($query) {
-//                    $query->whereNull('actual_departure_time');
-//                },
-//                'trailer_order_list as trailer_future'=>function($query) {
-//                    $query->whereNull('actual_departure_time');
-//                }
-//            ])
-            ->with(['creator','inspector_er','pivot_project_user',
-//                'car_order_list_for_current'=>function($query) {
-//                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','asc')->limit(1);
-//                },
-//                'trailer_order_list_for_current'=>function($query) {
-//                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','asc')->limit(1);
-//                },
-//                'car_order_list_for_completed'=>function($query) {
-//                    $query->whereNotNull('actual_arrival_time')->orderby('actual_arrival_time','desc')->limit(1);
-//                },
-//                'trailer_order_list_for_completed'=>function($query) {
-//                    $query->whereNotNull('actual_arrival_time')->orderby('actual_arrival_time','desc')->limit(1);
-//                },
-//                'car_order_list_for_future'=>function($query) {
-//                    $query->whereNull('actual_departure_time')->orderby('actual_departure_time','asc');
-//                },
-//                'trailer_order_list_for_future'=>function($query) {
-//                    $query->whereNull('actual_departure_time')->orderby('actual_departure_time','asc');
-//                }
-            ]);
+            ->with(['creator','inspector_er','pivot_project_user']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -3844,68 +4487,6 @@ class DKAdminRepository {
                 $query->where('item_type', $post_data['car_type']);
             }
         }
-
-
-//        if(!empty($post_data['work_status']) || $post_data['work_status'] == 0)
-//        {
-//            $work_status = $post_data['work_status'];
-//            if(in_array($work_status,[-1,0,1,9,19]))
-//            {
-//                if($work_status == 0)
-//                {
-//                    $query->whereDoesntHave('car_order_list_for_current', function ($query) {
-//                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                        })
-//                        ->whereDoesntHave('trailer_order_list_for_current', function ($query) {
-//                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                        })
-//                        ->whereDoesntHave('car_order_list_for_future', function ($query) {
-//                            $query->whereNull('actual_departure_time');
-//                        })
-//                        ->whereDoesntHave('trailer_order_list_for_future', function ($query) {
-//                            $query->whereNull('actual_departure_time');
-//                        });
-//                }
-//                else if($work_status == 1)
-//                {
-//                    $query->whereHas('car_order_list_for_current', function ($query) {
-//                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                        })
-//                        ->orWhereHas('trailer_order_list_for_current', function ($query) {
-//                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                        });
-//                }
-//                else if($work_status == 9)
-//                {
-//                    $query->where(function ($query) {
-//                            $query->whereDoesntHave('car_order_list_for_current', function ($query) {
-//                                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                                })
-//                                ->whereDoesntHave('trailer_order_list_for_current', function ($query) {
-//                                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                                });
-//                        })
-//                        ->where(function ($query) {
-//                            $query->whereHas('car_order_list_for_future', function ($query) {
-//                                    $query->whereNull('actual_departure_time');
-//                                })
-//                                ->orWhereHas('trailer_order_list_for_future', function ($query) {
-//                                    $query->whereNull('actual_departure_time');
-//                                });
-//                        });
-//                }
-//                else if($work_status == 19)
-//                {
-//                    $query->whereDoesntHave('car_order_list_for_current', function ($query) {
-//                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                        })
-//                        ->whereDoesntHave('trailer_order_list_for_current', function ($query) {
-//                            $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-//                        });
-//                }
-//            }
-//        }
-
 
         $total = $query->count();
 
@@ -3929,84 +4510,6 @@ class DKAdminRepository {
         else $list = $query->skip($skip)->take($limit)->get();
 //        dd($list->toArray());
 
-//        foreach ($list as $k => $v)
-//        {
-////            $list[$k]->encode_id = encode($v->id);
-//
-//            $list[$k]->work_status = 0;
-//            $list[$k]->current_place = '--';
-//            $list[$k]->future_place = '--';
-//            $list[$k]->future_time = 0;
-//
-//            // 车辆类型 牵引车 || 车挂
-//            if($v->item_type == 1)
-//            {
-//                $mine_on_the_road = $v->car_on_the_road;
-//                $mine_future = $v->car_future;
-//                $mine_order_list_for_current = $v->car_order_list_for_current;
-//                $mine_order_list_for_completed = $v->car_order_list_for_completed;
-//                $mine_order_list_for_future = $v->car_order_list_for_future;
-//            }
-//            else if($v->item_type == 21)
-//            {
-//                $mine_on_the_road = $v->trailer_on_the_road;
-//                $mine_future = $v->trailer_future;
-//                $mine_order_list_for_current = $v->trailer_order_list_for_current;
-//                $mine_order_list_for_completed = $v->trailer_order_list_for_completed;
-//                $mine_order_list_for_future = $v->trailer_order_list_for_future;
-//            }
-//
-////            if(count($v->car_order_list) || count($v->trailer_order_list)) $list[$k]->work_status = 1;
-//            if($mine_on_the_road)
-//            {
-//                $list[$k]->work_status = 1;  // 工作中
-//                // 未来位置
-//                if(count($mine_order_list_for_current) > 0)
-//                {
-//                    $list[$k]->future_place = $mine_order_list_for_current[0]->destination_place;
-//                    $list[$k]->future_time = $mine_order_list_for_current[0]->should_arrival_time;
-//                }
-//            }
-//            else
-//            {
-//                if($mine_future)
-//                {
-//                    $list[$k]->work_status = 9;  // 待发车
-//                    // 当前位置
-//                    if(count($mine_order_list_for_completed) > 0)
-//                    {
-//                        $list[$k]->current_place = $mine_order_list_for_completed[0]->destination_place;
-//
-//                        if(count($mine_order_list_for_future) > 0)
-//                        {
-//                            $list[$k]->future_place = $mine_order_list_for_future[0]->destination_place;
-//                            $list[$k]->future_time = $mine_order_list_for_future[0]->should_arrival_time;
-//                        }
-//                    }
-//                    else
-//                    {
-//                        if(count($mine_order_list_for_future) > 0)
-//                        {
-//                            $list[$k]->current_place = $mine_order_list_for_future[0]->departure_place;
-//                            $list[$k]->future_place = $mine_order_list_for_future[0]->destination_place;
-//                            $list[$k]->future_time = $mine_order_list_for_future[0]->should_arrival_time;
-//                        }
-//                    }
-//                }
-//                else
-//                {
-//                    $list[$k]->work_status = 0;  // 空闲中
-//                    // 当前位置
-//                    if(count($v->car_order_completed_list) > 0)
-//                    {
-//                        $list[$k]->current_place = $v->car_order_completed_list[0]->destination_place;
-//                    }
-//                }
-//
-//            }
-//
-//        }
-//        dd($list->toArray());
         return datatable_response($list, $draw, $total);
     }
 
@@ -4849,6 +5352,7 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
+        $me->load(['department_district_er','department_group_er']);
 
         $operate = $post_data["operate"];
         $operate_id = $post_data["operate_id"];
@@ -4902,6 +5406,10 @@ class DKAdminRepository {
 
 
             $mine_data = $post_data;
+            $mine_data['department_district_id'] = $me->department_district_id;
+            $mine_data['department_group_id'] = $me->department_group_id;
+            if($me->department_district_er) $mine_data['department_manager_id'] = $me->department_district_er->leader_id;
+            if($me->department_group_er) $mine_data['department_supervisor_id'] = $me->department_group_er->leader_id;
 
             unset($mine_data['operate']);
             unset($mine_data['operate_id']);
@@ -6638,7 +7146,10 @@ class DKAdminRepository {
 
         $query = DK_Order::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with(['creator','owner','inspector','project_er']);
+            ->with(['creator','owner','inspector',
+                'project_er',
+                'department_district_er','department_group_er',
+                'department_manager_er','department_supervisor_er']);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )

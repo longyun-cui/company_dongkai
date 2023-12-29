@@ -58,38 +58,6 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 71))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            @if($operate == 'edit' && $data->user_type == 71)
-                                                <input type="radio" name="user_type" value="71" checked="checked"> 质检经理
-                                            @else
-                                                <input type="radio" name="user_type" value="71" checked="checked"> 质检经理
-                                            @endif
-                                        </label>
-                                    </span>
-                                </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11]))
-                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 77))
-                                    <button type="button" class="btn">
-                                        <span class="radio">
-                                            <label>
-                                                @if($operate == 'edit' && $data->user_type == 77)
-                                                    <input type="radio" name="user_type" value="77" checked="checked"> 质检员
-                                                @else
-                                                    <input type="radio" name="user_type" value="77"> 质检员
-                                                @endif
-                                            </label>
-                                        </span>
-                                    </button>
-                                @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 81))
                                 <button type="button" class="btn">
                                     <span class="radio">
@@ -97,7 +65,7 @@
                                             @if($operate == 'edit' && $data->user_type == 81)
                                                 <input type="radio" name="user_type" value="81" checked="checked"> 客服经理
                                             @else
-                                                <input type="radio" name="user_type" value="81"> 客服经理
+                                                <input type="radio" name="user_type" value="81" checked="checked"> 客服经理
                                             @endif
                                         </label>
                                     </span>
@@ -137,17 +105,77 @@
                             @endif
                             @endif
 
+                            @if(in_array($me->user_type, [0,1,11]))
+                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 71))
+                                    <button type="button" class="btn">
+                                        <span class="radio">
+                                            <label>
+                                                @if($operate == 'edit' && $data->user_type == 71)
+                                                    <input type="radio" name="user_type" value="71" checked="checked"> 质检经理
+                                                @else
+                                                    <input type="radio" name="user_type" value="71"> 质检经理
+                                                @endif
+                                            </label>
+                                        </span>
+                                    </button>
+                                @endif
+                            @endif
+
+                            @if(in_array($me->user_type, [0,1,11]))
+                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 77))
+                                    <button type="button" class="btn">
+                                        <span class="radio">
+                                            <label>
+                                                @if($operate == 'edit' && $data->user_type == 77)
+                                                    <input type="radio" name="user_type" value="77" checked="checked"> 质检员
+                                                @else
+                                                    <input type="radio" name="user_type" value="77"> 质检员
+                                                @endif
+                                            </label>
+                                        </span>
+                                    </button>
+                                @endif
+                            @endif
+
                         </div>
                     </div>
                 </div>
 
                 {{--上级--}}
-                <div class="form-group superior-box">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 上级</label>
+{{--                <div class="form-group superior-box">--}}
+{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 上级</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control" name="superior_id" id="select2-superior" data-type="">--}}
+{{--                            @if($operate == 'edit' && $data->superior_id)--}}
+{{--                                <option data-id="{{ $data->superior_id or 0 }}" value="{{ $data->superior_id or 0 }}">{{ $data->superior->true_name }}</option>--}}
+{{--                            @else--}}
+{{--                                <option data-id="0" value="0">未指定</option>--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+
+                {{--部门-大区--}}
+                <div class="form-group department-box department-district-box">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 大区</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="superior_id" id="select2-superior" data-type="">
-                            @if($operate == 'edit' && $data->superior_id)
-                                <option data-id="{{ $data->superior_id or 0 }}" value="{{ $data->superior_id or 0 }}">{{ $data->superior->true_name }}</option>
+                        <select class="form-control" name="department_district_id" id="select2-department-district" data-type="">
+                            @if($operate == 'edit' && $data->department_district_id)
+                                <option data-id="{{ $data->department_district_id or 0 }}" value="{{ $data->department_district_id or 0 }}">{{ $data->department_district_er->name }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
+
+                {{--部门-小组--}}
+                <div class="form-group department-box department-group-box">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 小组</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="department_group_id" id="select2-department-group" data-type="">
+                            @if($operate == 'edit' && $data->department_group_id)
+                                <option data-id="{{ $data->department_group_id or 0 }}" value="{{ $data->department_group_id or 0 }}">{{ $data->department_group_er->name }}</option>
                             @else
                                 <option data-id="0" value="0">未指定</option>
                             @endif
@@ -300,8 +328,8 @@
         });
 
 
-        // 【选择车辆所属】
-        $("#form-edit-item").on('click', "input[name=user_type]", function() {
+        // 【选择用户类型】
+        $("#form-edit-item").on('click', "input[name=user_type-]", function() {
             // checkbox
 //            if($(this).is(':checked'))
 //            {
@@ -435,6 +463,111 @@
         console.log($('#select2-superior').prop('data-type'));
         console.log($("input[name=user_type]").val())
         console.log($("#select2-superior").find('option:checked').val());
+
+
+
+
+
+
+        // 【选择用户类型】
+        $("#form-edit-item").on('click', "input[name=user_type]", function() {
+
+            // radio
+            var $value = $(this).val();
+            if($value == 81 || $value == 84 || $value == 88)
+            {
+                $('.department-box').show();
+
+                if($value == 81)
+                {
+                    $('.department-group-box').hide();
+                }
+                else if($value == 84)
+                {
+                    $('.department-group-box').show();
+                }
+                else if($value == 88)
+                {
+                    $('.department-group-box').show();
+                }
+            }
+            else
+            {
+                $('.department-box').hide();
+            }
+        });
+
+
+        //
+        $('#select2-department-district').select2({
+            ajax: {
+                url: "{{ url('/user/user_select2_department?type=district') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+        $("#select2-department-district").on("select2:select",function(){
+            var $id = $(this).val();
+            if($id > 0)
+            {
+                //
+                //得到select标签对象,Jquery写法
+                var $select = $('#select2-department-group')[0];
+                $select.length = 0;
+                $('#select2-department-group').select2({
+                    ajax: {
+                        url: "{{ url('/user/user_select2_department?type=group') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                keyword: params.term, // search term
+                                page: params.page,
+                                superior_id: $id
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+            }
+        });
+
+
+
+
 
     });
 </script>

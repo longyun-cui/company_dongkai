@@ -83,17 +83,17 @@
                 </div>
 
                 {{--团队大区--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">团队大区</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="team_district" id="">
-                            <option value="">选择大区</option>
-                            @foreach(config('info.team_district') as $v)
-                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->team_district) selected="selected" @endif>{{ $v }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">团队大区</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control" name="team_district" id="">--}}
+{{--                            <option value="">选择大区</option>--}}
+{{--                            @foreach(config('info.team_district') as $v)--}}
+{{--                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->team_district) selected="selected" @endif>{{ $v }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
                 {{--渠道来源--}}
                 <div class="form-group">
@@ -123,9 +123,6 @@
                         <div class="col-sm-6 col-md-6 padding-0">
                             <select class="form-control" name="location_district" id="select-district">
                                 <option value="">所在区域</option>
-                                @foreach(config('info.location_city') as $k => $v)
-                                    <option value ="{{ $k }}" @if($operate == 'edit' && $k == $data->location_city) selected="selected" @endif>{{ $k }}</option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -358,6 +355,8 @@
             minimumInputLength: 0,
             theme: 'classic'
         });
+
+
 
 
 

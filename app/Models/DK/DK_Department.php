@@ -3,19 +3,20 @@ namespace App\Models\DK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Project extends Model
+class DK_Department extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_project";
+    protected $table = "dk_department";
     protected $fillable = [
-        'active', 'status', 'item_active', 'item_status', 'item_category', 'item_type', 'category', 'type', 'sort',
+        'active', 'status', 'category', 'type', 'sort', 'item_active', 'item_status', 'item_category', 'item_type',
+        'department_active', 'department_status', 'department_category', 'department_type',
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
         'item_id', 'menu_id',
+        'leader_id', 'superior_department_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'inspector_id',
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
@@ -64,16 +65,29 @@ class DK_Project extends Model
 
 
 
-    // 【一对一】审核员
-    function inspector_er()
+    // 【一对多】下级部门
+    function subordinate_department_list()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
+        return $this->hasMany('App\Models\DK\DK_Department','superior_department_id','id');
+    }
+
+    // 【反向一对多】上级部门
+    function superior_department_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Department','superior_department_id','id');
+    }
+
+
+    // 【一对一】负责人
+    function leader()
+    {
+        return $this->belongsTo('App\Models\DK\DK_User','leader_id','id');
     }
 
     // 【多对多】审核人关联的项目
-    function pivot_project_user()
+    function pivot_department_user()
     {
-        return $this->belongsToMany('App\Models\DK\DK_User','dk_pivot_user_project','project_id','user_id');
+        return $this->belongsToMany('App\Models\DK\DK_User','dk_pivot_user_department','department_id','user_id');
 //            ->wherePivot('relation_type', 1);
 //            ->withTimestamps();
     }

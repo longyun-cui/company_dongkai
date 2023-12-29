@@ -309,6 +309,32 @@
                         }
                     },
                     {
+                        "title": "大区",
+                        "data": "department_district_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.department_district_er) {
+                                return '<a href="javascript:void(0);">'+row.department_district_er.name+'</a>';
+                            }
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "小组",
+                        "data": "department_group_id",
+                        "className": "",
+                        "width":"80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.department_group_er) {
+                                return '<a href="javascript:void(0);">'+row.department_group_er.name+'</a>';
+                            }
+                            else return '--';
+                        }
+                    },
+                    {
                         "title": "登录手机",
                         "data": "mobile",
                         "className": "",
@@ -318,7 +344,7 @@
                             return data;
                         }
                     },
-                   {
+                    {
                        "title": "上级",
                        "data": "id",
                        "className": "text-left",
@@ -330,7 +356,7 @@
                            }
                            else return '--';
                        }
-                   },
+                    },
                     {
                         "title": "备注",
                         "data": "remark",

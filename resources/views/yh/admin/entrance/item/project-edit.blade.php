@@ -51,9 +51,9 @@
 {{--                        <div class="form-group">--}}
 {{--                            <label class="control-label col-md-2">选择质检员</label>--}}
 {{--                            <div class="col-md-8 ">--}}
-{{--                                <select class="form-control" name="user_id" id="select2-inspector">--}}
-{{--                                    @if($operate == 'edit' && $data->user_id)--}}
-{{--                                        <option data-id="{{ $data->user_id or 0 }}" value="{{ $data->user_id or 0 }}">{{ $data->inspector_er->username }}</option>--}}
+{{--                                <select class="form-control" name="inspector_id" id="select2-inspector">--}}
+{{--                                    @if($operate == 'edit' && $data->inspector_id)--}}
+{{--                                        <option data-id="{{ $data->inspector_id or 0 }}" value="{{ $data->inspector_id or 0 }}">{{ $data->inspector_er->username }}</option>--}}
 {{--                                    @else--}}
 {{--                                        <option data-id="0" value="0">未指定</option>--}}
 {{--                                    @endif--}}

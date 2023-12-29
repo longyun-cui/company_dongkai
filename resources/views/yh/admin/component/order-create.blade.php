@@ -46,17 +46,17 @@
         </div>
     </div>
     {{--团队大区--}}
-    <div class="form-group">
-        <label class="control-label col-md-2">团队大区</label>
-        <div class="col-md-8 ">
-            <select class="form-control" name="team_district" id="">
-                <option value="">选择大区</option>
-                @foreach(config('info.team_district') as $v)
-                    <option value ="{{ $v }}">{{ $v }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
+{{--    <div class="form-group">--}}
+{{--        <label class="control-label col-md-2">团队大区</label>--}}
+{{--        <div class="col-md-8 ">--}}
+{{--            <select class="form-control" name="team_district" id="">--}}
+{{--                <option value="">选择大区</option>--}}
+{{--                @foreach(config('info.team_district') as $v)--}}
+{{--                    <option value ="{{ $v }}">{{ $v }}</option>--}}
+{{--                @endforeach--}}
+{{--            </select>--}}
+{{--        </div>--}}
+{{--    </div>--}}
     {{--渠道来源--}}
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道来源</label>

@@ -111,7 +111,12 @@
 
                 $("#select-district").append('<option value="' + $val + '">' + $val + '</option>');
             });
+
+            $('#select-district').select2();
         });
+
+        $('#select-city').select2();
+        $('#select-district').select2();
 
 
     });

@@ -36,11 +36,39 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
     /*
+     * 部门管理
+     */
+    Route::match(['get','post'], '/department/department_select2_leader', $controller.'@operate_department_select2_leader');
+    Route::match(['get','post'], '/department/department_select2_superior_department', $controller.'@operate_department_select2_superior_department');
+    // 创建 & 修改
+    Route::match(['get','post'], '/department/department-create', $controller.'@operate_department_create');
+    Route::match(['get','post'], '/department/department-edit', $controller.'@operate_department_edit');
+
+    // 删除 & 恢复
+    Route::post('/department/department-admin-delete', $controller.'@operate_department_admin_delete');
+    Route::post('/department/department-admin-restore', $controller.'@operate_department_admin_restore');
+    Route::post('/department/department-admin-delete-permanently', $controller.'@operate_department_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/department/department-admin-enable', $controller.'@operate_department_admin_enable');
+    Route::post('/department/department-admin-disable', $controller.'@operate_department_admin_disable');
+
+    // 列表
+    Route::match(['get','post'], '/department/department-list', $controller.'@view_department_list');
+    Route::match(['get','post'], '/department/department-list-for-all', $controller.'@view_department_list_for_all');
+
+    // 部门-修改信息
+    Route::match(['get','post'], '/department/department-modify-record', $controller.'@view_department_modify_record');
+
+
+
+
+    /*
      * 用户-员工管理
      */
     Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
     Route::match(['get','post'], '/user/user_select2_sales', $controller.'@operate_user_select2_sales');
     Route::match(['get','post'], '/user/user_select2_superior', $controller.'@operate_user_select2_superior');
+    Route::match(['get','post'], '/user/user_select2_department', $controller.'@operate_user_select2_department');
 
     // 【用户-员工管理】创建 & 修改
     Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
