@@ -1,11 +1,11 @@
 <?php
-namespace App\Models\YH;
+namespace App\Models\DK;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class YH_Client extends Authenticatable
+class DK_User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
@@ -13,11 +13,11 @@ class YH_Client extends Authenticatable
 //    protected $connection = 'mysql0';
 //    protected $connection = 'mysql_def';
 
-    protected $table = "yh_client";
+    protected $table = "dk_user";
 
     protected $fillable = [
         'active', 'status', 'user_active', 'user_status', 'user_category', 'user_group', 'user_type', 'category', 'group', 'type',
-        'creator_id', 'parent_id', 'p_id',
+        'creator_id', 'parent_id', 'p_id', 'superior_id',
         'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
         'mobile', 'telephone', 'email', 'password',
         'wx_unionid',
@@ -55,18 +55,73 @@ class YH_Client extends Authenticatable
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
     }
+
+
+    // 上级
+    function superior()
+    {
+        return $this->belongsTo('App\Models\DK\DK_User','superior_id','id');
+    }
+    // 下级
+    function subordinate_er()
+    {
+        return $this->hasMany('App\Models\DK\DK_User','superior_id','id');
+    }
+    // 下级的下级
+    function through_subordinate_er()
+    {
+        return $this->hasManyThrough(
+            'App\Models\DK\DK_User',
+            'App\Models\DK\DK_User',
+            'superior_id',
+            'superior_id',
+            'id',
+            'id'
+        );
+    }
+
+
+    // 工单
+    function order_list()
+    {
+        return $this->hasMany('App\Models\DK\DK_Order','creator_id','id');
+    }
+
+    // 客服工单
+    function order_list_for_customer_service()
+    {
+        return $this->hasMany('App\Models\DK\DK_Order','creator_id','id');
+    }
+
+    // 审核人工单
+    function order_list_for_inspector()
+    {
+        return $this->hasMany('App\Models\DK\DK_Order','inspector_id','id');
+    }
+
+
+
+
+    // 多对多 审核人关联的项目
+    function pivot_user_project()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Project','dk_pivot_user_project','user_id','project_id');
+//            ->wherePivot('relation_type', 1);
+//            ->withTimestamps();
+    }
+
 
 
 
@@ -74,31 +129,31 @@ class YH_Client extends Authenticatable
     // 所属代理商
     function parent()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','parent_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','parent_id','id');
     }
 
     // 名下代理商
     function children()
     {
-        return $this->hasMany('App\Models\YH\YH_User','parent_id','id');
+        return $this->hasMany('App\Models\DK\DK_User','parent_id','id');
     }
 
     // 成员
     function members()
     {
-        return $this->hasMany('App\Models\YH\YH_User','parent_id','id');
+        return $this->hasMany('App\Models\DK\DK_User','parent_id','id');
     }
 
     // 粉丝
     function fans()
     {
-        return $this->hasMany('App\Models\YH\YH_User','parent_id','id');
+        return $this->hasMany('App\Models\DK\DK_User','parent_id','id');
     }
 
     // 名下客户
     function clients()
     {
-        return $this->hasMany('App\Models\YH\YH_User','parent_id','id');
+        return $this->hasMany('App\Models\DK\DK_User','parent_id','id');
     }
 
     // 与我相关的内容
@@ -146,35 +201,35 @@ class YH_Client extends Authenticatable
     //
     function pivot_user()
     {
-        return $this->belongsToMany('App\Models\YH\YH_User','pivot_user_user','user_1_id','user_2_id')
+        return $this->belongsToMany('App\Models\DK\DK_User','pivot_user_user','user_1_id','user_2_id')
             ->withPivot(['active','relation_active','type','relation_type'])->withTimestamps();
     }
 
     // 与我相关的内容
     function pivot_relation()
     {
-        return $this->belongsToMany('App\Models\YH\YH_User','pivot_user_relation','mine_user_id','relation_user_id')
+        return $this->belongsToMany('App\Models\DK\DK_User','pivot_user_relation','mine_user_id','relation_user_id')
             ->withPivot(['active','relation_active','type','relation_type'])->withTimestamps();
     }
 
     // 与我相关的内容
     function pivot_sponsor_list()
     {
-        return $this->belongsToMany('App\Models\YH\YH_User','pivot_user_relation','mine_user_id','relation_user_id')
+        return $this->belongsToMany('App\Models\DK\DK_User','pivot_user_relation','mine_user_id','relation_user_id')
             ->withPivot(['active','relation_active','type','relation_type'])->withTimestamps();
     }
 
     // 与我相关的内容
     function pivot_org_list()
     {
-        return $this->belongsToMany('App\Models\YH\YH_User','pivot_user_relation','relation_user_id','mine_user_id')
+        return $this->belongsToMany('App\Models\DK\DK_User','pivot_user_relation','relation_user_id','mine_user_id')
             ->withPivot(['active','relation_active','type','relation_type'])->withTimestamps();
     }
 
     // 与我相关的内容
     function pivot_follow_list()
     {
-        return $this->belongsToMany('App\Models\YH\YH_User','pivot_user_relation','relation_user_id','mine_user_id')
+        return $this->belongsToMany('App\Models\DK\DK_User','pivot_user_relation','relation_user_id','mine_user_id')
             ->withPivot(['active','relation_active','type','relation_type'])->withTimestamps();
     }
 

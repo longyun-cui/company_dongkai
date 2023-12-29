@@ -6,7 +6,7 @@ Route::get('/', function () {
 });
 
 
-$controller = "YHStaffController";
+$controller = "DKStaffController";
 
 Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
@@ -18,7 +18,7 @@ Route::match(['get','post'], 'logout', $controller.'@logout');
  */
 Route::group(['middleware' => ['yh.staff.login']], function () {
 
-    $controller = 'YHStaffController';
+    $controller = 'DKStaffController';
 
 
     Route::get('/', $controller.'@view_staff_index');

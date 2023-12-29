@@ -1,29 +1,30 @@
 <?php
-namespace App\Repositories\YH;
+namespace App\Repositories\DK;
 
-use App\Models\YH\YH_User;
-use App\Models\YH\YH_UserExt;
-use App\Models\YH\YH_Driver;
-use App\Models\YH\YH_Client;
-use App\Models\YH\DK_Project;
-use App\Models\YH\YH_Route;
-use App\Models\YH\YH_Pricing;
-use App\Models\YH\YH_Order;
-use App\Models\YH\YH_Circle;
-use App\Models\YH\YH_Attachment;
-use App\Models\YH\YH_Finance;
-use App\Models\YH\YH_Record;
-use App\Models\YH\YH_Item;
-use App\Models\YH\YH_Task;
-use App\Models\YH\YH_Pivot_Circle_Order;
-use App\Models\YH\YH_Pivot_Item_Relation;
+use App\Models\DK\DK_Pivot_User_Project;
+use App\Models\DK\DK_User;
+use App\Models\DK\YH_UserExt;
+use App\Models\DK\YH_Driver;
+use App\Models\DK\YH_Client;
+use App\Models\DK\DK_Project;
+use App\Models\DK\YH_Route;
+use App\Models\DK\YH_Pricing;
+use App\Models\DK\DK_Order;
+use App\Models\DK\YH_Circle;
+use App\Models\DK\YH_Attachment;
+use App\Models\DK\YH_Finance;
+use App\Models\DK\DK_Record;
+use App\Models\DK\YH_Item;
+use App\Models\DK\YH_Task;
+use App\Models\DK\YH_Pivot_Circle_Order;
+use App\Models\DK\YH_Pivot_Item_Relation;
 
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon;
 use QrCode, Excel;
 
-class YHAdminRepository {
+class DKAdminRepository {
 
     private $env;
     private $auth_check;
@@ -36,7 +37,7 @@ class YHAdminRepository {
 
     public function __construct()
     {
-        $this->modelUser = new YH_User;
+        $this->modelUser = new DK_User;
         $this->modelItem = new YH_Item;
 
         $this->view_blade_403 = env('TEMPLATE_YH_ADMIN').'entrance.errors.403';
@@ -112,20 +113,20 @@ class YHAdminRepository {
 
 
         // 工单统计
-        $query_order_count_for_all = YH_Order::select('*');
-        $query_order_count_for_unpublished = YH_Order::where('is_published', 0);
-        $query_order_count_for_published = YH_Order::where('is_published', 1);
-        $query_order_count_for_waiting_for_inspect = YH_Order::where('is_published', 1)->where('inspected_status', 0);
-        $query_order_count_for_inspected = YH_Order::where('is_published', 1)->where('inspected_status', '<>', 0);
-        $query_order_count_for_accepted = YH_Order::where('is_published', 1)->where('inspected_result','通过');
-        $query_order_count_for_refused = YH_Order::where('is_published', 1)->where('inspected_result','拒绝');
-        $query_order_count_for_accepted_inside = YH_Order::where('is_published', 1)->where('inspected_result','内部通过');
-        $query_order_count_for_repeat = YH_Order::where('is_published', 1)->where('is_repeat','>',0);
+        $query_order_count_for_all = DK_Order::select('*');
+        $query_order_count_for_unpublished = DK_Order::where('is_published', 0);
+        $query_order_count_for_published = DK_Order::where('is_published', 1);
+        $query_order_count_for_waiting_for_inspect = DK_Order::where('is_published', 1)->where('inspected_status', 0);
+        $query_order_count_for_inspected = DK_Order::where('is_published', 1)->where('inspected_status', '<>', 0);
+        $query_order_count_for_accepted = DK_Order::where('is_published', 1)->where('inspected_result','通过');
+        $query_order_count_for_refused = DK_Order::where('is_published', 1)->where('inspected_result','拒绝');
+        $query_order_count_for_accepted_inside = DK_Order::where('is_published', 1)->where('inspected_result','内部通过');
+        $query_order_count_for_repeat = DK_Order::where('is_published', 1)->where('is_repeat','>',0);
 
 
 
         // 本月每日工单量
-        $query_this_month = YH_Order::select('id','assign_time')
+        $query_this_month = DK_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$this_month_start_timestamp,$this_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
@@ -136,7 +137,7 @@ class YHAdminRepository {
                 "));
 
         // 上月每日工单量
-        $query_last_month = YH_Order::select('id','assign_time')
+        $query_last_month = DK_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$last_month_start_timestamp,$last_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
@@ -150,8 +151,8 @@ class YHAdminRepository {
         // 客服经理
         if($me->user_type == 81)
         {
-            $subordinates_array = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $sub_subordinates_array = YH_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
+            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 
             $query_order_count_for_all->whereIn('creator_id',$sub_subordinates_array);
             $query_order_count_for_unpublished->whereIn('creator_id',$sub_subordinates_array);
@@ -169,7 +170,7 @@ class YHAdminRepository {
         // 客服主管
         if($me->user_type == 84)
         {
-            $subordinates_array = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
 
             $query_order_count_for_all->whereIn('creator_id',$subordinates_array);
             $query_order_count_for_unpublished->whereIn('creator_id',$subordinates_array);
@@ -208,7 +209,7 @@ class YHAdminRepository {
 //                $query->whereIn('user_id', $subordinates);
 //            });
 
-            $subordinates_array = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
             $project_array = DK_Project::select('id')->whereIn('user_id',$subordinates_array)->get()->pluck('id')->toArray();
 
             $query_order_count_for_all->whereIn('project_id', $project_array);
@@ -497,14 +498,14 @@ class YHAdminRepository {
 
         if(empty($post_data['keyword']))
         {
-            $list =YH_User::select(['id','username as text'])
+            $list =DK_User::select(['id','username as text'])
                 ->where(['user_category'=>11])->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_User::select(['id','username as text'])->where('username','like',"%$keyword%")
+            $list =DK_User::select(['id','username as text'])->where('username','like',"%$keyword%")
                 ->where(['user_category'=>11])->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
@@ -517,13 +518,13 @@ class YHAdminRepository {
     {
         if(empty($post_data['keyword']))
         {
-            $query =YH_User::select(['id','true_name as text'])
+            $query =DK_User::select(['id','true_name as text'])
                 ->where(['user_status'=>1]);
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query =YH_User::select(['id','true_name as text'])->where('username','like',"%$keyword%")
+            $query =DK_User::select(['id','true_name as text'])->where('username','like',"%$keyword%")
                 ->where(['user_status'=>1]);
         }
 
@@ -596,7 +597,7 @@ class YHAdminRepository {
         }
         else
         {
-            $mine = YH_User::with(['parent','superior'])->find($id);
+            $mine = DK_User::with(['parent','superior'])->find($id);
             if($mine)
             {
 //                $mine->custom = json_decode($mine->custom);
@@ -641,7 +642,7 @@ class YHAdminRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            $mine = new YH_User;
+            $mine = new DK_User;
             $post_data["user_category"] = 11;
             $post_data["active"] = 1;
             $post_data["password"] = password_encode("12345678");
@@ -650,7 +651,7 @@ class YHAdminRepository {
         }
         else if($operate == 'edit') // 编辑
         {
-            $mine = YH_User::find($operate_id);
+            $mine = DK_User::find($operate_id);
             if(!$mine) return response_error([],"该用户不存在，刷新页面重试！");
         }
         else return response_error([],"参数有误！");
@@ -761,7 +762,7 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = YH_User::withTrashed()->find($id);
+        $user = DK_User::withTrashed()->find($id);
         if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         $this->get_me();
@@ -825,7 +826,7 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = YH_User::withTrashed()->find($id);
+        $user = DK_User::withTrashed()->find($id);
         if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         $this->get_me();
@@ -884,7 +885,7 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = YH_User::withTrashed()->find($id);
+        $user = DK_User::withTrashed()->find($id);
         if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         $this->get_me();
@@ -941,7 +942,7 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = YH_User::withTrashed()->find($id);
+        $user = DK_User::withTrashed()->find($id);
         if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         $this->get_me();
@@ -997,7 +998,7 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = YH_User::withTrashed()->find($id);
+        $user = DK_User::withTrashed()->find($id);
         if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         $this->get_me();
@@ -1056,7 +1057,7 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = YH_User::find($id);
+        $user = DK_User::find($id);
         if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         $this->get_me();
@@ -1107,7 +1108,7 @@ class YHAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = YH_User::find($id);
+        $user = DK_User::find($id);
         if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         $this->get_me();
@@ -1156,7 +1157,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = YH_User::select('*')
+        $query = DK_User::select('*')
             ->with(['creator','superior'])
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,42,61,71,77,81,82,84,88]);
@@ -1534,7 +1535,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_client_list_for_all'] = 'active menu-open';
@@ -1548,7 +1549,7 @@ class YHAdminRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = YH_Record::select('*')
+        $query = DK_Record::select('*')
             ->with(['creator'])
             ->where(['operate_object'=>41,'item_id'=>$id]);
 
@@ -1604,7 +1605,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $sales = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[41,61,88])->get();
+        $sales = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[41,61,88])->get();
 
         $return['sales'] = $sales;
         $return['menu_active_of_task_list'] = 'active';
@@ -2892,6 +2893,22 @@ class YHAdminRepository {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
+                if(!empty($post_data["peoples"]))
+                {
+//                    $product->peoples()->attach($post_data["peoples"]);
+                    $current_time = time();
+                    $peoples = $post_data["peoples"];
+                    foreach($peoples as $p)
+                    {
+                        $people_insert[$p] = ['relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
+                    }
+                    $mine->pivot_project_user()->sync($people_insert);
+//                    $mine->pivot_product_people()->syncWithoutDetaching($people_insert);
+                }
+                else
+                {
+                    $mine->pivot_project_user()->detach();
+                }
             }
             else throw new Exception("insert--car--fail");
 
@@ -2962,7 +2979,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -3053,7 +3070,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -3162,7 +3179,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -3294,7 +3311,7 @@ class YHAdminRepository {
                             $bool = $attachment->fill($attachment_data)->save();
                             if($bool)
                             {
-                                $record = new YH_Record;
+                                $record = new DK_Record;
 
                                 $record_data["ip"] = Get_IP();
                                 $record_data["record_object"] = 21;
@@ -3340,7 +3357,7 @@ class YHAdminRepository {
                     $bool = $attachment->fill($attachment_data)->save();
                     if($bool)
                     {
-                        $record = new YH_Record;
+                        $record = new DK_Record;
 
                         $record_data["ip"] = Get_IP();
                         $record_data["record_object"] = 21;
@@ -3420,7 +3437,7 @@ class YHAdminRepository {
             $bool = $item->delete();  // 普通删除
             if($bool)
             {
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -3794,7 +3811,7 @@ class YHAdminRepository {
 //                    $query->whereNull('actual_departure_time');
 //                }
 //            ])
-            ->with(['creator','inspector_er',
+            ->with(['creator','inspector_er','pivot_project_user',
 //                'car_order_list_for_current'=>function($query) {
 //                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','asc')->limit(1);
 //                },
@@ -4000,7 +4017,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_car_list_for_all'] = 'active menu-open';
@@ -4014,7 +4031,7 @@ class YHAdminRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = YH_Record::select('*')
+        $query = DK_Record::select('*')
             ->with(['creator','before_driver_er','after_driver_er'])
             ->where(['operate_object'=>41,'item_id'=>$id]);
 
@@ -4071,13 +4088,13 @@ class YHAdminRepository {
     {
         if(empty($post_data['keyword']))
         {
-            $query =YH_User::select(['id','username as text'])
+            $query =DK_User::select(['id','username as text'])
                 ->where(['user_status'=>1]);
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query =YH_User::select(['id','username as text'])->where('username','like',"%$keyword%")
+            $query =DK_User::select(['id','username as text'])->where('username','like',"%$keyword%")
                 ->where(['user_status'=>1]);
         }
 
@@ -4656,7 +4673,7 @@ class YHAdminRepository {
 
             foreach($order_data as $key => $value)
             {
-                $order = new YH_Order;
+                $order = new DK_Order;
 
                 $order->create_type = 9;
                 $order->creator_id = $me->id;
@@ -4790,7 +4807,7 @@ class YHAdminRepository {
         }
         else
         {
-            $mine = YH_Order::find($id);
+            $mine = DK_Order::find($id);
             if($mine)
             {
 //                if($mine->deleted_at) return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
@@ -4838,21 +4855,21 @@ class YHAdminRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            $mine = new YH_Order;
+            $mine = new DK_Order;
             $post_data["item_category"] = 1;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
 
-            $is_repeat = YH_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->count("*");
+            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->count("*");
         }
         else if($operate == 'edit') // 编辑
         {
-            $mine = YH_Order::find($operate_id);
+            $mine = DK_Order::find($operate_id);
             if(!$mine) return response_error([],"该工单不存在，刷新页面重试！");
 
             if(in_array($me->user_type,[88]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
 
-            $is_repeat = YH_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->where('id','<>',$operate_id)->count("*");
+            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->where('id','<>',$operate_id)->count("*");
         }
         else return response_error([],"参数有误！");
 
@@ -4940,7 +4957,7 @@ class YHAdminRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
+        $item = DK_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
         if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
@@ -4991,7 +5008,7 @@ class YHAdminRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
+        $item = DK_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
         if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5067,7 +5084,7 @@ class YHAdminRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::with(['attachment_list'])->withTrashed()->find($id);
+        $item = DK_Order::with(['attachment_list'])->withTrashed()->find($id);
         if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5104,7 +5121,7 @@ class YHAdminRepository {
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($item_id);
+        $item = DK_Order::withTrashed()->find($item_id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5133,7 +5150,7 @@ class YHAdminRepository {
                 if(!$bool) throw new Exception("item--delete--fail");
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -5160,7 +5177,7 @@ class YHAdminRepository {
                 if(!$bool) throw new Exception("item--delete--fail");
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -5213,7 +5230,7 @@ class YHAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5231,7 +5248,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -5282,7 +5299,7 @@ class YHAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5304,7 +5321,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -5355,7 +5372,7 @@ class YHAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5375,7 +5392,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -5426,7 +5443,7 @@ class YHAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5446,7 +5463,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -5499,7 +5516,7 @@ class YHAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5517,7 +5534,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -5570,7 +5587,7 @@ class YHAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5597,7 +5614,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -5654,7 +5671,7 @@ class YHAdminRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5697,7 +5714,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -5758,7 +5775,7 @@ class YHAdminRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
@@ -5861,7 +5878,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -5923,7 +5940,7 @@ class YHAdminRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -6042,7 +6059,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -6147,7 +6164,7 @@ class YHAdminRepository {
         $order_id = $post_data["order_id"];
         if(intval($order_id) !== 0 && !$order_id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($order_id);
+        $item = DK_Order::withTrashed()->find($order_id);
         if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -6188,7 +6205,7 @@ class YHAdminRepository {
                             $bool = $attachment->fill($attachment_data)->save();
                             if($bool)
                             {
-                                $record = new YH_Record;
+                                $record = new DK_Record;
 
                                 $record_data["ip"] = Get_IP();
                                 $record_data["record_object"] = 21;
@@ -6235,7 +6252,7 @@ class YHAdminRepository {
                     $bool = $attachment->fill($attachment_data)->save();
                     if($bool)
                     {
-                        $record = new YH_Record;
+                        $record = new DK_Record;
 
                         $record_data["ip"] = Get_IP();
                         $record_data["record_object"] = 21;
@@ -6315,7 +6332,7 @@ class YHAdminRepository {
             $bool = $item->delete();  // 普通删除
             if($bool)
             {
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -6373,7 +6390,7 @@ class YHAdminRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = YH_Order::withTrashed()->find($id);
+        $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
@@ -6597,7 +6614,7 @@ class YHAdminRepository {
 
 
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $car_list = DK_Project::select('id','title')->whereIn('item_type',[1,21])->get();
         $route_list = YH_Route::select('id','title')->get();
@@ -6619,7 +6636,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = YH_Order::select('*')
+        $query = DK_Order::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->with(['creator','owner','inspector','project_er']);
 //            ->whereIn('user_category',[11])
@@ -6640,8 +6657,8 @@ class YHAdminRepository {
         // 客服经理
         if($me->user_type == 81)
         {
-            $subordinates = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $subordinates_subordinates = YH_User::select('id')->whereIn('superior_id',$subordinates)->get()->pluck('id')->toArray();
+            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $subordinates_subordinates = DK_User::select('id')->whereIn('superior_id',$subordinates)->get()->pluck('id')->toArray();
             $subordinates_list = array_merge($subordinates_subordinates,$subordinates);
             $subordinates_list[] = $me->id;
             $query->whereIn('creator_id',$subordinates_list);
@@ -6649,7 +6666,7 @@ class YHAdminRepository {
         // 客服主管
         if($me->user_type == 84)
         {
-            $subordinates = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
             $subordinates[] = $me->id;
             $query->whereIn('creator_id',$subordinates);
         }
@@ -6661,17 +6678,26 @@ class YHAdminRepository {
         // 质检经理
         if($me->user_type == 71)
         {
-            $subordinates = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($subordinates) {
-                $query->whereIn('user_id', $subordinates);
-            });
+            // 一对一
+//            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($subordinates) {
+//                $query->whereIn('user_id', $subordinates);
+//            });
+            // 多对对
+            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $project_list = DK_Pivot_User_Project::select('project_id')->whereIn('user_id',$subordinates)->get()->pluck('project_id')->toArray();
+            $query->where('is_published','<>',0)->whereIn('project_id', $project_list);
         }
         // 质检员
         if($me->user_type == 77)
         {
-            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($me) {
-                $query->where('user_id', $me->id);
-            });
+            // 一对一
+//            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($me) {
+//                $query->where('user_id', $me->id);
+//            });
+            // 多对多
+            $project_list = DK_Pivot_User_Project::select('project_id')->where('user_id',$me->id)->get()->pluck('project_id')->toArray();
+            $query->where('is_published','<>',0)->whereIn('project_id', $project_list);
         }
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -6938,7 +6964,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_order_list_for_all'] = 'active menu-open';
@@ -7054,7 +7080,7 @@ class YHAdminRepository {
         if($transaction_date_timestamp > time('Y-m-d')) return response_error([],"指定日期不能大于今天！");
 
         $order_id = $post_data["order_id"];
-        $order = YH_Order::where('id',$order_id)->lockForUpdate()->first();
+        $order = DK_Order::where('id',$order_id)->lockForUpdate()->first();
         if(!$order) return response_error([],"该【工单】不存在，刷新页面重试！");
 
         // 交易类型 收入 || 支出
@@ -7155,7 +7181,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_order_list_for_all'] = 'active menu-open';
@@ -7169,10 +7195,9 @@ class YHAdminRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = YH_Record::select('*')
+        $query = DK_Record::select('*')
             ->with([
                 'creator',
-                'before_client_er','after_client_er',
             ])
             ->where(['order_id'=>$id]);
 
@@ -7273,7 +7298,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -7364,7 +7389,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -7456,7 +7481,7 @@ class YHAdminRepository {
                 }
                 else
                 {
-                    $record = new YH_Record;
+                    $record = new DK_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -7545,7 +7570,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $order = YH_Order::lockForUpdate()->find($item->order_id);
+                $order = DK_Order::lockForUpdate()->find($item->order_id);
                 if(!$order) return response_error([],"该工单不存在，刷新页面重试！");
 
                 if($item->finance_type == 1)
@@ -7563,7 +7588,7 @@ class YHAdminRepository {
                 if(!$bool_1) throw new Exception("update--order--fail");
 
 
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -7642,7 +7667,7 @@ class YHAdminRepository {
             if(!$bool) throw new Exception("finance--delete--fail");
             else
             {
-                $order = YH_Order::lockForUpdate()->find($item->order_id);
+                $order = DK_Order::lockForUpdate()->find($item->order_id);
                 if(!$order) return response_error([],"该工单不存在，刷新页面重试！");
 
                 if($item->is_confirmed == 0)
@@ -7672,7 +7697,7 @@ class YHAdminRepository {
                 if(!$bool_1) throw new Exception("update--order--fail");
 
 
-                $record = new YH_Record;
+                $record = new DK_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -7718,7 +7743,7 @@ class YHAdminRepository {
         }
         else $view_data['staff_id'] = -1;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,41,42,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,41,42,81,82,88])->get();
         $view_data['staff_list'] = $staff_list;
 
         $view_data["menu_active_statistic_list_for_all"] = 'active';
@@ -7833,7 +7858,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_pricing_list_for_all'] = 'active menu-open';
@@ -7847,7 +7872,7 @@ class YHAdminRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = YH_Record::select('*')
+        $query = DK_Record::select('*')
             ->with(['creator'])
             ->where(['operate_object'=>88,'item_id'=>$id]);
 
@@ -7988,7 +8013,7 @@ class YHAdminRepository {
             $order_id = trim($value['order_id']);
             $temp_date['order_id'] = (!empty($order_id) && (floor($order_id) == $order_id) && $order_id >= 0) ? $order_id : 0;
             if(empty($temp_date['order_id']))  continue;
-            $order = YH_Order::find($order_id);
+            $order = DK_Order::find($order_id);
             if($order) $temp_date['order_id'] = $order->id;
             else continue;
 
@@ -8029,7 +8054,7 @@ class YHAdminRepository {
             {
 
                 $order_id = $value["order_id"];
-                $order = YH_Order::where('id',$order_id)->lockForUpdate()->first();
+                $order = DK_Order::where('id',$order_id)->lockForUpdate()->first();
 //                if(!$order) continue;
 
                 $finance = new YH_Finance;
@@ -8118,7 +8143,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $car_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $route_list = YH_Route::select('id','title')->get();
@@ -8155,7 +8180,7 @@ class YHAdminRepository {
         }
 
         $user_id = $post_data["user-id"];
-        $user = YH_User::find($user_id);
+        $user = DK_User::find($user_id);
 
         $this_month = date('Y-m');
         $this_month_year = date('Y');
@@ -8456,15 +8481,15 @@ class YHAdminRepository {
 
 
         // 工单统计
-        $order_count_for_all = YH_Order::select('*')->count("*");
-        $order_count_for_unpublished = YH_Order::where('is_published', 0)->count("*");
-        $order_count_for_published = YH_Order::where('is_published', 1)->count("*");
-        $order_count_for_waiting_for_inspect = YH_Order::where('is_published', 1)->where('inspected_status', 0)->count("*");
-        $order_count_for_inspected = YH_Order::where('is_published', 1)->where('inspected_status', '<>', 0);
-        $order_count_for_accepted = YH_Order::where('is_published', 1)->where('inspected_result','通过');
-        $order_count_for_refused = YH_Order::where('is_published', 1)->where('inspected_result','拒绝');
-        $order_count_for_accepted_inside = YH_Order::where('is_published', 1)->where('inspected_result','内部通过');
-        $order_count_for_repeat = YH_Order::where('is_published', 1)->where('is_repeat','>',0);
+        $order_count_for_all = DK_Order::select('*')->count("*");
+        $order_count_for_unpublished = DK_Order::where('is_published', 0)->count("*");
+        $order_count_for_published = DK_Order::where('is_published', 1)->count("*");
+        $order_count_for_waiting_for_inspect = DK_Order::where('is_published', 1)->where('inspected_status', 0)->count("*");
+        $order_count_for_inspected = DK_Order::where('is_published', 1)->where('inspected_status', '<>', 0);
+        $order_count_for_accepted = DK_Order::where('is_published', 1)->where('inspected_result','通过');
+        $order_count_for_refused = DK_Order::where('is_published', 1)->where('inspected_result','拒绝');
+        $order_count_for_accepted_inside = DK_Order::where('is_published', 1)->where('inspected_result','内部通过');
+        $order_count_for_repeat = DK_Order::where('is_published', 1)->where('is_repeat','>',0);
 
 
 
@@ -8481,7 +8506,7 @@ class YHAdminRepository {
         // 工单统计
 
         // 本月每日工单量
-        $query_for_order_this_month = YH_Order::select('id','assign_time')
+        $query_for_order_this_month = DK_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
@@ -8502,7 +8527,7 @@ class YHAdminRepository {
         $return_data['statistics_data_for_order_this_month'] = $statistics_data_for_order_this_month;
 
         // 上月每日工单量
-        $query_for_order_last_month = YH_Order::select('id','assign_time')
+        $query_for_order_last_month = DK_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
@@ -8639,7 +8664,7 @@ class YHAdminRepository {
         $type = isset($post_data['type']) ? $post_data['type']  : '';
 
 
-        $query = YH_Order::select('*');
+        $query = DK_Order::select('*');
 
         // 项目
         if(isset($post_data['project']))
@@ -8862,7 +8887,7 @@ class YHAdminRepository {
 
 
         // 本月每日工单量
-        $query_for_order_this_month = YH_Order::select('id','assign_time')
+        $query_for_order_this_month = DK_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
@@ -8886,7 +8911,7 @@ class YHAdminRepository {
         $return_data['statistics_data_for_order_this_month'] = $statistics_data_for_order_this_month;
 
         // 上月每日工单量
-        $query_for_order_last_month = YH_Order::select('id','assign_time')
+        $query_for_order_last_month = DK_Order::select('id','assign_time')
 //            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
@@ -9018,20 +9043,20 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = YH_User::select('*')
+        $query = DK_User::select('*')
             ->with([
                 'superior' => function($query) { $query->select(['id','username','true_name']); }
             ])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[88]);
+            ->whereIn('user_type',[84,88]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
         // 客服经理
         if($me->user_type == 81)
         {
-            $subordinates_array = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $sub_subordinates_array = YH_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
+            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 
             $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
         }
@@ -9202,7 +9227,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = YH_User::select('*')
+        $query = DK_User::select('*')
             ->with([
                 'superior' => function($query) { $query->select(['id','username','true_name']); }
             ])
@@ -9506,7 +9531,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = YH_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $car_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $route_list = YH_Route::select('id','title')->get();
@@ -9559,7 +9584,7 @@ class YHAdminRepository {
         }
         else if($export_type == "latest")
         {
-            $record_last = YH_Record::select('*')
+            $record_last = DK_Record::select('*')
                 ->where(['creator_id'=>$me->id,'operate_category'=>109,'operate_type'=>99])
                 ->orderBy('id','desc')->first();
 
@@ -9618,7 +9643,7 @@ class YHAdminRepository {
 //        dd($car_id);
 
         // 工单
-        $query = YH_Order::select('*')
+        $query = DK_Order::select('*')
             ->with([
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
@@ -9704,7 +9729,7 @@ class YHAdminRepository {
         array_unshift($cellData, $title_row);
 
 
-        $record = new YH_Record;
+        $record = new DK_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 21;
@@ -9778,7 +9803,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $record = new YH_Record;
+        $record = new DK_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 21;
@@ -10015,7 +10040,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $record = new YH_Record;
+        $record = new DK_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 21;
@@ -10273,7 +10298,7 @@ class YHAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = YH_Record::select('*')->withTrashed()
+        $query = DK_Record::select('*')->withTrashed()
             ->with('creator')
 //            ->where(['owner_id'=>100,'item_category'=>100])
 //            ->where('item_type', '!=',0);
@@ -10292,7 +10317,7 @@ class YHAdminRepository {
         else if($me->user_type == 71)
         {
 
-            $subordinates_array = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
 
             $query->where(function($query) use($me,$subordinates_array) {
                 $query->where('creator_id',$me->id)->orWhereIn('creator_id',$subordinates_array);
@@ -10381,7 +10406,7 @@ class YHAdminRepository {
     // 【访问记录】
     public function record_for_user_operate($record_object,$record_category,$record_type,$creator_id,$item_id,$operate_object,$operate_category,$operate_type = 0,$column_key = '',$before = '',$after = '')
     {
-        $record = new YH_Record;
+        $record = new DK_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = $record_object;

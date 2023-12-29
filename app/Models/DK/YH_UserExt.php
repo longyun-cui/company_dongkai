@@ -1,5 +1,5 @@
 <?php
-namespace App\Models\YH;
+namespace App\Models\DK;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -59,18 +59,18 @@ class YH_UserExt extends Authenticatable
 
     function user()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
+        return $this->belongsTo('App\Models\YH\DK_User','user_id','id');
     }
     // 所属代理商
     function parent()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','parent_id','id');
+        return $this->belongsTo('App\Models\YH\DK_User','parent_id','id');
     }
 
     // 名下代理商
     function children()
     {
-        return $this->hasMany('App\Models\YH\YH_User','parent_id','id');
+        return $this->hasMany('App\Models\YH\DK_User','parent_id','id');
     }
 
 

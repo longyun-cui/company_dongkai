@@ -854,7 +854,7 @@
                         "title": "创建人",
                         "data": "creator_id",
                         "className": "",
-                        "width": "88px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
@@ -890,7 +890,7 @@
                         "title": "项目",
                         "data": "project_id",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1051,6 +1051,28 @@
                         }
                     },
                     {
+                        "title": "微信号",
+                        "data": "wx_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','微信号');
+                                $(nTd).attr('data-key','wx_id').attr('data-value',data);
+                                $(nTd).attr('data-column-name','微信号');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "团队大区",
                         "data": "team_district",
                         "className": "",
@@ -1147,7 +1169,7 @@
                         "title": "审核人",
                         "data": "inspector_id",
                         "className": "",
-                        "width": "88px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.inspector == null ? '--' : '<a href="javascript:void(0);">'+row.inspector.true_name+'</a>';

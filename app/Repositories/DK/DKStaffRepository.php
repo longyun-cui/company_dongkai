@@ -1,17 +1,17 @@
 <?php
-namespace App\Repositories\YH;
+namespace App\Repositories\DK;
 
-use App\Models\YH\YH_User;
-use App\Models\YH\YH_Item;
-use App\Models\YH\YH_Task;
-use App\Models\YH\YH_Pivot_Item_Relation;
+use App\Models\DK\DK_User;
+use App\Models\DK\YH_Item;
+use App\Models\DK\YH_Task;
+use App\Models\DK\YH_Pivot_Item_Relation;
 
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade;
 use QrCode, Excel;
 
-class YHStaffRepository {
+class DKStaffRepository {
 
     private $evn;
     private $auth_check;
@@ -26,7 +26,7 @@ class YHStaffRepository {
 
     public function __construct()
     {
-        $this->modelUser = new YH_User;
+        $this->modelUser = new DK_User;
         $this->modelItem = new YH_Item;
 
         $this->view_blade_404 = env('TEMPLATE_YH_STAFF').'errors.404';

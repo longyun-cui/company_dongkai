@@ -1,34 +1,31 @@
 <?php
-namespace App\Models\YH;
+namespace App\Models\DK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class YH_Finance extends Model
+class YH_Attachment extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "yh_finance";
+    protected $table = "yh_attachment";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort',
-        'item_active', 'item_status', 'item_category', 'item_type',
-        'finance_active', 'finance_status', 'finance_category', 'finance_type',
-        'is_confirmed', 'confirmer_id',
+        'attachment_active', 'attachment_status', 'attachment_object', 'attachment_category', 'attachment_type', 'attachment_module',
+        'operate_object', 'operate_category', 'operate_type',
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
-        'create_type',
-        'admin_id',
-        'menu_id', 'item_id', 'order_id',
-        'transaction_amount', 'transaction_time', 'transaction_type', 'transaction_account', 'transaction_receipt_account', 'transaction_payment_account', 'transaction_order',
-        'total_funds', 'balance_funds', 'available_funds', 'init_freeze_funds', 'freeze_funds',
-        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'mobile', 'address',
+        'org_id', 'admin_id',
+        'item_id', 'order_id',
+        'attachment_src', 'attachment_name',
+        'attachment_name', 'attachment_src',
+        'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+        'link_url', 'cover_pic', 'tag',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'confirmed_at', 'completed_at'
+        'published_at'
     ];
     protected $dateFormat = 'U';
 
-    protected $hidden = ['content','custom'];
+    protected $hidden = [];
 
     protected $dates = ['created_at','updated_at','deleted_at'];
 //    public function getDates()
@@ -41,32 +38,27 @@ class YH_Finance extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','owner_id','id');
+        return $this->belongsTo('App\Models\YH\DK_User','owner_id','id');
     }
-    // 创建者
+    // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','creator_id','id');
+        return $this->belongsTo('App\Models\YH\DK_User','creator_id','id');
     }
-    // 更新者
+    // 创作者
     function updater()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','updater_id','id');
+        return $this->belongsTo('App\Models\YH\DK_User','updater_id','id');
     }
-    // 完成者
+    // 创作者
     function completer()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','completer_id','id');
-    }
-    // 完成者
-    function confirmer()
-    {
-        return $this->belongsTo('App\Models\YH\YH_User','confirmer_id','id');
+        return $this->belongsTo('App\Models\YH\DK_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
+        return $this->belongsTo('App\Models\YH\DK_User','user_id','id');
     }
 
 
@@ -76,12 +68,6 @@ class YH_Finance extends Model
     function order_er()
     {
         return $this->belongsTo('App\Models\YH\YH_Order','order_id','id');
-    }
-
-    // 客户
-    function client_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Client','client_id','id');
     }
 
 
@@ -117,7 +103,7 @@ class YH_Finance extends Model
     // 与我相关的话题
     function pivot_collection_item_users()
     {
-        return $this->belongsToMany('App\Models\YH\YH_User','pivot_user_item','item_id','user_id');
+        return $this->belongsToMany('App\Models\YH\DK_User','pivot_user_item','item_id','user_id');
     }
 
 

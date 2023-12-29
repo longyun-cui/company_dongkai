@@ -1,18 +1,18 @@
 <?php
-namespace App\Repositories\YH;
+namespace App\Repositories\DK;
 
-use App\Models\YH\YH_Order;
-use App\Models\YH\YH_Record;
-use App\Models\YH\YH_User;
-use App\Models\YH\YH_Item;
-use App\Models\YH\YH_Pivot_Item_Relation;
+use App\Models\DK\DK_Order;
+use App\Models\DK\DK_Record;
+use App\Models\DK\DK_User;
+use App\Models\DK\YH_Item;
+use App\Models\DK\YH_Pivot_Item_Relation;
 
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade;
 use QrCode, Excel;
 
-class YHSuperRepository {
+class DKSuperRepository {
 
     private $evn;
     private $auth_check;
@@ -27,7 +27,7 @@ class YHSuperRepository {
 
     public function __construct()
     {
-        $this->modelUser = new YH_User;
+        $this->modelUser = new DK_User;
         $this->modelItem = new YH_Item;
 
         $this->view_blade_404 = env('TEMPLATE_YH_SUPER').'errors.404';
@@ -664,7 +664,7 @@ class YHSuperRepository {
     public function operate_user_user_login()
     {
         $user_id = request()->get('user_id');
-        $user = YH_User::where('id',$user_id)->first();
+        $user = DK_User::where('id',$user_id)->first();
         if($user)
         {
 
@@ -684,7 +684,7 @@ class YHSuperRepository {
             else if($type == "admin")
             {
                 $admin_id = request()->get('admin_id');
-                $admin = YH_User::where('id',$admin_id)->first();
+                $admin = DK_User::where('id',$admin_id)->first();
 
                 Auth::guard('zy_admin')->login($admin,true);
 
@@ -747,7 +747,7 @@ class YHSuperRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = YH_User::select('*')
+        $query = DK_User::select('*')
 //            ->with(['district'])
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88]);
@@ -878,7 +878,7 @@ class YHSuperRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = YH_Record::select('*')->withTrashed()
+        $query = DK_Record::select('*')->withTrashed()
             ->with('creator');
 //            ->where(['owner_id'=>100,'item_category'=>100])
 //            ->where('item_type', '!=',0);
@@ -1261,7 +1261,7 @@ class YHSuperRepository {
 
 
         // 订单统计
-        $query_for_order_this_month = YH_Order::select('id','created_at')
+        $query_for_order_this_month = DK_Order::select('id','created_at')
 //            ->where('finance_type',1)
             ->whereBetween('created_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(created_at,'%Y-%m-%d')"))
@@ -1275,7 +1275,7 @@ class YHSuperRepository {
 
 
         // 统计
-        $query_for_record = YH_Record::select('id','created_at')
+        $query_for_record = DK_Record::select('id','created_at')
             ->whereBetween('created_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(created_at,'%Y-%m-%d')"))
             ->select(DB::raw("

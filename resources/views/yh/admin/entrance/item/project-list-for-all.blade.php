@@ -746,28 +746,34 @@
                             return data;
                         }
                     },
+                    // {
+                    //     "className": "text-center",
+                    //     "width": "240px",
+                    //     "title": "质检员",
+                    //     "data": "user_id",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.inspector_er == null) return '--';
+                    //         else return '<a href="javascript:void(0);">'+row.inspector_er.username+' </a>';
+                    //     }
+                    // },
                     {
                         "className": "text-center",
-                        "width": "160px",
+                        "width": "240px",
                         "title": "质检员",
-                        "data": "user_id",
+                        "data": "pivot_project_user",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','驾驶员');
-                                $(nTd).attr('data-key','driver_id').attr('data-value',data);
-                                if(row.inspector_er == null) $(nTd).attr('data-option-name','未指定');
-                                else $(nTd).attr('data-option-name',row.inspector_er.username);
-                                $(nTd).attr('data-column-name','驾驶员');
-                                if(row.driver_id) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
                         },
                         render: function(data, type, row, meta) {
-                            if(row.inspector_er == null) return '--';
-                            else return '<a href="javascript:void(0);">'+row.inspector_er.username+' </a>';
+                            var html = '';
+                            $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                                html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
+                            });
+                            return html;
                         }
                     },
                     {

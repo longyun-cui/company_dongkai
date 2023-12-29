@@ -1,11 +1,11 @@
 <?php
-namespace App\Models\YH;
+namespace App\Models\DK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class YH_Order extends Model
+class DK_Order extends Model
 {
     use SoftDeletes;
     //
@@ -46,45 +46,54 @@ class YH_Order extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','owner_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','creator_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','creator_id','id');
     }
     // 更改者
     function updater()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','updater_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','updater_id','id');
     }
     // 验证者
     function verifier()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','verifier_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','verifier_id','id');
     }
     // 审核者
     function inspector()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','inspector_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','inspector_id','id');
     }
     // 完成者
     function completer()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','completer_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','user_id','id');
     }
 
 
     // 项目
     function project_er()
     {
-        return $this->belongsTo('App\Models\YH\DK_Project','project_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_Project','project_id','id');
     }
+
+
+
+
+
+
+
+
+
 
 
     // 客户
@@ -123,17 +132,17 @@ class YH_Order extends Model
     // 车辆
     function car_er()
     {
-        return $this->belongsTo('App\Models\YH\DK_Project','car_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_Project','car_id','id');
     }
     // 车挂
     function trailer_er()
     {
-        return $this->belongsTo('App\Models\YH\DK_Project','trailer_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_Project','trailer_id','id');
     }
     // 车厢
     function container_er()
     {
-        return $this->belongsTo('App\Models\YH\DK_Project','container_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_Project','container_id','id');
     }
 
 
@@ -207,7 +216,7 @@ class YH_Order extends Model
     // 与我相关的话题
     function pivot_collection_item_users()
     {
-        return $this->belongsToMany('App\Models\YH\YH_User','pivot_user_item','item_id','user_id');
+        return $this->belongsToMany('App\Models\Dk\DK_User','pivot_user_item','item_id','user_id');
     }
 
 

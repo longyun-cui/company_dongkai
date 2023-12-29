@@ -1,25 +1,25 @@
 <?php
-namespace App\Http\Controllers\YH;
+namespace App\Http\Controllers\DK;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\YH\YH_User;
-use App\Models\YH\YH_Item;
+use App\Models\DK\DK_User;
+use App\Models\DK\YH_Item;
 
-use App\Repositories\YH\YHAdminRepository;
+use App\Repositories\DK\DKAdminRepository;
 
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
 
-class YHAdminController extends Controller
+class DKAdminController extends Controller
 {
     //
     private $repo;
     public function __construct()
     {
-        $this->repo = new YHAdminRepository;
+        $this->repo = new DKAdminRepository;
     }
 
 
@@ -43,7 +43,7 @@ class YHAdminController extends Controller
 //            $admin = SuperAdministrator::whereEmail($email)->first();
 
             $mobile = request()->get('mobile');
-            $admin = YH_User::whereMobile($mobile)->first();
+            $admin = DK_User::whereMobile($mobile)->first();
 
             if($admin)
             {

@@ -107,22 +107,22 @@ return [
 
         'yh_users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\YH\YH_User::class,
+            'model' => App\Models\DK\DK_User::class,
         ],
 
         'yh_supers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\YH\YH_User::class,
+            'model' => App\Models\DK\DK_User::class,
         ],
 
         'yh_admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\YH\YH_User::class,
+            'model' => App\Models\DK\DK_User::class,
         ],
 
         'yh_staffs' => [
             'driver' => 'eloquent',
-            'model' => App\Models\YH\YH_User::class,
+            'model' => App\Models\DK\DK_User::class,
         ],
 
     ],

@@ -1,9 +1,9 @@
 <?php
-namespace App\Models\YH;
+namespace App\Models\DK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class YH_Record extends Model
+class DK_Record extends Model
 {
     use SoftDeletes;
     //
@@ -46,27 +46,27 @@ class YH_Record extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','owner_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','creator_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','creator_id','id');
     }
     // 创作者
     function updater()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','updater_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','updater_id','id');
     }
     // 创作者
     function completer()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','completer_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\YH\YH_User','user_id','id');
+        return $this->belongsTo('App\Models\Dk\DK_User','user_id','id');
     }
 
 
@@ -164,7 +164,7 @@ class YH_Record extends Model
     // 与我相关的话题
     function pivot_collection_item_users()
     {
-        return $this->belongsToMany('App\Models\YH\YH_User','pivot_user_item','item_id','user_id');
+        return $this->belongsToMany('App\Models\Dk\DK_User','pivot_user_item','item_id','user_id');
     }
 
 

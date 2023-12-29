@@ -48,14 +48,26 @@
 
 
                         {{--质检员--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label class="control-label col-md-2">选择质检员</label>--}}
+{{--                            <div class="col-md-8 ">--}}
+{{--                                <select class="form-control" name="user_id" id="select2-inspector">--}}
+{{--                                    @if($operate == 'edit' && $data->user_id)--}}
+{{--                                        <option data-id="{{ $data->user_id or 0 }}" value="{{ $data->user_id or 0 }}">{{ $data->inspector_er->username }}</option>--}}
+{{--                                    @else--}}
+{{--                                        <option data-id="0" value="0">未指定</option>--}}
+{{--                                    @endif--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="form-group">
                             <label class="control-label col-md-2">选择质检员</label>
                             <div class="col-md-8 ">
-                                <select class="form-control" name="user_id" id="select2-inspector">
-                                    @if($operate == 'edit' && $data->user_id)
-                                        <option data-id="{{ $data->user_id or 0 }}" value="{{ $data->user_id or 0 }}">{{ $data->inspector_er->username }}</option>
-                                    @else
-                                        <option data-id="0" value="0">未指定</option>
+                                <select class="form-control" name="peoples[]" id="select2-inspector" multiple="multiple">
+                                    @if(!empty($data->pivot_project_user))
+                                        @foreach($data->pivot_project_user as $p)
+                                            <option value="{{ $p->id }}" selected="selected">{{ $p->username }}</option>
+                                        @endforeach
                                     @endif
                                 </select>
                             </div>
@@ -235,53 +247,6 @@
             minimumInputLength: 0,
             theme: 'classic'
         });
-
-
-        //
-        $('#select2-driver').select2({
-            ajax: {
-                url: "{{ url('/item/order_select2_driver') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        keyword: params.term, // search term
-                        page: params.page
-                    };
-                },
-                processResults: function (data, params) {
-
-                    params.page = params.page || 1;
-                    return {
-                        results: data,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
-            },
-            templateSelection: function(data, container) {
-                $(data.element).attr("data-name",data.driver_name);
-                $(data.element).attr("data-phone",data.driver_phone);
-                $(data.element).attr("data-sub-name",data.sub_driver_name);
-                $(data.element).attr("data-sub-phone",data.sub_driver_phone);
-                return data.text;
-            },
-            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            minimumInputLength: 0,
-            theme: 'classic'
-        });
-        // $("#select2-driver").on("select2:select",function(){
-        //     var $id = $(this).val();
-        //     if($id > 0)
-        //     {
-        //         $('input[name=driver_name]').val($(this).find('option:selected').attr('data-name'));
-        //         $('input[name=driver_phone]').val($(this).find('option:selected').attr('data-phone'));
-        //         $('input[name=copilot_name]').val($(this).find('option:selected').attr('data-sub-name'));
-        //         $('input[name=copilot_phone]').val($(this).find('option:selected').attr('data-sub-phone'));
-        //     }
-        // });
 
 
 

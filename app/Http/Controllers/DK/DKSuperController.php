@@ -1,25 +1,25 @@
 <?php
-namespace App\Http\Controllers\YH;
+namespace App\Http\Controllers\DK;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\YH\YH_User;
-use App\Models\YH\YH_Item;
+use App\Models\DK\DK_User;
+use App\Models\DK\YH_Item;
 
-use App\Repositories\YH\YHSuperRepository;
+use App\Repositories\DK\DKSuperRepository;
 
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
 
-class YHSuperController extends Controller
+class DKSuperController extends Controller
 {
     //
     private $repo;
     public function __construct()
     {
-        $this->repo = new YHSuperRepository;
+        $this->repo = new DKSuperRepository;
     }
 
 
@@ -41,7 +41,7 @@ class YHSuperController extends Controller
 //            $admin = SuperAdministrator::whereEmail($email)->first();
 
             $mobile = request()->get('mobile');
-            $admin = YH_User::whereMobile($mobile)->first();
+            $admin = DK_User::whereMobile($mobile)->first();
 
             if($admin)
             {
@@ -137,7 +137,7 @@ class YHSuperController extends Controller
     public function operate_user_user_login()
     {
         $user_id = request()->get('user_id');
-        $user = YH_User::where('id',$user_id)->first();
+        $user = DK_User::where('id',$user_id)->first();
         if($user)
         {
 //            $type = request()->get('type','');
@@ -171,7 +171,7 @@ class YHSuperController extends Controller
     public function operate_user_admin_login()
     {
         $user_id = request()->get('user_id');
-        $user = YH_User::where('id',$user_id)->first();
+        $user = DK_User::where('id',$user_id)->first();
         if($user)
         {
             Auth::guard('yh_admin')->login($user,true);

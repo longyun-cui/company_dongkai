@@ -6,7 +6,7 @@ Route::get('/', function () {
 });
 
 
-$controller = "YHAdminController";
+$controller = "DKAdminController";
 
 Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
@@ -18,7 +18,7 @@ Route::match(['get','post'], 'logout', $controller.'@logout');
  */
 Route::group(['middleware' => ['yh.admin.login']], function () {
 
-    $controller = 'YHAdminController';
+    $controller = 'DKAdminController';
 
 
     Route::get('/', $controller.'@view_admin_index');

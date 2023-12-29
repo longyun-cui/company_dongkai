@@ -6,7 +6,7 @@ Route::get('/', function () {
 });
 
 
-$controller = "YHSuperController";
+$controller = "DKSuperController";
 
 Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
@@ -18,7 +18,7 @@ Route::match(['get','post'], 'logout', $controller.'@logout');
  */
 Route::group(['middleware' => ['yh.super.login']], function () {
 
-    $controller = 'YHSuperController';
+    $controller = 'DKSuperController';
 
 
     Route::get('/', $controller.'@view_super_index');

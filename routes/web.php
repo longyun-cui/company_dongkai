@@ -41,19 +41,19 @@ Route::group(['prefix'=>'common'], function () {
 
 
 /*
- * YH 上海豫好
+ * DK 董凯
  */
-Route::group(['domain'=>env('DOMAIN_ROOT'), 'namespace'=>'YH'], function () {
-    require(__DIR__ . '/YH/route.php');
+Route::group(['domain'=>env('DOMAIN_ROOT'), 'namespace'=>'DK'], function () {
+    require(__DIR__ . '/DK/route.php');
 });
-Route::group(['domain'=>env('DOMAIN_YH_SUPER'), 'namespace'=>'YH'], function () {
-    require(__DIR__ . '/YH/route-super.php');
+Route::group(['domain'=>env('DOMAIN_YH_SUPER'), 'namespace'=>'DK'], function () {
+    require(__DIR__ . '/DK/route-super.php');
 });
-Route::group(['domain'=>env('DOMAIN_YH_ADMIN'), 'namespace'=>'YH'], function () {
-    require(__DIR__ . '/YH/route-admin.php');
+Route::group(['domain'=>env('DOMAIN_YH_ADMIN'), 'namespace'=>'DK'], function () {
+    require(__DIR__ . '/DK/route-admin.php');
 });
-Route::group(['domain'=>env('DOMAIN_YH_STAFF'), 'namespace'=>'YH'], function () {
-    require(__DIR__ . '/YH/route-staff.php');
+Route::group(['domain'=>env('DOMAIN_YH_STAFF'), 'namespace'=>'DK'], function () {
+    require(__DIR__ . '/DK/route-staff.php');
 });
 
 

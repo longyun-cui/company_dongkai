@@ -1,27 +1,27 @@
 <?php
-namespace App\Http\Controllers\YH;
+namespace App\Http\Controllers\DK;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\YH\YH_User;
-use App\Models\YH\YH_Item;
-use App\Models\YH\YH_Pivot_Item_Relation;
+use App\Models\DK\DK_User;
+use App\Models\DK\YH_Item;
+use App\Models\DK\YH_Pivot_Item_Relation;
 
-use App\Repositories\YH\YHStaffRepository;
+use App\Repositories\DK\DKStaffRepository;
 
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
 
-class YHStaffController extends Controller
+class DKStaffController extends Controller
 {
     //
     private $service;
     private $repo;
     public function __construct()
     {
-        $this->repo = new YHStaffRepository;
+        $this->repo = new DKStaffRepository;
     }
 
     /*
@@ -45,7 +45,7 @@ class YHStaffController extends Controller
 //            $admin = OrgAdministrator::whereEmail($email)->first();
 
             $mobile = request()->get('mobile');
-            $user = YH_User::withTrashed()->whereMobile($mobile)->first();
+            $user = DK_User::withTrashed()->whereMobile($mobile)->first();
 
             if($user)
             {
