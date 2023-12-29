@@ -95,19 +95,6 @@
 {{--                    </div>--}}
 {{--                </div>--}}
 
-                {{--渠道来源--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">渠道来源</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="channel_source" id="">
-                            <option value="">选择渠道</option>
-                            @foreach(config('info.channel_source') as $v)
-                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->channel_source) selected="selected" @endif>{{ $v }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
                 {{--所在城市--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">所在城市</label>
@@ -163,6 +150,19 @@
                     <label class="control-label col-md-2">微信号</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name=wx_id placeholder="微信号" value="{{ $data->wx_id or '' }}">
+                    </div>
+                </div>
+
+                {{--渠道来源--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">渠道来源</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="channel_source" id="">
+                            <option value="">选择渠道</option>
+                            @foreach(config('info.channel_source') as $v)
+                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->channel_source) selected="selected" @endif>{{ $v }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

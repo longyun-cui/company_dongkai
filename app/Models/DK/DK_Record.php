@@ -7,7 +7,7 @@ class DK_Record extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "yh_record";
+    protected $table = "dk_record";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort',
         'record_active', 'record_status', 'record_object', 'record_category', 'record_type', 'record_module',
