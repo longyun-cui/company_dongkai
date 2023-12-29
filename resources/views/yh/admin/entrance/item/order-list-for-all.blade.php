@@ -814,7 +814,7 @@
                         "title": "审核结果",
                         "data": "inspected_result",
                         "className": "text-center",
-                        "width": "64px",
+                        "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1230,7 +1230,7 @@
                         "title": "操作",
                         "data": 'id',
                         "className": "",
-                        "width": "160px",
+                        "width": "180px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
