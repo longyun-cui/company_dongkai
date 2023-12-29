@@ -46,44 +46,44 @@ class DK_Order extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
     }
     // 更改者
     function updater()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','updater_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
     }
     // 验证者
     function verifier()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','verifier_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','verifier_id','id');
     }
     // 审核者
     function inspector()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','inspector_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
     }
     // 完成者
     function completer()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','completer_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','user_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
     }
 
 
     // 项目
     function project_er()
     {
-        return $this->belongsTo('App\Models\Dk\DK_Project','project_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Project','project_id','id');
     }
 
 
