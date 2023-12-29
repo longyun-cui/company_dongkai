@@ -112,12 +112,6 @@
             {{--数据统计--}}
             <li class="header">数据统计</li>
 
-            <li class="treeview {{ $menu_active_of_statistic_index or '' }}">
-                <a href="{{ url('/statistic/statistic-index') }}">
-                    <i class="fa fa-pie-chart text-green"></i> <span>数据统计</span>
-                </a>
-            </li>
-
             @if(in_array($me->user_type,[0,1,9,11,81,84]))
                 <li class="treeview {{ $menu_active_of_statistic_customer_service or '' }}">
                     <a href="{{ url('/statistic/statistic-customer-service') }}">
@@ -133,6 +127,12 @@
                     </a>
                 </li>
             @endif
+
+            <li class="treeview {{ $menu_active_of_statistic_index or '' }}">
+                <a href="{{ url('/statistic/statistic-index') }}">
+                    <i class="fa fa-pie-chart text-green"></i> <span>数据统计</span>
+                </a>
+            </li>
 
             @if(in_array($me->user_type,[0,1,9,11,71,77]))
             <li class="treeview {{ $menu_active_of_statistic_export or '' }}">
