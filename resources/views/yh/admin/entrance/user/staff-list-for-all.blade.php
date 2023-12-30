@@ -285,6 +285,16 @@
                         }
                     },
                     {
+                        "title": "登录工号",
+                        "data": "mobile",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "姓名",
                         "data": "id",
                         "className": "",
@@ -335,19 +345,9 @@
                         }
                     },
                     {
-                        "title": "登录手机",
-                        "data": "mobile",
-                        "className": "",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                       "title": "上级",
+                       "title": "上级领导",
                        "data": "id",
-                       "className": "text-left",
+                       "className": "",
                        "width":"100px",
                        "orderable": false,
                        render: function(data, type, row, meta) {

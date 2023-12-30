@@ -737,7 +737,7 @@
                         }
                     },
                     {
-                        "title": "部门名称",
+                        "title": "部门类型",
                         "data": 'department_type',
                         "width": "80px",
                         "orderable": false,
