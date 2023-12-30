@@ -772,7 +772,7 @@
                         "title": "小组名称",
                         "data": "name",
                         "className": "text-center",
-                        "width": "120px",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.department_type == 11)
@@ -789,7 +789,7 @@
                         "title": "负责人",
                         "data": "leader_id",
                         "className": "text-center",
-                        "width": "240px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -847,7 +847,7 @@
                     },
                     {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "80px",
                         "title": "创建者",
                         "data": "creator_id",
                         "orderable": false,
@@ -857,7 +857,32 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "108px",
+                        "width": "120px",
+                        "title": "创建时间",
+                        "data": 'created_at',
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                        }
+                    },
+                    {
+                        "className": "font-12px",
+                        "width": "120px",
                         "title": "更新时间",
                         "data": 'updated_at',
                         "orderable": false,
