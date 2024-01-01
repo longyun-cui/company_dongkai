@@ -29,8 +29,8 @@
                 if(window.location.search) history.replaceState({page: 1}, "", $url);
             }
 
-            $('.comprehensive-day-title').html($date);
-            $('.comprehensive-month-title').html($month);
+            $('.comprehensive-day-title').html($date+'日');
+            $('.comprehensive-month-title').html($month+'月');
             if($project_id > 0)  $('.comprehensive-title').html('【'+$project_text+'】');
 
             var $data = new Object();

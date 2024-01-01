@@ -142,18 +142,18 @@
                 </div>
 
                 {{--上级--}}
-{{--                <div class="form-group superior-box">--}}
-{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 上级</label>--}}
-{{--                    <div class="col-md-8 ">--}}
-{{--                        <select class="form-control" name="superior_id" id="select2-superior" data-type="">--}}
-{{--                            @if($operate == 'edit' && $data->superior_id)--}}
-{{--                                <option data-id="{{ $data->superior_id or 0 }}" value="{{ $data->superior_id or 0 }}">{{ $data->superior->true_name }}</option>--}}
-{{--                            @else--}}
-{{--                                <option data-id="0" value="0">未指定</option>--}}
-{{--                            @endif--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                <div class="form-group superior-box">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 上级</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="superior_id" id="select2-superior" data-type="">
+                            @if($operate == 'edit' && $data->superior_id)
+                                <option data-id="{{ $data->superior_id or 0 }}" value="{{ $data->superior_id or 0 }}">{{ $data->superior->true_name }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
 
                 {{--部门-大区--}}
                 <div class="form-group department-box department-district-box">
@@ -343,8 +343,8 @@
             // $("#select2-superior").find("option[value=0]").attr("selected",true);
             // radio
             var $value = $(this).val();
-            console.log($value);
-            if($value == 77 || $value == 84 || $value == 88)
+            // if($value == 77 || $value == 84 || $value == 88)
+            if($value == 77)
             {
                 $('.superior-box').show();
             }
