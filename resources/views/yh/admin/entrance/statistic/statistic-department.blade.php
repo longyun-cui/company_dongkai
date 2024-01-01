@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '客服看板' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '部门看板' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -20,44 +20,44 @@
         <div class="box box-info main-list-body">
 
             <div class="box-header with-border" style="margin:16px 0;">
-                <h3 class="box-title">客服看板(<span class="statistic-title">全部</span>)</h3>
+                <h3 class="box-title">部门看板(<span class="statistic-title">全部</span>)</h3>
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="statistic-for-customer-service">
+            <div class="box-body datatable-body item-main-body" id="statistic-for-department">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="hidden" name="customer-service-time-type" value="" readonly>
+                        <input type="hidden" name="department-time-type" value="" readonly>
 
                         {{--按月查看--}}
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-customer-service">
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-department">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="customer-service-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-next-for-customer-service">
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="department-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-next-for-department">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-customer-service-by-month">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-department-by-month">
                             <i class="fa fa-search"></i> 按月查看
                         </button>
 
 
                         {{--按天查看--}}
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-customer-service">
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-department">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="customer-service-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-customer-service">
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="department-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-department">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-customer-service-by-day">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-department-by-day">
                             <i class="fa fa-search"></i> 按日查看
                         </button>
 
 
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-customer-service">
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-department">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="tableArea">
-                    <table class='table table-striped- table-bordered table-hover order-column' id='datatable_ajax'>
+                    <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
                         <thead>
                         </thead>
                         <tbody>
@@ -141,7 +141,7 @@
     <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
-@include(env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-customer-service-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-department-script')
 <script>
     var TableDatatablesAjax = function () {
         var datatableAjax = function () {
@@ -154,19 +154,19 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/statistic/statistic-customer-service') }}",
+                    'url': "{{ url('/statistic/statistic-department') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="customer-service-id"]').val();
-                        d.name = $('input[name="customer-service-name"]').val();
-                        d.title = $('input[name="customer-service-title"]').val();
-                        d.keyword = $('input[name="customer-service-keyword"]').val();
-                        d.status = $('select[name="customer-service-status"]').val();
-                        d.time_type = $('input[name="customer-service-time-type"]').val();
-                        d.time_month = $('input[name="customer-service-month"]').val();
-                        d.time_date = $('input[name="customer-service-date"]').val();
+                        d.id = $('input[name="department-id"]').val();
+                        d.name = $('input[name="department-name"]').val();
+                        d.title = $('input[name="department-title"]').val();
+                        d.keyword = $('input[name="department-keyword"]').val();
+                        d.status = $('select[name="department-status"]').val();
+                        d.time_type = $('input[name="department-time-type"]').val();
+                        d.time_month = $('input[name="department-month"]').val();
+                        d.time_date = $('input[name="department-date"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",
@@ -190,43 +190,33 @@
 //                        "orderable": false
 //                    },
                     {
-                        "title": "大区经理",
-                        "data": "department_district_id",
+                        "title": "主管",
+                        "data": "superior_id",
                         "className": "vertical-middle",
                         "width": "100px",
-                        "orderable": false,
+                        "orderable": true,
                         render: function(data, type, row, meta) {
-                            return row.department_district_er == null ? '未知' : '<a href="javascript:void(0);">' + row.department_district_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_district_er.leader.username + '</a>';
+                            return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
                         }
                     },
                     {
-                        "title": "部门主管",
-                        "data": "department_group_id",
-                        "className": "vertical-middle",
-                        "width": "100px",
-                        "orderable": false,
+                        "title": "ID",
+                        "data": "id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": true,
                         render: function(data, type, row, meta) {
-                            return row.department_group_er == null ? '未知' : '<a href="javascript:void(0);">' + row.department_group_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_group_er.leader.username + '</a>';
+                            return data;
                         }
                     },
-                    // {
-                    //     "title": "ID",
-                    //     "data": "id",
-                    //     "className": "",
-                    //     "width": "80px",
-                    //     "orderable": true,
-                    //     render: function(data, type, row, meta) {
-                    //         return data;
-                    //     }
-                    // },
                     {
                         "title": "姓名",
-                        "data": "username",
+                        "data": "true_name",
                         "className": "text-center",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">' + data + '</a>';
+                            return data;
                         }
                     },
                     {
@@ -293,8 +283,8 @@
                         }
                     },
                     {
-                        "title": "小组提交量",
-                        "data": "group_count_for_all",
+                        "title": "总提交量",
+                        "data": "order_sum_for_all",
                         "className": "text-center vertical-middle",
                         "width": "100px",
                         "orderable": false,
@@ -303,8 +293,8 @@
                         }
                     },
                     {
-                        "title": "小组通过量",
-                        "data": "group_count_for_accepted",
+                        "title": "总通过量",
+                        "data": "order_sum_for_accepted",
                         "className": "text-center vertical-middle",
                         "width": "100px",
                         "orderable": false,
@@ -314,38 +304,7 @@
                     },
                     {
                         "title": "平均通过率",
-                        "data": "group_rate_for_accepted",
-                        "className": "text-center vertical-middle",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data) return data + " %";
-                            return data
-                        }
-                    },
-                    {
-                        "title": "大区提交量",
-                        "data": "district_count_for_all",
-                        "className": "text-center vertical-middle",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "大区通过量",
-                        "data": "district_count_for_accepted",
-                        "className": "text-center vertical-middle",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "大区通过率",
-                        "data": "district_rate_for_accepted",
+                        "data": "order_average_rate_for_accepted",
                         "className": "text-center vertical-middle",
                         "width": "100px",
                         "orderable": false,
@@ -369,11 +328,11 @@
 
                 },
                 "columnDefs": [
-                    {
+                    {     //重要的部分
                         targets: [0], //要合并的列数（第1，2，3列）
                         createdCell: function (td, cellData, rowData, row, col) {
                             //重要的操作可以合并列的代码
-                            var rowspan = rowData.district_merge;
+                            var rowspan = rowData.merge;
                             if (rowspan > 1) {
                                 $(td).attr('rowspan', rowspan)
                             }
@@ -381,33 +340,16 @@
                                 $(td).remove();
                             }
                         },
-                        "data": "department_district_id",
+                        "data": "superior_id",
                         "render": function (data, type, full) {
                             // return "<span title='" + data + "'>" + data + "</span>";
-                            return row.department_district_er == null ? '未知' : '<a href="javascript:void(0);">'+row.department_district_er.leader.username+'</a>';
+                            return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
                         }
                     },
                     {
-                        targets: [1], //要合并的列数（第1，2，3列）
+                        targets: [9],
                         createdCell: function (td, cellData, rowData, row, col) {
-                            //重要的操作可以合并列的代码
-                            var rowspan = rowData.group_merge;
-                            if (rowspan > 1) {
-                                $(td).attr('rowspan', rowspan)
-                            }
-                            if (rowspan == 0) {
-                                $(td).remove();
-                            }
-                        },
-                        "data": "department_group_id",
-                        "render": function (data, type, full) {
-                            return row.department_group_er == null ? '未知' : '<a href="javascript:void(0);">'+row.department_group_er.leader.username+'</a>';
-                        }
-                    },
-                    {
-                        targets: [9,10,11],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            var rowspan = rowData.group_merge;
+                            var rowspan = rowData.merge;
                             if (rowspan > 1) {
                                 $(td).attr('rowspan', rowspan)
                             }
@@ -417,9 +359,21 @@
                         }
                     },
                     {
-                        targets: [12,13,14],
+                        targets: [10],
                         createdCell: function (td, cellData, rowData, row, col) {
-                            var rowspan = rowData.district_merge;
+                            var rowspan = rowData.merge;
+                            if (rowspan > 1) {
+                                $(td).attr('rowspan', rowspan)
+                            }
+                            if (rowspan == 0) {
+                                $(td).remove();
+                            }
+                        }
+                    },
+                    {
+                        targets: [11],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            var rowspan = rowData.merge;
                             if (rowspan > 1) {
                                 $(td).attr('rowspan', rowspan)
                             }

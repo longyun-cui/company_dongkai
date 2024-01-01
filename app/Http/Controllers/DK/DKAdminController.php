@@ -1403,6 +1403,13 @@ class DKAdminController extends Controller
         return $this->repo->get_statistic_data_for_finance(request()->all());
     }
 
+
+    // 【统计】客服看板
+    public function view_statistic_department()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_department(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_department(request()->all());
+    }
     // 【统计】客服看板
     public function view_statistic_customer_service()
     {

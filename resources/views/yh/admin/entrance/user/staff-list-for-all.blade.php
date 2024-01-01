@@ -344,19 +344,19 @@
                             else return '--';
                         }
                     },
-                    {
-                       "title": "上级领导",
-                       "data": "id",
-                       "className": "",
-                       "width":"100px",
-                       "orderable": false,
-                       render: function(data, type, row, meta) {
-                           if(row.superior) {
-                               return '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
-                           }
-                           else return '--';
-                       }
-                    },
+                    // {
+                    //    "title": "上级领导",
+                    //    "data": "id",
+                    //    "className": "",
+                    //    "width":"100px",
+                    //    "orderable": false,
+                    //    render: function(data, type, row, meta) {
+                    //        if(row.superior) {
+                    //            return '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
+                    //        }
+                    //        else return '--';
+                    //    }
+                    // },
                     {
                         "title": "备注",
                         "data": "remark",

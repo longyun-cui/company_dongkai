@@ -93,6 +93,18 @@ class DK_Department extends Model
     }
 
 
+    // 工单
+    function order_list_for_district()
+    {
+        return $this->hasMany('App\Models\DK\DK_Order','department_district_id','id');
+    }
+    // 工单
+    function order_list_for_group()
+    {
+        return $this->hasMany('App\Models\DK\DK_Order','department_group_id','id');
+    }
+
+
 
 
     // 驾驶员

@@ -69,7 +69,7 @@
                         <select class="form-control form-filter select2-container order-select2-project" name="order-project" style="width:100px;">
                             @if($project_id > 0)
                                 <option value="-1">选择项目</option>
-                                <option value="{{ $project_id }}" selected="selected">{{ $project_title }}</option>
+                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
                             @else
                                 <option value="-1">选择项目</option>
                             @endif
@@ -901,7 +901,7 @@
                                 $(nTd).attr('data-key','project_id').attr('data-value',data);
                                 if(row.project_er == null) $(nTd).attr('data-option-name','未指定');
                                 else {
-                                    $(nTd).attr('data-option-name',row.project_er.title);
+                                    $(nTd).attr('data-option-name',row.project_er.name);
                                 }
                                 $(nTd).attr('data-column-name','项目');
                                 if(row.project_id) $(nTd).attr('data-operate-type','edit');
@@ -914,7 +914,7 @@
                                 return '未指定';
                             }
                             else {
-                                return '<a href="javascript:void(0);">'+row.project_er.title+'</a>';
+                                return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
                             }
                         }
                     },

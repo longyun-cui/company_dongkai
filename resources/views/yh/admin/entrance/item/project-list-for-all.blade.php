@@ -738,7 +738,7 @@
                     },
                     {
                         "title": "项目名称",
-                        "data": "title",
+                        "data": "name",
                         "className": "text-center",
                         "width": "120px",
                         "orderable": false,

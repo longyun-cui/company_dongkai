@@ -117,6 +117,16 @@ class DK_User extends Authenticatable
     {
         return $this->hasMany('App\Models\DK\DK_Order','creator_id','id');
     }
+    // 主管工单
+    function order_list_for_supervisor()
+    {
+        return $this->hasMany('App\Models\DK\DK_Order','department_supervisor_id','id');
+    }
+    // 经理工单
+    function order_list_for_manager()
+    {
+        return $this->hasMany('App\Models\DK\DK_Order','department_manager_id','id');
+    }
 
     // 审核人工单
     function order_list_for_inspector()

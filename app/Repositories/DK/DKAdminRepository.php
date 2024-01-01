@@ -4051,13 +4051,13 @@ class DKAdminRepository {
     {
         $messages = [
             'operate.required' => 'operate.required.',
-            'title.required' => '请输入项目名称！',
-//            'title.unique' => '该车牌号已存在！',
+            'name.required' => '请输入项目名称！',
+//            'name.unique' => '该项目已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'title' => 'required',
-//            'title' => 'required|unique:dk_project,title',
+            'name' => 'required',
+//            'name' => 'required|unique:dk_project,name',
         ], $messages);
         if ($v->fails())
         {
@@ -4075,9 +4075,9 @@ class DKAdminRepository {
         $operate = $post_data["operate"];
         $operate_id = $post_data["operate_id"];
 
-        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        if($operate == 'create') // 添加 ( $id==0，添加一个项目 )
         {
-            $is_exist = DK_Project::select('id')->where('name',$post_data["title"])->count();
+            $is_exist = DK_Project::select('id')->where('name',$post_data["name"])->count();
             if($is_exist) return response_error([],"该【项目】已存在，请勿重复添加！");
 
             $mine = new DK_Project;
@@ -4087,7 +4087,7 @@ class DKAdminRepository {
         else if($operate == 'edit') // 编辑
         {
             $mine = DK_Project::find($operate_id);
-            if(!$mine) return response_error([],"该【车辆】不存在，刷新页面重试！");
+            if(!$mine) return response_error([],"该【项目】不存在，刷新页面重试！");
         }
         else return response_error([],"参数有误！");
 
@@ -4129,7 +4129,7 @@ class DKAdminRepository {
                     $mine->pivot_project_user()->detach();
                 }
             }
-            else throw new Exception("insert--car--fail");
+            else throw new Exception("insert--project--fail");
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
@@ -5160,7 +5160,7 @@ class DKAdminRepository {
 
         if(empty($post_data['keyword']))
         {
-            $list =DK_Project::select(['id','title as text'])
+            $list =DK_Project::select(['id','name as text'])
                 ->where('item_status',1)
 //                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
@@ -5235,177 +5235,6 @@ class DKAdminRepository {
 
         $list = $query->orderBy('id', 'desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
-        return $list;
-    }
-    //
-    public function operate_order_select2_route($post_data)
-    {
-        if(empty($post_data['keyword']))
-        {
-            $list =YH_Route::select('*','title as text')
-//                ->select(['id','title as text','amount_with_cash','amount_with_invoice'])
-                ->where(['item_status'=>1,'item_category'=>1])
-                ->get()->toArray();
-        }
-        else
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Route::select('*','title as text')
-//                ->select(['id','title as text','amount_with_cash','amount_with_invoice'])
-                ->where('title','like',"%$keyword%")
-                ->where(['item_status'=>1,'item_category'=>1])
-                ->get()->toArray();
-        }
-        $unSpecified = ['id'=>0,'text'=>'[未指定]','amount_with_cash'=>0,'amount_with_invoice'=>0];
-        array_unshift($list,$unSpecified);
-        return $list;
-    }
-    //
-    public function operate_order_select2_pricing($post_data)
-    {
-        if(empty($post_data['keyword']))
-        {
-            $list =YH_Pricing::select(['id','title as text','price1','price2','price3'])
-                ->where(['item_status'=>1,'item_category'=>1])
-                ->get();
-        }
-        else
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Pricing::select(['id','title as text','price1','price2','price3'])->where('title','like',"%$keyword%")
-                ->where(['item_status'=>1,'item_category'=>1])
-                ->get();
-        }
-        foreach ($list as $v)
-        {
-            $v->text = $v->text.' ('.$v->price1.' / '.$v->price2.' / '.$v->price3.')';
-        }
-        $list = $list->toArray();
-        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
-        return $list;
-    }
-    //
-    public function operate_order_select2_car($post_data)
-    {
-        if(empty($post_data['keyword']))
-        {
-            $list =DK_Project::select(['id','name as text','driver_id','linkman_name','linkman_phone'])
-                ->with('driver_er')
-                ->where(['item_status'=>1, 'item_type'=>1])
-//                ->whereIn('user_type',[41,61,88])
-                ->get()->toArray();
-        }
-        else
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $list =DK_Project::select(['id','name as text','driver_id','linkman_name','linkman_phone'])
-                ->with('driver_er')
-                ->where('name','like',"%$keyword%")
-                ->where(['item_status'=>1, 'item_type'=>1])
-//                ->whereIn('user_type',[41,61,88])
-                ->get()->toArray();
-        }
-        $unSpecified = ['id'=>0,'text'=>'[未指定]','driver_id'=>0,'linkman_name'=>'','linkman_phone'=>''];
-        array_unshift($list,$unSpecified);
-        return $list;
-    }
-    //
-    public function operate_order_select2_trailer($post_data)
-    {
-        if(empty($post_data['keyword']))
-        {
-            $list =DK_Project::select(['id','name as text'])
-                ->with('driver_er')
-                ->where(['item_status'=>1, 'item_type'=>21])
-//                ->whereIn('item_type',[41,61,88])
-                ->get()->toArray();
-        }
-        else
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $list =DK_Project::select(['id','name as text'])
-                ->with('driver_er')
-                ->where('name','like',"%$keyword%")
-                ->where(['item_status'=>1, 'item_type'=>21])
-//                ->whereIn('item_type',[41,61,88])
-                ->get()->toArray();
-        }
-        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
-        return $list;
-    }
-    //
-    public function operate_order_select2_container($post_data)
-    {
-        if(empty($post_data['keyword']))
-        {
-            $list =DK_Project::select(['id','name as text'])
-                ->with('driver_er')
-                ->where(['item_status'=>1, 'item_type'=>31])
-//                ->whereIn('item_type',[41,61,88])
-                ->get()->toArray();
-        }
-        else
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $list =DK_Project::select(['id','name as text'])
-                ->with('driver_er')
-                ->where('name','like',"%$keyword%")
-                ->where(['item_status'=>1, 'item_type'=>31])
-//                ->whereIn('item_type',[41,61,88])
-                ->get()->toArray();
-        }
-        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
-        return $list;
-    }
-    //
-    public function operate_order_list_select2_car($post_data)
-    {
-        $query = DK_Project::select(['id','name as text','driver_id'])
-            ->with('driver_er');
-
-        if(!empty($post_data['car_type']))
-        {
-            if($post_data['car_type'] == 'all')
-            {
-            }
-            else if($post_data['car_type'] == 'car') $query->where('item_type',1);
-            else if($post_data['car_type'] == 'trailer') $query->where('item_type',21);
-            else if($post_data['car_type'] == 'container') $query->where('item_type',31);
-        }
-
-        if(!empty($post_data['keyword']))
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $query->where('name','like',"%$keyword%");
-        }
-
-        $list = $query->get()->toArray();
-        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
-        return $list;
-    }
-    //
-    public function operate_order_select2_driver($post_data)
-    {
-        if(empty($post_data['keyword']))
-        {
-            $list =YH_Driver::select(['id','driver_name as text'])
-                ->addSelect(['driver_name','driver_phone','sub_driver_name','sub_driver_phone'])
-                ->where(['user_status'=>1])
-                ->get()->toArray();
-        }
-        else
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Driver::select(['id','driver_name as text'])->where('driver_name','like',"%$keyword%")
-                ->where(['user_status'=>1])
-                ->get()->toArray();
-        }
-        $unSpecified = ['id'=>0,'text'=>'[未指定]','driver_name'=>'','driver_phone'=>'','sub_driver_name'=>'','sub_driver_phone'=>''];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7611,11 +7440,11 @@ class DKAdminRepository {
         {
             if(is_numeric($post_data['project_id']) && $post_data['project_id'] > 0)
             {
-                $driver = DK_Project::select(['id','title'])->find($post_data['project_id']);
-                if($driver)
+                $project = DK_Project::select(['id','name'])->find($post_data['project_id']);
+                if($project)
                 {
                     $view_data['project_id'] = $post_data['project_id'];
-                    $view_data['project_title'] = $driver->title;
+                    $view_data['project_name'] = $project->name;
                 }
                 else $view_data['project_id'] = -1;
             }
@@ -7667,15 +7496,11 @@ class DKAdminRepository {
 
         $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
-        $car_list = DK_Project::select('id','title')->whereIn('item_type',[1,21])->get();
-        $route_list = YH_Route::select('id','title')->get();
-        $pricing_list = YH_Pricing::select('id','title')->get();
+        $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
 
         $view_data['staff_list'] = $staff_list;
         $view_data['client_list'] = $client_list;
-        $view_data['car_list'] = $car_list;
-        $view_data['route_list'] = $route_list;
-        $view_data['pricing_list'] = $pricing_list;
+        $view_data['project_list'] = $project_list;
         $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
@@ -10082,27 +9907,26 @@ class DKAdminRepository {
     }
 
 
-    // 【统计】客服看板
-    public function view_statistic_customer_service()
+    // 【统计】团队看板
+    public function view_statistic_department()
     {
         $this->get_me();
         $me = $this->me;
 
-        $view_data['menu_active_of_statistic_customer_service'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-customer-service';
+        $view_data['menu_active_of_statistic_department'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-department';
         return view($view_blade)->with($view_data);
     }
-    public function get_statistic_data_for_customer_service($post_data)
+    public function get_statistic_data_for_department($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_User::select('*')
+        $query = DK_Department::select('*')
             ->with([
                 'superior' => function($query) { $query->select(['id','username','true_name']); }
             ])
-            ->whereIn('user_category',[11])
-            ->whereIn('user_type',[84,88]);
+            ->whereIn('department_type',[21]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -10263,6 +10087,233 @@ class DKAdminRepository {
 
             $v[0]->merge = count($v);
         }
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【统计】客服看板
+    public function view_statistic_customer_service()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $view_data['menu_active_of_statistic_customer_service'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-customer-service';
+        return view($view_blade)->with($view_data);
+    }
+    public function get_statistic_data_for_customer_service($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_User::select(['id','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
+            ->with([
+                'superior' => function($query) { $query->select(['id','username','true_name']); },
+                'department_district_er' => function($query) {
+                    $query->select(['id','name','leader_id'])->with([
+                        'leader' => function($query) {
+                            $query->select(['id','username'])
+                                ->withCount([
+                                    'order_list_for_manager as district_count_for_all' => function($query) { $query->where('is_published', 1); },
+                                    'order_list_for_manager as district_count_for_accepted' => function($query) { $query->where('inspected_result', '通过'); }
+                                ]); }
+                    ]);
+                },
+                'department_group_er' => function($query) {
+                    $query->select(['id','name','leader_id'])->with([
+                        'leader' => function($query) {
+                            $query->select(['id','username'])
+                                ->withCount([
+                                    'order_list_for_supervisor as group_count_for_all' => function($query) { $query->where('is_published', 1); },
+                                    'order_list_for_supervisor as group_count_for_accepted' => function($query) { $query->where('inspected_result', '通过'); }
+                                ]); }
+                    ]);
+                },
+            ])
+            ->where('department_district_id','>',0)
+            ->where('department_group_id','>',0)
+            ->whereIn('user_type',[84,88])
+            ->whereIn('user_type',[84,88]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        // 客服经理
+        if($me->user_type == 81)
+        {
+            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
+
+            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
+        }
+        else if($me->user_type == 84)
+        {
+            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+        }
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'day')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query->withCount([
+                'order_list as order_count_for_all'=>function($query) use($the_day) {
+                    $query->where('is_published', 1)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                },
+                'order_list as order_count_for_accepted'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '通过');
+                },
+                'order_list as order_count_for_refused'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '拒绝');
+                },
+                'order_list as order_count_for_repeated'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '重复');
+                },
+                'order_list as order_count_for_accepted_inside'=>function($query) use($the_day) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '内部通过');
+                }
+            ]);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query->withCount([
+                'order_list as order_count_for_all'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->where('is_published', 1)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+                },
+                'order_list as order_count_for_accepted'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '通过');
+                },
+                'order_list as order_count_for_refused'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '拒绝');
+                },
+                'order_list as order_count_for_repeated'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '重复');
+                },
+                'order_list as order_count_for_accepted_inside'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '内部通过');
+                }
+            ]);
+
+        }
+        else
+        {
+            $query->withCount([
+                'order_list as order_count_for_all'=>function($query) {
+                    $query->where('is_published', 1);
+                },
+                'order_list as order_count_for_accepted'=>function($query) {
+                    $query->where('inspected_result', '通过');
+                },
+                'order_list as order_count_for_refused'=>function($query) {
+                    $query->where('inspected_result', '拒绝');
+                },
+                'order_list as order_count_for_repeated'=>function($query) {
+                    $query->where('inspected_result', '重复');
+                },
+                'order_list as order_count_for_accepted_inside'=>function($query) {
+                    $query->where('inspected_result', '内部通过');
+                }
+            ]);
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("department_district_id", "asc")->orderBy("department_group_id", "asc")->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            if($v->order_count_for_all > 0)
+            {
+                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            }
+            else $list[$k]->order_rate_for_accepted = 0;
+
+            // 小组数据
+            if(isset($v->department_group_er->leader->group_count_for_all))
+            {
+                $v->group_count_for_all = $v->department_group_er->leader->group_count_for_all;
+            }
+            else $v->group_count_for_all = 0;
+            if(isset($v->department_group_er->leader->group_count_for_accepted))
+            {
+                $v->group_count_for_accepted = $v->department_group_er->leader->group_count_for_accepted;
+            }
+            $v->group_count_for_accepted = 0;
+            $v->group_count_for_refused = 0;
+            $v->group_count_for_repeated = 0;
+            $v->group_count_for_accepted_inside = 0;
+            if($v->group_count_for_all > 0)
+            {
+                $v->group_rate_for_accepted = round(($v->group_count_for_accepted * 100 / $v->group_count_for_all),2);
+            }
+            else $v->group_rate_for_accepted = 0;
+
+
+            // 大区数据
+            if(isset($v->department_district_er->leader->district_count_for_all))
+            {
+                $v->district_count_for_all = $v->department_district_er->leader->district_count_for_all;
+            }
+            else $v->district_count_for_all = 0;
+            if(isset($v->department_district_er->leader->district_count_for_accepted))
+            {
+                $v->district_count_for_accepted = $v->department_district_er->leader->district_count_for_accepted;
+            }
+            else $v->district_count_for_accepted = 0;
+            $v->district_count_for_refused = 0;
+            $v->district_count_for_repeated = 0;
+            $v->district_count_for_accepted_inside = 0;
+            if($v->district_count_for_all > 0)
+            {
+                $v->district_rate_for_accepted = round(($v->district_count_for_accepted * 100 / $v->district_count_for_all),2);
+            }
+            else $v->district_rate_for_accepted = 0;
+
+            $v->district_merge = 0;
+            $v->group_merge = 0;
+        }
+//        dd($list->toArray());
+
+        $grouped_by_district = $list->groupBy('department_district_id');
+        foreach ($grouped_by_district as $k => $v)
+        {
+            $v[0]->district_merge = count($v);
+
+            $grouped_by_group = $list->groupBy('department_group_id');
+            foreach ($grouped_by_group as $key => $val)
+            {
+                $val[0]->group_merge = count($val);
+            }
+        }
+//        dd($list->toArray());
 
         return datatable_response($list, $draw, $total);
     }
@@ -10702,7 +10753,7 @@ class DKAdminRepository {
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
                 'client_er'=>function($query) { $query->select('id','username','short_name'); },
-                'project_er'=>function($query) { $query->select('id','title'); },
+                'project_er'=>function($query) { $query->select('id','name'); },
             ]);
 
         if($export_type == "month")
@@ -10741,7 +10792,7 @@ class DKAdminRepository {
 
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['assign_date'] = date('Y-m-d', $v['assign_time']);
-            $cellData[$k]['project_er_title'] = $v['project_er']['title'];
+            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
             $cellData[$k]['channel_source'] = $v['channel_source'];
@@ -10768,7 +10819,7 @@ class DKAdminRepository {
             'id'=>'ID',
             'creator_name'=>'创建人',
             'assign_date'=>'提交时间',
-            'project_er_title'=>'项目',
+            'project_er_name'=>'项目',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'channel_source'=>'渠道来源',
@@ -10829,9 +10880,9 @@ class DKAdminRepository {
         $project_title = '';
         if($project_id)
         {
-            if($cellData[1]['project_er_title'])
+            if($cellData[1]['project_er_name'])
             {
-                $project_name = $cellData[1]['project_er_title'];
+                $project_name = $cellData[1]['project_er_name'];
                 $project_title = '【'.$project_name.'】';
             }
         }
