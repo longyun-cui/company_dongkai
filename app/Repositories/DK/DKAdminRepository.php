@@ -10431,12 +10431,12 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_User::select('*')
+        $query = DK_User::select(['id','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
             ->with([
                 'superior' => function($query) { $query->select(['id','username','true_name']); }
             ])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[77]);
+            ->whereIn('user_type',[71,77]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -10507,15 +10507,20 @@ class DKAdminRepository {
 
         foreach ($list as $k => $v)
         {
-//            if($v->order_count_for_all > 0)
-//            {
-//                $list[$k]->order_rate_for_inspected = round(($v->order_count_for_inspected * 100 / $v->order_count_for_all),2);
-//            }
-//            else $list[$k]->order_rate_for_inspected = 0;
+            if($v->user_type == 71)
+            {
+                $v->superior_id = $v->id;
+                $v->superior = $v->id;
+                $superior = ['id'=>$v->id,'username'=>$v->username,'true_name'=>$v->true_name];
+                $v->superior = json_decode(json_encode($superior));
+                $list[$k]->superior =  json_decode(json_encode($superior));
+            }
         }
 //        dd($list->toArray());
 
-        $grouped = $list->groupBy('superior_id');
+        $a = [];
+        $list = $list->sortBy('superior_id');
+        $grouped = $list->sortBy('superior_id')->groupBy('superior_id');
         foreach ($grouped as $k => $v)
         {
             $order_sum_for_all = 0;
@@ -10543,8 +10548,9 @@ class DKAdminRepository {
 
             $v[0]->merge = count($v);
         }
+        $collapsed = $grouped->collapse();
 
-        return datatable_response($list, $draw, $total);
+        return datatable_response($collapsed, $draw, $total);
     }
 
 

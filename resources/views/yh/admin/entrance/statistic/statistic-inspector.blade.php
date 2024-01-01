@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '客服看板' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '审核员看板' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="tableArea">
-                    <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
+                    <table class='table table-striped- table-bordered table-hover order-column' id='datatable_ajax'>
                         <thead>
                         </thead>
                         <tbody>
@@ -190,28 +190,29 @@
 //                        "orderable": false
 //                    },
                     {
-                        "title": "主管",
+                        "title": "经理",
                         "data": "superior_id",
                         "className": "vertical-middle",
                         "width": "100px",
-                        "orderable": true,
+                        "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
+                            if(row.user_type == 71) return '<a href="javascript:void(0);">'+row.username+'</a>';
+                            return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.username+'</a>';
                         }
                     },
-                    {
-                        "title": "ID",
-                        "data": "id",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": true,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "ID",
+                    //     "data": "id",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": true,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "姓名",
-                        "data": "true_name",
+                        "data": "username",
                         "className": "text-center",
                         "width": "100px",
                         "orderable": false,
@@ -223,7 +224,7 @@
                         "title": "审核量",
                         "data": "order_count_for_inspected",
                         "className": "font-12px",
-                        "width": "80px",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -254,7 +255,7 @@
 
                 },
                 "columnDefs": [
-                    {     //重要的部分
+                    {
                         targets: [0], //要合并的列数（第1，2，3列）
                         createdCell: function (td, cellData, rowData, row, col) {
                             //重要的操作可以合并列的代码
@@ -265,15 +266,10 @@
                             if (rowspan == 0) {
                                 $(td).remove();
                             }
-                        },
-                        "data": "superior_id",
-                        "render": function (data, type, full) {
-                            // return "<span title='" + data + "'>" + data + "</span>";
-                            return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
                         }
                     },
                     {
-                        targets: [4],
+                        targets: [3],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.merge;
                             if (rowspan > 1) {
