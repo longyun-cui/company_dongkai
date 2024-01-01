@@ -31,6 +31,10 @@
 
                         <input type="hidden" name="customer-service-time-type" value="" readonly>
 
+                        <select class="form-control form-filter select2-container select2-project" name="customer-service-project" style="width:160px;">
+                            <option value="-1">选择项目</option>
+                        </select>
+
                         {{--按月查看--}}
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-customer-service">
                             <i class="fa fa-chevron-left"></i>
@@ -40,7 +44,7 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-customer-service-by-month">
-                            <i class="fa fa-search"></i> 按月查看
+                            <i class="fa fa-search"></i> 按月查询
                         </button>
 
 
@@ -53,10 +57,13 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-customer-service-by-day">
-                            <i class="fa fa-search"></i> 按日查看
+                            <i class="fa fa-search"></i> 按日查询
                         </button>
 
 
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-customer-service">
+                            <i class="fa fa-search"></i> 全部查询
+                        </button>
                         <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-customer-service">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
@@ -167,6 +174,7 @@
                         d.time_type = $('input[name="customer-service-time-type"]').val();
                         d.time_month = $('input[name="customer-service-month"]').val();
                         d.time_date = $('input[name="customer-service-date"]').val();
+                        d.project = $('select[name="customer-service-project"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",

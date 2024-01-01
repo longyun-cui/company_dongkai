@@ -56,7 +56,7 @@
 
 
                         {{--业务管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,88]))
+                        @if(in_array($me->user_type,[0,1,9,11,84,88]))
                         <li class="header">业务</li>
                         @endif
 
@@ -68,7 +68,7 @@
                         </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,88]))
+                        @if(in_array($me->user_type,[0,1,9,84,88]))
                         <li class="header">
                             <a href="{{ url('/item/order-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加工单

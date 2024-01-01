@@ -112,10 +112,10 @@
             {{--数据统计--}}
             <li class="header">数据统计</li>
 
-            @if(in_array($me->user_type,[0,1,9,11,81,84]))
+            @if(in_array($me->user_type,[0,1,9,11]))
                 <li class="treeview {{ $menu_active_of_statistic_department or '' }}">
                     <a href="{{ url('/statistic/statistic-department') }}">
-                        <i class="fa fa-bar-chart text-purple"></i> <span>客服看板</span>
+                        <i class="fa fa-bar-chart text-purple"></i> <span>团队排名</span>
                     </a>
                 </li>
             @endif

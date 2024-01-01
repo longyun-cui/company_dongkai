@@ -7536,18 +7536,22 @@ class DKAdminRepository {
         // 客服经理
         if($me->user_type == 81)
         {
-            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $subordinates_subordinates = DK_User::select('id')->whereIn('superior_id',$subordinates)->get()->pluck('id')->toArray();
-            $subordinates_list = array_merge($subordinates_subordinates,$subordinates);
-            $subordinates_list[] = $me->id;
-            $query->whereIn('creator_id',$subordinates_list);
+//            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//            $subordinates_subordinates = DK_User::select('id')->whereIn('superior_id',$subordinates)->get()->pluck('id')->toArray();
+//            $subordinates_list = array_merge($subordinates_subordinates,$subordinates);
+//            $subordinates_list[] = $me->id;
+//            $query->whereIn('creator_id',$subordinates_list);
+            $district_staff_list = DK_User::select('id')->where('department_district_id',$me->department_district_id)->get()->pluck('id')->toArray();
+            $query->whereIn('creator_id',$district_staff_list);
         }
         // 客服主管
         if($me->user_type == 84)
         {
-            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $subordinates[] = $me->id;
-            $query->whereIn('creator_id',$subordinates);
+//            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//            $subordinates[] = $me->id;
+//            $query->whereIn('creator_id',$subordinates);
+            $group_staff_list = DK_User::select('id')->where('department_group_id',$me->department_group_id)->get()->pluck('id')->toArray();
+            $query->whereIn('creator_id',$group_staff_list);
         }
         // 客服
         if($me->user_type == 88)
@@ -10109,27 +10113,7 @@ class DKAdminRepository {
 
         $query = DK_User::select(['id','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
             ->with([
-                'superior' => function($query) { $query->select(['id','username','true_name']); },
-                'department_district_er' => function($query) {
-                    $query->select(['id','name','leader_id'])->with([
-                        'leader' => function($query) {
-                            $query->select(['id','username'])
-                                ->withCount([
-                                    'order_list_for_manager as district_count_for_all' => function($query) { $query->where('is_published', 1); },
-                                    'order_list_for_manager as district_count_for_accepted' => function($query) { $query->where('inspected_result', '通过'); }
-                                ]); }
-                    ]);
-                },
-                'department_group_er' => function($query) {
-                    $query->select(['id','name','leader_id'])->with([
-                        'leader' => function($query) {
-                            $query->select(['id','username'])
-                                ->withCount([
-                                    'order_list_for_supervisor as group_count_for_all' => function($query) { $query->where('is_published', 1); },
-                                    'order_list_for_supervisor as group_count_for_accepted' => function($query) { $query->where('inspected_result', '通过'); }
-                                ]); }
-                    ]);
-                },
+                'superior' => function($query) { $query->select(['id','username','true_name']); }
             ])
             ->where('department_district_id','>',0)
             ->where('department_group_id','>',0)
@@ -10138,17 +10122,36 @@ class DKAdminRepository {
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
+
+        // 项目
+        $project_id = 0;
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[0,-1]))
+            {
+//                $query->where('project_id', $post_data['project']);
+                $project_id = $post_data['project'];
+            }
+        }
+
         // 客服经理
         if($me->user_type == 81)
         {
-            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
+            // 根据属下查看
+//            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
+//            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
+            // 根据部门查看
+            $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 84)
         {
-            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+            // 根据属下查看
+//            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+
+            // 根据部门查看
+            $query->where('department_group_id', $me->department_group_id);
         }
 
 
@@ -10158,31 +10161,47 @@ class DKAdminRepository {
             $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
             $query->with([
-                'department_district_er' => function($query) use($the_day) {
+                'department_district_er' => function($query) use($the_day,$project_id) {
                     $query->select(['id','name','leader_id'])->with([
-                        'leader' => function($query) use($the_day) {
+                        'leader' => function($query) use($the_day,$project_id) {
                             $query->select(['id','username'])
                                 ->withCount([
-                                    'order_list_for_manager as district_count_for_all' => function($query) use($the_day) {
-                                        $query->where('is_published', 1)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                                    'order_list_for_manager as district_count_for_all' => function($query) use($the_day,$project_id) {
+                                        $query->where('is_published', 1)
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            })
+                                            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
                                     },
-                                    'order_list_for_manager as district_count_for_accepted' => function($query) use($the_day) {
-                                        $query->where('inspected_result', '通过')->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                                    'order_list_for_manager as district_count_for_accepted' => function($query) use($the_day,$project_id) {
+                                        $query->where('inspected_result', '通过')
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            })
+                                            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
                                     }
                                 ]);
                         }
                     ]);
                 },
-                'department_group_er' => function($query) use($the_day) {
+                'department_group_er' => function($query) use($the_day,$project_id) {
                     $query->select(['id','name','leader_id'])->with([
-                        'leader' => function($query) use($the_day) {
+                        'leader' => function($query) use($the_day,$project_id) {
                             $query->select(['id','username'])
                                 ->withCount([
-                                    'order_list_for_supervisor as group_count_for_all' => function($query) use($the_day) {
-                                        $query->where('is_published', 1)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                                    'order_list_for_supervisor as group_count_for_all' => function($query) use($the_day,$project_id) {
+                                        $query->where('is_published', 1)
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            })
+                                            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
                                     },
-                                    'order_list_for_supervisor as group_count_for_accepted' => function($query) use($the_day) {
-                                        $query->where('inspected_result', '通过')->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                                    'order_list_for_supervisor as group_count_for_accepted' => function($query) use($the_day,$project_id) {
+                                        $query->where('inspected_result', '通过')
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            })
+                                            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
                                     }
                                 ]);
                         }
@@ -10191,20 +10210,40 @@ class DKAdminRepository {
             ]);
 
             $query->withCount([
-                'order_list as order_count_for_all'=>function($query) use($the_day) {
-                    $query->where('is_published', 1)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                'order_list as order_count_for_all'=>function($query) use($the_day,$project_id) {
+                    $query->where('is_published', 1)
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        })
+                        ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
                 },
-                'order_list as order_count_for_accepted'=>function($query) use($the_day) {
-                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '通过');
+                'order_list as order_count_for_accepted'=>function($query) use($the_day,$project_id) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        })
+                        ->where('inspected_result', '通过');
                 },
-                'order_list as order_count_for_refused'=>function($query) use($the_day) {
-                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '拒绝');
+                'order_list as order_count_for_refused'=>function($query) use($the_day,$project_id) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        })
+                        ->where('inspected_result', '拒绝');
                 },
-                'order_list as order_count_for_repeated'=>function($query) use($the_day) {
-                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '重复');
+                'order_list as order_count_for_repeated'=>function($query) use($the_day,$project_id) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        })
+                        ->where('inspected_result', '重复');
                 },
-                'order_list as order_count_for_accepted_inside'=>function($query) use($the_day) {
-                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)->where('inspected_result', '内部通过');
+                'order_list as order_count_for_accepted_inside'=>function($query) use($the_day,$project_id) {
+                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        })
+                        ->where('inspected_result', '内部通过');
                 }
             ]);
         }
@@ -10221,31 +10260,47 @@ class DKAdminRepository {
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
             $query->with([
-                'department_district_er' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                'department_district_er' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
                     $query->select(['id','name','leader_id'])->with([
-                        'leader' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                        'leader' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
                             $query->select(['id','username'])
                                 ->withCount([
-                                    'order_list_for_manager as district_count_for_all' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                                        $query->where('is_published', 1)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+                                    'order_list_for_manager as district_count_for_all' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                                        $query->where('is_published', 1)
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            })
+                                            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
                                     },
-                                    'order_list_for_manager as district_count_for_accepted' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                                        $query->where('inspected_result', '通过')->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+                                    'order_list_for_manager as district_count_for_accepted' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                                        $query->where('inspected_result', '通过')
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            })
+                                            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
                                     }
                                 ]);
                         }
                     ]);
                 },
-                'department_group_er' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                'department_group_er' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
                     $query->select(['id','name','leader_id'])->with([
-                        'leader' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
+                        'leader' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
                             $query->select(['id','username'])
                                 ->withCount([
-                                    'order_list_for_supervisor as group_count_for_all' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                                        $query->where('is_published', 1)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+                                    'order_list_for_supervisor as group_count_for_all' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                                        $query->where('is_published', 1)
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            })
+                                            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
                                     },
-                                    'order_list_for_supervisor as group_count_for_accepted' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                                        $query->where('inspected_result', '通过')->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+                                    'order_list_for_supervisor as group_count_for_accepted' => function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                                        $query->where('inspected_result', '通过')
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            })
+                                            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
                                     }
                                 ]);
                         }
@@ -10254,20 +10309,40 @@ class DKAdminRepository {
             ]);
 
             $query->withCount([
-                'order_list as order_count_for_all'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                    $query->where('is_published', 1)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+                'order_list as order_count_for_all'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                    $query->where('is_published', 1)
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        })
+                        ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
                 },
-                'order_list as order_count_for_accepted'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '通过');
+                'order_list as order_count_for_accepted'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+                        ->where('inspected_result', '通过')
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 },
-                'order_list as order_count_for_refused'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '拒绝');
+                'order_list as order_count_for_refused'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+                        ->where('inspected_result', '拒绝')
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 },
-                'order_list as order_count_for_repeated'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '重复');
+                'order_list as order_count_for_repeated'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+                        ->where('inspected_result', '重复')
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 },
-                'order_list as order_count_for_accepted_inside'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_result', '内部通过');
+                'order_list as order_count_for_accepted_inside'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp,$project_id) {
+                    $query->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+                        ->where('inspected_result', '内部通过')
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 }
             ]);
 
@@ -10275,31 +10350,43 @@ class DKAdminRepository {
         else
         {
             $query->with([
-                'department_district_er' => function($query) {
+                'department_district_er' => function($query) use($project_id) {
                     $query->select(['id','name','leader_id'])->with([
-                        'leader' => function($query) {
+                        'leader' => function($query) use($project_id) {
                             $query->select(['id','username'])
                                 ->withCount([
-                                    'order_list_for_manager as district_count_for_all' => function($query) {
-                                        $query->where('is_published', 1);
+                                    'order_list_for_manager as district_count_for_all' => function($query) use($project_id) {
+                                        $query->where('is_published', 1)
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            });
                                     },
-                                    'order_list_for_manager as district_count_for_accepted' => function($query) {
-                                        $query->where('inspected_result', '通过');
+                                    'order_list_for_manager as district_count_for_accepted' => function($query) use($project_id) {
+                                        $query->where('inspected_result', '通过')
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            });
                                     }
                                 ]);
                         }
                     ]);
                 },
-                'department_group_er' => function($query) {
+                'department_group_er' => function($query) use($project_id) {
                     $query->select(['id','name','leader_id'])->with([
-                        'leader' => function($query) {
+                        'leader' => function($query) use($project_id) {
                             $query->select(['id','username'])
                                 ->withCount([
-                                    'order_list_for_supervisor as group_count_for_all' => function($query) {
-                                        $query->where('is_published', 1);
+                                    'order_list_for_supervisor as group_count_for_all' => function($query) use($project_id) {
+                                        $query->where('is_published', 1)
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            });
                                     },
-                                    'order_list_for_supervisor as group_count_for_accepted' => function($query) {
-                                        $query->where('inspected_result', '通过');
+                                    'order_list_for_supervisor as group_count_for_accepted' => function($query) use($project_id) {
+                                        $query->where('inspected_result', '通过')
+                                            ->when($project_id, function ($query) use ($project_id) {
+                                                return $query->where('project_id', $project_id);
+                                            });
                                     }
                                 ]);
                         }
@@ -10308,20 +10395,35 @@ class DKAdminRepository {
             ]);
 
             $query->withCount([
-                'order_list as order_count_for_all'=>function($query) {
-                    $query->where('is_published', 1);
+                'order_list as order_count_for_all'=>function($query) use($project_id) {
+                    $query->where('is_published', 1)
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 },
-                'order_list as order_count_for_accepted'=>function($query) {
-                    $query->where('inspected_result', '通过');
+                'order_list as order_count_for_accepted'=>function($query) use($project_id) {
+                    $query->where('inspected_result', '通过')
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 },
-                'order_list as order_count_for_refused'=>function($query) {
-                    $query->where('inspected_result', '拒绝');
+                'order_list as order_count_for_refused'=>function($query) use($project_id) {
+                    $query->where('inspected_result', '拒绝')
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 },
-                'order_list as order_count_for_repeated'=>function($query) {
-                    $query->where('inspected_result', '重复');
+                'order_list as order_count_for_repeated'=>function($query) use($project_id) {
+                    $query->where('inspected_result', '重复')
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 },
-                'order_list as order_count_for_accepted_inside'=>function($query) {
-                    $query->where('inspected_result', '内部通过');
+                'order_list as order_count_for_accepted_inside'=>function($query) use($project_id) {
+                    $query->where('inspected_result', '内部通过')
+                        ->when($project_id, function ($query) use ($project_id) {
+                            return $query->where('project_id', $project_id);
+                        });
                 }
             ]);
         }
