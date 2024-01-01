@@ -115,8 +115,14 @@
             $('#select-district').select2();
         });
 
-        $('#select-city').select2();
-        $('#select-district').select2();
+        $('#select-city').select2({
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+        $('#select-district').select2({
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
 
 
     });

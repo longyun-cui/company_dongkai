@@ -290,12 +290,10 @@
         // 【发布】
         $(".main-content").on('click', ".item-publish-submit", function() {
             var $that = $(this);
-            // layer.msg('确定"发布"么？', {
-            //     time: 0
-            //     ,btn: ['确定', '取消']
-            //     ,yes: function(index){
-            //     }
-            // });
+            layer.msg('确定"发布"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
 
                     var $index = layer.load(1, {
                         shade: [0.3, '#fff'],
@@ -336,6 +334,9 @@
                         },
                         'json'
                     );
+
+                }
+            });
         });
         // 【完成】
         $(".main-content").on('click', ".item-complete-submit", function() {

@@ -66,7 +66,7 @@
 {{--                            @endforeach--}}
 {{--                        </select>--}}
 
-                        <select class="form-control form-filter select2-container order-select2-project" name="order-project" style="width:100px;">
+                        <select class="form-control form-filter select2-container order-select2-project" name="order-project" style="width:120px;">
                             @if($project_id > 0)
                                 <option value="-1">选择项目</option>
                                 <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
@@ -77,6 +77,9 @@
 
                         <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
                             <option value ="-1">审核状态</option>
+                            @if(in_array($me->user_type,[81,84,88]))
+                            <option value ="待发布">待发布</option>
+                            @endif
                             <option value ="待审核">待审核</option>
                             <option value ="已审核">已审核</option>
                         </select>
@@ -762,7 +765,7 @@
                     {
                         "title": "工单状态",
                         "className": "",
-                        "width": "60px",
+                        "width": "80px",
                         "data": "id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -802,11 +805,19 @@
 
                             if(row.inspected_at)
                             {
-                                return '<small class="btn-xs bg-blue">已审核</small>';
+                                if(row.inspected_status == 1)
+                                {
+                                    return '<small class="btn-xs bg-blue">已审核</small>';
+                                }
+                                else if(row.inspected_status == 9)
+                                {
+                                    return '<small class="btn-xs bg-aqua">等待再审</small>';
+                                }
+                                else return '--';
                             }
                             else
                             {
-                                return '<small class="btn-xs bg-teal">待审核</small>';
+                                return '<small class="btn-xs bg-aqua">待审核</small>';
                             }
 
                         }
@@ -1313,9 +1324,15 @@
                             }
                             else
                             {
+                                if(row.inspected_status == 1 && row.inspected_result == '二次待审')
+                                {
+                                    $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
+                                    $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
+                                }
                                 $html_detail = '<a class="btn btn-xs bg-primary item-modal-show-for-detail" data-id="'+data+'">详情</a>';
 //                                $html_travel = '<a class="btn btn-xs bg-olive item-modal-show-for-travel" data-id="'+data+'">行程</a>';
                                 $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+
 
                                 if(row.is_completed == 1)
                                 {
@@ -1324,13 +1341,6 @@
                                 }
                                 else
                                 {
-                                    var $to_be_collected = parseFloat(row.amount) + parseFloat(row.oil_card_amount) - parseFloat(row.time_limitation_deduction) - parseFloat(row.income_total);
-                                    if($to_be_collected > 0)
-                                    {
-                                        $html_completed = '<a class="btn btn-xs btn-default disabled">完成</a>';
-                                    }
-                                    else $html_completed = '<a class="btn btn-xs bg-blue item-complete-submit" data-id="'+data+'">完成</a>';
-
                                     if(row.item_status == 97)
                                     {
                                         // $html_abandon = '<a class="btn btn-xs btn-default disabled">弃用</a>';
@@ -1361,9 +1371,13 @@
                                         // $html_inspected = '<a class="btn btn-xs bg-aqua-gradient disabled">已审</a>';
                                         $html_inspected = '<a class="btn btn-xs bg-blue item-inspect-submit" data-id="'+data+'">再审</a>';
                                     }
+                                    $html_edit = '';
+                                    $html_publish = '';
                                 }
 
                             }
+
+
 
 
 

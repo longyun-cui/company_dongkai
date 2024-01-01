@@ -108,8 +108,15 @@
                             </select>
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control" name="location_district" id="select-district">
-                                <option value="">所在区域</option>
+                            <select class="form-control" name="location_district" id="select-district">s
+                                @if($operate == 'edit' && config('info.location_city.'.$data->location_city))
+                                    <option value="">所在区域</option>
+                                    @foreach(config('info.location_city.'.$data->location_city) as $k => $v)
+                                        <option value="{{ $v }}" @if($operate == 'edit' && $v == $data->location_district) selected="selected" @endif>{{ $v }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="">所在区域</option>
+                                @endif
                             </select>
                         </div>
                     </div>

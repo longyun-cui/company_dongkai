@@ -5688,7 +5688,6 @@ class DKAdminRepository {
 //                if($mine->deleted_at) return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
 //                else
                 {
-                    $mine->load(['client_er','car_er','trailer_er']);
                     $mine->custom = json_decode($mine->custom);
                     $mine->custom2 = json_decode($mine->custom2);
                     $mine->custom3 = json_decode($mine->custom3);
@@ -6116,12 +6115,17 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
-        if(in_array($me->user_type,[81,82,88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(in_array($me->user_type,[88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
+            if($item->inspected_status == 1)
+            {
+                $item->inspected_status = 9;
+            }
+
             $item->is_published = 1;
             $item->published_at = time();
             $bool = $item->save();
@@ -7647,10 +7651,17 @@ class DKAdminRepository {
         if(!empty($post_data['inspected_status']))
         {
             $inspected_status = $post_data['inspected_status'];
-            if(in_array($inspected_status,['待审核','已审核']))
+            if(in_array($inspected_status,['待发布','待审核','已审核']))
             {
-                if($inspected_status == '待审核') $query->where('inspected_status', 0);
-                else if($inspected_status == '已审核') $query->where('inspected_status', '<>', 0);
+                if($inspected_status == '待发布')
+                {
+                    $query->where('is_published', 0);
+                }
+                else if($inspected_status == '待审核')
+                {
+                    $query->where('is_published', 1)->whereIn('inspected_status', [0,9]);
+                }
+                else if($inspected_status == '已审核') $query->where('inspected_status', 1);
             }
         }
         // 审核结果
@@ -7666,23 +7677,6 @@ class DKAdminRepository {
 
 
 
-        if(!empty($post_data['status']))
-        {
-            $order_status = $post_data['status'];
-            if(in_array($order_status,["未发布","待发车","进行中","已到达","待收款","已收款","已结束","弃用"]))
-            {
-                if($order_status == "未发布") $query->where('is_published', 0);
-                else if($order_status == "待发车") $query->where('is_published', 1)->whereNull('actual_departure_time');
-                else if($order_status == "进行中") $query->where('is_published', 1)->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time');
-                else if($order_status == "已到达") $query->where('is_published', 1)->whereNotNull('actual_arrival_time');
-                else if($order_status == "待收款") $query->where('is_published', 1)->where('is_completed', '!=', 1)->whereNotNull('actual_arrival_time')
-                    ->whereRaw('(amount + oil_card_amount - time_limitation_deduction) > income_total');
-                else if($order_status == "已收款") $query->where('is_published', 1)->where('is_completed', '!=', 1)->whereNotNull('actual_arrival_time')
-                    ->whereRaw('(amount + oil_card_amount - time_limitation_deduction) <= income_total');
-                else if($order_status == "已结束") $query->where('is_published', 1)->where('is_completed', 1);
-                else if($order_status == "弃用") $query->where('item_status', 97);
-            }
-        }
 
         $total = $query->count();
 
@@ -10545,7 +10539,9 @@ class DKAdminRepository {
         // 审核经理
         if($me->user_type == 71)
         {
-            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+            $query->where(function ($query) use($me) {
+                $query->where('id',$me->id)->orWhereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+            });
         }
 
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
@@ -10555,7 +10551,8 @@ class DKAdminRepository {
 
             $query->withCount([
                 'order_list_for_inspector as order_count_for_inspected'=>function($query) use($the_day) {
-                    $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_day)->where('inspected_status', '<>', 0);
+                    $query->where('inspected_status', '<>', 0)
+                        ->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_day);
                 }
             ]);
         }
@@ -10573,7 +10570,8 @@ class DKAdminRepository {
 
             $query->withCount([
                 'order_list_for_inspector as order_count_for_inspected'=>function($query) use($the_month_start_timestamp,$the_month_ended_timestamp) {
-                    $query->whereBetween('inspected_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->where('inspected_status', '<>', 0);
+                    $query->where('inspected_status', '<>', 0)
+                        ->whereBetween('inspected_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
                 }
             ]);
         }
