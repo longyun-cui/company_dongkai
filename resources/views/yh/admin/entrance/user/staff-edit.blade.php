@@ -142,7 +142,7 @@
                 </div>
 
                 {{--上级--}}
-                <div class="form-group superior-box">
+                <div class="form-group superior-box" style="display:none;">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 上级</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="superior_id" id="select2-superior" data-type="">
