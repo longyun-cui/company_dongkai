@@ -204,7 +204,7 @@
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.department_district_er == null ? '未知' : '<a href="javascript:void(0);">' + row.department_district_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_district_er.leader.username + '</a>';
+                            return row.department_district_er.leader == null ? '未知' : '<a href="javascript:void(0);">' + row.department_district_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_district_er.leader.username + '</a>';
                         }
                     },
                     {
@@ -214,10 +214,10 @@
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.department_group_er == null ? '未知' : '<a href="javascript:void(0);">' + row.department_group_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_group_er.leader.username + '</a>';
+                            return row.department_group_er.leader == null ? '未知' : '<a href="javascript:void(0);">' + row.department_group_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_group_er.leader.username + '</a>';
                         }
                     },
-                    // {
+                    // {s
                     //     "title": "ID",
                     //     "data": "id",
                     //     "className": "",
