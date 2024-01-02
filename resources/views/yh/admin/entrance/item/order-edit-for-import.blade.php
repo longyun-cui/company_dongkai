@@ -54,13 +54,13 @@
 
                 {{--选择车辆--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">选择车辆</label>
+                    <label class="control-label col-md-2">选择项目</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="car_id" id="select2-car">
-                            @if($operate == 'edit' && $data->car_id)
-                                <option data-id="{{ $data->car_id or 0 }}" value="{{ $data->car_id or 0 }}">{{ $data->car_er->name }}</option>
+                        <select class="form-control" name="project_id" id="select2-project">
+                            @if($operate == 'edit' && $data->project_id)
+                                <option data-id="{{ $data->project_id or 0 }}" value="{{ $data->project_id or 0 }}">{{ $data->project_er->name }}</option>
                             @else
-                                <option data-id="0" value="0">选择车辆</option>
+                                <option data-id="0" value="0">选择项目</option>
                             @endif
                         </select>
                     </div>
@@ -70,7 +70,8 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">文件上传</label>
                     <div class="col-md-8">
-                        <input id="multiple-images" type="file" class="file-upload" name="excel-file" multiple- >
+                        <input id="multiple-file" type="file" class="file-upload" name="excel-file" multiple- >
+{{--                        <input id="multiple-files" type="file" class="file-upload" name="multiple-excel-file" multiple >--}}
                     </div>
                 </div>
 
@@ -160,7 +161,7 @@
 
                         $(".fileinput-remove-button").click();
 
-                        location.href = "/item/order-list-for-all";
+                        // location.href = "/item/order-list-for-all";
                     }
                 }
             };
@@ -171,9 +172,9 @@
 
 
         //
-        $('#select2-car').select2({
+        $('#select2-project').select2({
             ajax: {
-                url: "{{ url('/item/order_select2_car') }}",
+                url: "{{ url('/item/item_select2_project') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

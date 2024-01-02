@@ -676,12 +676,12 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[20, 50, 100, 200])) {{ $length.',' }} @endif 20, 50, 100, 200], [ @if(!in_array($length,[20, 50, 100, 200])) {{ $length.',' }} @endif "20", "50", "100", "200"]],
+                "aLengthMenu": [[ @if(!in_array($length,[50, 100, 200])) {{ $length.',' }} @endif 50, 100, 200], [ @if(!in_array($length,[50, 100, 200])) {{ $length.',' }} @endif "50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "iDisplayStart": {{ ($page - 1) * $length }},
-                "iDisplayLength": {{ $length or 20 }},
+                "iDisplayLength": {{ $length or 50 }},
                 "ajax": {
                     'url': "{{ url('/item/order-list-for-all') }}",
                     "type": 'POST',
@@ -805,6 +805,7 @@
 
                             if(row.inspected_at)
                             {
+
                                 if(row.inspected_status == 1)
                                 {
                                     return '<small class="btn-xs bg-blue">已审核</small>';
@@ -817,7 +818,14 @@
                             }
                             else
                             {
-                                return '<small class="btn-xs bg-aqua">待审核</small>';
+                                if(row.created_type = 9)
+                                {
+                                    return '<small class="btn-xs bg-blue">导入</small>';
+                                }
+                                else
+                                {
+                                    return '<small class="btn-xs bg-aqua">待审核</small>';
+                                }
                             }
 
                         }
@@ -1449,7 +1457,7 @@
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != 20) $obj.length = $page_length;
+                    if($page_length != 50) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
                     var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($pagination > 1) $obj.page = $pagination;
