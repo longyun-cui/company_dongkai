@@ -301,7 +301,7 @@
                         }
                     },
                     {
-                        "title": "小组提交量",
+                        "title": "主管-单量",
                         "data": "group_count_for_all",
                         "className": "text-center vertical-middle",
                         "width": "100px",
@@ -311,7 +311,7 @@
                         }
                     },
                     {
-                        "title": "小组通过量",
+                        "title": "主管-通过量",
                         "data": "group_count_for_accepted",
                         "className": "text-center vertical-middle",
                         "width": "100px",
@@ -321,7 +321,7 @@
                         }
                     },
                     {
-                        "title": "平均通过率",
+                        "title": "主管-通过率",
                         "data": "group_rate_for_accepted",
                         "className": "text-center vertical-middle",
                         "width": "100px",
@@ -332,7 +332,7 @@
                         }
                     },
                     {
-                        "title": "大区提交量",
+                        "title": "经理-单量",
                         "data": "district_count_for_all",
                         "className": "text-center vertical-middle",
                         "width": "100px",
@@ -342,7 +342,7 @@
                         }
                     },
                     {
-                        "title": "大区通过量",
+                        "title": "经理-通过量",
                         "data": "district_count_for_accepted",
                         "className": "text-center vertical-middle",
                         "width": "100px",
@@ -352,7 +352,7 @@
                         }
                     },
                     {
-                        "title": "大区通过率",
+                        "title": "经理-通过率",
                         "data": "district_rate_for_accepted",
                         "className": "text-center vertical-middle",
                         "width": "100px",
