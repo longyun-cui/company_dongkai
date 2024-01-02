@@ -5706,6 +5706,9 @@ class DKAdminRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
+            'project_id.required' => '请填选择项目！',
+            'project_id.numeric' => '选择项目参数有误！',
+            'project_id.min' => '请填选择项目！',
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户信息！',
             'location_city.required' => '请选择城市！',
@@ -5713,6 +5716,7 @@ class DKAdminRepository {
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
+            'project_id' => 'required|numeric|min:1',
             'client_name' => 'required',
             'client_phone' => 'required',
             'location_city' => 'required',
