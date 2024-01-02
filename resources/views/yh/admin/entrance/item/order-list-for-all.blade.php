@@ -59,12 +59,12 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-{{--                        <select class="form-control form-filter" name="order-staff" style="width:88px;">--}}
-{{--                            <option value ="-1">选择员工</option>--}}
-{{--                            @foreach($staff_list as $v)--}}
-{{--                                <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->true_name }}</option>--}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
+                        <select class="form-control form-filter order-select2-staff" name="order-staff" style="width:100px;">
+                            <option value ="-1">选择员工</option>
+                            @foreach($staff_list as $v)
+                                <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
+                            @endforeach
+                        </select>
 
                         <select class="form-control form-filter select2-container order-select2-project" name="order-project" style="width:120px;">
                             @if($project_id > 0)

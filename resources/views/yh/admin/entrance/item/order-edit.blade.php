@@ -175,7 +175,7 @@
 
                 {{--通话小结--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">描述</label>
+                    <label class="control-label col-md-2">通话小结</label>
                     <div class="col-md-8 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="description" rows="3" cols="100%">{{ $data->description or '' }}</textarea>

@@ -5706,11 +5706,17 @@ class DKAdminRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-//            'amount.required' => 'amount.required.',
+            'client_name.required' => '请填写客户信息！',
+            'client_phone.required' => '请填写客户信息！',
+            'location_city.required' => '请选择城市！',
+            'description.required' => '请输入通话小结！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-//            'amount' => 'required',
+            'client_name' => 'required',
+            'client_phone' => 'required',
+            'location_city' => 'required',
+            'description' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -5742,7 +5748,7 @@ class DKAdminRepository {
             $mine = DK_Order::find($operate_id);
             if(!$mine) return response_error([],"该工单不存在，刷新页面重试！");
 
-            if(in_array($me->user_type,[88]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
+            if(in_array($me->user_type,[84,88]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
 
             $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->where('id','<>',$operate_id)->count("*");
         }
@@ -6568,7 +6574,6 @@ class DKAdminRepository {
 
         $before = $item->$column_key;
 
-
         if($column_key == "client_phone")
         {
             if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
@@ -6581,6 +6586,8 @@ class DKAdminRepository {
         {
             if(!in_array($me->user_type,[0,1,11,81,84,88])) return response_error([],"你没有操作权限！");
         }
+
+        if(in_array($me->user_type,[84,88]) && $item->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
 
 
         // 启动数据库事务
@@ -7498,7 +7505,7 @@ class DKAdminRepository {
 
 
 
-        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','username')->where('user_category',11)->whereIn('user_type',[81,84,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
 

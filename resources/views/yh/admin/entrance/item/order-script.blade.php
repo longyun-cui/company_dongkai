@@ -1339,6 +1339,12 @@
 
 
 
+        $('.order-select2-staff').select2({
+            theme: 'classic'
+        });
+
+
+
 
         $('.time_picker').datetimepicker({
             locale: moment.locale('zh-cn'),
@@ -1364,6 +1370,8 @@
             autoclose: true,
             ignoreReadonly: true
         });
+
+
 
 
 
