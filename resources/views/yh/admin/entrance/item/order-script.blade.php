@@ -692,7 +692,7 @@
             $('input[name=info-text-set-order-id]').val($that.attr("data-id"));
             $('input[name=info-text-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-text-set-operate-type]').val($that.attr('data-operate-type'));
-            console.log($that.attr("data-value"));
+            // console.log($that.attr("data-value"));
             if($that.attr('data-text-type') == "textarea")
             {
                 $('input[name=info-text-set-column-value]').val('').hide();
