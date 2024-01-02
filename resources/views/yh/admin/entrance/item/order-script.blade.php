@@ -692,6 +692,7 @@
             $('input[name=info-text-set-order-id]').val($that.attr("data-id"));
             $('input[name=info-text-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-text-set-operate-type]').val($that.attr('data-operate-type'));
+            console.log($that.attr("data-value"));
             if($that.attr('data-text-type') == "textarea")
             {
                 $('input[name=info-text-set-column-value]').val('').hide();
@@ -714,7 +715,7 @@
                 $("body").addClass("modal-open");
             });
             $('input[name=info-text-set-column-value]').val('');
-            $('textarea[name=info-textarea-set-column-value]').val('');
+            $('textarea[name=info-textarea-set-column-value]').text('');
         });
         // 【修改-文本-text-属性】【提交】
         $(".main-content").on('click', "#item-submit-for-info-text-set", function() {
