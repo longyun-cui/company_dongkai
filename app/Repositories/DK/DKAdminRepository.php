@@ -5712,7 +5712,7 @@ class DKAdminRepository {
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户信息！',
             'location_city.required' => '请选择城市！',
-            'location_district.required' => '请选择行者办公区域！',
+            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
         ];
         $v = Validator::make($post_data, [
@@ -5721,7 +5721,7 @@ class DKAdminRepository {
             'client_name' => 'required',
             'client_phone' => 'required',
             'location_city' => 'required',
-            'location_city' => 'required',
+            'location_district' => 'required',
             'description' => 'required',
         ], $messages);
         if ($v->fails())
