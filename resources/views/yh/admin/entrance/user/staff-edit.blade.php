@@ -156,7 +156,7 @@
                 </div>
 
                 {{--部门-大区--}}
-                <div class="form-group department-box department-district-box">
+                <div class="form-group department-box department-district-box" style="display:none;">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 大区</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="department_district_id" id="select2-department-district" data-type="">
@@ -170,7 +170,7 @@
                 </div>
 
                 {{--部门-小组--}}
-                <div class="form-group department-box department-group-box">
+                <div class="form-group department-box department-group-box" style="display:none;">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 小组</label>
                     <div class="col-md-8 ">
                         <select class="form-control" name="department_group_id" id="select2-department-group" data-type="">
@@ -477,6 +477,7 @@
             if($value == 81 || $value == 84 || $value == 88)
             {
                 $('.department-box').show();
+                $('.superior-box').hide();
 
                 if($value == 81)
                 {
@@ -494,6 +495,11 @@
             else
             {
                 $('.department-box').hide();
+                if($value == 77)
+                {
+                    $('.superior-box').show();
+                }
+                else $('.superior-box').hide();
             }
         });
 
@@ -502,6 +508,7 @@
         if($user_type == 81 || $user_type == 84 || $user_type == 88)
         {
             $('.department-box').show();
+            $('.superior-box').hide();
         }
         else
         {
@@ -519,6 +526,10 @@
         else if($user_type == 88)
         {
             $('.department-group-box').show();
+        }
+        else if($user_type == 77)
+        {
+            $('.superior-box').show();
         }
 
 
