@@ -10832,6 +10832,7 @@ class DKAdminRepository {
             $cellData[$k]['client_phone'] = $v['client_phone'];
             $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['location_city'] = $v['location_city'];
+            $cellData[$k]['location_district'] = $v['location_district'];
 
             // 是否+V
             if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
@@ -10845,7 +10846,7 @@ class DKAdminRepository {
 
             // 审核
             $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
-            $cellData[$k]['inspected_time'] = date('Y-m-d H:i', $v['inspected_at']);
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
             $cellData[$k]['inspected_result'] = $v['inspected_result'];
         }
 
@@ -10859,6 +10860,7 @@ class DKAdminRepository {
             'client_phone'=>'客户电话',
             'channel_source'=>'渠道来源',
             'location_city'=>'所在城市',
+            'location_district'=>'行政区',
             'is_wx'=>'是否+V',
             'is_repeat'=>'是否重复',
             'description'=>'通话小结',
