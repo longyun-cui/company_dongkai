@@ -1340,7 +1340,7 @@
 
 
 
-        $('.order-select2-staff').select2({
+        $('.order-select2').select2({
             theme: 'classic'
         });
 

@@ -7274,6 +7274,16 @@ class DKAdminRepository {
         }
         else $view_data['staff_id'] = -1;
 
+        // 部门-大区
+        if(!empty($post_data['department_district_id']))
+        {
+            if(is_numeric($post_data['department_district_id']) && $post_data['department_district_id'] > 0) $view_data['department_district_id'] = $post_data['department_district_id'];
+            else $view_data['department_district_id'] = -1;
+        }
+        else $view_data['department_district_id'] = -1;
+
+
+
         // 客户
         if(!empty($post_data['client_id']))
         {
@@ -7343,10 +7353,12 @@ class DKAdminRepository {
 
 
 
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
         $staff_list = DK_User::select('id','username')->where('user_category',11)->whereIn('user_type',[81,84,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
 
+        $view_data['department_district_list'] = $department_district_list;
         $view_data['staff_list'] = $staff_list;
         $view_data['client_list'] = $client_list;
         $view_data['project_list'] = $project_list;
@@ -7454,6 +7466,17 @@ class DKAdminRepository {
                 $query->where('creator_id', $post_data['staff']);
             }
         }
+
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0]))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
+
 
         // 客户
         if(isset($post_data['client']))

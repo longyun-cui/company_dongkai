@@ -44,7 +44,7 @@
 {{--                            @endforeach--}}
 {{--                        </select>--}}
 
-                        <select class="form-control form-filter select2-container select2-project" name="order-project" style="width:100px;">
+                        <select class="form-control form-filter select2-container select2-project" name="order-project" style="width:120px;">
                             <option value="-1">选择项目</option>
                         </select>
 

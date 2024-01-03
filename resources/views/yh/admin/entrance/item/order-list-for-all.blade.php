@@ -59,7 +59,14 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-                        <select class="form-control form-filter order-select2-staff" name="order-staff" style="width:100px;">
+                        <select class="form-control form-filter order-select2" name="order-department-district" style="width:100px;">
+                            <option value ="-1">选择大区</option>
+                            @foreach($department_district_list as $v)
+                                <option value ="{{ $v->id }}" @if($v->id == $department_district_id) selected="selected" @endif>{{ $v->name }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-control form-filter order-select2" name="order-staff" style="width:100px;">
                             <option value ="-1">选择员工</option>
                             @foreach($staff_list as $v)
                                 <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
@@ -697,6 +704,7 @@
                         d.name = $('input[name="order-name"]').val();
                         d.title = $('input[name="order-title"]').val();
                         d.keyword = $('input[name="order-keyword"]').val();
+                        d.department_district = $('select[name="order-department-district"]').val();
                         d.staff = $('select[name="order-staff"]').val();
                         d.project = $('select[name="order-project"]').val();
                         d.status = $('select[name="order-status"]').val();
@@ -1472,6 +1480,7 @@
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
                     if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
+                    if($('select[name="order-inspected-status"]').val() > 0)  $obj.inspected_status = $('select[name="inspected-status"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 50) $obj.length = $page_length;
