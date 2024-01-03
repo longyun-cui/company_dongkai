@@ -837,16 +837,6 @@
                         "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','审核结果');
-                                $(nTd).attr('data-key','inspected_result').attr('data-value',data);
-                                $(nTd).attr('data-column-name','审核结果');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
                         },
                         render: function(data, type, row, meta) {
                             if(!row.inspected_at) return '--';
@@ -877,7 +867,7 @@
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.true_name+'</a>';
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                         }
                     },
                     {
