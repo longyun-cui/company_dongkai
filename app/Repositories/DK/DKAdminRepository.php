@@ -10913,7 +10913,7 @@ class DKAdminRepository {
         }
 
 
-        $title = '【工单】'.' - '.date('Ymd.His').$project_title.$month_title.$time_title;
+        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
 
         $file = Excel::create($title, function($excel) use($cellData) {
             $excel->sheet('全部工单', function($sheet) use($cellData) {
