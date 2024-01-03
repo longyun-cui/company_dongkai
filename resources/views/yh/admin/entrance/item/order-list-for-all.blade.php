@@ -818,7 +818,7 @@
                             }
                             else
                             {
-                                if(row.created_type = 9)
+                                if(row.created_type == 9)
                                 {
                                     return '<small class="btn-xs bg-blue">导入</small>';
                                 }
