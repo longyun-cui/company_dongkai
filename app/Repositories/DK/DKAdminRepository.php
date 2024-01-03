@@ -10879,6 +10879,7 @@ class DKAdminRepository {
         $record_data["after"] = $record_after;
         if($project_er)
         {
+            $record_data["item_id"] = $project_id;
             $record_data["title"] = $project_er->name;
         }
 
