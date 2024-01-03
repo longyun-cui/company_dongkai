@@ -76,6 +76,18 @@
             </div>
         </div>
     </div>
+    {{--牙齿数量--}}
+    <div class="form-group">
+        <label class="control-label col-md-2">牙齿数量</label>
+        <div class="col-md-8 ">
+            <select class="form-control select-select2" name="teeth_count" id="">
+                <option value="">选择牙齿数量</option>
+                @foreach(config('info.teeth_count') as $v)
+                    <option value ="{{ $v }}">{{ $v }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
     {{--是否+V--}}
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 是否+V</label>

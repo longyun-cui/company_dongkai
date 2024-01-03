@@ -124,6 +124,13 @@
             theme: 'classic'
         });
 
+        $('.select-select2').select2({
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+
+
 
     });
 

@@ -1118,6 +1118,28 @@
                         }
                     },
                     {
+                        "title": "牙齿数量",
+                        "data": "teeth_count",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','微信号');
+                                $(nTd).attr('data-key','wx_id').attr('data-value',data);
+                                $(nTd).attr('data-column-name','微信号');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "所在城市",
                         "data": "location_city",
                         "className": "",

@@ -82,22 +82,9 @@
                     </div>
                 </div>
 
-                {{--团队大区--}}
-{{--                <div class="form-group">--}}
-{{--                    <label class="control-label col-md-2">团队大区</label>--}}
-{{--                    <div class="col-md-8 ">--}}
-{{--                        <select class="form-control" name="team_district" id="">--}}
-{{--                            <option value="">选择大区</option>--}}
-{{--                            @foreach(config('info.team_district') as $v)--}}
-{{--                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->team_district) selected="selected" @endif>{{ $v }}</option>--}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-
                 {{--所在城市--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">所在城市</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
                             <select class="form-control" name="location_city" id="select-city">
@@ -119,6 +106,19 @@
                                 @endif
                             </select>
                         </div>
+                    </div>
+                </div>
+
+                {{--牙齿数量--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">牙齿数量</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control select-select2" name="teeth_count" id="">
+                            <option value="">选择牙齿数量</option>
+                            @foreach(config('info.teeth_count') as $v)
+                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->teeth_count) selected="selected" @endif>{{ $v }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

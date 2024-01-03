@@ -26,6 +26,7 @@ class DK_Order extends Model
         'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id', 'is_repeat',
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'is_delay',
+        'teeth_count',
         'company', 'fund', 'mobile', 'city', 'address',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
