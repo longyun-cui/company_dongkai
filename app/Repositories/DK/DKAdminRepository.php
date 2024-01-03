@@ -6737,7 +6737,10 @@ class DKAdminRepository {
             }
 
             $item->$column_key = $column_value;
-            $item->$column_key2 = $column_value2;
+            if($column_key2)
+            {
+                $item->$column_key2 = $column_value2;
+            }
             $bool = $item->save();
             if(!$bool) throw new Exception("order--update--fail");
             else
