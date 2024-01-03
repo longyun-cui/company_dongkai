@@ -311,8 +311,8 @@
                         }
                     },
                     {
-                        "title": "主管-通过量",
-                        "data": "group_count_for_accepted",
+                        "title": "主管-有效量",
+                        "data": "group_count_for_effective",
                         "className": "text-center vertical-middle",
                         "width": "100px",
                         "orderable": false,
@@ -321,8 +321,8 @@
                         }
                     },
                     {
-                        "title": "主管-有效量",
-                        "data": "group_count_for_effective",
+                        "title": "主管-通过量",
+                        "data": "group_count_for_accepted",
                         "className": "text-center vertical-middle",
                         "width": "100px",
                         "orderable": false,
