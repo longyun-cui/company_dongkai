@@ -147,22 +147,23 @@
             </div>
 
 
-            <div class="box-footer _none">
+            <div class="box-footer">
                 <div class="row" style="margin:16px 0;">
                     <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
                         {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
                         {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
                         <div class="input-group">
                             <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
-                            <select name="bulk-operate-status" class="form-control form-filter">
+                            <select name="bulk-operate-status" class="form-control form-filter _none">
                                 <option value="-1">请选择操作类型</option>
                                 <option value="启用">启用</option>
                                 <option value="禁用">禁用</option>
                                 <option value="删除">删除</option>
                                 <option value="彻底删除">彻底删除</option>
                             </select>
-                            <span class="input-group-addon btn btn-default" id="operate-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
-                            <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
+                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
                         </div>
                     </div>
                 </div>
@@ -686,12 +687,12 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[50, 100, 200])) {{ $length.',' }} @endif 50, 100, 200], [ @if(!in_array($length,[50, 100, 200])) {{ $length.',' }} @endif "50", "100", "200"]],
+                "aLengthMenu": [[ @if(!in_array($length,[20,50, 100, 200])) {{ $length.',' }} @endif 20,50, 100, 200], [ @if(!in_array($length,[20,50, 100, 200])) {{ $length.',' }} @endif "20", "50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "iDisplayStart": {{ ($page - 1) * $length }},
-                "iDisplayLength": {{ $length or 50 }},
+                "iDisplayLength": {{ $length or 20 }},
                 "ajax": {
                     'url': "{{ url('/item/order-list-for-all') }}",
                     "type": 'POST',
@@ -746,15 +747,15 @@
                     }
                 ],
                 "columns": [
-//                    {
-//                        "title": "选择",
-//                        "width": "32px",
-//                        "data": "id",
-//                        "orderable": false,
-//                        render: function(data, type, row, meta) {
-//                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
-//                        }
-//                    },
+                   {
+                       "title": "选择",
+                       "width": "32px",
+                       "data": "id",
+                       "orderable": false,
+                       render: function(data, type, row, meta) {
+                           return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+                       }
+                   },
 //                    {
 //                        "title": "序号",
 //                        "width": "32px",
@@ -1510,7 +1511,7 @@
                     if($('select[name="order-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="order-inspected-status"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != 50) $obj.length = $page_length;
+                    if($page_length != 20) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
                     var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($pagination > 1) $obj.page = $pagination;

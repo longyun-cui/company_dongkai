@@ -198,28 +198,28 @@
 
 
 
-    function copyToClipboard(text)
-    {
-        // 创建一个隐藏的textarea元素
-        var textarea = document.createElement("textarea");
-
-        // 设置要复制的文本内容
-        textarea.value = text;
-
-        // 添加该元素到页面上（但不显示）
-        document.body.appendChild(textarea);
-
-        // 选中并复制文本
-        textarea.select();
-        document.execCommand('copy');
-
-        // 移除该元素
-        document.body.removeChild(textarea);
-
-        console.log('已经写入：'+text)
-    }
-    copyToClipboard('123321');
-    copyToClipboard('135');
+    // function copyToClipboard(text)
+    // {
+    //     // 创建一个隐藏的textarea元素
+    //     var textarea = document.createElement("textarea");
+    //
+    //     // 设置要复制的文本内容
+    //     textarea.value = text;
+    //
+    //     // 添加该元素到页面上（但不显示）
+    //     document.body.appendChild(textarea);
+    //
+    //     // 选中并复制文本
+    //     textarea.select();
+    //     document.execCommand('copy');
+    //
+    //     // 移除该元素
+    //     document.body.removeChild(textarea);
+    //
+    //     console.log('已经写入：'+text)
+    // }
+    // copyToClipboard('123321');
+    // copyToClipboard('135');
 
 
 </script>

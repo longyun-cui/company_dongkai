@@ -7185,9 +7185,9 @@ class DKAdminRepository {
         if(!empty($post_data['length']))
         {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
-            else $view_data['length'] = 50;
+            else $view_data['length'] = 20;
         }
-        else $view_data['length'] = 50;
+        else $view_data['length'] = 20;
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -7524,7 +7524,7 @@ class DKAdminRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
 
         if(isset($post_data['order']))
         {
@@ -10888,6 +10888,148 @@ class DKAdminRepository {
         return view($view_blade)->with($view_data);
     }
     // 【数据导出】工单
+    public function operate_statistic_export_for_order_by_ids($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $record_operate_type = 100;
+        $record_column_type = 'ids';
+        $record_before = '';
+        $record_after = $ids;
+
+        // 工单
+        $query = DK_Order::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select('id','name','true_name'); },
+                'inspector'=>function($query) { $query->select('id','name','true_name'); },
+                'project_er'=>function($query) { $query->select('id','name'); },
+            ])
+            ->whereIn('id',$ids_array);
+
+
+
+        $data = $query->orderBy('id','desc')->get();
+        $data = $data->toArray();
+//        $data = $data->groupBy('car_id')->toArray();
+//        dd($data);
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
+            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+            $cellData[$k]['channel_source'] = $v['channel_source'];
+            $cellData[$k]['client_name'] = $v['client_name'];
+            $cellData[$k]['client_phone'] = $v['client_phone'];
+
+
+            // 微信号 & 是否+V
+            $cellData[$k]['wx_id'] = $v['wx_id'];
+            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
+            else $cellData[$k]['is_wx'] = '--';
+
+            $cellData[$k]['location_city'] = $v['location_city'];
+            $cellData[$k]['location_district'] = $v['location_district'];
+
+            $cellData[$k]['description'] = $v['description'];
+
+            $cellData[$k]['teeth_count'] = $v['teeth_count'];
+
+            // 是否重复
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+        }
+
+
+        $title_row = [
+            'id'=>'ID',
+            'creator_name'=>'创建人',
+            'published_time'=>'提交时间',
+            'project_er_name'=>'项目',
+            'channel_source'=>'渠道来源',
+            'client_name'=>'客户姓名',
+            'client_phone'=>'客户电话',
+            'wx_id'=>'微信号',
+            'is_wx'=>'是否+V',
+            'location_city'=>'所在城市',
+            'location_district'=>'行政区',
+            'description'=>'通话小结',
+            'teeth_count'=>'牙齿数量',
+            'is_repeat'=>'是否重复',
+            'inspector_name'=>'审核人',
+            'inspected_time'=>'审核时间',
+            'inspected_result'=>'审核结果',
+        ];
+        array_unshift($cellData, $title_row);
+
+
+        $record = new DK_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 21;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 71;
+        $record_data["operate_category"] = 109;
+        $record_data["operate_type"] = $record_operate_type;
+        $record_data["column_type"] = $record_column_type;
+        $record_data["before"] = $record_before;
+        $record_data["after"] = $record_after;
+
+        $record->fill($record_data)->save();
+
+
+
+
+        $title = '【工单】'.date('Ymd.His').'_by_ids';
+
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('全部工单', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setWidth(array(
+                    'A'=>10,
+                    'B'=>10,
+                    'C'=>20,
+                    'D'=>20,
+                    'E'=>10,
+                    'F'=>10,
+                    'G'=>16,
+                    'H'=>16,
+                    'I'=>10,
+                    'J'=>10,
+                    'K'=>10,
+                    'L'=>60,
+                    'M'=>10,
+                    'N'=>10,
+                    'O'=>10,
+                    'P'=>20,
+                    'Q'=>10
+                ));
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
+
+
+
+
+
+    }
+    // 【数据导出】工单
     public function operate_statistic_export_for_order($post_data)
     {
         $this->get_me();
@@ -11028,7 +11170,9 @@ class DKAdminRepository {
         if($project_id) $query->where('project_id',$project_id);
         if($inspected_result) $query->where('inspected_result',$inspected_result);
 
-        $data = $query->orderBy('inspected_at','desc')->orderBy('id','asc')->get();
+//        $data = $query->orderBy('inspected_at','desc')->orderBy('id','desc')->get();
+//        $data = $query->orderBy('published_at','desc')->orderBy('id','desc')->get();
+        $data = $query->orderBy('id','desc')->get();
         $data = $data->toArray();
 //        $data = $data->groupBy('car_id')->toArray();
 //        dd($data);
@@ -11157,7 +11301,7 @@ class DKAdminRepository {
                     'I'=>10,
                     'J'=>10,
                     'K'=>10,
-                    'L'=>50,
+                    'L'=>60,
                     'M'=>10,
                     'N'=>10,
                     'O'=>10,
