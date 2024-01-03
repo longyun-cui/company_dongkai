@@ -59,15 +59,15 @@
                 </div>
 
                 {{--提交日期--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 提交日期</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="assign_date" placeholder="提交日期" readonly="readonly"
-                               @if(!empty($data->assign_time)) value="{{ date("Y-m-d",$data->assign_time) }}"
-                               @else  value="{{ date("Y-m-d") }}" @endif
-                        >
-                    </div>
-                </div>
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 提交日期</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <input type="text" class="form-control" name="assign_date" placeholder="提交日期" readonly="readonly"--}}
+{{--                               @if(!empty($data->assign_time)) value="{{ date("Y-m-d",$data->assign_time) }}"--}}
+{{--                               @else  value="{{ date("Y-m-d") }}" @endif--}}
+{{--                        >--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
                 {{--客户信息--}}
                 <div class="form-group">

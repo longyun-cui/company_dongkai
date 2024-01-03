@@ -54,7 +54,7 @@
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="提交日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
@@ -962,51 +962,51 @@
                             }
                         }
                     },
-                    {
-                        "title": "提交日期",
-                        "data": 'assign_time',
-                        "className": "text-center",
-                        "width": "72px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                var $assign_time_value = '';
-                                if(data)
-                                {
-                                    var $date = new Date(data*1000);
-                                    var $year = $date.getFullYear();
-                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                                    var $day = ('00'+($date.getDate())).slice(-2);
-                                    $assign_time_value = $year+'-'+$month+'-'+$day;
-                                }
-
-                                $(nTd).addClass('modal-show-for-info-time-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','提交日期');
-                                $(nTd).attr('data-key','assign_time').attr('data-value',$assign_time_value);
-                                $(nTd).attr('data-column-name','提交日期');
-                                $(nTd).attr('data-time-type','date');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '';
-
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day;
-                            else return $year+'-'+$month+'-'+$day;
-                        }
-                    },
+                    // {
+                    //     "title": "提交日期",
+                    //     "data": 'assign_time',
+                    //     "className": "text-center",
+                    //     "width": "72px",
+                    //     "orderable": true,
+                    //     "orderSequence": ["desc", "asc"],
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             var $assign_time_value = '';
+                    //             if(data)
+                    //             {
+                    //                 var $date = new Date(data*1000);
+                    //                 var $year = $date.getFullYear();
+                    //                 var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                    //                 var $day = ('00'+($date.getDate())).slice(-2);
+                    //                 $assign_time_value = $year+'-'+$month+'-'+$day;
+                    //             }
+                    //
+                    //             $(nTd).addClass('modal-show-for-info-time-set-');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','提交日期');
+                    //             $(nTd).attr('data-key','assign_time').attr('data-value',$assign_time_value);
+                    //             $(nTd).attr('data-column-name','提交日期');
+                    //             $(nTd).attr('data-time-type','date');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(!data) return '';
+                    //
+                    //         var $date = new Date(data*1000);
+                    //         var $year = $date.getFullYear();
+                    //         var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                    //         var $day = ('00'+($date.getDate())).slice(-2);
+                    //         var $hour = ('00'+$date.getHours()).slice(-2);
+                    //         var $minute = ('00'+$date.getMinutes()).slice(-2);
+                    //         var $second = ('00'+$date.getSeconds()).slice(-2);
+                    //
+                    //         var $currentYear = new Date().getFullYear();
+                    //         if($year == $currentYear) return $month+'-'+$day;
+                    //         else return $year+'-'+$month+'-'+$day;
+                    //     }
+                    // },
                     {
                         "title": "客户姓名",
                         "data": "client_name",
