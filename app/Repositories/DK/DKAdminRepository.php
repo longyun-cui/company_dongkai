@@ -10793,12 +10793,12 @@ class DKAdminRepository {
             if(!empty($post_data['order_start']))
             {
 //                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-                $query->where('inspected_at', '>=', time($post_data['order_start']));
+                $query->where('inspected_at', '>=', strtotime($post_data['order_start']));
             }
             if(!empty($post_data['order_ended']))
             {
 //                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-                $query->where('inspected_at', '<=', time($post_data['order_ended']));
+                $query->where('inspected_at', '<=', strtotime($post_data['order_ended']));
             }
         }
 
