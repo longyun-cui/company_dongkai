@@ -11146,23 +11146,23 @@ class DKAdminRepository {
             $excel->sheet('全部工单', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
                 $sheet->setWidth(array(
-                    'A'=>20,
-                    'B'=>20,
+                    'A'=>10,
+                    'B'=>10,
                     'C'=>20,
                     'D'=>20,
-                    'E'=>20,
-                    'F'=>20,
-                    'G'=>20,
-                    'H'=>20,
-                    'I'=>20,
-                    'J'=>20,
-                    'K'=>20,
-                    'L'=>40,
-                    'M'=>20,
-                    'N'=>20,
-                    'O'=>20,
+                    'E'=>10,
+                    'F'=>10,
+                    'G'=>16,
+                    'H'=>16,
+                    'I'=>10,
+                    'J'=>10,
+                    'K'=>10,
+                    'L'=>50,
+                    'M'=>10,
+                    'N'=>10,
+                    'O'=>10,
                     'P'=>20,
-                    'Q'=>20
+                    'Q'=>10
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
