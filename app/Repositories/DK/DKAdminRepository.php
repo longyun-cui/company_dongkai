@@ -10740,8 +10740,11 @@ class DKAdminRepository {
         }
         else
         {
-            $the_start  = isset($post_data['order_start']) ? $post_data['order_start']  : '';
-            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended']  : '';
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].':00'  : '';
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].':59'  : '';
+
+            $the_start_timestamp  = strtotime($the_start);
+            $the_ended_timestamp  = strtotime($the_ended);
 
             $record_operate_type = 1;
             $record_before = $the_start;
@@ -10802,12 +10805,12 @@ class DKAdminRepository {
             if(!empty($post_data['order_start']))
             {
 //                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-                $query->where('inspected_at', '>=', strtotime($post_data['order_start']));
+                $query->where('inspected_at', '>=', $the_start_timestamp);
             }
             if(!empty($post_data['order_ended']))
             {
 //                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-                $query->where('inspected_at', '<=', strtotime($post_data['order_ended']));
+                $query->where('inspected_at', '<=', $the_ended_timestamp);
             }
         }
 
