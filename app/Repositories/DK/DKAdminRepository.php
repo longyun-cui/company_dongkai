@@ -10750,7 +10750,6 @@ class DKAdminRepository {
 
 
         $staff_id = 0;
-        $client_id = 0;
         $project_id = 0;
 
         // 员工
@@ -10772,7 +10771,6 @@ class DKAdminRepository {
 
         $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
 
-//        dd($car_id);
 
         // 工单
         $query = DK_Order::select('*')
