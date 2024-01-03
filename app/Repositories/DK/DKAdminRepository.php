@@ -7294,6 +7294,7 @@ class DKAdminRepository {
 
 
 
+
         // 项目
         if(!empty($post_data['project_id']))
         {
@@ -7351,6 +7352,14 @@ class DKAdminRepository {
         else $view_data['order_type'] = -1;
 
 
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $view_data['inspected_status'] = $post_data['inspected_status'];
+        }
+        else $view_data['inspected_status'] = -1;
+
+//        dd($view_data);
 
 
         $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();

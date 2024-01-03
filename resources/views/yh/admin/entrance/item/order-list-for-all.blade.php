@@ -60,16 +60,16 @@
                         </button>
 
                         <select class="form-control form-filter order-select2" name="order-department-district" style="width:100px;">
-                            <option value ="-1">选择大区</option>
+                            <option value="-1">选择大区</option>
                             @foreach($department_district_list as $v)
-                                <option value ="{{ $v->id }}" @if($v->id == $department_district_id) selected="selected" @endif>{{ $v->name }}</option>
+                                <option value="{{ $v->id }}" @if($v->id == $department_district_id) selected="selected" @endif>{{ $v->name }}</option>
                             @endforeach
                         </select>
 
                         <select class="form-control form-filter order-select2" name="order-staff" style="width:100px;">
-                            <option value ="-1">选择员工</option>
+                            <option value="-1">选择员工</option>
                             @foreach($staff_list as $v)
-                                <option value ="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
+                                <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
                             @endforeach
                         </select>
 
@@ -83,18 +83,18 @@
                         </select>
 
                         <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
-                            <option value ="-1">审核状态</option>
+                            <option value="-1">审核状态</option>
                             @if(in_array($me->user_type,[81,84,88]))
-                            <option value ="待发布">待发布</option>
+                            <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>
                             @endif
-                            <option value ="待审核">待审核</option>
-                            <option value ="已审核">已审核</option>
+                            <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>
+                            <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>
                         </select>
 
                         <select class="form-control form-filter" name="order-inspected-result" style="width:88px;">
                             <option value="-1">审核结果</option>
                             @foreach(config('info.inspected_result') as $v)
-                                <option value ="{{ $v }}" @if($v == $client_id) selected="selected" @endif>{{ $v }}</option>
+                                <option value="{{ $v }}" @if($v == $client_id) selected="selected" @endif>{{ $v }}</option>
                             @endforeach
                         </select>
 
@@ -155,11 +155,11 @@
                         <div class="input-group">
                             <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
                             <select name="bulk-operate-status" class="form-control form-filter">
-                                <option value ="-1">请选择操作类型</option>
-                                <option value ="启用">启用</option>
-                                <option value ="禁用">禁用</option>
-                                <option value ="删除">删除</option>
-                                <option value ="彻底删除">彻底删除</option>
+                                <option value="-1">请选择操作类型</option>
+                                <option value="启用">启用</option>
+                                <option value="禁用">禁用</option>
+                                <option value="删除">删除</option>
+                                <option value="彻底删除">彻底删除</option>
                             </select>
                             <span class="input-group-addon btn btn-default" id="operate-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
                             <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
@@ -592,7 +592,7 @@
                         <input type="text" class="form-control form-filter filter-keyup" name="modify-keyword" placeholder="关键词" />
 
                         <select class="form-control form-filter" name="modify-attribute" style="width:96px;">
-                            <option value ="-1">选择属性</option>
+                            <option value="-1">选择属性</option>
                         </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-modify">
@@ -1472,6 +1472,7 @@
                     if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
                     if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
                     if($('input[name="order-ended"]').val())  $obj.assign_ended = $('input[name="order-ended"]').val();
+                    if($('select[name="order-department-district"]').val() > 0)  $obj.department_district_id = $('select[name="order-department-district"]').val();
                     if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
                     if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
                     if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
@@ -1480,7 +1481,7 @@
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
                     if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
-                    if($('select[name="order-inspected-status"]').val() > 0)  $obj.inspected_status = $('select[name="inspected-status"]').val();
+                    if($('select[name="order-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="order-inspected-status"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 50) $obj.length = $page_length;
