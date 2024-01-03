@@ -5571,7 +5571,7 @@ class DKAdminRepository {
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
 
-            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->count("*");
+//            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->count("*");
         }
         else if($operate == 'edit') // 编辑
         {
@@ -5580,11 +5580,11 @@ class DKAdminRepository {
 
             if(in_array($me->user_type,[84,88]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
 
-            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->where('id','<>',$operate_id)->count("*");
+//            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->where('id','<>',$operate_id)->count("*");
         }
         else return response_error([],"参数有误！");
 
-        $post_data['is_repeat'] = $is_repeat;
+//        $post_data['is_repeat'] = $is_repeat;
 
         if(!empty($post_data['project_id']))
         {
@@ -5953,6 +5953,13 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
         if(in_array($me->user_type,[88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
+
+        $project_id = $item->project_id;
+        $client_phone = $item->client_phone;
+
+        $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$client_phone])
+            ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -5962,6 +5969,7 @@ class DKAdminRepository {
                 $item->inspected_status = 9;
             }
 
+            $item->is_repeat = $is_repeat;
             $item->is_published = 1;
             $item->published_at = time();
             $bool = $item->save();
