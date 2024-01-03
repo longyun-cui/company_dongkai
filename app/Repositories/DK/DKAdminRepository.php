@@ -10679,16 +10679,9 @@ class DKAdminRepository {
         $me = $this->me;
 
         $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
-        $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
-        $car_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
-        $route_list = YH_Route::select('id','title')->get();
-        $pricing_list = YH_Pricing::select('id','title')->get();
+        $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
 
         $view_data['staff_list'] = $staff_list;
-        $view_data['client_list'] = $client_list;
-        $view_data['car_list'] = $car_list;
-        $view_data['route_list'] = $route_list;
-        $view_data['pricing_list'] = $pricing_list;
 
 
         $view_data['menu_active_of_statistic_export'] = 'active menu-open';
@@ -10768,14 +10761,6 @@ class DKAdminRepository {
                 $staff_id = $post_data['staff'];
             }
         }
-        // 客户
-        if(!empty($post_data['client']))
-        {
-            if(!in_array($post_data['client'],[-1,0]))
-            {
-                $client_id = $post_data['client'];
-            }
-        }
         // 项目
         if(!empty($post_data['project']))
         {
@@ -10794,7 +10779,6 @@ class DKAdminRepository {
             ->with([
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'client_er'=>function($query) { $query->select('id','username','short_name'); },
                 'project_er'=>function($query) { $query->select('id','name'); },
             ]);
 
