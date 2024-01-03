@@ -132,8 +132,7 @@
             if($('input[name="order-ended"]').val())  $obj.order_ended = $('input[name="order-ended"]').val();
             if($('select[name="order-staff"]').val() > 0)  $obj.staff = $('select[name="order-staff"]').val();
             if($('select[name="order-project"]').val() > 0)  $obj.project = $('select[name="order-project"]').val();
-            if($('select[name="order-route"]').val() > 0)  $obj.route_id = $('select[name="order-route"]').val();
-            if($('select[name="order-pricing"]').val() > 0)  $obj.pricing = $('select[name="order-pricing"]').val();
+            if($('select[name="order-inspected-result"]').val() != -1)  $obj.inspected_result = $('select[name="order-inspected-result"]').val();
 
             var $url = url_build('/statistic/statistic-export-for-order',$obj);
             window.open($url);

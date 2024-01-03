@@ -10979,6 +10979,17 @@ class DKAdminRepository {
             }
         }
 
+        // 审核结果
+        $inspected_result = 0;
+        if(!empty($post_data['inspected_result']))
+        {
+            if(!in_array($post_data['inspected_result'],['-1','0']))
+            {
+                $inspected_result = $post_data['inspected_result'];
+            }
+        }
+
+
         $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
 
 
@@ -11015,6 +11026,7 @@ class DKAdminRepository {
 
         if($staff_id) $query->where('creator_id',$staff_id);
         if($project_id) $query->where('project_id',$project_id);
+        if($inspected_result) $query->where('inspected_result',$inspected_result);
 
         $data = $query->orderBy('inspected_at','desc')->orderBy('id','asc')->get();
         $data = $data->toArray();
@@ -11027,26 +11039,28 @@ class DKAdminRepository {
             $cellData[$k]['id'] = $v['id'];
 
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
-            $cellData[$k]['assign_date'] = date('Y-m-d', $v['assign_time']);
+            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+            $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
-            $cellData[$k]['channel_source'] = $v['channel_source'];
-            $cellData[$k]['location_city'] = $v['location_city'];
-            $cellData[$k]['location_district'] = $v['location_district'];
 
-            // 是否+V
+
+            // 微信号 & 是否+V
+            $cellData[$k]['wx_id'] = $v['wx_id'];
             if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
             else $cellData[$k]['is_wx'] = '--';
 
-            $cellData[$k]['wx_id'] = $v['wx_id'];
+            $cellData[$k]['location_city'] = $v['location_city'];
+            $cellData[$k]['location_district'] = $v['location_district'];
+
+            $cellData[$k]['description'] = $v['description'];
+
+            $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
             else $cellData[$k]['is_repeat'] = '--';
-
-            $cellData[$k]['description'] = $v['description'];
-            $cellData[$k]['location_city'] = $v['location_city'];
 
             // 审核
             $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
@@ -11058,17 +11072,18 @@ class DKAdminRepository {
         $title_row = [
             'id'=>'ID',
             'creator_name'=>'创建人',
-            'assign_date'=>'提交时间',
+            'published_time'=>'提交时间',
             'project_er_name'=>'项目',
+            'channel_source'=>'渠道来源',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
-            'channel_source'=>'渠道来源',
+            'wx_id'=>'微信号',
+            'is_wx'=>'是否+V',
             'location_city'=>'所在城市',
             'location_district'=>'行政区',
-            'is_wx'=>'是否+V',
-            'wx_id'=>'微信号',
-            'is_repeat'=>'是否重复',
             'description'=>'通话小结',
+            'teeth_count'=>'牙齿数量',
+            'is_repeat'=>'是否重复',
             'inspector_name'=>'审核人',
             'inspected_time'=>'审核时间',
             'inspected_result'=>'审核结果',
@@ -11130,6 +11145,25 @@ class DKAdminRepository {
         $file = Excel::create($title, function($excel) use($cellData) {
             $excel->sheet('全部工单', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
+                $sheet->setWidth(array(
+                    'A'=>20,
+                    'B'=>20,
+                    'C'=>20,
+                    'D'=>20,
+                    'E'=>20,
+                    'F'=>20,
+                    'G'=>20,
+                    'H'=>20,
+                    'I'=>20,
+                    'J'=>20,
+                    'K'=>20,
+                    'L'=>40,
+                    'M'=>20,
+                    'N'=>20,
+                    'O'=>20,
+                    'P'=>20,
+                    'Q'=>20
+                ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
             });
