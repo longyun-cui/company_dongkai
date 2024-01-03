@@ -5957,10 +5957,10 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-//            if($item->inspected_status == 1)
-//            {
-//                $item->inspected_status = 9;
-//            }
+            if($item->inspected_status == 1)
+            {
+                $item->inspected_status = 9;
+            }
 
             $item->is_published = 1;
             $item->published_at = time();
