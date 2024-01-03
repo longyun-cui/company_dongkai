@@ -1099,7 +1099,7 @@
                         "title": "微信号",
                         "data": "wx_id",
                         "className": "",
-                        "width": "80px",
+                        "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
