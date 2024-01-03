@@ -10904,9 +10904,9 @@ class DKAdminRepository {
         $project_title = '';
         if($project_id)
         {
-            if($cellData[1]['project_er_name'])
+            if($cellData[0]['project_er_name'])
             {
-                $project_name = $cellData[1]['project_er_name'];
+                $project_name = $cellData[0]['project_er_name'];
                 $project_title = '【'.$project_name.'】';
             }
         }
