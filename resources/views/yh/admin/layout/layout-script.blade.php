@@ -104,14 +104,10 @@
         $("#select-city").change(function() {
 
             var $city_index = $("#select-city").find('option:selected').attr('data-index');
-
             $("#select-district").html('<option value="">选择区划</option>');
-
             $.each($district_list[$city_index], function($i,$val) {
-
                 $("#select-district").append('<option value="' + $val + '">' + $val + '</option>');
             });
-
             $('#select-district').select2();
         });
 

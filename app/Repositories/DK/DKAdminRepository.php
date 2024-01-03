@@ -6682,9 +6682,12 @@ class DKAdminRepository {
 
         $operate_type = $post_data["operate_type"];
         $column_key = $post_data["column_key"];
+        $column_key2 = $post_data["column_key2"];
         $column_value = $post_data["column_value"];
+        $column_value2 = $post_data["column_value2"];
 
         $before = $item->$column_key;
+        $after = $column_value;
 
 //        if($column_key == "client")
 //        {
@@ -6693,13 +6696,6 @@ class DKAdminRepository {
 //        else
 //        {
 //            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
-//        }
-
-
-//        if($column_key == "route_id")
-//        {
-//            $route = YH_Route::withTrashed()->find($column_value);
-//            if(!$route) return response_error([],"该【线路】不存在，刷新页面重试！");
 //        }
 
 
@@ -6718,24 +6714,6 @@ class DKAdminRepository {
                     if(!$circle) throw new Exception("该【环线】不存在，刷新页面重试！");
                 }
             }
-            else if($column_key == "route_id")
-            {
-                if($column_value == 0)
-                {
-                }
-                else
-                {
-                    $route = YH_Route::withTrashed()->find($column_value);
-                    if(!$route) throw new Exception("该【线路】不存在，刷新页面重试！");
-
-                    $item->amount = $route->amount_with_cash;
-                    $item->departure_place = $route->departure_place;
-                    $item->destination_place = $route->destination_place;
-                    $item->stopover_place = $route->stopover_place;
-                    $item->travel_distance = $route->travel_distance;
-                    $item->time_limitation_prescribed = $route->time_limitation_prescribed;
-                }
-            }
             else if($column_key == "car_id")
             {
                 if($column_value == 0)
@@ -6752,38 +6730,18 @@ class DKAdminRepository {
                     $item->driver_phone = $car->linkman_phone;
                 }
             }
-            else if($column_key == "driver_id")
+            else if($column_key == "location_city")
             {
-                if($column_value == 0)
-                {
-                }
-                else
-                {
-                    $driver = YH_Driver::withTrashed()->find($column_value);
-                    if(!$driver) throw new Exception("该【驾驶员】不存在，刷新页面重试！");
-
-//                $item->driver_name = null;
-//                $item->driver_phone = null;
-                    $item->driver_name = $driver->driver_name;
-                    $item->driver_phone = $driver->driver_phone;
-                    $item->copilot_name = $driver->sub_driver_name;
-                    $item->copilot_phone = $driver->sub_driver_phone;
-                }
+                $before = $item->location_city.' - '.$item->location_district;
+                $after = $column_value.' - '.$column_value2;
             }
 
             $item->$column_key = $column_value;
+            $item->$column_key2 = $column_value2;
             $bool = $item->save();
             if(!$bool) throw new Exception("order--update--fail");
             else
             {
-
-//                if($column_key == "circle_id")
-//                {
-//                    $circle_data['order_id'] = $item->id;
-//                    $circle_data['creator_id'] = $me->id;
-//                    $circle->pivot_order_list()->attach($circle_data);  //
-////                    $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
-//                }
 
 
                     // 需要记录(已发布 || 他人修改)
@@ -6808,7 +6766,7 @@ class DKAdminRepository {
 
                     $record_data["column_name"] = $column_key;
                     $record_data["before"] = $before;
-                    $record_data["after"] = $column_value;
+                    $record_data["after"] = $after;
 
                     if(in_array($column_key,['client_id','circle_id','route_id','car_id','trailer_id','driver_id']))
                     {

@@ -975,33 +975,15 @@
 
 
             $('select[name=info-select-set-column-value]').removeClass('select2-car').removeClass('select2-client');
-            if($that.attr("data-key") == "car_owner_type")
+            if($that.attr("data-key") == "location_city")
             {
-                var $option_html = $('#car_owner_type-option-list').html();
+                $('select[name=info-select-set-column-value]').removeClass('select2-city');
+                $('select[name=info-select-set-column-value2]').removeClass('select2-district');
+                var $option_html = $('#location-city-option-list').html();
             }
             else if($that.attr("data-key") == "receipt_status")
             {
                 var $option_html = $('#receipt_status-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_type")
-            {
-                var $option_html = $('#trailer_type-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_length")
-            {
-                var $option_html = $('#trailer_length-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_volume")
-            {
-                var $option_html = $('#trailer_volume-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_weight")
-            {
-                var $option_html = $('#trailer_weight-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_axis_count")
-            {
-                var $option_html = $('#trailer_axis_count-option-list').html();
             }
             $('select[name=info-select-set-column-value]').html($option_html);
             $('select[name=info-select-set-column-value]').find("option[value='"+$that.attr("data-value")+"']").attr("selected","selected");
@@ -1015,6 +997,8 @@
         // 【修改-select2-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-select2-set", function() {
 
+
+
             $('select[name=info-select-set-column-value]').attr("selected","");
             $('select[name=info-select-set-column-value]').find('option').eq(0).val(0).text('');
             $('select[name=info-select-set-column-value]').find('option:not(:first)').remove();
@@ -1024,6 +1008,7 @@
             $('.info-select-set-column-name').html($that.attr("data-name"));
             $('input[name=info-select-set-order-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-select-set-column-key2]').val($that.attr("data-key2"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
             $('select[name=info-select-set-column-value]').find('option').eq(0).val($that.attr("data-value"));
@@ -1034,41 +1019,56 @@
             $('#modal-body-for-info-select-set').modal('show');
 
 
-            if($that.attr("data-key") == "client_id")
+            if($that.attr("data-key") == "location_city")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-circle').removeClass('select2-route').removeClass('select2-car').removeClass('select2-driver').addClass('select2-client');
-                $('.select2-client').select2({
-                    ajax: {
-                        url: "{{ url('/item/order_select2_client') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                keyword: params.term, // search term
-                                page: params.page
-                            };
-                        },
-                        processResults: function (data, params) {
 
-                            params.page = params.page || 1;
-                            return {
-                                results: data,
-                                pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }
-                            };
-                        },
-                        cache: true
-                    },
-                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                    minimumInputLength: 0,
-                    theme: 'classic'
+                var $district_list = [
+                    ['东城区','西城区','海淀区','朝阳区','丰台区','门头沟区','石景山区','房山区','通州区','顺义区','昌平区','大兴区','怀柔区','平谷区','延庆区','密云区','其他'],
+                    ['和平区','河东区','河西区','南开区','河北区','红桥区','滨海新区','东丽区','西青区','津南区','北辰区','武清区','宝坻区','宁河区','静海区','蓟州区','其他'],
+                    ['玄武区','秦淮区','建邺区','鼓楼区','浦口区','栖霞区','雨花台区','江宁区','六合区','溧水区','高淳区','江北新区','其他'],
+                    ['黄浦区','徐汇区','长宁区','静安区','普陀区','虹口区','杨浦区','闵行区','宝山区','嘉定区','浦东新区','金山区','松江区','青浦区','奉贤区','崇明区','其他'],
+                    ['海曙区','江北区','北仑区','镇海区','鄞州区','奉化区','象山县','宁海县','余姚市','慈溪市','其他'],
+                    ['锦江区','青羊区','金牛区','武侯区','成华区','龙泉驿区','新都区','郫都区','温江区','双流区','青白江区','新津区','都江堰市','彭州市','邛崃市','崇州市','简阳市','金堂县','大邑县','蒲江县','其他'],
+                    ['越秀区','荔湾区','海珠区','天河区','白云区','黄埔区','南沙区','番禺区','花都区','从化区','增城区','其他']
+                ];
+
+                var $option_html = $('#location-city-option-list').html();
+                $('select[name=info-select-set-column-value]').html($option_html);
+                $('select[name=info-select-set-column-value]').find("option[value='"+$that.attr("data-value")+"']").attr("selected","selected");
+
+                $('select[name=info-select-set-column-value]').removeClass('select2-project').addClass('select2-city');
+                $('select[name=info-select-set-column-value2]').removeClass('select2-project').addClass('select2-district');
+
+
+                var $city_index = $(".select2-city").find('option:selected').attr('data-index');
+                $(".select2-district").html('<option value="">选择区划</option>');
+                $.each($district_list[$city_index], function($i,$val) {
+                    $(".select2-district").append('<option value="' + $val + '">' + $val + '</option>');
+                });
+                $('.select2-district').find("option[value='"+$that.attr("data-value2")+"']").attr("selected","selected");
+                $('.select2-district').select2();
+
+
+                $(".select2-city").change(function() {
+
+                    $that = $(this);
+
+                    var $city_index = $that.find('option:selected').attr('data-index');
+
+                    $(".select2-district").html('<option value="">选择区划</option>');
+
+                    $.each($district_list[$city_index], function($i,$val) {
+
+                        $(".select2-district").append('<option value="' + $val + '">' + $val + '</option>');
+                    });
+
+                    $('.select2-district').select2();
                 });
             }
             else if($that.attr("data-key") == "project_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-circle').removeClass('select2-car').removeClass('select2-driver').removeClass('select2-pricing').addClass('select2-route');
-                $('.select2-route').select2({
+                $('select[name=info-select-set-column-value]').removeClass('select2-city').addClass('select2-project');
+                $('.select2-project').select2({
                     ajax: {
                         url: "{{ url('/item/item_select2_project') }}",
                         dataType: 'json',
@@ -1108,7 +1108,9 @@
         $(".main-content").on('click', "#item-submit-for-info-select-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-select-set-column-key"]').val();
+            var $column_key2 = $('input[name="info-select-set-column-key2"]').val();
             var $column_value = $('select[name="info-select-set-column-value"]').val();
+            var $column_value2 = $('select[name="info-select-set-column-value2"]').val();
 
             // layer.msg('确定"提交"么？', {
             //     time: 0
@@ -1125,7 +1127,9 @@
                             order_id: $('input[name="info-select-set-order-id"]').val(),
                             operate_type: $('input[name="info-select-set-operate-type"]').val(),
                             column_key: $column_key,
+                            column_key2: $column_key2,
                             column_value: $column_value,
+                            column_value2: $column_value2,
                         },
                         function(data){
                             // layer.close(index);

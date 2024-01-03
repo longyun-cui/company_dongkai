@@ -443,12 +443,16 @@
                     <input type="hidden" name="info-select-set-order-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
+                    <input type="hidden" name="info-select-set-column-key2" value="" readonly>
 
 
                     <div class="form-group">
                         <label class="control-label col-md-2 info-select-set-column-name"></label>
                         <div class="col-md-8 ">
-                            <select class="form-control select2-client" name="info-select-set-column-value" style="width:360px;" id="">
+                            <select class="form-control select-select2 select2-primary" name="info-select-set-column-value" style="width:48%;" id="">
+                                <option data-id="0" value="0">未指定</option>
+                            </select>
+                            <select class="form-control select-select2 select2-sub select-district" name="info-select-set-column-value2" style="width:48%;" id="">
                                 <option data-id="0" value="0">未指定</option>
                             </select>
                         </div>
@@ -476,12 +480,11 @@
 <div class="option-container _none">
 
     {{--订单类型--}}
-    <div id="car_owner_type-option-list">
-        <option value="0">选择订单类型</option>
-        <option value="1">自有</option>
-        <option value="11">空单</option>
-        <option value="41">外配·配货</option>
-        <option value="61">外请·调车</option>
+    <div id="location-city-option-list">
+        <option value="">选择城市</option>
+        @foreach(config('info.location_city') as $k => $v)
+            <option value ="{{ $k }}" data-index="{{ $loop->index }}">{{ $k }}</option>
+        @endforeach
     </div>
 
     {{--是否+V--}}
@@ -1148,9 +1151,10 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
                                 $(nTd).attr('data-key','location_city').attr('data-value',data);
+                                $(nTd).attr('data-key2','location_district').attr('data-value2',row.location_district);
                                 $(nTd).attr('data-column-name','所在城市');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1677,6 +1681,7 @@
                                 else if(data == "client_name") return '客户电话';
                                 else if(data == "client_phone") return '客户电话';
                                 else if(data == "description") return '通话小结';
+                                else if(data == "location_city") return '城市区域';
                                 else if(data == "inspected_description") return '审核说明';
                                 else return '有误';
                             }
