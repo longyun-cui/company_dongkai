@@ -10900,7 +10900,8 @@ class DKAdminRepository {
         $record_operate_type = 100;
         $record_column_type = 'ids';
         $record_before = '';
-        $record_after = $ids;
+        $record_after = '';
+        $$record_data_title = $ids;
 
         // 工单
         $query = DK_Order::select('*')
@@ -10989,6 +10990,7 @@ class DKAdminRepository {
         $record_data["column_type"] = $record_column_type;
         $record_data["before"] = $record_before;
         $record_data["after"] = $record_after;
+        $record_data["title"] = $record_data_title;
 
         $record->fill($record_data)->save();
 
