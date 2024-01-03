@@ -9953,7 +9953,6 @@ class DKAdminRepository {
             ])
             ->where('department_district_id','>',0)
             ->where('department_group_id','>',0)
-            ->whereIn('user_type',[84,88])
             ->whereIn('user_type',[84,88]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
@@ -10433,6 +10432,12 @@ class DKAdminRepository {
             }
             else $list[$k]->order_rate_for_accepted = 0;
 
+            // 有效单量
+            $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
+
+
+
+
             // 小组数据
             // 总单数
             if(isset($v->department_group_er->leader->group_count_for_all))
@@ -10474,6 +10479,8 @@ class DKAdminRepository {
                 $v->group_rate_for_accepted = round(($v->group_count_for_accepted * 100 / $v->group_count_for_all),2);
             }
             else $v->group_rate_for_accepted = 0;
+
+
 
 
             // 大区数据

@@ -248,6 +248,16 @@
                         }
                     },
                     {
+                        "title": "有效量",
+                        "data": "order_count_for_effective",
+                        "className": "font-12px",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "通过量",
                         "data": "order_count_for_accepted",
                         "className": "font-12px",
