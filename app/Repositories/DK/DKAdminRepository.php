@@ -6689,14 +6689,14 @@ class DKAdminRepository {
         $before = $item->$column_key;
         $after = $column_value;
 
-//        if($column_key == "client")
-//        {
-//            if(!in_array($me->user_type,[0,1,11,41,42])) return response_error([],"你没有操作权限！");
-//        }
-//        else
-//        {
-//            if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
-//        }
+        if($column_key == "location_city")
+        {
+            if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+        }
+        else
+        {
+            if(!in_array($me->user_type,[0,1,11,81,84,88])) return response_error([],"你没有操作权限！");
+        }
 
 
         // 启动数据库事务
