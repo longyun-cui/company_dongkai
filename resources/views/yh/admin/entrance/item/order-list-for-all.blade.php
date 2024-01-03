@@ -1019,7 +1019,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-text-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户姓名');
                                 $(nTd).attr('data-key','client_name').attr('data-value',data);
                                 $(nTd).attr('data-column-name','客户姓名');
