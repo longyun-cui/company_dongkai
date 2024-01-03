@@ -10763,13 +10763,18 @@ class DKAdminRepository {
 
         // 项目
         $project_title = '';
+        $record_data_title = '';
         if(!empty($post_data['project']))
         {
             if(!in_array($post_data['project'],[-1,0]))
             {
                 $project_id = $post_data['project'];
                 $project_er = DK_Project::find($project_id);
-                $project_title = '【'.$project_er->name.'】';
+                if($project_er)
+                {
+                    $project_title = '【'.$project_er->name.'】';
+                    $record_data_title = $project_er->name;
+                }
             }
         }
 
@@ -10877,10 +10882,10 @@ class DKAdminRepository {
         $record_data["column_type"] = $record_column_type;
         $record_data["before"] = $record_before;
         $record_data["after"] = $record_after;
-        if($project_er)
+        if($project_id)
         {
             $record_data["item_id"] = $project_id;
-            $record_data["title"] = $project_er->name;
+            $record_data["title"] = $record_data_title;
         }
 
         $record->fill($record_data)->save();
