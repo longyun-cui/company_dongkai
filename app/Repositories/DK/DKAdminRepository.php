@@ -10840,8 +10840,11 @@ class DKAdminRepository {
             // 是否+V
             if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
             else $cellData[$k]['is_wx'] = '--';
+
+            $cellData[$k]['wx_id'] = $v['wx_id'];
+
             // 是否重复
-            if($v['is_repeat'] == 1) $cellData[$k]['is_repeat'] = '是';
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
             else $cellData[$k]['is_repeat'] = '--';
 
             $cellData[$k]['description'] = $v['description'];
@@ -10865,6 +10868,7 @@ class DKAdminRepository {
             'location_city'=>'所在城市',
             'location_district'=>'行政区',
             'is_wx'=>'是否+V',
+            'wx_id'=>'微信号',
             'is_repeat'=>'是否重复',
             'description'=>'通话小结',
             'inspector_name'=>'审核人',
