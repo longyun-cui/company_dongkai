@@ -443,7 +443,7 @@
                         }
                     },
                     {
-                        targets: [9,10,11,12],
+                        targets: [10,11,12,13],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.group_merge;
                             if (rowspan > 1) {
@@ -455,7 +455,7 @@
                         }
                     },
                     {
-                        targets: [13,14,15,16],
+                        targets: [14,15,16,17],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.district_merge;
                             if (rowspan > 1) {
