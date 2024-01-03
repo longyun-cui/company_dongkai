@@ -696,7 +696,7 @@
             if($that.attr('data-text-type') == "textarea")
             {
                 $('input[name=info-text-set-column-value]').val('').hide();
-                $('textarea[name=info-textarea-set-column-value]').text($that.attr("data-value")).show();
+                $('textarea[name=info-textarea-set-column-value]').text('').text($that.attr("data-value")).show();
             }
             else
             {
