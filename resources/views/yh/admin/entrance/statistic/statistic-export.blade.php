@@ -375,9 +375,9 @@
                     },
                     {
                         "title": "导出类型",
+                        "data": "operate_type",
                         "className": "font-12px",
                         "width": "120px",
-                        "data": "operate_type",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 1) return '自定义时间导出';
@@ -387,10 +387,20 @@
                         }
                     },
                     {
+                        "title": "导出范围",
+                        "data": "title",
                         "className": "font-12px",
-                        "width": "240px",
+                        "width": "160px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "起始时间",
                         "data": "before",
+                        "className": "font-12px",
+                        "width": "240px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -441,10 +451,10 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "240px",
                         "title": "终止时间",
                         "data": "after",
+                        "className": "font-12px",
+                        "width": "240px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 

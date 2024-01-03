@@ -10760,12 +10760,16 @@ class DKAdminRepository {
                 $staff_id = $post_data['staff'];
             }
         }
+
         // 项目
+        $project_title = '';
         if(!empty($post_data['project']))
         {
             if(!in_array($post_data['project'],[-1,0]))
             {
                 $project_id = $post_data['project'];
+                $project_er = DK_Project::find($project_id);
+                $project_title = '【'.$project_er->name.'】';
             }
         }
 
@@ -10873,6 +10877,10 @@ class DKAdminRepository {
         $record_data["column_type"] = $record_column_type;
         $record_data["before"] = $record_before;
         $record_data["after"] = $record_after;
+        if($project_er)
+        {
+            $record_data["title"] = $project_er->name;
+        }
 
         $record->fill($record_data)->save();
 
@@ -10903,15 +10911,6 @@ class DKAdminRepository {
             }
         }
 
-        $project_title = '';
-        if($project_id)
-        {
-            if($cellData[0]['project_er_name'])
-            {
-                $project_name = $cellData[0]['project_er_name'];
-                $project_title = '【'.$project_name.'】';
-            }
-        }
 
         $title = '【工单】'.' - '.date('Ymd.His').$project_title.$month_title.$time_title;
 
