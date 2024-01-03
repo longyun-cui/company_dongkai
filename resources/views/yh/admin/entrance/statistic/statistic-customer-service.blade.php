@@ -321,6 +321,16 @@
                         }
                     },
                     {
+                        "title": "主管-有效量",
+                        "data": "group_count_for_effective",
+                        "className": "text-center vertical-middle",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "主管-通过率",
                         "data": "group_rate_for_accepted",
                         "className": "text-center vertical-middle",
@@ -334,6 +344,16 @@
                     {
                         "title": "经理-单量",
                         "data": "district_count_for_all",
+                        "className": "text-center vertical-middle",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "经理-有效量",
+                        "data": "district_count_for_effective",
                         "className": "text-center vertical-middle",
                         "width": "100px",
                         "orderable": false,
@@ -413,7 +433,7 @@
                         }
                     },
                     {
-                        targets: [9,10,11],
+                        targets: [9,10,11,12],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.group_merge;
                             if (rowspan > 1) {
@@ -425,7 +445,7 @@
                         }
                     },
                     {
-                        targets: [12,13,14],
+                        targets: [13,14,15,16],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.district_merge;
                             if (rowspan > 1) {

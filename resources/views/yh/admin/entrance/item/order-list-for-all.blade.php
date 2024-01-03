@@ -1227,7 +1227,7 @@
                         }
                     },
                     {
-                        "title": "部门经理",
+                        "title": "部门主管",
                         "data": "department_supervisor_id",
                         "className": "",
                         "width": "80px",
@@ -1236,7 +1236,7 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-select-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','部门经理');
+                                $(nTd).attr('data-id',row.id).attr('data-name','部门主管');
                                 $(nTd).attr('data-key','department_supervisor_id').attr('data-value',data);
                                 $(nTd).attr('data-column-name','部门经理');
                                 if(data) $(nTd).attr('data-operate-type','edit');
