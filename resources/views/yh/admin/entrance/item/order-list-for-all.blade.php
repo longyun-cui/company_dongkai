@@ -189,6 +189,104 @@
 
 
 
+{{--显示-基本信息--}}
+<div class="modal fade modal-main-body" id="modal-body-for-info-detail">
+    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">订单【<span class="info-detail-title"></span>】详情</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered" id="form-edit-modal">
+                <div class="box-body  info-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="operate" value="work-order" readonly>
+                    <input type="hidden" name="id" value="0" readonly>
+
+                    {{--项目--}}
+                    <div class="form-group item-detail-project">
+                        <label class="control-label col-md-2">项目</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="project"></div>
+                    </div>
+                    {{--客户--}}
+                    <div class="form-group item-detail-client">
+                        <label class="control-label col-md-2">客户</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <label class="col-md-2"></label>
+                    </div>
+                    {{--电话--}}
+                    <div class="form-group item-detail-phone">
+                        <label class="control-label col-md-2">电话</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--是否+V--}}
+                    <div class="form-group item-detail-is-wx">
+                        <label class="control-label col-md-2">是否+V</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--微信号--}}
+                    <div class="form-group item-detail-wx-id">
+                        <label class="control-label col-md-2">微信号</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate="driver"></div>
+                    </div>
+                    {{--所在城市--}}
+                    <div class="form-group item-detail-city-district">
+                        <label class="control-label col-md-2">所在城市</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--牙齿数量--}}
+                    <div class="form-group item-detail-teeth-count">
+                        <label class="control-label col-md-2">牙齿数量</label>
+                        <div class="col-md-8 ">
+                            <span class="item-detail-text"></span>
+                        </div>
+                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
+                    </div>
+                    {{--通话小结--}}
+                    <div class="form-group item-detail-description">
+                        <label class="control-label col-md-2">通话小结</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 {{--显示-附件-信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-attachment">
@@ -530,6 +628,14 @@
     <div id="option-list-for-teeth-count">
         <option value="-1">选择牙齿数量</option>
         @foreach(config('info.teeth_count') as $v)
+            <option value="{{ $v }}">{{ $v }}</option>
+        @endforeach
+    </div>
+
+    {{--渠道来源--}}
+    <div id="option-list-for-channel-source">
+        <option value="-1">选择渠道来源</option>
+        @foreach(config('info.channel_source') as $v)
             <option value="{{ $v }}">{{ $v }}</option>
         @endforeach
     </div>
@@ -1164,7 +1270,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');
                                 $(nTd).attr('data-key','channel_source').attr('data-value',data);
                                 $(nTd).attr('data-column-name','渠道来源');
@@ -1458,7 +1564,7 @@
 //                                 $html_completed+
                                 $html_edit+
                                 $html_publish+
-//                                $html_detail+
+                                // $html_detail+
                                 // $html_verified+
                                 $html_inspected+
                                 $html_delete+
@@ -1667,10 +1773,11 @@
                                 else if(data == "project_id") return '项目';
                                 else if(data == "client_name") return '客户电话';
                                 else if(data == "client_phone") return '客户电话';
-                                else if(data == "location_city") return '城市区域';
                                 else if(data == "is_wx") return '是否+V';
                                 else if(data == "wx_id") return '微信号';
                                 else if(data == "teeth_count") return '牙齿数量';
+                                else if(data == "location_city") return '城市区域';
+                                else if(data == "channel_source") return '渠道来源';
                                 else if(data == "description") return '通话小结';
                                 else if(data == "inspected_description") return '审核说明';
                                 else return '有误';
