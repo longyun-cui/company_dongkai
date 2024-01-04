@@ -141,6 +141,8 @@
                     </thead>
                     <tbody>
                     </tbody>
+                    <tfoot>
+                    </tfoot>
                 </table>
                 </div>
 
@@ -1022,7 +1024,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set-');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户姓名');
                                 $(nTd).attr('data-key','client_name').attr('data-value',data);
                                 $(nTd).attr('data-column-name','客户姓名');
@@ -1044,7 +1046,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set-');
+                                $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
                                 $(nTd).attr('data-key','client_phone').attr('data-value',data);
                                 $(nTd).attr('data-column-name','客户电话');
@@ -1066,12 +1068,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                // $(nTd).addClass('modal-show-for-info-radio-set');
-                                // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
-                                // $(nTd).attr('data-key','is_repeat').attr('data-value',data);
-                                // $(nTd).attr('data-column-name','是否重复');
-                                // if(data) $(nTd).attr('data-operate-type','edit');
-                                // else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('modal-show-for-info-radio-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
+                                $(nTd).attr('data-key','is_repeat').attr('data-value',data);
+                                $(nTd).attr('data-column-name','是否重复');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -1088,12 +1090,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                // $(nTd).addClass('modal-show-for-info-radio-set');
-                                // $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
-                                // $(nTd).attr('data-key','is_wx').attr('data-value',data);
-                                // $(nTd).attr('data-column-name','是否+V');
-                                // if(data) $(nTd).attr('data-operate-type','edit');
-                                // else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('modal-show-for-info-radio-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
+                                $(nTd).attr('data-key','is_wx').attr('data-value',data);
+                                $(nTd).attr('data-column-name','是否+V');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -1132,10 +1134,10 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','微信号');
-                                $(nTd).attr('data-key','wx_id').attr('data-value',data);
-                                $(nTd).attr('data-column-name','微信号');
+                                $(nTd).addClass('modal-show-for-info-radio-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
+                                $(nTd).attr('data-key','teeth_count').attr('data-value',data);
+                                $(nTd).attr('data-column-name','牙齿数量');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
