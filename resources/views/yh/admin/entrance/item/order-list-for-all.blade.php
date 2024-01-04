@@ -1714,44 +1714,12 @@
                             if(row.column_name == 'client_id')
                             {
                                 if(row.before_client_er == null) return '';
-                                else
-                                {
-                                    if(row.before_client_er.short_name != null)
-                                    {
-                                        return '<a href="javascript:void(0);">'+row.before_client_er.short_name+'</a>';
-                                    }
-                                    else return '<a href="javascript:void(0);">'+row.before_client_er.username+'</a>';
-                                }
+                                else return '<a href="javascript:void(0);">'+row.before_client_er.username+'</a>';
                             }
-                            else if(row.column_name == 'circle_id')
+                            else if(row.column_name == 'project_id')
                             {
-                                if(row.before_circle_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_circle_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'route_id')
-                            {
-                                if(row.before_route_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_route_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'emtpy_route_id')
-                            {
-                                if(row.before_emtpy_route_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_emtpy_route_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'pricing_id')
-                            {
-                                if(row.before_pricing_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_pricing_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
-                            {
-                                if(row.before_car_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_car_er.name+'</a>';
-                            }
-                            else if(row.column_name == 'driver_id')
-                            {
-                                if(row.before_driver_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.before_driver_er.driver_name+'</a>';
+                                if(row.before_project_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.before_project_er.name+'</a>';
                             }
 
                             if(row.column_name == 'is_wx')
@@ -1809,44 +1777,12 @@
                             if(row.column_name == 'client_id')
                             {
                                 if(row.after_client_er == null) return '';
-                                else
-                                {
-                                    if(row.after_client_er.short_name)
-                                    {
-                                        return '<a href="javascript:void(0);">'+row.after_client_er.short_name+'</a>';
-                                    }
-                                    else return '<a href="javascript:void(0);">'+row.after_client_er.username+'</a>';
-                                }
+                                else return '<a href="javascript:void(0);">'+row.after_client_er.username+'</a>';
                             }
-                            else if(row.column_name == 'circle_id')
+                            else if(row.column_name == 'project_id')
                             {
-                                if(row.after_circle_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_circle_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'route_id')
-                            {
-                                if(row.after_route_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_route_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'empty_route_id')
-                            {
-                                if(row.after_empty_route_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_empty_route_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'pricing_id')
-                            {
-                                if(row.after_pricing_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_pricing_er.title+'</a>';
-                            }
-                            else if(row.column_name == 'car_id' || row.column_name == 'trailer_id')
-                            {
-                                if(row.after_car_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_car_er.name+'</a>';
-                            }
-                            else if(row.column_name == 'driver_id')
-                            {
-                                if(row.after_driver_er == null) return '';
-                                else return '<a href="javascript:void(0);">'+row.after_driver_er.driver_name+'</a>';
+                                if(row.after_project_er == null) return '';
+                                else return '<a href="javascript:void(0);">'+row.after_project_er.name+'</a>';
                             }
 
                             if(row.column_name == 'is_wx')

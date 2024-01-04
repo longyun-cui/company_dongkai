@@ -46,27 +46,27 @@ class DK_Record extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
     }
     // 创作者
     function updater()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','updater_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
     }
     // 创作者
     function completer()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','completer_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\Dk\DK_User','user_id','id');
+        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
     }
 
 
@@ -80,55 +80,15 @@ class DK_Record extends Model
     {
         return $this->belongsTo('App\Models\YH\YH_Client','after_client_id','id');
     }
-    // 线路
-    function before_route_er()
+    // 项目
+    function before_project_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Route','before_route_id','id');
+        return $this->belongsTo('App\Models\DK\YH_Porject','before_project_id','id');
     }
-    // 线路
-    function after_route_er()
+    // 项目
+    function after_project_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Route','after_route_id','id');
-    }
-    // 线路
-    function before_empty_route_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Route','before_empty_route_id','id');
-    }
-    // 线路
-    function after_empty_route_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Route','after_empty_route_id','id');
-    }
-    // 定价
-    function before_pricing_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Pricing','before_pricing_id','id');
-    }
-    // 定价
-    function after_pricing_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Pricing','after_pricing_id','id');
-    }
-    // 车辆
-    function before_car_er()
-    {
-        return $this->belongsTo('App\Models\YH\DKProject','before_car_id','id');
-    }
-    // 车辆
-    function after_car_er()
-    {
-        return $this->belongsTo('App\Models\YH\DKProject','after_car_id','id');
-    }
-    // 驾驶员
-    function before_driver_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Driver','before_driver_id','id');
-    }
-    // 驾驶员
-    function after_driver_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Driver','after_driver_id','id');
+        return $this->belongsTo('App\Models\DK\YH_Porject','after_project_id','id');
     }
 
 
