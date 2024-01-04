@@ -974,22 +974,27 @@
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
 
-            $('select[name=info-select-set-column-value]').removeClass('select2-car').removeClass('select2-client');
+            $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-project');
             if($that.attr("data-key") == "location_city")
             {
                 $('select[name=info-select-set-column-value]').removeClass('select2-city');
                 $('select[name=info-select-set-column-value2]').removeClass('select2-district');
                 var $option_html = $('#location-city-option-list').html();
             }
-            else if($that.attr("data-key") == "receipt_status")
+            else if($that.attr("data-key") == "teeth_count")
             {
-                var $option_html = $('#receipt_status-option-list').html();
+                var $option_html = $('#option-list-for-teeth-count').html();
+            }
+            else if($that.attr("data-key") == "inspected_result")
+            {
+                var $option_html = $('#option-list-inspected-result').html();
             }
             $('select[name=info-select-set-column-value]').html($option_html);
             $('select[name=info-select-set-column-value]').find("option[value='"+$that.attr("data-value")+"']").attr("selected","selected");
 
 
             $('#modal-body-for-info-select-set').modal('show');
+            $('#modal-body-for-info-select-set').find('select[name=info-select-set-column-value2]').hide();
 
 
 
@@ -1017,10 +1022,12 @@
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
             $('#modal-body-for-info-select-set').modal('show');
+            $('select[name=info-select-set-column-value2]').show();
 
 
             if($that.attr("data-key") == "location_city")
             {
+                $('select[name=info-select-set-column-value2]').show();
 
                 var $district_list = [
                     ['东城区','西城区','海淀区','朝阳区','丰台区','门头沟区','石景山区','房山区','通州区','顺义区','昌平区','大兴区','怀柔区','平谷区','延庆区','密云区','其他'],
@@ -1039,6 +1046,7 @@
                 $('select[name=info-select-set-column-value]').removeClass('select2-project').addClass('select2-city');
                 $('select[name=info-select-set-column-value2]').removeClass('select2-project').addClass('select2-district');
 
+                $('select[name=info-select-set-column-value2]').show();
 
                 var $city_index = $(".select2-city").find('option:selected').attr('data-index');
                 $(".select2-district").html('<option value="">选择区划</option>');
@@ -1046,6 +1054,8 @@
                     $(".select2-district").append('<option value="' + $val + '">' + $val + '</option>');
                 });
                 $('.select2-district').find("option[value='"+$that.attr("data-value2")+"']").attr("selected","selected");
+
+                $('.select2-city').select2();
                 $('.select2-district').select2();
 
 

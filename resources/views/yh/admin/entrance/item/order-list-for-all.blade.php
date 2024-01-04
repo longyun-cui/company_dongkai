@@ -454,10 +454,10 @@
                     <div class="form-group">
                         <label class="control-label col-md-2 info-select-set-column-name"></label>
                         <div class="col-md-8 ">
-                            <select class="form-control select-select2 select2-primary" name="info-select-set-column-value" style="width:48%;" id="">
+                            <select class="form-control select2-primary" name="info-select-set-column-value" style="width:48%;" id="">
                                 <option data-id="0" value="0">未指定</option>
                             </select>
-                            <select class="form-control select-select2 select2-sub select-district" name="info-select-set-column-value2" style="width:48%;" id="">
+                            <select class="form-control select2-assistant" name="info-select-set-column-value2" style="width:48%;" id="">
                                 <option data-id="0" value="0">未指定</option>
                             </select>
                         </div>
@@ -492,30 +492,6 @@
         @endforeach
     </div>
 
-    {{--是否+V--}}
-    <div id="is_delay-option-list">
-        <label class="control-label col-md-2">是否+V</label>
-        <div class="col-md-8">
-            <div class="btn-group">
-
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="is_wx" value="1" class="info-set-column"> 是
-                        </label>
-                    </span>
-                </button>
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="is_wx" value="0" class="info-set-column"> 否
-                        </label>
-                    </span>
-                </button>
-
-            </div>
-        </div>
-    </div>
 
     {{--是否+V--}}
     <div id="option-list-for-is-wx">
@@ -542,14 +518,20 @@
         </div>
     </div>
 
-    {{--回单状态--}}
-    <div id="receipt_status-option-list">
-        <option value="-1">选择回单状态</option>
-        <option value="1">等待回单</option>
-        <option value="21">邮寄中</option>
-        <option value="41">已签收，等待确认</option>
-        <option value="100">已完成</option>
-        <option value="101">回单异常</option>
+    {{--审核结果--}}
+    <div id="option-list-for-inspected-result">
+        <option value="-1">审核结果</option>
+        @foreach(config('info.inspected_result') as $v)
+            <option value="{{ $v }}">{{ $v }}</option>
+        @endforeach
+    </div>
+
+    {{--牙齿数量--}}
+    <div id="option-list-for-teeth-count">
+        <option value="-1">选择牙齿数量</option>
+        @foreach(config('info.teeth_count') as $v)
+            <option value="{{ $v }}">{{ $v }}</option>
+        @endforeach
     </div>
 
 </div>
@@ -1134,7 +1116,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-radio-set-');
+                                $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
                                 $(nTd).attr('data-key','teeth_count').attr('data-value',data);
                                 $(nTd).attr('data-column-name','牙齿数量');
@@ -1688,6 +1670,7 @@
                                 else if(data == "location_city") return '城市区域';
                                 else if(data == "is_wx") return '是否+V';
                                 else if(data == "wx_id") return '微信号';
+                                else if(data == "teeth_count") return '牙齿数量';
                                 else if(data == "description") return '通话小结';
                                 else if(data == "inspected_description") return '审核说明';
                                 else return '有误';
