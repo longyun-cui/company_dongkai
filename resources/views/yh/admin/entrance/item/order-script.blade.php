@@ -886,11 +886,11 @@
                 $('.radio-box').html($option_html);
                 $('input[name=receipt_need][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
             }
-            else if($that.attr("data-key") == "is_delay")
+            else if($that.attr("data-key") == "is_wx")
             {
-                var $option_html = $('#is_delay-option-list').html();
+                var $option_html = $('#option-list-for-is-wx').html();
                 $('.radio-box').html($option_html);
-                $('input[name=is_delay][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
+                $('input[name=is_wx][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
             }
 
 

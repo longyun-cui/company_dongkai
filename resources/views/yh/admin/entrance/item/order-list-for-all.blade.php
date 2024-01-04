@@ -517,23 +517,23 @@
         </div>
     </div>
 
-    {{--是否需要回单--}}
-    <div id="receipt_need-option-list">
-        <label class="control-label col-md-2">是否需要回单</label>
+    {{--是否+V--}}
+    <div id="option-list-for-is-wx">
+        <label class="control-label col-md-2">是否+V</label>
         <div class="col-md-8">
             <div class="btn-group">
 
                 <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="receipt_need" value="0" class="info-set-column"> 不需要
+                            <input type="radio" name="is_wx" value="0" class="info-set-column"> 否
                         </label>
                     </span>
                 </button>
                 <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="receipt_need" value="1" class="info-set-column"> 需要
+                            <input type="radio" name="is_wx" value="1" class="info-set-column"> 是
                         </label>
                     </span>
                 </button>
@@ -1068,12 +1068,12 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-radio-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
-                                $(nTd).attr('data-key','is_repeat').attr('data-value',data);
-                                $(nTd).attr('data-column-name','是否重复');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                // $(nTd).addClass('modal-show-for-info-radio-set-');
+                                // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
+                                // $(nTd).attr('data-key','is_repeat').attr('data-value',data);
+                                // $(nTd).attr('data-column-name','是否重复');
+                                // if(data) $(nTd).attr('data-operate-type','edit');
+                                // else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -1090,7 +1090,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-radio-set-');
+                                $(nTd).addClass('modal-show-for-info-radio-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
                                 $(nTd).attr('data-key','is_wx').attr('data-value',data);
                                 $(nTd).attr('data-column-name','是否+V');
@@ -1685,8 +1685,10 @@
                                 else if(data == "project_id") return '项目';
                                 else if(data == "client_name") return '客户电话';
                                 else if(data == "client_phone") return '客户电话';
-                                else if(data == "description") return '通话小结';
                                 else if(data == "location_city") return '城市区域';
+                                else if(data == "is_wx") return '是否+V';
+                                else if(data == "wx_id") return '微信号';
+                                else if(data == "description") return '通话小结';
                                 else if(data == "inspected_description") return '审核说明';
                                 else return '有误';
                             }
@@ -1752,10 +1754,10 @@
                                 else return '<a href="javascript:void(0);">'+row.before_driver_er.driver_name+'</a>';
                             }
 
-                            if(row.column_name == 'is_delay')
+                            if(row.column_name == 'is_wx')
                             {
-                                if(data == 1) return '正常';
-                                else if(data == 9) return '压车';
+                                if(data == 0) return '否';
+                                else if(data == 1) return '是';
                                 else return '--';
                             }
 
@@ -1847,10 +1849,10 @@
                                 else return '<a href="javascript:void(0);">'+row.after_driver_er.driver_name+'</a>';
                             }
 
-                            if(row.column_name == 'is_delay')
+                            if(row.column_name == 'is_wx')
                             {
-                                if(data == 1) return '正常';
-                                else if(data == 9) return '压车';
+                                if(data == 0) return '否';
+                                else if(data == 1) return '是';
                                 else return '--';
                             }
 

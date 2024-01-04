@@ -6461,6 +6461,17 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
+            if($column_key == "client_phone")
+            {
+                $project_id = $item->project_id;
+                $client_phone = $item->client_phone;
+
+                $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$client_phone])
+                    ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                $item->is_repeat = $is_repeat;
+//                dd($item->is_repeat);
+            }
+
             $item->$column_key = $column_value;
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");
@@ -6707,9 +6718,15 @@ class DKAdminRepository {
 
         $operate_type = $post_data["operate_type"];
         $column_key = $post_data["column_key"];
-        $column_key2 = $post_data["column_key2"];
         $column_value = $post_data["column_value"];
-        $column_value2 = $post_data["column_value2"];
+        if(isset($post_data["column_key2"]))
+        {
+            $column_key2 = $post_data["column_key2"];
+        }
+        if(isset($post_data["column_value2"]))
+        {
+            $column_value2 = $post_data["column_value2"];
+        }
 
         $before = $item->$column_key;
         $after = $column_value;
@@ -6728,18 +6745,7 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-            if($column_key == "circle_id")
-            {
-                if($column_value == 0)
-                {
-                }
-                else
-                {
-                    $circle = YH_Circle::withTrashed()->find($column_value);
-                    if(!$circle) throw new Exception("该【环线】不存在，刷新页面重试！");
-                }
-            }
-            else if($column_key == "car_id")
+            if($column_key == "car_id")
             {
                 if($column_value == 0)
                 {
@@ -6762,7 +6768,7 @@ class DKAdminRepository {
             }
 
             $item->$column_key = $column_value;
-            if($column_key2)
+            if(isset($column_key2))
             {
                 $item->$column_key2 = $column_value2;
             }
@@ -6809,35 +6815,10 @@ class DKAdminRepository {
                         $record_data["before_client_id"] = $before;
                         $record_data["after_client_id"] = $column_value;
                     }
-                    else if($column_key == 'circle_id')
-                    {
-                        $record_data["before_circle_id"] = $before;
-                        $record_data["after_circle_id"] = $column_value;
-                    }
-                    else if($column_key == 'route_id')
-                    {
-                        $record_data["before_route_id"] = $before;
-                        $record_data["after_route_id"] = $column_value;
-                    }
-                    else if($column_key == 'pricing_id')
-                    {
-                        $record_data["before_pricing_id"] = $before;
-                        $record_data["after_pricing_id"] = $column_value;
-                    }
                     else if($column_key == 'car_id' || $column_key == 'trailer_id')
                     {
                         $record_data["before_car_id"] = $before;
                         $record_data["after_car_id"] = $column_value;
-                    }
-                    else if($column_key == 'driver_id')
-                    {
-                        $record_data["before_driver_id"] = $before;
-                        $record_data["after_driver_id"] = $column_value;
-                    }
-                    else if($column_key == 'empty_route_id')
-                    {
-                        $record_data["before_empty_route_id"] = $before;
-                        $record_data["after_empty_route_id"] = $column_value;
                     }
 
                     $bool_1 = $record->fill($record_data)->save();
