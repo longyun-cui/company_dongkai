@@ -6719,14 +6719,6 @@ class DKAdminRepository {
         $operate_type = $post_data["operate_type"];
         $column_key = $post_data["column_key"];
         $column_value = $post_data["column_value"];
-        if(isset($post_data["column_key2"]))
-        {
-            $column_key2 = $post_data["column_key2"];
-        }
-        if(isset($post_data["column_value2"]))
-        {
-            $column_value2 = $post_data["column_value2"];
-        }
 
         $before = $item->$column_key;
         $after = $column_value;
@@ -6763,15 +6755,16 @@ class DKAdminRepository {
             }
             else if($column_key == "location_city")
             {
+                $column_key2 = $post_data["column_key2"];
+                $column_value2 = $post_data["column_value2"];
+
                 $before = $item->location_city.' - '.$item->location_district;
                 $after = $column_value.' - '.$column_value2;
+
+                $item->$column_key2 = $column_value2;
             }
 
             $item->$column_key = $column_value;
-            if(isset($column_key2))
-            {
-                $item->$column_key2 = $column_value2;
-            }
             $bool = $item->save();
             if(!$bool) throw new Exception("order--update--fail");
             else
