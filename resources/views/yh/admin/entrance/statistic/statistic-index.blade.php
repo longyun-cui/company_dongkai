@@ -340,6 +340,7 @@
     .datatable-search-row .input-group .month-picker-btn { width:30px; }
     .datatable-search-row .input-group .month_picker,
     .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
+    .datatable-search-row .input-group button { width:80px; }
     .datatable-search-row .input-group select { width:100px; }
     .datatable-search-row .input-group .select2-container { width:120px; }
 </style>

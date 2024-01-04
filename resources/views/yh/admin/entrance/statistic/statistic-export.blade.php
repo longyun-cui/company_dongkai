@@ -80,24 +80,40 @@
                         </button>
 
 
-                        <input type="text" class="form-control form-filter filter-keyup time_picker" name="order-start" placeholder="起始时间" readonly="readonly" value="" data-default="" style="width:120px;text-align:center;" />
-                        <input type="text" class="form-control form-filter filter-keyup time_picker" name="order-ended" placeholder="终止时间" readonly="readonly" value="" data-default="" style="width:120px;text-align:center;" />
+                        {{--按时间段导出--}}
+                        <input type="text" class="form-control form-filter filter-keyup time_picker" name="export-start" placeholder="起始时间" readonly="readonly" value="" data-default="" style="width:120px;text-align:center;" />
+                        <input type="text" class="form-control form-filter filter-keyup time_picker" name="export-ended" placeholder="终止时间" readonly="readonly" value="" data-default="" style="width:120px;text-align:center;" />
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit filter-submit-for-order" data-type="" style="width:100px;">
                             <i class="fa fa-download"></i> 按时间段导出
                         </button>
 
 
-                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre">
+                        {{--按天导出--}}
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-export">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup month-picker month_picker" name="order-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next">
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="export-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-export">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit filter-submit-for-order" data-type="day">
+                            <i class="fa fa-download"></i> 按日导出
+                        </button>
+
+
+                        {{--按月导出--}}
+                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-pre-for-export">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <input type="text" class="form-control form-filter filter-keyup month-picker month_picker" name="export-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default month-picker-btn month-pick-next-for-export">
                             <i class="fa fa-chevron-right"></i>
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit filter-submit-for-order" data-type="month">
                             <i class="fa fa-download"></i> 按月导出
                         </button>
+
 
                         <div class="month-picker-box clear-both">
                         </div>
@@ -213,8 +229,11 @@
 @section('custom-style')
 <style>
     .myChart { width:100%;height:240px; }
+    .datatable-search-row .input-group .time-picker-btn,
     .datatable-search-row .input-group .month-picker-btn { width:30px; }
-    .datatable-search-row .input-group .month_picker { width:90px;text-align:center; }
+    .datatable-search-row .input-group .month_picker,
+    .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
+    .datatable-search-row .input-group button { width:80px; }
     .datatable-search-row .input-group select { width:100px; }
     .datatable-search-row .input-group .select2-container { width:120px; }
 </style>

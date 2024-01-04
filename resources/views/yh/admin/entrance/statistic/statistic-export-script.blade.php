@@ -6,7 +6,7 @@
             var that = $(this);
             var $id = that.attr("data-id");
 
-            var $month = $('input[name="comprehensive-month"]').val();
+            var $month = $('input[name="export-month"]').val();
             $('.statistic-title').html($month+'月');
 
             var $data = new Object();
@@ -31,31 +31,28 @@
 
         });
         // 【清空重选】
-        $("#statistic-for-comprehensive").on('click', ".filter-cancel", function() {
-            $("#statistic-for-comprehensive").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#statistic-for-export").on('click', ".filter-cancel", function() {
+            $("#statistic-for-export").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#statistic-for-comprehensive").find('select.form-filter option').attr("selected",false);
-            $("#statistic-for-comprehensive").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#statistic-for-export").find('select.form-filter option').attr("selected",false);
+            $("#statistic-for-export").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
-            var $month_dom = $('input[name="comprehensive-month"]');
+            var $month_dom = $('input[name="export-month"]');
             var $month_default = $month_dom.attr('data-default')
             $month_dom.val($month_default);
-            $("#filter-submit-for-comprehensive").click();
+            $("#filter-submit-for-export").click();
 
         });
 
 
 
         // 【前一月】
-        $(".main-content").on('click', ".month-pick-pre", function() {
+        $(".main-content").on('click', ".month-pick-pre-for-export", function() {
             var $that = $(this);
-            var $box = $that.parents('.month-picker-box');
-
-            var $month_dom = $box.find('.month-picker');
-            // var $month_dom = $('input[name="order-month"]');
+            var $month_dom = $('input[name="export-month"]');
 
             var $the_month = $month_dom.val();
             var $date = new Date($the_month);
@@ -76,15 +73,11 @@
             var $pre_month_str = $pre_year+'-'+$pre_month;
             $month_dom.val($pre_month_str);
 
-            // $("#filter-submit-for-order").click();
-
         });
         // 【后一月】
-        $(".main-content").on('click', ".month-pick-next", function() {
+        $(".main-content").on('click', ".month-pick-next-for-export", function() {
             var $that = $(this);
-            var $box = $that.parents('.month-picker-box');
-
-            var $month_dom = $box.find('.month-picker');
+            var $month_dom = $('input[name="export-month"]');
             var $the_month_str = $month_dom.val();
 
             var $date = new Date($the_month_str);
@@ -105,8 +98,45 @@
 
             var $next_month_str = $next_year+'-'+$next_month;
             $month_dom.val($next_month_str);
+        });
 
-            // $("#filter-submit-for-order").click();
+        // 【前一天】
+        $(".main-content").on('click', ".date-pick-pre-for-export", function() {
+
+            var $date_dom = $('input[name="export-date"]');
+            var $the_date_str = $date_dom.val();
+
+            var $date = new Date($the_date_str);
+            var $time = $date.getTime();
+            var $yesterday_time = $time - (24*60*60*1000);
+
+            var $yesterday = new Date($yesterday_time);
+            var $yesterday_year = $yesterday.getFullYear();
+            var $yesterday_month = ('00'+($yesterday.getMonth()+1)).slice(-2);
+            var $yesterday_day = ('00'+($yesterday.getDate())).slice(-2);
+
+            var $yesterday_date_str = $yesterday_year + '-' + $yesterday_month + '-' + $yesterday_day;
+            $date_dom.val($yesterday_date_str);
+
+        });
+        // 【后一天】
+        $(".main-content").on('click', ".date-pick-next-for-export", function() {
+
+            var $date_dom = $('input[name="export-date"]');
+            var $the_date_str = $date_dom.val();
+
+            var $date = new Date($the_date_str);
+            var $time = $date.getTime();
+            var $tomorrow_time = $time + (24*60*60*1000);
+
+            var $tomorrow = new Date($tomorrow_time);
+            var $tomorrow_year = $tomorrow.getFullYear();
+            var $tomorrow_month = ('00'+($tomorrow.getMonth()+1)).slice(-2);
+            var $tomorrow_day = ('00'+($tomorrow.getDate())).slice(-2);
+
+            var $tomorrow_date_str = $tomorrow_year + '-' + $tomorrow_month + '-' + $tomorrow_day;
+            $date_dom.val($tomorrow_date_str);
+
         });
 
 
@@ -122,14 +152,16 @@
             var $id = that.attr("data-id");
             var $export_type = that.attr("data-type");
 
-            var $month = $('input[name="order-month"]').val();
+            var $month = $('input[name="export-month"]').val();
+            var $day = $('input[name="export-date"]').val();
 
             var $obj = new Object();
             $obj.export_type = $export_type;
             if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
-            if($('input[name="order-month"]').val())  $obj.month = $('input[name="order-month"]').val();
-            if($('input[name="order-start"]').val())  $obj.order_start = $('input[name="order-start"]').val();
-            if($('input[name="order-ended"]').val())  $obj.order_ended = $('input[name="order-ended"]').val();
+            if($('input[name="export-month"]').val())  $obj.month = $('input[name="export-month"]').val();
+            if($('input[name="export-date"]').val())  $obj.day = $('input[name="export-date"]').val();
+            if($('input[name="export-start"]').val())  $obj.order_start = $('input[name="export-start"]').val();
+            if($('input[name="export-ended"]').val())  $obj.order_ended = $('input[name="export-ended"]').val();
             if($('select[name="order-staff"]').val() > 0)  $obj.staff = $('select[name="order-staff"]').val();
             if($('select[name="order-project"]').val() > 0)  $obj.project = $('select[name="order-project"]').val();
             if($('select[name="order-inspected-result"]').val() != -1)  $obj.inspected_result = $('select[name="order-inspected-result"]').val();
@@ -137,9 +169,9 @@
             var $url = url_build('/statistic/statistic-export-for-order',$obj);
             window.open($url);
 
-            setTimeout(function(){
-                $('#datatable_ajax').DataTable().ajax.reload(null,false);
-            }, 1000);
+            // setTimeout(function(){
+            //     $('#datatable_ajax').DataTable().ajax.reload(null,false);
+            // }, 1000);
 
             {{--var $data = new Object();--}}
             {{--$.ajax({--}}

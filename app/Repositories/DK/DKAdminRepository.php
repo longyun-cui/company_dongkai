@@ -11063,6 +11063,15 @@ class DKAdminRepository {
             $record_before = $the_month;
             $record_after = $the_month;
         }
+        else if($export_type == "day")
+        {
+            $the_day  = isset($post_data['day']) ? $post_data['day']  : date('Y-m-d');
+
+            $record_operate_type = 31;
+            $record_column_type = 'date';
+            $record_before = $the_day;
+            $record_after = $the_day;
+        }
         else if($export_type == "latest")
         {
             $record_last = DK_Record::select('*')
@@ -11134,6 +11143,7 @@ class DKAdminRepository {
 
 
         $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+        $the_day  = isset($post_data['day'])  ? $post_data['day']  : date('Y-m-d');
 
 
         // 工单
@@ -11147,6 +11157,10 @@ class DKAdminRepository {
         if($export_type == "month")
         {
             $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
+        }
+        else if($export_type == "day")
+        {
+            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_day);
         }
         else if($export_type == "latest")
         {
@@ -11263,6 +11277,10 @@ class DKAdminRepository {
         if($export_type == "month")
         {
             $month_title = '【'.$the_month.'月】';
+        }
+        else if($export_type == "day")
+        {
+            $month_title = '【'.$the_day.'】';
         }
         else if($export_type == "latest")
         {
