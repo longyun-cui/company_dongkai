@@ -162,7 +162,9 @@
         });
 
 
-        // 内容【获取详情】
+
+
+        // 【获取】内容详情
         $(".main-content").on('click', ".item-modal-show-for-detail", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
@@ -207,6 +209,81 @@
             $modal.modal('show');
 
         });
+        // 【取消】内容详情
+        $(".main-content").on('click', ".item-cancel-for-detail", function() {
+            var that = $(this);
+            $('#modal-body-for-info-detail').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+
+        // 【获取】内容详情-审核
+        $(".main-content").on('click', ".item-modal-show-for-detail-inspected", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            console.log('--');
+
+            $('input[name="detail-inspected-order-id"]').val($that.attr('data-id'));
+            $('.info-detail-title').html($that.attr('data-id'));
+            $('.info-set-title').html($that.attr('data-id'));
+
+            var $modal = $('#modal-body-for-detail-inspected');
+
+            $modal.find('.item-detail-project .item-detail-text').html($row.find('td[data-key=project_id]').attr('data-value'));
+            $modal.find('.item-detail-client .item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
+            $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
+            $modal.find('.item-detail-is-wx .item-detail-text').html($row.find('td[data-key=is_wx]').html());
+            $modal.find('.item-detail-wx-id .item-detail-text').html($row.find('td[data-key=wx_id]').attr('data-value'));
+            $modal.find('.item-detail-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
+            $modal.find('.item-detail-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
+            $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
+
+            var $inspected_result = $row.find('td[data-key=inspected_result]').attr('data-value');
+            $('select[name="detail-inspected-result"]').find("option[value='"+$inspected_result+"']").attr("selected","selected");
+
+            $modal.find('textarea[name="detail-inspected-description"]').html('');
+            $modal.find('textarea[name="detail-inspected-description"]').html($row.find('td[data-key=inspected_description]').attr('data-value'));
+
+            $modal.modal('show');
+
+        });
+        // 【取消】内容详情-审核
+        $(".main-content").on('click', ".item-cancel-for-detail-inspected", function() {
+            var that = $(this);
+            $('#modal-body-for-detail-inspected').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【提交】内容详情-审核
+        $(".main-content").on('click', ".item-summit-for-detail-inspected", function() {
+            var $that = $(this);
+            $.post(
+                "{{ url('/item/order-inspect') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-inspect",
+                    item_id: $('input[name="detail-inspected-order-id"]').val(),
+                    inspected_result: $('select[name="detail-inspected-result"]').val(),
+                    inspected_description: $('textarea[name="detail-inspected-description"]').val()
+                },
+                function(data){
+                    // layer.close(index);
+                    // layer.form.render();
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
+                    else
+                    {
+                        $(".item-cancel-for-detail-inspected").click();
+                        $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                    }
+                },
+                'json'
+            );
+        });
+
+
 
 
         // 【删除】

@@ -190,7 +190,7 @@
 
 
 {{--显示-基本信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-detail">
+<div class="modal fade modal-main-body" id="modal-body-for-detail-inspected">
     <div class="col-md-8 col-md-offset-2" id="" style="margin-top:64px;margin-bottom:64px;background:#fff;">
 
         <div class="box- box-info- form-container">
@@ -201,12 +201,12 @@
                 </div>
             </div>
 
-            <form action="" method="post" class="form-horizontal form-bordered" id="form-edit-modal">
+            <form action="" method="post" class="form-horizontal form-bordered" id="form-inspected-modal">
                 <div class="box-body  info-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="operate" value="work-order" readonly>
-                    <input type="hidden" name="id" value="0" readonly>
+                    <input type="hidden" name="operate" value="order-inspect" readonly>
+                    <input type="hidden" name="detail-inspected-order-id" value="0" readonly>
 
                     {{--项目--}}
                     <div class="form-group item-detail-project">
@@ -271,6 +271,26 @@
                             <span class="item-detail-text"></span>
                         </div>
                     </div>
+                    {{--审核结果--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">审核结果</label>
+                        <div class="col-md-8 ">
+                            <select class="form-control select-select2-" name="detail-inspected-result" id="" style="width:100%;">
+                                <option value="-1">选择审核结果</option>
+                                @foreach(config('info.inspected_result') as $v)
+                                    <option value ="{{ $v }}">{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{--审核说明--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">审核说明</label>
+                        <div class="col-md-8 ">
+                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
+                            <textarea class="form-control" name="detail-inspected-description" rows="3" cols="100%"></textarea>
+                        </div>
+                    </div>
 
                 </div>
             </form>
@@ -278,8 +298,8 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-site-submit"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default modal-cancel" id="item-site-cancel">取消</button>
+                        <button type="button" class="btn btn-success item-summit-for-detail-inspected" id=""><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default item-cancel-for-detail-inspected" id="">取消</button>
                     </div>
                 </div>
             </div>
@@ -941,6 +961,15 @@
                         "width": "72px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','审核结果');
+                                $(nTd).attr('data-key','inspected_result').attr('data-value',data);
+                                $(nTd).attr('data-column-name','审核结果');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
                         },
                         render: function(data, type, row, meta) {
                             if(!row.inspected_at) return '--';
@@ -972,32 +1001,6 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
-                        }
-                    },
-                    {
-                        "title": "创建时间",
-                        "data": 'created_at',
-                        "className": "",
-                        "width": "100px",
-                        "orderable": false,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
                     },
                     {
@@ -1436,6 +1439,32 @@
                         }
                     },
                     {
+                        "title": "创建时间",
+                        "data": 'created_at',
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                        }
+                    },
+                    {
                         "title": "操作",
                         "data": 'id',
                         "className": "",
@@ -1454,6 +1483,7 @@
                             var $html_completed = '';
                             var $html_verified = '';
                             var $html_inspected = '';
+                            var $html_detail_inspected = '';
 
 
                             if(row.item_status == 1)
@@ -1517,11 +1547,13 @@
                                     if(row.inspector_id == 0)
                                     {
                                         $html_inspected = '<a class="btn btn-xs bg-teal item-inspect-submit" data-id="'+data+'">审核</a>';
+                                        $html_detail_inspected = '<a class="btn btn-xs bg-teal item-modal-show-for-detail-inspected" data-id="'+data+'">审核</a>';
                                     }
                                     else
                                     {
                                         // $html_inspected = '<a class="btn btn-xs bg-aqua-gradient disabled">已审</a>';
                                         $html_inspected = '<a class="btn btn-xs bg-blue item-inspect-submit" data-id="'+data+'">再审</a>';
+                                        $html_detail_inspected = '<a class="btn btn-xs bg-blue item-modal-show-for-detail-inspected" data-id="'+data+'">再审</a>';
                                     }
                                     $html_edit = '';
                                     $html_publish = '';
@@ -1566,7 +1598,8 @@
                                 $html_publish+
                                 // $html_detail+
                                 // $html_verified+
-                                $html_inspected+
+                                $html_detail_inspected+
+                                // $html_inspected+
                                 $html_delete+
                                 $html_record+
                                 // $html_abandon+
