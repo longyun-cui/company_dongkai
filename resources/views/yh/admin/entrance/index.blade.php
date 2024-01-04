@@ -25,6 +25,7 @@
 
             <div class="callout-body">
                 <span>总计 <text class="text-black font-24px">{{ $order_count_for_all or '' }}</text> 单</span>
+                <span>导入 <text class="text-black font-24px">{{ $query_order_count_for_export or '' }}</text> 单</span>
                 <span>待发布 <text class="text-teal font-24px">{{ $order_count_for_unpublished or '' }}</text> 单</span>
                 <span>已发布 <text class="text-green font-24px">{{ $order_count_for_published or '' }}</text> 单</span>
                 <span>待审核 <text class="text-aqua font-24px">{{ $order_count_for_waiting_for_inspect or '' }}</text> 单</span>

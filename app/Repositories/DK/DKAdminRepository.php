@@ -107,14 +107,15 @@ class DKAdminRepository {
 
         // 工单统计
         $query_order_count_for_all = DK_Order::select('id');
-        $query_order_count_for_unpublished = DK_Order::where('is_published', 0);
-        $query_order_count_for_published = DK_Order::where('is_published', 1);
-        $query_order_count_for_waiting_for_inspect = DK_Order::where('is_published', 1)->where('inspected_status', 0);
-        $query_order_count_for_inspected = DK_Order::where('is_published', 1)->where('inspected_status', '<>', 0);
-        $query_order_count_for_accepted = DK_Order::where('is_published', 1)->where('inspected_result','通过');
-        $query_order_count_for_refused = DK_Order::where('is_published', 1)->where('inspected_result','拒绝');
-        $query_order_count_for_accepted_inside = DK_Order::where('is_published', 1)->where('inspected_result','内部通过');
-        $query_order_count_for_repeat = DK_Order::where('is_published', 1)->where('is_repeat','>',0);
+        $query_order_count_for_export = DK_Order::where('created_type', 9);
+        $query_order_count_for_unpublished = DK_Order::where('created_type', 1)->where('is_published', 0);
+        $query_order_count_for_published = DK_Order::where('created_type', 1)->where('is_published', 1);
+        $query_order_count_for_waiting_for_inspect = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_status', 0);
+        $query_order_count_for_inspected = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_status', '<>', 0);
+        $query_order_count_for_accepted = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_result','通过');
+        $query_order_count_for_refused = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_result','拒绝');
+        $query_order_count_for_accepted_inside = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_result','内部通过');
+        $query_order_count_for_repeat = DK_Order::where('created_type', 1)->where('is_published', 1)->where('is_repeat','>',0);
 
 
 
@@ -162,6 +163,7 @@ class DKAdminRepository {
 
 
             $query_order_count_for_all->where('department_manager_id',$me->id);
+            $query_order_count_for_export->where('department_manager_id',$me->id);
             $query_order_count_for_unpublished->where('department_manager_id',$me->id);
             $query_order_count_for_published->where('department_manager_id',$me->id);
             $query_order_count_for_waiting_for_inspect->where('department_manager_id',$me->id);
@@ -194,6 +196,7 @@ class DKAdminRepository {
 
 
             $query_order_count_for_all->where('department_supervisor_id',$me->id);
+            $query_order_count_for_export->where('department_supervisor_id',$me->id);
             $query_order_count_for_unpublished->where('department_supervisor_id', $me->id);
             $query_order_count_for_published->where('department_supervisor_id', $me->id);
             $query_order_count_for_waiting_for_inspect->where('department_supervisor_id', $me->id);
@@ -210,6 +213,7 @@ class DKAdminRepository {
         if($me->user_type == 88)
         {
             $query_order_count_for_all->where('creator_id', $me->id);
+            $query_order_count_for_export->where('creator_id', $me->id);
             $query_order_count_for_unpublished->where('creator_id', $me->id);
             $query_order_count_for_published->where('creator_id', $me->id);
             $query_order_count_for_waiting_for_inspect->where('creator_id', $me->id);
@@ -274,6 +278,7 @@ class DKAdminRepository {
 
 
         $order_count_for_all = $query_order_count_for_all->count("*");
+        $query_order_count_for_export = $query_order_count_for_export->count("*");
         $order_count_for_unpublished = $query_order_count_for_unpublished->count("*");
         $order_count_for_published = $query_order_count_for_published->count("*");
         $order_count_for_waiting_for_inspect = $query_order_count_for_waiting_for_inspect->count("*");
@@ -285,6 +290,7 @@ class DKAdminRepository {
 
 
         $return['order_count_for_all'] = $order_count_for_all;
+        $return['query_order_count_for_export'] = $query_order_count_for_export;
         $return['order_count_for_unpublished'] = $order_count_for_unpublished;
         $return['order_count_for_published'] = $order_count_for_published;
         $return['order_count_for_waiting_for_inspect'] = $order_count_for_waiting_for_inspect;
