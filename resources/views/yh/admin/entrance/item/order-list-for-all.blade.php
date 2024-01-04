@@ -552,10 +552,10 @@
                     <div class="form-group">
                         <label class="control-label col-md-2 info-select-set-column-name"></label>
                         <div class="col-md-8 ">
-                            <select class="form-control select2-primary" name="info-select-set-column-value" style="width:48%;" id="">
+                            <select class="form-control select-primary" name="info-select-set-column-value" style="width:48%;" id="">
                                 <option data-id="0" value="0">未指定</option>
                             </select>
-                            <select class="form-control select2-assistant" name="info-select-set-column-value2" style="width:48%;" id="">
+                            <select class="form-control select-assistant" name="info-select-set-column-value2" style="width:48%;" id="">
                                 <option data-id="0" value="0">未指定</option>
                             </select>
                         </div>

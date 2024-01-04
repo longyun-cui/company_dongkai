@@ -985,13 +985,17 @@
 //            $('select[name=info-select-set-column-value]').find('option').eq(0).attr('data-id',$that.attr("data-value"));
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
+            console.log(1);
+            $('#modal-body-for-info-select-set').find('select[name=info-select-set-column-value2]').next('.select2-container').hide();
+            $('#modal-body-for-info-select-set').find('select[name=info-select-set-column-value2]').hide();
 
-            $('select[name=info-select-set-column-value]').removeClass('select2-client').removeClass('select2-project');
             if($that.attr("data-key") == "location_city")
             {
                 $('select[name=info-select-set-column-value]').removeClass('select2-city');
                 $('select[name=info-select-set-column-value2]').removeClass('select2-district');
                 var $option_html = $('#location-city-option-list').html();
+
+                $('#modal-body-for-info-select-set').find('select[name=info-select-set-column-value2]').show();
             }
             else if($that.attr("data-key") == "teeth_count")
             {
@@ -1010,7 +1014,6 @@
 
 
             $('#modal-body-for-info-select-set').modal('show');
-            $('#modal-body-for-info-select-set').find('select[name=info-select-set-column-value2]').hide();
 
 
 
@@ -1038,7 +1041,7 @@
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
             $('#modal-body-for-info-select-set').modal('show');
-            $('select[name=info-select-set-column-value2]').show();
+            $('select[name=info-select-set-column-value2]').hide();
 
 
             if($that.attr("data-key") == "location_city")
