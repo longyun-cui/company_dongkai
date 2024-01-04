@@ -9384,6 +9384,28 @@ class DKAdminRepository {
 
         $query = DK_Order::select('*');
 
+        if($me->user_type == 81)
+        {
+            $query->where('department_manager_id',$me->id);
+        }
+        else if($me->user_type == 84)
+        {
+            $query->where('department_supervisor_id',$me->id);
+        }
+        else if($me->user_type == 88)
+        {
+            $query->where('creator_id',$me->id);
+        }
+        else if($me->user_type == 71)
+        {
+            $query->where('inspector_id',$me->id);
+        }
+        else if($me->user_type == 77)
+        {
+            $query->where('inspector_id',$me->id);
+        }
+
+
         // 项目
         if(isset($post_data['project']))
         {
