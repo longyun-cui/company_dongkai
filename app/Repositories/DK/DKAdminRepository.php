@@ -8843,18 +8843,18 @@ class DKAdminRepository {
                             return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
                         });
                 },
-                'order_list_for_manager as order_count_for_accepted_inside'=>function($query) use($use) {
-                    $query->where('inspected_result', '内部通过')
-                        ->when($use['project_id'], function ($query) use ($use) {
-                            return $query->where('project_id', $use['project_id']);
-                        })
-                        ->when($use['is_month'], function ($query) use ($use) {
-                            return $query->whereBetween('published_at',[$use['the_month_start_timestamp'],$use['the_month_ended_timestamp']]);
-                        })
-                        ->when($use['is_day'], function ($query) use ($use) {
-                            return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
-                        });
-                }
+//                'order_list_for_manager as order_count_for_accepted_inside'=>function($query) use($use) {
+//                    $query->where('inspected_result', '内部通过')
+//                        ->when($use['project_id'], function ($query) use ($use) {
+//                            return $query->where('project_id', $use['project_id']);
+//                        })
+//                        ->when($use['is_month'], function ($query) use ($use) {
+//                            return $query->whereBetween('published_at',[$use['the_month_start_timestamp'],$use['the_month_ended_timestamp']]);
+//                        })
+//                        ->when($use['is_day'], function ($query) use ($use) {
+//                            return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
+//                        });
+//                }
             ]);
 
         }
@@ -8924,18 +8924,18 @@ class DKAdminRepository {
                             return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
                         });
                 },
-                'order_list_for_supervisor as order_count_for_accepted_inside'=>function($query) use($use) {
-                    $query->where('inspected_result', '内部通过')
-                        ->when($use['project_id'], function ($query) use ($use) {
-                            return $query->where('project_id', $use['project_id']);
-                        })
-                        ->when($use['is_month'], function ($query) use ($use) {
-                            return $query->whereBetween('published_at',[$use['the_month_start_timestamp'],$use['the_month_ended_timestamp']]);
-                        })
-                        ->when($use['is_day'], function ($query) use ($use) {
-                            return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
-                        });
-                }
+//                'order_list_for_supervisor as order_count_for_accepted_inside'=>function($query) use($use) {
+//                    $query->where('inspected_result', '内部通过')
+//                        ->when($use['project_id'], function ($query) use ($use) {
+//                            return $query->where('project_id', $use['project_id']);
+//                        })
+//                        ->when($use['is_month'], function ($query) use ($use) {
+//                            return $query->whereBetween('published_at',[$use['the_month_start_timestamp'],$use['the_month_ended_timestamp']]);
+//                        })
+//                        ->when($use['is_day'], function ($query) use ($use) {
+//                            return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
+//                        });
+//                }
             ]);
 
         }
@@ -9007,18 +9007,18 @@ class DKAdminRepository {
                             return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
                         });
                 },
-                'order_list as order_count_for_accepted_inside'=>function($query) use($use) {
-                    $query->where('inspected_result', '内部通过')
-                        ->when($use['project_id'], function ($query) use ($use) {
-                            return $query->where('project_id', $use['project_id']);
-                        })
-                        ->when($use['is_month'], function ($query) use ($use) {
-                            return $query->whereBetween('published_at',[$use['the_month_start_timestamp'],$use['the_month_ended_timestamp']]);
-                        })
-                        ->when($use['is_day'], function ($query) use ($use) {
-                            return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
-                        });
-                }
+//                'order_list as order_count_for_accepted_inside'=>function($query) use($use) {
+//                    $query->where('inspected_result', '内部通过')
+//                        ->when($use['project_id'], function ($query) use ($use) {
+//                            return $query->where('project_id', $use['project_id']);
+//                        })
+//                        ->when($use['is_month'], function ($query) use ($use) {
+//                            return $query->whereBetween('published_at',[$use['the_month_start_timestamp'],$use['the_month_ended_timestamp']]);
+//                        })
+//                        ->when($use['is_day'], function ($query) use ($use) {
+//                            return $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$use['the_day']);
+//                        });
+//                }
             ]);
 
         }

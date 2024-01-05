@@ -131,7 +131,7 @@
             @if(in_array($me->user_type,[0,1,9,11,81,84]))
                 <li class="treeview {{ $menu_active_of_statistic_rank or '' }}">
                     <a href="{{ url('/statistic/statistic-rank') }}">
-                        <i class="fa fa-line-chart text-purple"></i> <span>员工排名</span>
+                        <i class="fa fa-line-chart text-maroon"></i> <span>员工排名</span>
                     </a>
                 </li>
             @endif
@@ -145,7 +145,7 @@
             @if(in_array($me->user_type,[0,1,9,11,71,77]))
             <li class="treeview {{ $menu_active_of_statistic_export or '' }}">
                 <a href="{{ url('/statistic/statistic-export') }}">
-                    <i class="fa fa-download text-green"></i> <span>数据导出</span>
+                    <i class="fa fa-download text-default"></i> <span>数据导出</span>
                 </a>
             </li>
             @endif

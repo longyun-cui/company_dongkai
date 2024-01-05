@@ -9,7 +9,7 @@
 
 
 @section('header','')
-@section('description'){{ $title_text or '客服看板' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '排名' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -346,16 +346,16 @@
                             return data;
                         }
                     },
-                    {
-                        "title": "内部通过",
-                        "data": "order_count_for_accepted_inside",
-                        "className": "text-center",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "内部通过",
+                    //     "data": "order_count_for_accepted_inside",
+                    //     "className": "text-center",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "有效率",
                         "data": "order_rate_for_effective",
@@ -400,23 +400,23 @@
                 "columnDefs": [
                     {
                         "targets": [2],
-                        "orderData": [2,9,8]
+                        "orderData": [2,8,7]
                     },
                     {
                         "targets": [3],
-                        "orderData": [3,9,8]
+                        "orderData": [3,8,7]
                     },
                     {
                         "targets": [4],
-                        "orderData": [4,9,8]
+                        "orderData": [4,8,7]
+                    },
+                    {
+                        "targets": [7],
+                        "orderData": [7,8,2]
                     },
                     {
                         "targets": [8],
-                        "orderData": [8,9,2]
-                    },
-                    {
-                        "targets": [9],
-                        "orderData": [9,8,2]
+                        "orderData": [8,7,2]
                     }
                 ],
                 "language": { url: '/common/dataTableI18n' },
