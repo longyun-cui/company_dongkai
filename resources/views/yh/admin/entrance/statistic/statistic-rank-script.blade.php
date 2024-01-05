@@ -1,47 +1,56 @@
 <script>
     $(function() {
 
-        // 【客服看板】按月搜索
-        $(".main-content").on('click', "#filter-submit-for-department-by-month", function() {
+        // 【排名】全部搜索
+        $(".main-content").on('click', "#filter-submit-for-rank", function() {
 
-            $("#statistic-for-department").find('input[name=department-time-type]').val('month');
-            var $month_dom = $('input[name="department-month"]');
+            $("#statistic-for-rank").find('input[name=rank-time-type]').val('all');
+            $staff_type_title = $('select[name=rank-staff-type]').find("option:selected").text();
+            $(".statistic-title").html($staff_type_title);
+            $(".statistic-time-title").html('全部');
+            $('#datatable_ajax').DataTable().ajax.reload();
+        });
+        // 【排名】按月搜索
+        $(".main-content").on('click', "#filter-submit-for-rank-by-month", function() {
+
+            $("#statistic-for-rank").find('input[name=rank-time-type]').val('month');
+            var $month_dom = $('input[name="rank-month"]');
             var $the_month_str = $month_dom.val();
             $(".statistic-title").html($the_month_str);
             $('#datatable_ajax').DataTable().ajax.reload();
         });
-        // 【客服看板】按天搜索
-        $(".main-content").on('click', "#filter-submit-for-department-by-day", function() {
+        // 【排名】按天搜索
+        $(".main-content").on('click', "#filter-submit-for-rank-by-day", function() {
 
-            $("#statistic-for-department").find('input[name=department-time-type]').val('day');
-            var $date_dom = $('input[name="department-date"]');
+            $("#statistic-for-rank").find('input[name=rank-time-type]').val('day');
+            var $date_dom = $('input[name="rank-date"]');
             var $the_date_str = $date_dom.val();
             $(".statistic-title").html($the_date_str);
             $('#datatable_ajax').DataTable().ajax.reload();
         });
-        // 【客服看板】【重置】
-        $("#statistic-for-department").on('click', ".filter-cancel", function() {
-            $("#statistic-for-department").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        // 【排名】【重置】
+        $("#statistic-for-rank").on('click', ".filter-cancel", function() {
+            $("#statistic-for-rank").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#statistic-for-department").find('select.form-filter option').attr("selected",false);
-            $("#statistic-for-department").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#statistic-for-rank").find('select.form-filter option').attr("selected",false);
+            $("#statistic-for-rank").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
-            $("#statistic-for-department").find('input[name=department-time-type]').val('');
+            $("#statistic-for-rank").find('input[name=rank-time-type]').val('');
 
-            var $month_dom = $('input[name="department-month"]');
+            var $month_dom = $('input[name="rank-month"]');
             var $month_default = $month_dom.attr('data-default')
             $month_dom.val($month_default);
 
-            var $date_dom = $('input[name="department-date"]');
+            var $date_dom = $('input[name="rank-date"]');
             var $date_default = $date_dom.attr('data-default')
             $date_dom.val($date_default);
 
             $(".statistic-title").html("全部");
 
-            // $("#filter-submit-for-department").click();
+            // $("#filter-submit-for-rank").click();
             $('#datatable_ajax').DataTable().ajax.reload();
 
         });
@@ -50,9 +59,9 @@
 
 
         // 【客服看板】【前一月】
-        $(".main-content").on('click', ".month-pick-pre-for-department", function() {
+        $(".main-content").on('click', ".month-pick-pre-for-rank", function() {
 
-            var $month_dom = $('input[name="department-month"]');
+            var $month_dom = $('input[name="rank-month"]');
             var $the_month = $month_dom.val();
             var $date = new Date($the_month);
             var $year = $date.getFullYear();
@@ -72,14 +81,14 @@
             var $pre_month_str = $pre_year+'-'+$pre_month;
             $month_dom.val($pre_month_str);
 
-            $("#filter-submit-for-department-by-month").click();
+            $("#filter-submit-for-rank-by-month").click();
             // $('#datatable_ajax').DataTable().ajax.reload();
 
         });
         // 【客服看板】【后一月】
-        $(".main-content").on('click', ".month-pick-next-for-department", function() {
+        $(".main-content").on('click', ".month-pick-next-for-rank", function() {
 
-            var $month_dom = $('input[name="department-month"]');
+            var $month_dom = $('input[name="rank-month"]');
             var $the_month_str = $month_dom.val();
 
             var $date = new Date($the_month_str);
@@ -101,15 +110,15 @@
             var $next_month_str = $next_year+'-'+$next_month;
             $month_dom.val($next_month_str);
 
-            $("#filter-submit-for-department-by-month").click();
+            $("#filter-submit-for-rank-by-month").click();
             // $('#datatable_ajax').DataTable().ajax.reload();
 
         });
 
         // 【客服看板】【前一天】
-        $(".main-content").on('click', ".date-pick-pre-for-department", function() {
+        $(".main-content").on('click', ".date-pick-pre-for-rank", function() {
 
-            var $date_dom = $('input[name="department-date"]');
+            var $date_dom = $('input[name="rank-date"]');
             var $the_date_str = $date_dom.val();
 
             var $date = new Date($the_date_str);
@@ -125,14 +134,14 @@
             $date_dom.val($yesterday_date_str);
 
 
-            $("#filter-submit-for-department-by-day").click();
+            $("#filter-submit-for-rank-by-day").click();
             // $('#datatable_ajax').DataTable().ajax.reload();
 
         });
         // 【客服看板】【后一天】
-        $(".main-content").on('click', ".date-pick-next-for-department", function() {
+        $(".main-content").on('click', ".date-pick-next-for-rank", function() {
 
-            var $date_dom = $('input[name="department-date"]');
+            var $date_dom = $('input[name="rank-date"]');
             var $the_date_str = $date_dom.val();
 
             var $date = new Date($the_date_str);
@@ -147,7 +156,7 @@
             var $tomorrow_date_str = $tomorrow_year + '-' + $tomorrow_month + '-' + $tomorrow_day;
             $date_dom.val($tomorrow_date_str);
 
-            $("#filter-submit-for-department-by-day").click();
+            $("#filter-submit-for-rank-by-day").click();
             // $('#datatable_ajax').DataTable().ajax.reload();
 
         });

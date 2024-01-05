@@ -1405,10 +1405,20 @@ class DKAdminController extends Controller
 
 
     // 【统计】客服看板
-    public function view_statistic_department()
+    public function view_statistic_rank()
     {
-        if(request()->isMethod('get')) return $this->repo->view_statistic_department(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_department(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_statistic_rank(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_rank(request()->all());
+    }
+    public function view_statistic_rank_by_staff()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_rank_by_staff(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_rank_by_staff(request()->all());
+    }
+    public function view_statistic_rank_by_department()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_rank_by_department(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_rank_by_department(request()->all());
     }
     // 【统计】客服看板
     public function view_statistic_customer_service()

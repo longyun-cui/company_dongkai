@@ -532,7 +532,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/statistic/statistic-get-data-for-finance', $controller.'@get_statistic_data_for_finance');
 
 
-    Route::match(['get','post'], '/statistic/statistic-department', $controller.'@view_statistic_department');
+    Route::match(['get','post'], '/statistic/statistic-rank', $controller.'@view_statistic_rank');
+    Route::match(['get','post'], '/statistic/statistic-rank-by-staff', $controller.'@view_statistic_rank_by_staff');
+    Route::match(['get','post'], '/statistic/statistic-rank-by-department', $controller.'@view_statistic_rank_by_department');
     Route::match(['get','post'], '/statistic/statistic-customer-service', $controller.'@view_statistic_customer_service');
     Route::match(['get','post'], '/statistic/statistic-inspector', $controller.'@view_statistic_inspector');
 

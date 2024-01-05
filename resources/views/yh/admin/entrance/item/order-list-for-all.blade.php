@@ -843,7 +843,7 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-//                "scrollY": true,
+                // "scrollY": 400,
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",

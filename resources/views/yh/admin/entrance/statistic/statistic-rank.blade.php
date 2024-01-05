@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '部门看板' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '排名' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -20,44 +20,71 @@
         <div class="box box-info main-list-body">
 
             <div class="box-header with-border" style="margin:16px 0;">
-                <h3 class="box-title">部门看板(<span class="statistic-title">全部</span>)</h3>
+                <h3 class="box-title">
+                    【<span class="statistic-title">客服</span>】
+                    排名
+                    (<span class="statistic-time-title">全部</span>)</h3>
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="statistic-for-department">
+            <div class="box-body datatable-body item-main-body" id="statistic-for-rank">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="hidden" name="department-time-type" value="" readonly>
+                        <input type="hidden" name="rank-time-type" value="all" readonly>
+
+
+                        @if($me->user_type == 1)
+                        <select class="form-control form-filter" name="rank-object-type" style="width:88px;">
+                            <option value="staff">员工</option>
+                            <option value="department">部门</option>
+                        </select>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11,81]))
+                        <select class="form-control form-filter" name="rank-staff-type" style="width:88px;">
+                            <option value="88">客服</option>
+                            @if(in_array($me->user_type,[0,1,9,11,81]))
+                            <option value="84">主管</option>
+                            @endif
+                            @if(in_array($me->user_type,[0,1,9,11]))
+                            <option value="81">经理</option>
+                            @endif
+                        </select>
+                        @endif
 
                         {{--按月查看--}}
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-department">
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-rank">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="department-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-next-for-department">
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="rank-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-next-for-rank">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-department-by-month">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-rank-by-month">
                             <i class="fa fa-search"></i> 按月查看
                         </button>
 
 
                         {{--按天查看--}}
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-department">
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-rank">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="department-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-department">
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="rank-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-rank">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-department-by-day">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-rank-by-day">
                             <i class="fa fa-search"></i> 按日查看
                         </button>
 
 
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-department">
+                        {{--全部查询--}}
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-rank">
+                            <i class="fa fa-search"></i> 全部查询
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-rank">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
@@ -141,7 +168,7 @@
     <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
-@include(env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-department-script')
+@include(env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-rank-script')
 <script>
     var TableDatatablesAjax = function () {
         var datatableAjax = function () {
@@ -151,26 +178,29 @@
                 // "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
                 "aLengthMenu": [[-1], ["全部"]],
                 "processing": true,
-                "serverSide": true,
+                "serverSide": false,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/statistic/statistic-department') }}",
+                    'url': "{{ url('/statistic/statistic-rank') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="department-id"]').val();
-                        d.name = $('input[name="department-name"]').val();
-                        d.title = $('input[name="department-title"]').val();
-                        d.keyword = $('input[name="department-keyword"]').val();
-                        d.status = $('select[name="department-status"]').val();
-                        d.time_type = $('input[name="department-time-type"]').val();
-                        d.time_month = $('input[name="department-month"]').val();
-                        d.time_date = $('input[name="department-date"]').val();
+                        d.id = $('input[name="rank-id"]').val();
+                        d.name = $('input[name="rank-name"]').val();
+                        d.title = $('input[name="rank-title"]').val();
+                        d.keyword = $('input[name="rank-keyword"]').val();
+                        d.status = $('select[name="rank-status"]').val();
+                        d.time_type = $('input[name="rank-time-type"]').val();
+                        d.time_month = $('input[name="rank-month"]').val();
+                        d.time_date = $('input[name="rank-date"]').val();
+                        d.rank_object_type = $('select[name="rank-object-type"]').val();
+                        d.rank_staff_type = $('select[name="rank-staff-type"]').val();
                     },
                 },
+                "paging": false,
                 "pagingType": "simple_numbers",
-                "order": [],
+                "order": [2,'desc'],
                 "orderCellsTop": true,
                 "columns": [
 //                    {
@@ -190,33 +220,50 @@
 //                        "orderable": false
 //                    },
                     {
-                        "title": "主管",
-                        "data": "superior_id",
-                        "className": "vertical-middle",
-                        "width": "100px",
-                        "orderable": true,
-                        render: function(data, type, row, meta) {
-                            return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
-                        }
-                    },
-                    {
-                        "title": "ID",
+                        "title": "名称",
                         "data": "id",
-                        "className": "",
+                        "className": "text-center",
                         "width": "80px",
-                        "orderable": true,
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            {
+                                // this.column(2)
+                                $(nTd).addClass('modal-show-for-text');
+                                $(nTd).attr('data-id',row.id).attr('data-name','姓名');
+                                $(nTd).attr('data-key','username').attr('data-value',data);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(row.username) return '<a href="javascript:void(0);">'+row.username+'</a>';
+                            return '<a href="javascript:void(0);">'+row.name+'</a>';
                         }
                     },
                     {
-                        "title": "姓名",
-                        "data": "true_name",
+                        "title": "部门",
+                        "data": "id",
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "80px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        },
                         render: function(data, type, row, meta) {
-                            return data;
+                            @if($me->user_type == 11)
+                                if(row.username)
+                                {
+                                    var $district_name = row.department_district_er == null ? '' : row.department_district_er.name;
+                                    var $group_name = row.department_group_er == null ? '' : row.department_group_er.name;
+                                    return $district_name + ' - ' + $group_name;
+                                }
+                                return '<a href="javascript:void(0);">'+row.name+'</a>';
+                            @elseif($me->user_type == 81)
+                                if(row.username) return row.department_group_er == null ? '' : row.department_group_er.name;
+                                return '<a href="javascript:void(0);">'+row.name+'</a>';
+                            @elseif($me->user_type == 84)
+                                if(row.username) return row.department_group_er == null ? '' : row.department_group_er.name;
+                                return '<a href="javascript:void(0);">'+row.name+'</a>';
+                            @endif
                         }
                     },
                     {
@@ -224,9 +271,21 @@
                         "data": "order_count_for_all",
                         "className": "font-12px",
                         "width": "80px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                            return data;
+                        }
+                    },
+                    {
+                        "title": "有效量",
+                        "data": "order_count_for_effective",
+                        "className": "font-12px",
+                        "width": "80px",
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+                            return data;
                         }
                     },
                     {
@@ -234,7 +293,8 @@
                         "data": "order_count_for_accepted",
                         "className": "font-12px",
                         "width": "80px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             return data;
                         }
@@ -272,42 +332,24 @@
                         }
                     },
                     {
-                        "title": "通过率",
-                        "data": "order_rate_for_accepted",
-                        "className": "",
+                        "title": "有效率",
+                        "data": "order_rate_for_effective",
+                        "className": "text-center vertical-middle",
                         "width": "100px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             if(data) return data + " %";
                             return data
                         }
                     },
                     {
-                        "title": "总提交量",
-                        "data": "order_sum_for_all",
-                        "className": "text-center vertical-middle",
+                        "title": "通过率",
+                        "data": "order_rate_for_accepted",
+                        "className": "",
                         "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "总通过量",
-                        "data": "order_sum_for_accepted",
-                        "className": "text-center vertical-middle",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "平均通过率",
-                        "data": "order_average_rate_for_accepted",
-                        "className": "text-center vertical-middle",
-                        "width": "100px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             if(data) return data + " %";
                             return data
@@ -316,10 +358,13 @@
                 ],
                 "drawCallback": function (settings) {
 
+                    // console.log(this.api());
+
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
+
 
                     $('.lightcase-image').lightcase({
                         maxWidth: 9999,
@@ -328,64 +373,42 @@
 
                 },
                 "columnDefs": [
-                    {     //重要的部分
-                        targets: [0], //要合并的列数（第1，2，3列）
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            //重要的操作可以合并列的代码
-                            var rowspan = rowData.merge;
-                            if (rowspan > 1) {
-                                $(td).attr('rowspan', rowspan)
-                            }
-                            if (rowspan == 0) {
-                                $(td).remove();
-                            }
-                        },
-                        "data": "superior_id",
-                        "render": function (data, type, full) {
-                            // return "<span title='" + data + "'>" + data + "</span>";
-                            return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
-                        }
+                    {
+                        "targets": [2],
+                        "orderData": [1,9,8]
                     },
                     {
-                        targets: [9],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            var rowspan = rowData.merge;
-                            if (rowspan > 1) {
-                                $(td).attr('rowspan', rowspan)
-                            }
-                            if (rowspan == 0) {
-                                $(td).remove();
-                            }
-                        }
+                        "targets": [3],
+                        "orderData": [3,9,8]
                     },
                     {
-                        targets: [10],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            var rowspan = rowData.merge;
-                            if (rowspan > 1) {
-                                $(td).attr('rowspan', rowspan)
-                            }
-                            if (rowspan == 0) {
-                                $(td).remove();
-                            }
-                        }
+                        "targets": [4],
+                        "orderData": [3,9,8]
                     },
                     {
-                        targets: [11],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            var rowspan = rowData.merge;
-                            if (rowspan > 1) {
-                                $(td).attr('rowspan', rowspan)
-                            }
-                            if (rowspan == 0) {
-                                $(td).remove();
-                            }
-                        }
+                        "targets": [8],
+                        "orderData": [8,7]
+                    },
+                    {
+                        "targets": [9],
+                        "orderData": [9,8]
                     }
                 ],
                 "language": { url: '/common/dataTableI18n' },
             });
 
+            dt.on('click', '.order-all', function () {
+                // ajax_datatable.column(2).order('desc,asc');
+                // ajax_datatable.sort([2,'desc|asc']).page(0).draw(false);
+                // ajax_datatable.sort([2,'desc|asc']);
+                // ajax_datatable.column(2)
+                //     .data()
+                //     .sort().page().draw(false);
+                // var $data = ajax_datatable
+                //     .column(2)
+                //     .order('asc');
+                // console.log($data);
+            });
 
             dt.on('click', '.filter-submit', function () {
                 ajax_datatable.ajax.reload();
@@ -406,6 +429,7 @@
             init: datatableAjax
         }
     }();
+
 
     $(function () {
         TableDatatablesAjax.init();

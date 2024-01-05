@@ -112,14 +112,6 @@
             {{--数据统计--}}
             <li class="header">数据统计</li>
 
-{{--            @if(in_array($me->user_type,[0,1,9,11]))--}}
-{{--                <li class="treeview {{ $menu_active_of_statistic_department or '' }}">--}}
-{{--                    <a href="{{ url('/statistic/statistic-department') }}">--}}
-{{--                        <i class="fa fa-bar-chart text-purple"></i> <span>团队排名</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--            @endif--}}
-
             @if(in_array($me->user_type,[0,1,9,11,81,84]))
                 <li class="treeview {{ $menu_active_of_statistic_customer_service or '' }}">
                     <a href="{{ url('/statistic/statistic-customer-service') }}">
@@ -132,6 +124,14 @@
                 <li class="treeview {{ $menu_active_of_statistic_inspector or '' }}">
                     <a href="{{ url('/statistic/statistic-inspector') }}">
                         <i class="fa fa-bar-chart text-purple"></i> <span>审核员看板</span>
+                    </a>
+                </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,81,84]))
+                <li class="treeview {{ $menu_active_of_statistic_rank or '' }}">
+                    <a href="{{ url('/statistic/statistic-rank') }}">
+                        <i class="fa fa-line-chart text-purple"></i> <span>员工排名</span>
                     </a>
                 </li>
             @endif
