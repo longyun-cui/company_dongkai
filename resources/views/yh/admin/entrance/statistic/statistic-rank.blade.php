@@ -22,8 +22,9 @@
             <div class="box-header with-border" style="margin:16px 0;">
                 <h3 class="box-title">
                     【<span class="statistic-title">客服</span>】
-                    排名
-                    (<span class="statistic-time-title">全部</span>)</h3>
+                    <span class="statistic-time-type-title">总量</span>排名
+                    <span class="statistic-time-title"></span>
+                </h3>
             </div>
 
 
@@ -63,7 +64,7 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-rank-by-month">
-                            <i class="fa fa-search"></i> 按月查看
+                            <i class="fa fa-search"></i> 按月排名
                         </button>
 
 
@@ -76,13 +77,13 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-rank-by-day">
-                            <i class="fa fa-search"></i> 按日查看
+                            <i class="fa fa-search"></i> 按天排名
                         </button>
 
 
                         {{--全部查询--}}
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-rank">
-                            <i class="fa fa-search"></i> 全部查询
+                            <i class="fa fa-search"></i> 总量排名
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-rank">
                             <i class="fa fa-circle-o-notch"></i> 重置

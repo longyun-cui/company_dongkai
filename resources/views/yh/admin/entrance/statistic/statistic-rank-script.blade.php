@@ -7,7 +7,7 @@
             $("#statistic-for-rank").find('input[name=rank-time-type]').val('all');
             var $staff_type_title = $('select[name=rank-staff-type]').find("option:selected").text();
             $(".statistic-title").html($staff_type_title);
-            $(".statistic-time-title").html('全部');
+            $(".statistic-time-type-title").html('总量');
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【排名】按月搜索
@@ -16,9 +16,10 @@
             $("#statistic-for-rank").find('input[name=rank-time-type]').val('month');
             var $staff_type_title = $('select[name=rank-staff-type]').find("option:selected").text();
             $(".statistic-title").html($staff_type_title);
+            $(".statistic-time-type-title").html('按月');
             var $month_dom = $('input[name="rank-month"]');
             var $the_month_str = $month_dom.val();
-            $(".statistic-time-title").html($the_month_str);
+            $(".statistic-time-title").html('（'+$the_month_str+'月）');
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【排名】按天搜索
@@ -27,9 +28,10 @@
             $("#statistic-for-rank").find('input[name=rank-time-type]').val('day');
             var $staff_type_title = $('select[name=rank-staff-type]').find("option:selected").text();
             $(".statistic-title").html($staff_type_title);
+            $(".statistic-time-type-title").html('按天');
             var $date_dom = $('input[name="rank-date"]');
             var $the_date_str = $date_dom.val();
-            $(".statistic-time-title").html($the_date_str);
+            $(".statistic-time-title").html('（'+$the_date_str+'）');
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【排名】【重置】
