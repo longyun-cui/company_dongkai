@@ -387,11 +387,11 @@
                     },
                     {
                         "targets": [8],
-                        "orderData": [8,7]
+                        "orderData": [8,9,3]
                     },
                     {
                         "targets": [9],
-                        "orderData": [9,8]
+                        "orderData": [9,8,3]
                     }
                 ],
                 "language": { url: '/common/dataTableI18n' },
