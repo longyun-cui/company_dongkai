@@ -208,14 +208,14 @@ desired effect
 <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 
 
+{{--layout-script--}}
+@include(env('TEMPLATE_YH_ADMIN').'layout.layout-script')
+
+
 @yield('js')
 @yield('script')
 @yield('custom-js')
 @yield('custom-script')
-
-
-{{--layout-script--}}
-@include(env('TEMPLATE_YH_ADMIN').'layout.layout-script')
 
 
 </body>

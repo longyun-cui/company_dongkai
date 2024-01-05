@@ -55,6 +55,28 @@
                         </select>
                         @endif
 
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                        <select class="form-control form-filter select-select2 rank-department-district" name="rank-department-district" style="width:100px;">
+                            <option value="-1">选择大区</option>
+                            @if(!empty($department_district_list))
+                            @foreach($department_district_list as $v)
+                                <option value="{{ $v->id }}">{{ $v->name }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11,81]))
+                        <select class="form-control form-filter select-select2 rank-department-group" name="rank-department-group" style="width:100px;">
+                            <option data-id="-1" value="-1">选择小组</option>
+                            @if(!empty($department_group_list))
+                                @foreach($department_group_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        @endif
+
                         {{--按月查看--}}
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-rank">
                             <i class="fa fa-chevron-left"></i>
@@ -197,6 +219,8 @@
                         d.time_date = $('input[name="rank-date"]').val();
                         d.rank_object_type = $('select[name="rank-object-type"]').val();
                         d.rank_staff_type = $('select[name="rank-staff-type"]').val();
+                        d.department_district = $('select[name="rank-department-district"]').val();
+                        d.department_group = $('select[name="rank-department-group"]').val();
                     },
                 },
                 "paging": false,
