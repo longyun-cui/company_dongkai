@@ -9813,6 +9813,8 @@ class DKAdminRepository {
         if($time_type == 'day')
         {
             $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $use['is_day'] = 1;
             $use['the_day'] = $the_day;
         }
         else if($time_type == 'month')
@@ -9827,6 +9829,7 @@ class DKAdminRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
+            $use['is_month'] = 1;
             $use['the_month_start_timestamp'] = $the_month_start_timestamp;
             $use['the_month_ended_timestamp'] = $the_month_ended_timestamp;
         }
