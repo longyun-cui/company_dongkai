@@ -889,7 +889,7 @@
                     {
                         "title": "工单状态",
                         "className": "",
-                        "width": "60px",
+                        "width": "72px",
                         "data": "id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
