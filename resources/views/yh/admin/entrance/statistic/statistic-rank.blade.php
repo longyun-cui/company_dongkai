@@ -375,7 +375,7 @@
                 "columnDefs": [
                     {
                         "targets": [2],
-                        "orderData": [1,9,8]
+                        "orderData": [2,9,8]
                     },
                     {
                         "targets": [3],
