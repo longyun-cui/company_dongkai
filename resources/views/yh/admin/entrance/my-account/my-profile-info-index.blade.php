@@ -24,7 +24,7 @@
         <!-- BEGIN PORTLET-->
         <div class="box box-info form-container">
 
-            <div class="box-header with-border" style="margin: 15px 0;">
+            <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">基本资料</h3>
                 <div class="pull-right">
                     <a href="{{url('/my-account/my-profile-info-edit')}}">

@@ -25,7 +25,7 @@
         <!-- BEGIN PORTLET-->
         <div class="box box-info form-container">
 
-            <div class="box-header with-border" style="margin:16px 0;">
+            <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">修改密码</h3>
                 <div class="box-tools pull-right">
                 </div>

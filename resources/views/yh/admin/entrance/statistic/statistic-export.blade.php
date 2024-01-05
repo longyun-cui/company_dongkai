@@ -20,7 +20,7 @@
     <div class="col-md-12">
         <div class="box box-warning">
 
-            <div class="box-header with-border" style="margin:8px 0;">
+            <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">订单导出</h3>
             </div>
 
@@ -146,7 +146,7 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body">
 
-            <div class="box-header with-border" style="margin:16px 0;">
+            <div class="box-header with-border" style="margin:4px 0;">
 
                 <h3 class="box-title">{{ $title_text or '导出记录' }}</h3>
 

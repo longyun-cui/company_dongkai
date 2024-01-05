@@ -68,7 +68,7 @@
             </div>
 
 
-            <div class="box-header with-border" style="margin:8px 0;">
+            <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title comprehensive-title">【综合概览】</h3>
             </div>
             <div class="box-body">

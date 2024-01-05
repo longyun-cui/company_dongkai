@@ -20,7 +20,7 @@
         <!-- BEGIN PORTLET-->
         <div class="box box-info">
 
-            <div class="box-header with-border" style="margin:16px 0;">
+            <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">员工列表</h3>
 
                 <div class="caption pull-right">

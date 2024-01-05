@@ -12,7 +12,7 @@
     </section>
 
     {{--<!-- Main content -->--}}
-    <section class="content main-content">
+    <section class="content main-content" style="padding:8px 15px">
         @yield('content') {{--Your Page Content Here--}}
     </section>
     {{--<!-- /.content -->--}}

@@ -16,9 +16,9 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-info main-list-body">
+        <div class="box box-info main-list-body" style="margin-bottom:0;">
 
-            <div class="box-header with-border" style="margin:16px 0;">
+            <div class="box-header with-border" style="margin:4px 0;">
 
                 <h3 class="box-title">工单列表</h3>
 
@@ -151,7 +151,7 @@
 
             @if(in_array($me->user_type,[0,1,9,11,71,77]))
             <div class="box-footer">
-                <div class="row" style="margin:16px 0;">
+                <div class="row" style="margin:2px 0;">
                     <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
                         {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
                         {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
@@ -843,7 +843,7 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                // "scrollY": 400,
+                "scrollY": ($(document).height() - 498)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
