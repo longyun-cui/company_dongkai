@@ -383,15 +383,15 @@
                     },
                     {
                         "targets": [4],
-                        "orderData": [3,9,8]
+                        "orderData": [4,9,8]
                     },
                     {
                         "targets": [8],
-                        "orderData": [8,9,3]
+                        "orderData": [8,9,2]
                     },
                     {
                         "targets": [9],
-                        "orderData": [9,8,3]
+                        "orderData": [9,8,2]
                     }
                 ],
                 "language": { url: '/common/dataTableI18n' },
