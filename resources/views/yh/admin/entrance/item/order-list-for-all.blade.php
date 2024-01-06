@@ -895,9 +895,9 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
-                                $(nTd).attr('data-key','attachment_list').attr('data-value',row.attachment_list);
+                                $(nTd).addClass('order_status');
+                                $(nTd).attr('data-id',row.id).attr('data-name','工单状态');
+                                $(nTd).attr('data-key','order_status').attr('data-value',row.id);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }

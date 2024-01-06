@@ -217,11 +217,15 @@
             });
         });
 
+
         // 【获取】内容详情-审核
         $(".main-content").on('click', ".item-modal-show-for-detail-inspected", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
-            console.log('--');
+            // console.log('--');
+
+            $('#datatable_ajax').find('tr').removeClass('inspecting');
+            $row.addClass('inspecting');
 
             $('input[name="detail-inspected-order-id"]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
@@ -239,10 +243,14 @@
             $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
 
             var $inspected_result = $row.find('td[data-key=inspected_result]').attr('data-value');
-            $('select[name="detail-inspected-result"]').find("option[value='"+$inspected_result+"']").attr("selected","selected");
+            // console.log($inspected_result);
+            $modal.find('select[name="detail-inspected-result"]').find("option").prop("selected",false);
+            $modal.find('select[name="detail-inspected-result"]').find("option[value='"+$inspected_result+"']").prop("selected",true);
 
-            $modal.find('textarea[name="detail-inspected-description"]').html('');
-            $modal.find('textarea[name="detail-inspected-description"]').html($row.find('td[data-key=inspected_description]').attr('data-value'));
+            var $inspected_description = $row.find('td[data-key=inspected_description]').attr('data-value');
+            // console.log($inspected_description);
+            $modal.find('textarea[name="detail-inspected-description"]').val('');
+            $modal.find('textarea[name="detail-inspected-description"]').val($inspected_description);
 
             $modal.modal('show');
 
@@ -250,13 +258,23 @@
         // 【取消】内容详情-审核
         $(".main-content").on('click', ".item-cancel-for-detail-inspected", function() {
             var that = $(this);
-            $('#modal-body-for-detail-inspected').modal('hide').on("hidden.bs.modal", function () {
+            var $modal = $('#modal-body-for-detail-inspected');
+            $modal.find('select[name="detail-inspected-result"]').prop("checked", false);
+            $modal.find('select[name="detail-inspected-result"]').find('option').attr("selected",false);
+            $modal.find('select[name="detail-inspected-result"]').find('option[value="-1"]').attr("selected",true);
+            $modal.find('textarea[name="detail-inspected-description"]').val('');
+            $modal.modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
         // 【提交】内容详情-审核
         $(".main-content").on('click', ".item-summit-for-detail-inspected", function() {
             var $that = $(this);
+
+            var $id = $('input[name="detail-inspected-order-id"]').val();
+            var $inspected_result = $('select[name="detail-inspected-result"]').val();
+            var $inspected_description = $('textarea[name="detail-inspected-description"]').val();
+
             $.post(
                 "{{ url('/item/order-inspect') }}",
                 {
@@ -276,7 +294,33 @@
                     else
                     {
                         $(".item-cancel-for-detail-inspected").click();
-                        $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                        // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                        var $result_html = '--';
+                        if($inspected_result == "通过" || $inspected_result == "内部通过")
+                        {
+                            $result_html = '<small class="btn-xs bg-green">'+$inspected_result+'</small>';
+                        }
+                        else if($inspected_result == "拒绝")
+                        {
+                            $result_html = '<small class="btn-xs bg-red">拒绝</small>';
+                        }
+                        else if($inspected_result == "重复")
+                        {
+                            $result_html = '<small class="btn-xs bg-yellow">重复</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-purple">'+$inspected_result+'</small>';
+                        }
+
+                        var $row = $('#datatable_ajax').find('tr.inspecting');
+                        $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-blue">已审核</small>');
+                        $row.find('td[data-key=inspected_result]').attr('data-value',$inspected_result);
+                        $row.find('td[data-key=inspected_result]').html($result_html);
+                        $row.find('td[data-key=inspected_description]').attr('data-value',$inspected_description);
+                        $row.find('.item-modal-show-for-detail-inspected').removeClass('bg-teal').addClass('bg-blue').html('再审');
+
                     }
                 },
                 'json'
