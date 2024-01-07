@@ -820,6 +820,11 @@
         // 【修改-文本-text-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-text-set", function() {
             var $that = $(this);
+            var $row = $that.parents('tr');
+
+            $('#datatable_ajax').find('tr').removeClass('operating');
+            $row.addClass('operating');
+
             $('.info-text-set-title').html($that.attr("data-id"));
             $('.info-text-set-column-name').html($that.attr("data-name"));
             $('input[name=info-text-set-order-id]').val($that.attr("data-id"));
@@ -829,7 +834,7 @@
             if($that.attr('data-text-type') == "textarea")
             {
                 $('input[name=info-text-set-column-value]').val('').hide();
-                $('textarea[name=info-textarea-set-column-value]').text('').text($that.attr("data-value")).show();
+                $('textarea[name=info-textarea-set-column-value]').val('').val($that.attr("data-value")).show();
             }
             else
             {
@@ -854,6 +859,7 @@
         $(".main-content").on('click', "#item-submit-for-info-text-set", function() {
             var $that = $(this);
             var $column_key = $('input[name="info-text-set-column-key"]').val();
+
             if($that.attr('data-text-type') == "textarea")
             {
                 var $column_value = $('textarea[name="info-textarea-set-column-value"]').val();
@@ -862,6 +868,8 @@
             {
                 var $column_value = $('input[name="info-text-set-column-value"]').val();
             }
+
+            var $row = $('#datatable_ajax').find('tr.operating');
 
             // layer.msg('确定"提交"么？', {
             //     time: 0
@@ -895,11 +903,17 @@
                                 $('input[name=info-text-set-column-value]').val('');
                                 $('textarea[name=info-textarea-set-column-value]').text('');
 
-//                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
-////                                TableDatatablesAjax_inner.init($keyword_id);
+                                // $('#datatable_ajax').DataTable().ajax.reload(null, false);
 
-                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
-//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
+                                if($that.attr('data-text-type') == "textarea")
+                                {
+                                    $row.find('td[data-key='+$column_key+']').html('<small class="btn-xs bg-yellow">双击查看</small>');
+                                }
+                                else
+                                {
+                                    $row.find('td[data-key='+$column_key+']').html($column_value);
+                                }
+                                $row.find('td[data-key='+$column_key+']').attr('data-value',$column_value);
                             }
                         },
                         'json'
