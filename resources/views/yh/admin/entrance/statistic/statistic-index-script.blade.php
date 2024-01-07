@@ -61,6 +61,7 @@
             $(".order_count_for_all").find('b').html($data.order_count_for_all);
             $(".order_count_for_inspected").find('b').html($data.order_count_for_inspected);
             $(".order_count_for_accepted").find('b').html($data.order_count_for_accepted);
+            $(".order_count_for_accepted_inside").find('b').html($data.order_count_for_accepted_inside);
             $(".order_count_for_refused").find('b').html($data.order_count_for_refused);
             $(".order_count_for_repeated").find('b').html($data.order_count_for_repeated);
             $(".order_count_for_rate").find('b').html($data.order_count_for_rate);
@@ -68,6 +69,7 @@
             $(".order_count_of_today_for_all").find('b').html($data.order_count_of_today_for_all);
             $(".order_count_of_today_for_inspected").find('b').html($data.order_count_of_today_for_inspected);
             $(".order_count_of_today_for_accepted").find('b').html($data.order_count_of_today_for_accepted);
+            $(".order_count_of_today_for_accepted_inside").find('b').html($data.order_count_of_today_for_accepted_inside);
             $(".order_count_of_today_for_refused").find('b').html($data.order_count_of_today_for_refused);
             $(".order_count_of_today_for_repeated").find('b').html($data.order_count_of_today_for_repeated);
             $(".order_count_of_today_for_rate").find('b').html($data.order_count_of_today_for_rate);
@@ -75,6 +77,7 @@
             $(".order_count_of_month_for_all").find('b').html($data.order_count_of_month_for_all);
             $(".order_count_of_month_for_inspected").find('b').html($data.order_count_of_month_for_inspected);
             $(".order_count_of_month_for_accepted").find('b').html($data.order_count_of_month_for_accepted);
+            $(".order_count_of_month_for_accepted_inside").find('b').html($data.order_count_of_month_for_accepted_inside);
             $(".order_count_of_month_for_refused").find('b').html($data.order_count_of_month_for_refused);
             $(".order_count_of_month_for_repeated").find('b').html($data.order_count_of_month_for_repeated);
             $(".order_count_of_month_for_rate").find('b').html($data.order_count_of_month_for_rate);
