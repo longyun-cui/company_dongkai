@@ -414,46 +414,6 @@
 {{--option--}}
 <div class="option-container _none">
 
-    <div id="trailer_type-option-list">
-        <option value="0">选择箱型</option>
-        <option value="直板">直板</option>
-        <option value="高栏">高栏</option>
-        <option value="平板">平板</option>
-        <option value="冷藏">冷藏</option>
-    </div>
-
-    <div id="trailer_length-option-list">
-        <option value="0">选择车挂尺寸</option>
-        <option value="9.6">9.6</option>
-        <option value="12.5">12.5</option>
-        <option value="15">15</option>
-        <option value="16.5">16.5</option>
-        <option value="17.5">17.5</option>
-    </div>
-
-    <div id="trailer_volume-option-list">
-        <option value="0">选择承载方数</option>
-        <option value="125">125</option>
-        <option value="130">130</option>
-        <option value="135">135</option>
-    </div>
-
-    <div id="trailer_weight-option-list">
-        <option value="0">选择承载重量</option>
-        <option value="13">13吨</option>
-        <option value="20">20吨</option>
-        <option value="25">25吨</option>
-    </div>
-
-    <div id="trailer_axis_count-option-list">
-        <option value="0">选择轴数</option>
-        <option value="1">1轴</option>
-        <option value="2">2轴</option>
-        <option value="3">3轴</option>
-    </div>
-
-
-
 
     <div id="receipt_need-option-list">
 
@@ -481,6 +441,7 @@
         </div>
 
     </div>
+
 
 </div>
 
@@ -588,7 +549,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50, 100, 200, -1], ["50", "100", "200", "全部"]],
+                "aLengthMenu": [[-1], ["全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
