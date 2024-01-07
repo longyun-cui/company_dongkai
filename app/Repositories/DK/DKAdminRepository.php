@@ -1778,7 +1778,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,21,22])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,21,22,81])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '用户';
@@ -1803,7 +1803,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,19,21,22])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,9,11,19,21,22,81])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.staff-edit';
@@ -1832,13 +1832,20 @@ class DKAdminRepository {
             $mine = DK_User::with(['parent','superior'])->find($id);
             if($mine)
             {
-//                $mine->custom = json_decode($mine->custom);
+                if($me->user_type == 81)
+                {
+                    if($mine->department_district_id == $me->department_district_id)
+                    {
+//                        $mine->custom = json_decode($mine->custom);
 
-                $return_data['operate'] = 'edit';
-                $return_data['operate_id'] = $id;
-                $return_data['data'] = $mine;
+                        $return_data['operate'] = 'edit';
+                        $return_data['operate_id'] = $id;
+                        $return_data['data'] = $mine;
 
-                return view($view_blade)->with($return_data);
+                        return view($view_blade)->with($return_data);
+                    }
+                    else return view($this->view_blade_403);
+                }
             }
             else return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
         }
@@ -1866,7 +1873,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,21])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,21,81])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -1904,6 +1911,11 @@ class DKAdminRepository {
             unset($mine_data['operate_id']);
             unset($mine_data['category']);
             unset($mine_data['type']);
+
+            if($me->user_type == 81)
+            {
+                $mine_data['department_district_id'] = $me->department_district_id;
+            }
 
             if($post_data["user_type"] == 71 || $post_data["user_type"] == 77)
             {
@@ -2129,11 +2141,13 @@ class DKAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = DK_User::withTrashed()->find($id);
-        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
-
         $this->get_me();
         $me = $this->me;
+
+        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有权限！");
+
+        $user = DK_User::withTrashed()->find($id);
+        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         // 判断操作权限
         if(!in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该操作权限！");
@@ -2186,11 +2200,13 @@ class DKAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = DK_User::withTrashed()->find($id);
-        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
-
         $this->get_me();
         $me = $this->me;
+
+        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有权限！");
+
+        $user = DK_User::withTrashed()->find($id);
+        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         // 判断操作权限
         if(!in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该操作权限！");
@@ -2242,11 +2258,13 @@ class DKAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = DK_User::withTrashed()->find($id);
-        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
-
         $this->get_me();
         $me = $this->me;
+
+        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有权限！");
+
+        $user = DK_User::withTrashed()->find($id);
+        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
 
         // 判断操作权限
         if(!in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该操作权限！");
@@ -2403,8 +2421,17 @@ class DKAdminRepository {
 
         $query = DK_User::select('*')
             ->with(['creator','superior','department_district_er','department_group_er'])
-            ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,41,42,61,71,77,81,82,84,88]);
+            ->whereIn('user_category',[11]);
+
+        if($me->user_type == 11)
+        {
+            $query->whereIn('user_type',[71,77,81,84,88]);
+        }
+        else if($me->user_type == 81)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[84,88]);
+        }
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
 //            ->with('ep','parent','fund')
 //            ->withCount([

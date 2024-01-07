@@ -68,8 +68,8 @@
             @endif
 
 
-            {{--用户管理--}}
-            @if(in_array($me->user_type,[0,1,9,11]))
+            {{--员工管理--}}
+            @if(in_array($me->user_type,[0,1,9,11,81]))
             <li class="header">员工管理</li>
 
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
