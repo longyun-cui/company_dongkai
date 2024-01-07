@@ -1834,18 +1834,19 @@ class DKAdminRepository {
             {
                 if($me->user_type == 81)
                 {
-                    if($mine->department_district_id == $me->department_district_id)
+                    if($mine->department_district_id != $me->department_district_id)
                     {
-//                        $mine->custom = json_decode($mine->custom);
-
-                        $return_data['operate'] = 'edit';
-                        $return_data['operate_id'] = $id;
-                        $return_data['data'] = $mine;
-
-                        return view($view_blade)->with($return_data);
+                        return view($this->view_blade_403);
                     }
-                    else return view($this->view_blade_403);
                 }
+
+//                $mine->custom = json_decode($mine->custom);
+
+                $return_data['operate'] = 'edit';
+                $return_data['operate_id'] = $id;
+                $return_data['data'] = $mine;
+
+                return view($view_blade)->with($return_data);
             }
             else return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
         }
