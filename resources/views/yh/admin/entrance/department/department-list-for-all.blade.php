@@ -640,15 +640,6 @@
                                 $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
                             }
 
-                            if(row.is_me == 1 && row.active == 0)
-                            {
-                                $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
-                            }
-                            else
-                            {
-                                $html_publish = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">发布</a>';
-                            }
-
                             if(row.deleted_at == null)
                             {
                                 $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';

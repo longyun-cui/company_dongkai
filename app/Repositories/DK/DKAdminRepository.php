@@ -1524,9 +1524,13 @@ class DKAdminRepository {
         $me = $this->me;
 
 
-        $query = DK_Department::select('*')
+        $query = DK_Department::select(['id','item_status','name','department_type','leader_id','superior_department_id','remark','creator_id','created_at','updated_at','deleted_at'])
             ->withTrashed()
-            ->with(['creator','leader','superior_department_er']);
+            ->with([
+                    'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                    'leader'=>function($query) { $query->select(['id','username','true_name']); },
+                    'superior_department_er'=>function($query) { $query->select(['id','name']); }
+                ]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -1557,10 +1561,24 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("name", "asc");
+        else $query->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+            if($v->department_type == 11)
+            {
+                $v->district_id = $v->id;
+            }
+            else if($v->department_type == 21)
+            {
+                $v->district_id = $v->superior_department_id;
+            }
+        }
+        $list = $list->sortBy('district_id')->values();
 //        dd($list->toArray());
 
         return datatable_response($list, $draw, $total);
