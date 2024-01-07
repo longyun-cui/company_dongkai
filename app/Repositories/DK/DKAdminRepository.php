@@ -8785,7 +8785,8 @@ class DKAdminRepository {
 
 
 
-        $query = DK_User::select(['id','user_type','username','true_name','department_district_id','department_group_id'])
+        $query = DK_User::select(['id','user_status','user_type','username','true_name','department_district_id','department_group_id'])
+            ->where('user_status',1)
             ->with([
                 'department_district_er' => function($query) { $query->select(['id','name']); },
                 'department_group_er' => function($query) { $query->select(['id','name']); }
@@ -9638,10 +9639,11 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_User::select(['id','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
+        $query = DK_User::select(['id','user_status','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
             ->with([
                 'superior' => function($query) { $query->select(['id','username','true_name']); }
             ])
+            ->where('user_status',1)
             ->where('department_district_id','>',0)
             ->where('department_group_id','>',0)
             ->whereIn('user_type',[84,88]);
@@ -10253,10 +10255,11 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_User::select(['id','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
+        $query = DK_User::select(['id','user_status','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
             ->with([
                 'superior' => function($query) { $query->select(['id','username','true_name']); }
             ])
+            ->where('user_status',1)
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[71,77]);
 
