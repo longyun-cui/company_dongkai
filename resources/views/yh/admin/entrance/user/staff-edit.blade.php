@@ -619,7 +619,11 @@
                     return {
                         keyword: params.term, // search term
                         page: params.page,
+                        @if($me->user_type == 81)
                         superior_id: {{ $me->department_district_id or 0 }}
+                        @else
+                        superior_id: {{ $data->department_district_id or 0 }}
+                        @endif
                     };
                 },
                 processResults: function (data, params) {
