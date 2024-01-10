@@ -97,12 +97,12 @@
 
                     <button type="button" class="btn">
                         <span class="radio">
-                            <label><input type="radio" name="ix_wx" value="0" checked="checked"> 否</label>
+                            <label><input type="radio" name="is_wx" value="0" checked="checked"> 否</label>
                         </span>
                     </button>
                     <button type="button" class="btn">
                         <span class="radio">
-                            <label><input type="radio" name="ix_wx" value="1"> 是</label>
+                            <label><input type="radio" name="is_wx" value="1"> 是</label>
                         </span>
                     </button>
 
@@ -114,7 +114,7 @@
     <div class="form-group wx_box">
         <label class="control-label col-md-2">微信号</label>
         <div class="col-md-8 ">
-            <input type="text" class="form-control" name=wx_id placeholder="微信号" value="">
+            <input type="text" class="form-control" name=wx_id placeholder="微信号" value="" data-default="">
         </div>
     </div>
     {{--渠道来源--}}

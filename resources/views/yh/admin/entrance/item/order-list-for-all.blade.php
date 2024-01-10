@@ -18,7 +18,7 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
 
-            <div class="box-header with-border" style="margin:4px 0;">
+            <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
 
                 <h3 class="box-title">工单列表</h3>
 
@@ -59,14 +59,14 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-                        <select class="form-control form-filter order-select2" name="order-department-district" style="width:100px;">
+                        <select class="form-control form-filter order-select2" name="order-department-district" style="width:80px;">
                             <option value="-1">选择大区</option>
                             @foreach($department_district_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $department_district_id) selected="selected" @endif>{{ $v->name }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter order-select2" name="order-staff" style="width:100px;">
+                        <select class="form-control form-filter order-select2" name="order-staff" style="width:80px;">
                             <option value="-1">选择员工</option>
                             @foreach($staff_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
@@ -150,7 +150,7 @@
 
 
             @if(in_array($me->user_type,[0,1,9,11,71,77]))
-            <div class="box-footer">
+            <div class="box-footer" style="padding:4px 10px;">
                 <div class="row" style="margin:2px 0;">
                     <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
                         {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
@@ -843,7 +843,7 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": ($(document).height() - 498)+"px",
+                "scrollY": ($(document).height() - 448)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",

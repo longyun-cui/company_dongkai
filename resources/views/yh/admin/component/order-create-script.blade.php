@@ -170,14 +170,15 @@
                         layer.msg(data.msg);
 
                         // 重置输入框
+                        $("#form-edit-item").find("select").val('').trigger("change");
                         $("#form-edit-item").find(".select2-container").val(0).trigger("change");
                         $("#form-edit-item").find('input[type=text]').each(function () {
                             $(this).val($(this).attr('data-default'));
                         });
+                        $("#form-edit-item").find('textarea').val('');
 
-                        $("#form-edit-item").find("input[name=car_owner_type][value='1']").click();
-                        $("#form-edit-item").find("input[name=route_type][value='1']").click();
-                        $("#form-edit-item").find("input[name=receipt_need][value='0']").click();
+                        $("#form-edit-item").find("input[name=teeth_count][value='']").click();
+                        $("#form-edit-item").find("input[name=is_wx][value='0']").click();
 
                         $('#order-price').removeAttr('readonly');
                         $("#form-edit-item").find('input[name=departure_place]').removeAttr('readonly');
