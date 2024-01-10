@@ -84,7 +84,7 @@
 
                         <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
                             <option value="-1">审核状态</option>
-                            @if(in_array($me->user_type,[81,84,88]))
+                            @if(in_array($me->user_type,[11,81,84,88]))
                             <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>
                             @endif
                             <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>
