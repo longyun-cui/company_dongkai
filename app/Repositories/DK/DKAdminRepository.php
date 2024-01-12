@@ -2438,7 +2438,7 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_User::select('*')
+        $query = DK_User::withTrashed()->select('*')
             ->with(['creator','superior','department_district_er','department_group_er'])
             ->whereIn('user_category',[11]);
 
@@ -2466,7 +2466,7 @@ class DKAdminRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -2481,12 +2481,13 @@ class DKAdminRepository {
         else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+        else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)
         {
             $list[$k]->encode_id = encode($v->id);
         }
+//        dd($total);
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
     }

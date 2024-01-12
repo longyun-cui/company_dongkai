@@ -158,8 +158,10 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50, 100, 200], ["50", "100", "200"]],
+               // "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+               // "aLengthMenu": [[-1], ["全部"]],
+               // "aLengthMenu": [[200, -1], ["200", "全部"]],
+                "aLengthMenu": [[50, 100, 200, -1], ["50", "100", "200", "全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,

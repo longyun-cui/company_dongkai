@@ -29,6 +29,12 @@ class YHAdminLoginMiddleware
         else
         {
             $me_admin = Auth::guard('yh_admin')->user();
+            // 判断用户是否重新登录
+            if($me_admin->admin_token == 'logout')
+            {
+                Auth::guard('yh_admin')->logout();
+                return redirect('/login');
+            }
             // 判断用户是否被封禁
             if($me_admin->user_status != 1)
             {

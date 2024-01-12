@@ -100,7 +100,7 @@
                                     <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_accepted_inside">
-                                    <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                    <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_rate">
                                     <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>

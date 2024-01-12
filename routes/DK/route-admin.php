@@ -10,6 +10,7 @@ $controller = "DKAdminController";
 
 Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
+Route::match(['get','post'], 'logout_without_token', $controller.'@logout_without_token');
 
 
 /*
@@ -21,6 +22,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     $controller = 'DKAdminController';
 
 
+    Route::post('/is_only_me', $controller.'@check_is_only_me');
     Route::get('/', $controller.'@view_admin_index');
     Route::get('/404', $controller.'@view_admin_404');
 

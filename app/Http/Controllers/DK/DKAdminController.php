@@ -25,6 +25,26 @@ class DKAdminController extends Controller
 
 
 
+
+    // 账号唯一登录
+    public function check_is_only_me()
+    {
+        $result['message'] = 'failed';
+        $result['result'] = 'denied';
+
+        if(Auth::guard('yh_admin')->check())
+        {
+            $token = request('_token');
+            if(Auth::guard('yh_admin')->user()->admin_token == $token)
+            {
+                $result['message'] = 'success';
+                $result['result'] = 'access';
+            }
+        }
+
+        return Response::json($result);
+    }
+
     // 登陆
     public function login()
     {
@@ -49,12 +69,15 @@ class DKAdminController extends Controller
             {
                 if($admin->user_status == 1)
                 {
+                    $token = request()->get('_token');
                     $password = request()->get('password');
                     if(password_check($password,$admin->password))
                     {
                         $remember = request()->get('remember');
-                        if($remember) Auth::guard('yh_admin')->login($admin);
-                        else Auth::guard('yh_admin')->login($admin);
+                        if($remember) Auth::guard('yh_admin')->login($admin,false);
+                        else Auth::guard('yh_admin')->login($admin,false);
+                        Auth::guard('yh_admin')->user()->admin_token = $token;
+                        Auth::guard('yh_admin')->user()->save();
                         return response_success();
                     }
                     else return response_error([],'账户or密码不正确！');
@@ -67,6 +90,15 @@ class DKAdminController extends Controller
 
     // 退出
     public function logout()
+    {
+        Auth::guard('yh_admin')->user()->admin_token = '';
+        Auth::guard('yh_admin')->user()->save();
+        Auth::guard('yh_admin')->logout();
+        return redirect('/login');
+    }
+
+    // 退出
+    public function logout_without_token()
     {
         Auth::guard('yh_admin')->logout();
         return redirect('/login');
