@@ -53,8 +53,8 @@ class DKAdminController extends Controller
                     if(password_check($password,$admin->password))
                     {
                         $remember = request()->get('remember');
-                        if($remember) Auth::guard('yh_admin')->login($admin,true);
-                        else Auth::guard('yh_admin')->login($admin,true);
+                        if($remember) Auth::guard('yh_admin')->login($admin);
+                        else Auth::guard('yh_admin')->login($admin);
                         return response_success();
                     }
                     else return response_error([],'账户or密码不正确！');

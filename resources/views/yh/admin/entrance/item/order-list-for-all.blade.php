@@ -59,19 +59,23 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
+                        @if(in_array($me->user_type,[11,71,77]))
                         <select class="form-control form-filter order-select2" name="order-department-district" style="width:80px;">
                             <option value="-1">选择大区</option>
                             @foreach($department_district_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $department_district_id) selected="selected" @endif>{{ $v->name }}</option>
                             @endforeach
                         </select>
+                        @endif
 
+                        @if(in_array($me->user_type,[11,71,77,81,84]))
                         <select class="form-control form-filter order-select2" name="order-staff" style="width:80px;">
                             <option value="-1">选择员工</option>
                             @foreach($staff_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
                             @endforeach
                         </select>
+                        @endif
 
                         <select class="form-control form-filter select2-container order-select2-project" name="order-project" style="width:120px;">
                             @if($project_id > 0)

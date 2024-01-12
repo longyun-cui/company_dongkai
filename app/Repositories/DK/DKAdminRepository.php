@@ -7373,7 +7373,29 @@ class DKAdminRepository {
 
 
         $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
-        $staff_list = DK_User::select('id','username')->where('user_category',11)->whereIn('user_type',[81,84,88])->get();
+        if($me->user_type == 81)
+        {
+            $staff_list = DK_User::select('id','username')
+                ->where('user_category',11)
+                ->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        else if($me->user_type == 84)
+        {
+            $staff_list = DK_User::select('id','username')
+                ->where('user_category',11)
+                ->where('department_group_id',$me->department_group_id)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        else
+        {
+            $staff_list = DK_User::select('id','username')
+                ->where('user_category',11)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
 
