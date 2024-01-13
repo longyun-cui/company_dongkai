@@ -175,6 +175,9 @@ class DKSuperController extends Controller
         if($user)
         {
             Auth::guard('yh_admin')->login($user,true);
+            $token = request()->get('_token');
+            Auth::guard('yh_admin')->user()->admin_token = $token;
+            Auth::guard('yh_admin')->user()->save();
 
             $return['user'] = $user;
             $return['url'] = env('DOMAIN_YH_ADMIN');
