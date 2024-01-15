@@ -60,8 +60,7 @@
                         </button>
 
                         @if(in_array($me->user_type,[11,71,77]))
-                        <select class="form-control form-filter order-select2" name="order-department-district" style="width:80px;">
-                            <option value="-1">选择大区</option>
+                        <select class="form-control form-filter select2-box" name="order-department-district[]" id="order-department-district" multiple="multiple"  style="width:80px;">
                             @foreach($department_district_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $department_district_id) selected="selected" @endif>{{ $v->name }}</option>
                             @endforeach
@@ -69,7 +68,7 @@
                         @endif
 
                         @if(in_array($me->user_type,[11,71,77,81,84]))
-                        <select class="form-control form-filter order-select2" name="order-staff" style="width:80px;">
+                        <select class="form-control form-filter select2-box order-select2-staff" name="order-staff" style="width:80px;">
                             <option value="-1">选择员工</option>
                             @foreach($staff_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
@@ -77,7 +76,7 @@
                         </select>
                         @endif
 
-                        <select class="form-control form-filter select2-container order-select2-project" name="order-project" style="width:120px;">
+                        <select class="form-control form-filter select2-box order-select2-project" name="order-project" style="width:120px;">
                             @if($project_id > 0)
                                 <option value="-1">选择项目</option>
                                 <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
@@ -824,7 +823,7 @@
                         d.name = $('input[name="order-name"]').val();
                         d.title = $('input[name="order-title"]').val();
                         d.keyword = $('input[name="order-keyword"]').val();
-                        d.department_district = $('select[name="order-department-district"]').val();
+                        d.department_district = $('select[name="order-department-district[]"]').val();
                         d.staff = $('select[name="order-staff"]').val();
                         d.project = $('select[name="order-project"]').val();
                         d.status = $('select[name="order-status"]').val();

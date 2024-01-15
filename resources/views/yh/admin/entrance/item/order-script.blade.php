@@ -15,11 +15,8 @@
             $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
-            $(".select2-container").val(-1).trigger("change");
-            // $(".order-select2-circle").val(-1).trigger("change");
-            // $(".order-select2-car").val(-1).trigger("change");
-            // $(".order-select2-trailer").val(-1).trigger("change");
-            // $(".order-select2-driver").val(-1).trigger("change");
+            $(".select2-box").val(-1).trigger("change");
+            $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
             $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
@@ -32,7 +29,8 @@
             $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
-            $(".select2-container").val(-1).trigger("change");
+            $(".select2-box").val(-1).trigger("change");
+            $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
             $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
@@ -1559,7 +1557,7 @@
 
 
 
-        $('.order-select2').select2({
+        $('.select2-box').select2({
             theme: 'classic'
         });
 
@@ -1596,7 +1594,7 @@
 
 
 
-        // select2-环线
+        // select2 项目
         $('.order-select2-project').select2({
             ajax: {
                 url: "{{ url('/item/item_select2_project') }}",

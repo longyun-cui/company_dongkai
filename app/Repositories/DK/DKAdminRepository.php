@@ -7511,11 +7511,18 @@ class DKAdminRepository {
 
 
         // 部门-大区
+//        if(!empty($post_data['department_district']))
+//        {
+//            if(!in_array($post_data['department_district'],[-1,0]))
+//            {
+//                $query->where('department_district_id', $post_data['department_district']);
+//            }
+//        }
         if(!empty($post_data['department_district']))
         {
-            if(!in_array($post_data['department_district'],[-1,0]))
+            if(count($post_data['department_district']))
             {
-                $query->where('department_district_id', $post_data['department_district']);
+                $query->whereIn('department_district_id', $post_data['department_district']);
             }
         }
 
