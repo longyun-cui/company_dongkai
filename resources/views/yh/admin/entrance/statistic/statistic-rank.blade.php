@@ -262,7 +262,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.username) return '<a href="javascript:void(0);">'+row.username+'</a>';
-                            return '<a href="javascript:void(0);">'+row.name+'</a>';
+                            return '<a href="javascript:void(0);">'+row.username+'</a>';
                         }
                     },
                     {
@@ -274,21 +274,10 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         },
                         render: function(data, type, row, meta) {
-                            @if($me->user_type == 11)
-                                if(row.username)
-                                {
-                                    var $district_name = row.department_district_er == null ? '' : row.department_district_er.name;
-                                    var $group_name = row.department_group_er == null ? '' : row.department_group_er.name;
-                                    return $district_name + ' - ' + $group_name;
-                                }
-                                return '<a href="javascript:void(0);">'+row.name+'</a>';
-                            @elseif($me->user_type == 81)
-                                if(row.username) return row.department_group_er == null ? '' : row.department_group_er.name;
-                                return '<a href="javascript:void(0);">'+row.name+'</a>';
-                            @elseif($me->user_type == 84)
-                                if(row.username) return row.department_group_er == null ? '' : row.department_group_er.name;
-                                return '<a href="javascript:void(0);">'+row.name+'</a>';
-                            @endif
+                            var $district_name = row.department_district_er == null ? '' : row.department_district_er.name;
+                            var $group_name = row.department_group_er == null ? '' : (' - ' + row.department_group_er.name);
+                            return $district_name + $group_name;
+
                         }
                     },
                     {
