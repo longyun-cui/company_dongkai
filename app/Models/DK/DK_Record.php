@@ -20,7 +20,7 @@ class DK_Record extends Model
         'before', 'after',
         'before_id', 'after_id',
         'before_client_id', 'after_client_id',
-        'before_route_id', 'after_route_id',
+        'before_project_id', 'after_project_id',
         'before_empty_route_id', 'after_empty_route_id',
         'before_car_id', 'after_car_id',
         'before_driver_id', 'after_driver_id',
@@ -83,12 +83,12 @@ class DK_Record extends Model
     // 项目
     function before_project_er()
     {
-        return $this->belongsTo('App\Models\DK\YH_Porject','before_project_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Project','before_project_id','id');
     }
     // 项目
     function after_project_er()
     {
-        return $this->belongsTo('App\Models\DK\YH_Porject','after_project_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Project','after_project_id','id');
     }
 
 

@@ -6842,7 +6842,7 @@ class DKAdminRepository {
                     $record_data["before"] = $before;
                     $record_data["after"] = $after;
 
-                    if(in_array($column_key,['client_id','circle_id','route_id','car_id','trailer_id','driver_id']))
+                    if(in_array($column_key,['client_id','project_id','car_id','driver_id']))
                     {
                         $record_data["before_id"] = $before;
                         $record_data["after_id"] = $column_value;
@@ -6855,10 +6855,10 @@ class DKAdminRepository {
                         $record_data["before_client_id"] = $before;
                         $record_data["after_client_id"] = $column_value;
                     }
-                    else if($column_key == 'car_id' || $column_key == 'trailer_id')
+                    else if($column_key == 'project_id')
                     {
-                        $record_data["before_car_id"] = $before;
-                        $record_data["after_car_id"] = $column_value;
+                        $record_data["before_project_id"] = $before;
+                        $record_data["after_project_id"] = $column_value;
                     }
 
                     $bool_1 = $record->fill($record_data)->save();
@@ -7779,6 +7779,8 @@ class DKAdminRepository {
         $query = DK_Record::select('*')
             ->with([
                 'creator',
+                'before_project_er'=>function($query) { $query->select('id','name'); },
+                'after_project_er'=>function($query) { $query->select('id','name'); }
             ])
             ->where(['order_id'=>$id]);
 

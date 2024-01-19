@@ -1042,7 +1042,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select2-set-');
+                                $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','项目');
                                 $(nTd).attr('data-key','project_id').attr('data-value',data);
                                 if(row.project_er == null) $(nTd).attr('data-option-name','未指定');
