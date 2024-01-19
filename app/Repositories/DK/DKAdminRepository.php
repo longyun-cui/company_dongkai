@@ -7584,10 +7584,14 @@ class DKAdminRepository {
         // 审核结果
         if(!empty($post_data['inspected_result']))
         {
-            $inspected_result = $post_data['inspected_result'];
-            if(in_array($inspected_result,config('info.inspected_result')))
+//            $inspected_result = $post_data['inspected_result'];
+//            if(in_array($inspected_result,config('info.inspected_result')))
+//            {
+//                $query->where('inspected_result', $inspected_result);
+//            }
+            if(count($post_data['inspected_result']))
             {
-                $query->where('inspected_result', $inspected_result);
+                $query->whereIn('inspected_result', $post_data['inspected_result']);
             }
         }
 

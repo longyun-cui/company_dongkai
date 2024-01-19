@@ -94,7 +94,7 @@
                             <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>
                         </select>
 
-                        <select class="form-control form-filter" name="order-inspected-result" style="width:88px;">
+                        <select class="form-control form-filter select2-box" name="order-inspected-result[]" multiple="multiple" style="width:88px;">
                             <option value="-1">审核结果</option>
                             @foreach(config('info.inspected_result') as $v)
                                 <option value="{{ $v }}" @if($v == $client_id) selected="selected" @endif>{{ $v }}</option>
@@ -833,7 +833,7 @@
                         d.is_wx = $('select[name="order-is-wx"]').val();
                         d.is_repeat = $('select[name="order-is-repeat"]').val();
                         d.inspected_status = $('select[name="order-inspected-status"]').val();
-                        d.inspected_result = $('select[name="order-inspected-result"]').val();
+                        d.inspected_result = $('select[name="order-inspected-result[]"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
