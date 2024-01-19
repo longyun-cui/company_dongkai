@@ -47,12 +47,21 @@
 
                         <select class="form-control form-filter select2-container item-select2-project" name="comprehensive-project" style="width:120px;">
                             @if(isset($project_id) && $project_id > 0)
-                                <option value="-1">选择项目</option>s
+                                <option value="-1">选择项目</option>
                                 <option value="{{ $project_id  }}" selected="selected">{{ $project_title }}</option>
                             @else
                                 <option value="-1">选择项目</option>
                             @endif
                         </select>
+
+                        @if(in_array($me->user_type,[0,1,9,11,71,77]))
+                        <select class="form-control form-filter select2-container select-select2" multiple="multiple" name="comprehensive-department-district[]" style="width:120px;">
+                            <option value="-1">选择大区</option>
+                            @foreach($department_district_list as $v)
+                                <option value="{{ $v->id }}">{{ $v->name }}</option>
+                            @endforeach
+                        </select>
+                        @endif
 
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-comprehensive">
@@ -269,20 +278,6 @@
                             <option value ="-1">选择客户</option>
                             @foreach($client_list as $v)
                                 <option value ="{{ $v->id }}">{{ $v->username }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter" name="order-route">
-                            <option value="-1">选择线路</option>
-                            @foreach($route_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter" name="order-pricing">
-                            <option value="-1">选择定价</option>
-                            @foreach($pricing_list as $v)
-                                <option value ="{{ $v->id }}">{{ $v->title }}</option>
                             @endforeach
                         </select>
 

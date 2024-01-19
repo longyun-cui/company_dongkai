@@ -44,6 +44,7 @@
                     date: $date,
                     month: $month,
                     project: $project_id,
+                    department_district: $('select[name="comprehensive-department-district[]"]').val(),
                     operate:"statistic-get"
                 },
                 success:function(data){
@@ -937,6 +938,12 @@
                 cache: true
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+
+        $('select[name="comprehensive-department-district[]"]').select2({
             minimumInputLength: 0,
             theme: 'classic'
         });

@@ -7837,15 +7837,13 @@ class DKAdminRepository {
 
         $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
-        $car_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
-        $route_list = YH_Route::select('id','title')->get();
-        $pricing_list = YH_Pricing::select('id','title')->get();
+        $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
 
         $view_data['staff_list'] = $staff_list;
         $view_data['client_list'] = $client_list;
-        $view_data['car_list'] = $car_list;
-        $view_data['route_list'] = $route_list;
-        $view_data['pricing_list'] = $pricing_list;
+        $view_data['project_list'] = $project_list;
+        $view_data['department_district_list'] = $department_district_list;
 
 
         $view_data['menu_active_of_statistic_index'] = 'active menu-open';
@@ -8386,6 +8384,23 @@ class DKAdminRepository {
             if(!in_array($post_data['project'],[-1,0]))
             {
                 $query->where('project_id', $post_data['project']);
+            }
+        }
+
+
+        // 部门-大区
+//        if(!empty($post_data['department_district']))
+//        {
+//            if(!in_array($post_data['department_district'],[-1,0]))
+//            {
+//                $query->where('department_district_id', $post_data['department_district']);
+//            }
+//        }
+        if(!empty($post_data['department_district']))
+        {
+            if(count($post_data['department_district']))
+            {
+                $query->whereIn('department_district_id', $post_data['department_district']);
             }
         }
 
