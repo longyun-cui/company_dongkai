@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\DK;
 
+use App\Models\DK\DK_Client;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -50,7 +51,7 @@ class DKAdminController extends Controller
     {
         if(request()->isMethod('get'))
         {
-            $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.login';
+            $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.login';
             return view($view_blade);
         }
         else if(request()->isMethod('post'))
@@ -74,8 +75,8 @@ class DKAdminController extends Controller
                     if(password_check($password,$admin->password))
                     {
                         $remember = request()->get('remember');
-                        if($remember) Auth::guard('yh_admin')->login($admin,false);
-                        else Auth::guard('yh_admin')->login($admin,false);
+                        if($remember) Auth::guard('yh_admin')->login($admin,true);
+                        else Auth::guard('yh_admin')->login($admin);
                         Auth::guard('yh_admin')->user()->admin_token = $token;
                         Auth::guard('yh_admin')->user()->save();
                         return response_success();
@@ -141,6 +142,117 @@ class DKAdminController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_my_account_password_change();
         else if (request()->isMethod('post')) return $this->repo->operate_my_account_password_change_save(request()->all());
     }
+
+
+
+
+    // 【用户】登录
+    public function operate_user_user_login()
+    {
+        $user_id = request()->get('user_id');
+        $user = DK_User::select('*')->find($user_id);
+        if($user)
+        {
+//            $type = request()->get('type','');
+//            if($type == "admin")
+//            {
+//                $admin_id = request()->get('admin_id');
+//                $admin = User::where('id',$admin_id)->first();
+//
+//                Auth::guard('gps')->login($user,true);
+//
+//                if(request()->isMethod('get')) return redirect(env('DOMAIN_GPS').'/admin');
+//                else if(request()->isMethod('post')) return response_success();
+//
+//            }
+
+            Auth::guard('user')->login($user,true);
+
+            $return['user'] = $user;
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_STAFF'));
+            else if(request()->isMethod('post')) return response_success($return);
+        }
+        else return response_error([]);
+
+    }
+
+
+
+
+
+
+
+    /*
+     * 客户管理
+     */
+    // 【客户管理】添加
+    public function operate_user_client_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_client_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
+    }
+    // 【客户管理】编辑
+    public function operate_user_client_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_client_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
+    }
+
+
+    // 【客户管理】修改-密码
+    public function operate_user_client_password_admin_change()
+    {
+        return $this->repo->operate_user_client_password_admin_change(request()->all());
+    }
+    // 【客户管理】修改-密码
+    public function operate_user_client_password_admin_reset()
+    {
+        return $this->repo->operate_user_client_password_admin_reset(request()->all());
+    }
+
+
+    // 【客户管理】启用
+    public function operate_user_client_admin_enable()
+    {
+        return $this->repo->operate_user_client_admin_enable(request()->all());
+    }
+    // 【客户管理】禁用
+    public function operate_user_client_admin_disable()
+    {
+        return $this->repo->operate_user_client_admin_disable(request()->all());
+    }
+
+
+    // 【客户管理】返回-列表-视图
+    public function view_user_client_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
+    }
+
+
+    // 【客户管理】客户-登录
+    public function operate_user_client_login()
+    {
+        $user_id = request()->get('user_id');
+        $user = DK_Client::select('*')->find($user_id);
+        if($user)
+        {
+            Auth::guard('dk_client')->login($user,true);
+
+            $return['user'] = $user;
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_CLIENT'));
+            else if(request()->isMethod('post')) return response_success($return);
+        }
+        else return response_error([]);
+
+    }
+
+
+
+
 
 
 
@@ -290,26 +402,13 @@ class DKAdminController extends Controller
 
 
     // 【用户】登录
-    public function operate_user_user_login()
+    public function operate_user_staff_login()
     {
         $user_id = request()->get('user_id');
         $user = User::where('id',$user_id)->first();
         if($user)
         {
-//            $type = request()->get('type','');
-//            if($type == "admin")
-//            {
-//                $admin_id = request()->get('admin_id');
-//                $admin = User::where('id',$admin_id)->first();
-//
-//                Auth::guard('gps')->login($user,true);
-//
-//                if(request()->isMethod('get')) return redirect(env('DOMAIN_GPS').'/admin');
-//                else if(request()->isMethod('post')) return response_success();
-//
-//            }
-
-            Auth::guard('staff')->login($user,true);
+            Auth::guard('yh_admin')->login($user,true);
 
             $return['user'] = $user;
 
@@ -331,7 +430,7 @@ class DKAdminController extends Controller
     }
 
 
-    // 【用户-员工管理】管理员-删除（）
+    // 【用户-员工管理】管理员-删除
     public function operate_user_staff_admin_delete()
     {
         return $this->repo->operate_user_staff_admin_delete(request()->all());
@@ -379,157 +478,6 @@ class DKAdminController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_user_list_for_org(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_user_list_for_org_datatable(request()->all());
-    }
-
-
-
-
-
-
-
-
-    /*
-     * 驾驶员管理
-     */
-    // 【驾驶员管理】返回-列表-视图（全部任务）
-    public function view_user_driver_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_driver_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_driver_list_for_all_datatable(request()->all());
-    }
-    // 【驾驶员管理】【修改记录】返回-列表-视图（全部任务）
-    public function view_user_driver_modify_record()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_driver_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_driver_modify_record_datatable(request()->all());
-    }
-
-
-    // 【驾驶员管理】添加
-    public function operate_user_driver_create()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_driver_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_driver_save(request()->all());
-    }
-    // 【驾驶员管理】编辑
-    public function operate_user_driver_edit()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_driver_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_driver_save(request()->all());
-    }
-
-
-    // 【驾驶员管理】修改-文本-text-信息
-    public function operate_user_driver_info_text_set()
-    {
-        return $this->repo->operate_user_driver_info_text_set(request()->all());
-    }
-    // 【驾驶员管理】修改-时间-time-信息
-    public function operate_user_driver_info_time_set()
-    {
-        return $this->repo->operate_user_driver_info_time_set(request()->all());
-    }
-    // 【驾驶员管理】修改-选项-option-信息
-    public function operate_user_driver_info_option_set()
-    {
-        return $this->repo->operate_user_driver_info_option_set(request()->all());
-    }
-    // 【驾驶员管理】修改-图片-image-信息
-    public function operate_user_driver_info_image_set()
-    {
-        return $this->repo->operate_user_driver_info_image_set(request()->all());
-    }
-
-    // 【驾驶员管理】获取-附件-attachment-HTML-页面
-    public function operate_user_driver_info_attachment_get_html()
-    {
-        return $this->repo->operate_user_driver_info_attachment_get_html(request()->all());
-    }
-    // 【驾驶员管理】添加-附件-attachment-信息
-    public function operate_user_driver_info_attachment_set()
-    {
-        return $this->repo->operate_user_driver_info_attachment_set(request()->all());
-    }
-    // 【驾驶员管理】删除-附件-attachment-信息
-    public function operate_user_driver_info_attachment_delete()
-    {
-        return $this->repo->operate_user_driver_info_attachment_delete(request()->all());
-    }
-    // 【驾驶员管理】获取-附件-attachment-信息
-    public function operate_user_driver_get_attachment_html()
-    {
-        return $this->repo->operate_user_driver_get_attachment_html(request()->all());
-    }
-
-
-    // 【驾驶员管理】删除
-    public function operate_user_driver_admin_delete()
-    {
-        return $this->repo->operate_user_driver_admin_delete(request()->all());
-    }
-    // 【驾驶员管理】恢复
-    public function operate_user_driver_admin_restore()
-    {
-        return $this->repo->operate_user_driver_admin_restore(request()->all());
-    }
-    // 【驾驶员管理】永久删除
-    public function operate_user_driver_admin_delete_permanently()
-    {
-        return $this->repo->operate_user_driver_admin_delete_permanently(request()->all());
-    }
-
-    // 【驾驶员管理】启用
-    public function operate_user_driver_admin_enable()
-    {
-        return $this->repo->operate_user_driver_admin_enable(request()->all());
-    }
-    // 【驾驶员管理】禁用
-    public function operate_user_driver_admin_disable()
-    {
-        return $this->repo->operate_user_driver_admin_disable(request()->all());
-    }
-
-
-
-
-
-
-
-
-    /*
-     * 客户管理
-     */
-    // 【客户管理】添加
-    public function operate_user_client_create()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
-    }
-    // 【客户管理】编辑
-    public function operate_user_client_edit()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
-    }
-
-
-    // 【客户管理】启用
-    public function operate_user_client_admin_enable()
-    {
-        return $this->repo->operate_user_client_admin_enable(request()->all());
-    }
-    // 【客户管理】禁用
-    public function operate_user_client_admin_disable()
-    {
-        return $this->repo->operate_user_client_admin_disable(request()->all());
-    }
-
-
-    // 【客户管理】返回-列表-视图
-    public function view_user_client_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
     }
 
 
@@ -1001,47 +949,10 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_item_select2_project(request()->all());
     }
-
-
     // 【订单管理】SELECT2 Client 客户
-    public function operate_order_select2_client()
+    public function operate_item_select2_client()
     {
-        return $this->repo->operate_order_select2_client(request()->all());
-    }
-    // 【订单管理】SELECT2 Circle 环线
-    public function operate_order_select2_circle()
-    {
-        return $this->repo->operate_order_select2_circle(request()->all());
-    }
-    // 【订单管理】SELECT2 Route 线路
-    public function operate_order_select2_route()
-    {
-        return $this->repo->operate_order_select2_route(request()->all());
-    }
-    // 【订单管理】SELECT2 Pricing 定价
-    public function operate_order_select2_pricing()
-    {
-        return $this->repo->operate_order_select2_pricing(request()->all());
-    }
-    // 【订单管理】SELECT2 Car 车辆
-    public function operate_order_select2_car()
-    {
-        return $this->repo->operate_order_select2_car(request()->all());
-    }
-    // 【订单管理】SELECT2 Trailer 车挂
-    public function operate_order_select2_trailer()
-    {
-        return $this->repo->operate_order_select2_trailer(request()->all());
-    }
-    // 【订单管理】SELECT2 Car 车辆
-    public function operate_order_list_select2_car()
-    {
-        return $this->repo->operate_order_list_select2_car(request()->all());
-    }
-    // 【订单管理】SELECT2 Trailer 车挂
-    public function operate_order_select2_driver()
-    {
-        return $this->repo->operate_order_select2_driver(request()->all());
+        return $this->repo->operate_item_select2_client(request()->all());
     }
 
 
@@ -1117,6 +1028,11 @@ class DKAdminController extends Controller
     public function operate_item_order_inspect()
     {
         return $this->repo->operate_item_order_inspect(request()->all());
+    }
+    // 【内容】交付
+    public function operate_item_order_deliver()
+    {
+        return $this->repo->operate_item_order_deliver(request()->all());
     }
 
 

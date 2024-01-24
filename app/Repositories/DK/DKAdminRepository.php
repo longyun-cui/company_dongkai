@@ -8,18 +8,10 @@ use App\Models\DK\DK_Project;
 use App\Models\DK\DK_Pivot_User_Project;
 use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Record;
+use App\Models\DK\DK_Client;
 
-use App\Models\DK\YH_Driver;
-use App\Models\DK\YH_Client;
-use App\Models\DK\YH_Route;
-use App\Models\DK\YH_Pricing;
-use App\Models\DK\YH_Circle;
 use App\Models\DK\YH_Attachment;
-use App\Models\DK\YH_Finance;
 use App\Models\DK\YH_Item;
-use App\Models\DK\YH_Task;
-use App\Models\DK\YH_Pivot_Circle_Order;
-use App\Models\DK\YH_Pivot_Item_Relation;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -42,8 +34,8 @@ class DKAdminRepository {
         $this->modelUser = new DK_User;
         $this->modelItem = new YH_Item;
 
-        $this->view_blade_403 = env('TEMPLATE_YH_ADMIN').'entrance.errors.403';
-        $this->view_blade_404 = env('TEMPLATE_YH_ADMIN').'entrance.errors.404';
+        $this->view_blade_403 = env('TEMPLATE_DK_ADMIN').'entrance.errors.403';
+        $this->view_blade_404 = env('TEMPLATE_DK_ADMIN').'entrance.errors.404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -121,7 +113,6 @@ class DKAdminRepository {
 
         // 本月每日工单量
         $query_this_month = DK_Order::select('id','published_at')
-//            ->where('finance_type',1)
             ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
             ->select(DB::raw("
@@ -132,7 +123,6 @@ class DKAdminRepository {
 
         // 上月每日工单量
         $query_last_month = DK_Order::select('id','published_at')
-//            ->where('finance_type',1)
             ->whereBetween('published_at',[$last_month_start_timestamp,$last_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
             ->select(DB::raw("
@@ -311,7 +301,7 @@ class DKAdminRepository {
 
 
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.index';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.index';
         return view($view_blade)->with($return);
     }
 
@@ -320,7 +310,7 @@ class DKAdminRepository {
     public function view_admin_404()
     {
         $this->get_me();
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.errors.404';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.errors.404';
         return view($view_blade);
     }
 
@@ -338,7 +328,7 @@ class DKAdminRepository {
 
         $return['data'] = $me;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.my-account.my-profile-info-index';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.my-account.my-profile-info-index';
         return view($view_blade)->with($return);
     }
     // 【基本信息】返回-编辑-视图
@@ -349,7 +339,7 @@ class DKAdminRepository {
 
         $return['data'] = $me;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.my-account.my-profile-info-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.my-account.my-profile-info-edit';
         return view($view_blade)->with($return);
     }
     // 【基本信息】保存数据
@@ -416,7 +406,7 @@ class DKAdminRepository {
 
         $return['data'] = $me;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.my-account.my-account-password-change';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.my-account.my-account-password-change';
         return view($view_blade)->with($return);
     }
     // 【密码】保存数据
@@ -467,6 +457,515 @@ class DKAdminRepository {
 
 
 
+    /*
+     * 客户管理
+     */
+    // 【客户管理】返回-添加-视图
+    public function view_user_client_create()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+
+        $item_type = 'item';
+        $item_type_text = '客户';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/user/client-list-for-all';
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-edit';
+        return view($view_blade)->with([
+            'operate'=>'create',
+            'operate_id'=>0,
+            'category'=>'item',
+            'type'=>$item_type,
+            'item_type_text'=>$item_type_text,
+            'title_text'=>$title_text,
+            'list_text'=>$list_text,
+            'list_link'=>$list_link,
+        ]);
+    }
+    // 【客户管理】返回-编辑-视图
+    public function view_user_client_edit()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+
+        $id = request("id",0);
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-edit';
+
+        $item_type = 'item';
+        $item_type_text = '客户';
+        $title_text = '编辑'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/user/client-list-for-all';
+
+        if($id == 0)
+        {
+            return view($view_blade)->with([
+                'operate'=>'create',
+                'operate_id'=>0,
+                'category'=>'item',
+                'type'=>$item_type,
+                'item_type_text'=>$item_type_text,
+                'title_text'=>$title_text,
+                'list_text'=>$list_text,
+                'list_link'=>$list_link,
+            ]);
+        }
+        else
+        {
+            $mine = DK_Client::with(['parent'])->find($id);
+            if($mine)
+            {
+                if(!in_array($mine->user_category,[0,1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+                $mine->custom = json_decode($mine->custom);
+                $mine->custom2 = json_decode($mine->custom2);
+                $mine->custom3 = json_decode($mine->custom3);
+
+                return view($view_blade)->with([
+                    'operate'=>'edit',
+                    'operate_id'=>$id,
+                    'data'=>$mine,
+                    'category'=>'item',
+                    'type'=>$item_type,
+                    'item_type_text'=>$item_type_text,
+                    'title_text'=>$title_text,
+                    'list_text'=>$list_text,
+                    'list_link'=>$list_link,
+                ]);
+            }
+            else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+        }
+    }
+    // 【客户管理】保存数据
+    public function operate_user_client_save($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'username.required' => '请输入客户名称！',
+//            'username.unique' => '该客户已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'username' => 'required',
+//            'username' => 'required|unique:dk_client,username',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_Client::select('id')->where('username',$post_data["username"])->count();
+            if($is_exist) return response_error([],"该客户名已存在，请勿重复添加！");
+
+            $mine = new DK_Client;
+            $post_data["user_category"] = 11;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+            $post_data["password"] = password_encode("12345678");
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = DK_Client::find($operate_id);
+            if(!$mine) return response_error([],"该客户不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['category']);
+            unset($mine_data['type']);
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("insert--user--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【用户-员工管理】管理员-修改密码
+    public function operate_user_client_password_admin_change($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+            'user-password.required' => '请输入密码！',
+            'user-password-confirm.required' => '请输入确认密码！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+            'user-password' => 'required',
+            'user-password-confirm' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'client-password-admin-change') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = DK_Client::withTrashed()->find($id);
+        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该操作权限！");
+//        if(in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该员工的操作权限！");
+        if($user->id == $me->id) return response_error([],"你不能操作你自己！");
+        if($user->user_type <= $me->user_type) return response_error([],"你不能操作比你职级更高或同级的员工！");
+
+        $password = $post_data["user-password"];
+        $confirm = $post_data["user-password-confirm"];
+        if($password != $confirm) return response_error([],"两次密码不一致！");
+
+//        if(!password_is_legal($password)) ;
+        $pattern = '/^[a-zA-Z0-9]{1}[a-zA-Z0-9]{5,19}$/i';
+        if(!preg_match($pattern,$password)) return response_error([],"密码格式不正确！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->password = password_encode($password);
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--user--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【用户-员工管理】管理员-重置密码
+    public function operate_user_client_password_admin_reset($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'client-password-admin-reset') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = DK_Client::withTrashed()->find($id);
+        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该操作权限！");
+//        if(in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该员工的操作权限！");
+//        if($user->id == $me->id) return response_error([],"你不能操作你自己！");
+//        if($user->user_type <= $me->user_type) return response_error([],"你不能操作比你职级更高或同级的员工！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->password = password_encode('12345678');
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--user--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【客户管理】管理员-启用
+    public function operate_user_client_admin_enable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'client-admin-enable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = DK_Client::find($id);
+        if(!$user) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->user_status = 1;
+            $user->timestamps = false;
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--client--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【客户管理】管理员-禁用
+    public function operate_user_client_admin_disable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'client-admin-disable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = DK_Client::find($id);
+        if(!$user) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->user_status = 9;
+            $user->timestamps = false;
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--client--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【客户管理】返回-列表-视图
+    public function view_user_client_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【客户管理】返回-列表-数据
+    public function get_user_client_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Client::select('*')
+            ->with(['creator'])
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【客户管理】【修改记录】返回-列表-视图
+    public function view_user_client_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【客户管理】【修改记录】返回-列表-数据
+    public function get_user_client_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Record::select('*')
+            ->with(['creator'])
+            ->where(['record_object'=>21, 'operate_object'=>41,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
 
 
 
@@ -474,8 +973,6 @@ class DKAdminRepository {
     /*
      * 部门管理
      */
-
-
     //
     public function operate_department_select2_leader($post_data)
     {
@@ -549,7 +1046,7 @@ class DKAdminRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/department/department-list-for-all';
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.department.department-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-edit';
         return view($view_blade)->with([
             'operate'=>'create',
             'operate_id'=>0,
@@ -569,7 +1066,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.department.department-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-edit';
 
         $item_type = 'item';
         $item_type_text = '部门';
@@ -595,7 +1092,7 @@ class DKAdminRepository {
             $mine = DK_Department::with('leader')->find($id);
             if($mine)
             {
-//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
                 $mine->custom = json_decode($mine->custom);
                 $mine->custom2 = json_decode($mine->custom2);
                 $mine->custom3 = json_decode($mine->custom3);
@@ -612,7 +1109,7 @@ class DKAdminRepository {
                     'list_link'=>$list_link,
                 ]);
             }
-            else return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+            else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
         }
     }
     // 【部门管理】保存数据
@@ -681,7 +1178,7 @@ class DKAdminRepository {
             if($bool)
             {
             }
-            else throw new Exception("insert--car--fail");
+            else throw new Exception("insert--department--fail");
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
@@ -1225,7 +1722,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Department::with([
-            'attachment_list' => function($query) { $query->where('operate_object',41); }
+            'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
         ])->withTrashed()->find($id);
         if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
 
@@ -1234,7 +1731,7 @@ class DKAdminRepository {
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-assign-html-for-attachment';
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -1280,7 +1777,7 @@ class DKAdminRepository {
         {
             $item->timestamps = false;
             $bool = $item->delete();  // 普通删除
-            if(!$bool) throw new Exception("car--delete--fail");
+            if(!$bool) throw new Exception("department--delete--fail");
 
             DB::commit();
             return response_success([]);
@@ -1318,7 +1815,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -1333,7 +1830,7 @@ class DKAdminRepository {
         {
             $item->timestamps = false;
             $bool = $item->restore();
-            if(!$bool) throw new Exception("car--restore--fail");
+            if(!$bool) throw new Exception("department--restore--fail");
 
             DB::commit();
             return response_success([]);
@@ -1388,7 +1885,7 @@ class DKAdminRepository {
             $item_copy = $item;
 
             $bool = $item->forceDelete();
-            if(!$bool) throw new Exception("car--delete--fail");
+            if(!$bool) throw new Exception("department--delete--fail");
 
             DB::commit();
             return response_success([]);
@@ -1426,7 +1923,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -1439,7 +1936,7 @@ class DKAdminRepository {
             $item->item_status = 1;
             $item->timestamps = false;
             $bool = $item->save();
-            if(!$bool) throw new Exception("update--car--fail");
+            if(!$bool) throw new Exception("update--department--fail");
 
             DB::commit();
             return response_success([]);
@@ -1477,7 +1974,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -1490,7 +1987,7 @@ class DKAdminRepository {
             $item->item_status = 9;
             $item->timestamps = false;
             $bool = $item->save();
-            if(!$bool) throw new Exception("update--car--fail");
+            if(!$bool) throw new Exception("update--department--fail");
 
             DB::commit();
             return response_success([]);
@@ -1514,7 +2011,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $return['menu_active_of_department_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.department.department-list-for-all';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【部门管理】返回-列表-数据
@@ -1595,7 +2092,7 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_car_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.car-list-for-all';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.department-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【部门管理】【修改记录】返回-列表-数据
@@ -1606,8 +2103,8 @@ class DKAdminRepository {
 
         $id  = $post_data["id"];
         $query = DK_Record::select('*')
-            ->with(['creator','before_driver_er','after_driver_er'])
-            ->where(['operate_object'=>41,'item_id'=>$id]);
+            ->with(['creator'])
+            ->where(['record_object'=>21, 'operate_object'=>41,'item_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -1710,8 +2207,8 @@ class DKAdminRepository {
 //        else if($type == 31) $district_type = 21;
 //        else if($type == 41) $district_type = 31;
 //        else $district_type = 0;
-//        if(!is_numeric($type)) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
-//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+//        if(!is_numeric($type)) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
 
         if(empty($post_data['keyword']))
         {
@@ -1813,7 +2310,7 @@ class DKAdminRepository {
         $return_data['list_text'] = $list_text;
         $return_data['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.staff-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-edit';
         return view($view_blade)->with($return_data);
     }
     // 【用户-员工管理】返回-编辑-视图
@@ -1824,7 +2321,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,19,21,22,81])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.staff-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-edit';
 
         $item_type = 'item';
         $item_type_text = '用户';
@@ -1866,7 +2363,7 @@ class DKAdminRepository {
 
                 return view($view_blade)->with($return_data);
             }
-            else return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
+            else return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
         }
     }
     // 【用户-员工管理】保存数据
@@ -2429,7 +2926,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.staff-list-for-all';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【用户-员工管理】返回-列表-数据
@@ -2498,497 +2995,6 @@ class DKAdminRepository {
 
 
 
-    /*
-     * 客户管理
-     */
-    // 【客户管理】返回-添加-视图
-    public function view_user_client_create()
-    {
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
-
-        $item_type = 'item';
-        $item_type_text = '客户';
-        $title_text = '添加'.$item_type_text;
-        $list_text = $item_type_text.'列表';
-        $list_link = '/user/client-list-for-all';
-
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.client-edit';
-        return view($view_blade)->with([
-            'operate'=>'create',
-            'operate_id'=>0,
-            'category'=>'item',
-            'type'=>$item_type,
-            'item_type_text'=>$item_type_text,
-            'title_text'=>$title_text,
-            'list_text'=>$list_text,
-            'list_link'=>$list_link,
-        ]);
-    }
-    // 【客户管理】返回-编辑-视图
-    public function view_user_client_edit()
-    {
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
-
-        $id = request("id",0);
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.client-edit';
-
-        $item_type = 'item';
-        $item_type_text = '客户';
-        $title_text = '编辑'.$item_type_text;
-        $list_text = $item_type_text.'列表';
-        $list_link = '/user/client-list-for-all';
-
-        if($id == 0)
-        {
-            return view($view_blade)->with([
-                'operate'=>'create',
-                'operate_id'=>0,
-                'category'=>'item',
-                'type'=>$item_type,
-                'item_type_text'=>$item_type_text,
-                'title_text'=>$title_text,
-                'list_text'=>$list_text,
-                'list_link'=>$list_link,
-            ]);
-        }
-        else
-        {
-            $mine = YH_Client::with(['parent'])->find($id);
-            if($mine)
-            {
-                if(!in_array($mine->user_category,[0,1,9,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
-                $mine->custom = json_decode($mine->custom);
-                $mine->custom2 = json_decode($mine->custom2);
-                $mine->custom3 = json_decode($mine->custom3);
-
-                return view($view_blade)->with([
-                    'operate'=>'edit',
-                    'operate_id'=>$id,
-                    'data'=>$mine,
-                    'category'=>'item',
-                    'type'=>$item_type,
-                    'item_type_text'=>$item_type_text,
-                    'title_text'=>$title_text,
-                    'list_text'=>$list_text,
-                    'list_link'=>$list_link,
-                ]);
-            }
-            else return view(env('TEMPLATE_YH_ADMIN').'errors.404');
-        }
-    }
-    // 【客户管理】保存数据
-    public function operate_user_client_save($post_data)
-    {
-//        dd($post_data);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'username.required' => '请输入客户名称！',
-//            'username.unique' => '该客户已存在！',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'username' => 'required',
-//            'username' => 'required|unique:yh_client,username',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
-
-
-        $operate = $post_data["operate"];
-        $operate_id = $post_data["operate_id"];
-
-        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
-        {
-            $is_exist = YH_Client::select('id')->where('username',$post_data["username"])->count();
-            if($is_exist) return response_error([],"该客户名已存在，请勿重复添加！");
-
-            $mine = new YH_Client;
-            $post_data["user_category"] = 11;
-            $post_data["active"] = 1;
-            $post_data["creator_id"] = $me->id;
-        }
-        else if($operate == 'edit') // 编辑
-        {
-            $mine = YH_Client::find($operate_id);
-            if(!$mine) return response_error([],"该用户不存在，刷新页面重试！");
-        }
-        else return response_error([],"参数有误！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            if(!empty($post_data['custom']))
-            {
-                $post_data['custom'] = json_encode($post_data['custom']);
-            }
-
-            $mine_data = $post_data;
-
-            unset($mine_data['operate']);
-            unset($mine_data['operate_id']);
-            unset($mine_data['category']);
-            unset($mine_data['type']);
-
-            $bool = $mine->fill($mine_data)->save();
-            if($bool)
-            {
-            }
-            else throw new Exception("insert--user--fail");
-
-            DB::commit();
-            return response_success(['id'=>$mine->id]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-    // 【客户管理】管理员-启用
-    public function operate_user_client_admin_enable($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'user_id.required' => 'user_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'user_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'client-admin-enable') return response_error([],"参数【operate】有误！");
-        $id = $post_data["user_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
-
-        $user = YH_Client::find($id);
-        if(!$user) return response_error([],"该【客户】不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $user->user_status = 1;
-            $user->timestamps = false;
-            $bool = $user->save();
-            if(!$bool) throw new Exception("update--client--fail");
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【客户管理】管理员-禁用
-    public function operate_user_client_admin_disable($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'user_id.required' => 'user_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'user_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'client-admin-disable') return response_error([],"参数【operate】有误！");
-        $id = $post_data["user_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
-
-        $user = YH_Client::find($id);
-        if(!$user) return response_error([],"该【客户】不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $user->user_status = 9;
-            $user->timestamps = false;
-            $bool = $user->save();
-            if(!$bool) throw new Exception("update--client--fail");
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-    // 【客户管理】返回-列表-视图
-    public function view_user_client_list_for_all($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.client-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【客户管理】返回-列表-数据
-    public function get_user_client_list_for_all_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $query = YH_Client::select('*')
-            ->with(['creator'])
-            ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【客户管理】【修改记录】返回-列表-视图
-    public function view_user_client_modify_record($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
-
-        $return['staff_list'] = $staff_list;
-        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.user.client-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【客户管理】【修改记录】返回-列表-数据
-    public function get_user_client_modify_record_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $id  = $post_data["id"];
-        $query = DK_Record::select('*')
-            ->with(['creator'])
-            ->where(['operate_object'=>41,'item_id'=>$id]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-
-            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-            else $list[$k]->is_me = 0;
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-
-
-
-
-
-
-    /*
-     * ITEM 内容管理
-     */
-
-
-    // 【内容】【全部】返回-列表-视图
-    public function view_task_list_for_all($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $sales = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[41,61,88])->get();
-
-        $return['sales'] = $sales;
-        $return['menu_active_of_task_list'] = 'active';
-        $return['menu_active_of_task_list_for_all'] = 'active';
-
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.task-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【内容】【全部】返回-列表-数据
-    public function get_task_list_for_all_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $query = YH_Task::select('*')
-//            ->withTrashed()
-            ->with('owner','creator');
-//            ->where('item_category',11)
-//            ->where('item_type', '!=',0)
-//            ->withCount([
-//                'order_list as order_'=>function($query) {
-//                    $query->whereNotNull('actual_departure_time')->whereNull('actual_arrival_time')->orderby('id','desc');
-//                }
-//            ]);
-//            ->whereIn('user_category',[11])
-//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
-//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
-//            ->with('ep','parent','fund')
-//            ->withCount([
-//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
-//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
-//            ]);
-//            ->where(['userstatus'=>'正常','status'=>1])
-//            ->whereIn('usergroup',['Agent','Agent2']);
-
-        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-        if(!empty($post_data['tag'])) $query->where('tag', 'like', "%{$post_data['tag']}%");
-
-        $item_type = isset($post_data['item_type']) ? $post_data['item_type'] : '';
-        if($item_type == "article") $query->where('item_type', 1);
-        else if($item_type == "menu_type") $query->where('item_type', 11);
-        else if($item_type == "time_line") $query->where('item_type', 18);
-        else if($item_type == "debase") $query->where('item_type', 22);
-        else if($item_type == "vote") $query->where('item_type', 29);
-        else if($item_type == "ask") $query->where('item_type', 31);
-
-
-
-        $owner_id = isset($post_data['finished']) ? $post_data['owner'] : '';
-        if(!in_array($owner_id,[-1,0])) $query->where('owner_id', $owner_id);
-
-        $is_completed = isset($post_data['finished']) ? $post_data['finished'] : '';
-        if($is_completed == 0) $query->where('is_completed', 0);
-        else if($is_completed == 1) $query->where('is_completed', 1);
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->custom = json_decode($v->custom,true);
-//            $list[$k]->description = replace_blank($v->description);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-
-
-
-
-
 
     /*
      * ITEM 内容管理
@@ -3016,7 +3022,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.item-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-edit';
         return view($view_blade)->with($return);
     }
     // 【内容】返回-编辑-视图
@@ -3024,11 +3030,11 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,21,22])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+        if(!in_array($me->user_type,[0,1,11,21,22])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
 
         $id = $post_data["item-id"];
         $mine = $this->modelItem->with(['owner'])->find($id);
-        if(!$mine) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+        if(!$mine) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
 
 
         $operate_category = 'item';
@@ -3088,7 +3094,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.item-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-edit';
         if($id == 0)
         {
             $return['operate'] = 'create';
@@ -4052,7 +4058,7 @@ class DKAdminRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/item/project-list-for-all';
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.project-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
         return view($view_blade)->with([
             'operate'=>'create',
             'operate_id'=>0,
@@ -4072,7 +4078,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.project-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
 
         $item_type = 'item';
         $item_type_text = '项目';
@@ -4098,7 +4104,7 @@ class DKAdminRepository {
             $mine = DK_Project::with('inspector_er')->find($id);
             if($mine)
             {
-//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
                 $mine->custom = json_decode($mine->custom);
                 $mine->custom2 = json_decode($mine->custom2);
                 $mine->custom3 = json_decode($mine->custom3);
@@ -4115,7 +4121,7 @@ class DKAdminRepository {
                     'list_link'=>$list_link,
                 ]);
             }
-            else return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+            else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
         }
     }
     // 【车辆管理】保存数据
@@ -4448,13 +4454,6 @@ class DKAdminRepository {
                 }
                 else
                 {
-                    $driver = YH_Driver::withTrashed()->find($column_value);
-                    if(!$driver) throw new Exception("该【驾驶员】不存在，刷新页面重试！");
-
-//                $item->linkman_name = $driver->driver_name;
-//                $item->linkman_phone = $driver->driver_phone;
-//                $item->copilot_name = $driver->sub_driver_name;
-//                $item->copilot_phone = $driver->sub_driver_phone;
                 }
             }
 
@@ -4488,7 +4487,7 @@ class DKAdminRepository {
                     $record_data["before"] = $before;
                     $record_data["after"] = $column_value;
 
-                    if(in_array($column_key,['client_id','route_id','car_id','trailer_id','driver_id']))
+                    if(in_array($column_key,['client_id']))
                     {
                         $record_data["before_id"] = $before;
                         $record_data["after_id"] = $column_value;
@@ -4498,26 +4497,6 @@ class DKAdminRepository {
                     {
                         $record_data["before_client_id"] = $before;
                         $record_data["after_client_id"] = $column_value;
-                    }
-                    else if($column_key == 'route_id')
-                    {
-                        $record_data["before_route_id"] = $before;
-                        $record_data["after_route_id"] = $column_value;
-                    }
-                    else if($column_key == 'pricing_id')
-                    {
-                        $record_data["before_pricing_id"] = $before;
-                        $record_data["after_pricing_id"] = $column_value;
-                    }
-                    else if($column_key == 'car_id' || $column_key == 'trailer_id')
-                    {
-                        $record_data["before_car_id"] = $before;
-                        $record_data["after_car_id"] = $column_value;
-                    }
-                    else if($column_key == 'driver_id')
-                    {
-                        $record_data["before_driver_id"] = $before;
-                        $record_data["after_driver_id"] = $column_value;
                     }
 
                     $bool_1 = $record->fill($record_data)->save();
@@ -4787,7 +4766,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Project::with([
-                'attachment_list' => function($query) { $query->where('operate_object',41); }
+                'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
             ])->withTrashed()->find($id);
         if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
 
@@ -4796,7 +4775,7 @@ class DKAdminRepository {
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-assign-html-for-attachment';
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -4826,7 +4805,7 @@ class DKAdminRepository {
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -4842,7 +4821,7 @@ class DKAdminRepository {
         {
             $item->timestamps = false;
             $bool = $item->delete();  // 普通删除
-            if(!$bool) throw new Exception("car--delete--fail");
+            if(!$bool) throw new Exception("project--delete--fail");
 
             DB::commit();
             return response_success([]);
@@ -4880,7 +4859,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -4895,7 +4874,7 @@ class DKAdminRepository {
         {
             $item->timestamps = false;
             $bool = $item->restore();
-            if(!$bool) throw new Exception("car--restore--fail");
+            if(!$bool) throw new Exception("project--restore--fail");
 
             DB::commit();
             return response_success([]);
@@ -4933,7 +4912,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -4950,7 +4929,7 @@ class DKAdminRepository {
             $item_copy = $item;
 
             $bool = $item->forceDelete();
-            if(!$bool) throw new Exception("car--delete--fail");
+            if(!$bool) throw new Exception("project--delete--fail");
 
             DB::commit();
             return response_success([]);
@@ -4988,7 +4967,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5001,7 +4980,7 @@ class DKAdminRepository {
             $item->item_status = 1;
             $item->timestamps = false;
             $bool = $item->save();
-            if(!$bool) throw new Exception("update--car--fail");
+            if(!$bool) throw new Exception("update--project--fail");
 
             DB::commit();
             return response_success([]);
@@ -5039,7 +5018,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5052,7 +5031,7 @@ class DKAdminRepository {
             $item->item_status = 9;
             $item->timestamps = false;
             $bool = $item->save();
-            if(!$bool) throw new Exception("update--car--fail");
+            if(!$bool) throw new Exception("update--project--fail");
 
             DB::commit();
             return response_success([]);
@@ -5076,7 +5055,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $return['menu_active_of_car_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.project-list-for-all';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【车辆管理】返回-列表-数据
@@ -5139,7 +5118,7 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_car_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.car-list-for-all';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【车辆管理】【修改记录】返回-列表-数据
@@ -5150,8 +5129,8 @@ class DKAdminRepository {
 
         $id  = $post_data["id"];
         $query = DK_Record::select('*')
-            ->with(['creator','before_driver_er','after_driver_er'])
-            ->where(['operate_object'=>41,'item_id'=>$id]);
+            ->with(['creator'])
+            ->where(['record_object'=>21,'operate_object'=>41,'item_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -5241,7 +5220,7 @@ class DKAdminRepository {
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Client::select(['id','title as text'])
+            $list =DK_Project::select(['id','title as text'])
                 ->where('item_status',1)
 //                ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
@@ -5253,7 +5232,7 @@ class DKAdminRepository {
         return $list;
     }
     //
-    public function operate_order_select2_client($post_data)
+    public function operate_item_select2_client($post_data)
     {
 //        $type = $post_data['type'];
 //        if($type == 0) $district_type = 0;
@@ -5265,12 +5244,12 @@ class DKAdminRepository {
 //        else if($type == 31) $district_type = 21;
 //        else if($type == 41) $district_type = 31;
 //        else $district_type = 0;
-//        if(!is_numeric($type)) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
-//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_YH_ADMIN').'errors.404');
+//        if(!is_numeric($type)) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
 
         if(empty($post_data['keyword']))
         {
-            $list =YH_Client::select(['id','username as text'])
+            $list =DK_Client::select(['id','username as text'])
                 ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
@@ -5278,34 +5257,11 @@ class DKAdminRepository {
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =YH_Client::select(['id','username as text'])->where('username','like',"%$keyword%")
+            $list =DK_Client::select(['id','username as text'])->where('username','like',"%$keyword%")
                 ->where(['user_status'=>1,'user_category'=>11])
 //                ->whereIn('user_type',[41,61,88])
                 ->get()->toArray();
         }
-        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
-        return $list;
-    }
-    //
-    public function operate_order_select2_circle($post_data)
-    {
-        $query =YH_Circle::select(['id','title as text']);
-//                ->where(['user_status'=>1,'user_category'=>11])
-//                ->whereIn('user_type',[41,61,88]);
-
-        if(!empty($post_data['car_id']))
-        {
-            $query->where('car_id',$post_data['car_id']);
-        }
-
-        if(!empty($post_data['keyword']))
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $query->where('title','like',"%$keyword%");
-        }
-
-        $list = $query->orderBy('id', 'desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
@@ -5337,7 +5293,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit-for-import';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit-for-import';
         return view($view_blade)->with($return);
     }
     // 【工单管理】保存-导入-数据
@@ -5531,7 +5487,7 @@ class DKAdminRepository {
         $item_type_text = '工单';
         $title_text = '添加'.$item_type_text;
         $list_text = $item_type_text.'列表';
-        $list_link = '/item/car-list-for-all';
+        $list_link = '/item/order-list-for-all';
 
         $return['operate'] = 'create';
         $return['operate_id'] = 0;
@@ -5542,7 +5498,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
         return view($view_blade)->with($return);
     }
     // 【工单管理】返回-编辑-视图
@@ -5552,13 +5508,13 @@ class DKAdminRepository {
         $me = $this->me;
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
 
         $item_type = 'item';
         $item_type_text = '工单';
         $title_text = '编辑'.$item_type_text;
         $list_text = $item_type_text.'列表';
-        $list_link = '/item/car-list-for-all';
+        $list_link = '/item/order-list-for-all';
 
         $return['operate'] = 'edit';
         $return['operate_id'] = $id;
@@ -5581,7 +5537,7 @@ class DKAdminRepository {
             $mine = DK_Order::find($id);
             if($mine)
             {
-//                if($mine->deleted_at) return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
+//                if($mine->deleted_at) return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
 //                else
                 {
                     $mine->custom = json_decode($mine->custom);
@@ -5593,7 +5549,7 @@ class DKAdminRepository {
                     return view($view_blade)->with($return);
                 }
             }
-            else return view(env('TEMPLATE_YH_ADMIN').'entrance.errors.404');
+            else return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
         }
     }
     // 【工单管理】保存数据
@@ -5843,7 +5799,7 @@ class DKAdminRepository {
         }
 
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-info-html';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-info-html';
         $html = view($view_blade)->with(['data'=>$item])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -5879,7 +5835,7 @@ class DKAdminRepository {
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-assign-html-for-attachment';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-assign-html-for-attachment';
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -6447,6 +6403,91 @@ class DKAdminRepository {
         }
 
     }
+    // 【工单管理】审核
+    public function operate_item_order_deliver($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-deliver') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,71,77])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $client_id = $post_data["client_id"];
+        $client = DK_Client::find($client_id);
+        if(!$client) return response_error([],"客户不存在！");
+
+        $before = $item->client_id;
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->client_id = $client_id;
+            $item->deliverer_id = $me->id;
+            $item->delivered_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 95;
+                $record_data["operate_type"] = 1;
+                $record_data["column_name"] = "client_id";
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $client_id;
+
+                $record_data["before_client_id"] = $before;
+                $record_data["after_client_id"] = $client_id;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 
     // 【工单管理】【文本】修改-文本-类型
@@ -6779,6 +6820,11 @@ class DKAdminRepository {
             if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
         }
 
+        if(in_array($me->user_type,['client_id','project_id']))
+        {
+            if(in_array($column_value,["-1",-1])) return response_error([],"选择有误！");
+        }
+
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -6793,11 +6839,6 @@ class DKAdminRepository {
                 {
                     $car = DK_Project::withTrashed()->find($column_value);
                     if(!$car) throw new Exception("该【车辆】不存在，刷新页面重试！");
-
-//                $item->driver_name = null;
-//                $item->driver_phone = null;
-                    $item->driver_name = $car->linkman_name;
-                    $item->driver_phone = $car->linkman_phone;
                 }
             }
             else if($column_key == "location_city")
@@ -6842,7 +6883,7 @@ class DKAdminRepository {
                     $record_data["before"] = $before;
                     $record_data["after"] = $after;
 
-                    if(in_array($column_key,['client_id','project_id','car_id','driver_id']))
+                    if(in_array($column_key,['client_id','project_id']))
                     {
                         $record_data["before_id"] = $before;
                         $record_data["after_id"] = $column_value;
@@ -7373,6 +7414,7 @@ class DKAdminRepository {
 //        dd($view_data);
 
 
+        $client_list = DK_Client::select('id','username')->where('user_category',11)->get();
         $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
         if($me->user_type == 81)
         {
@@ -7397,16 +7439,15 @@ class DKAdminRepository {
                 ->whereIn('user_type',[81,84,88])
                 ->get();
         }
-        $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
 
+        $view_data['client_list'] = $client_list;
         $view_data['department_district_list'] = $department_district_list;
         $view_data['staff_list'] = $staff_list;
-        $view_data['client_list'] = $client_list;
         $view_data['project_list'] = $project_list;
         $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($view_data);
     }
     // 【工单管理】返回-列表-数据
@@ -7417,10 +7458,17 @@ class DKAdminRepository {
 
         $query = DK_Order::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with(['creator','owner','inspector',
+            ->with([
+                'creator',
+                'owner'=>function($query) { $query->select('id','username'); },
+                'client_er'=>function($query) { $query->select('id','username'); },
+                'inspector',
                 'project_er',
-                'department_district_er','department_group_er',
-                'department_manager_er','department_supervisor_er']);
+                'department_district_er',
+                'department_group_er',
+                'department_manager_er',
+                'department_supervisor_er'
+            ]);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -7627,127 +7675,6 @@ class DKAdminRepository {
             if($v->owner_id == $me->id) $list[$k]->is_me = 1;
             else $list[$k]->is_me = 0;
 
-            if($v->is_published != 0)
-            {
-                $list[$k]->travel_status = "--";
-                $list[$k]->travel_result = "--";
-
-                if(!$v->actual_departure_time)
-                {
-                    $list[$k]->travel_status = "待发车";
-
-                    if($v->should_departure_time)
-                    {
-                        if(time() <= $v->should_departure_time) $list[$k]->travel_result = "等待出发";
-                        else $list[$k]->travel_result = "发车超时";
-                    }
-                    else $list[$k]->travel_result = "等待出发";
-                }
-                else
-                {
-                    if(!$v->actual_arrival_time)
-                    {
-                        $list[$k]->travel_status = "进行中";
-
-                        if(time() < $v->should_arrival_time) $list[$k]->travel_result = "正常";
-                        else $list[$k]->travel_result = "已超时";
-                    }
-                    else
-                    {
-                        if($v->is_completed == 1)
-                        {
-                            $list[$k]->travel_status = "已完成";
-                            $list[$k]->travel_result = "已结束";
-                        }
-                        else
-                        {
-                            $list[$k]->travel_status = "已到达";
-                            if(($v->amount + $v->oil_card_amount - $v->time_limitation_deduction) <= $v->income_total)
-                            {
-                                $list[$k]->travel_status = "已收款";
-                            }
-                            else $list[$k]->travel_status = "待收款";
-                        }
-
-
-                        // 行程记录
-                        $journey_time = $v->actual_arrival_time - $v->actual_departure_time;
-                        $journey_day=floor($journey_time/86400);
-                        $journey_hour=floor($journey_time%86400/3600);
-                        $journey_minute=ceil($journey_time%86400%3600/60);
-                        $journey_second=floor($journey_time%86400%3600%60/60);
-                        if($journey_day == 0)
-                        {
-                            if($journey_hour == 0) $journey_result = $journey_minute."分钟";
-                            else $journey_result = $journey_hour."小时".$journey_minute."分钟";
-                        }
-                        else
-                        {
-                            $journey_result = $journey_day."天".$journey_hour."小时".$journey_minute."分钟";
-                        }
-                        $list[$k]->travel_journey_time = $journey_result;
-
-                        // 发车超时
-                        if($v->should_departure_time)
-                        {
-                            if($v->actual_departure_time <= $v->should_departure_time)
-                            {
-                                $list[$k]->travel_result = "正常";
-                            }
-                            else
-                            {
-                                $departure_subtract = $v->actual_departure_time - $v->should_departure_time;
-
-                                $departure_subtract_day=floor($departure_subtract/86400);
-                                $departure_subtract_hour=floor($departure_subtract%86400/3600);
-                                $departure_subtract_minute=ceil($departure_subtract%86400%3600/60);
-                                $departure_subtract_second=floor($departure_subtract%86400%3600%60/60);
-                                if($departure_subtract_day == 0)
-                                {
-                                    if($departure_subtract_hour == 0) $departure_subtract_result = $departure_subtract_minute."分钟";
-                                    else $departure_subtract_result = $departure_subtract_hour."小时".$departure_subtract_minute."分钟";
-                                }
-                                else
-                                {
-                                    $departure_subtract_result = $departure_subtract_day."天".$departure_subtract_hour."小时".$departure_subtract_minute."分钟";
-                                }
-                                $list[$k]->travel_departure_overtime_time = $departure_subtract_result;
-                            }
-                        }
-
-                        // 到达超时
-                        if($v->should_arrival_time)
-                        {
-                            if($v->actual_arrival_time <= $v->should_arrival_time)
-                            {
-                                $list[$k]->travel_result = "正常";
-                            }
-                            else
-                            {
-                                $arrival_subtract = $v->actual_arrival_time - $v->should_arrival_time;
-
-                                $arrival_subtract_day=floor($arrival_subtract/86400);
-                                $arrival_subtract_hour=floor($arrival_subtract%86400/3600);
-                                $arrival_subtract_minute=ceil($arrival_subtract%86400%3600/60);
-                                $arrival_subtract_second=floor($arrival_subtract%86400%3600%60/60);
-                                if($arrival_subtract_day == 0)
-                                {
-                                    if($arrival_subtract_hour == 0) $arrival_subtract_result = $arrival_subtract_minute."分钟";
-                                    else $arrival_subtract_result = $arrival_subtract_hour."小时".$arrival_subtract_minute."分钟";
-                                }
-                                else
-                                {
-                                    $arrival_subtract_result = $arrival_subtract_day."天".$arrival_subtract_hour."小时".$arrival_subtract_minute."分钟";
-                                }
-                                $list[$k]->travel_arrival_overtime_time = $arrival_subtract_result;
-                            }
-                        }
-
-                    }
-
-                }
-            }
-
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
@@ -7766,7 +7693,7 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_order_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.item.order-list-for-all';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【工单管理】【修改记录】返回-列表-数据
@@ -7779,6 +7706,8 @@ class DKAdminRepository {
         $query = DK_Record::select('*')
             ->with([
                 'creator',
+                'before_client_er'=>function($query) { $query->select('id','username'); },
+                'after_client_er'=>function($query) { $query->select('id','username'); },
                 'before_project_er'=>function($query) { $query->select('id','name'); },
                 'after_project_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -7836,7 +7765,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
-        $client_list = YH_Client::select('id','username')->where('user_category',11)->get();
+        $client_list = DK_Client::select('id','username')->where('user_category',11)->get();
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
 
@@ -7848,7 +7777,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_statistic_index'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-index';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-index';
         return view($view_blade)->with($view_data);
     }
     // 【统计】
@@ -7942,7 +7871,7 @@ class DKAdminRepository {
         $view_data["all_rate"] = $all_rate;
         $view_data["today_rate"] = $today_rate;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-user';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-user';
         return view($view_blade)->with($view_data);
     }
     // 【统计】
@@ -8059,7 +7988,7 @@ class DKAdminRepository {
         $view_data["shared_data"] = $shared_data;
         $view_data["shared_data_scale"] = $shared_data_scale;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-item';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-item';
         return view($view_blade)->with($view_data);
     }
     // 【统计】返回（后台）主页视图
@@ -8197,7 +8126,6 @@ class DKAdminRepository {
 
         // 本月每日工单量
         $query_for_order_this_month = DK_Order::select('id','assign_time')
-//            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
             ->select(DB::raw("
@@ -8218,7 +8146,6 @@ class DKAdminRepository {
 
         // 上月每日工单量
         $query_for_order_last_month = DK_Order::select('id','assign_time')
-//            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
             ->select(DB::raw("
@@ -8237,87 +8164,6 @@ class DKAdminRepository {
         $return_data['statistics_data_for_order_last_month'] = $statistics_data_for_order_last_month;
 
 
-
-
-        // 财务统计
-
-//        $finance_this_month_income = YH_Finance::select('id')
-//            ->where('finance_type',1)
-//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-//            ->sum("transaction_amount");
-//
-//        $finance_this_month_payout = YH_Finance::select('id')
-//            ->where('finance_type',21)
-//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-//            ->sum("transaction_amount");
-//
-//
-//        $finance_last_month_income = YH_Finance::select('id')
-//            ->where('finance_type',1)
-//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
-//            ->sum("transaction_amount");
-//
-//        $finance_last_month_payout = YH_Finance::select('id')
-//            ->where('finance_type',21)
-//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
-//            ->sum("transaction_amount");
-//
-//
-//        $return_data['finance_this_month_income'] = $finance_this_month_income;
-//        $return_data['finance_this_month_payout'] = $finance_this_month_payout;
-//        $return_data['finance_last_month_income'] = $finance_last_month_income;
-//        $return_data['finance_last_month_payout'] = $finance_last_month_payout;
-
-
-        $query_for_finance = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
-            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
-            ->select(DB::raw("
-                    FROM_UNIXTIME(transaction_time,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(transaction_time,'%e') as day,
-                    sum(transaction_amount) as sum,
-                    count(*) as count
-                "));
-
-        if($staff_id)
-        {
-            $query_for_finance->whereHas('order_er', function ($query) use ($staff_id) {
-                $query->where('creator_id', $staff_id);
-            });
-        }
-        if($client_id)
-        {
-            $query_for_finance->whereHas('order_er', function ($query) use ($client_id) {
-                $query->where('client_id', $client_id);
-            });
-        }
-        if($car_id)
-        {
-            $query_for_finance->whereHas('order_er', function ($query) use ($car_id) {
-                $query->where('car_id', $car_id);
-            });
-        }
-        if($route_id)
-        {
-            $query_for_finance->whereHas('order_er', function ($query) use ($route_id) {
-                $query->where('route_id', $route_id);
-            });
-        }
-        if($pricing_id)
-        {
-            $query_for_finance->whereHas('order_er', function ($query) use ($pricing_id) {
-                $query->where('pricing_id', $pricing_id);
-            });
-        }
-
-        $query_for_income = clone $query_for_finance;
-        $statistics_data_for_income = $query_for_income->where('finance_type',1)->get()->keyBy('day');
-        $return_data['statistics_data_for_income'] = $statistics_data_for_income;
-
-
-        $query_for_payout = clone $query_for_finance;
-        $statistics_data_for_payout = $query_for_payout->where('finance_type',21)->get()->keyBy('day');
-        $return_data['statistics_data_for_payout'] = $statistics_data_for_payout;
 
 
         return response_success($return_data,"");
@@ -8540,7 +8386,6 @@ class DKAdminRepository {
         $pricing_isset = 0;
         $car_isset = 0;
         $trailer_isset = 0;
-        $driver_isset = 0;
 
 
         // 员工
@@ -8561,51 +8406,6 @@ class DKAdminRepository {
                 $client_id = $post_data['client'];
             }
         }
-        // 线路
-        if(isset($post_data['route']))
-        {
-            if(!in_array($post_data['route'],[-1]))
-            {
-                $route_isset = 1;
-                $route_id = $post_data['route'];
-            }
-        }
-        // 定价
-        if(isset($post_data['pricing']))
-        {
-            if(!in_array($post_data['pricing'],[-1]))
-            {
-                $pricing_isset = 1;
-                $pricing_id = $post_data['pricing'];
-            }
-        }
-        // 车辆
-        if(isset($post_data['car']))
-        {
-            if(!in_array($post_data['car'],[-1]))
-            {
-                $car_isset = 1;
-                $car_id = $post_data['car'];
-            }
-        }
-        // 车挂
-        if(isset($post_data['trailer']))
-        {
-            if(!in_array($post_data['trailer'],[-1]))
-            {
-                $trailer_isset = 1;
-                $trailer_id = $post_data['trailer'];
-            }
-        }
-        // 驾驶员
-        if(isset($post_data['driver']))
-        {
-            if(!in_array($post_data['driver'],[-1]))
-            {
-                $driver_isset = 1;
-                $driver_id = $post_data['driver'];
-            }
-        }
 
 
 
@@ -8617,7 +8417,6 @@ class DKAdminRepository {
 
         // 本月每日工单量
         $query_for_order_this_month = DK_Order::select('id','assign_time')
-//            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
             ->select(DB::raw("
@@ -8629,11 +8428,6 @@ class DKAdminRepository {
 
         if($staff_isset) $query_for_order_this_month->where('creator_id', $staff_id);
         if($client_isset) $query_for_order_this_month->where('client_id', $client_id);
-        if($route_isset) $query_for_order_this_month->where('route_id', $route_id);
-        if($pricing_isset) $query_for_order_this_month->where('pricing_id', $pricing_id);
-        if($car_isset) $query_for_order_this_month->where('car_id', $car_id);
-        if($trailer_isset) $query_for_order_this_month->where('trailer_id', $trailer_id);
-        if($driver_isset) $query_for_order_this_month->where('driver_id', $driver_id);
 
 
         $statistics_data_for_order_this_month = $query_for_order_this_month->get()->keyBy('day');
@@ -8641,7 +8435,6 @@ class DKAdminRepository {
 
         // 上月每日工单量
         $query_for_order_last_month = DK_Order::select('id','assign_time')
-//            ->where('finance_type',1)
             ->whereBetween('assign_time',[$the_last_month_start_timestamp,$the_last_month_ended_timestamp])
             ->groupBy(DB::raw("FROM_UNIXTIME(assign_time,'%Y-%m-%d')"))
             ->select(DB::raw("
@@ -8653,104 +8446,11 @@ class DKAdminRepository {
 
         if($staff_isset) $query_for_order_last_month->where('creator_id', $staff_id);
         if($client_isset) $query_for_order_last_month->where('client_id', $client_id);
-        if($route_isset) $query_for_order_last_month->where('route_id', $route_id);
-        if($pricing_isset) $query_for_order_last_month->where('pricing_id', $pricing_id);
-        if($car_isset) $query_for_order_last_month->where('car_id', $car_id);
-        if($trailer_isset) $query_for_order_last_month->where('trailer_id', $trailer_id);
-        if($driver_isset) $query_for_order_last_month->where('driver_id', $driver_id);
 
 
 
         $statistics_data_for_order_last_month = $query_for_order_last_month->get()->keyBy('day');
         $return_data['statistics_data_for_order_last_month'] = $statistics_data_for_order_last_month;
-
-
-        return response_success($return_data,"");
-    }
-    // 【统计】返回-财务-数据
-    public function get_statistic_data_for_finance($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-
-
-        $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
-        $the_month_timestamp = strtotime($the_month);
-
-        $the_month_start_date = date('Y-m-1',$the_month_timestamp); // 指定月份-开始日期
-        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
-        $the_month_start_datetime = date('Y-m-1 00:00:00',$the_month_timestamp); // 本月开始时间
-        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
-        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
-        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
-
-        $the_last_month_timestamp = strtotime('last month', $the_month_timestamp);
-        $the_last_month_start_date = date('Y-m-1',$the_last_month_timestamp); // 指定月份-上月-开始时间
-        $the_last_month_ended_date = date('Y-m-t',$the_last_month_timestamp); // 指定月份-上月-开始时间
-        $the_last_month_start_datetime = date('Y-m-1 00:00:00',$the_last_month_timestamp); // 指定月份-上月-开始时间
-        $the_last_month_ended_datetime = date('Y-m-t 23:59:59',$the_last_month_timestamp); // 指定月份-上月-结束时间
-        $the_last_month_start_timestamp = strtotime($the_last_month_start_datetime); // 指定月份-上月-开始时间戳
-        $the_last_month_ended_timestamp = strtotime($the_last_month_ended_datetime); // 指定月份-上月-结束时间戳
-
-
-
-        $type = isset($post_data['type']) ? $post_data['type']  : '';
-
-
-        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
-
-
-
-        // 财务统计
-
-//        $finance_this_month_income = YH_Finance::select('id')
-//            ->where('finance_type',1)
-//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-//            ->sum("transaction_amount");
-//
-//        $finance_this_month_payout = YH_Finance::select('id')
-//            ->where('finance_type',21)
-//            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-//            ->sum("transaction_amount");
-//
-//
-//        $finance_last_month_income = YH_Finance::select('id')
-//            ->where('finance_type',1)
-//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
-//            ->sum("transaction_amount");
-//
-//        $finance_last_month_payout = YH_Finance::select('id')
-//            ->where('finance_type',21)
-//            ->whereBetween(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"),[$the_last_month_start_date,$the_last_month_ended_date])
-//            ->sum("transaction_amount");
-//
-//
-//        $return_data['finance_this_month_income'] = $finance_this_month_income;
-//        $return_data['finance_this_month_payout'] = $finance_this_month_payout;
-//        $return_data['finance_last_month_income'] = $finance_last_month_income;
-//        $return_data['finance_last_month_payout'] = $finance_last_month_payout;
-
-
-        $query_for_finance = YH_Finance::select('id','transaction_amount','transaction_time','created_at')
-            ->whereBetween('transaction_time',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"))
-            ->select(DB::raw("
-                    FROM_UNIXTIME(transaction_time,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(transaction_time,'%e') as day,
-                    sum(transaction_amount) as sum,
-                    count(*) as count
-                "));
-
-
-        $query_for_income = clone $query_for_finance;
-        $statistics_data_for_income = $query_for_income->where('finance_type',1)->get()->keyBy('day');
-        $return_data['statistics_data_for_income'] = $statistics_data_for_income;
-
-
-        $query_for_payout = clone $query_for_finance;
-        $statistics_data_for_payout = $query_for_payout->where('finance_type',21)->get()->keyBy('day');
-        $return_data['statistics_data_for_payout'] = $statistics_data_for_payout;
 
 
         return response_success($return_data,"");
@@ -8774,7 +8474,7 @@ class DKAdminRepository {
         }
 
         $view_data['menu_active_of_statistic_rank'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-rank';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-rank';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_rank($post_data)
@@ -9172,7 +8872,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $view_data['menu_active_of_statistic_rank_by_staff'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-rank-by-staff';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-rank-by-staff';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_rank_by_staff($post_data)
@@ -9426,7 +9126,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $view_data['menu_active_of_statistic_rank_by_department'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-rank-by-department';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-rank-by-department';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_rank_by_department($post_data)
@@ -9682,7 +9382,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $view_data['menu_active_of_statistic_customer_service'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-customer-service';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-customer-service';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_customer_service($post_data)
@@ -10298,7 +9998,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $view_data['menu_active_of_statistic_inspector'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-inspector';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-inspector';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_inspector($post_data)
@@ -10440,7 +10140,7 @@ class DKAdminRepository {
     public function view_statistic_list_for_all($post_data)
     {
         $view_data["menu_active_statistic_list_for_all"] = 'active';
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-list-for-all';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-list-for-all';
         return view($view_blade)->with($view_data);
     }
     // 【流量统计】返回-列表-数据
@@ -10621,16 +10321,338 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
+        $staff_list = DK_User::select('id','username','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $client_list = DK_Client::select('id','username','true_name')->where('user_category',11)->get();
 
+        $view_data['project_list'] = $project_list;
         $view_data['staff_list'] = $staff_list;
+        $view_data['client_list'] = $client_list;
 
 
         $view_data['menu_active_of_statistic_export'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.statistic.statistic-export';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-export';
         return view($view_blade)->with($view_data);
+    }
+    // 【数据导出】工单
+    public function operate_statistic_export_for_order($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $time = time();
+
+        $record_operate_type = 1;
+        $record_column_type = null;
+        $record_before = '';
+        $record_after = '';
+
+        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
+        if($export_type == "month")
+        {
+            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $start_timestamp = $the_month_start_timestamp;
+            $ended_timestamp = $the_month_ended_timestamp;
+
+            $record_operate_type = 11;
+            $record_column_type = 'month';
+            $record_before = $the_month;
+            $record_after = $the_month;
+        }
+        else if($export_type == "day")
+        {
+            $the_day  = isset($post_data['day']) ? $post_data['day']  : date('Y-m-d');
+
+            $record_operate_type = 31;
+            $record_column_type = 'day';
+            $record_before = $the_day;
+            $record_after = $the_day;
+        }
+        else if($export_type == "latest")
+        {
+            $record_last = DK_Record::select('*')
+                ->where(['creator_id'=>$me->id,'operate_category'=>109,'operate_type'=>99])
+                ->orderBy('id','desc')->first();
+
+            if($record_last) $start_timestamp = $record_last->after;
+            else $start_timestamp = 0;
+
+            $ended_timestamp = $time;
+
+            $record_operate_type = 99;
+            $record_column_type = 'datetime';
+            $record_before = '';
+            $record_after = $time;
+        }
+        else
+        {
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].':00'  : '';
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].':59'  : '';
+
+            $the_start_timestamp  = strtotime($the_start);
+            $the_ended_timestamp  = strtotime($the_ended);
+
+            $record_operate_type = 1;
+            $record_before = $the_start;
+            $record_after = $the_ended;
+        }
+
+
+        $client_id = 0;
+        $staff_id = 0;
+        $project_id = 0;
+
+        // 客户
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0]))
+            {
+                $client_id = $post_data['client'];
+            }
+        }
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0]))
+            {
+                $staff_id = $post_data['staff'];
+            }
+        }
+
+        // 项目
+        $project_title = '';
+        $record_data_title = '';
+        if(!empty($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1,0]))
+            {
+                $project_id = $post_data['project'];
+                $project_er = DK_Project::find($project_id);
+                if($project_er)
+                {
+                    $project_title = '【'.$project_er->name.'】';
+                    $record_data_title = $project_er->name;
+                }
+            }
+        }
+
+        // 审核结果
+        $inspected_result = 0;
+        if(!empty($post_data['inspected_result']))
+        {
+            if(!in_array($post_data['inspected_result'],['-1','0']))
+            {
+                $inspected_result = $post_data['inspected_result'];
+            }
+        }
+
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+        $the_day  = isset($post_data['day'])  ? $post_data['day']  : date('Y-m-d');
+
+
+        // 工单
+        $query = DK_Order::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select('id','name','true_name'); },
+                'inspector'=>function($query) { $query->select('id','name','true_name'); },
+                'project_er'=>function($query) { $query->select('id','name'); },
+            ]);
+
+        if($export_type == "month")
+        {
+            $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
+        }
+        else if($export_type == "day")
+        {
+            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_day);
+        }
+        else if($export_type == "latest")
+        {
+            $query->whereBetween('inspected_at',[$start_timestamp,$time]);
+        }
+        else
+        {
+            if(!empty($post_data['order_start']))
+            {
+//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
+                $query->where('inspected_at', '>=', $the_start_timestamp);
+            }
+            if(!empty($post_data['order_ended']))
+            {
+//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
+                $query->where('inspected_at', '<=', $the_ended_timestamp);
+            }
+        }
+
+
+        if($client_id) $query->where('client_id',$client_id);
+        if($staff_id) $query->where('creator_id',$staff_id);
+        if($project_id) $query->where('project_id',$project_id);
+        if($inspected_result) $query->where('inspected_result',$inspected_result);
+
+//        $data = $query->orderBy('inspected_at','desc')->orderBy('id','desc')->get();
+//        $data = $query->orderBy('published_at','desc')->orderBy('id','desc')->get();
+        $data = $query->orderBy('id','desc')->get();
+        $data = $data->toArray();
+//        $data = $data->groupBy('car_id')->toArray();
+//        dd($data);
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
+            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+            $cellData[$k]['channel_source'] = $v['channel_source'];
+            $cellData[$k]['client_name'] = $v['client_name'];
+            $cellData[$k]['client_phone'] = $v['client_phone'];
+
+
+            // 微信号 & 是否+V
+            $cellData[$k]['wx_id'] = $v['wx_id'];
+            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
+            else $cellData[$k]['is_wx'] = '--';
+
+            $cellData[$k]['location_city'] = $v['location_city'];
+            $cellData[$k]['location_district'] = $v['location_district'];
+
+            $cellData[$k]['teeth_count'] = $v['teeth_count'];
+
+            $cellData[$k]['description'] = $v['description'];
+
+            // 是否重复
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+        }
+
+
+        $title_row = [
+            'id'=>'ID',
+            'creator_name'=>'创建人',
+            'published_time'=>'提交时间',
+            'project_er_name'=>'项目',
+            'channel_source'=>'渠道来源',
+            'client_name'=>'客户姓名',
+            'client_phone'=>'客户电话',
+            'wx_id'=>'微信号',
+            'is_wx'=>'是否+V',
+            'location_city'=>'所在城市',
+            'location_district'=>'行政区',
+            'teeth_count'=>'牙齿数量',
+            'description'=>'通话小结',
+            'is_repeat'=>'是否重复',
+            'inspector_name'=>'审核人',
+            'inspected_time'=>'审核时间',
+            'inspected_result'=>'审核结果',
+        ];
+        array_unshift($cellData, $title_row);
+
+
+        $record = new DK_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 21;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 71;
+        $record_data["operate_category"] = 109;
+        $record_data["operate_type"] = $record_operate_type;
+        $record_data["column_type"] = $record_column_type;
+        $record_data["before"] = $record_before;
+        $record_data["after"] = $record_after;
+        if($project_id)
+        {
+            $record_data["item_id"] = $project_id;
+            $record_data["title"] = $record_data_title;
+        }
+
+        $record->fill($record_data)->save();
+
+
+        $month_title = '';
+        $time_title = '';
+        if($export_type == "month")
+        {
+            $month_title = '【'.$the_month.'月】';
+        }
+        else if($export_type == "day")
+        {
+            $month_title = '【'.$the_day.'】';
+        }
+        else if($export_type == "latest")
+        {
+            $month_title = '【最新】';
+        }
+        else
+        {
+            if($the_start && $the_ended)
+            {
+                $time_title = '【'.$the_start.' - '.$the_ended.'】';
+            }
+            else if($the_start)
+            {
+                $time_title = '【'.$the_start.'】';
+            }
+            else if($the_ended)
+            {
+                $time_title = '【'.$the_ended.'】';
+            }
+        }
+
+
+        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
+
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('全部工单', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setWidth(array(
+                    'A'=>10,
+                    'B'=>10,
+                    'C'=>20,
+                    'D'=>20,
+                    'E'=>10,
+                    'F'=>10,
+                    'G'=>16,
+                    'H'=>16,
+                    'I'=>10,
+                    'J'=>10,
+                    'K'=>10,
+                    'L'=>10,
+                    'M'=>60,
+                    'N'=>10,
+                    'O'=>10,
+                    'P'=>20,
+                    'Q'=>10
+                ));
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
+
+
+
+
+
     }
     // 【数据导出】工单
     public function operate_statistic_export_for_order_by_ids($post_data)
@@ -10776,725 +10798,6 @@ class DKAdminRepository {
 
 
     }
-    // 【数据导出】工单
-    public function operate_statistic_export_for_order($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $time = time();
-
-        $record_operate_type = 1;
-        $record_column_type = null;
-        $record_before = '';
-        $record_after = '';
-
-        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
-        if($export_type == "month")
-        {
-            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
-            $the_month_timestamp = strtotime($the_month);
-
-            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
-            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
-            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
-            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
-            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
-            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
-
-            $start_timestamp = $the_month_start_timestamp;
-            $ended_timestamp = $the_month_ended_timestamp;
-
-            $record_operate_type = 11;
-            $record_before = $the_month;
-            $record_after = $the_month;
-        }
-        else if($export_type == "day")
-        {
-            $the_day  = isset($post_data['day']) ? $post_data['day']  : date('Y-m-d');
-
-            $record_operate_type = 31;
-            $record_column_type = 'date';
-            $record_before = $the_day;
-            $record_after = $the_day;
-        }
-        else if($export_type == "latest")
-        {
-            $record_last = DK_Record::select('*')
-                ->where(['creator_id'=>$me->id,'operate_category'=>109,'operate_type'=>99])
-                ->orderBy('id','desc')->first();
-
-            if($record_last) $start_timestamp = $record_last->after;
-            else $start_timestamp = 0;
-
-            $ended_timestamp = $time;
-
-            $record_operate_type = 99;
-            $record_column_type = 'datetime';
-            $record_before = '';
-            $record_after = $time;
-        }
-        else
-        {
-            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].':00'  : '';
-            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].':59'  : '';
-
-            $the_start_timestamp  = strtotime($the_start);
-            $the_ended_timestamp  = strtotime($the_ended);
-
-            $record_operate_type = 1;
-            $record_before = $the_start;
-            $record_after = $the_ended;
-        }
-
-
-        $staff_id = 0;
-        $project_id = 0;
-
-        // 员工
-        if(!empty($post_data['staff']))
-        {
-            if(!in_array($post_data['staff'],[-1,0]))
-            {
-                $staff_id = $post_data['staff'];
-            }
-        }
-
-        // 项目
-        $project_title = '';
-        $record_data_title = '';
-        if(!empty($post_data['project']))
-        {
-            if(!in_array($post_data['project'],[-1,0]))
-            {
-                $project_id = $post_data['project'];
-                $project_er = DK_Project::find($project_id);
-                if($project_er)
-                {
-                    $project_title = '【'.$project_er->name.'】';
-                    $record_data_title = $project_er->name;
-                }
-            }
-        }
-
-        // 审核结果
-        $inspected_result = 0;
-        if(!empty($post_data['inspected_result']))
-        {
-            if(!in_array($post_data['inspected_result'],['-1','0']))
-            {
-                $inspected_result = $post_data['inspected_result'];
-            }
-        }
-
-
-        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
-        $the_day  = isset($post_data['day'])  ? $post_data['day']  : date('Y-m-d');
-
-
-        // 工单
-        $query = DK_Order::select('*')
-            ->with([
-                'creator'=>function($query) { $query->select('id','name','true_name'); },
-                'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
-            ]);
-
-        if($export_type == "month")
-        {
-            $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
-        }
-        else if($export_type == "day")
-        {
-            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_day);
-        }
-        else if($export_type == "latest")
-        {
-            $query->whereBetween('inspected_at',[$start_timestamp,$time]);
-        }
-        else
-        {
-            if(!empty($post_data['order_start']))
-            {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-                $query->where('inspected_at', '>=', $the_start_timestamp);
-            }
-            if(!empty($post_data['order_ended']))
-            {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-                $query->where('inspected_at', '<=', $the_ended_timestamp);
-            }
-        }
-
-
-        if($staff_id) $query->where('creator_id',$staff_id);
-        if($project_id) $query->where('project_id',$project_id);
-        if($inspected_result) $query->where('inspected_result',$inspected_result);
-
-//        $data = $query->orderBy('inspected_at','desc')->orderBy('id','desc')->get();
-//        $data = $query->orderBy('published_at','desc')->orderBy('id','desc')->get();
-        $data = $query->orderBy('id','desc')->get();
-        $data = $data->toArray();
-//        $data = $data->groupBy('car_id')->toArray();
-//        dd($data);
-
-        $cellData = [];
-        foreach($data as $k => $v)
-        {
-            $cellData[$k]['id'] = $v['id'];
-
-            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
-            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
-            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
-            $cellData[$k]['channel_source'] = $v['channel_source'];
-            $cellData[$k]['client_name'] = $v['client_name'];
-            $cellData[$k]['client_phone'] = $v['client_phone'];
-
-
-            // 微信号 & 是否+V
-            $cellData[$k]['wx_id'] = $v['wx_id'];
-            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
-            else $cellData[$k]['is_wx'] = '--';
-
-            $cellData[$k]['location_city'] = $v['location_city'];
-            $cellData[$k]['location_district'] = $v['location_district'];
-
-            $cellData[$k]['description'] = $v['description'];
-
-            $cellData[$k]['teeth_count'] = $v['teeth_count'];
-
-            // 是否重复
-            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
-            else $cellData[$k]['is_repeat'] = '--';
-
-            // 审核
-            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
-            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
-            $cellData[$k]['inspected_result'] = $v['inspected_result'];
-        }
-
-
-        $title_row = [
-            'id'=>'ID',
-            'creator_name'=>'创建人',
-            'published_time'=>'提交时间',
-            'project_er_name'=>'项目',
-            'channel_source'=>'渠道来源',
-            'client_name'=>'客户姓名',
-            'client_phone'=>'客户电话',
-            'wx_id'=>'微信号',
-            'is_wx'=>'是否+V',
-            'location_city'=>'所在城市',
-            'location_district'=>'行政区',
-            'description'=>'通话小结',
-            'teeth_count'=>'牙齿数量',
-            'is_repeat'=>'是否重复',
-            'inspector_name'=>'审核人',
-            'inspected_time'=>'审核时间',
-            'inspected_result'=>'审核结果',
-        ];
-        array_unshift($cellData, $title_row);
-
-
-        $record = new DK_Record;
-
-        $record_data["ip"] = Get_IP();
-        $record_data["record_object"] = 21;
-        $record_data["record_category"] = 11;
-        $record_data["record_type"] = 1;
-        $record_data["creator_id"] = $me->id;
-        $record_data["operate_object"] = 71;
-        $record_data["operate_category"] = 109;
-        $record_data["operate_type"] = $record_operate_type;
-        $record_data["column_type"] = $record_column_type;
-        $record_data["before"] = $record_before;
-        $record_data["after"] = $record_after;
-        if($project_id)
-        {
-            $record_data["item_id"] = $project_id;
-            $record_data["title"] = $record_data_title;
-        }
-
-        $record->fill($record_data)->save();
-
-
-        $month_title = '';
-        $time_title = '';
-        if($export_type == "month")
-        {
-            $month_title = '【'.$the_month.'月】';
-        }
-        else if($export_type == "day")
-        {
-            $month_title = '【'.$the_day.'】';
-        }
-        else if($export_type == "latest")
-        {
-            $month_title = '【最新】';
-        }
-        else
-        {
-            if($the_start && $the_ended)
-            {
-                $time_title = '【'.$the_start.' - '.$the_ended.'】';
-            }
-            else if($the_start)
-            {
-                $time_title = '【'.$the_start.'】';
-            }
-            else if($the_ended)
-            {
-                $time_title = '【'.$the_ended.'】';
-            }
-        }
-
-
-        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
-
-        $file = Excel::create($title, function($excel) use($cellData) {
-            $excel->sheet('全部工单', function($sheet) use($cellData) {
-                $sheet->rows($cellData);
-                $sheet->setWidth(array(
-                    'A'=>10,
-                    'B'=>10,
-                    'C'=>20,
-                    'D'=>20,
-                    'E'=>10,
-                    'F'=>10,
-                    'G'=>16,
-                    'H'=>16,
-                    'I'=>10,
-                    'J'=>10,
-                    'K'=>10,
-                    'L'=>60,
-                    'M'=>10,
-                    'N'=>10,
-                    'O'=>10,
-                    'P'=>20,
-                    'Q'=>10
-                ));
-                $sheet->setAutoSize(false);
-                $sheet->freezeFirstRow();
-            });
-        })->export('xls');
-
-
-
-
-
-    }
-    // 【数据导出】环线
-    public function operate_statistic_export_for_circle($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $record = new DK_Record;
-
-        $record_data["ip"] = Get_IP();
-        $record_data["record_object"] = 21;
-        $record_data["record_category"] = 11;
-        $record_data["record_type"] = 1;
-        $record_data["creator_id"] = $me->id;
-        $record_data["operate_object"] = 77;
-        $record_data["operate_category"] = 109;
-        $record_data["operate_type"] = 1;
-
-        $record->fill($record_data)->save();
-
-
-        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
-        if($export_type == "month")
-        {
-            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
-            $the_month_timestamp = strtotime($the_month);
-
-            $the_month_start_date = date('Y-m-1',$the_month_timestamp); // 指定月份-开始日期
-            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
-            $the_month_start_datetime = date('Y-m-1 00:00:00',$the_month_timestamp); // 本月开始时间
-            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
-            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
-            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
-
-            $start_timestamp = $the_month_start_timestamp;
-            $ended_timestamp = $the_month_ended_timestamp;
-        }
-        else
-        {
-            $the_start  = isset($post_data['circle_start']) ? $post_data['circle_start']  : '';
-            $the_ended  = isset($post_data['circle_ended']) ? $post_data['circle_ended']  : '';
-        }
-
-        $car_id = 0;
-
-        // 车辆
-        if(!empty($post_data['car']))
-        {
-            if(!in_array($post_data['car'],[-1,0]))
-            {
-                $car_id = $post_data['car'];
-            }
-        }
-
-        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
-
-//        dd($car_id);
-
-        // 工单
-        $query = YH_Circle::select('*')
-            ->with([
-                'creator'=>function($query) { $query->select('id','name','true_name'); },
-                'car_er'=>function($query) { $query->select('id','name'); },
-                'order_list'=>function($query) {
-                    $query->where('item_status','!=',97)->orderby('assign_time','asc');
-                },
-            ]);
-
-
-        if($car_id) $query->where('car_id',$car_id);
-
-        if($export_type == "month")
-        {
-            $query->whereBetween('start_time',[$start_timestamp,$ended_timestamp]);
-        }
-        else
-        {
-            if(!empty($post_data['circle_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(start_time,'%Y-%m-%d')"), '>=', $post_data['circle_start']);
-            if(!empty($post_data['circle_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(start_time,'%Y-%m-%d')"), '<=', $post_data['circle_ended']);
-        }
-
-
-
-        $data = $query->orderBy('id','desc')->get();
-        $data_all = $data->toArray();
-        $data = $data->groupBy('car_id')->toArray();
-//        dd($data);
-
-
-        $sheetData = [];
-        foreach($data as $ki => $vi)
-        {
-            $cellData = [];
-            foreach($vi as $k => $v)
-            {
-                $cell['id'] = $v['id'];
-                $cell['creator_name'] = $v['creator']['true_name'];
-                $cell['car_er_name'] = $v['car_er']['name'];
-                $cell['title'] = $v['title'];
-                $cell['order_id'] = 0;
-                $cell['order_title'] = '';
-
-                $cell['start_time'] = date('Y-m-d', $v['start_time']);
-                $cell['ended_time'] = date('Y-m-d', $v['ended_time']);
-
-                $order_list = [];
-                $amount = 0;
-                $amount = 0;
-                $cost = 0;
-                if(count($v['order_list']) > 0)
-                {
-                    foreach($v['order_list'] as $key => $val)
-                    {
-
-                        $order_cell['id'] = '';
-                        $order_cell['creator_name'] = '';
-                        $order_cell['car_er_name'] = $v['car_er']['name'];
-                        $order_cell['title'] = $v['title'];
-                        $order_cell['order_id'] = $val['id'];
-
-                        if($val['car_owner_type'] == 11) $type = '[空单]';
-                        else $type = '';
-                        $assign = date('Y-m-d', $val['assign_time']);
-                        $departure = $val['departure_place'];
-                        $stopover = $val['stopover_place'];
-                        $destination = $val['destination_place'];
-                        $title = "[" . $assign . "] (" . $departure . "-" . $stopover . "-" . $destination . ") " . $type;
-                        $order_cell['order_title'] = $title;
-
-                        $order_cell['start_time'] = '';
-                        $order_cell['ended_time'] = '';
-
-                        $order_cell['amount_total'] = '';
-                        $order_cell['cost_total'] = '';
-
-                        $order_cell['remark'] = '';
-
-                        $order_list[] = $order_cell;
-
-                        // 总计
-                        $amount += $val['amount'] + $val['oil_card_amount'];
-                        $cost += $val['expenditure_total'] + $val['oil_card_amount'];
-                    }
-                }
-
-                $cell['amount_total'] = floatval($amount);
-                $cell['cost_total'] = floatval($cost);
-                $cell['remark'] = $v['remark'];
-
-                $cellData[] = $cell;
-                if(count($order_list) > 0)
-                {
-                    foreach($order_list as $value)
-                    {
-                        $cellData[] = $value;
-                    }
-                }
-                $cellData[] = [];
-                $cellData[] = [];
-            }
-            $sheetData[] = $cellData;
-        }
-
-        $circle_title_row = [
-            'id'=>'ID',
-            'creator_name'=>'创建者',
-            'car_er_name'=>'车辆',
-            'title'=>'环线',
-            'order_id'=>'工单ID',
-            'order_title'=>'工单',
-            'start_time'=>'开始时间',
-            'ended_time'=>'结束时间',
-            'amount_total'=>'收入',
-            'cost_total'=>'支出',
-            'remark'=>'备注',
-        ];
-//        array_unshift($cellData,$circle_title_row);
-//        dd($sheetData);
-
-        $month_title = '';
-        $time_title = '';
-        if($export_type == "month")
-        {
-            $month_title = '【'.$the_month.'月】';
-        }
-        else
-        {
-            if($the_start && $the_ended)
-            {
-                $time_title = '【'.$the_start.' - '.$the_ended.'】';
-            }
-            else if($the_start) $time_title = '【'.$the_start.'】';
-            else if($the_ended) $time_title = '【'.$the_ended.'】';
-        }
-
-        $car_title = '';
-        if($car_id)
-        {
-            if($cellData[1]['car_er_name'])
-            {
-                $car_name = $cellData[1]['car_er_name'];
-                $car_title = '【'.$car_name.'】';
-            }
-        }
-
-        $title = '【环线】'.$car_title.$month_title.$time_title.' - '.date('YmdHis');
-
-
-//        $cellData = collect($sheetData)->collapse()->toArray();
-
-
-
-        $file = Excel::create($title, function($excel) use($sheetData,$circle_title_row) {
-
-            $cellData = collect($sheetData)->collapse()->toArray();
-            array_unshift($cellData, $circle_title_row);
-            $excel->sheet('全部环线', function($sheet) use($cellData) {
-                $sheet->rows($cellData);
-                $sheet->setAutoSize(false);
-                $sheet->freezeFirstRow();
-                $sheet->setWidth('F', 30);
-            });
-
-            foreach($sheetData as $key => $val)
-            {
-
-                $title = $val[0]['car_er_name'];
-                array_unshift($val, $circle_title_row);
-                $excel->sheet($title, function($sheet) use($val) {
-                    $sheet->rows($val);
-                    $sheet->setAutoSize(false);
-                    $sheet->freezeFirstRow();
-                    $sheet->setWidth('F', 30);
-                });
-            }
-
-        })->export('xls');
-    }
-    // 【数据导出】财务
-    public function operate_statistic_export_for_finance($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $record = new DK_Record;
-
-        $record_data["ip"] = Get_IP();
-        $record_data["record_object"] = 21;
-        $record_data["record_category"] = 11;
-        $record_data["record_type"] = 1;
-        $record_data["creator_id"] = $me->id;
-        $record_data["operate_object"] = 88;
-        $record_data["operate_category"] = 109;
-        $record_data["operate_type"] = 1;
-
-        $record->fill($record_data)->save();
-
-
-        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
-        if($export_type == "month")
-        {
-            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
-            $the_month_timestamp = strtotime($the_month);
-
-            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
-            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
-            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
-            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
-            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
-            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
-
-            $start_timestamp = $the_month_start_timestamp;
-            $ended_timestamp = $the_month_ended_timestamp;
-        }
-        else
-        {
-            $the_start  = isset($post_data['finance_start']) ? $post_data['finance_start']  : '';
-            $the_ended  = isset($post_data['finance_ended']) ? $post_data['finance_ended']  : '';
-        }
-
-
-
-        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
-
-        // 工单
-        $query = YH_Finance::select('id','finance_type','creator_id','transaction_time','order_id','transaction_amount','title','transaction_type','transaction_receipt_account','transaction_payment_account','transaction_order','remark')
-//            ->where('finance_type',1)
-            ->with([
-                'creator'=>function($query) { $query->select('id','name','true_name'); },
-                'order_er'=>function($query) {
-                    $query->select('*')->with([
-                        'car_er'=>function($query){ $query->select('id','name'); },
-                        'route_er'=>function($query){ $query->select('id','title'); }
-                    ]);
-                }
-            ]);
-
-        if($export_type == "month")
-        {
-            $query->whereBetween('transaction_time',[$start_timestamp,$ended_timestamp]);
-        }
-        else
-        {
-            if(!empty($post_data['finance_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '>=', $post_data['finance_start']);
-            if(!empty($post_data['finance_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['finance_ended']);
-        }
-
-
-        if(!empty($post_data['finance_type']))
-        {
-            if(in_array($post_data['finance_type'],[1,21]))
-            {
-                $query->where('finance_type', $post_data['finance_type']);
-            }
-        }
-
-        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
-        if(!empty($post_data['title'])) $query->where('transaction_type', $post_data['title']);
-        if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
-        if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
-        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_receipt_account', $post_data['transaction_payment_account']);
-        if(!empty($post_data['transaction_order'])) $query->where('transaction_order', $post_data['transaction_order']);
-
-
-        $data = $query->orderBy('id','desc')->get()->toArray();
-
-        $cellData = [];
-        foreach($data as $k => $v)
-        {
-            $cellData[$k]['id'] = $v['id'];
-
-            if($v['finance_type'] == 1) $cellData[$k]['finance_type_name'] = '收入';
-            else if($v['finance_type'] == 21) $cellData[$k]['finance_type_name'] = '支出';
-            else $cellData[$k]['finance_type_name'] = '有误';
-
-            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
-            $cellData[$k]['order_id'] = $v['order_id'];
-
-            $title = $v['order_er']['title'] ? $v['order_er']['title'] : '';
-            $departure = $v['order_er']['departure_place'];
-            $stopover = $v['order_er']['stopover_place'];
-            $destination = $v['order_er']['destination_place'];
-            $car = $v['order_er']['car_er'] ? $v['order_er']['car_er']['name'] : $v['order_er']['outside_car'];
-            $assign = date("Y-m-d", $v['order_er']['assign_time']);
-
-            $cellData[$k]['order_name'] = $car . " [" . $assign . "] (" . $departure . "-" . $stopover . "-" . $destination . ")  " . $title;
-            $cellData[$k]['car_name'] = $car;
-            $cellData[$k]['assign_time'] = $assign;
-            $cellData[$k]['route'] = $v['order_er']['route_er'] ? $v['order_er']['route_er']['title'] : '[临]'.$v['order_er']['route_temporary'];
-
-            $cellData[$k]['transaction_date'] = date('Y-m-d', $v['transaction_time']);
-            $cellData[$k]['transaction_amount'] = $v['transaction_amount'];
-            $cellData[$k]['title'] = $v['title'];
-            $cellData[$k]['transaction_type'] = $v['transaction_type'];
-            $cellData[$k]['transaction_receipt_account'] = $v['transaction_receipt_account'];
-            $cellData[$k]['transaction_payment_account'] = $v['transaction_payment_account'];
-            $cellData[$k]['transaction_order'] = $v['transaction_order'];
-            $cellData[$k]['remark'] = $v['remark'];
-
-        }
-//        dd($cellData);
-
-
-        array_unshift($cellData,[
-            'id'=>'ID',
-            'finance_type_name'=>'类型',
-            'creator_name'=>'创建者',
-            'order_id'=>'工单ID',
-            'order_name'=>'工单详情',
-            'car_name'=>'工单车辆',
-            'assign_time'=>'工单时间',
-            'route'=>'线路',
-            'transaction_date'=>'交易时间',
-            'transaction_amount'=>'交易金额',
-            'title'=>'名目',
-            'transaction_type'=>'交易方式',
-            'transaction_receipt_account'=>'收款账户',
-            'transaction_payment_account'=>'支出账户',
-            'transaction_order'=>'交易单号',
-            'remark'=>'备注',
-        ]);
-
-        $month_title = '';
-        $time_title = '';
-        if($export_type == "month")
-        {
-            $month_title = '【'.$the_month.'月】';
-        }
-        else
-        {
-            if($the_start && $the_ended)
-            {
-                $time_title = '【'.$the_start.' - '.$the_ended.'】';
-            }
-            else if($the_start) $time_title = '【'.$the_start.'】';
-            else if($the_ended) $time_title = '【'.$the_ended.'】';
-        }
-
-        $title = '【财务记录】'.$month_title.$time_title.' - '.date('YmdHis');
-
-//        if($export_type == "month") $title = '【财务记录】【'.$the_month.'】 - '.date('YmdHis');
-//        else
-//        {
-//            $title = '【财务记录】【'.$the_start.' - '.$the_ended.'】 - '.date('YmdHis');
-//        }
-        $file = Excel::create($title, function($excel) use($cellData) {
-            $excel->sheet('all', function($sheet) use($cellData) {
-                $sheet->rows($cellData);
-                $sheet->setAutoSize(false);
-                $sheet->freezeFirstRow();
-            });
-        })->export('xls');
-    }
 
 
 
@@ -11588,7 +10891,7 @@ class DKAdminRepository {
             ->with('creator')
 //            ->where(['owner_id'=>100,'item_category'=>100])
 //            ->where('item_type', '!=',0);
-            ->where('operate_object', 71);
+            ->where(['record_object'=>21,'operate_object'=>71]);
 
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");

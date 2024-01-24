@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\DK;
 
+use App\Models\DK\DK_Client;
 use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Record;
 use App\Models\DK\DK_User;
@@ -30,7 +31,7 @@ class DKSuperRepository {
         $this->modelUser = new DK_User;
         $this->modelItem = new YH_Item;
 
-        $this->view_blade_404 = env('TEMPLATE_YH_SUPER').'errors.404';
+        $this->view_blade_404 = env('TEMPLATE_DK_SUPER').'errors.404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -59,7 +60,7 @@ class DKSuperRepository {
     public function view_super_index()
     {
         $this->get_me();
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.index';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.index';
         return view($view_blade);
     }
 
@@ -77,7 +78,7 @@ class DKSuperRepository {
 
         $return['data'] = $me;
 
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.my-account.my-profile-info-index';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.my-account.my-profile-info-index';
         return view($view_blade)->with($return);
     }
     // 【基本信息】返回-编辑-视图
@@ -88,7 +89,7 @@ class DKSuperRepository {
 
         $return['data'] = $me;
 
-        $view_blade = env('TEMPLATE_YH_ADMIN').'entrance.my-account.my-profile-info-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.my-account.my-profile-info-edit';
         return view($view_blade)->with($return);
     }
     // 【基本信息】保存数据
@@ -150,7 +151,7 @@ class DKSuperRepository {
     public function view_info_password_reset()
     {
         $me = Auth::guard('admin')->user();
-        return view(env('TEMPLATE_YH_SUPER').'entrance.info.password-reset')->with(['data'=>$me]);
+        return view(env('TEMPLATE_DK_SUPER').'entrance.info.password-reset')->with(['data'=>$me]);
     }
     // 【密码】保存数据
     public function operate_info_password_reset_save($post_data)
@@ -317,8 +318,8 @@ class DKSuperRepository {
 //        else if($type == 31) $district_type = 21;
 //        else if($type == 41) $district_type = 31;
 //        else $district_type = 0;
-//        if(!is_numeric($type)) return view(env('TEMPLATE_YH_SUPER').'errors.404');
-//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_YH_SUPER').'errors.404');
+//        if(!is_numeric($type)) return view(env('TEMPLATE_DK_SUPER').'errors.404');
+//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_DK_SUPER').'errors.404');
 
         if(empty($post_data['keyword']))
         {
@@ -341,7 +342,7 @@ class DKSuperRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/admin/user/user-list-for-all';
 
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.user.user-edit';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.user-edit';
         return view($view_blade)->with([
             'operate'=>'create',
             'operate_id'=>0,
@@ -357,7 +358,7 @@ class DKSuperRepository {
     public function view_user_user_edit()
     {
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.user.user-edit';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.user-edit';
 
         $item_type = 'item';
         $item_type_text = '用户';
@@ -383,7 +384,7 @@ class DKSuperRepository {
             $mine = User::with(['parent'])->find($id);
             if($mine)
             {
-                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_YH_SUPER').'errors.404');
+                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_SUPER').'errors.404');
                 $mine->custom = json_decode($mine->custom);
                 $mine->custom2 = json_decode($mine->custom2);
                 $mine->custom3 = json_decode($mine->custom3);
@@ -400,7 +401,7 @@ class DKSuperRepository {
                     'list_link'=>$list_link,
                 ]);
             }
-            else return view(env('TEMPLATE_YH_SUPER').'errors.404');
+            else return view(env('TEMPLATE_DK_SUPER').'errors.404');
         }
     }
     // 【用户】【组织】保存数据
@@ -732,16 +733,16 @@ class DKSuperRepository {
 
 
 
-    // 【K】【用户】【全部机构】返回-列表-视图
+    // 【用户】【全部机构】返回-列表-视图
     public function view_user_list_for_all($post_data)
     {
         $this->get_me();
 
         $return['menu_active_of_user_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.user.user-list-for-all';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.user-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【K】【用户】【全部机构】返回-列表-数据
+    // 【用户】【全部机构】返回-列表-数据
     public function get_user_list_for_all_datatable($post_data)
     {
         $this->get_me();
@@ -791,6 +792,124 @@ class DKSuperRepository {
         return datatable_response($list, $draw, $total);
     }
 
+    // 【用户】【全部机构】返回-列表-视图
+    public function view_user_staff_list_for_all($post_data)
+    {
+        $this->get_me();
+
+        $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.staff-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【用户】【全部机构】返回-列表-数据
+    public function get_user_staff_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_User::select('*')
+//            ->with(['district'])
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->with('ep','parent','fund')
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+    // 【用户】【全部机构】返回-列表-视图
+    public function view_user_client_list_for_all($post_data)
+    {
+        $this->get_me();
+
+        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.client-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【K】【用户】【全部机构】返回-列表-数据
+    public function get_user_client_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Client::select('*')
+//            ->with(['district'])
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->with('ep','parent','fund')
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
 
 
 
@@ -805,7 +924,7 @@ class DKSuperRepository {
     // 【内容】【全部】返回-列表-视图
     public function view_item_list_for_all($post_data)
     {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.item.item-list-for-all')
+        return view(env('TEMPLATE_DK_SUPER').'entrance.item.item-list-for-all')
             ->with([
                 'sidebar_item_list_active'=>'active',
                 'sidebar_item_list_for_all_active'=>'active'
@@ -869,7 +988,7 @@ class DKSuperRepository {
         $this->get_me();
 
         $return['menu_active_of_record_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.item.record-list-for-all';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.item.record-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【内容】【全部】返回-列表-数据
@@ -945,7 +1064,7 @@ class DKSuperRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/admin/district/district-list-for-all';
 
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.district.district-edit';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.district.district-edit';
         return view($view_blade)->with([
             'operate'=>'create',
             'operate_id'=>0,
@@ -961,7 +1080,7 @@ class DKSuperRepository {
     public function view_district_edit()
     {
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.district.district-edit';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.district.district-edit';
 
         if($id == 0)
         {
@@ -972,8 +1091,8 @@ class DKSuperRepository {
             $mine = Def_District::with(['parent'])->find($id);
             if($mine)
             {
-//                if(!is_numeric($type)) return view(env('TEMPLATE_YH_SUPER').'errors.404');
-                if(!in_array($mine->district_type,[1,2,3,4,11,21,31,41])) return view(env('TEMPLATE_YH_SUPER').'errors.404');
+//                if(!is_numeric($type)) return view(env('TEMPLATE_DK_SUPER').'errors.404');
+                if(!in_array($mine->district_type,[1,2,3,4,11,21,31,41])) return view(env('TEMPLATE_DK_SUPER').'errors.404');
                 $mine->custom = json_decode($mine->custom);
                 $mine->custom2 = json_decode($mine->custom2);
                 $mine->custom3 = json_decode($mine->custom3);
@@ -996,7 +1115,7 @@ class DKSuperRepository {
                     'list_link'=>$list_link,
                 ]);
             }
-            else return view(env('TEMPLATE_YH_SUPER').'errors.404');
+            else return view(env('TEMPLATE_DK_SUPER').'errors.404');
         }
     }
     // 【地域】【组织】保存数据
@@ -1094,7 +1213,7 @@ class DKSuperRepository {
     // 【地域】【全部】返回-列表-视图
     public function view_district_list_for_all($post_data)
     {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.district.district-list-for-all')
+        return view(env('TEMPLATE_DK_SUPER').'entrance.district.district-list-for-all')
             ->with([
                 'sidebar_district_list_active'=>'active',
                 'sidebar_district_list_for_all_active'=>'active'
@@ -1162,8 +1281,8 @@ class DKSuperRepository {
         else if($type == 31)$district_type = 21;
         else if($type == 41)$district_type = 31;
         else $district_type = 0;
-        if(!is_numeric($type)) return view(env('TEMPLATE_YH_SUPER').'errors.404');
-//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_YH_SUPER').'errors.404');
+        if(!is_numeric($type)) return view(env('TEMPLATE_DK_SUPER').'errors.404');
+//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_DK_SUPER').'errors.404');
 
         if(empty($post_data['keyword']))
         {
@@ -1194,7 +1313,7 @@ class DKSuperRepository {
 
         $view_data['menu_active_of_statistic_index'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_YH_SUPER').'entrance.statistic.statistic-index';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.statistic.statistic-index';
         return view($view_blade)->with($view_data);
     }
     // 【流量统计】返回（后台）主页视图
@@ -1295,7 +1414,7 @@ class DKSuperRepository {
     // 【K】【内容】【全部】返回-列表-视图
     public function view_statistic_all_list($post_data)
     {
-        return view(env('TEMPLATE_YH_SUPER').'entrance.statistic.statistic-all-list')
+        return view(env('TEMPLATE_DK_SUPER').'entrance.statistic.statistic-all-list')
             ->with([
                 'sidebar_statistic_all_list_active'=>'active'
             ]);

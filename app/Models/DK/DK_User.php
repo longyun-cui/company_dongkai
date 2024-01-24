@@ -33,7 +33,7 @@ class DK_User extends Authenticatable
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
         'company', 'department', 'position', 'business_description',
         'visit_num', 'share_num', 'favor_num',  'follow_num', 'fans_num',
-
+        'admin_token',
     ];
 
     protected $datas = ['deleted_at'];

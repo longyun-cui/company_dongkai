@@ -69,6 +69,12 @@ return [
             'provider' => 'yh_staffs',
         ],
 
+
+        'dk_client' => [
+            'driver' => 'session',
+            'provider' => 'dk_clients',
+        ],
+
     ],
 
     /*
@@ -123,6 +129,11 @@ return [
         'yh_staffs' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK\DK_User::class,
+        ],
+
+        'dk_clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK\DK_Client::class,
         ],
 
     ],

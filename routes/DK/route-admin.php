@@ -37,6 +37,39 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
 
+
+
+
+
+    /*
+     * 客户管理
+     */
+    // 创建 & 修改
+    Route::match(['get','post'], '/user/client-create', $controller.'@operate_user_client_create');
+    Route::match(['get','post'], '/user/client-edit', $controller.'@operate_user_client_edit');
+    // 【用户-员工管理】修改密码
+    Route::match(['get','post'], '/user/client-password-admin-change', $controller.'@operate_user_client_password_admin_change');
+    Route::match(['get','post'], '/user/client-password-admin-reset', $controller.'@operate_user_client_password_admin_reset');
+    Route::match(['get','post'], '/user/client-login', $controller.'@operate_user_client_login');
+    // 删除 & 恢复
+    Route::post('/user/client-admin-delete', $controller.'@operate_user_client_admin_delete');
+    Route::post('/user/client-admin-restore', $controller.'@operate_user_client_admin_restore');
+    Route::post('/user/client-admin-delete-permanently', $controller.'@operate_user_client_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/user/client-admin-enable', $controller.'@operate_user_client_admin_enable');
+    Route::post('/user/client-admin-disable', $controller.'@operate_user_client_admin_disable');
+
+    // 列表
+    Route::match(['get','post'], '/user/client-list', $controller.'@view_user_client_list');
+    Route::match(['get','post'], '/user/client-list-for-all', $controller.'@view_user_client_list_for_all');
+
+
+
+
+
+
+
+
     /*
      * 部门管理
      */
@@ -105,73 +138,6 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
 
-    /*
-     * 驾驶员管理
-     */
-    Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
-    Route::match(['get','post'], '/user/user_select2_sales', $controller.'@operate_user_select2_sales');
-
-    // 创建 & 修改
-    Route::match(['get','post'], '/user/driver-create', $controller.'@operate_user_driver_create');
-    Route::match(['get','post'], '/user/driver-edit', $controller.'@operate_user_driver_edit');
-    // 编辑-信息
-    Route::post('/user/driver-info-text-set', $controller.'@operate_user_driver_info_text_set');
-    Route::post('/user/driver-info-time-set', $controller.'@operate_user_driver_info_time_set');
-    Route::post('/user/driver-info-option-set', $controller.'@operate_user_driver_info_option_set');
-    Route::post('/user/driver-info-radio-set', $controller.'@operate_user_driver_info_option_set');
-    Route::post('/user/driver-info-select-set', $controller.'@operate_user_driver_info_option_set');
-    Route::post('/user/driver-info-select2-set', $controller.'@operate_user_driver_info_option_set');
-    Route::post('/user/driver-info-image-set', $controller.'@operate_user_driver_info_image_set');
-    // 编辑-附件
-    Route::match(['get','post'], '/user/driver-get-attachment-html', $controller.'@operate_user_driver_get_attachment_html');
-    Route::post('/user/driver-info-attachment-get-html', $controller.'@operate_user_driver_info_attachment_get_html');
-    Route::post('/user/driver-info-attachment-set', $controller.'@operate_user_driver_info_attachment_set');
-    Route::post('/user/driver-info-attachment-delete', $controller.'@operate_user_driver_info_attachment_delete');
-    // 修改密码
-    Route::match(['get','post'], '/user/driver-password-admin-change', $controller.'@operate_user_driver_password_admin_change');
-    Route::match(['get','post'], '/user/driver-password-admin-reset', $controller.'@operate_user_driver_password_admin_reset');
-    Route::match(['get','post'], '/user/driver-login', $controller.'@operate_user_user_login');
-    // 删除 & 恢复 & 永久删除
-    Route::post('/user/driver-admin-delete', $controller.'@operate_user_driver_admin_delete');
-    Route::post('/user/driver-admin-restore', $controller.'@operate_user_driver_admin_restore');
-    Route::post('/user/driver-admin-delete-permanently', $controller.'@operate_user_driver_admin_delete_permanently');
-    // 启用 & 禁用
-    Route::post('/user/driver-admin-enable', $controller.'@operate_user_driver_admin_enable');
-    Route::post('/user/driver-admin-disable', $controller.'@operate_user_driver_admin_disable');
-
-    // 列表
-    Route::match(['get','post'], '/user/driver-list', $controller.'@view_user_driver_list');
-    Route::match(['get','post'], '/user/driver-list-for-all', $controller.'@view_user_driver_list_for_all');
-
-    // 修改-列表
-    Route::match(['get','post'], '/user/driver-modify-record', $controller.'@view_user_driver_modify_record');
-
-
-
-
-
-
-
-
-
-    /*
-     * 客户管理
-     */
-    // 创建 & 修改
-    Route::match(['get','post'], '/user/client-create', $controller.'@operate_user_client_create');
-    Route::match(['get','post'], '/user/client-edit', $controller.'@operate_user_client_edit');
-    // 删除 & 恢复
-    Route::post('/user/client-admin-delete', $controller.'@operate_user_client_admin_delete');
-    Route::post('/user/client-admin-restore', $controller.'@operate_user_client_admin_restore');
-    Route::post('/user/client-admin-delete-permanently', $controller.'@operate_user_client_admin_delete_permanently');
-    // 启用 & 禁用
-    Route::post('/user/client-admin-enable', $controller.'@operate_user_client_admin_enable');
-    Route::post('/user/client-admin-disable', $controller.'@operate_user_client_admin_disable');
-
-    // 列表
-    Route::match(['get','post'], '/user/client-list', $controller.'@view_user_client_list');
-    Route::match(['get','post'], '/user/client-list-for-all', $controller.'@view_user_client_list_for_all');
-
 
 
 
@@ -219,78 +185,10 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
 
-    /*
-     * 线路管理
-     */
-    // 创建 & 修改
-    Route::match(['get','post'], '/item/route-create', $controller.'@operate_item_route_create');
-    Route::match(['get','post'], '/item/route-edit', $controller.'@operate_item_route_edit');
-
-    // 编辑-信息
-    Route::post('/item/route-info-text-set', $controller.'@operate_item_route_info_text_set');
-    Route::post('/item/route-info-time-set', $controller.'@operate_item_route_info_time_set');
-    Route::post('/item/route-info-radio-set', $controller.'@operate_item_route_info_option_set');
-    Route::post('/item/route-info-select-set', $controller.'@operate_item_route_info_option_set');
-    Route::post('/item/route-info-select2-set', $controller.'@operate_item_route_info_option_set');
-    // 编辑-附件
-    Route::match(['get','post'], '/item/route-get-attachment-html', $controller.'@operate_item_route_get_attachment_html');
-    Route::post('/item/route-info-attachment-set', $controller.'@operate_item_route_info_attachment_set');
-    Route::post('/item/route-info-attachment-delete', $controller.'@operate_item_route_info_attachment_delete');
-
-    // 删除 & 恢复
-    Route::post('/item/route-admin-delete', $controller.'@operate_item_route_admin_delete');
-    Route::post('/item/route-admin-restore', $controller.'@operate_item_route_admin_restore');
-    Route::post('/item/route-admin-delete-permanently', $controller.'@operate_item_route_admin_delete_permanently');
-    // 启用 & 禁用
-    Route::post('/item/route-admin-enable', $controller.'@operate_item_route_admin_enable');
-    Route::post('/item/route-admin-disable', $controller.'@operate_item_route_admin_disable');
-
-    // 列表
-    Route::match(['get','post'], '/item/route-list', $controller.'@view_item_route_list');
-    Route::match(['get','post'], '/item/route-list-for-all', $controller.'@view_item_route_list_for_all');
-
-    // 修改-列表
-    Route::match(['get','post'], '/item/route-modify-record', $controller.'@view_item_route_modify_record');
 
 
 
 
-
-
-
-
-    /*
-     * 定价管理
-     */
-    // 创建 & 修改
-    Route::match(['get','post'], '/item/pricing-create', $controller.'@operate_item_pricing_create');
-    Route::match(['get','post'], '/item/pricing-edit', $controller.'@operate_item_pricing_edit');
-
-    // 编辑-单条-信息
-    Route::post('/item/pricing-info-text-set', $controller.'@operate_item_pricing_info_text_set');
-    Route::post('/item/pricing-info-time-set', $controller.'@operate_item_pricing_info_time_set');
-    Route::post('/item/pricing-info-radio-set', $controller.'@operate_item_pricing_info_option_set');
-    Route::post('/item/pricing-info-select-set', $controller.'@operate_item_pricing_info_option_set');
-    Route::post('/item/pricing-info-select2-set', $controller.'@operate_item_pricing_info_option_set');
-    // 编辑-附件
-    Route::match(['get','post'], '/item/pricing-get-attachment-html', $controller.'@operate_item_pricing_get_attachment_html');
-    Route::post('/item/pricing-info-attachment-set', $controller.'@operate_item_pricing_info_attachment_set');
-    Route::post('/item/pricing-info-attachment-delete', $controller.'@operate_item_pricing_info_attachment_delete');
-
-    // 删除 & 恢复
-    Route::post('/item/pricing-admin-delete', $controller.'@operate_item_pricing_admin_delete');
-    Route::post('/item/pricing-admin-restore', $controller.'@operate_item_pricing_admin_restore');
-    Route::post('/item/pricing-admin-delete-permanently', $controller.'@operate_item_pricing_admin_delete_permanently');
-    // 启用 & 禁用
-    Route::post('/item/pricing-admin-enable', $controller.'@operate_item_pricing_admin_enable');
-    Route::post('/item/pricing-admin-disable', $controller.'@operate_item_pricing_admin_disable');
-
-    // 列表
-    Route::match(['get','post'], '/item/pricing-list', $controller.'@view_item_pricing_list');
-    Route::match(['get','post'], '/item/pricing-list-for-all', $controller.'@view_item_pricing_list_for_all');
-
-    // 修改-列表
-    Route::match(['get','post'], '/item/pricing-modify-record', $controller.'@view_item_pricing_modify_record');
 
 
 
@@ -304,6 +202,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
      */
     // select2
     Route::match(['get','post'], '/item/item_select2_user', $controller.'@operate_item_select2_user');
+    Route::match(['get','post'], '/item/item_select2_client', $controller.'@operate_item_select2_client');
     Route::match(['get','post'], '/item/item_select2_project', $controller.'@operate_item_select2_project');
 
     Route::match(['get','post'], '/item/order_select2_project', $controller.'@operate_order_select2_project');
@@ -335,12 +234,13 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/item/order-disable', $controller.'@operate_item_order_disable');
     // 发布 & 完成 & 备注
     Route::post('/item/order-verify', $controller.'@operate_item_order_verify');
-    Route::post('/item/order-inspect', $controller.'@operate_item_order_inspect');
     Route::post('/item/order-publish', $controller.'@operate_item_order_publish');
+    Route::post('/item/order-inspect', $controller.'@operate_item_order_inspect');
     Route::post('/item/order-complete', $controller.'@operate_item_order_complete');
     Route::post('/item/order-abandon', $controller.'@operate_item_order_abandon');
     Route::post('/item/order-reuse', $controller.'@operate_item_order_reuse');
     Route::post('/item/order-remark-edit', $controller.'@operate_item_order_remark_edit');
+    Route::post('/item/order-deliver', $controller.'@operate_item_order_deliver');
 
     // 列表
     Route::match(['get','post'], '/item/order-list', $controller.'@view_item_order_list');

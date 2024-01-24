@@ -54,6 +54,11 @@ class DK_Record extends Model
         return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
     }
     // 创作者
+    function client_creator()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Client','creator_id','id');
+    }
+    // 创作者
     function updater()
     {
         return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
@@ -73,12 +78,12 @@ class DK_Record extends Model
     // 客户
     function before_client_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Client','before_client_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client','before_client_id','id');
     }
     // 客户
     function after_client_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Client','after_client_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client','after_client_id','id');
     }
     // 项目
     function before_project_er()

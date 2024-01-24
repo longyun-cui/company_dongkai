@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\DK;
 
+use App\Models\DK\DK_Client;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -28,7 +29,7 @@ class DKSuperController extends Controller
     {
         if(request()->isMethod('get'))
         {
-            $view_blade = env('TEMPLATE_YH_SUPER').'entrance.login';
+            $view_blade = env('TEMPLATE_DK_SUPER').'entrance.login';
             return view($view_blade);
         }
         else if(request()->isMethod('post'))
@@ -156,9 +157,9 @@ class DKSuperController extends Controller
             Auth::guard('yh_admin')->login($user,true);
 
             $return['user'] = $user;
-            $return['url'] = env('DOMAIN_YH_ADMIN');
+            $return['url'] = env('DOMAIN_DK_ADMIN');
 
-            if(request()->isMethod('get')) return redirect(env('DOMAIN_YH_ADMIN'));
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_ADMIN'));
             else if(request()->isMethod('post'))
             {
                 return response_success($return);
@@ -180,16 +181,61 @@ class DKSuperController extends Controller
             Auth::guard('yh_admin')->user()->save();
 
             $return['user'] = $user;
-            $return['url'] = env('DOMAIN_YH_ADMIN');
+            $return['url'] = env('DOMAIN_DK_ADMIN');
 
-            if(request()->isMethod('get')) return redirect(env('DOMAIN_YH_ADMIN'));
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_ADMIN'));
             else if(request()->isMethod('post'))
             {
                 return response_success($return);
             }
         }
         else return response_error([]);
+    }
+    // 【用户-管理员】登录
+    public function operate_user_staff_login()
+    {
+        $user_id = request()->get('user_id');
+        $user = DK_User::where('id',$user_id)->first();
+        if($user)
+        {
+            Auth::guard('yh_admin')->login($user,true);
+            $token = request()->get('_token');
+            Auth::guard('yh_admin')->user()->admin_token = $token;
+            Auth::guard('yh_admin')->user()->save();
 
+            $return['user'] = $user;
+            $return['url'] = env('DOMAIN_DK_ADMIN');
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_ADMIN'));
+            else if(request()->isMethod('post'))
+            {
+                return response_success($return);
+            }
+        }
+        else return response_error([]);
+    }
+    // 【用户-管理员】登录
+    public function operate_user_client_login()
+    {
+        $user_id = request()->get('user_id');
+        $user = DK_Client::where('id',$user_id)->first();
+        if($user)
+        {
+            Auth::guard('dk_client')->login($user,true);
+            $token = request()->get('_token');
+            Auth::guard('dk_client')->user()->admin_token = $token;
+            Auth::guard('dk_client')->user()->save();
+
+            $return['user'] = $user;
+            $return['url'] = env('DOMAIN_DK_CLIENT');
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_CLIENT'));
+            else if(request()->isMethod('post'))
+            {
+                return response_success($return);
+            }
+        }
+        else return response_error([]);
     }
 
 
@@ -200,6 +246,18 @@ class DKSuperController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_user_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_user_list_for_all_datatable(request()->all());
+    }
+    // 【用户】【全部用户】返回-列表-视图
+    public function view_user_staff_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_for_all_datatable(request()->all());
+    }
+    // 【用户】【全部用户】返回-列表-视图
+    public function view_user_client_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
     }
 
 

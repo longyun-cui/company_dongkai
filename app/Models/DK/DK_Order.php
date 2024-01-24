@@ -16,15 +16,19 @@ class DK_Order extends Model
         'owner_active', 'is_show', 'is_published', 'is_completed',
         'owner_id', 'creator_id', 'verifier_id', 'inspector_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'created_type',
+        'order_category', 'order_type', 'order_quality',
         'org_id', 'admin_id',
+        'client_id',
         'item_id', 'menu_id',
-        'order_category', 'order_type',
+        '',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'project_id', 'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id',
         'assign_time',
         'client_name', 'client_phone',
         'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id', 'is_repeat',
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description',
+        'pusher_id', 'pushed_at',
+        'deliverer_id', 'delivered_at',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'is_delay',
         'teeth_count',
         'company', 'fund', 'mobile', 'city', 'address',
@@ -114,71 +118,10 @@ class DK_Order extends Model
 
 
 
-
-
-
-
-
-
     // 客户
     function client_er()
     {
-        return $this->belongsTo('App\Models\YH\YH_Client','client_id','id');
-    }
-
-
-    // 环线
-    function circle_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Circle','circle_id','id');
-    }
-
-
-    // 固定线路
-    function route_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Route','route_id','id');
-    }
-    // 固定线路
-    function empty_route_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Route','empty_route_id','id');
-    }
-
-
-    // 定价
-    function pricing_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Pricing','pricing_id','id');
-    }
-
-
-    // 车辆
-    function car_er()
-    {
-        return $this->belongsTo('App\Models\Dk\DK_Project','car_id','id');
-    }
-    // 车挂
-    function trailer_er()
-    {
-        return $this->belongsTo('App\Models\Dk\DK_Project','trailer_id','id');
-    }
-    // 车厢
-    function container_er()
-    {
-        return $this->belongsTo('App\Models\Dk\DK_Project','container_id','id');
-    }
-
-
-    // 司机
-    function driver_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Driver','driver_id','id');
-    }
-    // 副驾
-    function sub_driver_er()
-    {
-        return $this->belongsTo('App\Models\YH\YH_Driver','driver_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
     }
 
 

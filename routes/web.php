@@ -46,14 +46,17 @@ Route::group(['prefix'=>'common'], function () {
 Route::group(['domain'=>env('DOMAIN_ROOT'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route.php');
 });
-Route::group(['domain'=>env('DOMAIN_YH_SUPER'), 'namespace'=>'DK'], function () {
+Route::group(['domain'=>env('DOMAIN_DK_SUPER'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-super.php');
 });
-Route::group(['domain'=>env('DOMAIN_YH_ADMIN'), 'namespace'=>'DK'], function () {
+Route::group(['domain'=>env('DOMAIN_DK_ADMIN'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-admin.php');
 });
-Route::group(['domain'=>env('DOMAIN_YH_STAFF'), 'namespace'=>'DK'], function () {
+Route::group(['domain'=>env('DOMAIN_DK_STAFF'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-staff.php');
+});
+Route::group(['domain'=>env('DOMAIN_DK_CLIENT'), 'namespace'=>'DK'], function () {
+    require(__DIR__ . '/DK/route-client.php');
 });
 
 
