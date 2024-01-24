@@ -409,7 +409,7 @@
                         "title": "导出范围",
                         "data": "title",
                         "className": "font-12px",
-                        "width": "360px",
+                        "width": "480px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -419,7 +419,7 @@
                         "title": "起始时间",
                         "data": "before",
                         "className": "font-12px",
-                        "width": "240px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -473,7 +473,7 @@
                         "title": "终止时间",
                         "data": "after",
                         "className": "font-12px",
-                        "width": "240px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
