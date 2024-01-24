@@ -489,5 +489,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_YH_ADMIN').'entrance.user.staff-script')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.user.staff-script')
 @endsection
