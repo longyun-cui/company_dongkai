@@ -53,7 +53,7 @@ class DK_Record extends Model
     {
         return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
     }
-    // 创作者
+    // 创作者（客户）
     function client_creator()
     {
         return $this->belongsTo('App\Models\DK\DK_Client','creator_id','id');

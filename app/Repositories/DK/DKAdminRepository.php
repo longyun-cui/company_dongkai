@@ -10465,6 +10465,7 @@ class DKAdminRepository {
         // 工单
         $query = DK_Order::select('*')
             ->with([
+                'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
                 'project_er'=>function($query) { $query->select('id','name'); },
@@ -10514,8 +10515,12 @@ class DKAdminRepository {
         {
             $cellData[$k]['id'] = $v['id'];
 
+            $cellData[$k]['client_er_name'] = $v['client_er']['username'];
+            $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
+
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
             $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['client_name'] = $v['client_name'];
@@ -10547,6 +10552,8 @@ class DKAdminRepository {
 
         $title_row = [
             'id'=>'ID',
+            'client_er_name'=>'客户',
+            'delivered_at'=>'交付时间',
             'creator_name'=>'创建人',
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
@@ -10629,20 +10636,22 @@ class DKAdminRepository {
                     'A'=>10,
                     'B'=>10,
                     'C'=>20,
-                    'D'=>20,
-                    'E'=>10,
-                    'F'=>10,
-                    'G'=>16,
-                    'H'=>16,
-                    'I'=>10,
-                    'J'=>10,
+                    'D'=>10,
+                    'E'=>20,
+                    'F'=>20,
+                    'G'=>10,
+                    'H'=>10,
+                    'I'=>16,
+                    'J'=>16,
                     'K'=>10,
                     'L'=>10,
-                    'M'=>60,
+                    'M'=>10,
                     'N'=>10,
-                    'O'=>10,
-                    'P'=>20,
-                    'Q'=>10
+                    'O'=>60,
+                    'P'=>10,
+                    'Q'=>10,
+                    'R'=>20,
+                    'S'=>10
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -10674,6 +10683,7 @@ class DKAdminRepository {
         $query = DK_Order::select('*')
             ->with([
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
+                'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
                 'project_er'=>function($query) { $query->select('id','name'); },
             ])
@@ -10691,8 +10701,12 @@ class DKAdminRepository {
         {
             $cellData[$k]['id'] = $v['id'];
 
+            $cellData[$k]['client_er_name'] = $v['client_er']['username'];
+            $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
+
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
             $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['client_name'] = $v['client_name'];
@@ -10707,9 +10721,9 @@ class DKAdminRepository {
             $cellData[$k]['location_city'] = $v['location_city'];
             $cellData[$k]['location_district'] = $v['location_district'];
 
-            $cellData[$k]['description'] = $v['description'];
-
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
+
+            $cellData[$k]['description'] = $v['description'];
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -10724,6 +10738,8 @@ class DKAdminRepository {
 
         $title_row = [
             'id'=>'ID',
+            'client_er_name'=>'客户',
+            'delivered_at'=>'交付时间',
             'creator_name'=>'创建人',
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
@@ -10734,8 +10750,8 @@ class DKAdminRepository {
             'is_wx'=>'是否+V',
             'location_city'=>'所在城市',
             'location_district'=>'行政区',
-            'description'=>'通话小结',
             'teeth_count'=>'牙齿数量',
+            'description'=>'通话小结',
             'is_repeat'=>'是否重复',
             'inspector_name'=>'审核人',
             'inspected_time'=>'审核时间',
@@ -10773,20 +10789,22 @@ class DKAdminRepository {
                     'A'=>10,
                     'B'=>10,
                     'C'=>20,
-                    'D'=>20,
-                    'E'=>10,
-                    'F'=>10,
-                    'G'=>16,
-                    'H'=>16,
-                    'I'=>10,
-                    'J'=>10,
+                    'D'=>10,
+                    'E'=>20,
+                    'F'=>20,
+                    'G'=>10,
+                    'H'=>10,
+                    'I'=>16,
+                    'J'=>16,
                     'K'=>10,
-                    'L'=>60,
+                    'L'=>10,
                     'M'=>10,
                     'N'=>10,
-                    'O'=>10,
-                    'P'=>20,
-                    'Q'=>10
+                    'O'=>60,
+                    'P'=>10,
+                    'Q'=>10,
+                    'R'=>20,
+                    'S'=>10
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();

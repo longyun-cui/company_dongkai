@@ -5848,7 +5848,7 @@ class DKClientRepository {
         {
             $cellData[$k]['id'] = $v['id'];
 
-            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+//            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
             $cellData[$k]['channel_source'] = $v['channel_source'];
@@ -5858,24 +5858,24 @@ class DKClientRepository {
 
             // 微信号 & 是否+V
             $cellData[$k]['wx_id'] = $v['wx_id'];
-            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
-            else $cellData[$k]['is_wx'] = '--';
+//            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
+//            else $cellData[$k]['is_wx'] = '--';
 
             $cellData[$k]['location_city'] = $v['location_city'];
             $cellData[$k]['location_district'] = $v['location_district'];
 
-            $cellData[$k]['description'] = $v['description'];
-
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
+            $cellData[$k]['description'] = $v['description'];
+
             // 是否重复
-            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
-            else $cellData[$k]['is_repeat'] = '--';
+//            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+//            else $cellData[$k]['is_repeat'] = '--';
 
             // 审核
-            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
-            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
-            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+//            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
+//            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+//            $cellData[$k]['inspected_result'] = $v['inspected_result'];
         }
 
 
@@ -5888,15 +5888,15 @@ class DKClientRepository {
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'wx_id'=>'微信号',
-            'is_wx'=>'是否+V',
+//            'is_wx'=>'是否+V',
             'location_city'=>'所在城市',
             'location_district'=>'行政区',
-            'description'=>'通话小结',
             'teeth_count'=>'牙齿数量',
-            'is_repeat'=>'是否重复',
-            'inspector_name'=>'审核人',
-            'inspected_time'=>'审核时间',
-            'inspected_result'=>'审核结果',
+            'description'=>'通话小结',
+//            'is_repeat'=>'是否重复',
+//            'inspector_name'=>'审核人',
+//            'inspected_time'=>'审核时间',
+//            'inspected_result'=>'审核结果',
         ];
         array_unshift($cellData, $title_row);
 
