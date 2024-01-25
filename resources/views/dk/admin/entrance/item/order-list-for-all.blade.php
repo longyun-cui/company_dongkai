@@ -1631,7 +1631,7 @@
                                 }
 
                                 // 审核
-                                if("{{ $me->user_type or 0 }}" == 71 || "{{ $me->user_type or 0 }}" == 77)
+                                if("{{ in_array($me->user_type,[0,1,11,71,77]) }}")
                                 {
                                     if(row.inspector_id == 0)
                                     {
