@@ -331,18 +331,18 @@ class DKAdminController extends Controller
     // 【部门管理】永久删除
     public function operate_department_admin_delete_permanently()
     {
-        return $this->repo->operate_item_project_admin_delete_permanently(request()->all());
+        return $this->repo->operate_department_admin_delete_permanently(request()->all());
     }
 
     // 【部门管理】启用
     public function operate_department_admin_enable()
     {
-        return $this->repo->operate_item_project_admin_enable(request()->all());
+        return $this->repo->operate_department_admin_enable(request()->all());
     }
     // 【部门管理】禁用
     public function operate_department_admin_disable()
     {
-        return $this->repo->operate_item_project_admin_disable(request()->all());
+        return $this->repo->operate_department_admin_disable(request()->all());
     }
 
 
@@ -1367,6 +1367,14 @@ class DKAdminController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_rank_by_department(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_rank_by_department(request()->all());
+    }
+
+
+    // 【统计】部门看板
+    public function view_statistic_department()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_department(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_department(request()->all());
     }
     // 【统计】客服看板
     public function view_statistic_customer_service()

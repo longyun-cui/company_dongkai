@@ -1310,5 +1310,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.department.department-script')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.department.department-list-script')
 @endsection

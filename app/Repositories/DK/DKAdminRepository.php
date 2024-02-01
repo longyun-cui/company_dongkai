@@ -465,7 +465,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+        if(!delete_the_item_files) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '客户';
@@ -1922,7 +1922,7 @@ class DKAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $item = DK_Project::find($id);
+        $item = DK_Department::find($id);
         if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -1973,7 +1973,7 @@ class DKAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $item = DK_Project::find($id);
+        $item = DK_Department::find($id);
         if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
 
         $this->get_me();
@@ -9373,6 +9373,91 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
+    // 【统计】排名
+    public function view_statistic_department()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $view_data['department_district_list'] = $department_district_list;
+
+        $view_data['menu_active_of_statistic_department'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-department';
+        return view($view_blade)->with($view_data);
+    }
+    public function get_statistic_data_for_department($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+        $query = DK_Department::select('id','name')
+            ->withCount([
+                'department_district_staff_list as staff_count' => function($query) use($the_day) {
+                    $query->whereHas('order_list', function($query) use($the_day) {
+                        $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                    });
+                },
+                'order_list_for_district as order_count_for_all'=>function($query) use($the_day) {
+                    $query->where('is_published', 1)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                },
+                'order_list_for_district as order_count_for_accepted'=>function($query) use($the_day) {
+                    $query->where('inspected_result', '通过')->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+                }
+            ])
+            ->where('department_type',11)
+            ->where(['item_status'=>1]);
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+            // 通过率
+            if($v->order_count_for_all > 0)
+            {
+                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            }
+            else $list[$k]->order_rate_for_accepted = 0;
+
+            // 人均交付量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_all_per = round(($v->order_count_for_all / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_all_per = 0;
+
+            // 人均通过量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_accepted_per = round(($v->order_count_for_accepted / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_accepted_per = 0;
+        }
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
 
 
     // 【统计】客服看板
@@ -10516,7 +10601,8 @@ class DKAdminRepository {
             $cellData[$k]['id'] = $v['id'];
 
             $cellData[$k]['client_er_name'] = $v['client_er']['username'];
-            $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            else $cellData[$k]['delivered_at'] = '';
 
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
@@ -10702,7 +10788,8 @@ class DKAdminRepository {
             $cellData[$k]['id'] = $v['id'];
 
             $cellData[$k]['client_er_name'] = $v['client_er']['username'];
-            $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            else $cellData[$k]['delivered_at'] = '';
 
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);

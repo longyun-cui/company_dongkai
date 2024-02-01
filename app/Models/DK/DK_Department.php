@@ -84,6 +84,21 @@ class DK_Department extends Model
         return $this->belongsTo('App\Models\DK\DK_User','leader_id','id');
     }
 
+
+    // 【一对多】部门（大区）员工
+    function department_district_staff_list()
+    {
+        return $this->hasMany('App\Models\DK\DK_User','department_district_id','id');
+    }
+    // 【一对多】部门（大区）员工
+    function department_group_staff_list()
+    {
+        return $this->hasMany('App\Models\DK\DK_User','department_group_id','id');
+    }
+
+
+
+
     // 【多对多】审核人关联的项目
     function pivot_department_user()
     {
