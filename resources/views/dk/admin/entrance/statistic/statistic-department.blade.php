@@ -215,6 +215,19 @@
                             }
                         },
                         {
+                            "title": "出勤人数",
+                            "data": "staff_count",
+                            "className": "text-center",
+                            "width": "80px",
+                            "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+
+                            }
+                        },
+                        {
                             "title": "交付量",
                             "data": "order_count_for_all",
                             "className": "font-12px",
