@@ -234,7 +234,7 @@
                         "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">' + data + '(' + row.id + ')' + '</a>';
+                            return '<a href="javascript:void(0);">'+data+' ('+row.id+')'+'</a>';
                         }
                     },
                     {
