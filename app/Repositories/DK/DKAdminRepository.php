@@ -2074,8 +2074,13 @@ class DKAdminRepository {
             {
                 $v->district_id = $v->superior_department_id;
             }
+
+            $v->district_group_id = $v->district_id.'.'.$v->id;
         }
-        $list = $list->sortBy('district_id')->values();
+//        $list = $list->sortBy(['district_id'=>'asc'])->values();
+        $list = $list->sortBy(function ($item, $key) {
+            return $item['district_group_id'];
+        })->values();
 //        dd($list->toArray());
 
         return datatable_response($list, $draw, $total);
@@ -2605,8 +2610,8 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断操作权限
-        if(!in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该操作权限！");
-//        if(in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该员工的操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,19,21,81])) return response_error([],"你没有该操作权限！");
+//        if(in_array($me->user_type,[0,1,9,11,19,21,81])) return response_error([],"你没有该员工的操作权限！");
         if($user->id == $me->id) return response_error([],"你不能删除你自己！");
         if($user->user_type <= $me->user_type) return response_error([],"你不能操作比你职级更高或同级的员工！");
 

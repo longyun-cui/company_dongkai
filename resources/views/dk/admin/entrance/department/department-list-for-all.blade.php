@@ -741,7 +741,7 @@
                         "title": "负责人",
                         "data": "leader_id",
                         "className": "text-center",
-                        "width": "120px",
+                        "width": "160px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -770,7 +770,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.leader == null) return '--';
-                            else return '<a href="javascript:void(0);">'+row.leader.username+' </a>';
+                            else return '<a href="javascript:void(0);">'+row.leader.username+' ('+row.leader.id+')'+'</a>';
                         }
                     },
                     {
