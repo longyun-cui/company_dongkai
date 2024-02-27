@@ -110,7 +110,7 @@ table.dataTable .text-bottom { vertical-align: bottom; }
 
 .navbar-nav>.notifications-menu>.dropdown-menu>li .menu,
 .navbar-nav>.messages-menu>.dropdown-menu>li .menu,
-.navbar-nav>.tasks-menu>.dropdown-menu>li .menu { max-height: 320px; }
+.navbar-nav>.tasks-menu>.dropdown-menu>li .menu { max-height: 480px; }
 
 .file-preview { padding:0; }
 .file-drop-zone-title { padding:40px 10px; }
