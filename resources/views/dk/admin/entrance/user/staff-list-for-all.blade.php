@@ -346,19 +346,19 @@
                             else return '--';
                         }
                     },
-                    {
-                       "title": "上级领导",
-                       "data": "id",
-                       "className": "",
-                       "width":"100px",
-                       "orderable": false,
-                       render: function(data, type, row, meta) {
-                           if(row.superior) {
-                               return '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
-                           }
-                           else return '--';
-                       }
-                    },
+                    // {
+                    //    "title": "上级领导",
+                    //    "data": "id",
+                    //    "className": "",
+                    //    "width":"100px",
+                    //    "orderable": false,
+                    //    render: function(data, type, row, meta) {
+                    //        if(row.superior) {
+                    //            return '<a href="javascript:void(0);">'+row.superior.true_name+'</a>';
+                    //        }
+                    //        else return '--';
+                    //    }
+                    // },
                     {
                         "title": "备注",
                         "data": "remark",
@@ -391,14 +391,15 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 0) return '未知';
-                            return row.creator.true_name;
+                            // return row.creator.true_name;
+                            return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                         }
                     },
                     {
                         "title": "创建时间",
                         "data": 'created_at',
                         "className": "font-12px",
-                        "width": "120px",
+                        "width": "160px",
                         "orderable": true,
                         render: function(data, type, row, meta) {
 //                            return data;
@@ -415,9 +416,10 @@
                             var $hour = ('00'+$date.getHours()).slice(-2);
                             var $minute = ('00'+$date.getMinutes()).slice(-2);
                             var $second = ('00'+$date.getSeconds()).slice(-2);
-                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            // return $year+'-'+$month+'-'+$day;
+                            // return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     }
                 ],

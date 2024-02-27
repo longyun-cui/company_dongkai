@@ -276,7 +276,8 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 0) return '未知';
-                            return row.creator.true_name;
+                            // return row.creator.true_name;
+                            return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                         }
                     },
                     {
