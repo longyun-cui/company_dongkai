@@ -19,7 +19,8 @@
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
 
-                <!-- Add Menu -->
+
+                {{--<!-- Add Menu -->--}}
                 <li class="dropdown tasks-menu add-menu">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -102,6 +103,7 @@
                     </ul>
                 </li>
 
+
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu _none">
                     <!-- Menu toggle button -->
@@ -138,29 +140,35 @@
                 </li>
                 <!-- /.messages-menu -->
 
+
                 <!-- Notifications Menu -->
-                <li class="dropdown notifications-menu _none">
+                <li class="dropdown notifications-menu">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-bell-o"></i>
-                        <span class="label label-warning">10</span>
+                        <i class="fa fa-qrcode"></i>
+{{--                        <span class="label label-warning">10</span>--}}
+                        <span class="hidden-xs">售后中心</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 10 notifications</li>
+                        <li class="header">
+                            <i class="fa fa-user-plus"></i>
+                            售后问题，售后中心为你服务
+                        </li>
                         <li>
                             <!-- Inner Menu: contains the notifications -->
                             <ul class="menu">
                                 <li><!-- start notification -->
-                                    <a href="#">
-                                        <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                    <a href="javascript:void(0);">
+                                        <img src="/custom/dk/qr_code3.jpg" class="qr-code-image" alt="QR_code Image">
                                     </a>
                                 </li>
                                 <!-- end notification -->
                             </ul>
                         </li>
-                        <li class="footer"><a href="#">View all</a></li>
+                        <li class="footer"><a href="javascript:void(0);"><i class="fa fa-weixin"></i>扫码添加微信</a></li>
                     </ul>
                 </li>
+
 
                 <!-- Tasks Menu -->
                 <li class="dropdown tasks-menu _none">
@@ -198,6 +206,7 @@
                         </li>
                     </ul>
                 </li>
+
 
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
@@ -253,10 +262,13 @@
                     </ul>
                 </li>
 
+
                 <!-- Control Sidebar Toggle Button -->
                 <li class="_none">
                     <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                 </li>
+
+
             </ul>
         </div>
     </nav>
