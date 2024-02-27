@@ -245,7 +245,7 @@
 //                        "orderable": false
 //                    },
                     {
-                        "title": "名称",
+                        "title": "姓名",
                         "data": "id",
                         "className": "text-center",
                         "width": "80px",
@@ -261,8 +261,8 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(row.username) return '<a href="javascript:void(0);">'+row.username+'</a>';
-                            return '<a href="javascript:void(0);">'+row.username+'</a>';
+                            if(row.username) return '<a href="javascript:void(0);">'+row.username+'('+row.id+')'+'</a>';
+                            return '<a href="javascript:void(0);">'+row.username+'('+row.id+')'+'</a>';
                         }
                     },
                     {

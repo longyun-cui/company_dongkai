@@ -231,10 +231,10 @@
                         "title": "姓名",
                         "data": "username",
                         "className": "text-center",
-                        "width": "100px",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">' + data + '</a>';
+                            return '<a href="javascript:void(0);">' + data + '(' + row.id + ')' + '</a>';
                         }
                     },
                     {
