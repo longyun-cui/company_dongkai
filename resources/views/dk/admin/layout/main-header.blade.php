@@ -159,7 +159,7 @@
                             <ul class="menu">
                                 <li><!-- start notification -->
                                     <a href="javascript:void(0);">
-                                        <img src="/custom/dk/qr_code5.jpg" class="qr-code-image" alt="QR_code Image">
+                                        <img src="/custom/dk/qr_code4.jpg" class="qr-code-image" alt="QR_code Image">
                                     </a>
                                 </li>
                                 <!-- end notification -->
