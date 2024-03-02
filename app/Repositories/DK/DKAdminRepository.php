@@ -2376,14 +2376,15 @@ class DKAdminRepository {
     {
 //        dd($post_data);
         $messages = [
-            'operate.required' => '参数有误',
-            'true_name.required' => '请输入用户名',
-            'mobile.required' => '请输入电话',
+            'operate.required' => '参数有误！',
+            'true_name.required' => '请输入用户名！',
+            'mobile.required' => '请输入电话！',
+            'mobile.unique' => '电话已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'true_name' => 'required',
-            'mobile' => 'required'
+            'mobile' => 'required|unique:dk_user,mobile',
         ], $messages);
         if ($v->fails())
         {
@@ -2403,6 +2404,7 @@ class DKAdminRepository {
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
             $mine = new DK_User;
+            $post_data["user_status"] = 0;
             $post_data["user_category"] = 11;
             $post_data["active"] = 1;
             $post_data["password"] = password_encode("12345678");
