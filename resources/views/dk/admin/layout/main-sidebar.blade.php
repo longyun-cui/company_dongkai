@@ -126,11 +126,19 @@
             <li class="header">数据统计</li>
 
             @if(in_array($me->user_type,[0,1,9,11]))
-                <li class="treeview {{ $menu_active_of_statistic_department or '' }}">
-                    <a href="{{ url('/statistic/statistic-department') }}">
-                        <i class="fa fa-area-chart text-teal"></i> <span>部门看板</span>
-                    </a>
-                </li>
+            <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
+                <a href="{{ url('/statistic/statistic-project') }}">
+                    <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
+                </a>
+            </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11]))
+            <li class="treeview {{ $menu_active_of_statistic_department or '' }}">
+                <a href="{{ url('/statistic/statistic-department') }}">
+                    <i class="fa fa-area-chart text-teal"></i> <span>部门看板</span>
+                </a>
+            </li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,81,84]))

@@ -939,10 +939,15 @@ class DKAdminController extends Controller
     }
 
 
-    // 【订单管理】SELECT2 Client 客户
+    // 【订单管理】SELECT2 User 员工
     public function operate_item_select2_user()
     {
         return $this->repo->operate_item_select2_user(request()->all());
+    }
+    // 【订单管理】SELECT2 Team 团队
+    public function operate_item_select2_team()
+    {
+        return $this->repo->operate_item_select2_team(request()->all());
     }
     // 【订单管理】SELECT2 Client 项目
     public function operate_item_select2_project()
@@ -1370,6 +1375,12 @@ class DKAdminController extends Controller
     }
 
 
+    // 【统计】项目看板
+    public function view_statistic_project()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_project(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_project(request()->all());
+    }
     // 【统计】部门看板
     public function view_statistic_department()
     {
@@ -1380,7 +1391,8 @@ class DKAdminController extends Controller
     public function view_statistic_customer_service()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_customer_service(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_customer_service(request()->all());
+//        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_customer_service(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_customer_service_by_group(request()->all());
     }
     // 【统计】审核员看板
     public function view_statistic_inspector()

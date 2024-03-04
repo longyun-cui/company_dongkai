@@ -73,6 +73,19 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class="control-label col-md-2">选择团队</label>
+                            <div class="col-md-8 ">
+                                <select class="form-control" name="teams[]" id="select2-team" multiple="multiple">
+                                    @if(!empty($data->pivot_project_team))
+                                        @foreach($data->pivot_project_team as $p)
+                                            <option value="{{ $p->id }}" selected="selected">{{ $p->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
 
                         {{--描述--}}
                         <div class="form-group">
@@ -242,6 +255,36 @@
                 $(data.element).attr("data-sub-name",data.sub_driver_name);
                 $(data.element).attr("data-sub-phone",data.sub_driver_phone);
                 return data.text;
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+
+        //
+        $('#select2-team').select2({
+            ajax: {
+                url: "{{ url('/item/item_select2_team?type=district') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
             minimumInputLength: 0,

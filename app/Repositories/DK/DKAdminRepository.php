@@ -4213,6 +4213,23 @@ class DKAdminRepository {
                 {
                     $mine->pivot_project_user()->detach();
                 }
+
+                if(!empty($post_data["teams"]))
+                {
+//                    $product->peoples()->attach($post_data["peoples"]);
+                    $current_time = time();
+                    $teams = $post_data["teams"];
+                    foreach($teams as $t)
+                    {
+                        $team_insert[$t] = ['relation_type'=>1,'created_at'=>$current_time,'updated_at'=>$current_time];
+                    }
+                    $mine->pivot_project_team()->sync($team_insert);
+//                    $mine->pivot_product_people()->syncWithoutDetaching($people_insert);
+                }
+                else
+                {
+                    $mine->pivot_project_team()->detach();
+                }
             }
             else throw new Exception("insert--project--fail");
 
@@ -5074,7 +5091,7 @@ class DKAdminRepository {
 
         $query = DK_Project::select('*')
             ->withTrashed()
-            ->with(['creator','inspector_er','pivot_project_user']);
+            ->with(['creator','inspector_er','pivot_project_user','pivot_project_team']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -5207,6 +5224,38 @@ class DKAdminRepository {
             $type = $post_data['type'];
             if($type == 'inspector') $query->where(['user_type'=>77]);
         }
+        $list = $query->orderBy('id','desc')->get()->toArray();
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        return $list;
+    }
+    //
+    public function operate_item_select2_team($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $query =DK_Department::select(['id','name as text'])
+                ->where(['item_status'=>1]);
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query =DK_Department::select(['id','name as text'])->where('name','like',"%$keyword%")
+                ->where(['item_status'=>1]);
+        }
+
+        if(!empty($post_data['type']))
+        {
+            $type = $post_data['type'];
+            if($type == 'district') $query->where(['department_type'=>11]);
+            else if($type == 'group')
+            {
+                $id = $post_data['superior_id'];
+                $query->where(['department_type'=>21,'superior_department_id'=>$id]);
+            }
+        }
+        else $query->where(['department_type'=>11]);
+
         $list = $query->orderBy('id','desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
@@ -10083,6 +10132,282 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
+    public function get_statistic_data_for_customer_service_by_group($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        // 员工统计
+        $query_order = DK_Order::select('creator_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                "))
+            ->groupBy('creator_id');
+
+
+        // 员工（经理）统计
+        $query_order_for_manager = DK_Order::select('department_manager_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                "))
+            ->groupBy('department_manager_id');
+
+
+        // 员工（组长）统计
+        $query_order_for_supervisor = DK_Order::select('department_supervisor_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                "))
+            ->groupBy('department_supervisor_id');
+
+
+        // 项目
+        $project_id = 0;
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[0,-1]))
+            {
+                $project_id = $post_data['project'];
+
+                $query_order->where('project_id', $project_id);
+                $query_order_for_manager->where('project_id', $project_id);
+                $query_order_for_supervisor->where('project_id', $project_id);
+            }
+        }
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'day')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query_order->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+            $query_order_for_manager->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+            $query_order_for_supervisor->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_order_for_manager->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_order_for_supervisor->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+        }
+        else
+        {
+        }
+
+
+        $query_order = $query_order->get()->keyBy('creator_id')->toArray();
+        $query_order_for_manager = $query_order_for_manager->get()->keyBy('department_manager_id')->toArray();
+        $query_order_for_supervisor = $query_order_for_supervisor->get()->keyBy('department_supervisor_id')->toArray();
+//        dd($query_order);
+
+
+
+        $query = DK_User::select(['id','user_status','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
+            ->with([
+//                'superior' => function($query) { $query->select(['id','username','true_name']); },
+                'department_district_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); },
+                'department_group_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); }
+            ])
+            ->where('user_status',1)
+            ->where('department_district_id','>',0)
+            ->where('department_group_id','>',0)
+            ->whereIn('user_type',[84,88]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+
+
+        // 客服经理
+        if($me->user_type == 81)
+        {
+            // 根据属下查看
+//            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
+//            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
+
+            // 根据部门查看
+            $query->where('department_district_id', $me->department_district_id);
+        }
+        else if($me->user_type == 84)
+        {
+            // 根据属下查看
+//            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+
+            // 根据部门查看
+            $query->where('department_group_id', $me->department_group_id);
+        }
+
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("department_district_id", "asc")->orderBy("department_group_id", "asc")->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+
+            if(isset($query_order[$v->id]))
+            {
+                $list[$k]->order_count_for_all = $query_order[$v->id]['order_count_for_all'];
+                $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
+                $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
+                $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
+                $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
+                $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
+            }
+            else
+            {
+                $list[$k]->order_count_for_all = 0;
+                $list[$k]->order_count_for_inspected = 0;
+                $list[$k]->order_count_for_accepted = 0;
+                $list[$k]->order_count_for_refused = 0;
+                $list[$k]->order_count_for_repeated = 0;
+                $list[$k]->order_count_for_accepted_inside = 0;
+            }
+
+            // 通过率
+            if($v->order_count_for_all > 0)
+            {
+                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            }
+            else $list[$k]->order_rate_for_accepted = 0;
+            // 有效单量
+            $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
+
+
+
+
+            // 组长
+            if($v->department_group_er) $supervisor_id = $v->department_group_er->leader_id;
+            else $supervisor_id = -1;
+            if($v->department_group_er && isset($query_order_for_supervisor[$supervisor_id]))
+            {
+                $list[$k]->group_count_for_all = $query_order_for_supervisor[$supervisor_id]['order_count_for_all'];
+                $list[$k]->group_count_for_inspected = $query_order_for_supervisor[$supervisor_id]['order_count_for_inspected'];
+                $list[$k]->group_count_for_accepted = $query_order_for_supervisor[$supervisor_id]['order_count_for_accepted'];
+                $list[$k]->group_count_for_refused = $query_order_for_supervisor[$supervisor_id]['order_count_for_refused'];
+                $list[$k]->group_count_for_repeated = $query_order_for_supervisor[$supervisor_id]['order_count_for_repeated'];
+            }
+            else
+            {
+                $list[$k]->group_count_for_all = 0;
+                $list[$k]->group_count_for_inspected = 0;
+                $list[$k]->group_count_for_accepted = 0;
+                $list[$k]->group_count_for_refused = 0;
+                $list[$k]->group_count_for_repeated = 0;
+            }
+            // 有效单量
+            $v->group_count_for_effective = $v->group_count_for_inspected - $v->group_count_for_refused - $v->group_count_for_repeated;
+
+            $v->group_count_for_accepted_inside = 0;
+
+            // 有效率
+            if($v->group_count_for_all > 0)
+            {
+                $v->group_rate_for_accepted = round(($v->group_count_for_accepted * 100 / $v->group_count_for_all),2);
+            }
+            else $v->group_rate_for_accepted = 0;
+
+
+
+
+            // 经理
+            if($v->department_district_er) $manager_id = $v->department_district_er->leader_id;
+            else $manager_id = -1;
+            if($v->department_district_er && isset($query_order_for_manager[$manager_id]))
+            {
+                $list[$k]->district_count_for_all = $query_order_for_manager[$manager_id]['order_count_for_all'];
+                $list[$k]->district_count_for_inspected = $query_order_for_manager[$manager_id]['order_count_for_inspected'];
+                $list[$k]->district_count_for_accepted = $query_order_for_manager[$manager_id]['order_count_for_accepted'];
+                $list[$k]->district_count_for_refused = $query_order_for_manager[$manager_id]['order_count_for_refused'];
+                $list[$k]->district_count_for_repeated = $query_order_for_manager[$manager_id]['order_count_for_repeated'];
+            }
+            else
+            {
+                $list[$k]->district_count_for_all = 0;
+                $list[$k]->district_count_for_inspected = 0;
+                $list[$k]->district_count_for_accepted = 0;
+                $list[$k]->district_count_for_refused = 0;
+                $list[$k]->district_count_for_repeated = 0;
+            }
+            // 有效单量
+            $v->district_count_for_effective = $v->district_count_for_inspected - $v->district_count_for_refused - $v->district_count_for_repeated;
+
+            $v->district_count_for_accepted_inside = 0;
+
+            // 有效率
+            if($v->district_count_for_all > 0)
+            {
+                $v->district_rate_for_accepted = round(($v->district_count_for_accepted * 100 / $v->district_count_for_all),2);
+            }
+            else $v->district_rate_for_accepted = 0;
+
+
+            $v->district_merge = 0;
+            $v->group_merge = 0;
+        }
+//        dd($list->toArray());
+
+        $grouped_by_district = $list->groupBy('department_district_id');
+        foreach ($grouped_by_district as $k => $v)
+        {
+            $v[0]->district_merge = count($v);
+
+            $grouped_by_group = $list->groupBy('department_group_id');
+            foreach ($grouped_by_group as $key => $val)
+            {
+                $val[0]->group_merge = count($val);
+            }
+        }
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
     // 【统计】客服看板
     public function view_statistic_inspector()
     {
@@ -10223,6 +10548,117 @@ class DKAdminRepository {
         $collapsed = $grouped->collapse();
 
         return datatable_response($collapsed, $draw, $total);
+    }
+
+
+    // 【统计】项目看板
+    public function view_statistic_project()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $view_data['menu_active_of_statistic_project'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-project';
+        return view($view_blade)->with($view_data);
+    }
+    public function get_statistic_data_for_project($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+//        dd(1);
+
+
+
+        // 团队统计
+        $query_order = DK_Order::select('department_district_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                "))
+            ->groupBy('department_district_id')->get()->keyBy('department_district_id')->toArray();
+
+
+        $query = DK_Project::select('*')
+            ->withTrashed()
+            ->with(['creator','inspector_er','pivot_project_user','pivot_project_team']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        // 车辆类型 [车辆|车挂]
+        if(!empty($post_data['car_type']))
+        {
+            if(!in_array($post_data['car_type'],[-1,0]))
+            {
+                $query->where('item_type', $post_data['car_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach ($list as $k => $v)
+        {
+
+            if(isset($query_order[$v->id]))
+            {
+                $list[$k]->order_count_for_all = $query_order[$v->id]['order_count_for_all'];
+                $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
+                $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
+                $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
+                $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
+                $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
+            }
+            else
+            {
+                $list[$k]->order_count_for_all = 0;
+                $list[$k]->order_count_for_inspected = 0;
+                $list[$k]->order_count_for_accepted = 0;
+                $list[$k]->order_count_for_refused = 0;
+                $list[$k]->order_count_for_repeated = 0;
+                $list[$k]->order_count_for_accepted_inside = 0;
+            }
+
+            // 通过率
+            if($v->order_count_for_all > 0)
+            {
+                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            }
+            else $list[$k]->order_rate_for_accepted = 0;
+            // 有效单量
+            $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
+
+        }
+
+        return datatable_response($list, $draw, $total);
+
+
+
+
     }
 
 

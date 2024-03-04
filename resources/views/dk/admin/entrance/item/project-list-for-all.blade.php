@@ -132,7 +132,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改车辆【<span class="info-text-set-title"></span>】</h3>
+                <h3 class="box-title">修改项目【<span class="info-text-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -774,6 +774,45 @@
                                 html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
                             });
                             return html;
+                        }
+                    },
+                    {
+                        "title": "团队",
+                        "data": "pivot_project_team",
+                        "className": "text-center",
+                        "width": "240px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        },
+                        render: function(data, type, row, meta) {
+                            var html = '';
+                            $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                                html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp;';
+                            });
+                            return html;
+                        }
+                    },
+                    {
+                        "title": "每日目标",
+                        "data": "daily_goal",
+                        "className": "text-center",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','每日目标');
+                                $(nTd).attr('data-key','daily_goal').attr('data-value',data);
+                                $(nTd).attr('data-column-name','每日目标');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
                         }
                     },
                     {

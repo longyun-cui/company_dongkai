@@ -78,6 +78,14 @@ class DK_Project extends Model
 //            ->withTimestamps();
     }
 
+    // 【多对多】审核人关联的项目
+    function pivot_project_team()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Department','dk_pivot_team_project','project_id','team_id');
+//            ->wherePivot('relation_type', 1);
+//            ->withTimestamps();
+    }
+
 
 
 

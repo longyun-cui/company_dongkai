@@ -204,6 +204,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/item/item_select2_user', $controller.'@operate_item_select2_user');
     Route::match(['get','post'], '/item/item_select2_client', $controller.'@operate_item_select2_client');
     Route::match(['get','post'], '/item/item_select2_project', $controller.'@operate_item_select2_project');
+    Route::match(['get','post'], '/item/item_select2_team', $controller.'@operate_item_select2_team');
 
     Route::match(['get','post'], '/item/order_select2_project', $controller.'@operate_order_select2_project');
     Route::match(['get','post'], '/item/order_select2_client', $controller.'@operate_order_select2_client');
@@ -438,6 +439,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::match(['get','post'], '/statistic/statistic-rank-by-staff', $controller.'@view_statistic_rank_by_staff');
     Route::match(['get','post'], '/statistic/statistic-rank-by-department', $controller.'@view_statistic_rank_by_department');
 
+    Route::match(['get','post'], '/statistic/statistic-project', $controller.'@view_statistic_project');
     Route::match(['get','post'], '/statistic/statistic-department', $controller.'@view_statistic_department');
     Route::match(['get','post'], '/statistic/statistic-customer-service', $controller.'@view_statistic_customer_service');
     Route::match(['get','post'], '/statistic/statistic-inspector', $controller.'@view_statistic_inspector');
