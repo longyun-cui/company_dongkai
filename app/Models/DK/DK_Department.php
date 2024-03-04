@@ -108,6 +108,15 @@ class DK_Department extends Model
     }
 
 
+    // 多对多 审核人关联的项目
+    function pivot_department_project()
+    {
+        return $this->belongsToMany('App\Models\DK\DK_Project','dk_pivot_team_project','team_id','project_id');
+//            ->wherePivot('relation_type', 1);
+//            ->withTimestamps();
+    }
+
+
     // 工单
     function order_list_for_district()
     {

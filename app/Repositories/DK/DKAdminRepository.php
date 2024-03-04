@@ -6,6 +6,7 @@ use App\Models\DK\DK_User;
 use App\Models\DK\YH_UserExt;
 use App\Models\DK\DK_Project;
 use App\Models\DK\DK_Pivot_User_Project;
+use App\Models\DK\DK_Pivot_Team_Project;
 use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Record;
 use App\Models\DK\DK_Client;
@@ -5234,13 +5235,13 @@ class DKAdminRepository {
     {
         if(empty($post_data['keyword']))
         {
-            $query =DK_Department::select(['id','name as text'])
+            $query = DK_Department::select(['id','name as text'])
                 ->where(['item_status'=>1]);
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query =DK_Department::select(['id','name as text'])->where('name','like',"%$keyword%")
+            $query = DK_Department::select(['id','name as text'])->where('name','like',"%$keyword%")
                 ->where(['item_status'=>1]);
         }
 
@@ -5264,25 +5265,31 @@ class DKAdminRepository {
     //
     public function operate_item_select2_project($post_data)
     {
+        $this->get_me();
+        $me = $this->me;
 
         if(empty($post_data['keyword']))
         {
-            $list =DK_Project::select(['id','name as text'])
-                ->where('item_status',1)
-//                ->where(['user_status'=>1,'user_category'=>11])
-//                ->whereIn('user_type',[41,61,88])
-                ->get()->toArray();
+            $query = DK_Project::select(['id','name as text']);
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $list =DK_Project::select(['id','title as text'])
-                ->where('item_status',1)
-//                ->where(['user_status'=>1,'user_category'=>11])
-//                ->whereIn('user_type',[41,61,88])
-                ->where('title','like',"%$keyword%")
-                ->get()->toArray();
+            $query = DK_Project::select(['id','title as text'])->where('title','like',"%$keyword%");
         }
+
+        $query->where('item_status',1);
+//        $query->where(['user_status'=>1,'user_category'=>11]);
+//        $query->whereIn('user_type',[41,61,88]);
+
+        if(in_array($me->user_type,[81,84,88]))
+        {
+            $department_district_id = $me->department_district_id;
+            $department_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
+            $query->whereIn('id',$department_list);
+        }
+
+        $list = $query->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
         return $list;
