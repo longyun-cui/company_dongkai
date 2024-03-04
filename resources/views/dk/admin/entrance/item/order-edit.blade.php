@@ -182,6 +182,16 @@
                     </div>
                 </div>
 
+                {{--通话小结--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">通话小结</label>
+                    <div class="col-md-8 ">
+                        <p>要求：准确，全面，丰富</p>
+                        <p>范本：用户当前3颗后槽牙齿缺失，已经缺失半年，2颗下牙松动，之前没了解过种牙，好说话，要求下午3点前回电，同意医生助理联系</p>
+
+                    </div>
+                </div>
+
                 {{--备注--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">备注</label>
