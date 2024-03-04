@@ -285,6 +285,17 @@
                             }
                         },
                         {
+                            "title": "完成率",
+                            "data": "order_rate_for_achieved",
+                            "className": "_bold",
+                            "width": "100px",
+                            "orderable": false,
+                            render: function(data, type, row, meta) {
+                                if(data) return data + " %";
+                                return data
+                            }
+                        },
+                        {
                             "title": "拒绝量",
                             "data": "order_count_for_refused",
                             "className": "font-12px",
