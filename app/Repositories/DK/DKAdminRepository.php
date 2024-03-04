@@ -10569,6 +10569,8 @@ class DKAdminRepository {
 
 
 
+        $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
         // 团队统计
         $query_order = DK_Order::select('project_id')
             ->addSelect(DB::raw("
@@ -10579,7 +10581,11 @@ class DKAdminRepository {
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
-            ->groupBy('project_id')->get()->keyBy('project_id')->toArray();
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+            ->groupBy('project_id')
+            ->get()
+            ->keyBy('project_id')
+            ->toArray();
 
 
         $query = DK_Project::select('*')
