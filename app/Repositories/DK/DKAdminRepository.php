@@ -10570,7 +10570,7 @@ class DKAdminRepository {
 
 
         // 团队统计
-        $query_order = DK_Order::select('department_district_id')
+        $query_order = DK_Order::select('project_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
@@ -10579,7 +10579,7 @@ class DKAdminRepository {
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
-            ->groupBy('department_district_id')->get()->keyBy('department_district_id')->toArray();
+            ->groupBy('project_id')->get()->keyBy('project_id')->toArray();
 
 
         $query = DK_Project::select('*')
