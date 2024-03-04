@@ -21,7 +21,7 @@
 
                 <div class="box-header with-border" style="margin:4px 0;">
                     <h3 class="box-title">
-                        【<span class="statistic-title">部门</span>】
+                        【<span class="statistic-title">项目</span>】
                         <span class="statistic-time-type-title"></span>
                         <span class="statistic-time-title">{{ date('Y-m-d') }}</span>
                     </h3>
@@ -30,7 +30,7 @@
 
                 <div class="box-body datatable-body item-main-body" id="statistic-for-rank">
 
-                    <div class="row col-md-12 datatable-search-row">
+                    <div class="row col-md-12 datatable-search-row _none">
                         <div class="input-group">
 
                             {{--按天查看--}}
