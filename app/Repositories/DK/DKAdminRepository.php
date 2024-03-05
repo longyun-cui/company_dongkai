@@ -2380,12 +2380,13 @@ class DKAdminRepository {
             'operate.required' => '参数有误！',
             'true_name.required' => '请输入用户名！',
             'mobile.required' => '请输入电话！',
-            'mobile.unique' => '电话已存在！',
+//            'mobile.unique' => '电话已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'true_name' => 'required',
-            'mobile' => 'required|unique:dk_user,mobile',
+            'mobile' => 'required',
+//            'mobile' => 'required|unique:dk_user,mobile',
         ], $messages);
         if ($v->fails())
         {
@@ -2404,6 +2405,9 @@ class DKAdminRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
+            $is_exist = DK_User::where('mobile',$post_data['mobile'])->first();
+            if($is_exist) return response_error([],"电话已存在！");
+
             $mine = new DK_User;
             $post_data["user_status"] = 0;
             $post_data["user_category"] = 11;
