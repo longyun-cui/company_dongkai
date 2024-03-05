@@ -8263,7 +8263,7 @@ class DKAdminRepository {
         $type = isset($post_data['type']) ? $post_data['type']  : '';
 
 
-        $query = DK_Order::select('*');
+        $query = new DK_Order;
 
         if($me->user_type == 81)
         {
@@ -8317,17 +8317,25 @@ class DKAdminRepository {
 
 
         // 工单统计
-        // 总量
-        $order_count_for_all = (clone $query)->count("*");
-        $order_count_for_unpublished = (clone $query)->where('is_published', 0)->count("*");
-        $order_count_for_published = (clone $query)->where('is_published', 1)->count("*");
-        $order_count_for_waiting_for_inspect = (clone $query)->where('is_published', 1)->where('inspected_status', 0)->count("*");
-        $order_count_for_inspected = (clone $query)->where('is_published', 1)->where('inspected_status', '<>', 0)->count("*");
-        $order_count_for_accepted = (clone $query)->where('is_published', 1)->where('inspected_result','通过')->count("*");
-        $order_count_for_accepted_inside = (clone $query)->where('is_published', 1)->where('inspected_result','内部通过')->count("*");
-        $order_count_for_refused = (clone $query)->where('is_published', 1)->where('inspected_result','拒绝')->count("*");
-        $order_count_for_repeated = (clone $query)->where('is_published', 1)->where('inspected_result','重复')->count("*");
-        $order_count_for_repeat = (clone $query)->where('is_published', 1)->where('is_repeat','>',0)->count("*");
+        // 总量统计
+        $query_order = (clone $query)->select(DB::raw("
+                    count(*) as order_count_for_all,
+                    count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
+                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                "))
+            ->get();
+
+        $order_count_for_all = $query_order[0]->order_count_for_all;
+        $order_count_for_inspected = $query_order[0]->order_count_for_inspected;
+        $order_count_for_accepted = $query_order[0]->order_count_for_accepted;
+        $order_count_for_accepted_inside = $query_order[0]->order_count_for_accepted_inside;
+        $order_count_for_refused = $query_order[0]->order_count_for_refused;
+        $order_count_for_repeated = $query_order[0]->order_count_for_repeated;
 
         $return_data['order_count_for_all'] = $order_count_for_all;
         $return_data['order_count_for_inspected'] = $order_count_for_inspected;
@@ -8342,26 +8350,26 @@ class DKAdminRepository {
         else $return_data['order_count_for_rate'] = 0;
 
 
-        // 当天
-        $order_count_of_today_for_all = (clone $query)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_unpublished = (clone $query)->where('is_published', 0)
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_published = (clone $query)->where('is_published', 1)
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_waiting_for_inspect = (clone $query)->where('is_published', 1)->where('inspected_status', 0)
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_inspected = (clone $query)->where('is_published', 1)->where('inspected_status', '<>', 0)
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_accepted = (clone $query)->where('is_published', 1)->where('inspected_result','通过')
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_accepted_inside = (clone $query)->where('is_published', 1)->where('inspected_result','内部通过')
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_refused = (clone $query)->where('is_published', 1)->where('inspected_result','拒绝')
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_repeated = (clone $query)->where('is_published', 1)->where('inspected_result','重复')
-            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)->count("*");
-        $order_count_of_today_for_repeat = (clone $query)->where('is_published', 1)->where('is_repeat','>',0)->count("*");
+        // 当天统计
+        $query_order_of_today = (clone $query)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)
+            ->select(DB::raw("
+                    count(*) as order_count_for_all,
+                    count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
+                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                "))
+            ->get();
 
+        $order_count_of_today_for_all = $query_order_of_today[0]->order_count_for_all;
+        $order_count_of_today_for_inspected = $query_order_of_today[0]->order_count_for_inspected;
+        $order_count_of_today_for_accepted = $query_order_of_today[0]->order_count_for_accepted;
+        $order_count_of_today_for_accepted_inside = $query_order_of_today[0]->order_count_for_accepted_inside;
+        $order_count_of_today_for_refused = $query_order_of_today[0]->order_count_for_refused;
+        $order_count_of_today_for_repeated = $query_order_of_today[0]->order_count_for_repeated;
 
         $return_data['order_count_of_today_for_all'] = $order_count_of_today_for_all;
         $return_data['order_count_of_today_for_inspected'] = $order_count_of_today_for_inspected;
@@ -8376,28 +8384,26 @@ class DKAdminRepository {
         else $return_data['order_count_of_today_for_rate'] = 0;
 
 
+        // 当月统计
+        $query_order_of_month = (clone $query)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->select(DB::raw("
+                    count(*) as order_count_for_all,
+                    count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
+                    count(IF(is_published = 1 AND inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                "))
+            ->get();
 
-
-        // 当月
-        $order_count_of_month_for_all = (clone $query)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_unpublished = (clone $query)->where('is_published', 0)
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_published = (clone $query)->where('is_published', 1)
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_waiting_for_inspect = (clone $query)->where('is_published', 1)->where('inspected_status', 0)
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_inspected = (clone $query)->where('is_published', 1)->where('inspected_status', '<>', 0)
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_accepted = (clone $query)->where('is_published', 1)->where('inspected_result','通过')
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_accepted_inside = (clone $query)->where('is_published', 1)->where('inspected_result','内部通过')
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_refused = (clone $query)->where('is_published', 1)->where('inspected_result','拒绝')
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_repeated = (clone $query)->where('is_published', 1)->where('inspected_result','重复')
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
-        $order_count_of_month_for_repeat = (clone $query)->where('is_published', 1)->where('is_repeat','>',0)
-            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])->count("*");
+        $order_count_of_month_for_all = $query_order_of_month[0]->order_count_for_all;
+        $order_count_of_month_for_inspected = $query_order_of_month[0]->order_count_for_inspected;
+        $order_count_of_month_for_accepted = $query_order_of_month[0]->order_count_for_accepted;
+        $order_count_of_month_for_accepted_inside = $query_order_of_month[0]->order_count_for_accepted_inside;
+        $order_count_of_month_for_refused = $query_order_of_month[0]->order_count_for_refused;
+        $order_count_of_month_for_repeated = $query_order_of_month[0]->order_count_for_repeated;
 
         $return_data['order_count_of_month_for_all'] = $order_count_of_month_for_all;
         $return_data['order_count_of_month_for_inspected'] = $order_count_of_month_for_inspected;
