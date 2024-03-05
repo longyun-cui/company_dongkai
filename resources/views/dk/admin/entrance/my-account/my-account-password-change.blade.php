@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $head_title or '修改密码' }} - 管理员后台系统 - 兆益信息
+    {{ $head_title or '修改密码' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 @section('meta_author')@endsection
 @section('meta_title')@endsection
@@ -13,7 +13,7 @@
 
 
 @section('header','')
-@section('description','修改密码 - 管理员后台系统 - 兆益信息')
+@section('description'){{ $title_text or '修改密码' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="{{ url('/my-account/my-profile-info-index') }}"><i class="fa fa-info-circle"></i>基本资料</a></li>

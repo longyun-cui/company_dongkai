@@ -71,12 +71,15 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+
 //        $condition = request()->all();
 //        $return['condition'] = $condition;
 //
 //        $condition['task-list-type'] = 'unfinished';
 //        $parameter_result = http_build_query($condition);
 //        return redirect('/?'.$parameter_result);
+
+
 
 
         $this_month = date('Y-m');

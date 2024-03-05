@@ -21,10 +21,21 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
     $controller = 'DKAdminController';
 
-
     Route::post('/is_only_me', $controller.'@check_is_only_me');
-    Route::get('/', $controller.'@view_admin_index');
+
     Route::get('/404', $controller.'@view_admin_404');
+
+    Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
+});
+
+Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], function () {
+
+    $controller = 'DKAdminController';
+
+
+//    Route::post('/is_only_me', $controller.'@check_is_only_me');
+    Route::get('/', $controller.'@view_admin_index');
+//    Route::get('/404', $controller.'@view_admin_404');
 
 
     /*
@@ -32,11 +43,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
      */
     Route::get('/my-account/my-profile-info-index/', $controller.'@view_my_profile_info_index');
     Route::match(['get','post'], '/my-account/my-profile-info-edit', $controller.'@operate_my_profile_info_edit');
-    Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
-
-
-
-
+//    Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
 
 
 
