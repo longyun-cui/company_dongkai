@@ -234,7 +234,7 @@
                         {
                             "title": "每日目标",
                             "data": "daily_goal",
-                            "className": "text-center text-green _bold",
+                            "className": "text-center text-green",
                             "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
