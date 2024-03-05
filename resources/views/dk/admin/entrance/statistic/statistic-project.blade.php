@@ -234,7 +234,7 @@
                         {
                             "title": "每日目标",
                             "data": "daily_goal",
-                            "className": "text-center",
+                            "className": "text-center text-green _bold",
                             "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -287,7 +287,7 @@
                         {
                             "title": "完成率",
                             "data": "order_rate_for_achieved",
-                            "className": "_bold",
+                            "className": "text-blue _bold",
                             "width": "100px",
                             "orderable": false,
                             render: function(data, type, row, meta) {
