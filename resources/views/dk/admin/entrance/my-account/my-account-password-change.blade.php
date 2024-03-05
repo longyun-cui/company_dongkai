@@ -26,7 +26,7 @@
         <div class="box box-info form-container">
 
             <div class="box-header with-border" style="margin:4px 0;">
-                <h3 class="box-title">修改密码</h3>
+                <h3 class="box-title">修改密码 (或更改初始密码)</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
