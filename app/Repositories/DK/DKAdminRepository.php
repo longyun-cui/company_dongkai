@@ -8263,27 +8263,30 @@ class DKAdminRepository {
         $type = isset($post_data['type']) ? $post_data['type']  : '';
 
 
-        $query = new DK_Order;
 
         if($me->user_type == 81)
         {
-            $query->where('department_manager_id',$me->id);
+            $query = DK_Order::where('department_manager_id',$me->id);
         }
         else if($me->user_type == 84)
         {
-            $query->where('department_supervisor_id',$me->id);
+            $query = DK_Order::where('department_supervisor_id',$me->id);
         }
         else if($me->user_type == 88)
         {
-            $query->where('creator_id',$me->id);
+            $query = DK_Order::where('creator_id',$me->id);
         }
         else if($me->user_type == 71)
         {
-            $query->where('inspector_id',$me->id);
+            $query = DK_Order::where('inspector_id',$me->id);
         }
         else if($me->user_type == 77)
         {
-            $query->where('inspector_id',$me->id);
+            $query = DK_Order::where('inspector_id',$me->id);
+        }
+        else
+        {
+            $query = new DK_Order;
         }
 
 

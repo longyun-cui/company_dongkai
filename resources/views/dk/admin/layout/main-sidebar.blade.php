@@ -125,7 +125,7 @@
             {{--数据统计--}}
             <li class="header">数据统计</li>
 
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,11,71,77]))
             <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
                 <a href="{{ url('/statistic/statistic-project') }}">
                     <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
