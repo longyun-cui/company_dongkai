@@ -5285,8 +5285,8 @@ class DKAdminRepository {
         if(in_array($me->user_type,[81,84,88]))
         {
             $department_district_id = $me->department_district_id;
-            $department_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
-            $query->whereIn('id',$department_list);
+            $project_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
+            $query->whereIn('id',$project_list);
         }
 
         $list = $query->get()->toArray();
@@ -9445,12 +9445,6 @@ class DKAdminRepository {
         $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
 
-        if($me->user_type == 81)
-        {
-            $
-            $query = DK_Order::where('department_manager_id',$me->id);
-        }
-
         // 团队统计
         $query_order = DK_Order::select('project_id')
             ->addSelect(DB::raw("
@@ -9471,6 +9465,13 @@ class DKAdminRepository {
         $query = DK_Project::select('*')
             ->withTrashed()
             ->with(['creator','inspector_er','pivot_project_user','pivot_project_team']);
+
+        if(in_array($me->user_type,[81]))
+        {
+            $department_district_id = $me->department_district_id;
+            $project_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
+            $query->whereIn('id',$project_list);
+        }
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
