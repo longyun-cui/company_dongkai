@@ -337,6 +337,18 @@
                                 if(data) return data + " %";
                                 return data
                             }
+                        },
+                        {
+                            "className": "text-center",
+                            "width": "",
+                            "title": "备注",
+                            "data": "remark",
+                            "orderable": false,
+                            render: function(data, type, row, meta) {
+                                return data;
+                                // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                                // else return '';
+                            }
                         }
                     ],
                     "drawCallback": function (settings) {
