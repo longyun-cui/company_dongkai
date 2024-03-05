@@ -8263,30 +8263,27 @@ class DKAdminRepository {
         $type = isset($post_data['type']) ? $post_data['type']  : '';
 
 
+        $query = DK_Order::select('id');
 
         if($me->user_type == 81)
         {
-            $query = DK_Order::where('department_manager_id',$me->id);
+            $query->where('department_manager_id',$me->id);
         }
         else if($me->user_type == 84)
         {
-            $query = DK_Order::where('department_supervisor_id',$me->id);
+            $query->where('department_supervisor_id',$me->id);
         }
         else if($me->user_type == 88)
         {
-            $query = DK_Order::where('creator_id',$me->id);
+            $query->where('creator_id',$me->id);
         }
         else if($me->user_type == 71)
         {
-            $query = DK_Order::where('inspector_id',$me->id);
+            $query->where('inspector_id',$me->id);
         }
         else if($me->user_type == 77)
         {
-            $query = DK_Order::where('inspector_id',$me->id);
-        }
-        else
-        {
-            $query = new DK_Order;
+            $query->where('inspector_id',$me->id);
         }
 
 
@@ -9446,6 +9443,13 @@ class DKAdminRepository {
         $me = $this->me;
 
         $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+
+        if($me->user_type == 81)
+        {
+            $
+            $query = DK_Order::where('department_manager_id',$me->id);
+        }
 
         // 团队统计
         $query_order = DK_Order::select('project_id')
