@@ -205,7 +205,7 @@
                             "title": "项目",
                             "data": "name",
                             "className": "text-center",
-                            "width": "80px",
+                            "width": "120px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             },
@@ -218,7 +218,7 @@
                             "title": "团队",
                             "data": "pivot_project_team",
                             "className": "text-center",
-                            "width": "240px",
+                            "width": "200px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             },
