@@ -7756,7 +7756,19 @@ class DKAdminRepository {
                 $v->is_me = 0;
             }
 
-            if(!in_array($me->user_type,[1,9,11]))
+            if(in_array($me->user_type,[0,1,9,11]))
+            {
+            }
+            else if(in_array($me->user_type,[71,77]))
+            {
+                $time = time();
+                if(($v->published_at >0) && (($time - $v->published_at) > 172800))
+                {
+                    $client_phone = $v->client_phone;
+                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
+            else if(in_array($me->user_type,[81,84,88]))
             {
                 $time = time();
                 if(!$v->is_me || (($v->published_at >0) && (($time - $v->published_at) > 172800)))
