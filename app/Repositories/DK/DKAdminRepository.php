@@ -7745,8 +7745,26 @@ class DKAdminRepository {
         {
 //            $list[$k]->encode_id = encode($v->id);
 
-            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-            else $list[$k]->is_me = 0;
+            if($v->creator_id == $me->id)
+            {
+                $list[$k]->is_me = 1;
+                $v->is_me = 1;
+            }
+            else
+            {
+                $list[$k]->is_me = 0;
+                $v->is_me = 0;
+            }
+
+            if(!in_array($me->user_type,[1,9,11]))
+            {
+                $time = time();
+                if(!$v->is_me || (($v->published_at >0) && (($time - $v->published_at) > 172800)))
+                {
+                    $client_phone = $v->client_phone;
+                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
 
         }
 //        dd($list->toArray());
