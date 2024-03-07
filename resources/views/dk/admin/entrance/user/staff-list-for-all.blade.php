@@ -51,11 +51,20 @@
                         <input type="text" class="form-control form-filter item-search-keyup" name="staff-username" placeholder="用户名" />
 
                         @if(in_array($me->user_type,[0,1,9,11]))
-                            <select class="form-control form-filter select2-box" name="staff-department-district" style="width:100px;">
+                            <select class="form-control form-filter select2-box" name="staff-department-district" style="width:88px;">
                                 <option value="-1">选择大区</option>
                                 @foreach($department_district_list as $v)
                                     <option value="{{ $v->id }}">{{ $v->name }}</option>
                                 @endforeach
+                            </select>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                            <select class="form-control form-filter" name="staff-user-type" style="width:88px;">
+                                <option value="-1">全部人员</option>
+                                <option value="88">客服</option>
+                                <option value="84">主管</option>
+                                <option value="81">经理</option>
                             </select>
                         @endif
 
@@ -184,6 +193,7 @@
                         d.mobile = $('input[name="staff-mobile"]').val();
                         d.username = $('input[name="staff-username"]').val();
                         d.department_district = $('select[name="staff-department-district"]').val();
+                        d.user_type = $('select[name="staff-user-type"]').val();
 
                     },
                 },

@@ -2994,6 +2994,15 @@ class DKAdminRepository {
             }
         }
 
+        // 员工类型
+        if(!empty($post_data['user_type']))
+        {
+            if(!in_array($post_data['user_type'],[-1,0]))
+            {
+                $query->where('user_type', $post_data['user_type']);
+            }
+        }
+
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
