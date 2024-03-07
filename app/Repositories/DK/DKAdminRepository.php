@@ -7773,8 +7773,12 @@ class DKAdminRepository {
                 $time = time();
                 if(!$v->is_me || (($v->published_at >0) && (($time - $v->published_at) > 172800)))
                 {
+//                    $len = strlen($client_phone);  // 字符串长度
                     $client_phone = $v->client_phone;
-                    $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                    if(is_numeric($client_phone))
+                    {
+                        $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                    }
                 }
             }
 
