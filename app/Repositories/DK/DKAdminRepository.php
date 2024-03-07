@@ -9615,7 +9615,7 @@ class DKAdminRepository {
             }
             else $list[$k]->order_rate_for_accepted = 0;
             // 完成率
-            if($v->order_count_for_all > 0)
+            if($v->daily_goal > 0)
             {
                 $list[$k]->order_rate_for_achieved = round(($v->order_count_for_accepted * 100 / $v->daily_goal),2);
             }
