@@ -5661,7 +5661,8 @@ class DKAdminRepository {
             'project_id.numeric' => '选择项目参数有误！',
             'project_id.min' => '请填选择项目！',
             'client_name.required' => '请填写客户信息！',
-            'client_phone.required' => '请填写客户信息！',
+            'client_phone.required' => '请填写客户电话！',
+            'client_phone.numeric' => '客户电话格式有误！',
             'location_city.required' => '请选择城市！',
             'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
@@ -5670,7 +5671,7 @@ class DKAdminRepository {
             'operate' => 'required',
             'project_id' => 'required|numeric|min:1',
             'client_name' => 'required',
-            'client_phone' => 'required',
+            'client_phone' => 'required|numeric',
             'location_city' => 'required',
             'location_district' => 'required',
             'description' => 'required',
@@ -9569,6 +9570,20 @@ class DKAdminRepository {
         else $list = $query->skip($skip)->take($limit)->get();
 //        dd($list->toArray());
 
+
+        $total = [];
+        $total['id'] = '统计';
+        $total['name'] = '所有项目';
+        $total['pivot_project_team'] = [];
+        $total['daily_goal'] = 0;
+        $total['order_count_for_all'] = 0;
+        $total['order_count_for_inspected'] = 0;
+        $total['order_count_for_accepted'] = 0;
+        $total['order_count_for_refused'] = 0;
+        $total['order_count_for_repeated'] = 0;
+        $total['order_count_for_accepted_inside'] = 0;
+        $total['remark'] = '';
+
         foreach ($list as $k => $v)
         {
 
@@ -9611,12 +9626,43 @@ class DKAdminRepository {
             }
 
 
+
+            $total['daily_goal'] += $v->daily_goal;
+            $total['order_count_for_all'] += $v->order_count_for_all;
+            $total['order_count_for_inspected'] += $v->order_count_for_inspected;
+            $total['order_count_for_accepted'] += $v->order_count_for_accepted;
+            $total['order_count_for_refused'] += $v->order_count_for_refused;
+            $total['order_count_for_repeated'] += $v->order_count_for_repeated;
+            $total['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
+
+
         }
 
+
+        // 有效单量
+        $total['order_count_for_effective'] = $total['order_count_for_inspected'] - $total['order_count_for_refused'] - $total['order_count_for_repeated'];
+        // 通过率
+        if($total['order_count_for_all'] > 0)
+        {
+            $total['order_rate_for_accepted'] = round(($total['order_count_for_accepted'] * 100 / $total['order_count_for_all']),2);
+        }
+        else $total['order_rate_for_accepted'] = 0;
+        // 完成率
+        if($total['order_count_for_all'] > 0)
+        {
+            $total['order_rate_for_achieved'] = round(($total['order_count_for_accepted'] * 100 / $total['daily_goal']),2);
+        }
+        else
+        {
+            if($total['order_count_for_accepted'] > 0) $total['order_rate_for_achieved'] = 100;
+            else $total['order_rate_for_achieved'] = 0;
+        }
+
+        $list[] = $total;
+
+
+
         return datatable_response($list, $draw, $total);
-
-
-
 
     }
 
@@ -9697,6 +9743,17 @@ class DKAdminRepository {
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
+        $total = [];
+        $total['id'] = '统计';
+        $total['name'] = '所有区';
+        $total['staff_count'] = 0;
+        $total['order_count_for_all'] = 0;
+        $total['order_count_for_inspected'] = 0;
+        $total['order_count_for_accepted'] = 0;
+        $total['order_count_for_refused'] = 0;
+        $total['order_count_for_repeated'] = 0;
+        $total['order_count_for_accepted_inside'] = 0;
+
         foreach ($list as $k => $v)
         {
             if(isset($query_order[$v->id]))
@@ -9740,7 +9797,40 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_accepted_per = round(($v->order_count_for_accepted / $v->staff_count),2);
             }
             else $list[$k]->order_count_for_accepted_per = 0;
+
+            $total['staff_count'] += $v->staff_count;
+            $total['order_count_for_all'] += $v->order_count_for_all;
+            $total['order_count_for_inspected'] += $v->order_count_for_inspected;
+            $total['order_count_for_accepted'] += $v->order_count_for_accepted;
+            $total['order_count_for_refused'] += $v->order_count_for_refused;
+            $total['order_count_for_repeated'] += $v->order_count_for_repeated;
+            $total['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
+
         }
+
+        // 通过率
+        if($total['order_count_for_all'] > 0)
+        {
+            $total['order_rate_for_accepted'] = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+        }
+        else $total['order_rate_for_accepted'] = 0;
+
+        // 人均交付量
+        if($total['staff_count'] > 0)
+        {
+            $total['order_count_for_all_per'] = round(($total['order_count_for_all'] / $total['staff_count']),2);
+        }
+        else $total['order_count_for_all_per'] = 0;
+
+        // 人均通过量
+        if($total['staff_count'] > 0)
+        {
+            $total['order_count_for_accepted_per'] = round(($total['order_count_for_accepted'] / $total['staff_count']),2);
+        }
+        else $total['order_count_for_accepted_per'] = 0;
+
+        $list[] = $total;
+
 //        dd($list->toArray());
 
         return datatable_response($list, $draw, $total);

@@ -194,7 +194,9 @@
                             "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
                                 {
+                                    $(nTd).addClass('_bold');
                                 }
                             },
                             render: function(data, type, row, meta) {
@@ -208,6 +210,10 @@
                             "width": "120px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
                             },
                             render: function(data, type, row, meta) {
                                 return data;
@@ -221,6 +227,10 @@
                             "width": "200px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
                             },
                             render: function(data, type, row, meta) {
                                 var html = '';
@@ -238,15 +248,9 @@
                             "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                                if(row.is_completed != 1 && row.item_status != 97)
+                                if(row.id == "统计")
                                 {
-                                    $(nTd).addClass('modal-show-for-info-text-set');
-                                    $(nTd).attr('data-id',row.id).attr('data-name','每日目标');
-                                    $(nTd).attr('data-key','daily_goal').attr('data-value',data);
-                                    $(nTd).attr('data-column-name','每日目标');
-                                    $(nTd).attr('data-text-type','text');
-                                    if(data) $(nTd).attr('data-operate-type','edit');
-                                    else $(nTd).attr('data-operate-type','add');
+                                    $(nTd).addClass('_bold');
                                 }
                             },
                             render: function(data, type, row, meta) {
@@ -260,6 +264,12 @@
                             "width": "80px",
                             "orderable": true,
                             "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
                             render: function(data, type, row, meta) {
                                 return data;
                             }
@@ -270,6 +280,12 @@
                             "className": "font-12px",
                             "width": "80px",
                             "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
                             render: function(data, type, row, meta) {
                                 return data;
                             }
@@ -280,6 +296,12 @@
                             "className": "font-12px",
                             "width": "80px",
                             "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
                             render: function(data, type, row, meta) {
                                 return data;
                             }
@@ -290,6 +312,12 @@
                             "className": "text-blue _bold",
                             "width": "100px",
                             "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
                             render: function(data, type, row, meta) {
                                 if(data) return data + " %";
                                 return data
@@ -301,6 +329,12 @@
                             "className": "font-12px",
                             "width": "80px",
                             "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
                             render: function(data, type, row, meta) {
 
                                 return data;
@@ -312,6 +346,12 @@
                             "className": "font-12px",
                             "width": "80px",
                             "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
                             render: function(data, type, row, meta) {
 
                                 return data;
@@ -323,6 +363,12 @@
                             "className": "text-center",
                             "width": "80px",
                             "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
                             render: function(data, type, row, meta) {
                                 return data;
                             }
@@ -333,6 +379,12 @@
                             "className": "",
                             "width": "100px",
                             "orderable": false,
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
                             render: function(data, type, row, meta) {
                                 if(data) return data + " %";
                                 return data
