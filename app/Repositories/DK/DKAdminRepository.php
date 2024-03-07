@@ -9811,7 +9811,7 @@ class DKAdminRepository {
         // 通过率
         if($total['order_count_for_all'] > 0)
         {
-            $total['order_rate_for_accepted'] = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            $total['order_rate_for_accepted'] = round(($total['order_count_for_accepted'] * 100 / $total['order_count_for_all']),2);
         }
         else $total['order_rate_for_accepted'] = 0;
 
