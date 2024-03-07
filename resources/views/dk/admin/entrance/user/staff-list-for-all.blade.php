@@ -47,7 +47,17 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="username" placeholder="用户名" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="staff-mobile" placeholder="登录工号" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="staff-username" placeholder="用户名" />
+
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                            <select class="form-control form-filter select2-box" name="staff-department-district" style="width:100px;">
+                                <option value="-1">选择大区</option>
+                                @foreach($department_district_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                @endforeach
+                            </select>
+                        @endif
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
@@ -171,16 +181,9 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.username = $('input[name="username"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
-//
-//                        d.created_at_from = $('input[name="created_at_from"]').val();
-//                        d.created_at_to = $('input[name="created_at_to"]').val();
-//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
-//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
+                        d.mobile = $('input[name="staff-mobile"]').val();
+                        d.username = $('input[name="staff-username"]').val();
+                        d.department_district = $('select[name="staff-department-district"]').val();
 
                     },
                 },

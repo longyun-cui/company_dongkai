@@ -2943,6 +2943,12 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+        if(in_array($me->user_type,[0,1,9,11]))
+        {
+            $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+            $return['department_district_list'] = $department_district_list;
+        }
+
         $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-list-for-all';
         return view($view_blade)->with($return);
@@ -2976,6 +2982,17 @@ class DKAdminRepository {
 //            ->whereIn('usergroup',['Agent','Agent2']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0]))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
 
         $total = $query->count();
 
