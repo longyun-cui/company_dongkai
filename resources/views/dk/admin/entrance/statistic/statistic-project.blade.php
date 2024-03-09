@@ -168,7 +168,7 @@
                     },
                     "paging": false,
                     "pagingType": "simple_numbers",
-                    "order": [0,'asc'],
+                    "order": [],
                     "orderCellsTop": true,
                     "columns": [
 //                    {
