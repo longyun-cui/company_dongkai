@@ -4089,7 +4089,7 @@ class DKAdminRepository {
     /*
      * 车辆管理
      */
-    // 【车辆管理】返回-添加-视图
+    // 【项目】返回-添加-视图
     public function view_item_project_create()
     {
         $this->get_me();
@@ -4114,7 +4114,7 @@ class DKAdminRepository {
             'list_link'=>$list_link,
         ]);
     }
-    // 【车辆管理】返回-编辑-视图
+    // 【项目】返回-编辑-视图
     public function view_item_project_edit()
     {
         $this->get_me();
@@ -4168,7 +4168,7 @@ class DKAdminRepository {
             else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
         }
     }
-    // 【车辆管理】保存数据
+    // 【项目】保存数据
     public function operate_item_project_save($post_data)
     {
         $messages = [
@@ -4285,7 +4285,7 @@ class DKAdminRepository {
     }
 
 
-    // 【车辆管理】【文本-信息】设置-文本-类型
+    // 【项目】【文本-信息】设置-文本-类型
     public function operate_item_car_info_text_set($post_data)
     {
         $messages = [
@@ -4376,7 +4376,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】【时间-信息】修改-时间-类型
+    // 【项目】【时间-信息】修改-时间-类型
     public function operate_item_car_info_time_set($post_data)
     {
         $messages = [
@@ -4468,7 +4468,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】【选项-信息】修改-radio-select-[option]-类型
+    // 【项目】【选项-信息】修改-radio-select-[option]-类型
     public function operate_item_car_info_option_set($post_data)
     {
         $messages = [
@@ -4581,7 +4581,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】【附件】添加
+    // 【项目】【附件】添加
     public function operate_item_car_info_attachment_set($post_data)
     {
         $messages = [
@@ -4727,7 +4727,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】【附件】删除
+    // 【项目】【附件】删除
     public function operate_item_car_info_attachment_delete($post_data)
     {
         $messages = [
@@ -4804,7 +4804,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】【附件】获取
+    // 【项目】【附件】获取
     public function operate_item_car_get_attachment_html($post_data)
     {
         $messages = [
@@ -4843,7 +4843,7 @@ class DKAdminRepository {
     }
 
 
-    // 【车辆管理】管理员-删除
+    // 【项目】管理员-删除
     public function operate_item_project_admin_delete($post_data)
     {
         $messages = [
@@ -4897,7 +4897,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】管理员-恢复
+    // 【项目】管理员-恢复
     public function operate_item_project_admin_restore($post_data)
     {
         $messages = [
@@ -4950,7 +4950,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】管理员-彻底删除
+    // 【项目】管理员-彻底删除
     public function operate_item_project_admin_delete_permanently($post_data)
     {
         $messages = [
@@ -5005,7 +5005,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】管理员-启用
+    // 【项目】管理员-启用
     public function operate_item_project_admin_enable($post_data)
     {
         $messages = [
@@ -5056,7 +5056,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【车辆管理】管理员-禁用
+    // 【项目】管理员-禁用
     public function operate_item_project_admin_disable($post_data)
     {
         $messages = [
@@ -5109,7 +5109,7 @@ class DKAdminRepository {
     }
 
 
-    // 【车辆管理】返回-列表-视图
+    // 【项目】返回-列表-视图
     public function view_item_project_list_for_all($post_data)
     {
         $this->get_me();
@@ -5119,7 +5119,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【车辆管理】返回-列表-数据
+    // 【项目】返回-列表-数据
     public function get_item_project_list_for_all_datatable($post_data)
     {
         $this->get_me();
@@ -5169,7 +5169,7 @@ class DKAdminRepository {
     }
 
 
-    // 【车辆管理】【修改记录】返回-列表-视图
+    // 【项目】【修改记录】返回-列表-视图
     public function view_item_project_modify_record($post_data)
     {
         $this->get_me();
@@ -5182,7 +5182,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【车辆管理】【修改记录】返回-列表-数据
+    // 【项目】【修改记录】返回-列表-数据
     public function get_item_project_modify_record_datatable($post_data)
     {
         $this->get_me();

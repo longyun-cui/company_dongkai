@@ -21,20 +21,22 @@ class DK_Order extends Model
         'client_id',
         'item_id', 'menu_id',
         '',
-        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'tag', 'custom', 'custom2', 'custom3',
+        'link_url', 'cover_pic', 'attachment_name', 'attachment_src',
+        'visit_num', 'share_num', 'favor_num', 'comment_num',
+
         'project_id', 'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id',
         'assign_time',
         'client_name', 'client_phone',
         'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id', 'is_repeat',
-        'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description',
-        'pusher_id', 'pushed_at',
-        'deliverer_id', 'delivered_at',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'is_delay',
         'teeth_count',
         'company', 'fund', 'mobile', 'city', 'address',
-        'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at', 'completed_at', 'verified_at', 'inspected_at'
+
+        'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description', 'inspected_at',
+        'pusher_id', 'pushed_at',
+        'deliverer_id', 'delivered_at',
+        'published_at', 'completed_at', 'verified_at'
     ];
     protected $dateFormat = 'U';
 
