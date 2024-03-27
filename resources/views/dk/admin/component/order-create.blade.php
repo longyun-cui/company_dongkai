@@ -81,10 +81,10 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 其他城市</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="custom_location_city" placeholder="所在城市">
+                <input type="text" class="form-control" name="custom_location_city" placeholder="所在城市" id="custom-city">
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <input type="text" class="form-control" name="custom_location_district" placeholder="所在区域">
+                <input type="text" class="form-control" name="custom_location_district" placeholder="所在区域" id="custom-district">
             </div>
         </div>
     </div>
