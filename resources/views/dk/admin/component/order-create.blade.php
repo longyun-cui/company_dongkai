@@ -76,6 +76,18 @@
             </div>
         </div>
     </div>
+    {{--其他城市--}}
+    <div class="form-group">
+        <label class="control-label col-md-2"><sup class="text-red">*</sup> 其他城市</label>
+        <div class="col-md-8 ">
+            <div class="col-sm-6 col-md-6 padding-0">
+                <input type="text" class="form-control" name="custom_location_city" placeholder="所在城市">
+            </div>
+            <div class="col-sm-6 col-md-6 padding-0">
+                <input type="text" class="form-control" name="custom_location_district" placeholder="所在区域">
+            </div>
+        </div>
+    </div>
     {{--牙齿数量--}}
     <div class="form-group">
         <label class="control-label col-md-2">牙齿数量</label>

@@ -5663,8 +5663,8 @@ class DKAdminRepository {
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户电话！',
             'client_phone.numeric' => '客户电话格式有误！',
-            'location_city.required' => '请选择城市！',
-            'location_district.required' => '请选择行政区！',
+//            'location_city.required' => '请选择城市！',
+//            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
         ];
         $v = Validator::make($post_data, [
@@ -5672,8 +5672,8 @@ class DKAdminRepository {
             'project_id' => 'required|numeric|min:1',
             'client_name' => 'required',
             'client_phone' => 'required|numeric',
-            'location_city' => 'required',
-            'location_district' => 'required',
+//            'location_city' => 'required',
+//            'location_district' => 'required',
             'description' => 'required',
         ], $messages);
         if ($v->fails())
@@ -5681,6 +5681,23 @@ class DKAdminRepository {
             $messages = $v->errors();
             return response_error([],$messages->first());
         }
+
+        $location_city = $post_data["location_city"];
+        $location_district = $post_data["location_district"];
+        $custom_location_city = $post_data["custom_location_city"];
+        $custom_location_district = $post_data["custom_location_district"];
+
+        if(!empty($location_city) && !empty($location_district))
+        {
+        }
+        else
+        {
+            if(!empty($custom_location_city) && !empty($custom_location_district))
+            {
+            }
+            else return response_error([],"请选择城市和区域！");
+        }
+//        dd($custom_location_city.$custom_location_district);
 
 
         $this->get_me();
@@ -5745,6 +5762,12 @@ class DKAdminRepository {
             $mine_data['department_group_id'] = $me->department_group_id;
             if($me->department_district_er) $mine_data['department_manager_id'] = $me->department_district_er->leader_id;
             if($me->department_group_er) $mine_data['department_supervisor_id'] = $me->department_group_er->leader_id;
+
+            if(!empty($custom_location_city) && !empty($custom_location_district))
+            {
+                $mine_data['location_city'] = $custom_location_city;
+                $mine_data['location_district'] = $custom_location_district;
+            }
 
             unset($mine_data['operate']);
             unset($mine_data['operate_id']);

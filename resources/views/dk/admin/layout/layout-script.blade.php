@@ -138,12 +138,22 @@
 
         $("#select-city").change(function() {
 
+            var $city_value = $("#select-city").val();
             var $city_index = $("#select-city").find('option:selected').attr('data-index');
             $("#select-district").html('<option value="">选择区划</option>');
             $.each($district_list[$city_index], function($i,$val) {
                 $("#select-district").append('<option value="' + $val + '">' + $val + '</option>');
             });
             $('#select-district').select2();
+
+            $('#custom-city').val($city_value);
+            $('#custom-district').val('');
+
+        });
+        $("#select-district").change(function() {
+
+            var $district_value = $("#select-district").val();
+            $('#custom-district').val($district_value);
         });
 
         $('#select-city').select2({
