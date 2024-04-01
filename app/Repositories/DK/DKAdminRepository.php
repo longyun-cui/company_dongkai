@@ -5311,7 +5311,7 @@ class DKAdminRepository {
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query = DK_Project::select(['id','title as text'])->where('title','like',"%$keyword%");
+            $query = DK_Project::select(['id','name as text'])->where('name','like',"%$keyword%");
         }
 
         $query->where('item_status',1);
