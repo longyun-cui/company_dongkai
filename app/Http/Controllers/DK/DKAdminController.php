@@ -307,7 +307,7 @@ class DKAdminController extends Controller
         return $this->repo->operate_department_info_attachment_set(request()->all());
     }
     // 【部门管理】删除-附件-attachment-信息
-    public function operate_v_info_attachment_delete()
+    public function operate_department_info_attachment_delete()
     {
         return $this->repo->operate_department_info_attachment_delete(request()->all());
     }

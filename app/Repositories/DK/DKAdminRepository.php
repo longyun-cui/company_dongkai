@@ -982,13 +982,13 @@ class DKAdminRepository {
     {
         if(empty($post_data['keyword']))
         {
-            $query =DK_User::select(['id','true_name as text'])
+            $query =DK_User::select(['id','username as text'])
                 ->where(['user_status'=>1]);
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query =DK_User::select(['id','true_name as text'])->where('username','like',"%$keyword%")
+            $query =DK_User::select(['id','username as text'])->where('username','like',"%$keyword%")
                 ->where(['user_status'=>1]);
         }
 
