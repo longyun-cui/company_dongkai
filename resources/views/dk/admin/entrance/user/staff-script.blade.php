@@ -231,6 +231,35 @@
         });
 
 
+        // 【晋升】
+        $("#item-main-body").on('click', ".item-admin-promote-submit", function() {
+            var $that = $(this);
+            layer.msg('确定"晋升"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/user/staff-admin-promote') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "staff-admin-promote",
+                            user_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
 
 
         // 【启用】

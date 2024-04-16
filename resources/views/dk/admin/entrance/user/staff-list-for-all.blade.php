@@ -219,8 +219,7 @@
                         render: function(data, type, row, meta) {
                             if(row.user_status == 1)
                             {
-                                $html_able =
-                                    '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
                             }
                             else
                             {
@@ -245,10 +244,21 @@
                                 $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
                             }
 
+                            if(row.user_type == 88)
+                            {
+                                $html_promote = '<a class="btn btn-xs bg-olive item-admin-promote-submit" data-id="'+data+'">晋升</a>';
+                            }
+                            else
+                            {
+                                $html_promote = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">晋升</a>';
+                            }
+
+
                             var html =
                                 $html_edit+
                                 // '<a class="btn btn-xs bg-maroon item-password-admin-change-show" data-id="'+data+'" data-name="'+row.username+'">修改密码</a>'+
                                 '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
+                                $html_promote+
                                 $html_able+
                                 $html_delete+
 //                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+

@@ -2956,6 +2956,59 @@ class DKAdminRepository {
 
     }
 
+    // 【用户-员工管理】管理员-晋升
+    public function operate_user_staff_admin_promote($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'staff-admin-promote') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = DK_User::find($id);
+        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
+        if($user->user_type != 88) return response_error([],"只有客服才可以晋升！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,81])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->user_type = 84;
+            $user->timestamps = false;
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--user--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
 
 
 
