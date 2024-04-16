@@ -69,7 +69,7 @@
 
 
             {{--部门管理--}}
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,11,81]))
             <li class="header">部门管理</li>
 
             <li class="treeview {{ $menu_active_of_department_list_for_all or '' }}">
@@ -101,7 +101,7 @@
             <li class="header">业务管理</li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,11,71]))
             <li class="treeview {{ $menu_active_of_project_list_for_all or '' }} _none1">
                 <a href="{{ url('/item/project-list-for-all')}}">
                     <i class="fa fa-cube text-green"></i>

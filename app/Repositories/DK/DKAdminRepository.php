@@ -980,6 +980,9 @@ class DKAdminRepository {
     //
     public function operate_department_select2_leader($post_data)
     {
+        $this->get_me();
+        $me = $this->me;
+
         if(empty($post_data['keyword']))
         {
             $query =DK_User::select(['id','username as text'])
@@ -1001,6 +1004,11 @@ class DKAdminRepository {
         }
         else $query->where(['user_type'=>81]);
 
+        if($me->user_type == 81)
+        {
+            $query->where('department_district_id',$me->department_district_id);
+        }
+
         $list = $query->orderBy('id','desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
@@ -1009,6 +1017,9 @@ class DKAdminRepository {
     //
     public function operate_department_select2_superior_department($post_data)
     {
+        $this->get_me();
+        $me = $this->me;
+
         if(empty($post_data['keyword']))
         {
             $query =DK_Department::select(['id','name as text'])
@@ -1030,6 +1041,11 @@ class DKAdminRepository {
         }
         else $query->where(['department_type'=>11]);
 
+        if($me->user_type == 81)
+        {
+            $query->where('id',$me->department_district_id);
+        }
+
         $list = $query->orderBy('id','desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
@@ -1042,7 +1058,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,81])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '部门';
@@ -1067,7 +1083,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,81])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-edit';
@@ -1138,7 +1154,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19,81])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -1764,11 +1780,12 @@ class DKAdminRepository {
         $item_id = $post_data["item_id"];
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
-        $item = DK_Project::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        $item = DK_Department::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         // 判断用户操作权限
         if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
@@ -2032,6 +2049,11 @@ class DKAdminRepository {
                     'leader'=>function($query) { $query->select(['id','username','true_name']); },
                     'superior_department_er'=>function($query) { $query->select(['id','name']); }
                 ]);
+
+        if($me->user_type == 81)
+        {
+            $query->where('superior_department_id',$me->department_district_id);
+        }
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -4119,7 +4141,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,71])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
@@ -4191,7 +4213,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19,71])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];

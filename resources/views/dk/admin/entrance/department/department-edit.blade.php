@@ -58,7 +58,7 @@
                                         @endif
                                     @endif
 
-                                    @if(in_array($me->user_type, [0,1,11]))
+                                    @if(in_array($me->user_type, [0,1,11,81]))
                                         @if($operate == 'create' || ($operate == 'edit' && $data->department_type == 21))
                                         <button type="button" class="btn">
                                             <span class="radio">
@@ -66,7 +66,11 @@
                                                     @if($operate == 'edit' && $data->department_type == 21)
                                                         <input type="radio" name="department_type" value="21" checked="checked"> 组
                                                     @else
-                                                        <input type="radio" name="department_type" value="21"> 组
+                                                        @if($me->user_type == 81)
+                                                            <input type="radio" name="department_type" value="21" checked="checked"> 组
+                                                        @else
+                                                            <input type="radio" name="department_type" value="21"> 组
+                                                        @endif
                                                     @endif
                                                 </label>
                                             </span>

@@ -29,11 +29,11 @@
                     <ul class="dropdown-menu">
 
                         {{--部门管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11]))
+                        @if(in_array($me->user_type,[0,1,9,11,81]))
                         <li class="header">部门</li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11]))
+                        @if(in_array($me->user_type,[0,1,9,11,81]))
                         <li class="header">
                             <a href="{{ url('/department/department-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加部门
