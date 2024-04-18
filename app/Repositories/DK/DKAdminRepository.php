@@ -2430,6 +2430,8 @@ class DKAdminRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
+            $is_exist = DK_User::where('mobile',$post_data['mobile'])->first();
+            if($is_exist) return response_error([],"工号已存在！");
 
             $mine = new DK_User;
             $post_data["user_status"] = 0;
@@ -2446,7 +2448,7 @@ class DKAdminRepository {
             if($mine->mobile != $post_data['mobile'])
             {
                 $is_exist = DK_User::where('mobile',$post_data['mobile'])->first();
-                if($is_exist) return response_error([],"电话已存在！");
+                if($is_exist) return response_error([],"工号重复，请更换工号再试一次！");
             }
         }
         else return response_error([],"参数有误！");
