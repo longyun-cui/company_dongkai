@@ -5109,7 +5109,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -5160,7 +5160,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
 
         // 启动数据库事务
         DB::beginTransaction();
