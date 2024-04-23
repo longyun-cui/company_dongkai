@@ -248,6 +248,10 @@
                             {
                                 $html_promote = '<a class="btn btn-xs bg-olive item-admin-promote-submit" data-id="'+data+'">晋升</a>';
                             }
+                            else if(row.user_type == 84)
+                            {
+                                $html_promote = '<a class="btn btn-xs bg-blue item-admin-demote-submit" data-id="'+data+'">降职</a>';
+                            }
                             else
                             {
                                 $html_promote = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">晋升</a>';

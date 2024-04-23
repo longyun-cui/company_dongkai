@@ -459,10 +459,15 @@ class DKAdminController extends Controller
     }
 
 
-    // 【用户-员工管理】禁用
+    // 【用户-员工管理】晋升
     public function operate_user_staff_admin_promote()
     {
         return $this->repo->operate_user_staff_admin_promote(request()->all());
+    }
+    // 【用户-员工管理】降职
+    public function operate_user_staff_admin_demote()
+    {
+        return $this->repo->operate_user_staff_admin_demote(request()->all());
     }
 
 

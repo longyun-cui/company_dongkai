@@ -258,6 +258,33 @@
                 }
             });
         });
+        // 【降职】
+        $("#item-main-body").on('click', ".item-admin-demote-submit", function() {
+            var $that = $(this);
+            layer.msg('确定"降职"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/user/staff-admin-demote') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "staff-admin-demote",
+                            user_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
 
 
 

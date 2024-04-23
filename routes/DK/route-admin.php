@@ -135,6 +135,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/user/staff-admin-disable', $controller.'@operate_user_staff_admin_disable');
     // 【用户-员工管理】晋升
     Route::post('/user/staff-admin-promote', $controller.'@operate_user_staff_admin_promote');
+    Route::post('/user/staff-admin-demote', $controller.'@operate_user_staff_admin_demote');
 
     // 列表
     Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
