@@ -11584,6 +11584,8 @@ class DKAdminRepository {
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
                 'project_er'=>function($query) { $query->select('id','name'); },
+                'department_district_er'=>function($query) { $query->select('id','name'); },
+                'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
             ->whereIn('id',$ids_array);
 
