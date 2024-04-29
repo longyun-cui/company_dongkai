@@ -11361,6 +11361,8 @@ class DKAdminRepository {
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
                 'project_er'=>function($query) { $query->select('id','name'); },
+                'department_district_er'=>function($query) { $query->select('id','name'); },
+                'department_group_er'=>function($query) { $query->select('id','name'); }
             ]);
 
         if($export_type == "month")
@@ -11412,6 +11414,7 @@ class DKAdminRepository {
             else $cellData[$k]['delivered_at'] = '';
 
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['team'] = $v['department_district_er']['name'].' - '.$v['department_group_er']['name'];
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
 
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
@@ -11448,6 +11451,7 @@ class DKAdminRepository {
             'client_er_name'=>'客户',
             'delivered_at'=>'交付时间',
             'creator_name'=>'创建人',
+            'team'=>'团队',
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
             'channel_source'=>'渠道来源',
@@ -11532,19 +11536,20 @@ class DKAdminRepository {
                     'D'=>10,
                     'E'=>20,
                     'F'=>20,
-                    'G'=>10,
+                    'G'=>20,
                     'H'=>10,
-                    'I'=>16,
+                    'I'=>10,
                     'J'=>16,
-                    'K'=>10,
+                    'K'=>16,
                     'L'=>10,
                     'M'=>10,
                     'N'=>10,
-                    'O'=>60,
-                    'P'=>10,
+                    'O'=>10,
+                    'P'=>60,
                     'Q'=>10,
-                    'R'=>20,
-                    'S'=>10
+                    'R'=>10,
+                    'S'=>20,
+                    'T'=>10
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -11599,6 +11604,7 @@ class DKAdminRepository {
             else $cellData[$k]['delivered_at'] = '';
 
             $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['team'] = $v['department_district_er']['name'].' - '.$v['department_group_er']['name'];
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
 
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
@@ -11635,6 +11641,7 @@ class DKAdminRepository {
             'client_er_name'=>'客户',
             'delivered_at'=>'交付时间',
             'creator_name'=>'创建人',
+            'team'=>'团队',
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
             'channel_source'=>'渠道来源',
@@ -11686,19 +11693,20 @@ class DKAdminRepository {
                     'D'=>10,
                     'E'=>20,
                     'F'=>20,
-                    'G'=>10,
+                    'G'=>20,
                     'H'=>10,
-                    'I'=>16,
+                    'I'=>10,
                     'J'=>16,
-                    'K'=>10,
+                    'K'=>16,
                     'L'=>10,
                     'M'=>10,
                     'N'=>10,
-                    'O'=>60,
-                    'P'=>10,
+                    'O'=>10,
+                    'P'=>60,
                     'Q'=>10,
-                    'R'=>20,
-                    'S'=>10
+                    'R'=>10,
+                    'S'=>20,
+                    'T'=>10
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
