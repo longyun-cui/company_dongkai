@@ -9690,6 +9690,7 @@ class DKAdminRepository {
 
 
         $query = DK_Project::select('*')
+            ->where('item_status', 1)
             ->withTrashed()
             ->with(['creator','inspector_er','pivot_project_user','pivot_project_team']);
 
