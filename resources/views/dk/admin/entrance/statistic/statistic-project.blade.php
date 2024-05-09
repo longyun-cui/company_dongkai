@@ -224,7 +224,7 @@
                             "title": "团队",
                             "data": "pivot_project_team",
                             "className": "text-center",
-                            "width": "200px",
+                            "width": "240px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
