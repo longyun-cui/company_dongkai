@@ -5264,19 +5264,23 @@ class DKAdminRepository {
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 
         // 车辆类型 [车辆|车挂]
-        if(!empty($post_data['car_type']))
+        if(!empty($post_data['item_status']))
         {
-            if(!in_array($post_data['car_type'],[-1,0]))
+            if(!in_array($post_data['item_status'],[-1,0]))
             {
-                $query->where('item_type', $post_data['car_type']);
+                $query->where('item_status', $post_data['item_status']);
             }
+        }
+        else
+        {
+            $query->where('item_status', 1);
         }
 
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 100;
 
         if(isset($post_data['order']))
         {

@@ -57,11 +57,11 @@
 {{--                            <option value ="19">非工作状态</option>--}}
 {{--                        </select>--}}
 
-{{--                        <select class="form-control form-filter" name="project-type" style="width:96px;">--}}
-{{--                            <option value ="-1">全部</option>--}}
-{{--                            <option value ="1">车辆</option>--}}
-{{--                            <option value ="21">车挂</option>--}}
-{{--                        </select>--}}
+                        <select class="form-control form-filter" name="project-status" style="width:96px;">
+                            <option value ="1">启用</option>
+                            <option value ="-1">全部</option>
+                            <option value ="9">禁用</option>
+                        </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
@@ -588,7 +588,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50, 100, 200, -1], ["50", "100", "200", "全部"]],
+                "aLengthMenu": [[100, 200, -1], ["100", "200", "全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -602,9 +602,7 @@
                         d.name = $('input[name="project-name"]').val();
                         d.title = $('input[name="project-title"]').val();
                         d.keyword = $('input[name="project-keyword"]').val();
-                        d.status = $('select[name="project-status"]').val();
-                        d.car_type = $('select[name="project-type"]').val();
-                        d.work_status = $('select[name="work_status"]').val();
+                        d.item_status = $('select[name="project-status"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",
@@ -881,46 +879,6 @@
 //                    this.api().column(1).nodes().each(function(cell, i) {
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
-
-                    ajax_datatable.$('.tooltips').tooltip({placement: 'top', html: true});
-                    $("a.verify").click(function(event){
-                        event.preventDefault();
-                        var node = $(this);
-                        var tr = node.closest('tr');
-                        var nickname = tr.find('span.nickname').text();
-                        var cert_name = tr.find('span.certificate_type_name').text();
-                        var action = node.attr('data-action');
-                        var certificate_id = node.attr('data-id');
-                        var action_name = node.text();
-
-                        var tpl = "{{trans('labels.crc.verify_user_certificate_tpl')}}";
-                        layer.open({
-                            'title': '警告',
-                            content: tpl
-                                .replace('@action_name', action_name)
-                                .replace('@nickname', nickname)
-                                .replace('@certificate_type_name', cert_name),
-                            btn: ['Yes', 'No'],
-                            yes: function(index) {
-                                layer.close(index);
-                                $.post(
-                                    '/admin/medsci/certificate/user/verify',
-                                    {
-                                        action: action,
-                                        id: certificate_id,
-                                        _token: '{{csrf_token()}}'
-                                    },
-                                    function(json){
-                                        if(json['response_code'] == 'success') {
-                                            layer.msg('操作成功!', {time: 3500});
-                                            ajax_datatable.ajax.reload();
-                                        } else {
-                                            layer.alert(json['response_data'], {time: 10000});
-                                        }
-                                    }, 'json');
-                            }
-                        });
-                    });
                 },
                 "language": { url: '/common/dataTableI18n' },
             });
