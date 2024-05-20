@@ -63,8 +63,10 @@
                             <select class="form-control form-filter" name="staff-user-type" style="width:88px;">
                                 <option value="-1">全部人员</option>
                                 <option value="88">客服</option>
-                                <option value="84">主管</option>
-                                <option value="81">经理</option>
+                                <option value="84">客服主管</option>
+                                <option value="81">客服经理</option>
+                                <option value="71">质检经理</option>
+                                <option value="77">质检员</option>
                             </select>
                         @endif
 

@@ -174,6 +174,20 @@ if(!function_exists('return_interval_unix'))
     }
 }
 
+if(!function_exists('isToday'))
+{
+    function isToday($timestamp)
+    {
+        $today = date("Y-m-d");
+        $givenDay = date("Y-m-d", $timestamp);
+        return $today === $givenDay;
+    }
+}
+
+
+
+
+
 
 if(!function_exists('replace_blank')) {
     function replace_blank($text)

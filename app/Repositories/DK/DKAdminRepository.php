@@ -7945,7 +7945,7 @@ class DKAdminRepository {
             else if(in_array($me->user_type,[71,77]))
             {
                 $time = time();
-                if(($v->published_at >0) && (($time - $v->published_at) > 172800))
+                if(($v->published_at > 0) && (($time - $v->published_at) > 172800))
                 {
                     $client_phone = $v->client_phone;
                     $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
@@ -11370,6 +11370,13 @@ class DKAdminRepository {
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ]);
 
+        if(in_array($me->user_type,[77]))
+        {
+
+            $query->where('inspector_id',$me->id);
+        }
+
+
         if($export_type == "month")
         {
             $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
@@ -11426,6 +11433,16 @@ class DKAdminRepository {
             $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
+            if(in_array($me->user_type,[71,77]))
+            {
+                $time = time();
+                // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
+                if(($v['inspected_at'] > 0) && (!isToday($v['inspected_at'])))
+                {
+                    $client_phone = $v['client_phone'];
+                    $cellData[$k]['client_phone'] = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
 
 
             // 微信号 & 是否+V
@@ -11594,6 +11611,12 @@ class DKAdminRepository {
             ])
             ->whereIn('id',$ids_array);
 
+        if(in_array($me->user_type,[77]))
+        {
+
+            $query->where('inspector_id',$me->id);
+        }
+
 
 
         $data = $query->orderBy('id','desc')->get();
@@ -11618,6 +11641,16 @@ class DKAdminRepository {
             $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
+            if(in_array($me->user_type,[71,77]))
+            {
+                $time = time();
+                // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
+                if(($v['inspected_at'] > 0) && (!isToday($v['inspected_at'])))
+                {
+                    $client_phone = $v['client_phone'];
+                    $cellData[$k]['client_phone'] = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
 
 
             // 微信号 & 是否+V
