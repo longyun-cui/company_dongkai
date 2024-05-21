@@ -11370,11 +11370,10 @@ class DKAdminRepository {
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ]);
 
-        if(in_array($me->user_type,[77]))
-        {
-
-            $query->where('inspector_id',$me->id);
-        }
+//        if(in_array($me->user_type,[77]))
+//        {
+//            $query->where('inspector_id',$me->id);
+//        }
 
 
         if($export_type == "month")
@@ -11611,11 +11610,10 @@ class DKAdminRepository {
             ])
             ->whereIn('id',$ids_array);
 
-        if(in_array($me->user_type,[77]))
-        {
-
-            $query->where('inspector_id',$me->id);
-        }
+//        if(in_array($me->user_type,[77]))
+//        {
+//            $query->where('inspector_id',$me->id);
+//        }
 
 
 
