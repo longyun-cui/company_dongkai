@@ -2,26 +2,26 @@
     $(function() {
 
         // 【搜索】
-        $("#datatable-for-car-list").on('click', ".filter-submit", function() {
+        $("#datatable-for-project-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#datatable-for-car-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-car-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-project-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-project-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-car-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-car-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-project-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-project-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $("#datatable-for-car-list").on('keyup', ".item-search-keyup", function(event) {
+        $("#datatable-for-project-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-car-list").find(".filter-submit").click();
+                $("#datatable-for-project-list").find(".filter-submit").click();
             }
         });
 
@@ -329,7 +329,7 @@
             // });
 
                     $.post(
-                        "{{ url('/item/car-info-text-set') }}",
+                        "{{ url('/item/project-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-text-set-operate"]').val(),
@@ -418,8 +418,8 @@
             // });
 
                     $.post(
-                        "{{ url('/item/car-info-text-set') }}",
-                        {{--"{{ url('/item/car-info-time-set') }}",--}}
+                        "{{ url('/item/project-info-text-set') }}",
+                        {{--"{{ url('/item/project-info-time-set') }}",--}}
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),
@@ -471,7 +471,7 @@
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
 
-            $('select[name=info-select-set-column-value]').removeClass('select2-car').removeClass('select2-client');
+            $('select[name=info-select-set-column-value]').removeClass('select2-project').removeClass('select2-client');
             if($that.attr("data-key") == "receipt_status")
             {
                 var $option_html = $('#receipt_status-option-list').html();
@@ -527,12 +527,12 @@
             $('#modal-body-for-info-select-set').modal('show');
 
 
-            if($that.attr("data-key") == "client_id")
+            if($that.attr("data-key") == "inspector_list")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-driver').addClass('select2-client');
-                $('.select2-client').select2({
+                $('select[name=info-select-set-column-value]').removeClass('select2-driver').addClass('select2-inspector');
+                $('.select2-inspector').select2({
                     ajax: {
-                        url: "{{ url('/item/car_select2_client') }}",
+                        url: "{{ url('/item/item_select2_user?type=inspector') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -552,6 +552,13 @@
                             };
                         },
                         cache: true
+                    },
+                    templateSelection: function(data, container) {
+                        $(data.element).attr("data-name",data.driver_name);
+                        $(data.element).attr("data-phone",data.driver_phone);
+                        $(data.element).attr("data-sub-name",data.sub_driver_name);
+                        $(data.element).attr("data-sub-phone",data.sub_driver_phone);
+                        return data.text;
                     },
                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
                     minimumInputLength: 0,
@@ -612,7 +619,7 @@
             // });
 
                     $.post(
-                        "{{ url('/item/car-info-select-set') }}",
+                        "{{ url('/item/project-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
@@ -652,7 +659,7 @@
 
             $('.attachment-set-title').html($that.attr("data-id"));
             $('.info-set-column-name').html($that.attr("data-name"));
-            $('input[name=attachment-set-car-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-project-id]').val($that.attr("data-id"));
             $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
             $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
             $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
@@ -669,7 +676,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/item/car-get-attachment-html') }}",
+                url: "{{ url('/item/project-get-attachment-html') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -724,7 +731,7 @@
             });
 
                     var options = {
-                        url: "{{ url('/item/car-info-attachment-set') }}",
+                        url: "{{ url('/item/project-info-attachment-set') }}",
                         type: "post",
                         dataType: "json",
                         // target: "#div2",
@@ -751,7 +758,7 @@
                                     type:"post",
                                     dataType:'json',
                                     async:false,
-                                    url: "{{ url('/item/car-get-attachment-html') }}",
+                                    url: "{{ url('/item/project-get-attachment-html') }}",
                                     data: {
                                         _token: $('meta[name="_token"]').attr('content'),
                                         operate:"item-get",
@@ -791,10 +798,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/car-info-attachment-delete') }}",
+                        "{{ url('/item/project-info-attachment-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "car-attachment-delete",
+                            operate: "project-attachment-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){

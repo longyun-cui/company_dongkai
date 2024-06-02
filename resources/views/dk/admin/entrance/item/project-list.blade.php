@@ -593,7 +593,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/item/project-list-for-all') }}",
+                    'url': "{{ url('/item/project-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {

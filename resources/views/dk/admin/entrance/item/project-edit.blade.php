@@ -217,7 +217,7 @@
                     else
                     {
                         layer.msg(data.msg);
-                        location.href = "{{ url('/item/project-list-for-all') }}";
+                        location.href = "{{ url('/item/project-list') }}";
                     }
                 }
             };

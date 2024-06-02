@@ -650,15 +650,15 @@ class DKAdminController extends Controller
 
 
     /*
-     * 车辆管理
+     * 项目管理
      */
-    // 【车辆管理】返回-列表-视图（全部任务）
-    public function view_item_project_list_for_all()
+    // 【项目管理】返回-列表-视图（全部任务）
+    public function view_item_project_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_project_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_project_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_project_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_project_list_datatable(request()->all());
     }
-    // 【车辆管理】【修改记录】返回-列表-视图（全部任务）
+    // 【项目管理】【修改记录】返回-列表-视图（全部任务）
     public function view_item_project_modify_record()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_project_modify_record(request()->all());
@@ -666,13 +666,13 @@ class DKAdminController extends Controller
     }
 
 
-    // 【车辆管理】添加
+    // 【项目管理】添加
     public function operate_item_project_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_project_create();
         else if (request()->isMethod('post')) return $this->repo->operate_item_project_save(request()->all());
     }
-    // 【车辆管理】编辑
+    // 【项目管理】编辑
     public function operate_item_project_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_project_edit();
@@ -681,59 +681,59 @@ class DKAdminController extends Controller
 
 
     // 【车辆管理】修改-文本-text-信息
-    public function operate_item_car_info_text_set()
+    public function operate_item_project_info_text_set()
     {
-        return $this->repo->operate_item_car_info_text_set(request()->all());
+        return $this->repo->operate_item_project_info_text_set(request()->all());
     }
     // 【车辆管理】修改-时间-time-信息
-    public function operate_item_car_info_time_set()
+    public function operate_item_project_info_time_set()
     {
-        return $this->repo->operate_item_car_info_time_set(request()->all());
+        return $this->repo->operate_item_project_info_time_set(request()->all());
     }
     // 【车辆管理】修改-选项-option-信息
-    public function operate_item_car_info_option_set()
+    public function operate_item_project_info_option_set()
     {
-        return $this->repo->operate_item_car_info_option_set(request()->all());
+        return $this->repo->operate_item_project_info_option_set(request()->all());
     }
     // 【车辆管理】添加-附件-attachment-信息
-    public function operate_item_car_info_attachment_set()
+    public function operate_item_project_info_attachment_set()
     {
-        return $this->repo->operate_item_car_info_attachment_set(request()->all());
+        return $this->repo->operate_item_project_info_attachment_set(request()->all());
     }
     // 【车辆管理】删除-附件-attachment-信息
-    public function operate_item_car_info_attachment_delete()
+    public function operate_item_project_info_attachment_delete()
     {
-        return $this->repo->operate_item_car_info_attachment_delete(request()->all());
+        return $this->repo->operate_item_project_info_attachment_delete(request()->all());
     }
     // 【车辆管理】获取-附件-attachment-信息
-    public function operate_item_car_get_attachment_html()
+    public function operate_item_project_get_attachment_html()
     {
-        return $this->repo->operate_item_car_get_attachment_html(request()->all());
+        return $this->repo->operate_item_project_get_attachment_html(request()->all());
     }
 
 
-    // 【车辆管理】删除
+    // 【项目管理】删除
     public function operate_item_project_admin_delete()
     {
         return $this->repo->operate_item_project_admin_delete(request()->all());
     }
-    // 【车辆管理】恢复
+    // 【项目管理】恢复
     public function operate_item_project_admin_restore()
     {
         return $this->repo->operate_item_project_admin_restore(request()->all());
     }
-    // 【车辆管理】永久删除
+    // 【项目管理】永久删除
     public function operate_item_project_admin_delete_permanently()
     {
         return $this->repo->operate_item_project_admin_delete_permanently(request()->all());
     }
 
-    // 【车辆管理】启用
+    // 【项目管理】启用
     public function operate_item_project_admin_enable()
     {
         return $this->repo->operate_item_project_admin_enable(request()->all());
     }
-    // 【车辆管理】禁用
+    // 【项目管理】禁用
     public function operate_item_project_admin_disable()
     {
         return $this->repo->operate_item_project_admin_disable(request()->all());
@@ -847,20 +847,25 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_item_order_reuse(request()->all());
     }
-    // 【内容】验证
+    // 【订单管理】验证
     public function operate_item_order_verify()
     {
         return $this->repo->operate_item_order_verify(request()->all());
     }
-    // 【内容】审核
+    // 【订单管理】审核
     public function operate_item_order_inspect()
     {
         return $this->repo->operate_item_order_inspect(request()->all());
     }
-    // 【内容】交付
+    // 【订单管理】交付
     public function operate_item_order_deliver()
     {
         return $this->repo->operate_item_order_deliver(request()->all());
+    }
+    // 【订单管理】批量-交付
+    public function operate_item_order_bulk_deliver()
+    {
+        return $this->repo->operate_item_order_bulk_deliver(request()->all());
     }
 
 
@@ -920,27 +925,6 @@ class DKAdminController extends Controller
 
 
 
-    // 【订单管理-财务往来记录】返回-列表-视图（全部任务）
-    public function view_item_order_finance_record()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_finance_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_order_finance_record_datatable(request()->all());
-    }
-
-    // 【订单管理】添加-财务记录
-    public function operate_item_order_finance_record_create()
-    {
-        return $this->repo->operate_item_order_finance_record_create(request()->all());
-    }
-    // 【订单管理】修改-财务记录
-    public function operate_item_order_finance_record_edit()
-    {
-        return $this->repo->operate_item_order_finance_record_edit(request()->all());
-    }
-
-
-
-
     // 【订单管理-修改记录】返回-列表-视图（全部任务）
     public function view_item_order_modify_record()
     {
@@ -954,175 +938,6 @@ class DKAdminController extends Controller
 
 
 
-
-    /*
-     * 环线管理
-     */
-    // 【环线管理】返回-列表-视图
-    public function view_item_circle_detail()
-    {
-        return $this->repo->view_item_circle_detail(request()->all());
-    }
-
-    // 【环线管理】返回-列表-视图
-    public function view_item_circle_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_circle_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_circle_list_for_all_datatable(request()->all());
-    }
-    // 【环线管理】【修改记录】返回-列表-视图
-    public function view_item_circle_modify_record()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_circle_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_circle_modify_record_datatable(request()->all());
-    }
-
-
-    // 【环线管理】返回-财务-分析
-    public function get_item_circle_detail_analysis()
-    {
-        return $this->repo->get_item_circle_detail_analysis(request()->all());
-    }
-    // 【环线管理】返回-财务-分析
-    public function get_item_circle_analysis()
-    {
-        return $this->repo->get_item_circle_analysis(request()->all());
-    }
-    // 【环线管理】返回-财务-数据
-    public function get_item_circle_finance_record()
-    {
-        return $this->repo->get_item_circle_finance_record_datatable(request()->all());
-    }
-
-
-    // 【环线管理】SELECT2 Order 订单
-    public function operate_circle_select2_order_list()
-    {
-        return $this->repo->operate_circle_select2_order_list(request()->all());
-    }
-    // 【环线管理】SELECT2 Car 车辆
-    public function operate_circle_select2_car()
-    {
-        return $this->repo->operate_circle_select2_car(request()->all());
-    }
-
-
-    // 【环线管理】添加
-    public function operate_item_circle_create()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_circle_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_circle_save(request()->all());
-    }
-    // 【环线管理】编辑
-    public function operate_item_circle_edit()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_circle_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_circle_save(request()->all());
-    }
-
-
-    // 【环线管理】修改-文本-text-信息
-    public function operate_item_circle_info_text_set()
-    {
-        return $this->repo->operate_item_circle_info_text_set(request()->all());
-    }
-    // 【环线管理】修改-时间-time-信息
-    public function operate_item_circle_info_time_set()
-    {
-        return $this->repo->operate_item_circle_info_time_set(request()->all());
-    }
-    // 【环线管理】修改-选项-option-信息
-    public function operate_item_circle_info_option_set()
-    {
-        return $this->repo->operate_item_circle_info_option_set(request()->all());
-    }
-
-
-    // 【环线管理】删除
-    public function operate_item_circle_admin_delete()
-    {
-        return $this->repo->operate_item_circle_admin_delete(request()->all());
-    }
-    // 【环线管理】恢复
-    public function operate_item_circle_admin_restore()
-    {
-        return $this->repo->operate_item_circle_admin_restore(request()->all());
-    }
-    // 【环线管理】永久删除
-    public function operate_item_circle_admin_delete_permanently()
-    {
-        return $this->repo->operate_item_circle_admin_delete_permanently(request()->all());
-    }
-
-    // 【环线管理】启用
-    public function operate_item_circle_admin_enable()
-    {
-        return $this->repo->operate_item_circle_admin_enable(request()->all());
-    }
-    // 【环线管理】禁用
-    public function operate_item_circle_admin_disable()
-    {
-        return $this->repo->operate_item_circle_admin_disable(request()->all());
-    }
-
-
-
-
-
-
-
-
-    /*
-     * Finance 财务
-     */
-    // 【财务管理】返回-全部内容-列表-视图
-    public function view_finance_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_finance_record_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_finance_record_list_for_all_datatable(request()->all());
-    }
-    // 【财务管理】【修改记录】返回-列表-视图
-    public function view_finance_modify_record()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_finance_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_finance_modify_record_datatable(request()->all());
-    }
-
-    // 【财务管理】导入
-    public function operate_finance_import()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_finance_import();
-        else if (request()->isMethod('post')) return $this->repo->operate_finance_import_save(request()->all());
-    }
-
-
-    // 【财务管理】删除
-    public function operate_finance_delete()
-    {
-        return $this->repo->operate_finance_delete(request()->all());
-    }
-    // 【财务管理】完成
-    public function operate_finance_confirm()
-    {
-        return $this->repo->operate_finance_confirm(request()->all());
-    }
-
-
-    // 【环线管理】修改-文本-text-信息
-    public function operate_finance_info_text_set()
-    {
-        return $this->repo->operate_finance_info_text_set(request()->all());
-    }
-    // 【环线管理】修改-时间-time-信息
-    public function operate_finance_info_time_set()
-    {
-        return $this->repo->operate_finance_info_time_set(request()->all());
-    }
-    // 【环线管理】修改-选项-option-信息
-    public function operate_finance_info_option_set()
-    {
-        return $this->repo->operate_finance_info_option_set(request()->all());
-    }
 
 
 

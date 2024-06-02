@@ -101,16 +101,16 @@
             <li class="header">业务管理</li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,71]))
-            <li class="treeview {{ $menu_active_of_project_list_for_all or '' }} _none1">
-                <a href="{{ url('/item/project-list-for-all')}}">
+            @if(in_array($me->user_type,[0,1,9,11,41,71,81]))
+            <li class="treeview {{ $menu_active_of_project_list or '' }} _none-">
+                <a href="{{ url('/item/project-list')}}">
                     <i class="fa fa-cube text-green"></i>
                     <span>项目列表</span>
                 </a>
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
+            @if(in_array($me->user_type,[0,1,9,11,41,71,77,81,84,88]))
             <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
                 <a href="{{ url('/item/order-list-for-all')}}">
                     <i class="fa fa-file-text text-yellow"></i>
@@ -125,7 +125,7 @@
             {{--数据统计--}}
             <li class="header">数据统计</li>
 
-            @if(in_array($me->user_type,[0,1,9,11,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11,41,81,84,71,77]))
             <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
                 <a href="{{ url('/statistic/statistic-project') }}">
                     <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
@@ -141,7 +141,7 @@
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,81,84]))
+            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
             <li class="treeview {{ $menu_active_of_statistic_customer_service or '' }}">
                 <a href="{{ url('/statistic/statistic-customer-service') }}">
                     <i class="fa fa-bar-chart text-purple"></i> <span>客服看板</span>
@@ -149,7 +149,7 @@
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,71]))
+            @if(in_array($me->user_type,[0,1,9,11,41,71]))
             <li class="treeview {{ $menu_active_of_statistic_inspector or '' }}">
                 <a href="{{ url('/statistic/statistic-inspector') }}">
                     <i class="fa fa-bar-chart text-purple"></i> <span>审核员看板</span>
@@ -171,7 +171,8 @@
                 </a>
             </li>
 
-            @if(in_array($me->user_type,[0,1,9,11,71,77]))
+{{--            @if(in_array($me->user_type,[0,1,9,11,71,77]))--}}
+            @if($me->department_district_id == 0)
             <li class="treeview {{ $menu_active_of_statistic_export or '' }}">
                 <a href="{{ url('/statistic/statistic-export') }}">
                     <i class="fa fa-download text-default"></i> <span>数据导出</span>

@@ -618,7 +618,13 @@
             $row.addClass('operating');
 
 
-            var $option_html = $('#option-list-for-client').html();
+            var $option_html_for_client = $('#option-list-for-client').html();
+            var $option_html_for_delivered_result = $('#option-list-for-delivered-result').html();
+
+            var $delivered_result = $('select[name="select-delivered-result"]').val();
+            var $client_id = $('select[name="select-client-id"]').val();
+            var $client_name = $('select[name="select-client-id"]').find('option:selected').html();
+            // console.log($client_name);
 
             layer.open({
                 time: 0
@@ -626,7 +632,10 @@
                 ,title: '选择客户！'
                 ,content:
                     '<select class="form-control select-primary" name="select-client-id" style="width:48%;" id="">'+
-                    $option_html+
+                    $option_html_for_client+
+                    '</select>'+
+                    '<select class="form-control select-primary" name="select-delivered-result" style="width:48%;" id="">'+
+                    $option_html_for_delivered_result+
                     '</select>'
                 ,yes: function(index){
                     $.post(
@@ -635,7 +644,8 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "order-deliver",
                             item_id: $that.attr('data-id'),
-                            client_id: $('select[name="select-client-id"]').val()
+                            client_id: $('select[name="select-client-id"]').val(),
+                            delivered_result: $('select[name="select-delivered-result"]').val()
                         },
                         function(data){
                             layer.close(index);
@@ -648,11 +658,17 @@
                             {
                                 // $('#datatable_ajax').DataTable().ajax.reload(null,false);
 
+                                var $delivered_result = $('select[name="select-delivered-result"]').val();
                                 var $client_id = $('select[name="select-client-id"]').val();
                                 var $client_name = $('select[name="select-client-id"]').find('option:selected').html();
-                                $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
+                                console.log($client_name);
+
+                                $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
+                                $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
+                                $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');
                                 $row.find('td[data-key=client_id]').attr('data-value',$client_id);
                                 $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
+                                $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
                                 $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
 
 
@@ -1634,7 +1650,7 @@
             console.log(1);
             $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
-        // 【批量操作】
+        // 【批量操作】批量-导出
         $(".main-content").on('click', '#bulk-submit-for-export', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
@@ -1678,6 +1694,84 @@
 
             {{--    }--}}
             {{--});--}}
+
+        });
+        // 【批量操作】批量-交付
+        $(".main-content").on('click', '#bulk-submit-for-delivered', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量交付"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/order-bulk-deliver') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-delivered-bulk",
+                            ids: $ids,
+                            client_id:$('select[name="bulk-operate-delivered-client"]').val(),
+                            delivered_result:$('select[name="bulk-operate-delivered-result"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $delivered_result = $('select[name="bulk-operate-delivered-result"]').val();
+                                    var $client_id = $('select[name="bulk-operate-delivered-client"]').val();
+                                    var $client_name = $('select[name="bulk-operate-delivered-client"]').find('option:selected').html();
+                                    console.log($client_name);
+
+                                    $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
+                                    $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
+                                    $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');
+                                    $row.find('td[data-key=client_id]').attr('data-value',$client_id);
+                                    $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
+                                    $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
+                                    $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
+
+
+                                    var $date = new Date();
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    var $hour = ('00'+$date.getHours()).slice(-2);
+                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                    var $second = ('00'+$date.getSeconds()).slice(-2);
+                                    var $time_html = $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                                    $row.find('td[data-key=delivered_at]').html($time_html);
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
 
         });
 

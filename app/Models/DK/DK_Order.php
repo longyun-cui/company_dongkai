@@ -35,7 +35,7 @@ class DK_Order extends Model
 
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description', 'inspected_at',
         'pusher_id', 'pushed_at',
-        'deliverer_id', 'delivered_at',
+        'deliverer_id', 'delivered_status', 'delivered_result', 'delivered_at',
         'published_at', 'completed_at', 'verified_at'
     ];
     protected $dateFormat = 'U';
@@ -74,6 +74,11 @@ class DK_Order extends Model
     function inspector()
     {
         return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
+    }
+    // 审核者
+    function deliverer()
+    {
+        return $this->belongsTo('App\Models\DK\DK_User','deliverer_id','id');
     }
     // 完成者
     function completer()

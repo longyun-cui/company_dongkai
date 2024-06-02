@@ -61,7 +61,6 @@
 
                         @if(in_array($me->user_type,[0,1,9,11,71,77]))
                         <select class="form-control form-filter select2-box" name="order-department-district[]" id="order-department-district" multiple="multiple"  style="width:80px;">
-                            <option value="-1">选择团队</option>
                             @foreach($department_district_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $department_district_id) selected="selected" @endif>{{ $v->name }}</option>
                             @endforeach
@@ -98,20 +97,7 @@
                         <select class="form-control form-filter select2-box" name="order-inspected-result[]" multiple="multiple" style="width:88px;">
                             <option value="-1">审核结果</option>
                             @foreach(config('info.inspected_result') as $v)
-                                <option value="{{ $v }}">{{ $v }}</option>
-                            @endforeach
-                        </select>
-
-                        <select class="form-control form-filter" name="order-delivered-status" style="width:88px;">
-                            <option value="-1">交付状态</option>
-                            <option value="待交付" @if("待交付" == $delivered_status) selected="selected" @endif>待交付</option>
-                            <option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>
-                        </select>
-
-                        <select class="form-control form-filter select2-box" name="order-delivered-result[]" multiple="multiple" style="width:88px;">
-                            <option value="-1">交付结果</option>
-                            @foreach(config('info.delivered_result') as $v)
-                                <option value="{{ $v }}">{{ $v }}</option>
+                                <option value="{{ $v }}" @if($v == $client_id) selected="selected" @endif>{{ $v }}</option>
                             @endforeach
                         </select>
 
@@ -174,26 +160,16 @@
                         {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
                         <div class="input-group">
                             <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
-
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
-
-                            <select name="bulk-operate-delivered-client" class="form-control form-filter select2-box" style="width:50%;">
-                                <option value="-1">交付客户</option>
-                                @foreach($client_list as $v)
-                                    <option value="{{ $v->id }}">{{ $v->username }}</option>
-                                @endforeach
+                            <select name="bulk-operate-status" class="form-control form-filter _none">
+                                <option value="-1">请选择操作类型</option>
+                                <option value="启用">启用</option>
+                                <option value="禁用">禁用</option>
+                                <option value="删除">删除</option>
+                                <option value="彻底删除">彻底删除</option>
                             </select>
-
-                            <select name="bulk-operate-delivered-result" class="form-control form-filter select2-box" style="width:50%;">
-                                <option value="-1">交付结果</option>
-                                @foreach(config('info.delivered_result') as $v)
-                                    <option value="{{ $v }}">{{ $v }}</option>
-                                @endforeach
-                            </select>
-
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delivered"><i class="fa fa-share"></i> 批量交付</span>
+                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
                         </div>
                     </div>
                 </div>
@@ -216,7 +192,7 @@
 
 
 
-{{--显示-审核信息--}}
+{{--显示-基本信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-detail-inspected">
     <div class="col-md-8 col-md-offset-2" id="" style="margin-top:64px;margin-bottom:64px;background:#fff;">
 
@@ -681,14 +657,6 @@
         @endforeach
     </div>
 
-    {{--审核结果--}}
-    <div id="option-list-for-delivered-result">
-        <option value="-1">交付结果</option>
-        @foreach(config('info.delivered_result') as $v)
-            <option value="{{ $v }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
     {{--牙齿数量--}}
     <div id="option-list-for-teeth-count">
         <option value="-1">选择牙齿数量</option>
@@ -876,8 +844,6 @@
                         d.is_repeat = $('select[name="order-is-repeat"]').val();
                         d.inspected_status = $('select[name="order-inspected-status"]').val();
                         d.inspected_result = $('select[name="order-inspected-result[]"]').val();
-                        d.delivered_status = $('select[name="order-delivered-status"]').val();
-                        d.delivered_result = $('select[name="order-delivered-result[]"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -893,21 +859,14 @@
                 "scrollY": ($(document).height() - 448)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
-
-                    @if($me->department_district_id == 0)
-                        "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
-                        "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
-                    @else
-                        "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
-                        "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
-                    @endif
+                    "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
+                    "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                 },
                 "showRefresh": true,
                 "columnDefs": [
-{{--                    @if(!in_array($me->user_type,[0,1,11]))--}}
-                    @if($me->department_district_id != 0)
+                    @if(!in_array($me->user_type,[0,1,11,71,77]))
                     {
-                        "targets": [0,2,3,4,5,6],
+                        "targets": [2],
                         "visible": false,
                     }
                     @endif
@@ -938,6 +897,76 @@
                         "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "title": "客户",
+                        "data": "client_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97 && row.client_id > 0)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','客户');
+                                $(nTd).attr('data-key','client_id').attr('data-value',data);
+                                if(row.client_er == null) $(nTd).attr('data-option-name','未指定');
+                                else {
+                                    $(nTd).attr('data-option-name',row.client_er.name);
+                                }
+                                $(nTd).attr('data-column-name','客户');
+                                if(row.project_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.client_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "title": "交付时间",
+                        "data": 'delivered_at',
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-time-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','交付时间');
+                                $(nTd).attr('data-key','delivered_at').attr('data-value',data);
+                                $(nTd).attr('data-column-name','交付时间');
+                                $(nTd).attr('data-text-type','textarea');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '--';
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     },
                     {
@@ -982,10 +1011,10 @@
                             }
 
 
-                            // if(row.client_id > 0)
-                            // {
-                            //     return '<small class="btn-xs bg-olive">已交付</small>';
-                            // }
+                            if(row.client_id > 0)
+                            {
+                                return '<small class="btn-xs bg-olive">已交付</small>';
+                            }
 
                             if(row.inspected_at)
                             {
@@ -1051,176 +1080,6 @@
                                 $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
                             }
                             return $result_html;
-                        }
-                    },
-                    {
-                        "title": "交付状态",
-                        "data": "delivered_status",
-                        "className": "text-center",
-                        "width": "72px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','交付状态');
-                                $(nTd).attr('data-key','delivered_status').attr('data-value',data);
-                                $(nTd).attr('data-column-name','交付状态');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!row.delivered_at) return '--';
-                            var $result_html = '';
-                            if(data == 0)
-                            {
-                                $result_html = '<small class="btn-xs bg-teal">待交付</small>';
-                            }
-                            else if(data == 1)
-                            {
-                                $result_html = '<small class="btn-xs bg-blue">已交付</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-black">error</small>';
-                            }
-                            return $result_html;
-                        }
-                    },
-                    {
-                        "title": "交付结果",
-                        "data": "delivered_result",
-                        "className": "text-center",
-                        "width": "72px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','交付结果');
-                                $(nTd).attr('data-key','delivered_result').attr('data-value',data);
-                                $(nTd).attr('data-column-name','审核结果');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!row.delivered_at) return '--';
-                            var $result_html = '';
-                            if(data == "已交付")
-                            {
-                                $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
-                            }
-                            else if(data == "待交付")
-                            {
-                                $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
-                            }
-                            else if(data == "驳回")
-                            {
-                                $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
-                            }
-                            else if(data == "等待再审" || data == "隔日交付")
-                            {
-                                $result_html = '<small class="btn-xs bg-yellow">'+data+'</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
-                            }
-                            return $result_html;
-                        }
-                    },
-                    {
-                        "title": "交付人",
-                        "data": "deliverer_id",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','交付人');
-                                $(nTd).attr('data-key','deliverer_name').attr('data-value',data);
-                                $(nTd).attr('data-column-name','交付人');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return row.deliverer == null ? '--' : '<a href="javascript:void(0);">'+row.deliverer.true_name+'</a>';
-                        }
-                    },
-                    {
-                        "title": "交付时间",
-                        "data": 'delivered_at',
-                        "className": "",
-                        "width": "100px",
-                        "orderable": false,
-                        "orderSequence": ["desc", "asc"],
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-time-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','交付时间');
-                                $(nTd).attr('data-key','delivered_at').attr('data-value',data);
-                                $(nTd).attr('data-column-name','交付时间');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '--';
-//                            return data;
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
-                        }
-                    },
-                    {
-                        "title": "交付客户",
-                        "data": "client_id",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            // if(row.is_completed != 1 && row.item_status != 97 && row.client_id > 0)
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','客户');
-                                $(nTd).attr('data-key','client_id').attr('data-value',data);
-                                if(row.client_er == null) $(nTd).attr('data-option-name','未指定');
-                                else {
-                                    $(nTd).attr('data-option-name',row.client_er.name);
-                                }
-                                $(nTd).attr('data-column-name','客户');
-                                if(row.project_id) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.client_er == null)
-                            {
-                                return '--';
-                            }
-                            else {
-                                return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
-                            }
                         }
                     },
                     {
@@ -1875,7 +1734,6 @@
                     if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
                     if($('select[name="order-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="order-inspected-status"]').val();
-                    if($('select[name="order-delivered-status"]').val() != -1)  $obj.delivered_status = $('select[name="order-delivered-status"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 20) $obj.length = $page_length;
