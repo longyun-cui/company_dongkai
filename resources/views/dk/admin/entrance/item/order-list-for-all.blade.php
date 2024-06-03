@@ -1785,6 +1785,7 @@
                                         $html_inspected = '<a class="btn btn-xs bg-blue item-inspect-submit" data-id="'+data+'">再审</a>';
                                         $html_detail_inspected = '<a class="btn btn-xs bg-blue item-modal-show-for-detail-inspected" data-id="'+data+'">再审</a>';
                                     }
+                                    @if($me->department_district_id == 0)
                                     if(row.client_id == 0)
                                     {
                                         // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
@@ -1794,6 +1795,7 @@
                                     {
                                         $html_deliver = '<a class="btn btn-xs bg-green disabled">已交</a>';
                                     }
+                                    @endif
                                     $html_edit = '';
                                     $html_publish = '';
                                 }
