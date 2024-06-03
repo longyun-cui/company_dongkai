@@ -7924,6 +7924,10 @@ class DKAdminRepository {
             $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
             $project_list = DK_Pivot_User_Project::select('project_id')->whereIn('user_id',$subordinates)->get()->pluck('project_id')->toArray();
             $query->where('is_published','<>',0)->whereIn('project_id', $project_list);
+            if($me->department_district_id != 0)
+            {
+                $query->where('department_district_id',$me->department_district_id);
+            }
         }
         // 质检员
         if($me->user_type == 77)
@@ -7935,6 +7939,10 @@ class DKAdminRepository {
             // 多对多
             $project_list = DK_Pivot_User_Project::select('project_id')->where('user_id',$me->id)->get()->pluck('project_id')->toArray();
             $query->where('is_published','<>',0)->whereIn('project_id', $project_list);
+            if($me->department_district_id != 0)
+            {
+                $query->where('department_district_id',$me->department_district_id);
+            }
         }
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);

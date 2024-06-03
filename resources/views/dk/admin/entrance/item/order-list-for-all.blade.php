@@ -166,6 +166,7 @@
             </div>
 
 
+            @if(in_array($me->department_district_id,[0]))
             @if(in_array($me->user_type,[0,1,9,11,71,77]))
             <div class="box-footer" style="padding:4px 10px;">
                 <div class="row" style="margin:2px 0;">
@@ -198,6 +199,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             @endif
 
 
