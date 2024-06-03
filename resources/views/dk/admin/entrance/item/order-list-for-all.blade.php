@@ -907,7 +907,7 @@
 {{--                    @if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
                     {
-                        "targets": [0,2,3,4,5,6],
+                        "targets": [0,4,5,6,7,8],
                         "visible": false,
                     }
                     @endif
