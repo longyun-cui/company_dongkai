@@ -6733,8 +6733,8 @@ class DKAdminRepository {
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $client_id = $post_data["client_id"];
-        $client = DK_Client::find($client_id);
-        if(!$client) return response_error([],"客户不存在！");
+//        $client = DK_Client::find($client_id);
+//        if(!$client) return response_error([],"客户不存在！");
 
         $before = $item->client_id;
 
@@ -6793,13 +6793,13 @@ class DKAdminRepository {
         $messages = [
             'operate.required' => 'operate.required.',
             'ids.required' => 'ids.required.',
-            'client_id.required' => 'client_id.required.',
+//            'client_id.required' => 'client_id.required.',
             'delivered_result.required' => 'delivered_result.required.',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'ids' => 'required',
-            'client_id' => 'required',
+//            'client_id' => 'required',
             'delivered_result' => 'required',
         ], $messages);
         if ($v->fails())
@@ -6822,8 +6822,8 @@ class DKAdminRepository {
         if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
 
         $client_id = $post_data["client_id"];
-        $client = DK_Client::find($client_id);
-        if(!$client) return response_error([],"客户不存在！");
+//        $client = DK_Client::find($client_id);
+//        if(!$client) return response_error([],"客户不存在！");
 
 
         // 启动数据库事务

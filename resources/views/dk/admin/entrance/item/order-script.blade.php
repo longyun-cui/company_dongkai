@@ -667,7 +667,10 @@
                                 $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
                                 $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');
                                 $row.find('td[data-key=client_id]').attr('data-value',$client_id);
-                                $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
+                                if($client_id != "-1")
+                                {
+                                    $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
+                                }
                                 $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
                                 $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
 
@@ -1749,7 +1752,10 @@
                                     $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
                                     $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');
                                     $row.find('td[data-key=client_id]').attr('data-value',$client_id);
-                                    $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
+                                    if($client_id != "-1")
+                                    {
+                                        $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
+                                    }
                                     $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
                                     $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
 
