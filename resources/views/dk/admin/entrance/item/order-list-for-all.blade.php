@@ -105,7 +105,8 @@
                         <select class="form-control form-filter" name="order-delivered-status" style="width:88px;">
                             <option value="-1">交付状态</option>
                             <option value="待交付" @if("待交付" == $delivered_status) selected="selected" @endif>待交付</option>
-                            <option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>
+{{--                            <option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
+                            <option value="已操作" @if("已操作" == $delivered_status) selected="selected" @endif>已操作</option>
                         </select>
 
                         <select class="form-control form-filter select2-box" name="order-delivered-result[]" multiple="multiple" style="width:88px;">
@@ -909,7 +910,7 @@
 {{--                    @if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
                     {
-                        "targets": [0,4,5,6,7,8],
+                        "targets": [0,6,7,8],
                         "visible": false,
                     }
                     @endif

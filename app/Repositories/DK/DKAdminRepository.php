@@ -8072,6 +8072,14 @@ class DKAdminRepository {
                 {
                     $query->where('delivered_status', 1);
                 }
+                else if($delivered_status == '已操作')
+                {
+                    $query->where('delivered_status', 1);
+                }
+                else if($delivered_status == '已处理')
+                {
+                    $query->where('delivered_status', 1);
+                }
             }
         }
         // 交付结果
