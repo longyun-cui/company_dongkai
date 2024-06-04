@@ -1081,7 +1081,7 @@
                             }
                             else if(data == 1)
                             {
-                                $result_html = '<small class="btn-xs bg-blue">已交付</small>';
+                                $result_html = '<small class="btn-xs bg-blue">已操作</small>';
                             }
                             else
                             {
