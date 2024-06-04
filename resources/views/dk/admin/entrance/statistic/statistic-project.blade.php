@@ -220,6 +220,7 @@
 
                             }
                         },
+                        @if($me->department_district_id == 0)
                         {
                             "title": "团队",
                             "data": "pivot_project_team",
@@ -241,6 +242,7 @@
                                 return html;
                             }
                         },
+                        @endif
                         {
                             "title": "每日目标",
                             "data": "daily_goal",
