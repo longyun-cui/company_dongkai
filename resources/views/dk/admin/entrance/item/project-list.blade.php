@@ -35,7 +35,7 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-car-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-project-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
@@ -141,7 +141,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-car-info-text-set" readonly>
+                    <input type="hidden" name="info-text-set-operate" value="item-project-info-text-set" readonly>
                     <input type="hidden" name="info-text-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-text-set-column-key" value="" readonly>
@@ -185,8 +185,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-car-info-text-set" readonly>
-                    {{--<input type="hidden" name="info-time-set-operate" value="item-car-info-time-set" readonly>--}}
+                    <input type="hidden" name="info-time-set-operate" value="item-project-info-text-set" readonly>
+                    {{--<input type="hidden" name="info-time-set-operate" value="item-project-info-time-set" readonly>--}}
                     <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
@@ -233,8 +233,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-car-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-car-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-operate" value="item-project-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-project-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
 
@@ -273,7 +273,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-car-info-option-set" readonly>
+                    <input type="hidden" name="info-select-set-operate" value="item-project-info-option-set" readonly>
                     <input type="hidden" name="info-select-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
@@ -337,12 +337,12 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="attachment-set-operate" value="item-car-attachment-set" readonly>
-                    <input type="hidden" name="attachment-set-car-id" value="0" readonly>
+                    <input type="hidden" name="attachment-set-operate" value="item-project-attachment-set" readonly>
+                    <input type="hidden" name="attachment-set-project-id" value="0" readonly>
                     <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
                     <input type="hidden" name="attachment-set-column-key" value="" readonly>
 
-                    <input type="hidden" name="operate" value="item-car-attachment-set" readonly>
+                    <input type="hidden" name="operate" value="item-project-attachment-set" readonly>
                     <input type="hidden" name="item_id" value="0" readonly>
                     <input type="hidden" name="operate_type" value="add" readonly>
                     <input type="hidden" name="column_key" value="attachment" readonly>

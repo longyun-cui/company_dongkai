@@ -5492,7 +5492,8 @@ class DKAdminRepository {
 //        $query->where(['user_status'=>1,'user_category'=>11]);
 //        $query->whereIn('user_type',[41,61,88]);
 
-        if(in_array($me->user_type,[81,84,88]))
+//        if(in_array($me->user_type,[81,84,88]))
+        if(!in_array($me->department_district_id,[0]))
         {
             $department_district_id = $me->department_district_id;
             $project_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
