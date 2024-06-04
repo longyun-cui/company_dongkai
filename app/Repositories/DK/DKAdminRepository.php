@@ -6737,7 +6737,10 @@ class DKAdminRepository {
 //        $client = DK_Client::find($client_id);
 //        if(!$client) return response_error([],"客户不存在！");
 
-        $before = $item->client_id;
+        $delivered_result = $post_data["delivered_result"];
+        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        $before = $item->delivered_result;
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -6746,7 +6749,7 @@ class DKAdminRepository {
             $item->client_id = $client_id;
             $item->deliverer_id = $me->id;
             $item->delivered_status = 1;
-            $item->delivered_result = $post_data["delivered_result"];
+            $item->delivered_result = $delivered_result;
             $item->delivered_at = time();
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");
@@ -6763,13 +6766,13 @@ class DKAdminRepository {
                 $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 95;
                 $record_data["operate_type"] = 1;
-                $record_data["column_name"] = "client_id";
+                $record_data["column_name"] = "delivered_result";
 
                 $record_data["before"] = $before;
-                $record_data["after"] = $client_id;
+                $record_data["after"] = $delivered_result;
 
-                $record_data["before_client_id"] = $before;
-                $record_data["after_client_id"] = $client_id;
+//                $record_data["before_client_id"] = $before;
+//                $record_data["after_client_id"] = $client_id;
 
                 $bool_1 = $record->fill($record_data)->save();
                 if(!$bool_1) throw new Exception("insert--record--fail");
@@ -6837,39 +6840,53 @@ class DKAdminRepository {
             $delivered_para['delivered_result'] = $delivered_result;
             $delivered_para['delivered_at'] = time();
 
-            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
-            if(!$bool) throw new Exception("item--update--fail");
-
-//            $item->client_id = $client_id;
-//            $item->deliverer_id = $me->id;
-//            $item->delivered_result = $post_data["delivered_result"];
-//            $item->delivered_at = time();
-//            $bool = $item->save();
+//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
 //            if(!$bool) throw new Exception("item--update--fail");
 //            else
 //            {
-//                $record = new DK_Record;
-//
-//                $record_data["ip"] = Get_IP();
-//                $record_data["record_object"] = 21;
-//                $record_data["record_category"] = 11;
-//                $record_data["record_type"] = 1;
-//                $record_data["creator_id"] = $me->id;
-//                $record_data["order_id"] = $id;
-//                $record_data["operate_object"] = 71;
-//                $record_data["operate_category"] = 95;
-//                $record_data["operate_type"] = 1;
-//                $record_data["column_name"] = "client_id";
-//
-//                $record_data["before"] = $before;
-//                $record_data["after"] = $client_id;
-//
+//            }
+
+            foreach($ids_array as $key => $id)
+            {
+                $item = DK_Order::withTrashed()->find($id);
+                if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+                $before = $item->delivered_result;
+
+                $item->client_id = $client_id;
+                $item->deliverer_id = $me->id;
+                $item->delivered_status = 1;
+                $item->delivered_result = $delivered_result;
+                $item->delivered_at = time();
+                $bool = $item->save();
+                if(!$bool) throw new Exception("item--update--fail");
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 95;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "delivered_result";
+
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $delivered_result;
+
 //                $record_data["before_client_id"] = $before;
 //                $record_data["after_client_id"] = $client_id;
-//
-//                $bool_1 = $record->fill($record_data)->save();
-//                if(!$bool_1) throw new Exception("insert--record--fail");
-//            }
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("insert--record--fail");
+                }
+
+            }
+
 
             DB::commit();
             return response_success([]);

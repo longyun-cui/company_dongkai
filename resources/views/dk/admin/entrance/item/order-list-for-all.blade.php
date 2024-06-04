@@ -2075,6 +2075,7 @@
                             else if(row.operate_category == 95)
                             {
                                 if(data == "client_id") return '客户';
+                                else if(data == "delivered_result") return '交付结果';
                                 else return '交付';
                             }
                             else return '';
