@@ -8079,7 +8079,7 @@ class DKAdminRepository {
         if(!empty($post_data['delivered_status']))
         {
             $delivered_status = $post_data['delivered_status'];
-            if(in_array($delivered_status,['待交付','已交付']))
+            if(in_array($delivered_status,['待交付','已交付','已操作','已处理']))
             {
                 if($delivered_status == '待交付')
                 {
