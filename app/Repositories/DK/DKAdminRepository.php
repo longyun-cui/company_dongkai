@@ -6832,6 +6832,7 @@ class DKAdminRepository {
 //        $client = DK_Client::find($client_id);
 //        if(!$client) return response_error([],"客户不存在！");
 
+        $delivered_description = $post_data["delivered_description"];
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -6860,6 +6861,7 @@ class DKAdminRepository {
                 $item->deliverer_id = $me->id;
                 $item->delivered_status = 1;
                 $item->delivered_result = $delivered_result;
+                $item->delivered_description = $delivered_description;
                 $item->delivered_at = time();
                 $bool = $item->save();
                 if(!$bool) throw new Exception("item--update--fail");

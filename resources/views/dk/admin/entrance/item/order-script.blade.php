@@ -1731,7 +1731,8 @@
                             operate: "order-delivered-bulk",
                             ids: $ids,
                             client_id:$('select[name="bulk-operate-delivered-client"]').val(),
-                            delivered_result:$('select[name="bulk-operate-delivered-result"]').val()
+                            delivered_result:$('select[name="bulk-operate-delivered-result"]').val(),
+                            delivered_description:$('input[name="bulk-operate-delivered-description"]').val()
                         },
                         function(data){
                             layer.close(index);

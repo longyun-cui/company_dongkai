@@ -171,7 +171,7 @@
             @if(in_array($me->user_type,[0,1,9,11,71,77]))
             <div class="box-footer" style="padding:4px 10px;">
                 <div class="row" style="margin:2px 0;">
-                    <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
+                    <div class="col-md-offset-0 col-md-9 col-sm-9 col-xs-12">
                         {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
                         {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
                         <div class="input-group">
@@ -179,19 +179,21 @@
 
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
 
-                            <select name="bulk-operate-delivered-client" class="form-control form-filter select2-box" style="width:50%;">
+                            <select name="bulk-operate-delivered-client" class="form-control form-filter select2-box" style="width:25%;height:100%;">
                                 <option value="-1">交付客户</option>
                                 @foreach($client_list as $v)
                                     <option value="{{ $v->id }}">{{ $v->username }}</option>
                                 @endforeach
                             </select>
 
-                            <select name="bulk-operate-delivered-result" class="form-control form-filter select2-box" style="width:50%;">
+                            <select name="bulk-operate-delivered-result" class="form-control form-filter select2-box" style="width:25%;height:100%;">
                                 <option value="-1">交付结果</option>
                                 @foreach(config('info.delivered_result') as $v)
                                     <option value="{{ $v }}">{{ $v }}</option>
                                 @endforeach
                             </select>
+
+                            <input type="text" name="bulk-operate-delivered-description" class="form-control form-filter pull-right" placeholder="交付说明" style="width:50%;">
 
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
