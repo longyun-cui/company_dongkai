@@ -67,6 +67,16 @@
             $(".order_count_for_repeated").find('b').html($data.order_count_for_repeated);
             $(".order_count_for_rate").find('b').html($data.order_count_for_rate);
 
+            $(".order_count_for_delivered").find('b').html($data.order_count_for_delivered);
+            $(".order_count_for_delivered_effective").find('b').html($data.order_count_for_delivered_effective);
+            $(".order_count_for_delivered_completed").find('b').html($data.order_count_for_delivered_completed);
+            $(".order_count_for_delivered_inside").find('b').html($data.order_count_for_delivered_inside);
+            $(".order_count_for_delivered_tomorrow").find('b').html($data.order_count_for_delivered_tomorrow);
+            $(".order_count_for_delivered_repeated").find('b').html($data.order_count_for_delivered_repeated);
+            $(".order_count_for_delivered_rejected").find('b').html($data.order_count_for_delivered_rejected);
+            $(".order_rate_for_delivered_effective").find('b').html($data.order_rate_for_delivered_effective);
+
+
             $(".order_count_of_today_for_all").find('b').html($data.order_count_of_today_for_all);
             $(".order_count_of_today_for_inspected").find('b').html($data.order_count_of_today_for_inspected);
             $(".order_count_of_today_for_accepted").find('b').html($data.order_count_of_today_for_accepted);
@@ -75,6 +85,16 @@
             $(".order_count_of_today_for_repeated").find('b').html($data.order_count_of_today_for_repeated);
             $(".order_count_of_today_for_rate").find('b').html($data.order_count_of_today_for_rate);
 
+            $(".order_count_of_today_for_delivered").find('b').html($data.order_count_of_today_for_delivered);
+            $(".order_count_of_today_for_delivered_effective").find('b').html($data.order_count_of_today_for_delivered_effective);
+            $(".order_count_of_today_for_delivered_completed").find('b').html($data.order_count_of_today_for_delivered_completed);
+            $(".order_count_of_today_for_delivered_inside").find('b').html($data.order_count_of_today_for_delivered_inside);
+            $(".order_count_of_today_for_delivered_tomorrow").find('b').html($data.order_count_of_today_for_delivered_tomorrow);
+            $(".order_count_of_today_for_delivered_repeated").find('b').html($data.order_count_of_today_for_delivered_repeated);
+            $(".order_count_of_today_for_delivered_rejected").find('b').html($data.order_count_of_today_for_delivered_rejected);
+            $(".order_rate_of_today_for_delivered_effective").find('b').html($data.order_rate_of_today_for_delivered_effective);
+
+
             $(".order_count_of_month_for_all").find('b').html($data.order_count_of_month_for_all);
             $(".order_count_of_month_for_inspected").find('b').html($data.order_count_of_month_for_inspected);
             $(".order_count_of_month_for_accepted").find('b').html($data.order_count_of_month_for_accepted);
@@ -82,6 +102,15 @@
             $(".order_count_of_month_for_refused").find('b').html($data.order_count_of_month_for_refused);
             $(".order_count_of_month_for_repeated").find('b').html($data.order_count_of_month_for_repeated);
             $(".order_count_of_month_for_rate").find('b').html($data.order_count_of_month_for_rate);
+
+            $(".order_count_of_month_for_delivered").find('b').html($data.order_count_of_month_for_delivered);
+            $(".order_count_of_month_for_delivered_effective").find('b').html($data.order_count_of_month_for_delivered_effective);
+            $(".order_count_of_month_for_delivered_completed").find('b').html($data.order_count_of_month_for_delivered_completed);
+            $(".order_count_of_month_for_delivered_inside").find('b').html($data.order_count_of_month_for_delivered_inside);
+            $(".order_count_of_month_for_delivered_tomorrow").find('b').html($data.order_count_of_month_for_delivered_tomorrow);
+            $(".order_count_of_month_for_delivered_repeated").find('b').html($data.order_count_of_month_for_delivered_repeated);
+            $(".order_count_of_month_for_delivered_rejected").find('b').html($data.order_count_of_month_for_delivered_rejected);
+            $(".order_rate_of_month_for_delivered_effective").find('b').html($data.order_rate_of_month_for_delivered_effective);
 
             // statistic_get_data_for_order($month, "myChart-for-comprehensive-order", "myChart-for-comprehensive-order-quantity", "myChart-for-comprehensive-order-income");
             // statistic_get_data_for_finance($month, "myChart-for-comprehensive-finance");

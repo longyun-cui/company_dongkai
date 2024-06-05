@@ -94,25 +94,59 @@
                         <div class="box-body">
                             <ul class="nav nav-stacked">
                                 <li class="order_count_of_today_for_all">
-                                    <a href="javascript:void(0);">工单总量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">工单提交量 <span class="pull-right"><b class="badge bg-black"></b> 单</span></a>
                                 </li>
+
+                                <li class="">
+                                    &nbsp;
+                                </li>
+
                                 <li class="order_count_of_today_for_inspected">
-                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_accepted">
                                     <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_of_today_for_refused">
-                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                                <li class="order_count_of_today_for_accepted_inside">
+                                    <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_repeated">
                                     <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_of_today_for_accepted_inside">
-                                    <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                <li class="order_count_of_today_for_refused">
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_today_for_rate">
                                     <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
+                                </li>
+
+                                <li class="">
+                                    &nbsp;
+                                </li>
+
+                                <li class="order_count_of_today_for_delivered">
+                                    <a href="javascript:void(0);">交付量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_today_for_delivered_effective">
+                                    <a href="javascript:void(0);">有效交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_today_for_delivered_completed">
+                                    <a href="javascript:void(0);">已交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_today_for_delivered_inside">
+                                    <a href="javascript:void(0);">内部交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_today_for_delivered_tomorrow">
+                                    <a href="javascript:void(0);">隔日交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_today_for_delivered_repeated">
+                                    <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_today_for_delivered_rejected">
+                                    <a href="javascript:void(0);">驳回量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                                </li>
+                                <li class="order_rate_of_today_for_delivered_effective">
+                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -131,25 +165,59 @@
                         <div class="box-body">
                             <ul class="nav nav-stacked">
                                 <li class="order_count_of_month_for_all">
-                                    <a href="javascript:void(0);">工单总量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">工单提交量 <span class="pull-right"><b class="badge bg-black"></b> 单</span></a>
                                 </li>
+
+                                <li class="">
+                                    &nbsp;
+                                </li>
+
                                 <li class="order_count_of_month_for_inspected">
-                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_month_for_accepted">
                                     <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_of_month_for_refused">
-                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                                <li class="order_count_of_month_for_accepted_inside">
+                                    <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_month_for_repeated">
                                     <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_of_month_for_accepted_inside">
-                                    <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                <li class="order_count_of_month_for_refused">
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_of_month_for_rate">
                                     <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
+                                </li>
+
+                                <li class="">
+                                    &nbsp;
+                                </li>
+
+                                <li class="order_count_of_month_for_delivered">
+                                    <a href="javascript:void(0);">交付量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_month_for_delivered_effective">
+                                    <a href="javascript:void(0);">有效交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_month_for_delivered_completed">
+                                    <a href="javascript:void(0);">已交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_month_for_delivered_inside">
+                                    <a href="javascript:void(0);">内部交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_month_for_delivered_tomorrow">
+                                    <a href="javascript:void(0);">隔日交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_month_for_delivered_repeated">
+                                    <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_of_month_for_delivered_rejected">
+                                    <a href="javascript:void(0);">驳回量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                                </li>
+                                <li class="order_rate_of_month_for_delivered_effective">
+                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -168,25 +236,59 @@
                         <div class="box-body">
                             <ul class="nav nav-stacked">
                                 <li class="order_count_for_all">
-                                    <a href="javascript:void(0);">工单总量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">工单提交量 <span class="pull-right"><b class="badge bg-black"></b> 单</span></a>
                                 </li>
+
+                                <li class="">
+                                    &nbsp;
+                                </li>
+
                                 <li class="order_count_for_inspected">
-                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge- bg-blue-"></b> 单</span></a>
+                                    <a href="javascript:void(0);">审核量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_accepted">
                                     <a href="javascript:void(0);">通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_for_refused">
-                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                                <li class="order_count_for_accepted_inside">
+                                    <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_repeated">
                                     <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
                                 </li>
-                                <li class="order_count_for_accepted_inside">
-                                    <a href="javascript:void(0);">内部通过量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                <li class="order_count_for_refused">
+                                    <a href="javascript:void(0);">拒绝量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
                                 </li>
                                 <li class="order_count_for_rate">
                                     <a href="javascript:void(0);">通过率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
+                                </li>
+
+                                <li class="">
+                                    &nbsp;
+                                </li>
+
+                                <li class="order_count_for_delivered">
+                                    <a href="javascript:void(0);">交付量 <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_delivered_effective">
+                                    <a href="javascript:void(0);">有效交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_delivered_completed">
+                                    <a href="javascript:void(0);">已交付量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_delivered_inside">
+                                    <a href="javascript:void(0);">内部交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_delivered_tomorrow">
+                                    <a href="javascript:void(0);">隔日交付 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_delivered_repeated">
+                                    <a href="javascript:void(0);">重复量 <span class="pull-right"><b class="badge bg-orange"></b> 单</span></a>
+                                </li>
+                                <li class="order_count_for_delivered_rejected">
+                                    <a href="javascript:void(0);">驳回量 <span class="pull-right"><b class="badge bg-red"></b> 单</span></a>
+                                </li>
+                                <li class="order_rate_for_delivered_effective">
+                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>
                                 </li>
                             </ul>
                         </div>

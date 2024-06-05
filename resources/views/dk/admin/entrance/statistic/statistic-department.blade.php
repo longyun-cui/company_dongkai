@@ -399,7 +399,7 @@
                             }
                         },
                         {
-                            "title": "有效率",
+                            "title": "有效交付率",
                             "data": "order_rate_for_delivered_effective",
                             "className": "bg-delivered",
                             "width": "100px",

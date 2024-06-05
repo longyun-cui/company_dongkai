@@ -8765,7 +8765,14 @@ class DKAdminRepository {
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->get();
 
@@ -8789,6 +8796,28 @@ class DKAdminRepository {
         else $return_data['order_count_for_rate'] = 0;
 
 
+        $order_count_for_delivered = $query_order[0]->order_count_for_delivered;
+        $order_count_for_delivered_completed = $query_order[0]->order_count_for_delivered_completed;
+        $order_count_for_delivered_inside = $query_order[0]->order_count_for_delivered_inside;
+        $order_count_for_delivered_tomorrow = $query_order[0]->order_count_for_delivered_tomorrow;
+        $order_count_for_delivered_repeated = $query_order[0]->order_count_for_delivered_repeated;
+        $order_count_for_delivered_rejected = $query_order[0]->order_count_for_delivered_repeated;
+        $order_count_for_delivered_effective = $order_count_for_delivered_completed + $order_count_for_delivered_inside + $order_count_for_delivered_tomorrow;
+
+        $return_data['order_count_for_delivered'] = $order_count_for_delivered;
+        $return_data['order_count_for_delivered_completed'] = $order_count_for_delivered_completed;
+        $return_data['order_count_for_delivered_inside'] = $order_count_for_delivered_inside;
+        $return_data['order_count_for_delivered_tomorrow'] = $order_count_for_delivered_tomorrow;
+        $return_data['order_count_for_delivered_repeated'] = $order_count_for_delivered_repeated;
+        $return_data['order_count_for_delivered_rejected'] = $order_count_for_delivered_rejected;
+        $return_data['order_count_for_delivered_effective'] = $order_count_for_delivered_effective;
+        if($order_count_for_delivered)
+        {
+            $return_data['order_rate_for_delivered_effective'] = round(($order_count_for_delivered_effective * 100 / $order_count_for_delivered),2);
+        }
+        else $return_data['order_rate_for_delivered_effective'] = 0;
+
+
         // 当天统计
         $query_order_of_today = (clone $query)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)
             ->select(DB::raw("
@@ -8799,7 +8828,14 @@ class DKAdminRepository {
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->get();
 
@@ -8823,6 +8859,28 @@ class DKAdminRepository {
         else $return_data['order_count_of_today_for_rate'] = 0;
 
 
+        $order_count_of_today_for_delivered = $query_order_of_today[0]->order_count_for_delivered;
+        $order_count_of_today_for_delivered_completed = $query_order_of_today[0]->order_count_for_delivered_completed;
+        $order_count_of_today_for_delivered_inside = $query_order_of_today[0]->order_count_for_delivered_inside;
+        $order_count_of_today_for_delivered_tomorrow = $query_order_of_today[0]->order_count_for_delivered_tomorrow;
+        $order_count_of_today_for_delivered_repeated = $query_order_of_today[0]->order_count_for_delivered_repeated;
+        $order_count_of_today_for_delivered_rejected = $query_order_of_today[0]->order_count_for_delivered_repeated;
+        $order_count_of_today_for_delivered_effective = $order_count_of_today_for_delivered_completed + $order_count_of_today_for_delivered_inside + $order_count_of_today_for_delivered_tomorrow;
+
+        $return_data['order_count_of_today_for_delivered'] = $order_count_of_today_for_delivered;
+        $return_data['order_count_of_today_for_delivered_completed'] = $order_count_of_today_for_delivered_completed;
+        $return_data['order_count_of_today_for_delivered_inside'] = $order_count_of_today_for_delivered_inside;
+        $return_data['order_count_of_today_for_delivered_tomorrow'] = $order_count_of_today_for_delivered_tomorrow;
+        $return_data['order_count_of_today_for_delivered_repeated'] = $order_count_of_today_for_delivered_repeated;
+        $return_data['order_count_of_today_for_delivered_rejected'] = $order_count_of_today_for_delivered_rejected;
+        $return_data['order_count_of_today_for_delivered_effective'] = $order_count_of_today_for_delivered_effective;
+        if($order_count_of_today_for_delivered)
+        {
+            $return_data['order_rate_of_today_for_delivered_effective'] = round(($order_count_of_today_for_delivered_effective * 100 / $order_count_of_today_for_delivered),2);
+        }
+        else $return_data['order_rate_of_today_for_delivered_effective'] = 0;
+
+
         // 当月统计
         $query_order_of_month = (clone $query)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->select(DB::raw("
@@ -8833,7 +8891,14 @@ class DKAdminRepository {
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->get();
 
@@ -8855,6 +8920,28 @@ class DKAdminRepository {
             $return_data['order_count_of_month_for_rate'] = round(($order_count_of_month_for_accepted * 100 / $order_count_of_month_for_inspected),2);
         }
         else $return_data['order_count_of_month_for_rate'] = 0;
+
+
+        $order_count_of_month_for_delivered = $query_order_of_month[0]->order_count_for_delivered;
+        $order_count_of_month_for_delivered_completed = $query_order_of_month[0]->order_count_for_delivered_completed;
+        $order_count_of_month_for_delivered_inside = $query_order_of_month[0]->order_count_for_delivered_inside;
+        $order_count_of_month_for_delivered_tomorrow = $query_order_of_month[0]->order_count_for_delivered_tomorrow;
+        $order_count_of_month_for_delivered_repeated = $query_order_of_month[0]->order_count_for_delivered_repeated;
+        $order_count_of_month_for_delivered_rejected = $query_order_of_month[0]->order_count_for_delivered_repeated;
+        $order_count_of_month_for_delivered_effective = $order_count_for_delivered_completed + $order_count_for_delivered_inside + $order_count_for_delivered_tomorrow;
+
+        $return_data['order_count_of_month_for_delivered'] = $order_count_of_month_for_delivered;
+        $return_data['order_count_of_month_for_delivered_completed'] = $order_count_of_month_for_delivered_completed;
+        $return_data['order_count_of_month_for_delivered_inside'] = $order_count_of_month_for_delivered_inside;
+        $return_data['order_count_of_month_for_delivered_tomorrow'] = $order_count_of_month_for_delivered_tomorrow;
+        $return_data['order_count_of_month_for_delivered_repeated'] = $order_count_of_month_for_delivered_repeated;
+        $return_data['order_count_of_month_for_delivered_rejected'] = $order_count_of_month_for_delivered_rejected;
+        $return_data['order_count_of_month_for_delivered_effective'] = $order_count_of_month_for_delivered_effective;
+        if($order_count_of_month_for_delivered)
+        {
+            $return_data['order_rate_of_month_for_delivered_effective'] = round(($order_count_of_month_for_delivered_effective * 100 / $order_count_of_month_for_delivered),2);
+        }
+        else $return_data['order_rate_of_month_for_delivered_effective'] = 0;
 
 
 
