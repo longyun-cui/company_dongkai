@@ -636,7 +636,8 @@
                     '</select>'+
                     '<select class="form-control select-primary" name="select-delivered-result" style="width:48%;" id="">'+
                     $option_html_for_delivered_result+
-                    '</select>'
+                    '</select>'+
+                    '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="交付说明"></textarea>'
                 ,yes: function(index){
                     $.post(
                         "{{ url('/item/order-deliver') }}",
@@ -645,7 +646,8 @@
                             operate: "order-deliver",
                             item_id: $that.attr('data-id'),
                             client_id: $('select[name="select-client-id"]').val(),
-                            delivered_result: $('select[name="select-delivered-result"]').val()
+                            delivered_result: $('select[name="select-delivered-result"]').val(),
+                            delivered_description: $('textarea[name="textarea-delivered-description"]').val()
                         },
                         function(data){
                             layer.close(index);

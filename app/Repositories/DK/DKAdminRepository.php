@@ -6742,6 +6742,8 @@ class DKAdminRepository {
 
         $before = $item->delivered_result;
 
+        $delivered_description = $post_data["delivered_description"];
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -6750,6 +6752,7 @@ class DKAdminRepository {
             $item->deliverer_id = $me->id;
             $item->delivered_status = 1;
             $item->delivered_result = $delivered_result;
+            $item->delivered_description = $delivered_description;
             $item->delivered_at = time();
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");
@@ -9044,7 +9047,14 @@ class DKAdminRepository {
                     count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "));
 
 
@@ -9169,6 +9179,13 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
                 $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
                 $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
+
+                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
+                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
+                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
+                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
+                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
+                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -9178,8 +9195,16 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_refused = 0;
                 $list[$k]->order_count_for_repeated = 0;
                 $list[$k]->order_count_for_accepted_inside = 0;
+
+                $list[$k]->order_count_for_delivered = 0;
+                $list[$k]->order_count_for_delivered_completed = 0;
+                $list[$k]->order_count_for_delivered_inside = 0;
+                $list[$k]->order_count_for_delivered_tomorrow = 0;
+                $list[$k]->order_count_for_delivered_repeated = 0;
+                $list[$k]->order_count_for_delivered_rejected = 0;
             }
 
+            // 审核
             // 通过率
             if($v->order_count_for_all > 0)
             {
@@ -9195,6 +9220,19 @@ class DKAdminRepository {
                 $list[$k]->order_rate_for_effective = round(($v->order_count_for_effective * 100 / $v->order_count_for_all),2);
             }
             else $list[$k]->order_rate_for_effective = 0;
+
+
+            // 交付
+            // 有效交付量
+            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_tomorrow;
+
+            // 有效交付率
+            if($v->order_count_for_delivered > 0)
+            {
+                $list[$k]->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
+            }
+            else $list[$k]->order_rate_for_delivered_effective = 0;
+
         }
 //        dd($list->toArray());
 
@@ -9889,7 +9927,14 @@ class DKAdminRepository {
                     count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
             ->groupBy('project_id')
@@ -9960,6 +10005,18 @@ class DKAdminRepository {
         $total['order_count_for_refused'] = 0;
         $total['order_count_for_repeated'] = 0;
         $total['order_count_for_accepted_inside'] = 0;
+
+        $total['order_count_for_delivered'] = 0;
+        $total['order_count_for_delivered_completed'] = 0;
+        $total['order_count_for_delivered_inside'] = 0;
+        $total['order_count_for_delivered_tomorrow'] = 0;
+        $total['order_count_for_delivered_repeated'] = 0;
+        $total['order_count_for_delivered_rejected'] = 0;
+
+        $total['order_count_for_delivered_per'] = 0;
+        $total['order_count_for_delivered_effective'] = 0;
+        $total['order_count_for_delivered_effective_per'] = 0;
+
         $total['remark'] = '';
 
         foreach ($list as $k => $v)
@@ -9973,6 +10030,13 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
                 $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
                 $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
+
+                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
+                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
+                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
+                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
+                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
+                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -9982,8 +10046,16 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_refused = 0;
                 $list[$k]->order_count_for_repeated = 0;
                 $list[$k]->order_count_for_accepted_inside = 0;
+
+                $list[$k]->order_count_for_delivered = 0;
+                $list[$k]->order_count_for_delivered_completed = 0;
+                $list[$k]->order_count_for_delivered_inside = 0;
+                $list[$k]->order_count_for_delivered_tomorrow = 0;
+                $list[$k]->order_count_for_delivered_repeated = 0;
+                $list[$k]->order_count_for_delivered_rejected = 0;
             }
 
+            // 审核
             // 有效单量
             $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
             // 通过率
@@ -10004,19 +10076,44 @@ class DKAdminRepository {
             }
 
 
+            // 交付
+            // 有效交付量
+            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_tomorrow;
+
+
+            // 有效交付率
+            if($v->order_count_for_delivered > 0)
+            {
+                $list[$k]->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
+            }
+            else $list[$k]->order_rate_for_delivered_effective = 0;
+
+
 
             $total['daily_goal'] += $v->daily_goal;
+
             $total['order_count_for_all'] += $v->order_count_for_all;
+
             $total['order_count_for_inspected'] += $v->order_count_for_inspected;
             $total['order_count_for_accepted'] += $v->order_count_for_accepted;
             $total['order_count_for_refused'] += $v->order_count_for_refused;
             $total['order_count_for_repeated'] += $v->order_count_for_repeated;
             $total['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
 
+            $total['order_count_for_delivered'] += $v->order_count_for_delivered;
+            $total['order_count_for_delivered_completed'] += $v->order_count_for_delivered_completed;
+            $total['order_count_for_delivered_inside'] += $v->order_count_for_delivered_inside;
+            $total['order_count_for_delivered_tomorrow'] += $v->order_count_for_delivered_tomorrow;
+            $total['order_count_for_delivered_repeated'] += $v->order_count_for_delivered_repeated;
+            $total['order_count_for_delivered_rejected'] += $v->order_count_for_delivered_rejected;
+
+            $total['order_count_for_delivered_effective'] += $v->order_count_for_delivered_effective;
+
 
         }
 
 
+        // 审核
         // 有效单量
         $total['order_count_for_effective'] = $total['order_count_for_inspected'] - $total['order_count_for_refused'] - $total['order_count_for_repeated'];
         // 通过率
@@ -10035,6 +10132,16 @@ class DKAdminRepository {
             if($total['order_count_for_accepted'] > 0) $total['order_rate_for_achieved'] = 100;
             else $total['order_rate_for_achieved'] = 0;
         }
+
+        // 审核
+
+        // 有效交付率
+        if($total['order_count_for_delivered'] > 0)
+        {
+            $total['order_rate_for_delivered_effective'] = round(($total['order_count_for_delivered_effective'] * 100 / $total['order_count_for_delivered']),2);
+        }
+        else $total['order_rate_for_delivered_effective'] = 0;
+
 
         $list[] = $total;
 
@@ -10070,11 +10177,20 @@ class DKAdminRepository {
             ->addSelect(DB::raw("
                     count(DISTINCT creator_id) as staff_count,
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
-                    count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    
                 "))
             ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
             ->groupBy('department_district_id')
@@ -10132,6 +10248,19 @@ class DKAdminRepository {
         $total['order_count_for_repeated'] = 0;
         $total['order_count_for_accepted_inside'] = 0;
 
+        $total['order_count_for_delivered'] = 0;
+        $total['order_count_for_delivered_completed'] = 0;
+        $total['order_count_for_delivered_inside'] = 0;
+        $total['order_count_for_delivered_tomorrow'] = 0;
+        $total['order_count_for_delivered_repeated'] = 0;
+        $total['order_count_for_delivered_rejected'] = 0;
+
+        $total['order_count_for_delivered_per'] = 0;
+        $total['order_count_for_delivered_effective'] = 0;
+        $total['order_count_for_delivered_effective_per'] = 0;
+
+
+
         foreach ($list as $k => $v)
         {
             if(isset($query_order[$v->id]))
@@ -10143,6 +10272,13 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
                 $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
                 $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
+
+                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
+                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
+                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
+                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
+                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
+                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -10153,8 +10289,16 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_refused = 0;
                 $list[$k]->order_count_for_repeated = 0;
                 $list[$k]->order_count_for_accepted_inside = 0;
+
+                $list[$k]->order_count_for_delivered = 0;
+                $list[$k]->order_count_for_delivered_completed = 0;
+                $list[$k]->order_count_for_delivered_inside = 0;
+                $list[$k]->order_count_for_delivered_tomorrow = 0;
+                $list[$k]->order_count_for_delivered_repeated = 0;
+                $list[$k]->order_count_for_delivered_rejected = 0;
             }
 
+            // 审核
             // 通过率
             if($v->order_count_for_all > 0)
             {
@@ -10162,7 +10306,7 @@ class DKAdminRepository {
             }
             else $list[$k]->order_rate_for_accepted = 0;
 
-            // 人均交付量
+            // 人均提交量
             if($v->staff_count > 0)
             {
                 $list[$k]->order_count_for_all_per = round(($v->order_count_for_all / $v->staff_count),2);
@@ -10176,6 +10320,35 @@ class DKAdminRepository {
             }
             else $list[$k]->order_count_for_accepted_per = 0;
 
+
+            // 交付
+            // 有效交付量
+            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_tomorrow;
+
+
+            // 人均交付量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_delivered_per = round(($v->order_count_for_delivered / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_delivered_per = 0;
+
+            // 人均通过量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_delivered_effective_per = round(($v->order_count_for_delivered_effective / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_delivered_effective_per = 0;
+
+            // 有效交付率
+            if($v->order_count_for_delivered > 0)
+            {
+                $list[$k]->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
+            }
+            else $list[$k]->order_rate_for_delivered_effective = 0;
+
+
+
             $total['staff_count'] += $v->staff_count;
             $total['order_count_for_all'] += $v->order_count_for_all;
             $total['order_count_for_inspected'] += $v->order_count_for_inspected;
@@ -10183,6 +10356,15 @@ class DKAdminRepository {
             $total['order_count_for_refused'] += $v->order_count_for_refused;
             $total['order_count_for_repeated'] += $v->order_count_for_repeated;
             $total['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
+
+            $total['order_count_for_delivered'] += $v->order_count_for_delivered;
+            $total['order_count_for_delivered_completed'] += $v->order_count_for_delivered_completed;
+            $total['order_count_for_delivered_inside'] += $v->order_count_for_delivered_inside;
+            $total['order_count_for_delivered_tomorrow'] += $v->order_count_for_delivered_tomorrow;
+            $total['order_count_for_delivered_repeated'] += $v->order_count_for_delivered_repeated;
+            $total['order_count_for_delivered_rejected'] += $v->order_count_for_delivered_rejected;
+
+            $total['order_count_for_delivered_effective'] += $v->order_count_for_delivered_effective;
 
         }
 
@@ -10193,7 +10375,7 @@ class DKAdminRepository {
         }
         else $total['order_rate_for_accepted'] = 0;
 
-        // 人均交付量
+        // 人均提交量
         if($total['staff_count'] > 0)
         {
             $total['order_count_for_all_per'] = round(($total['order_count_for_all'] / $total['staff_count']),2);
@@ -10206,6 +10388,29 @@ class DKAdminRepository {
             $total['order_count_for_accepted_per'] = round(($total['order_count_for_accepted'] / $total['staff_count']),2);
         }
         else $total['order_count_for_accepted_per'] = 0;
+
+
+
+        // 人均交付量
+        if($total['staff_count'] > 0)
+        {
+            $total['order_count_for_delivered_per'] = round(($total['order_count_for_delivered'] / $total['staff_count']),2);
+        }
+        else $total['order_count_for_all_per'] = 0;
+
+        // 人均有效交付量
+        if($total['staff_count'] > 0)
+        {
+            $total['order_count_for_delivered_effective_per'] = round(($total['order_count_for_delivered_effective'] / $total['staff_count']),2);
+        }
+        else $total['order_count_for_delivered_effective_per'] = 0;
+
+        // 有效交付率
+        if($total['order_count_for_delivered'] > 0)
+        {
+            $total['order_rate_for_delivered_effective'] = round(($total['order_count_for_delivered_effective'] * 100 / $total['order_count_for_delivered']),2);
+        }
+        else $total['order_rate_for_delivered_effective'] = 0;
 
         $list[] = $total;
 
@@ -10847,7 +11052,14 @@ class DKAdminRepository {
                     count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->groupBy('creator_id');
 
@@ -10856,11 +11068,19 @@ class DKAdminRepository {
         $query_order_for_manager = DK_Order::select('department_manager_id')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->groupBy('department_manager_id');
 
@@ -10873,7 +11093,14 @@ class DKAdminRepository {
                     count(IF(`inspected_result` = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->groupBy('department_supervisor_id');
 
@@ -11000,6 +11227,13 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
                 $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
                 $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
+
+                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
+                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
+                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
+                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
+                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
+                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -11009,7 +11243,18 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_refused = 0;
                 $list[$k]->order_count_for_repeated = 0;
                 $list[$k]->order_count_for_accepted_inside = 0;
+
+                $list[$k]->order_count_for_delivered = 0;
+                $list[$k]->order_count_for_delivered_completed = 0;
+                $list[$k]->order_count_for_delivered_inside = 0;
+                $list[$k]->order_count_for_delivered_tomorrow = 0;
+                $list[$k]->order_count_for_delivered_repeated = 0;
+                $list[$k]->order_count_for_delivered_rejected = 0;
             }
+            // 有效单量
+            $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
+            // 有效交付量
+            $v->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_tomorrow;
 
             // 通过率
             if($v->order_count_for_all > 0)
@@ -11017,8 +11262,13 @@ class DKAdminRepository {
                 $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
             }
             else $list[$k]->order_rate_for_accepted = 0;
-            // 有效单量
-            $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
+
+            // 有效交付率
+            if($v->order_count_for_delivered > 0)
+            {
+                $v->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
+            }
+            else $v->order_rate_for_delivered_effective = 0;
 
 
 
@@ -11033,6 +11283,13 @@ class DKAdminRepository {
                 $list[$k]->group_count_for_accepted = $query_order_for_supervisor[$supervisor_id]['order_count_for_accepted'];
                 $list[$k]->group_count_for_refused = $query_order_for_supervisor[$supervisor_id]['order_count_for_refused'];
                 $list[$k]->group_count_for_repeated = $query_order_for_supervisor[$supervisor_id]['order_count_for_repeated'];
+
+                $list[$k]->group_count_for_delivered = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered'];
+                $list[$k]->group_count_for_delivered_completed = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_completed'];
+                $list[$k]->group_count_for_delivered_inside = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_inside'];
+                $list[$k]->group_count_for_delivered_tomorrow = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_tomorrow'];
+                $list[$k]->group_count_for_delivered_repeated = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_repeated'];
+                $list[$k]->group_count_for_delivered_rejected = $query_order_for_supervisor[$supervisor_id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -11041,9 +11298,18 @@ class DKAdminRepository {
                 $list[$k]->group_count_for_accepted = 0;
                 $list[$k]->group_count_for_refused = 0;
                 $list[$k]->group_count_for_repeated = 0;
+
+                $list[$k]->group_count_for_delivered = 0;
+                $list[$k]->group_count_for_delivered_completed = 0;
+                $list[$k]->group_count_for_delivered_inside = 0;
+                $list[$k]->group_count_for_delivered_tomorrow = 0;
+                $list[$k]->group_count_for_delivered_repeated = 0;
+                $list[$k]->group_count_for_delivered_rejected = 0;
             }
             // 有效单量
             $v->group_count_for_effective = $v->group_count_for_inspected - $v->group_count_for_refused - $v->group_count_for_repeated;
+            // 有效交付量
+            $v->group_count_for_delivered_effective = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_inside + $v->group_count_for_delivered_tomorrow;
 
             $v->group_count_for_accepted_inside = 0;
 
@@ -11053,6 +11319,13 @@ class DKAdminRepository {
                 $v->group_rate_for_accepted = round(($v->group_count_for_accepted * 100 / $v->group_count_for_all),2);
             }
             else $v->group_rate_for_accepted = 0;
+
+            // 有效交付率
+            if($v->group_count_for_delivered > 0)
+            {
+                $v->group_rate_for_delivered_effective = round(($v->group_count_for_delivered_effective * 100 / $v->group_count_for_delivered),2);
+            }
+            else $v->group_rate_for_delivered_effective = 0;
 
 
 
@@ -11067,6 +11340,13 @@ class DKAdminRepository {
                 $list[$k]->district_count_for_accepted = $query_order_for_manager[$manager_id]['order_count_for_accepted'];
                 $list[$k]->district_count_for_refused = $query_order_for_manager[$manager_id]['order_count_for_refused'];
                 $list[$k]->district_count_for_repeated = $query_order_for_manager[$manager_id]['order_count_for_repeated'];
+
+                $list[$k]->district_count_for_delivered = $query_order_for_manager[$manager_id]['order_count_for_delivered'];
+                $list[$k]->district_count_for_delivered_completed = $query_order_for_manager[$manager_id]['order_count_for_delivered_completed'];
+                $list[$k]->district_count_for_delivered_inside = $query_order_for_manager[$manager_id]['order_count_for_delivered_inside'];
+                $list[$k]->district_count_for_delivered_tomorrow = $query_order_for_manager[$manager_id]['order_count_for_delivered_tomorrow'];
+                $list[$k]->district_count_for_delivered_repeated = $query_order_for_manager[$manager_id]['order_count_for_delivered_repeated'];
+                $list[$k]->district_count_for_delivered_rejected = $query_order_for_manager[$manager_id]['order_count_for_delivered_rejected'];
             }
             else
             {
@@ -11075,9 +11355,18 @@ class DKAdminRepository {
                 $list[$k]->district_count_for_accepted = 0;
                 $list[$k]->district_count_for_refused = 0;
                 $list[$k]->district_count_for_repeated = 0;
+
+                $list[$k]->district_count_for_delivered = 0;
+                $list[$k]->district_count_for_delivered_completed = 0;
+                $list[$k]->district_count_for_delivered_inside = 0;
+                $list[$k]->district_count_for_delivered_tomorrow = 0;
+                $list[$k]->district_count_for_delivered_repeated = 0;
+                $list[$k]->district_count_for_delivered_rejected = 0;
             }
             // 有效单量
             $v->district_count_for_effective = $v->district_count_for_inspected - $v->district_count_for_refused - $v->district_count_for_repeated;
+            // 有效交付量
+            $v->district_count_for_delivered_effective = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_inside + $v->district_count_for_delivered_tomorrow;
 
             $v->district_count_for_accepted_inside = 0;
 
@@ -11087,6 +11376,13 @@ class DKAdminRepository {
                 $v->district_rate_for_accepted = round(($v->district_count_for_accepted * 100 / $v->district_count_for_all),2);
             }
             else $v->district_rate_for_accepted = 0;
+
+            // 有效交付率
+            if($v->district_count_for_delivered > 0)
+            {
+                $v->district_rate_for_delivered_effective = round(($v->district_count_for_delivered_effective * 100 / $v->district_count_for_delivered),2);
+            }
+            else $v->district_rate_for_delivere_effectived = 0;
 
 
             $v->district_merge = 0;

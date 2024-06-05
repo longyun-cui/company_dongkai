@@ -35,7 +35,7 @@ class DK_Order extends Model
 
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description', 'inspected_at',
         'pusher_id', 'pushed_at',
-        'deliverer_id', 'delivered_status', 'delivered_result', 'delivered_at',
+        'deliverer_id', 'delivered_status', 'delivered_result', 'delivered_description', 'delivered_at',
         'published_at', 'completed_at', 'verified_at'
     ];
     protected $dateFormat = 'U';

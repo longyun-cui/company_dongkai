@@ -131,11 +131,17 @@
 @section('custom-style')
 <style>
     .myChart { width:100%;height:240px; }
-    .tableArea table { min-width:1280px; }
+    .tableArea table { min-width:3000px; }
     .datatable-search-row .input-group .time-picker-btn { width:30px; }
     .datatable-search-row .input-group .month_picker, .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
     .datatable-search-row .input-group select { width:100px; text-align:center; }
     .datatable-search-row .input-group .select2-container { width:120px; }
+
+    .bg-inspected { background:#CBFB9D; }
+    .bg-delivered { background:#8FEBE5; }
+    .bg-group { background:#E2FCAB; }
+    .bg-district { background:#F6C5FC; }
+    .bg-journey { background:#C3FAF7; }
 </style>
 @endsection
 
@@ -180,6 +186,10 @@
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
+                // "fixedColumns": {
+                    {{--"leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",--}}
+                    {{--"rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"--}}
+                // },
                 "columns": [
 //                    {
 //                        "title": "选择",
@@ -201,7 +211,7 @@
                         "title": "大区经理",
                         "data": "department_district_id",
                         "className": "vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.department_district_er.leader == null ? '未知' : '<a href="javascript:void(0);">' + row.department_district_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_district_er.leader.username + '</a>';
@@ -211,7 +221,7 @@
                         "title": "部门主管",
                         "data": "department_group_id",
                         "className": "vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.department_group_er.leader == null ? '未知' : '<a href="javascript:void(0);">' + row.department_group_er.name + '</a>' + '<br>' + '<a href="javascript:void(0);">' + row.department_group_er.leader.username + '</a>';
@@ -238,9 +248,9 @@
                         }
                     },
                     {
-                        "title": "交付量",
+                        "title": "提交量",
                         "data": "order_count_for_all",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -250,7 +260,7 @@
                     {
                         "title": "有效量",
                         "data": "order_count_for_effective",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -260,7 +270,7 @@
                     {
                         "title": "通过量",
                         "data": "order_count_for_accepted",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -270,7 +280,7 @@
                     {
                         "title": "拒绝量",
                         "data": "order_count_for_refused",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -281,7 +291,7 @@
                     {
                         "title": "重复量",
                         "data": "order_count_for_repeated",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -292,7 +302,7 @@
                     {
                         "title": "内部通过",
                         "data": "order_count_for_accepted_inside",
-                        "className": "text-center",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -300,9 +310,9 @@
                         }
                     },
                     {
-                        "title": "通过率",
+                        "title": "审核通过率",
                         "data": "order_rate_for_accepted",
-                        "className": "",
+                        "className": "bg-inspected",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -311,10 +321,91 @@
                         }
                     },
                     {
-                        "title": "主管-单量",
+                        "title": "交付量",
+                        "data": "order_count_for_delivered",
+                        "className": "bg-delivered",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "有效交付量",
+                        "data": "order_count_for_delivered_effective",
+                        "className": "bg-delivered",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "已交付",
+                        "data": "order_count_for_delivered_completed",
+                        "className": "bg-delivered",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "内部交付",
+                        "data": "order_count_for_delivered_inside",
+                        "className": "bg-delivered",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "隔日交付",
+                        "data": "order_count_for_delivered_tomorrow",
+                        "className": "bg-delivered",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "交付重复",
+                        "data": "order_count_for_delivered_repeated",
+                        "className": "bg-delivered",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "交付驳回",
+                        "data": "order_count_for_delivered_rejected",
+                        "className": "bg-delivered",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "有效交付率",
+                        "data": "order_rate_for_delivered_effective",
+                        "className": "bg-delivered",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data + " %";
+                            return data
+                        }
+                    },
+                    {
+                        "title": "主管-提交量",
                         "data": "group_count_for_all",
                         "className": "text-center vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -324,7 +415,7 @@
                         "title": "主管-有效量",
                         "data": "group_count_for_effective",
                         "className": "text-center vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -334,7 +425,7 @@
                         "title": "主管-通过量",
                         "data": "group_count_for_accepted",
                         "className": "text-center vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -344,7 +435,7 @@
                         "title": "主管-通过率",
                         "data": "group_rate_for_accepted",
                         "className": "text-center vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data) return data + " %";
@@ -352,10 +443,41 @@
                         }
                     },
                     {
-                        "title": "经理-单量",
+                        "title": "主管-交付量",
+                        "data": "group_count_for_delivered",
+                        "className": "text-center vertical-middle",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "主管-有效交付量",
+                        "data": "group_count_for_delivered_effective",
+                        "className": "text-center vertical-middle",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "主管-有效交付率",
+                        "data": "group_rate_for_delivered_effective",
+                        "className": "text-center vertical-middle",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data + " %";
+                            return data
+                        }
+                    },
+                    {
+                        "title": "经理-提交量",
                         "data": "district_count_for_all",
                         "className": "text-center vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -365,7 +487,7 @@
                         "title": "经理-有效量",
                         "data": "district_count_for_effective",
                         "className": "text-center vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -375,7 +497,7 @@
                         "title": "经理-通过量",
                         "data": "district_count_for_accepted",
                         "className": "text-center vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -385,13 +507,44 @@
                         "title": "经理-通过率",
                         "data": "district_rate_for_accepted",
                         "className": "text-center vertical-middle",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data) return data + " %";
                             return data
                         }
-                    }
+                    },
+                    {
+                        "title": "经理-交付量",
+                        "data": "district_count_for_delivered",
+                        "className": "text-center vertical-middle",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "经理-有效交付量",
+                        "data": "district_count_for_delivered_effective",
+                        "className": "text-center vertical-middle",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data
+                        }
+                    },
+                    {
+                        "title": "经理-有效交付率",
+                        "data": "district_rate_for_delivered_effective",
+                        "className": "text-center vertical-middle",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return data + " %";
+                            return data
+                        }
+                    },
                 ],
                 "drawCallback": function (settings) {
 
@@ -443,7 +596,7 @@
                         }
                     },
                     {
-                        targets: [10,11,12,13],
+                        targets: [18,19,20,21,22,23,24],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.group_merge;
                             if (rowspan > 1) {
@@ -455,7 +608,7 @@
                         }
                     },
                     {
-                        targets: [14,15,16,17],
+                        targets: [25,26,27,28,29,30,31],
                         createdCell: function (td, cellData, rowData, row, col) {
                             var rowspan = rowData.district_merge;
                             if (rowspan > 1) {

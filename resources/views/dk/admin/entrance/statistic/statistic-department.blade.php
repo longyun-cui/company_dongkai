@@ -122,6 +122,12 @@
         .datatable-search-row .input-group .month_picker, .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
         .datatable-search-row .input-group select { width:100px; text-align:center; }
         .datatable-search-row .input-group .select2-container { width:120px; }
+
+        .bg-inspected { background:#CBFB9D; }
+        .bg-delivered { background:#8FEBE5; }
+        .bg-group { background:#E2FCAB; }
+        .bg-district { background:#F6C5FC; }
+        .bg-journey { background:#C3FAF7; }
     </style>
 @endsection
 
@@ -238,9 +244,9 @@
                             }
                         },
                         {
-                            "title": "交付量",
+                            "title": "提交量",
                             "data": "order_count_for_all",
-                            "className": "font-12px",
+                            "className": "bg-inspected",
                             "width": "80px",
                             "orderable": true,
                             "orderSequence": ["desc", "asc"],
@@ -257,7 +263,7 @@
                         {
                             "title": "通过量",
                             "data": "order_count_for_accepted",
-                            "className": "font-12px",
+                            "className": "bg-inspected",
                             "width": "80px",
                             "orderable": true,
                             "orderSequence": ["desc", "asc"],
@@ -272,9 +278,9 @@
                             }
                         },
                         {
-                            "title": "人均交付量",
+                            "title": "人均提交量",
                             "data": "order_count_for_all_per",
-                            "className": "text-center vertical-middle",
+                            "className": "text-center vertical-middle bg-inspected",
                             "width": "100px",
                             "orderable": true,
                             "orderSequence": ["desc", "asc"],
@@ -291,7 +297,7 @@
                         {
                             "title": "人均通过量",
                             "data": "order_count_for_accepted_per",
-                            "className": "text-center vertical-middle",
+                            "className": "text-center vertical-middle bg-inspected",
                             "width": "100px",
                             "orderable": true,
                             "orderSequence": ["desc", "asc"],
@@ -308,7 +314,94 @@
                         {
                             "title": "通过率",
                             "data": "order_rate_for_accepted",
-                            "className": "",
+                            "className": "bg-inspected",
+                            "width": "100px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                if(data) return data + " %";
+                                return data
+                            }
+                        },
+
+                        {
+                            "title": "交付量",
+                            "data": "order_count_for_delivered",
+                            "className": "bg-delivered",
+                            "width": "80px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        {
+                            "title": "有效交付量",
+                            "data": "order_count_for_delivered_effective",
+                            "className": "bg-delivered",
+                            "width": "80px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        {
+                            "title": "人均交付量",
+                            "data": "order_count_for_delivered_per",
+                            "className": "text-center vertical-middle bg-delivered",
+                            "width": "100px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data
+                            }
+                        },
+                        {
+                            "title": "人均有效量",
+                            "data": "order_count_for_delivered_effective_per",
+                            "className": "text-center vertical-middle bg-delivered",
+                            "width": "100px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data
+                            }
+                        },
+                        {
+                            "title": "有效率",
+                            "data": "order_rate_for_delivered_effective",
+                            "className": "bg-delivered",
                             "width": "100px",
                             "orderable": true,
                             "orderSequence": ["desc", "asc"],

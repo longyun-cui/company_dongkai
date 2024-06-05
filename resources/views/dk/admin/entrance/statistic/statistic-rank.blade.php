@@ -174,11 +174,17 @@
 @section('custom-style')
 <style>
     .myChart { width:100%;height:240px; }
-    .tableArea table { min-width:1280px; }
+    .tableArea table { min-width:2000px; }
     .datatable-search-row .input-group .time-picker-btn { width:30px; }
     .datatable-search-row .input-group .month_picker, .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
     .datatable-search-row .input-group select { width:100px; text-align:center; }
     .datatable-search-row .input-group .select2-container { width:120px; }
+
+    .bg-inspected { background:#CBFB9D; }
+    .bg-delivered { background:#8FEBE5; }
+    .bg-group { background:#E2FCAB; }
+    .bg-district { background:#F6C5FC; }
+    .bg-journey { background:#C3FAF7; }
 </style>
 @endsection
 
@@ -227,6 +233,9 @@
                 "pagingType": "simple_numbers",
                 "order": [2,'desc'],
                 "orderCellsTop": true,
+                "fixedColumns": {
+                    "leftColumns": "1"
+                },
                 "columns": [
 //                    {
 //                        "title": "选择",
@@ -248,7 +257,7 @@
                         "title": "姓名",
                         "data": "id",
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             {
@@ -269,7 +278,7 @@
                         "title": "部门",
                         "data": "id",
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         },
@@ -281,9 +290,9 @@
                         }
                     },
                     {
-                        "title": "交付量",
+                        "title": "提交量",
                         "data": "order_count_for_all",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -294,7 +303,7 @@
                     {
                         "title": "有效量",
                         "data": "order_count_for_effective",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -305,7 +314,7 @@
                     {
                         "title": "通过量",
                         "data": "order_count_for_accepted",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -316,7 +325,7 @@
                     {
                         "title": "拒绝量",
                         "data": "order_count_for_refused",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -327,7 +336,7 @@
                     {
                         "title": "重复量",
                         "data": "order_count_for_repeated",
-                        "className": "font-12px",
+                        "className": "bg-inspected",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -348,7 +357,7 @@
                     {
                         "title": "有效率",
                         "data": "order_rate_for_effective",
-                        "className": "text-center vertical-middle",
+                        "className": "bg-inspected",
                         "width": "100px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -360,7 +369,97 @@
                     {
                         "title": "通过率",
                         "data": "order_rate_for_accepted",
-                        "className": "",
+                        "className": "bg-inspected",
+                        "width": "100px",
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+                            if(data) return data + " %";
+                            return data
+                        }
+                    },
+
+                    {
+                        "title": "交付量",
+                        "data": "order_count_for_delivered",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "有效量",
+                        "data": "order_count_for_delivered_effective",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "已交付量",
+                        "data": "order_count_for_delivered_completed",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "内部交付",
+                        "data": "order_count_for_delivered_inside",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "隔日交付",
+                        "data": "order_count_for_delivered_tomorrow",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "重复",
+                        "data": "order_count_for_delivered_repeated",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "驳回",
+                        "data": "order_count_for_delivered_rejected",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "有效率",
+                        "data": "order_rate_for_delivered_effective",
+                        "className": "bg-delivered",
                         "width": "100px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -369,6 +468,7 @@
                             return data
                         }
                     }
+
                 ],
                 "drawCallback": function (settings) {
 
