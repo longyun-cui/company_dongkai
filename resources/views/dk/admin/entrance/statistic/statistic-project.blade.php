@@ -305,7 +305,7 @@
                             "title": "交付<br>有效量",
                             "data": "order_count_for_delivered_effective",
                             "className": "bg-delivered",
-                            "width": "60px",
+                            "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
@@ -319,9 +319,9 @@
                         },
                         {
                             "title": "交付<br>实际产出",
-                            "data": "order_count_for_delivered_effective",
+                            "data": "order_count_for_delivered_actual",
                             "className": "bg-delivered",
-                            "width": "60px",
+                            "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
@@ -334,8 +334,8 @@
                             }
                         },
                         {
-                            "title": "交付<br>实际交付",
-                            "data": "order_count_for_delivered_actual",
+                            "title": "交付<br>已交付",
+                            "data": "order_count_for_delivered_completed",
                             "className": "bg-delivered",
                             "width": "60px",
                             "orderable": false,
