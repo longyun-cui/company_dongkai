@@ -10351,6 +10351,7 @@ class DKAdminRepository {
         $total['order_count_for_delivered_per'] = 0;
         $total['order_count_for_delivered_effective'] = 0;
         $total['order_count_for_delivered_effective_per'] = 0;
+        $total['order_count_for_delivered_actual'] = 0;
 
 
 
@@ -10416,7 +10417,9 @@ class DKAdminRepository {
 
             // 交付
             // 有效交付量
-            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_tomorrow;
+            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow + $v->order_count_for_delivered_inside;
+            // 实际产出
+            $list[$k]->order_count_for_delivered_actual = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow;
 
 
             // 人均交付量
@@ -10426,12 +10429,19 @@ class DKAdminRepository {
             }
             else $list[$k]->order_count_for_delivered_per = 0;
 
-            // 人均通过量
+            // 人均交付有效量
             if($v->staff_count > 0)
             {
                 $list[$k]->order_count_for_delivered_effective_per = round(($v->order_count_for_delivered_effective / $v->staff_count),2);
             }
             else $list[$k]->order_count_for_delivered_effective_per = 0;
+
+            // 人均实际产出
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_delivered_actual_per = round(($v->order_count_for_delivered_actual / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_delivered_actual_per = 0;
 
             // 有效交付率
             if($v->order_count_for_delivered > 0)
@@ -10458,6 +10468,7 @@ class DKAdminRepository {
             $total['order_count_for_delivered_rejected'] += $v->order_count_for_delivered_rejected;
 
             $total['order_count_for_delivered_effective'] += $v->order_count_for_delivered_effective;
+            $total['order_count_for_delivered_actual'] += $v->order_count_for_delivered_effective;
 
         }
 
@@ -10497,6 +10508,13 @@ class DKAdminRepository {
             $total['order_count_for_delivered_effective_per'] = round(($total['order_count_for_delivered_effective'] / $total['staff_count']),2);
         }
         else $total['order_count_for_delivered_effective_per'] = 0;
+
+        // 人均实际产出
+        if($total['staff_count'] > 0)
+        {
+            $total['order_count_for_delivered_actual_per'] = round(($total['order_count_for_delivered_actual'] / $total['staff_count']),2);
+        }
+        else $total['order_count_for_delivered_actual_per'] = 0;
 
         // 有效交付率
         if($total['order_count_for_delivered'] > 0)

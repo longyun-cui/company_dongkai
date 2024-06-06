@@ -246,7 +246,7 @@
 
 
                         {
-                            "title": "客服<br>提交量",
+                            "title": "客服<br>报单量",
                             "data": "order_count_for_all",
                             "className": "bg-inspected",
                             "width": "80px",
@@ -263,7 +263,7 @@
                             }
                         },
                         {
-                            "title": "客服<br>人均<br>提交量",
+                            "title": "人均<br>报单量",
                             "data": "order_count_for_all_per",
                             "className": "text-center vertical-middle bg-inspected",
                             "width": "100px",
@@ -281,25 +281,25 @@
                         },
 
 
+                        // {
+                        //     "title": "交付<br>总量",
+                        //     "data": "order_count_for_delivered",
+                        //     "className": "bg-delivered",
+                        //     "width": "80px",
+                        //     "orderable": true,
+                        //     "orderSequence": ["desc", "asc"],
+                        //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        //         if(row.id == "统计")
+                        //         {
+                        //             $(nTd).addClass('_bold');
+                        //         }
+                        //     },
+                        //     render: function(data, type, row, meta) {
+                        //         return data;
+                        //     }
+                        // },
                         {
-                            "title": "交付<br>总量",
-                            "data": "order_count_for_delivered",
-                            "className": "bg-delivered",
-                            "width": "80px",
-                            "orderable": true,
-                            "orderSequence": ["desc", "asc"],
-                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                                if(row.id == "统计")
-                                {
-                                    $(nTd).addClass('_bold');
-                                }
-                            },
-                            render: function(data, type, row, meta) {
-                                return data;
-                            }
-                        },
-                        {
-                            "title": "交付<br>有效交付",
+                            "title": "交付<br>有效量",
                             "data": "order_count_for_delivered_effective",
                             "className": "bg-delivered",
                             "width": "80px",
@@ -316,8 +316,42 @@
                             }
                         },
                         {
-                            "title": "交付<br>人均<br>交付量",
-                            "data": "order_count_for_delivered_per",
+                            "title": "交付<br>实际产出",
+                            "data": "order_count_for_delivered_actual",
+                            "className": "bg-delivered",
+                            "width": "80px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        // {
+                        //     "title": "交付<br>人均<br>交付量",
+                        //     "data": "order_count_for_delivered_per",
+                        //     "className": "text-center vertical-middle bg-delivered",
+                        //     "width": "100px",
+                        //     "orderable": true,
+                        //     "orderSequence": ["desc", "asc"],
+                        //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        //         if(row.id == "统计")
+                        //         {
+                        //             $(nTd).addClass('_bold');
+                        //         }
+                        //     },
+                        //     render: function(data, type, row, meta) {
+                        //         return data
+                        //     }
+                        // },
+                        {
+                            "title": "人均<br>有效量",
+                            "data": "order_count_for_delivered_effective_per",
                             "className": "text-center vertical-middle bg-delivered",
                             "width": "100px",
                             "orderable": true,
@@ -333,8 +367,8 @@
                             }
                         },
                         {
-                            "title": "交付<br>人均<br>有效量",
-                            "data": "order_count_for_delivered_effective_per",
+                            "title": "人均<br>实际产出",
+                            "data": "order_count_for_delivered_actual_per",
                             "className": "text-center vertical-middle bg-delivered",
                             "width": "100px",
                             "orderable": true,
@@ -387,7 +421,7 @@
                             }
                         },
                         {
-                            "title": "审核<br>人均<br>通过量",
+                            "title": "人均<br>通过量",
                             "data": "order_count_for_accepted_per",
                             "className": "text-center vertical-middle bg-inspected",
                             "width": "100px",

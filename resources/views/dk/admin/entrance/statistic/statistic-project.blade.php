@@ -304,7 +304,7 @@
                         {
                             "title": "交付<br>有效量",
                             "data": "order_count_for_delivered_effective",
-                            "className": "bg-delivered",
+                            "className": "bg-delivered _bold",
                             "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -320,7 +320,7 @@
                         {
                             "title": "交付<br>实际产出",
                             "data": "order_count_for_delivered_actual",
-                            "className": "bg-delivered",
+                            "className": "bg-delivered _bold",
                             "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
