@@ -570,7 +570,8 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { width:100% !important; min-width:100%; }
+    /*.tableArea table { width:100% !important; min-width:100%; }*/
+    .tableArea table { min-width:1200px; }
     .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
 </style>
 @endsection
@@ -656,7 +657,7 @@
                     {
                         "title": "操作",
                         "data": 'id',
-                        "width": "160px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -715,7 +716,7 @@
                     {
                         "title": "状态",
                         "data": "item_status",
-                        "width": "60px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;
@@ -797,10 +798,10 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "200px",
                         "title": "备注",
                         "data": "remark",
+                        "className": "text-center",
+                        "width": "160px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -824,7 +825,7 @@
                         "title": "质检员",
                         "data": "pivot_project_user",
                         "className": "text-left",
-                        "width": "200px",
+                        "width": "240px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         },
