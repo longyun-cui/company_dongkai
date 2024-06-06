@@ -302,17 +302,17 @@
                     },
 
 
-                    {
-                        "title": "交付<br>总量",
-                        "data": "order_count_for_delivered",
-                        "className": "bg-delivered",
-                        "width": "80px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "交付<br>总量",
+                    //     "data": "order_count_for_delivered",
+                    //     "className": "bg-delivered",
+                    //     "width": "80px",
+                    //     "orderable": true,
+                    //     "orderSequence": ["desc", "asc"],
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "交付<br>有效量",
                         "data": "order_count_for_delivered_effective",
@@ -325,7 +325,18 @@
                         }
                     },
                     {
-                        "title": "交付<br>已交付量",
+                        "title": "交付<br>实际产量",
+                        "data": "order_count_for_delivered_actual",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "交付<br>已交付",
                         "data": "order_count_for_delivered_completed",
                         "className": "bg-delivered",
                         "width": "80px",
@@ -336,8 +347,8 @@
                         }
                     },
                     {
-                        "title": "交付<br>内部交付",
-                        "data": "order_count_for_delivered_inside",
+                        "title": "交付<br>隔日交付",
+                        "data": "order_count_for_delivered_tomorrow",
                         "className": "bg-delivered",
                         "width": "80px",
                         "orderable": false,
@@ -347,8 +358,8 @@
                         }
                     },
                     {
-                        "title": "交付<br>隔日交付",
-                        "data": "order_count_for_delivered_tomorrow",
+                        "title": "交付<br>内部交付",
+                        "data": "order_count_for_delivered_inside",
                         "className": "bg-delivered",
                         "width": "80px",
                         "orderable": false,
@@ -393,17 +404,17 @@
                     },
 
 
-                    {
-                        "title": "审核<br>有效量",
-                        "data": "order_count_for_effective",
-                        "className": "bg-inspected",
-                        "width": "80px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "审核<br>有效量",
+                    //     "data": "order_count_for_effective",
+                    //     "className": "bg-inspected",
+                    //     "width": "80px",
+                    //     "orderable": true,
+                    //     "orderSequence": ["desc", "asc"],
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "审核<br>通过量",
                         "data": "order_count_for_accepted",
@@ -426,17 +437,17 @@
                             return data;
                         }
                     },
-                    {
-                        "title": "审核<br>重复量",
-                        "data": "order_count_for_repeated",
-                        "className": "bg-inspected",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "审核<br>重复量",
+                    //     "data": "order_count_for_repeated",
+                    //     "className": "bg-inspected",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //
+                    //         return data;
+                    //     }
+                    // },
                     // {
                     //     "title": "内部通过",
                     //     "data": "order_count_for_accepted_inside",
@@ -447,18 +458,18 @@
                     //         return data;
                     //     }
                     // },
-                    {
-                        "title": "审核<br>有效率",
-                        "data": "order_rate_for_effective",
-                        "className": "bg-inspected",
-                        "width": "100px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-                            if(data) return data + " %";
-                            return data
-                        }
-                    },
+                    // {
+                    //     "title": "审核<br>有效率",
+                    //     "data": "order_rate_for_effective",
+                    //     "className": "bg-inspected",
+                    //     "width": "100px",
+                    //     "orderable": true,
+                    //     "orderSequence": ["desc", "asc"],
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return data + " %";
+                    //         return data
+                    //     }
+                    // },
                     {
                         "title": "审核<br>通过率",
                         "data": "order_rate_for_accepted",

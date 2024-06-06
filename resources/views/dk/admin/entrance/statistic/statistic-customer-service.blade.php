@@ -139,8 +139,8 @@
 
     .bg-inspected { background:#CBFB9D; }
     .bg-delivered { background:#8FEBE5; }
-    .bg-group { background:#E2FCAB; }
-    .bg-district { background:#F6C5FC; }
+    .bg-group { background:#F6C5FC; }
+    .bg-district { background:#E2FCAB; }
     .bg-journey { background:#C3FAF7; }
 </style>
 @endsection
@@ -248,7 +248,7 @@
                         }
                     },
                     {
-                        "title": "客服<br>提交量",
+                        "title": "客服<br>报单量",
                         "data": "order_count_for_all",
                         "className": "bg-inspected",
                         "width": "80px",
@@ -259,19 +259,29 @@
                     },
 
 
-                    {
-                        "title": "交付<br>总量",
-                        "data": "order_count_for_delivered",
-                        "className": "bg-delivered",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data
-                        }
-                    },
+                    // {
+                    //     "title": "交付<br>总量",
+                    //     "data": "order_count_for_delivered",
+                    //     "className": "bg-delivered",
+                    //     "width": "100px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
                     {
                         "title": "交付<br>有效量",
                         "data": "order_count_for_delivered_effective",
+                        "className": "bg-delivered",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "交付<br>实际产量",
+                        "data": "order_count_for_delivered_actual",
                         "className": "bg-delivered",
                         "width": "80px",
                         "orderable": false,
@@ -290,8 +300,8 @@
                         }
                     },
                     {
-                        "title": "交付<br>内部交付",
-                        "data": "order_count_for_delivered_inside",
+                        "title": "交付<br>隔日交付",
+                        "data": "order_count_for_delivered_tomorrow",
                         "className": "bg-delivered",
                         "width": "80px",
                         "orderable": false,
@@ -300,8 +310,8 @@
                         }
                     },
                     {
-                        "title": "交付<br>隔日交付",
-                        "data": "order_count_for_delivered_tomorrow",
+                        "title": "交付<br>内部交付",
+                        "data": "order_count_for_delivered_inside",
                         "className": "bg-delivered",
                         "width": "80px",
                         "orderable": false,
@@ -342,16 +352,16 @@
                     },
 
 
-                    {
-                        "title": "审核<br>有效量",
-                        "data": "order_count_for_effective",
-                        "className": "bg-inspected",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "审核<br>有效量",
+                    //     "data": "order_count_for_effective",
+                    //     "className": "bg-inspected",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "审核<br>通过量",
                         "data": "order_count_for_accepted",
@@ -362,16 +372,16 @@
                             return data;
                         }
                     },
-                    {
-                        "title": "审核<br>内部通过",
-                        "data": "order_count_for_accepted_inside",
-                        "className": "bg-inspected",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "审核<br>内部通过",
+                    //     "data": "order_count_for_accepted_inside",
+                    //     "className": "bg-inspected",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "审核<br>拒绝量",
                         "data": "order_count_for_refused",
@@ -383,17 +393,17 @@
                             return data;
                         }
                     },
-                    {
-                        "title": "审核<br>重复量",
-                        "data": "order_count_for_repeated",
-                        "className": "bg-inspected",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "审核<br>重复量",
+                    //     "data": "order_count_for_repeated",
+                    //     "className": "bg-inspected",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "审核<br>通过率",
                         "data": "order_rate_for_accepted",
@@ -408,19 +418,29 @@
 
 
                     {
-                        "title": "主管<br>客服<br>提交量",
+                        "title": "主管<br>客服<br>报单量",
                         "data": "group_count_for_all",
-                        "className": "text-center vertical-middle",
+                        "className": "text-center vertical-middle bg-group",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
+                    // {
+                    //     "title": "主管<br>交付<br>总量",
+                    //     "data": "group_count_for_delivered",
+                    //     "className": "text-center vertical-middle bg-group",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
                     {
-                        "title": "主管<br>交付<br>总量",
-                        "data": "group_count_for_delivered",
-                        "className": "text-center vertical-middle",
+                        "title": "主管<br>交付<br>有效量",
+                        "data": "group_count_for_delivered_effective",
+                        "className": "text-center vertical-middle bg-group",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -428,9 +448,9 @@
                         }
                     },
                     {
-                        "title": "主管<br>交付<br>有效量",
-                        "data": "group_count_for_delivered_effective",
-                        "className": "text-center vertical-middle",
+                        "title": "主管<br>交付<br>实际产量",
+                        "data": "group_count_for_delivered_actual",
+                        "className": "text-center vertical-middle bg-group",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -440,7 +460,7 @@
                     {
                         "title": "主管<br>交付<br>有效率",
                         "data": "group_rate_for_delivered_effective",
-                        "className": "text-center vertical-middle",
+                        "className": "text-center vertical-middle bg-group",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -448,20 +468,20 @@
                             return data
                         }
                     },
-                    {
-                        "title": "主管<br>审核<br>有效量",
-                        "data": "group_count_for_effective",
-                        "className": "text-center vertical-middle",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "主管<br>审核<br>有效量",
+                    //     "data": "group_count_for_effective",
+                    //     "className": "text-center vertical-middle bg-group",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "主管<br>审核<br>通过量",
                         "data": "group_count_for_accepted",
-                        "className": "text-center vertical-middle",
+                        "className": "text-center vertical-middle bg-group",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -471,7 +491,7 @@
                     {
                         "title": "主管<br>审核<br>通过率",
                         "data": "group_rate_for_accepted",
-                        "className": "text-center vertical-middle",
+                        "className": "text-center vertical-middle bg-group",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -482,19 +502,29 @@
 
 
                     {
-                        "title": "经理<br>客服<br>提交量",
+                        "title": "经理<br>客服<br>报单量",
                         "data": "district_count_for_all",
-                        "className": "text-center vertical-middle",
+                        "className": "text-center vertical-middle bg-district",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
+                    // {
+                    //     "title": "经理<br>交付<br>总量",
+                    //     "data": "district_count_for_delivered",
+                    //     "className": "text-center vertical-middle bg-district",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data
+                    //     }
+                    // },
                     {
-                        "title": "经理<br>交付<br>总量",
-                        "data": "district_count_for_delivered",
-                        "className": "text-center vertical-middle",
+                        "title": "经理<br>交付<br>有效量",
+                        "data": "district_count_for_delivered_effective",
+                        "className": "text-center vertical-middle bg-district",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -502,9 +532,9 @@
                         }
                     },
                     {
-                        "title": "经理<br>交付<br>有效量",
-                        "data": "district_count_for_delivered_effective",
-                        "className": "text-center vertical-middle",
+                        "title": "经理<br>交付<br>实际产量",
+                        "data": "district_count_for_delivered_actual",
+                        "className": "text-center vertical-middle bg-district",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -514,7 +544,7 @@
                     {
                         "title": "经理<br>交付<br>有效率",
                         "data": "district_rate_for_delivered_effective",
-                        "className": "text-center vertical-middle",
+                        "className": "text-center vertical-middle bg-district",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -522,20 +552,20 @@
                             return data
                         }
                     },
-                    {
-                        "title": "经理<br>审核<br>有效量",
-                        "data": "district_count_for_effective",
-                        "className": "text-center vertical-middle",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "经理<br>审核<br>有效量",
+                    //     "data": "district_count_for_effective",
+                    //     "className": "text-center vertical-middle bg-district",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "经理<br>审核<br>通过量",
                         "data": "district_count_for_accepted",
-                        "className": "text-center vertical-middle",
+                        "className": "text-center vertical-middle bg-district",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -545,7 +575,7 @@
                     {
                         "title": "经理<br>审核<br>通过率",
                         "data": "district_rate_for_accepted",
-                        "className": "text-center vertical-middle",
+                        "className": "text-center vertical-middle bg-district",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -603,30 +633,30 @@
                             return row.department_group_er == null ? '未知' : '<a href="javascript:void(0);">'+row.department_group_er.leader.username+'</a>';
                         }
                     },
-                    {
-                        targets: [18,19,20,21,22,23,24],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            var rowspan = rowData.group_merge;
-                            if (rowspan > 1) {
-                                $(td).attr('rowspan', rowspan)
-                            }
-                            if (rowspan == 0) {
-                                $(td).remove();
-                            }
-                        }
-                    },
-                    {
-                        targets: [25,26,27,28,29,30,31],
-                        createdCell: function (td, cellData, rowData, row, col) {
-                            var rowspan = rowData.district_merge;
-                            if (rowspan > 1) {
-                                $(td).attr('rowspan', rowspan)
-                            }
-                            if (rowspan == 0) {
-                                $(td).remove();
-                            }
-                        }
-                    }
+                    // {
+                    //     targets: [14,15,16,17,22,23,24],
+                    //     createdCell: function (td, cellData, rowData, row, col) {
+                    //         var rowspan = rowData.group_merge;
+                    //         if (rowspan > 1) {
+                    //             $(td).attr('rowspan', rowspan)
+                    //         }
+                    //         if (rowspan == 0) {
+                    //             $(td).remove();
+                    //         }
+                    //     }
+                    // },
+                    // {
+                    //     targets: [25,26,27,28,29,30,31],
+                    //     createdCell: function (td, cellData, rowData, row, col) {
+                    //         var rowspan = rowData.district_merge;
+                    //         if (rowspan > 1) {
+                    //             $(td).attr('rowspan', rowspan)
+                    //         }
+                    //         if (rowspan == 0) {
+                    //             $(td).remove();
+                    //         }
+                    //     }
+                    // }
                 ],
                 "language": { url: '/common/dataTableI18n' },
             });

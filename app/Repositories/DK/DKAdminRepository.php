@@ -9313,7 +9313,7 @@ class DKAdminRepository {
 
             // 交付
             // 有效交付量
-            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_tomorrow;
+            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow + $v->order_count_for_delivered_inside;
 
             // 有效交付率
             if($v->order_count_for_delivered > 0)
@@ -9321,6 +9321,16 @@ class DKAdminRepository {
                 $list[$k]->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
             }
             else $list[$k]->order_rate_for_delivered_effective = 0;
+
+            // 有效交付量
+            $list[$k]->order_count_for_delivered_actual = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow;
+
+            // 有效交付率
+            if($v->order_count_for_delivered > 0)
+            {
+                $list[$k]->order_rate_for_delivered_actual = round(($v->order_count_for_delivered_actual * 100 / $v->order_count_for_delivered),2);
+            }
+            else $list[$k]->order_rate_for_delivered_actual = 0;
 
         }
 //        dd($list->toArray());
@@ -11363,10 +11373,10 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_delivered_repeated = 0;
                 $list[$k]->order_count_for_delivered_rejected = 0;
             }
+
+            // 审核
             // 有效单量
             $v->order_count_for_effective = $v->order_count_for_inspected - $v->order_count_for_refused - $v->order_count_for_repeated;
-            // 有效交付量
-            $v->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_tomorrow;
 
             // 通过率
             if($v->order_count_for_all > 0)
@@ -11375,12 +11385,25 @@ class DKAdminRepository {
             }
             else $list[$k]->order_rate_for_accepted = 0;
 
+            // 交付
+            // 有效交付量
+            $v->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow + $v->order_count_for_delivered_inside;
+
             // 有效交付率
             if($v->order_count_for_delivered > 0)
             {
                 $v->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
             }
             else $v->order_rate_for_delivered_effective = 0;
+
+            // 实际产量
+            $v->order_count_for_delivered_actual = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow;
+            // 实际产率
+            if($v->order_count_for_delivered > 0)
+            {
+                $v->order_rate_for_delivered_actual = round(($v->order_count_for_delivered_actual * 100 / $v->order_count_for_delivered),2);
+            }
+            else $v->order_rate_for_delivered_actual = 0;
 
 
 
@@ -11418,13 +11441,11 @@ class DKAdminRepository {
                 $list[$k]->group_count_for_delivered_repeated = 0;
                 $list[$k]->group_count_for_delivered_rejected = 0;
             }
+
+            // 审核
+            $v->group_count_for_accepted_inside = 0;
             // 有效单量
             $v->group_count_for_effective = $v->group_count_for_inspected - $v->group_count_for_refused - $v->group_count_for_repeated;
-            // 有效交付量
-            $v->group_count_for_delivered_effective = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_inside + $v->group_count_for_delivered_tomorrow;
-
-            $v->group_count_for_accepted_inside = 0;
-
             // 有效率
             if($v->group_count_for_all > 0)
             {
@@ -11432,12 +11453,25 @@ class DKAdminRepository {
             }
             else $v->group_rate_for_accepted = 0;
 
+
+            // 交付
+            // 有效交付量
+            $v->group_count_for_delivered_effective = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_tomorrow + $v->group_count_for_delivered_inside;
             // 有效交付率
             if($v->group_count_for_delivered > 0)
             {
                 $v->group_rate_for_delivered_effective = round(($v->group_count_for_delivered_effective * 100 / $v->group_count_for_delivered),2);
             }
             else $v->group_rate_for_delivered_effective = 0;
+
+            // 实际产量
+            $v->group_count_for_delivered_actual = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_tomorrow;
+            // 实际产率
+            if($v->group_count_for_delivered > 0)
+            {
+                $v->group_rate_for_delivered_actual = round(($v->group_count_for_delivered_actual * 100 / $v->group_count_for_delivered),2);
+            }
+            else $v->group_rate_for_delivered_actual = 0;
 
 
 
@@ -11475,13 +11509,11 @@ class DKAdminRepository {
                 $list[$k]->district_count_for_delivered_repeated = 0;
                 $list[$k]->district_count_for_delivered_rejected = 0;
             }
+
+            // 审核
+            $v->district_count_for_accepted_inside = 0;
             // 有效单量
             $v->district_count_for_effective = $v->district_count_for_inspected - $v->district_count_for_refused - $v->district_count_for_repeated;
-            // 有效交付量
-            $v->district_count_for_delivered_effective = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_inside + $v->district_count_for_delivered_tomorrow;
-
-            $v->district_count_for_accepted_inside = 0;
-
             // 有效率
             if($v->district_count_for_all > 0)
             {
@@ -11489,12 +11521,25 @@ class DKAdminRepository {
             }
             else $v->district_rate_for_accepted = 0;
 
+
+            // 交付
+            // 有效交付量
+            $v->district_count_for_delivered_effective = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_tomorrow + $v->district_count_for_delivered_inside;
             // 有效交付率
             if($v->district_count_for_delivered > 0)
             {
                 $v->district_rate_for_delivered_effective = round(($v->district_count_for_delivered_effective * 100 / $v->district_count_for_delivered),2);
             }
             else $v->district_rate_for_delivere_effectived = 0;
+
+            // 实际产量
+            $v->district_count_for_delivered_actual = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_tomorrow;
+            // 实际产率
+            if($v->district_count_for_delivered > 0)
+            {
+                $v->district_rate_for_delivered_actual = round(($v->district_count_for_delivered_actual * 100 / $v->district_count_for_delivered),2);
+            }
+            else $v->district_rate_for_delivere_actual = 0;
 
 
             $v->district_merge = 0;
