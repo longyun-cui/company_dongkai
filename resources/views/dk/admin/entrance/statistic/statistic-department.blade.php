@@ -117,7 +117,7 @@
 @section('custom-style')
     <style>
         .myChart { width:100%;height:240px; }
-        .tableArea table { min-width:1280px; }
+        .tableArea table { min-width:1360px; }
         .datatable-search-row .input-group .time-picker-btn { width:30px; }
         .datatable-search-row .input-group .month_picker, .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
         .datatable-search-row .input-group select { width:100px; text-align:center; }
@@ -262,10 +262,27 @@
                                 return data;
                             }
                         },
+                        {
+                            "title": "客服<br>人均<br>提交量",
+                            "data": "order_count_for_all_per",
+                            "className": "text-center vertical-middle bg-inspected",
+                            "width": "100px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data
+                            }
+                        },
 
 
                         {
-                            "title": "交付<br>交付量",
+                            "title": "交付<br>总量",
                             "data": "order_count_for_delivered",
                             "className": "bg-delivered",
                             "width": "80px",
@@ -333,7 +350,7 @@
                             }
                         },
                         {
-                            "title": "交付<br>有效交付率",
+                            "title": "交付<br>有效率",
                             "data": "order_rate_for_delivered_effective",
                             "className": "bg-delivered",
                             "width": "100px",
@@ -367,23 +384,6 @@
                             },
                             render: function(data, type, row, meta) {
                                 return data;
-                            }
-                        },
-                        {
-                            "title": "审核<br>人均<br>提交量",
-                            "data": "order_count_for_all_per",
-                            "className": "text-center vertical-middle bg-inspected",
-                            "width": "100px",
-                            "orderable": true,
-                            "orderSequence": ["desc", "asc"],
-                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                                if(row.id == "统计")
-                                {
-                                    $(nTd).addClass('_bold');
-                                }
-                            },
-                            render: function(data, type, row, meta) {
-                                return data
                             }
                         },
                         {
