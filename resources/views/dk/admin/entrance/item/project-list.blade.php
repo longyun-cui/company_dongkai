@@ -570,7 +570,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { width:100% !important; min-width:1200px; }
+    .tableArea table { width:100% !important; min-width:1360px; }
     .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
 </style>
 @endsection
@@ -612,7 +612,7 @@
 //                "scrollY": true,
                 "scrollCollapse": true,
                 "fixedColumns": {
-                    "leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",
+                    "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
                     "rightColumns": "0"
                 },
                 "columns": [
@@ -758,23 +758,6 @@
                     //     }
                     // },
                     {
-                        "title": "质检员",
-                        "data": "pivot_project_user",
-                        "className": "text-center",
-                        "width": "240px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        },
-                        render: function(data, type, row, meta) {
-                            var html = '';
-                            $.each(data,function( key, val ) {
-//                                console.log( key, val, this );
-                                html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
-                            });
-                            return html;
-                        }
-                    },
-                    {
                         "title": "团队",
                         "data": "pivot_project_team",
                         "className": "text-center",
@@ -811,6 +794,23 @@
                         },
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "title": "质检员",
+                        "data": "pivot_project_user",
+                        "className": "text-center",
+                        "width": "200px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        },
+                        render: function(data, type, row, meta) {
+                            var html = '';
+                            $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                                html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
+                            });
+                            return html;
                         }
                     },
                     {
