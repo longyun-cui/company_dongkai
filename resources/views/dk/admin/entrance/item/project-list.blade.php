@@ -570,7 +570,7 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { width:100% !important; min-width:1360px; }
+    .tableArea table { width:100% !important; min-width:100%; }
     .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
 </style>
 @endsection
@@ -636,7 +636,7 @@
                         "title": "ID",
                         "data": "id",
                         "className": "",
-                        "width": "50px",
+                        "width": "60px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -797,25 +797,8 @@
                         }
                     },
                     {
-                        "title": "质检员",
-                        "data": "pivot_project_user",
                         "className": "text-center",
                         "width": "200px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        },
-                        render: function(data, type, row, meta) {
-                            var html = '';
-                            $.each(data,function( key, val ) {
-//                                console.log( key, val, this );
-                                html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
-                            });
-                            return html;
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "",
                         "title": "备注",
                         "data": "remark",
                         "orderable": false,
@@ -838,8 +821,25 @@
                         }
                     },
                     {
+                        "title": "质检员",
+                        "data": "pivot_project_user",
+                        "className": "text-left",
+                        "width": "200px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        },
+                        render: function(data, type, row, meta) {
+                            var html = '';
+                            $.each(data,function( key, val ) {
+//                                console.log( key, val, this );
+                                html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
+                            });
+                            return html;
+                        }
+                    },
+                    {
                         "className": "text-center",
-                        "width": "60px",
+                        "width": "80px",
                         "title": "创建者",
                         "data": "creator_id",
                         "orderable": false,
@@ -849,7 +849,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "108px",
+                        "width": "120px",
                         "title": "更新时间",
                         "data": 'updated_at',
                         "orderable": false,
