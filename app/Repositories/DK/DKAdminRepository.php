@@ -8803,7 +8803,7 @@ class DKAdminRepository {
         $order_count_for_delivered_inside = $query_order[0]->order_count_for_delivered_inside;
         $order_count_for_delivered_tomorrow = $query_order[0]->order_count_for_delivered_tomorrow;
         $order_count_for_delivered_repeated = $query_order[0]->order_count_for_delivered_repeated;
-        $order_count_for_delivered_rejected = $query_order[0]->order_count_for_delivered_repeated;
+        $order_count_for_delivered_rejected = $query_order[0]->order_count_for_delivered_rejected;
         $order_count_for_delivered_effective = $order_count_for_delivered_completed + $order_count_for_delivered_inside + $order_count_for_delivered_tomorrow;
 
         $return_data['order_count_for_delivered'] = $order_count_for_delivered;
@@ -8866,7 +8866,7 @@ class DKAdminRepository {
         $order_count_of_today_for_delivered_inside = $query_order_of_today[0]->order_count_for_delivered_inside;
         $order_count_of_today_for_delivered_tomorrow = $query_order_of_today[0]->order_count_for_delivered_tomorrow;
         $order_count_of_today_for_delivered_repeated = $query_order_of_today[0]->order_count_for_delivered_repeated;
-        $order_count_of_today_for_delivered_rejected = $query_order_of_today[0]->order_count_for_delivered_repeated;
+        $order_count_of_today_for_delivered_rejected = $query_order_of_today[0]->order_count_for_delivered_rejected;
         $order_count_of_today_for_delivered_effective = $order_count_of_today_for_delivered_completed + $order_count_of_today_for_delivered_inside + $order_count_of_today_for_delivered_tomorrow;
 
         $return_data['order_count_of_today_for_delivered'] = $order_count_of_today_for_delivered;
