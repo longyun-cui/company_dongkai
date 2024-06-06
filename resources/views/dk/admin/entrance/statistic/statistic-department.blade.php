@@ -265,7 +265,7 @@
 
 
                         {
-                            "title": "运营<br>交付量",
+                            "title": "交付<br>交付量",
                             "data": "order_count_for_delivered",
                             "className": "bg-delivered",
                             "width": "80px",
@@ -282,7 +282,7 @@
                             }
                         },
                         {
-                            "title": "运营<br>有效交付",
+                            "title": "交付<br>有效交付",
                             "data": "order_count_for_delivered_effective",
                             "className": "bg-delivered",
                             "width": "80px",
@@ -299,7 +299,7 @@
                             }
                         },
                         {
-                            "title": "运营<br>人均<br>交付量",
+                            "title": "交付<br>人均<br>交付量",
                             "data": "order_count_for_delivered_per",
                             "className": "text-center vertical-middle bg-delivered",
                             "width": "100px",
@@ -316,7 +316,7 @@
                             }
                         },
                         {
-                            "title": "运营<br>人均<br>有效量",
+                            "title": "交付<br>人均<br>有效量",
                             "data": "order_count_for_delivered_effective_per",
                             "className": "text-center vertical-middle bg-delivered",
                             "width": "100px",
@@ -333,7 +333,7 @@
                             }
                         },
                         {
-                            "title": "运营<br>有效交付率",
+                            "title": "交付<br>有效交付率",
                             "data": "order_rate_for_delivered_effective",
                             "className": "bg-delivered",
                             "width": "100px",
@@ -353,7 +353,7 @@
 
 
                         {
-                            "title": "质检<br>通过量",
+                            "title": "审核<br>通过量",
                             "data": "order_count_for_accepted",
                             "className": "bg-inspected",
                             "width": "80px",
@@ -370,7 +370,7 @@
                             }
                         },
                         {
-                            "title": "质检<br>人均<br>提交量",
+                            "title": "审核<br>人均<br>提交量",
                             "data": "order_count_for_all_per",
                             "className": "text-center vertical-middle bg-inspected",
                             "width": "100px",
@@ -387,7 +387,7 @@
                             }
                         },
                         {
-                            "title": "质检<br>人均<br>通过量",
+                            "title": "审核<br>人均<br>通过量",
                             "data": "order_count_for_accepted_per",
                             "className": "text-center vertical-middle bg-inspected",
                             "width": "100px",
@@ -404,7 +404,7 @@
                             }
                         },
                         {
-                            "title": "质检<br>通过率",
+                            "title": "审核<br>通过率",
                             "data": "order_rate_for_accepted",
                             "className": "bg-inspected",
                             "width": "100px",
