@@ -10352,6 +10352,7 @@ class DKAdminRepository {
         $total['order_count_for_delivered_effective'] = 0;
         $total['order_count_for_delivered_effective_per'] = 0;
         $total['order_count_for_delivered_actual'] = 0;
+        $total['order_count_for_delivered_actual_per'] = 0;
 
 
 
@@ -10468,7 +10469,7 @@ class DKAdminRepository {
             $total['order_count_for_delivered_rejected'] += $v->order_count_for_delivered_rejected;
 
             $total['order_count_for_delivered_effective'] += $v->order_count_for_delivered_effective;
-            $total['order_count_for_delivered_actual'] += $v->order_count_for_delivered_effective;
+            $total['order_count_for_delivered_actual'] += $v->order_count_for_delivered_actual;
 
         }
 
