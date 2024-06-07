@@ -571,7 +571,7 @@
 @section('custom-style')
 <style>
     /*.tableArea table { width:100% !important; min-width:100%; }*/
-    .tableArea table { min-width:1200px; }
+    .tableArea table { min-width:1360px; }
     .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
 </style>
 @endsection
@@ -779,7 +779,7 @@
                         "title": "每日目标",
                         "data": "daily_goal",
                         "className": "text-center",
-                        "width": "80px",
+                        "width": "",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
