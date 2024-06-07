@@ -633,30 +633,30 @@
                             return row.department_group_er == null ? '未知' : '<a href="javascript:void(0);">'+row.department_group_er.leader.username+'</a>';
                         }
                     },
-                    // {
-                    //     targets: [14,15,16,17,22,23,24],
-                    //     createdCell: function (td, cellData, rowData, row, col) {
-                    //         var rowspan = rowData.group_merge;
-                    //         if (rowspan > 1) {
-                    //             $(td).attr('rowspan', rowspan)
-                    //         }
-                    //         if (rowspan == 0) {
-                    //             $(td).remove();
-                    //         }
-                    //     }
-                    // },
-                    // {
-                    //     targets: [25,26,27,28,29,30,31],
-                    //     createdCell: function (td, cellData, rowData, row, col) {
-                    //         var rowspan = rowData.district_merge;
-                    //         if (rowspan > 1) {
-                    //             $(td).attr('rowspan', rowspan)
-                    //         }
-                    //         if (rowspan == 0) {
-                    //             $(td).remove();
-                    //         }
-                    //     }
-                    // }
+                    {
+                        targets: [15,16,17,18,19,20],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            var rowspan = rowData.group_merge;
+                            if (rowspan > 1) {
+                                $(td).attr('rowspan', rowspan)
+                            }
+                            if (rowspan == 0) {
+                                $(td).remove();
+                            }
+                        }
+                    },
+                    {
+                        targets: [21,22,23,24,25,26],
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            var rowspan = rowData.district_merge;
+                            if (rowspan > 1) {
+                                $(td).attr('rowspan', rowspan)
+                            }
+                            if (rowspan == 0) {
+                                $(td).remove();
+                            }
+                        }
+                    }
                 ],
                 "language": { url: '/common/dataTableI18n' },
             });
