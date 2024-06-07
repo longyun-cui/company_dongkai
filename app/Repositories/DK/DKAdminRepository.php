@@ -11530,7 +11530,7 @@ class DKAdminRepository {
             {
                 $v->district_rate_for_delivered_effective = round(($v->district_count_for_delivered_effective * 100 / $v->district_count_for_delivered),2);
             }
-            else $v->district_rate_for_delivere_effective = 0;
+            else $v->district_rate_for_delivered_effective = 0;
 
             // 实际产量
             $v->district_count_for_delivered_actual = $v->district_count_for_delivered_completed + $v->district_count_for_delivered_tomorrow;
