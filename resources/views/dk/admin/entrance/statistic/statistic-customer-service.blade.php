@@ -131,7 +131,7 @@
 @section('custom-style')
 <style>
     .myChart { width:100%;height:240px; }
-    .tableArea table { min-width:2000px; }
+    .tableArea table { min-width:1600px; }
     .datatable-search-row .input-group .time-picker-btn { width:30px; }
     .datatable-search-row .input-group .month_picker, .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
     .datatable-search-row .input-group select { width:100px; text-align:center; }
