@@ -16,7 +16,7 @@
             $("#statistic-for-rank").find('input[name=rank-time-type]').val('month');
             var $staff_type_title = $('select[name=rank-staff-type]').find("option:selected").text();
             $(".statistic-title").html($staff_type_title);
-            $(".statistic-time-type-title").html('按月');
+            // $(".statistic-time-type-title").html('按月');
             var $month_dom = $('input[name="rank-month"]');
             var $the_month_str = $month_dom.val();
             $(".statistic-time-title").html('（'+$the_month_str+'月）');

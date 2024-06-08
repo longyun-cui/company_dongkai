@@ -24,7 +24,7 @@
                         <span class="statistic-title-">员工</span>
                         【<span class="statistic-title-">{{ $staff->username or '' }}</span>】
                         <span class="statistic-time-type-title"></span>
-                        <span class="statistic-time-title">{{ date('Y-m').'月' }}</span>
+                        <span class="statistic-time-title">（{{ date('Y-m').'月' }}）</span>
                     </h3>
                 </div>
 
@@ -154,7 +154,7 @@
     <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
-    @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-department-script')
+    @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-staff-script')
     <script>
         var TableDatatablesAjax = function () {
             var datatableAjax = function () {
