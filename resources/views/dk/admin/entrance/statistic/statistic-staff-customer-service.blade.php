@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '员工看板' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $staff->username or '员工看板' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 

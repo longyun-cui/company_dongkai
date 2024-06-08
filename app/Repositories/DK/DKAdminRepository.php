@@ -11713,6 +11713,7 @@ class DKAdminRepository {
         $staff = DK_User::select('id','username')->find($post_data['staff_id']);
         $view_data['staff'] = $staff;
 
+        $view_data['title_text'] = $staff->username;
         $view_data['menu_active_of_statistic_department'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-staff-customer-service';
         return view($view_blade)->with($view_data);
