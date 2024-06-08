@@ -7,6 +7,12 @@
     .content-wrapper, .right-side, .main-footer {
         margin-left: 120px;
     }
+    .main-header .logo {
+        width: 120px;
+    }
+    .main-header .navbar {
+        margin-left: 120px;
+    }
     .sidebar-menu>li>a {
         padding: 12px 4px 12px 8px;
         font-size:12px;
