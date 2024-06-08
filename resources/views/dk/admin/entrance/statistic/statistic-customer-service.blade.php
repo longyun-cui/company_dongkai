@@ -244,7 +244,7 @@
                         "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">'+data+' ('+row.id+')'+'</a>';
+                            return '<a href="/staff-statistic/statistic-customer-service?staff_id=' + row.id + '" target="_blank">'+data+' ('+row.id+')'+'</a>';
                         }
                     },
                     {

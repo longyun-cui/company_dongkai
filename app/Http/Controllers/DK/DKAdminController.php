@@ -1040,6 +1040,16 @@ class DKAdminController extends Controller
     }
 
 
+    // 【统计】部门看板
+    public function view_staff_statistic_customer_service()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_staff_statistic_customer_service(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_staff_customer_service(request()->all());
+    }
+
+
+
+
 
 
 

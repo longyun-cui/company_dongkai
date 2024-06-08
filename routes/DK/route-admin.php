@@ -389,6 +389,13 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/statistic/statistic-get-data-for-inspector', $controller.'@get_statistic_data_for_inspector');
 
 
+    Route::match(['get','post'], '/staff-statistic/statistic-customer-service', $controller.'@view_staff_statistic_customer_service');
+
+
+
+
+
+
 
 
     /*

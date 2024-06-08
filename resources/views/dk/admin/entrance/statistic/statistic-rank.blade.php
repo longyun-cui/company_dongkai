@@ -270,8 +270,8 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(row.username) return '<a href="javascript:void(0);">'+row.username+' ('+row.id+')'+'</a>';
-                            return '<a href="javascript:void(0);">'+row.username+' ('+row.id+')'+'</a>';
+                            if(row.username) return '<a href="/staff-statistic/statistic-customer-service?staff_id=' + data + '" target="_blank">'+row.username+' ('+row.id+')'+'</a>';
+                            return '<a href="/staff-statistic/statistic-customer-service?staff_id=' + data + '" target="_blank">'+row.username+' ('+row.id+')'+'</a>';
                         }
                     },
                     {
