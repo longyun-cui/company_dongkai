@@ -347,6 +347,40 @@
                             }
                         },
                         {
+                            "title": "重复",
+                            "data": "order_count_for_delivered_repeated",
+                            "className": "bg-delivered",
+                            "width": "80px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        {
+                            "title": "拒绝",
+                            "data": "order_count_for_delivered_rejected",
+                            "className": "bg-delivered",
+                            "width": "80px",
+                            "orderable": true,
+                            "orderSequence": ["desc", "asc"],
+                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                                if(row.id == "统计")
+                                {
+                                    $(nTd).addClass('_bold');
+                                }
+                            },
+                            render: function(data, type, row, meta) {
+                                return data;
+                            }
+                        },
+                        {
                             "title": "有效交付率",
                             "data": "order_rate_for_delivered_effective",
                             "className": "bg-delivered",
