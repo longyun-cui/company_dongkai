@@ -21,8 +21,9 @@
 
                 <div class="box-header with-border" style="margin:4px 0;">
                     <h3 class="box-title">
-                        <span class="statistic-title-">员工</span>
+{{--                        <span class="statistic-title-">员工</span>--}}
                         【<span class="statistic-title-">{{ $staff->username or '' }}</span>】
+                        <span class="">{{ $staff->department_district_er->name or '' }} - {{ $staff->department_group_er->name or '' }}</span>
                         <span class="statistic-time-type-title"></span>
                         <span class="statistic-time-title">（{{ date('Y-m').'月' }}）</span>
                     </h3>

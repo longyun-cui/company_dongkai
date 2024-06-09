@@ -11710,7 +11710,12 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $staff = DK_User::select('id','username')->find($post_data['staff_id']);
+        $staff = DK_User::select('id','username','department_district_id','department_group_id')
+            ->with([
+                'department_district_er' => function($query) { $query->select(['id','name']); },
+                'department_group_er' => function($query) { $query->select(['id','name']); }
+            ])
+            ->find($post_data['staff_id']);
         $view_data['staff'] = $staff;
 
         $view_data['title_text'] = $staff->username;
