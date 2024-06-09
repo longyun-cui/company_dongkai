@@ -21,17 +21,28 @@
 
                 <div class="box-header with-border" style="margin:4px 0;">
                     <h3 class="box-title">
-                        【<span class="statistic-title">项目</span>】
-                        <span class="statistic-time-type-title"></span>
-                        <span class="statistic-time-title">{{ date('Y-m-d') }}</span>
+                        【<span class="statistic-title-">项目看板</span>】
+                        <span class="statistic-time-type-title-"></span>
+                        <span class="statistic-time-title">（{{ date('Y-m-d') }}）</span>
                     </h3>
                 </div>
 
 
                 <div class="box-body datatable-body item-main-body" id="statistic-for-rank">
 
-                    <div class="row col-md-12 datatable-search-row _none">
+                    <div class="row col-md-12 datatable-search-row">
                         <div class="input-group">
+
+                            @if(in_array($me->user_type,[0,1,9,11]))
+                                <select class="form-control form-filter select-select2 rank-department-district" name="rank-department-district" style="width:100px;">
+                                    <option value="-1">选择大区</option>
+                                    @if(!empty($department_district_list))
+                                        @foreach($department_district_list as $v)
+                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            @endif
 
                             {{--按天查看--}}
                             <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-rank">
@@ -42,7 +53,7 @@
                                 <i class="fa fa-chevron-right"></i>
                             </button>
                             <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-rank-by-day">
-                                <i class="fa fa-search"></i> 按天查询
+                                <i class="fa fa-search"></i> 查询
                             </button>
 
 
@@ -140,7 +151,7 @@
     <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
-    @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-department-script')
+    @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-project-script')
     <script>
         var TableDatatablesAjax = function () {
             var datatableAjax = function () {

@@ -165,6 +165,14 @@
             </li>
             @endif
 
+            @if(in_array($me->user_type,[0,1,9,11,81,84]))
+                <li class="treeview {{ $menu_active_of_statistic_recent or '' }}">
+                    <a href="{{ url('/statistic/statistic-recent') }}">
+                        <i class="fa fa-line-chart text-maroon"></i> <span>近期成果</span>
+                    </a>
+                </li>
+            @endif
+
             <li class="treeview {{ $menu_active_of_statistic_index or '' }}">
                 <a href="{{ url('/statistic/statistic-index') }}">
                     <i class="fa fa-pie-chart text-green"></i> <span>数据统计</span>

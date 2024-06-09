@@ -1013,6 +1013,14 @@ class DKAdminController extends Controller
     }
 
 
+    // 【统计】客服近7天表现
+    public function view_statistic_recent()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_recent(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_recent(request()->all());
+    }
+
+
     // 【统计】项目看板
     public function view_statistic_project()
     {
