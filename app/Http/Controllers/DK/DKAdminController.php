@@ -1044,7 +1044,8 @@ class DKAdminController extends Controller
     public function view_statistic_inspector()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_inspector(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_inspector(request()->all());
+//        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_inspector(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_inspector_by_group(request()->all());
     }
 
 

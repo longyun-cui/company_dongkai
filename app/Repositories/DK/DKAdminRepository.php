@@ -11977,6 +11977,180 @@ class DKAdminRepository {
 
         return datatable_response($collapsed, $draw, $total);
     }
+    public function get_statistic_data_for_inspector_by_group($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        // 员工统计
+        $query_order = DK_Order::select('inspector_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused
+                "))
+            ->groupBy('inspector_id');
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'day')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query_order->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_day);
+
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query_order->whereBetween('inspected_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+        }
+        else
+        {
+        }
+
+
+        $query_order = $query_order->get()->keyBy('inspector_id')->toArray();
+
+
+
+
+        $query = DK_User::select(['id','user_status','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
+            ->with([
+                'superior' => function($query) { $query->select(['id','username','true_name']); }
+            ])
+            ->where('user_status',1)
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[71,77]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        // 审核经理
+        if($me->user_type == 71)
+        {
+            $query->where(function ($query) use($me) {
+                $query->where('id',$me->id)->orWhereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+            });
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("superior_id", "asc")->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+
+        // 数据拼接
+        foreach ($list as $k => $v)
+        {
+
+            if(isset($query_order[$v->id]))
+            {
+                $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
+                $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
+                $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
+            }
+            else
+            {
+                $list[$k]->order_count_for_inspected = 0;
+                $list[$k]->order_count_for_accepted = 0;
+                $list[$k]->order_count_for_refused = 0;
+            }
+
+
+
+            // 经理
+//            if($v->department_district_er) $manager_id = $v->department_district_er->leader_id;
+//            else $manager_id = -1;
+//            if($v->department_district_er && isset($query_order_for_manager[$manager_id]))
+//            {
+//                $list[$k]->district_count_for_accepted = $query_order_for_manager[$manager_id]['order_count_for_accepted'];
+//                $list[$k]->district_count_for_refused = $query_order_for_manager[$manager_id]['order_count_for_refused'];
+//            }
+//            else
+//            {
+//                $list[$k]->district_count_for_inspected = 0;
+//                $list[$k]->district_count_for_accepted = 0;
+//                $list[$k]->district_count_for_refused = 0;
+//            }
+//
+//            $v->district_merge = 0;
+        }
+
+
+
+        foreach ($list as $k => $v)
+        {
+            if($v->user_type == 71)
+            {
+                $v->superior_id = $v->id;
+                $v->superior = $v->id;
+                $superior = ['id'=>$v->id,'username'=>$v->username,'true_name'=>$v->true_name];
+                $v->superior = json_decode(json_encode($superior));
+                $list[$k]->superior =  json_decode(json_encode($superior));
+            }
+        }
+//        dd($list->toArray());
+
+        $a = [];
+        $list = $list->sortBy('superior_id');
+        $grouped = $list->sortBy('superior_id')->groupBy('superior_id');
+        foreach ($grouped as $k => $v)
+        {
+            $order_sum_for_all = 0;
+            $order_sum_for_inspected = 0;
+
+            foreach ($v as $key => $val)
+            {
+//                $order_sum_for_all += $val->order_count_for_all;
+                $order_sum_for_inspected += $val->order_count_for_inspected;
+            }
+
+
+            foreach ($v as $key => $val)
+            {
+                $v[$key]->merge = 0;
+//                $v[$key]->order_sum_for_all = $order_sum_for_all;
+                $v[$key]->order_sum_for_inspected = $order_sum_for_inspected;
+
+//                if($order_sum_for_all > 0)
+//                {
+//                    $v[$key]->order_average_rate_for_inspected = round(($order_sum_for_inspected * 100 / $order_sum_for_all),2);
+//                }
+//                else $v[$key]->order_average_rate_for_inspected = 0;
+            }
+
+            $v[0]->merge = count($v);
+        }
+        $collapsed = $grouped->collapse();
+
+        return datatable_response($collapsed, $draw, $total);
+    }
 
 
 
