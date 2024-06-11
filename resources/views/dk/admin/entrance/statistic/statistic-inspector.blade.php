@@ -189,15 +189,25 @@
 //                        "targets": 0,
 //                        "orderable": false
 //                    },
+//                     {
+//                         "title": "经理",
+//                         "data": "superior_id",
+//                         "className": "vertical-middle",
+//                         "width": "100px",
+//                         "orderable": false,
+//                         render: function(data, type, row, meta) {
+//                             if(row.user_type == 71) return '<a href="javascript:void(0);">'+row.username+'</a>';
+//                             return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.username+'</a>';
+//                         }
+//                     },
                     {
-                        "title": "经理",
-                        "data": "superior_id",
+                        "title": "团队",
+                        "data": "department_district_id",
                         "className": "vertical-middle",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.user_type == 71) return '<a href="javascript:void(0);">'+row.username+'</a>';
-                            return row.superior == null ? '未知' : '<a href="javascript:void(0);">'+row.superior.username+'</a>';
+                            return row.department_district_er == null ? '<a href="javascript:void(0);">总部</a>' : '<a href="javascript:void(0);">'+row.department_district_er.name+'</a>';
                         }
                     },
                     // {
@@ -217,7 +227,8 @@
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            // return data + ' (' + row.mobile + ')';
+                            return '<a href="javascript:void(0);">' + data + ' (' + row.mobile + ')' + '</a>';
                         }
                     },
                     {

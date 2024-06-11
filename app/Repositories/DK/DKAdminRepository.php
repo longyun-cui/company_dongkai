@@ -12024,9 +12024,10 @@ class DKAdminRepository {
 
 
 
-        $query = DK_User::select(['id','user_status','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
+        $query = DK_User::select(['id','mobile','user_status','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
             ->with([
-                'superior' => function($query) { $query->select(['id','username','true_name']); }
+                'superior' => function($query) { $query->select(['id','username','true_name']); },
+                'department_district_er' => function($query) { $query->select(['id','name','leader_id']); },
             ])
             ->where('user_status',1)
             ->whereIn('user_category',[11])
@@ -12059,7 +12060,7 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("superior_id", "asc")->orderBy("id", "asc");
+        else $query->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
@@ -12068,7 +12069,6 @@ class DKAdminRepository {
         // 数据拼接
         foreach ($list as $k => $v)
         {
-
             if(isset($query_order[$v->id]))
             {
                 $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
@@ -12081,25 +12081,6 @@ class DKAdminRepository {
                 $list[$k]->order_count_for_accepted = 0;
                 $list[$k]->order_count_for_refused = 0;
             }
-
-
-
-            // 经理
-//            if($v->department_district_er) $manager_id = $v->department_district_er->leader_id;
-//            else $manager_id = -1;
-//            if($v->department_district_er && isset($query_order_for_manager[$manager_id]))
-//            {
-//                $list[$k]->district_count_for_accepted = $query_order_for_manager[$manager_id]['order_count_for_accepted'];
-//                $list[$k]->district_count_for_refused = $query_order_for_manager[$manager_id]['order_count_for_refused'];
-//            }
-//            else
-//            {
-//                $list[$k]->district_count_for_inspected = 0;
-//                $list[$k]->district_count_for_accepted = 0;
-//                $list[$k]->district_count_for_refused = 0;
-//            }
-//
-//            $v->district_merge = 0;
         }
 
 
@@ -12118,8 +12099,9 @@ class DKAdminRepository {
 //        dd($list->toArray());
 
         $a = [];
-        $list = $list->sortBy('superior_id');
-        $grouped = $list->sortBy('superior_id')->groupBy('superior_id');
+//        $list = $list->sortBy('department_district_id');
+//        $grouped = $list->sortBy('department_district_id')->groupBy('department_district_id');
+        $grouped = $list->groupBy('department_district_id');
         foreach ($grouped as $k => $v)
         {
             $order_sum_for_all = 0;

@@ -149,7 +149,7 @@
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,71]))
+            @if(in_array($me->user_type,[0,1,9,11,41,71,81]))
             <li class="treeview {{ $menu_active_of_statistic_inspector or '' }}">
                 <a href="{{ url('/statistic/statistic-inspector') }}">
                     <i class="fa fa-bar-chart text-purple"></i> <span>审核员看板</span>
