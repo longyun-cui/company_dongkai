@@ -24,16 +24,29 @@
             <h4>工单统计</h4>
 
             <div class="callout-body">
-                <span>总计 <text class="text-black font-24px">{{ $order_count_for_all or '' }}</text> 单</span>
-                <span>导入 <text class="text-black font-24px">{{ $query_order_count_for_export or '' }}</text> 单</span>
-                <span>待发布 <text class="text-teal font-24px">{{ $order_count_for_unpublished or '' }}</text> 单</span>
-                <span>已发布 <text class="text-green font-24px">{{ $order_count_for_published or '' }}</text> 单</span>
-                <span>待审核 <text class="text-aqua font-24px">{{ $order_count_for_waiting_for_inspect or '' }}</text> 单</span>
-                <span>已审核 <text class="text-blue font-24px">{{ $order_count_for_inspected or '' }}</text> 单</span>
-                <span>通过 <text class="text-green font-24px">{{ $order_count_for_accepted or '' }}</text> 单</span>
-                <span>拒绝 <text class="text-red font-24px">{{ $order_count_for_refused or '' }}</text> 单</span>
-                <span>重复 <text class="text-orange font-24px">{{ $order_count_for_repeat or '' }}</text> 单 </span>
-                <span>内部通过 <text class="text-green font-24px">{{ $order_count_for_accepted_inside or '' }}</text> 单</span>
+                <span>【总计】</span>
+                <span>总计 <text class="text-black font-24px">{{ $order_count->order_count_for_all or '0' }}</text> 单</span>
+                <span>导入 <text class="text-black font-24px">{{ $order_count->query_order_count_for_export or '0' }}</text> 单</span>
+                <span>已发布 <text class="text-black font-24px">{{ $order_count->order_count_for_published or '0' }}</text> 单</span>
+                <span>待发布 <text class="text-black font-24px">{{ $order_count->order_count_for_unpublished or '0' }}</text> 单</span>
+            </div>
+            <div class="callout-body">
+                <span>【审核】</span>
+                <span>已审 <text class="text-blue font-24px">{{ $order_count->order_count_for_inspected or '0' }}</text> 单</span>
+                <span>待审 <text class="text-blue font-24px">{{ $order_count->order_count_for_waiting_for_inspect or '0' }}</text> 单</span>
+                <span>审核通过 <text class="text-blue font-24px">{{ $order_count->order_count_for_accepted or '0' }}</text> 单</span>
+                <span>内部通过 <text class="text-blue font-24px">{{ $order_count->order_count_for_accepted_inside or '0' }}</text> 单</span>
+                <span>重复 <text class="text-orange font-24px">{{ $order_count->order_count_for_repeat or '0' }}</text> 单 </span>
+                <span>拒绝 <text class="text-red font-24px">{{ $order_count->order_count_for_refused or '0' }}</text> 单</span>
+            </div>
+            <div class="callout-body">
+                <span>【交付】</span>
+                <span>交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered or '0' }}</text> 单</span>
+                <span>已交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered_completed or '0' }}</text> 单</span>
+                <span>隔日交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered_tomorrow or '0' }}</text> 单</span>
+                <span>内部交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered_inside or '0' }}</text> 单</span>
+                <span>重复 <text class="text-orange font-24px">{{ $order_count->order_count_for_delivered_repeated or '0' }}</text> 单 </span>
+                <span>拒绝 <text class="text-red font-24px">{{ $order_count->order_count_for_delivered_rejected or '0' }}</text> 单</span>
             </div>
 
             <div class="box box-info margin-top-32px">

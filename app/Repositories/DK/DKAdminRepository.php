@@ -100,6 +100,138 @@ class DKAdminRepository {
 
 
         // 工单统计
+        // 员工统计
+        $query_order = DK_Order::select(DB::raw("
+                    count(*) as order_count_for_all,
+                    count(IF(created_type = 9, TRUE, NULL)) as order_count_for_export,
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                "));
+
+
+
+        // 本月每日工单量
+        $query_this_month = DK_Order::select('id','published_at')
+            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(published_at,'%e') as day,
+                    count(*) as sum
+                "));
+
+        // 上月每日工单量
+        $query_last_month = DK_Order::select('id','published_at')
+            ->whereBetween('published_at',[$last_month_start_timestamp,$last_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
+            ->select(DB::raw("
+                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(published_at,'%e') as day,
+                    count(*) as sum
+                "));
+
+
+        // 客服经理
+        if($me->user_type == 81)
+        {
+
+            $query_order->where('department_manager_id',$me->id);
+            $query_this_month->where('department_manager_id',$me->id);
+            $query_last_month->where('department_manager_id',$me->id);
+        }
+        // 客服主管
+        if($me->user_type == 84)
+        {
+            $query_order->where('department_supervisor_id', $me->id);
+            $query_this_month->where('department_supervisor_id', $me->id);
+            $query_last_month->where('department_supervisor_id', $me->id);
+        }
+        // 客服
+        if($me->user_type == 88)
+        {
+            $query_order->where('creator_id', $me->id);
+            $query_this_month->where('creator_id', $me->id);
+            $query_last_month->where('creator_id', $me->id);
+        }
+        // 质检经理
+        if($me->user_type == 71)
+        {
+            $query_order->where('district_department_id',$me->district_department_id);
+            $query_this_month->where('district_department_id',$me->district_department_id);
+            $query_last_month->where('district_department_id',$me->district_department_id);
+
+        }
+        // 质检员
+        if($me->user_type == 77)
+        {
+            $query_order->where('inspector_id', $me->id);
+            $query_this_month->where('inspector_id', $me->id);
+            $query_last_month->where('inspector_id', $me->id);
+
+        }
+
+
+        $query_order = $query_order->get();
+
+        $return['order_count'] = $query_order[0];
+
+
+        $statistics_order_this_month_data = $query_this_month->get()->keyBy('day');
+        $return['statistics_order_this_month_data'] = $statistics_order_this_month_data;
+
+        $statistics_order_last_month_data = $query_last_month->get()->keyBy('day');
+        $return['statistics_order_last_month_data'] = $statistics_order_last_month_data;
+
+
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.index';
+        return view($view_blade)->with($return);
+    }
+    public function view_admin_index1()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+//        $condition = request()->all();
+//        $return['condition'] = $condition;
+//
+//        $condition['task-list-type'] = 'unfinished';
+//        $parameter_result = http_build_query($condition);
+//        return redirect('/?'.$parameter_result);
+
+
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+
+
+
+        // 工单统计
         $query_order_count_for_all = DK_Order::select('id');
         $query_order_count_for_export = DK_Order::where('created_type', 9);
         $query_order_count_for_unpublished = DK_Order::where('created_type', 1)->where('is_published', 0);
