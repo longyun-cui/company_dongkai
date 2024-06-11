@@ -12036,11 +12036,18 @@ class DKAdminRepository {
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
         // 审核经理
-        if($me->user_type == 71)
+//        if($me->user_type == 71)
+//        {
+//            $query->where(function ($query) use($me) {
+//                $query->where('id',$me->id)->orWhereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
+//            });
+//        }
+
+        // 根据部门查看
+        if($me->department_district_id > 0)
         {
-            $query->where(function ($query) use($me) {
-                $query->where('id',$me->id)->orWhereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
-            });
+            // 根据部门查看
+            $query->where('department_district_id', $me->department_district_id);
         }
 
 
