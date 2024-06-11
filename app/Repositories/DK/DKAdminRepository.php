@@ -10456,7 +10456,7 @@ class DKAdminRepository {
             $query->whereIn('id',$project_list);
         }
 
-        if(in_array($me->user_type,[81]))
+        if(in_array($me->user_type,[81,84]))
         {
             $department_district_id = $me->department_district_id;
             $project_list = DK_Pivot_Team_Project::select('project_id')->where('team_id',$department_district_id)->get();
