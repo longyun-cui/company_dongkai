@@ -89,6 +89,33 @@
             });
         });
 
+        // 【重置密码】提交
+        $("#item-main-body").on('click', ".item-staff-password-super-reset-submit", function() {
+            var $that = $(this);
+            layer.msg('确定"重置"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/user/staff-password-super-reset') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "staff-password-super-reset",
+                            user_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                layer.msg('重置成功！');
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
 
 
 
@@ -156,7 +183,7 @@
                     {
                         console.log(data);
                         var temp_window=window.open();
-                        temp_window.location = "{{ env('DOMAIN_DK_STAFF') }}";
+                        temp_window.location = "{{ env('DOMAIN_DK_ADMIN') }}";
                     }
                 },
                 'json'

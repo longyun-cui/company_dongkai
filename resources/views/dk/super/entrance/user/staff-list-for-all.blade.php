@@ -47,7 +47,25 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="username" placeholder="用户名" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="staff-mobile" placeholder="登录工号" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="staff-username" placeholder="用户名" />
+
+                        <select class="form-control form-filter select2-box" name="staff-department-district" style="width:88px;">
+                            <option value="-1">选择大区</option>
+                            @foreach($department_district_list as $v)
+                                <option value="{{ $v->id }}">{{ $v->name }}</option>
+                            @endforeach
+                        </select>
+
+
+                        <select class="form-control form-filter" name="staff-user-type" style="width:88px;">
+                            <option value="-1">全部人员</option>
+                            <option value="88">客服</option>
+                            <option value="84">客服主管</option>
+                            <option value="81">客服经理</option>
+                            <option value="71">质检经理</option>
+                            <option value="77">质检员</option>
+                        </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
@@ -64,16 +82,6 @@
                 <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
-                            <th>ID</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -175,16 +183,10 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.username = $('input[name="username"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
-//
-//                        d.created_at_from = $('input[name="created_at_from"]').val();
-//                        d.created_at_to = $('input[name="created_at_to"]').val();
-//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
-//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
+                        d.mobile = $('input[name="staff-mobile"]').val();
+                        d.username = $('input[name="staff-username"]').val();
+                        d.department_district = $('select[name="staff-department-district"]').val();
+                        d.user_type = $('select[name="staff-user-type"]').val();
 
                     },
                 },
@@ -232,7 +234,7 @@
                                 // '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
                                 // '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
                                 // '<a class="btn btn-xs bg-maroon item-password-super-change-show" data-id="'+data+'">修改密码</a>'+
-                                '<a class="btn btn-xs bg-maroon item-password-super-reset-submit" data-id="'+data+'">重置密码</a>'+
+                                '<a class="btn btn-xs bg-maroon item-staff-password-super-reset-submit" data-id="'+data+'">重置密码</a>'+
                                 '<a class="btn btn-xs bg-olive item-staff-login-submit" data-id="'+data+'">登录</a>'+
                                 // '<a class="btn btn-xs bg-olive item-staff-login-submit" data-id="'+data+'">员工登录</a>'+
                                 '<a class="btn btn-xs bg-navy item-super-delete-submit" data-id="'+data+'" >删除</a>'+
@@ -284,6 +286,16 @@
                         }
                     },
                     {
+                        "title": "手机号(工号)",
+                        "className": "text-left",
+                        "width": "120px",
+                        "data": "mobile",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "名称",
                         "className": "text-left",
                         "width": "120px",
@@ -304,13 +316,65 @@
                         }
                     },
                     {
-                        "title": "手机号",
-                        "className": "text-left",
-                        "width": "120px",
-                        "data": "mobile",
+                        "title": "大区",
+                        "data": "department_district_id",
+                        "className": "",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            if(row.department_district_er) {
+                                return '<a href="javascript:void(0);">'+row.department_district_er.name+'</a>';
+                            }
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "小组",
+                        "data": "department_group_id",
+                        "className": "",
+                        "width":"80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.department_group_er) {
+                                return '<a href="javascript:void(0);">'+row.department_group_er.name+'</a>';
+                            }
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "备注",
+                        "data": "remark",
+                        "className": "text-center",
+                        "width": "",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
+                                $(nTd).attr('data-key','remark').attr('data-value',data);
+                                $(nTd).attr('data-column-name','备注');
+                                $(nTd).attr('data-text-type','textarea');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
                             return data;
+                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                            // else return '';
+                        }
+                    },
+                    {
+                        "title": "创建人",
+                        "data": "creator_id",
+                        "className": "font-12px",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '未知';
+                            // return row.creator.true_name;
+                            return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                         }
                     },
 //                    {
@@ -352,24 +416,24 @@
 //                            else return '--';
 //                        }
 //                    },
-                    {
-                        "title": "浏览",
-                        "width": "40px",
-                        "data": "visit_num",
-                        "orderable": true,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "分享",
-                        "width": "40px",
-                        "data": "share_num",
-                        "orderable": true,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
+//                     {
+//                         "title": "浏览",
+//                         "width": "40px",
+//                         "data": "visit_num",
+//                         "orderable": true,
+//                         render: function(data, type, row, meta) {
+//                             return data;
+//                         }
+//                     },
+//                     {
+//                         "title": "分享",
+//                         "width": "40px",
+//                         "data": "share_num",
+//                         "orderable": true,
+//                         render: function(data, type, row, meta) {
+//                             return data;
+//                         }
+//                     },
 //                    {
 //                        "data": 'menu_id',
 //                        "orderable": false,

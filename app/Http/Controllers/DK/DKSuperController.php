@@ -7,7 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\DK\DK_User;
-use App\Models\DK\YH_Item;
+use App\Models\DK\DK_Item;
 
 use App\Repositories\DK\DKSuperRepository;
 
@@ -205,6 +205,7 @@ class DKSuperController extends Controller
 
             $return['user'] = $user;
             $return['url'] = env('DOMAIN_DK_ADMIN');
+//            dd(env('DOMAIN_DK_ADMIN'));
 
             if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_ADMIN'));
             else if(request()->isMethod('post'))
@@ -258,6 +259,19 @@ class DKSuperController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
+    }
+
+
+
+    // 【用户】修改-密码
+    public function operate_user_staff_password_super_change()
+    {
+        return $this->repo->operate_user_staff_password_super_change(request()->all());
+    }
+    // 【用户】修改-密码
+    public function operate_user_staff_password_super_reset()
+    {
+        return $this->repo->operate_user_staff_password_super_reset(request()->all());
     }
 
 

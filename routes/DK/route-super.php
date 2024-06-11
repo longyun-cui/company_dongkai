@@ -59,9 +59,15 @@ Route::group(['middleware' => ['yh.super.login']], function () {
 
     Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
     Route::match(['get','post'], '/user/staff-edit', $controller.'@operate_user_staff_edit');
+    // 【用户-员工管理】修改密码
+    Route::match(['get','post'], '/user/staff-password-super-change', $controller.'@operate_user_staff_password_super_change');
+    Route::match(['get','post'], '/user/staff-password-super-reset', $controller.'@operate_user_staff_password_super_reset');
+    Route::match(['get','post'], '/user/staff-login', $controller.'@operate_user_super_login');
+    // 【用户-员工管理】删除 & 恢复 & 永久删除
     Route::post('/user/staff-delete', $controller.'@operate_user_staff_delete');
     Route::post('/user/staff-restore', $controller.'@operate_user_staff_restore');
     Route::post('/user/staff-delete-permanently', $controller.'@operate_user_staff_delete_permanently');
+    // 【用户-员工管理】启用 & 禁用
     Route::post('/user/staff-enable', $controller.'@operate_user_staff_enable');
     Route::post('/user/staff-disable', $controller.'@operate_user_staff_disable');
 

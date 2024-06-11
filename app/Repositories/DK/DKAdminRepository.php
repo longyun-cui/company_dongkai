@@ -167,9 +167,12 @@ class DKAdminRepository {
         // 质检经理
         if($me->user_type == 71)
         {
-            $query_order->where('district_department_id',$me->district_department_id);
-            $query_this_month->where('district_department_id',$me->district_department_id);
-            $query_last_month->where('district_department_id',$me->district_department_id);
+            if($me->department_district_id)
+            {
+                $query_order->where('department_district_id',$me->department_district_id);
+                $query_this_month->where('department_district_id',$me->department_district_id);
+                $query_last_month->where('department_district_id',$me->department_district_id);
+            }
 
         }
         // 质检员

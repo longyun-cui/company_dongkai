@@ -2,6 +2,7 @@
 namespace App\Repositories\DK;
 
 use App\Models\DK\DK_Client;
+use App\Models\DK\DK_Department;
 use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Record;
 use App\Models\DK\DK_User;
@@ -733,7 +734,7 @@ class DKSuperRepository {
 
 
 
-    // 【用户】【全部机构】返回-列表-视图
+    // 【用户】【员工管理】返回-列表-视图
     public function view_user_list_for_all($post_data)
     {
         $this->get_me();
@@ -742,7 +743,7 @@ class DKSuperRepository {
         $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.user-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【用户】【全部机构】返回-列表-数据
+    // 【用户】【员工管理】返回-列表-数据
     public function get_user_list_for_all_datatable($post_data)
     {
         $this->get_me();
@@ -792,23 +793,26 @@ class DKSuperRepository {
         return datatable_response($list, $draw, $total);
     }
 
-    // 【用户】【全部机构】返回-列表-视图
+    // 【用户】【员工管理】返回-列表-视图
     public function view_user_staff_list_for_all($post_data)
     {
         $this->get_me();
+
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $return['department_district_list'] = $department_district_list;
 
         $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.staff-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【用户】【全部机构】返回-列表-数据
+    // 【用户】【员工管理】返回-列表-数据
     public function get_user_staff_list_for_all_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
         $query = DK_User::select('*')
-//            ->with(['district'])
+            ->with(['creator','superior','department_district_er','department_group_er'])
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -821,6 +825,26 @@ class DKSuperRepository {
 //            ->whereIn('usergroup',['Agent','Agent2']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0]))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
+
+        // 员工类型
+        if(!empty($post_data['user_type']))
+        {
+            if(!in_array($post_data['user_type'],[-1,0]))
+            {
+                $query->where('user_type', $post_data['user_type']);
+            }
+        }
 
         $total = $query->count();
 
@@ -851,7 +875,139 @@ class DKSuperRepository {
         return datatable_response($list, $draw, $total);
     }
 
-    // 【用户】【全部机构】返回-列表-视图
+
+    // 【用户-员工管理】管理员-修改密码
+    public function operate_user_staff_password_super_change($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+            'user-password.required' => '请输入密码！',
+            'user-password-confirm.required' => '请输入确认密码！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+            'user-password' => 'required',
+            'user-password-confirm' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'staff-password-admin-change') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = DK_User::withTrashed()->find($id);
+        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该操作权限！");
+//        if(in_array($me->user_type,[0,1,9,11,19,21])) return response_error([],"你没有该员工的操作权限！");
+        if($user->id == $me->id) return response_error([],"你不能删除你自己！");
+        if($user->user_type <= $me->user_type) return response_error([],"你不能操作比你职级更高或同级的员工！");
+
+        $password = $post_data["user-password"];
+        $confirm = $post_data["user-password-confirm"];
+        if($password != $confirm) return response_error([],"两次密码不一致！");
+
+//        if(!password_is_legal($password)) ;
+        $pattern = '/^[a-zA-Z0-9]{1}[a-zA-Z0-9]{5,19}$/i';
+        if(!preg_match($pattern,$password)) return response_error([],"密码格式不正确！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->password = password_encode($password);
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--user--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【用户-员工管理】管理员-重置密码
+    public function operate_user_staff_password_super_reset($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'staff-password-super-reset') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = DK_User::withTrashed()->find($id);
+        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,21,81])) return response_error([],"你没有该操作权限！");
+//        if(in_array($me->user_type,[0,1,9,11,19,21,81])) return response_error([],"你没有该员工的操作权限！");
+        if($user->id == $me->id) return response_error([],"你不能删除你自己！");
+        if($user->user_type <= $me->user_type) return response_error([],"你不能操作比你职级更高或同级的员工！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->password = password_encode('1');
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--user--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+
+
+
+
+    // 【用户】【客户】返回-列表-视图
     public function view_user_client_list_for_all($post_data)
     {
         $this->get_me();
@@ -860,7 +1016,7 @@ class DKSuperRepository {
         $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.client-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【K】【用户】【全部机构】返回-列表-数据
+    // 【用户】【客户】返回-列表-数据
     public function get_user_client_list_for_all_datatable($post_data)
     {
         $this->get_me();
