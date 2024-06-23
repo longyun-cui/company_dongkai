@@ -7381,15 +7381,22 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-            if($column_key == "car_id")
+            if($column_key == "project_id")
             {
                 if($column_value == 0)
                 {
                 }
                 else
                 {
-                    $car = DK_Project::withTrashed()->find($column_value);
-                    if(!$car) throw new Exception("该【车辆】不存在，刷新页面重试！");
+                    $project = DK_Project::withTrashed()->find($column_value);
+                    if(!$project) throw new Exception("该【项目】不存在，刷新页面重试！");
+
+                    $project_id = $item->project_id;
+                    $client_phone = $item->client_phone;
+
+                    $is_repeat = DK_Order::where(['project_id'=>$column_value,'client_phone'=>$client_phone])
+                        ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                    $item->is_repeat = $is_repeat;
                 }
             }
             else if($column_key == "location_city")
