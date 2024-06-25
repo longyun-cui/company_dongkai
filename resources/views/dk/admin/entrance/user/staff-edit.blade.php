@@ -57,7 +57,7 @@
                             @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,81]))
+                            @if(in_array($me->user_type, [0,1,11,61,81]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 88))
                                 <button type="button" class="btn">
                                     <span class="radio">
@@ -73,7 +73,7 @@
                             @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,81]))
+                            @if(in_array($me->user_type, [0,1,11,61,81]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 84))
                                 <button type="button" class="btn">
                                     <span class="radio">
@@ -89,7 +89,7 @@
                             @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
+                            @if(in_array($me->user_type, [0,1,11,61]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 81))
                                 <button type="button" class="btn">
                                     <span class="radio">
@@ -105,7 +105,23 @@
                             @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,81]))
+                            @if(in_array($me->user_type, [0,1,11]))
+                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 61))
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label>
+                                            @if($operate == 'edit' && $data->user_type == 61)
+                                                <input type="radio" name="user_type" value="61" checked="checked"> 部门经理
+                                            @else
+                                                <input type="radio" name="user_type" value="61"> 部门经理
+                                            @endif
+                                        </label>
+                                    </span>
+                                </button>
+                            @endif
+                            @endif
+
+                            @if(in_array($me->user_type, [0,1,11,61,81]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 77))
                                 <button type="button" class="btn">
                                 <span class="radio">
@@ -121,7 +137,7 @@
                             @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,81]))
+                            @if(in_array($me->user_type, [0,1,11,61,81]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 71))
                                 <button type="button" class="btn">
                                     <span class="radio">

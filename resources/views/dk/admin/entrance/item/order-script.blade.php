@@ -1029,6 +1029,18 @@
                                 else
                                 {
                                     $row.find('td[data-key='+$column_key+']').html($column_value);
+                                    if(data.data.is_repeat > 0)
+                                    {
+                                        var $is_repeat = data.data.is_repeat + 1;
+                                        var $repeat_html = '<small class="btn-xs btn-primary">是</small> <small class="btn-xs btn-danger">' + $is_repeat + '</small>';
+                                        $row.find('td[data-key="is_repeat"]').html($repeat_html);
+                                        $row.find('td[data-key="is_repeat"]').attr('data-value',$is_repeat);
+                                    }
+                                    else
+                                    {
+                                        $row.find('td[data-key="is_repeat"]').html('');
+                                        $row.find('td[data-key="is_repeat"]').attr('data-value',data.data.is_repeat);
+                                    }
                                 }
                                 $row.find('td[data-key='+$column_key+']').attr('data-value',$column_value);
                             }

@@ -1420,7 +1420,7 @@
                             {
                                 // $(nTd).addClass('modal-show-for-info-radio-set-');
                                 // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
-                                // $(nTd).attr('data-key','is_repeat').attr('data-value',data);
+                                $(nTd).attr('data-key','is_repeat').attr('data-value',data);
                                 // $(nTd).attr('data-column-name','是否重复');
                                 // if(data) $(nTd).attr('data-operate-type','edit');
                                 // else $(nTd).attr('data-operate-type','add');

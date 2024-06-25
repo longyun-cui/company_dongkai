@@ -7100,13 +7100,16 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
+            $is_repeat = 0;
             if($column_key == "client_phone")
             {
                 $project_id = $item->project_id;
                 $client_phone = $item->client_phone;
 
-                $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$client_phone])
+                $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$column_value])
                     ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+//
+
                 $item->is_repeat = $is_repeat;
 //                dd($item->is_repeat);
             }
@@ -7149,7 +7152,7 @@ class DKAdminRepository {
             }
 
             DB::commit();
-            return response_success([]);
+            return response_success(['is_repeat'=>$is_repeat]);
         }
         catch (Exception $e)
         {
