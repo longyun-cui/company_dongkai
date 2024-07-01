@@ -119,6 +119,24 @@
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
 
+
+                        <select class="form-control form-filter select2-box select2-district-city" name="order-city" id="order-city" data-target="#order-district" style="width:120px;">
+                            <option value="-1">选择城市</option>
+                            @if(!empty($district_city_list) && count($district_city_list) > 0)
+                            @foreach($district_city_list as $v)
+                                <option value="{{ $v->district_city }}" @if($district_city == $v->district_city) selected="selected" @endif>{{ $v->district_city }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                        <select class="form-control form-filter select2-box select2-district-district" name="order-district" id="order-district" data-target="order-city" style="width:120px;">
+                            <option value="-1">选择区域</option>
+                            @if(!empty($district_district_list) && count($district_district_list) > 0)
+                            @foreach($district_district_list as $v)
+                                <option value="{{ $v }}" @if($district_district == $v) selected="selected" @endif>{{ $v }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+
 {{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
 {{--                            <option value="-1">是否+V</option>--}}
 {{--                            <option value="1" @if($is_wx == "1") selected="selected" @endif>是</option>--}}
@@ -634,12 +652,20 @@
 {{--option--}}
 <div class="option-container _none">
 
-    {{--订单类型--}}
+    {{--城市列表--}}
+{{--    <div id="location-city-option-list">--}}
+{{--        <option value="">选择城市</option>--}}
+{{--        @foreach(config('info.location_city') as $k => $v)--}}
+{{--            <option value ="{{ $k }}" data-index="{{ $loop->index }}">{{ $k }}</option>--}}
+{{--        @endforeach--}}
+{{--    </div>--}}
     <div id="location-city-option-list">
         <option value="">选择城市</option>
-        @foreach(config('info.location_city') as $k => $v)
-            <option value ="{{ $k }}" data-index="{{ $loop->index }}">{{ $k }}</option>
-        @endforeach
+        @if(!empty($district_city_list) && count($district_city_list) > 0)
+            @foreach($district_city_list as $v)
+                <option value="{{ $v->district_city }}" @if($district_city == $v->district_city) selected="selected" @endif>{{ $v->district_city }}</option>
+            @endforeach
+        @endif
     </div>
 
 
@@ -883,6 +909,8 @@
                         d.inspected_result = $('select[name="order-inspected-result[]"]').val();
                         d.delivered_status = $('select[name="order-delivered-status"]').val();
                         d.delivered_result = $('select[name="order-delivered-result[]"]').val();
+                        d.district_city = $('select[name="order-city"]').val();
+                        d.district_district = $('select[name="order-district"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -1296,7 +1324,7 @@
                         "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
                             {
                                 $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','项目');
@@ -1372,7 +1400,7 @@
                         "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户姓名');
@@ -1394,7 +1422,7 @@
                         "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
@@ -1438,7 +1466,7 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
                             {
                                 $(nTd).addClass('modal-show-for-info-radio-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
@@ -1460,7 +1488,7 @@
                         "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','微信号');
@@ -1482,7 +1510,7 @@
                         "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
                             {
                                 $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
@@ -1504,7 +1532,7 @@
                         "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
                             {
                                 $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
@@ -1530,7 +1558,7 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
                             {
                                 $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');
@@ -1907,6 +1935,8 @@
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
                     if($('select[name="order-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="order-inspected-status"]').val();
                     if($('select[name="order-delivered-status"]').val() != -1)  $obj.delivered_status = $('select[name="order-delivered-status"]').val();
+                    if($('select[name="order-city"]').val() != -1)  $obj.district_city = $('select[name="order-city"]').val();
+                    if($('select[name="order-district"]').val() != -1)  $obj.district_district = $('select[name="order-district"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 20) $obj.length = $page_length;

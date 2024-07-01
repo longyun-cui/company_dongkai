@@ -650,6 +650,77 @@ class DKAdminController extends Controller
 
 
     /*
+     * 地域管理
+     */
+
+    // 【地域管理】SELECT2 Superior 上级
+    public function operate_district_select2_city()
+    {
+        return $this->repo->operate_district_select2_city(request()->all());
+    }
+    // 【地域管理】SELECT2 Superior 上级
+    public function operate_district_select2_district()
+    {
+        return $this->repo->operate_district_select2_district(request()->all());
+    }
+
+    // 【地域管理】返回-列表-视图（全部任务）
+    public function view_item_district_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_district_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_district_list_datatable(request()->all());
+    }
+
+
+    // 【地域管理】添加
+    public function operate_item_district_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_district_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_district_save(request()->all());
+    }
+    // 【地域管理】编辑
+    public function operate_item_district_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_district_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_district_save(request()->all());
+    }
+
+
+    // 【地域管理】删除
+    public function operate_item_district_admin_delete()
+    {
+        return $this->repo->operate_item_district_admin_delete(request()->all());
+    }
+    // 【地域管理】恢复
+    public function operate_item_district_admin_restore()
+    {
+        return $this->repo->operate_item_district_admin_restore(request()->all());
+    }
+    // 【地域管理】永久删除
+    public function operate_item_district_admin_delete_permanently()
+    {
+        return $this->repo->operate_item_district_admin_delete_permanently(request()->all());
+    }
+
+    // 【地域管理】启用
+    public function operate_item_district_admin_enable()
+    {
+        return $this->repo->operate_item_district_admin_enable(request()->all());
+    }
+    // 【地域管理】禁用
+    public function operate_item_district_admin_disable()
+    {
+        return $this->repo->operate_item_district_admin_disable(request()->all());
+    }
+
+
+
+
+
+
+
+
+    /*
      * 项目管理
      */
     // 【项目管理】返回-列表-视图（全部任务）

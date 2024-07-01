@@ -83,26 +83,52 @@
                 </div>
 
                 {{--所在城市--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <div class="col-sm-6 col-md-6 padding-0">--}}
+{{--                            <select class="form-control" name="location_city" id="select-city">--}}
+{{--                                <option value="">所在城市</option>--}}
+{{--                                @foreach(config('info.location_city') as $k => $v)--}}
+{{--                                    <option value="{{ $k }}" data-index="{{ $loop->index }}" @if($operate == 'edit' && $k == $data->location_city) selected="selected" @endif>{{ $k }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-sm-6 col-md-6 padding-0">--}}
+{{--                            <select class="form-control" name="location_district" id="select-district">--}}
+{{--                                @if($operate == 'edit' && config('info.location_city.'.$data->location_city))--}}
+{{--                                    <option value="">所在区域</option>--}}
+{{--                                    @foreach(config('info.location_city.'.$data->location_city) as $k => $v)--}}
+{{--                                        <option value="{{ $v }}" @if($operate == 'edit' && $v == $data->location_district) selected="selected" @endif>{{ $v }}</option>--}}
+{{--                                    @endforeach--}}
+{{--                                @else--}}
+{{--                                    <option value="">所在区域</option>--}}
+{{--                                @endif--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+                {{--所在城市--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control" name="location_city" id="select-city">
-                                <option value="">所在城市</option>
-                                @foreach(config('info.location_city') as $k => $v)
-                                    <option value="{{ $k }}" data-index="{{ $loop->index }}" @if($operate == 'edit' && $k == $data->location_city) selected="selected" @endif>{{ $k }}</option>
-                                @endforeach
+                            <select class="form-control select2-district-city" name="location_city" id="select-city-1" data-target="#select-district-1">
+                                <option value="">选择城市</option>
+                                @if(!empty($district_city_list) && count($district_city_list) > 0)
+                                    @foreach($district_city_list as $v)
+                                        <option value="{{ $v->district_city }}" @if(!empty($data->location_city) && $data->location_city == $v->district_city) selected="selected" @endif>{{ $v->district_city }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control" name="location_district" id="select-district">s
-                                @if($operate == 'edit' && config('info.location_city.'.$data->location_city))
-                                    <option value="">所在区域</option>
-                                    @foreach(config('info.location_city.'.$data->location_city) as $k => $v)
-                                        <option value="{{ $v }}" @if($operate == 'edit' && $v == $data->location_district) selected="selected" @endif>{{ $v }}</option>
+                            <select class="form-control select2-district-district" name="location_district" id="select-district-1" data-target="#select-city-1">
+                                <option value="">选择区域</option>
+                                @if(!empty($district_district_list) && count($district_district_list) > 0)
+                                    @foreach($district_district_list as $v)
+                                        <option value="{{ $v }}" @if(!empty($data->location_district) && $data->location_district == $v) selected="selected" @endif>{{ $v }}</option>
                                     @endforeach
-                                @else
-                                    <option value="">所在区域</option>
                                 @endif
                             </select>
                         </div>
@@ -110,7 +136,7 @@
                 </div>
 
                 {{--自定义城市--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 其他城市</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">

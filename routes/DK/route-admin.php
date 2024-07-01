@@ -149,6 +149,25 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
 
+    /*
+     * 地域管理
+     */
+    // select2
+    Route::match(['get','post'], '/district/district_select2_city', $controller.'@operate_district_select2_city');
+    Route::match(['get','post'], '/district/district_select2_district', $controller.'@operate_district_select2_district');
+    // 创建 & 修改
+    Route::match(['get','post'], '/district/district-create', $controller.'@operate_item_district_create');
+    Route::match(['get','post'], '/district/district-edit', $controller.'@operate_item_district_edit');
+    // 列表
+    Route::match(['get','post'], '/district/district-list', $controller.'@view_item_district_list');
+
+    // 删除 & 恢复
+    Route::post('/district/district-admin-delete', $controller.'@operate_item_district_admin_delete');
+    Route::post('/district/district-admin-restore', $controller.'@operate_item_district_admin_restore');
+    Route::post('/district/district-admin-delete-permanently', $controller.'@operate_item_district_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/district/district-admin-enable', $controller.'@operate_item_district_admin_enable');
+    Route::post('/district/district-admin-disable', $controller.'@operate_item_district_admin_disable');
 
 
 
@@ -156,7 +175,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
     /*
-     * 车辆管理
+     * 项目管理
      */
     // 创建 & 修改
     Route::match(['get','post'], '/item/project-create', $controller.'@operate_item_project_create');

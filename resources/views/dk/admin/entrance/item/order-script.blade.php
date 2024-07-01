@@ -1362,15 +1362,47 @@
 
                 $('select[name=info-select-set-column-value2]').show();
 
-                var $city_index = $(".select2-city").find('option:selected').attr('data-index');
-                $(".select2-district").html('<option value="">选择区划</option>');
-                $.each($district_list[$city_index], function($i,$val) {
-                    $(".select2-district").append('<option value="' + $val + '">' + $val + '</option>');
-                });
-                $('.select2-district').find("option[value='"+$that.attr("data-value2")+"']").attr("selected","selected");
+                // var $city_index = $(".select2-city").find('option:selected').attr('data-index');
+                // $(".select2-district").html('<option value="">选择区划</option>');
+                // $.each($district_list[$city_index], function($i,$val) {
+                //     $(".select2-district").append('<option value="' + $val + '">' + $val + '</option>');
+                // });
+                // $('.select2-district').find("option[value='"+$that.attr("data-value2")+"']").attr("selected","selected");
 
                 $('.select2-city').select2();
                 $('.select2-district').select2();
+                $('.select2-district').val(null).trigger('change');
+
+
+                var $city_value = $that.attr("data-value");
+                console.log($that.attr("data-value"));
+                $('.select2-district').select2({
+                    ajax: {
+                        url: "/district/district_select2_district?district_city=" + $city_value,
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
 
 
                 $(".select2-city").change(function() {
@@ -1381,13 +1413,47 @@
 
                     $(".select2-district").html('<option value="">选择区划</option>');
 
-                    $.each($district_list[$city_index], function($i,$val) {
+                    // $.each($district_list[$city_index], function($i,$val) {
+                    //
+                    //     $(".select2-district").append('<option value="' + $val + '">' + $val + '</option>');
+                    // });
+                    //
+                    // $('.select2-district').select2();
 
-                        $(".select2-district").append('<option value="' + $val + '">' + $val + '</option>');
+
+                    var $city_value = $(this).val();
+                    $('.select2-district').select2({
+                        ajax: {
+                            url: "/district/district_select2_district?district_city=" + $city_value,
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    keyword: params.term, // search term
+                                    page: params.page
+                                };
+                            },
+                            processResults: function (data, params) {
+
+                                params.page = params.page || 1;
+                                return {
+                                    results: data,
+                                    pagination: {
+                                        more: (params.page * 30) < data.total_count
+                                    }
+                                };
+                            },
+                            cache: true
+                        },
+                        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                        minimumInputLength: 0,
+                        theme: 'classic'
                     });
-
-                    $('.select2-district').select2();
                 });
+
+
+
+
             }
             else if($that.attr("data-key") == "project_id")
             {

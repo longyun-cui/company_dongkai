@@ -12,6 +12,8 @@
 
     $(function() {
 
+        var $city;
+
 
         $.post(
             "/is_only_me",
@@ -168,6 +170,21 @@
             $('#custom-district').val($district_value);
         });
 
+
+        $("#select-city-1").change(function() {
+
+            var $city_value = $(this).val();
+
+            $('#custom-city').val($city_value);
+            $('#custom-district').val('');
+
+        });
+        $("#select-district-1").change(function() {
+
+            var $district_value = $(this).val();
+            $('#custom-district').val($district_value);
+        });
+
         $('#select-city').select2({
             minimumInputLength: 0,
             theme: 'classic'
@@ -181,6 +198,74 @@
             minimumInputLength: 0,
             theme: 'classic'
         });
+
+
+
+        $(".select2-district-city").change(function() {
+
+            var $city_value = $(this).val();
+            var $target = $(this).attr('data-target');
+
+            $($target).val(null).trigger('change');
+
+            $($target).select2({
+                ajax: {
+                    url: "/district/district_select2_district?district_city=" + $city_value,
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            keyword: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+
+                        params.page = params.page || 1;
+                        return {
+                            results: data,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                minimumInputLength: 0,
+                theme: 'classic'
+            });
+
+
+        });
+
+        // $('.select2-district-district').select2({
+        //     ajax: {
+        //         url: "/district/district_select2_district?district_city=" + $city,
+        //         dataType: 'json',
+        //         delay: 250,
+        //         data: function (params) {
+        //             return {
+        //                 keyword: params.term, // search term
+        //                 page: params.page
+        //             };
+        //         },
+        //         processResults: function (data, params) {
+        //
+        //             params.page = params.page || 1;
+        //             return {
+        //                 results: data,
+        //                 pagination: {
+        //                     more: (params.page * 30) < data.total_count
+        //                 }
+        //             };
+        //         },
+        //         cache: true
+        //     },
+        //     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        //     minimumInputLength: 0,
+        //     theme: 'classic'
+        // });
 
 
 

@@ -2,6 +2,7 @@
 namespace App\Repositories\DK;
 
 use App\Models\DK\DK_Department;
+use App\Models\DK\DK_District;
 use App\Models\DK\DK_User;
 use App\Models\DK\YH_UserExt;
 use App\Models\DK\DK_Project;
@@ -4350,6 +4351,550 @@ class DKAdminRepository {
 
 
     /*
+     * 地域管理
+     */
+
+    //
+    public function operate_district_select2_district($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $query =DK_District::select(['id','district_district as text'])
+                ->where(['district_status'=>1]);
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query =DK_District::select(['id','district_district as text'])->where('district_district','like',"%$keyword%")
+                ->where(['item_status'=>1]);
+        }
+
+        $city = $post_data['district_city'];
+        $query->where(['district_city'=>$city]);
+
+        $list = $query->orderBy('id','desc')->get()->toArray();
+//        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+//        array_unshift($list,$unSpecified);
+
+
+        if(count($list) > 0)
+        {
+            $district_district_array = explode("-",$list[0]['text']);
+            foreach($district_district_array as $key => $value)
+            {
+                $district_district_array[$key] = ['id'=>$value,'text'=>$value];
+            }
+        }
+        else
+        {
+            $district_district_array = [];
+        }
+
+
+        return $district_district_array;
+    }
+
+    // 【项目】返回-列表-视图
+    public function view_item_district_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_district_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.district-list';
+        return view($view_blade)->with($return);
+    }
+    // 【项目】返回-列表-数据
+    public function get_item_district_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_District::select('*')
+            ->withTrashed()
+            ->with(['creator']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        // 状态 [|]
+        if(!empty($post_data['district_status']))
+        {
+            if(!in_array($post_data['district_status'],[-1,0]))
+            {
+                $query->where('district_status', $post_data['district_status']);
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 100;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+    // 【项目】返回-添加-视图
+    public function view_item_district_create()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+
+        $item_type = 'item';
+        $item_type_text = '项目';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/item/district-list';
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.district-edit';
+        return view($view_blade)->with([
+            'operate'=>'create',
+            'operate_id'=>0,
+            'category'=>'item',
+            'type'=>$item_type,
+            'item_type_text'=>$item_type_text,
+            'title_text'=>$title_text,
+            'list_text'=>$list_text,
+            'list_link'=>$list_link,
+        ]);
+    }
+    // 【项目】返回-编辑-视图
+    public function view_item_district_edit()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,71])) return view($this->view_blade_403);
+
+        $id = request("id",0);
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.district-edit';
+
+        $item_type = 'item';
+        $item_type_text = '项目';
+        $title_text = '编辑'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/item/district-list';
+
+        if($id == 0)
+        {
+            return view($view_blade)->with([
+                'operate'=>'create',
+                'operate_id'=>0,
+                'category'=>'item',
+                'type'=>$item_type,
+                'item_type_text'=>$item_type_text,
+                'title_text'=>$title_text,
+                'list_text'=>$list_text,
+                'list_link'=>$list_link,
+            ]);
+        }
+        else
+        {
+            $mine = DK_District::find($id);
+            if($mine)
+            {
+//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+//                $mine->custom = json_decode($mine->custom);
+//                $mine->custom2 = json_decode($mine->custom2);
+//                $mine->custom3 = json_decode($mine->custom3);
+
+                return view($view_blade)->with([
+                    'operate'=>'edit',
+                    'operate_id'=>$id,
+                    'data'=>$mine,
+                    'category'=>'item',
+                    'type'=>$item_type,
+                    'item_type_text'=>$item_type_text,
+                    'title_text'=>$title_text,
+                    'list_text'=>$list_text,
+                    'list_link'=>$list_link,
+                ]);
+            }
+            else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+        }
+    }
+    // 【项目】保存数据
+    public function operate_item_district_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'district_city.required' => '请输入城市名称！',
+            'district_district.required' => '请输入城市名称！',
+//            'name.unique' => '该项目已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'district_city' => 'required',
+            'district_district' => 'required',
+//            'name' => 'required|unique:dk_project,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+//        dd($post_data);
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,71])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个项目 )
+        {
+            $is_exist = DK_District::select('id')->where('district_city',$post_data["district_city"])->count();
+            if($is_exist) return response_error([],"该【城市】已存在，请勿重复添加！");
+
+            $mine = new DK_District;
+            $post_data["active"] = 1;
+            $post_data["district_status"] = 1;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = DK_District::find($operate_id);
+            if(!$mine) return response_error([],"该【城市】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['category']);
+            unset($mine_data['type']);
+
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("insert--district--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【项目】管理员-删除
+    public function operate_item_district_admin_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'district-admin-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_District::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【城市】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if(!$bool) throw new Exception("district--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【项目】管理员-恢复
+    public function operate_item_district_admin_restore($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'operate.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'district-admin-restore') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_District::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【城市】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->restore();
+            if(!$bool) throw new Exception("project--restore--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【项目】管理员-彻底删除
+    public function operate_item_district_admin_delete_permanently($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'district-admin-delete-permanently') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_District::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【城市】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item_copy = $item;
+
+            $bool = $item->forceDelete();
+            if(!$bool) throw new Exception("district--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【项目】管理员-启用
+    public function operate_item_district_admin_enable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'district-admin-enable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_District::find($id);
+        if(!$item) return response_error([],"该【城市】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->district_status = 1;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--district--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【项目】管理员-禁用
+    public function operate_item_district_admin_disable($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'district-admin-disable') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $item = DK_District::find($id);
+        if(!$item) return response_error([],"该【城市】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,71])) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->district_status = 9;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("update--district--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+
+
+
+
+    /*
      * 项目管理
      */
     // 【项目】返回-列表-视图
@@ -4505,7 +5050,7 @@ class DKAdminRepository {
         $item_type_text = '项目';
         $title_text = '添加'.$item_type_text;
         $list_text = $item_type_text.'列表';
-        $list_link = '/item/project-list-for-all';
+        $list_link = '/item/project-list';
 
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
         return view($view_blade)->with([
@@ -4533,7 +5078,7 @@ class DKAdminRepository {
         $item_type_text = '项目';
         $title_text = '编辑'.$item_type_text;
         $list_text = $item_type_text.'列表';
-        $list_link = '/item/project-list-for-all';
+        $list_link = '/item/project-list';
 
         if($id == 0)
         {
@@ -5905,6 +6450,21 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
+
+        $district_city_list = DK_District::select('id','district_city')->whereIn('district_status',[1])->get();
+        $return['district_city_list'] = $district_city_list;
+
+//        $district_district_list = DK_District::select('district_district')->where('district_city',$post_data['district_city'])->whereIn('district_status',[1])->get();
+//        if(count($district_district_list) > 0)
+//        {
+//            $district_district_array = explode("-",$district_district_list[0]->district_district);
+//            $return['district_district_list'] = $district_district_array;
+//        }
+//        else
+//        {
+//            $return['district_district_list'] = [];
+//        }
+
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
         return view($view_blade)->with($return);
     }
@@ -5932,6 +6492,11 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
+
+        $district_city_list = DK_District::select('id','district_city')->whereIn('district_status',[1])->get();
+        $return['district_city_list'] = $district_city_list;
+
+
         if($id == 0)
         {
             $return['operate'] = 'create';
@@ -5947,9 +6512,20 @@ class DKAdminRepository {
 //                if($mine->deleted_at) return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
 //                else
                 {
-                    $mine->custom = json_decode($mine->custom);
-                    $mine->custom2 = json_decode($mine->custom2);
-                    $mine->custom3 = json_decode($mine->custom3);
+//                    $mine->custom = json_decode($mine->custom);
+//                    $mine->custom2 = json_decode($mine->custom2);
+//                    $mine->custom3 = json_decode($mine->custom3);
+
+                    $district_district_list = DK_District::select('district_district')->where('district_city',$mine->location_city)->whereIn('district_status',[1])->get();
+                    if(count($district_district_list) > 0)
+                    {
+                        $district_district_array = explode("-",$district_district_list[0]->district_district);
+                        $return['district_district_list'] = $district_district_array;
+                    }
+                    else
+                    {
+                        $return['district_district_list'] = [];
+                    }
 
                     $return['data'] = $mine;
 
@@ -7979,11 +8555,29 @@ class DKAdminRepository {
         }
         else $view_data['delivered_status'] = -1;
 
+        // 城市
+        if(!empty($post_data['district_city']))
+        {
+            $view_data['district_city'] = $post_data['district_city'];
+        }
+        else $view_data['district_city'] = -1;
+
+        // 区域
+        if(!empty($post_data['district_district']))
+        {
+            $view_data['district_district'] = $post_data['district_district'];
+        }
+        else $view_data['district_district'] = -1;
+
 //        dd($view_data);
 
 
         $client_list = DK_Client::select('id','username')->where('user_category',11)->get();
+        $view_data['client_list'] = $client_list;
+
         $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $view_data['department_district_list'] = $department_district_list;
+
         if($me->user_type == 81)
         {
             $staff_list = DK_User::select('id','username')
@@ -8007,12 +8601,28 @@ class DKAdminRepository {
                 ->whereIn('user_type',[81,84,88])
                 ->get();
         }
-        $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
-
-        $view_data['client_list'] = $client_list;
-        $view_data['department_district_list'] = $department_district_list;
         $view_data['staff_list'] = $staff_list;
+
+        $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $view_data['project_list'] = $project_list;
+
+        $district_city_list = DK_District::select('id','district_city')->whereIn('district_status',[1])->get();
+        $view_data['district_city_list'] = $district_city_list;
+
+        if(!empty($post_data['district_city']))
+        {
+            $district_district_list = DK_District::select('district_district')->where('district_city',$post_data['district_city'])->whereIn('district_status',[1])->get();
+            if(count($district_district_list) > 0)
+            {
+                $district_district_array = explode("-",$district_district_list[0]->district_district);
+                $view_data['district_district_list'] = $district_district_array;
+            }
+            else
+            {
+                $view_data['district_district_list'] = [];
+            }
+        }
+
         $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-for-all';
@@ -8123,6 +8733,24 @@ class DKAdminRepository {
         if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(published_at)"), $post_data['assign']);
         if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+
+
+//        if(!empty($post_data['district_city'])) $query->where('location_city', $post_data['district_city']);
+//        if(!empty($post_data['district_district'])) $query->where('location_district', $post_data['district_district']);
+        if(!empty($post_data['district_city']))
+        {
+            if(!in_array($post_data['district_city'],[-1]))
+            {
+                $query->where('location_city', $post_data['district_city']);
+            }
+        }
+        if(!empty($post_data['district_district']))
+        {
+            if(!in_array($post_data['district_district'],[-1]))
+            {
+                $query->where('location_district', $post_data['district_district']);
+            }
+        }
 
 
         // 员工

@@ -87,7 +87,7 @@
 
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
                 <a href="{{ url('/user/staff-list-for-all') }}">
-                    <i class="fa fa-user text-blue"></i>
+                    <i class="fa fa-user text-red"></i>
                     <span>员工列表</span>
                 </a>
             </li>
@@ -99,6 +99,15 @@
 
             @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
             <li class="header">业务管理</li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11]))
+                <li class="treeview {{ $menu_active_of_district_list or '' }} _none-">
+                    <a href="{{ url('/district/district-list')}}">
+                        <i class="fa fa-location-arrow text-blue"></i>
+                        <span>地域列表</span>
+                    </a>
+                </li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,41,71,81]))
