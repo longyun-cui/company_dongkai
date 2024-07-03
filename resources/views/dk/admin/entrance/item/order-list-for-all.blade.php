@@ -1324,7 +1324,7 @@
                         "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
                                 $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','项目');
@@ -1400,7 +1400,7 @@
                         "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户姓名');
@@ -1422,7 +1422,7 @@
                         "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
@@ -1466,7 +1466,7 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
                                 $(nTd).addClass('modal-show-for-info-radio-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
@@ -1488,7 +1488,7 @@
                         "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','微信号');
@@ -1510,7 +1510,7 @@
                         "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
                                 $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
@@ -1532,7 +1532,7 @@
                         "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
                                 $(nTd).addClass('modal-show-for-info-select2-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
@@ -1558,7 +1558,7 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_status == 1))
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
                                 $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');
