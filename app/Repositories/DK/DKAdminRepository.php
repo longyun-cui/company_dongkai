@@ -7452,6 +7452,7 @@ class DKAdminRepository {
         $before = $item->delivered_result;
 
         $delivered_description = $post_data["delivered_description"];
+        $recording_address = $post_data["recording_address"];
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -7462,6 +7463,7 @@ class DKAdminRepository {
             $item->delivered_status = 1;
             $item->delivered_result = $delivered_result;
             $item->delivered_description = $delivered_description;
+            $item->recording_address = $recording_address;
             $item->delivered_at = time();
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");

@@ -637,6 +637,7 @@
                     '<select class="form-control select-primary" name="select-delivered-result" style="width:48%;" id="">'+
                     $option_html_for_delivered_result+
                     '</select>'+
+                    '<input type="text" class="form-control" name="input-recording-address" rows="2" placeholder="录音地址"></textarea>'+
                     '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="交付说明"></textarea>'
                 ,yes: function(index){
                     $.post(
@@ -647,6 +648,7 @@
                             item_id: $that.attr('data-id'),
                             client_id: $('select[name="select-client-id"]').val(),
                             delivered_result: $('select[name="select-delivered-result"]').val(),
+                            recording_address: $('input[name="input-recording-address"]').val(),
                             delivered_description: $('textarea[name="textarea-delivered-description"]').val()
                         },
                         function(data){
