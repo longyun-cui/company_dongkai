@@ -1043,6 +1043,19 @@
                         }
                     },
                     {
+                        "title": "录音地址",
+                        "data": "recording_address",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            if(data)
+                                return '<a target="_blank" href="'+data+'">录音地址</a>';
+                            else return '';
+                        }
+                    },
+                    {
                         "title": "工单质量",
                         "className": "",
                         "width": "80px",

@@ -5690,6 +5690,7 @@ class DKClientRepository {
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             $cellData[$k]['description'] = $v['description'];
+            $cellData[$k]['recording_address'] = $v['recording_address'];
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -5716,6 +5717,7 @@ class DKClientRepository {
             'location_district'=>'行政区',
             'teeth_count'=>'牙齿数量',
             'description'=>'通话小结',
+            'recording_address'=>'录音地址',
 //            'is_repeat'=>'是否重复',
 //            'inspector_name'=>'审核人',
 //            'inspected_time'=>'审核时间',
@@ -5787,19 +5789,14 @@ class DKClientRepository {
                     'B'=>20,
                     'C'=>20,
                     'D'=>20,
-                    'E'=>10,
-                    'F'=>10,
+                    'E'=>20,
+                    'F'=>20,
                     'G'=>16,
-                    'H'=>16,
+                    'H'=>10,
                     'I'=>10,
-                    'J'=>10,
-                    'K'=>60,
-                    'L'=>10,
-                    'M'=>10,
-                    'N'=>10,
-                    'O'=>10,
-                    'P'=>20,
-                    'Q'=>10
+                    'J'=>16,
+                    'K'=>40,
+                    'L'=>30
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -5867,6 +5864,7 @@ class DKClientRepository {
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             $cellData[$k]['description'] = $v['description'];
+            $cellData[$k]['recording_address'] = $v['recording_address'];
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -5881,7 +5879,7 @@ class DKClientRepository {
 
         $title_row = [
             'id'=>'ID',
-            'creator_name'=>'创建人',
+//            'creator_name'=>'创建人',
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
             'channel_source'=>'渠道来源',
@@ -5893,6 +5891,7 @@ class DKClientRepository {
             'location_district'=>'行政区',
             'teeth_count'=>'牙齿数量',
             'description'=>'通话小结',
+            'recording_address'=>'录音地址',
 //            'is_repeat'=>'是否重复',
 //            'inspector_name'=>'审核人',
 //            'inspected_time'=>'审核时间',
@@ -5928,22 +5927,17 @@ class DKClientRepository {
                 $sheet->rows($cellData);
                 $sheet->setWidth(array(
                     'A'=>10,
-                    'B'=>10,
+                    'B'=>20,
                     'C'=>20,
                     'D'=>20,
-                    'E'=>10,
-                    'F'=>10,
+                    'E'=>20,
+                    'F'=>20,
                     'G'=>16,
-                    'H'=>16,
+                    'H'=>10,
                     'I'=>10,
-                    'J'=>10,
-                    'K'=>10,
-                    'L'=>60,
-                    'M'=>10,
-                    'N'=>10,
-                    'O'=>10,
-                    'P'=>20,
-                    'Q'=>10
+                    'J'=>16,
+                    'K'=>40,
+                    'L'=>30
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
