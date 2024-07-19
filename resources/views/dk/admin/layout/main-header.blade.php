@@ -29,11 +29,11 @@
                     <ul class="dropdown-menu">
 
                         {{--部门管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,81]))
+                        @if(in_array($me->user_type,[0,1,9,11,41]))
                         <li class="header">部门</li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,81]))
+                        @if(in_array($me->user_type,[0,1,9,11,41]))
                         <li class="header">
                             <a href="{{ url('/department/department-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加部门
@@ -57,11 +57,11 @@
 
 
                         {{--员工管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,81]))
+                        @if(in_array($me->user_type,[0,1,9,11,41,81]))
                             <li class="header">员工</li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,81]))
+                        @if(in_array($me->user_type,[0,1,9,11,41,81]))
                         <li class="header">
                             <a href="{{ url('/user/staff-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加员工
@@ -71,8 +71,16 @@
 
 
                         {{--业务管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,84,88]))
+                        @if(in_array($me->user_type,[0,1,9,11,61,84,88]))
                         <li class="header">业务</li>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11,61]))
+                            <li class="header">
+                                <a href="{{ url('/district/district-create') }}">
+                                    <i class="fa fa-plus text-blue"></i> 添加地域
+                                </a>
+                            </li>
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11]))

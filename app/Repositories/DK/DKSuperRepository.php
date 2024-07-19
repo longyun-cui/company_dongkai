@@ -814,7 +814,7 @@ class DKSuperRepository {
         $query = DK_User::select('*')
             ->with(['creator','superior','department_district_er','department_group_er'])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88]);
+            ->whereIn('user_type',[0,1,9,11,19,21,22,31,33,41,61,66,71,77,81,84,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
 //            ->with('ep','parent','fund')
 //            ->withCount([
@@ -840,9 +840,34 @@ class DKSuperRepository {
         // 员工类型
         if(!empty($post_data['user_type']))
         {
-            if(!in_array($post_data['user_type'],[-1,0]))
+            if(!in_array($post_data['user_type'],[-9,-11,-41,-6,-7,-8,-1,0]))
             {
                 $query->where('user_type', $post_data['user_type']);
+            }
+
+            if($post_data['user_type'] == -9)
+            {
+                $query->whereIn('user_type', [11,41,61]);
+            }
+            if($post_data['user_type'] == -11)
+            {
+                $query->whereIn('user_type', [11,41,61,71,81,84]);
+            }
+            if($post_data['user_type'] == -41)
+            {
+                $query->whereIn('user_type', [41,71,81,84]);
+            }
+            if($post_data['user_type'] == -6)
+            {
+                $query->whereIn('user_type', [61,66]);
+            }
+            if($post_data['user_type'] == -7)
+            {
+                $query->whereIn('user_type', [71,77]);
+            }
+            if($post_data['user_type'] == -8)
+            {
+                $query->whereIn('user_type', [81,84,88]);
             }
         }
 

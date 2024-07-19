@@ -1093,6 +1093,12 @@ class DKAdminController extends Controller
 
 
     // 【统计】项目看板
+    public function view_statistic_delivery()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_delivery(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery(request()->all());
+    }
+    // 【统计】项目看板
     public function view_statistic_project()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_project(request()->all());
@@ -1111,12 +1117,19 @@ class DKAdminController extends Controller
 //        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_customer_service(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_customer_service_by_group(request()->all());
     }
-    // 【统计】审核员看板
+    // 【统计】质检看板
     public function view_statistic_inspector()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_inspector(request()->all());
 //        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_inspector(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_inspector_by_group(request()->all());
+    }
+    // 【统计】运营看板
+    public function view_statistic_deliverer()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_deliverer(request()->all());
+//        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_deliverer(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_deliverer_by_group(request()->all());
     }
 
 
@@ -1154,16 +1167,6 @@ class DKAdminController extends Controller
     public function operate_statistic_export_for_order_by_ids()
     {
         $this->repo->operate_statistic_export_for_order_by_ids(request()->all());
-    }
-    // 【统计】环线-导出
-    public function operate_statistic_export_for_circle()
-    {
-        $this->repo->operate_statistic_export_for_circle(request()->all());
-    }
-    // 【统计】财务-导出
-    public function operate_statistic_export_for_finance()
-    {
-        $this->repo->operate_statistic_export_for_finance(request()->all());
     }
 
 

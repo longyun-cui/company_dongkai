@@ -940,7 +940,7 @@
 {{--                    @if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
                     {
-                        "targets": [0,7,8,9,10],
+                        "targets": [0,7,8,9,10,11],
                         "visible": false,
                     }
                     @endif
@@ -1247,7 +1247,7 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','交付时间');
                                 $(nTd).attr('data-key','delivered_at').attr('data-value',data);
                                 $(nTd).attr('data-column-name','交付时间');
-                                $(nTd).attr('data-text-type','textarea');
+                                $(nTd).attr('data-time-type','date');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1302,6 +1302,42 @@
                             else {
                                 return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
                             }
+                        }
+                    },
+                    {
+                        "title": "交付客户日期 ",
+                        "data": 'delivered_time',
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-time-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','交付客户日期');
+                                $(nTd).attr('data-key','delivered_time').attr('data-value',data);
+                                $(nTd).attr('data-column-name','交付客户日期');
+                                $(nTd).attr('data-time-type','date');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '--';
+//                            return data;
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day;
+                            else return $year+'-'+$month+'-'+$day;
                         }
                     },
                     {

@@ -60,11 +60,21 @@
 
                         <select class="form-control form-filter" name="staff-user-type" style="width:88px;">
                             <option value="-1">全部人员</option>
+                            <option value="-9">【管理岗】</option>
+                            <option value="-11">【全部管理岗】</option>
+                            <option value="11">总经理</option>
+                            <option value="41">团队经理</option>
+                            <option value="-41">【团队管理岗】</option>
+                            <option value="-8">【客服】</option>
                             <option value="88">客服</option>
                             <option value="84">客服主管</option>
                             <option value="81">客服经理</option>
+                            <option value="-7">【质检】</option>
                             <option value="71">质检经理</option>
                             <option value="77">质检员</option>
+                            <option value="-6">【运营】</option>
+                            <option value="61">运营经理</option>
+                            <option value="66">运营人员</option>
                         </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
@@ -275,12 +285,15 @@
                             else if(data == 11) return '<small class="btn-xs bg-primary">总经理</small>';
                             else if(data == 21) return '<small class="btn-xs bg-purple">人事经理</small>';
                             else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
-                            else if(data == 41) return '<small class="btn-xs bg-orange">财务经理</small>';
-                            else if(data == 42) return '<small class="btn-xs bg-orange">财务</small>';
-                            else if(data == 71) return '<small class="btn-xs bg-purple">质检经理</small>';
+                            else if(data == 31) return '<small class="btn-xs bg-orange">财务经理</small>';
+                            else if(data == 33) return '<small class="btn-xs bg-orange">财务</small>';
+                            else if(data == 41) return '<small class="btn-xs bg-red">部门经理</small>';
+                            else if(data == 61) return '<small class="btn-xs bg-blue">运营</small><small class="btn-xs bg-red">经理</small>';
+                            else if(data == 66) return '<small class="btn-xs bg-blue">运营人员</small>';
+                            else if(data == 71) return '<small class="btn-xs bg-purple">质检</small><small class="btn-xs bg-red">经理</small>';
                             else if(data == 77) return '<small class="btn-xs bg-purple">质检员</small>';
-                            else if(data == 81) return '<small class="btn-xs bg-olive">客服·经理</small>';
-                            else if(data == 84) return '<small class="btn-xs bg-olive">客服·主管</small>';
+                            else if(data == 81) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs bg-red">经理</small>';
+                            else if(data == 84) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs bg-orange">主管</small>';
                             else if(data == 88) return '<small class="btn-xs bg-olive">客服</small>';
                             else return "有误";
                         }

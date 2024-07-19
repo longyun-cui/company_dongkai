@@ -715,7 +715,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-text-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','每日目标');
                                 $(nTd).attr('data-key','daily_goal').attr('data-value',data);
                                 $(nTd).attr('data-column-name','每日目标');

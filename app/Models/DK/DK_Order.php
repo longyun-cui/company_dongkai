@@ -77,7 +77,7 @@ class DK_Order extends Model
     {
         return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
     }
-    // 审核者
+    // 运营者
     function deliverer()
     {
         return $this->belongsTo('App\Models\DK\DK_User','deliverer_id','id');
