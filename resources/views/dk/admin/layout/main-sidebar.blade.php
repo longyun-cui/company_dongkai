@@ -110,7 +110,7 @@
                 </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,71,81]))
+            @if(in_array($me->user_type,[0,1,9,11,41,61,71,81]))
             <li class="treeview {{ $menu_active_of_project_list or '' }} _none-">
                 <a href="{{ url('/item/project-list')}}">
                     <i class="fa fa-cube text-green"></i>
@@ -142,7 +142,7 @@
                 </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,81,84,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11,41,81,84,61,71,77]))
             <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
                 <a href="{{ url('/statistic/statistic-project') }}">
                     <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
