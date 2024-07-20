@@ -67,9 +67,9 @@
                                 <span class="radio">
                                     <label>
                                         @if($operate == 'edit' && $data->user_type == 41)
-                                            <input type="radio" name="user_type" value="41" checked="checked"> 部门经理
+                                            <input type="radio" name="user_type" value="41" checked="checked"> 团队·总经理
                                         @else
-                                            <input type="radio" name="user_type" value="41"> 部门经理
+                                            <input type="radio" name="user_type" value="41"> 团队·总经理
                                         @endif
                                     </label>
                                 </span>
