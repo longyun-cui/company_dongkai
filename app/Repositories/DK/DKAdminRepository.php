@@ -5073,7 +5073,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '项目';
@@ -5098,7 +5098,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,71])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
@@ -5170,7 +5170,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,71])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19,61])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -12781,7 +12781,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,41,81,84,71,77])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,9,11,41,81,84,71,77,61,66])) return view($this->view_blade_403);
 
         $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
         $view_data['department_district_list'] = $department_district_list;

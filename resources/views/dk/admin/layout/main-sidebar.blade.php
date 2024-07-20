@@ -134,7 +134,7 @@
             {{--数据统计--}}
             <li class="header">数据统计</li>
 
-            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
+            @if(in_array($me->user_type,[0,1,9,11,41,61,66,81,84]))
                 <li class="treeview {{ $menu_active_of_statistic_delivery or '' }}">
                     <a href="{{ url('/statistic/statistic-delivery') }}">
                         <i class="fa fa-area-chart text-teal"></i> <span>交付看板</span>
@@ -142,7 +142,7 @@
                 </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,81,84,61,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11,41,81,84,71,77,61,66]))
             <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
                 <a href="{{ url('/statistic/statistic-project') }}">
                     <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
