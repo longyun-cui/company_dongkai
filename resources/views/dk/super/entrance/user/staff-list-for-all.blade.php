@@ -62,17 +62,17 @@
                             <option value="-1">全部人员</option>
                             <option value="-9">【管理岗】</option>
                             <option value="-11">【全部管理岗】</option>
-                            <option value="11">总经理</option>
-                            <option value="41">团队·总经理</option>
                             <option value="-41">【团队管理岗】</option>
                             <option value="-8">【客服】</option>
+                            <option value="-7">【质检】</option>
+                            <option value="-6">【运营】</option>
+                            <option value="11">总经理</option>
+                            <option value="41">团队·总经理</option>
                             <option value="88">客服</option>
                             <option value="84">客服主管</option>
                             <option value="81">客服经理</option>
-                            <option value="-7">【质检】</option>
                             <option value="71">质检经理</option>
                             <option value="77">质检员</option>
-                            <option value="-6">【运营】</option>
                             <option value="61">运营经理</option>
                             <option value="66">运营人员</option>
                         </select>
