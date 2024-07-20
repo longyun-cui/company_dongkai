@@ -9522,7 +9522,7 @@ class DKAdminRepository {
 
         if($me->user_type == 41)
         {
-            $query->where('department_manager_id',$me->id);
+            $query->where('department_district_id',$me->department_district_id);
         }
         else if($me->user_type == 81)
         {

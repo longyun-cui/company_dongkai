@@ -9,6 +9,7 @@ use App\Models\DK\DK_User;
 use App\Models\DK\YH_Item;
 use App\Models\DK\YH_Pivot_Item_Relation;
 
+use App\Models\DK\YH_UserExt;
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade;
@@ -25,6 +26,7 @@ class DKSuperRepository {
     private $modelItem;
     private $repo;
     private $service;
+    private $view_blade_403;
     private $view_blade_404;
 
     public function __construct()
@@ -32,7 +34,9 @@ class DKSuperRepository {
         $this->modelUser = new DK_User;
         $this->modelItem = new YH_Item;
 
-        $this->view_blade_404 = env('TEMPLATE_DK_SUPER').'errors.404';
+
+        $this->view_blade_403 = env('TEMPLATE_DK_SUPER').'entrance.errors.403';
+        $this->view_blade_404 = env('TEMPLATE_DK_SUPER').'entrance.errors.404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
@@ -898,6 +902,246 @@ class DKSuperRepository {
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
+
+    // 【用户-员工管理】返回-添加-视图
+    public function view_user_staff_create()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,21,31,41,61,71,81])) return view($this->view_blade_403);
+
+        $item_type = 'item';
+        $item_type_text = '用户';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/user/staff-list-for-all';
+
+        $return_data['operate'] = 'create';
+        $return_data['operate_id'] = 0;
+        $return_data['category'] = 'user';
+        $return_data['type'] = $item_type;
+        $return_data['item_type_text'] = $item_type_text;
+        $return_data['title_text'] = $title_text;
+        $return_data['list_text'] = $list_text;
+        $return_data['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.staff-edit';
+        return view($view_blade)->with($return_data);
+    }
+    // 【用户-员工管理】返回-编辑-视图
+    public function view_user_staff_edit()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,19,21,31,41,61,71,81])) return view($this->view_blade_403);
+
+        $id = request("id",0);
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.staff-edit';
+
+        $item_type = 'item';
+        $item_type_text = '用户';
+        $title_text = '编辑'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/user/staff-list-for-all';
+
+        $return_data['operate'] = 'create';
+        $return_data['operate_id'] = 0;
+        $return_data['category'] = 'user';
+        $return_data['type'] = $item_type;
+        $return_data['item_type_text'] = $item_type_text;
+        $return_data['title_text'] = $title_text;
+        $return_data['list_text'] = $list_text;
+        $return_data['list_link'] = $list_link;
+
+        if($id == 0)
+        {
+            return view($view_blade)->with($return_data);
+        }
+        else
+        {
+            $mine = DK_User::with(['parent','superior'])->find($id);
+            if($mine)
+            {
+                if($me->user_type == 81)
+                {
+                    if($mine->department_district_id != $me->department_district_id)
+                    {
+                        return view($this->view_blade_403);
+                    }
+                }
+
+//                $mine->custom = json_decode($mine->custom);
+
+                $return_data['operate'] = 'edit';
+                $return_data['operate_id'] = $id;
+                $return_data['data'] = $mine;
+
+                return view($view_blade)->with($return_data);
+            }
+            else return view(env('TEMPLATE_DK_SUPER').'entrance.errors.404');
+        }
+    }
+    // 【用户-员工管理】保存数据
+    public function operate_user_staff_save($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => '参数有误！',
+            'true_name.required' => '请输入用户名！',
+            'mobile.required' => '请输入电话！',
+//            'mobile.unique' => '电话已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'true_name' => 'required',
+            'mobile' => 'required',
+//            'mobile' => 'required|unique:dk_user,mobile',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,21,31,41,61,71,81])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_User::where('mobile',$post_data['mobile'])->first();
+            if($is_exist) return response_error([],"工号已存在！");
+
+            $mine = new DK_User;
+            $post_data["user_status"] = 0;
+            $post_data["user_category"] = 11;
+            $post_data["active"] = 1;
+            $post_data["password"] = password_encode("12345678");
+            $post_data["creator_id"] = $me->id;
+            $post_data['username'] = $post_data['true_name'];
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = DK_User::find($operate_id);
+            if(!$mine) return response_error([],"该用户不存在，刷新页面重试！");
+            if($mine->mobile != $post_data['mobile'])
+            {
+                $is_exist = DK_User::where('mobile',$post_data['mobile'])->first();
+                if($is_exist) return response_error([],"工号重复，请更换工号再试一次！");
+            }
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['category']);
+            unset($mine_data['type']);
+
+            if(in_array($me->user_type,[41,61,71,81]))
+            {
+                $mine_data['department_district_id'] = $me->department_district_id;
+            }
+//            if($me->user_type == 81)
+//            {
+//                $mine_data['department_district_id'] = $me->department_district_id;
+//            }
+
+            if($post_data["user_type"] == 71 || $post_data["user_type"] == 77)
+            {
+//                $mine_data['department_district_id'] = $me->department_district_id;
+//                unset($mine_data['department_district_id']);
+                unset($mine_data['department_group_id']);
+            }
+            else if($post_data["user_type"] == 81)
+            {
+                unset($mine_data['department_group_id']);
+            }
+
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+                if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+                {
+                    $user_ext = new YH_UserExt;
+                    $user_ext_create['user_id'] = $mine->id;
+                    $bool_2 = $user_ext->fill($user_ext_create)->save();
+                    if(!$bool_2) throw new Exception("insert--user-ext--failed");
+                }
+
+                // 头像
+                if(!empty($post_data["portrait"]))
+                {
+                    // 删除原图片
+                    $mine_portrait_img = $mine->portrait_img;
+                    if(!empty($mine_portrait_img) && file_exists(storage_resource_path($mine_portrait_img)))
+                    {
+                        unlink(storage_resource_path($mine_portrait_img));
+                    }
+
+//                    $result = upload_storage($post_data["portrait"]);
+//                    $result = upload_storage($post_data["portrait"], null, null, 'assign');
+                    $result = upload_img_storage($post_data["portrait"],'portrait_for_user_by_user_'.$mine->id,'dk/unique/portrait_for_user','');
+                    if($result["result"])
+                    {
+                        $mine->portrait_img = $result["local"];
+                        $mine->save();
+                    }
+                    else throw new Exception("upload--portrait_img--file--fail");
+                }
+                else
+                {
+                    if($operate == 'create')
+                    {
+                        $portrait_path = "dk/unique/portrait_for_user/".date('Y-m-d');
+                        if (!is_dir(storage_resource_path($portrait_path)))
+                        {
+                            mkdir(storage_resource_path($portrait_path), 0777, true);
+                        }
+                        copy(storage_resource_path("materials/portrait/user0.jpeg"), storage_resource_path($portrait_path."/portrait_for_user_by_user_".$mine->id.".jpeg"));
+                        $mine->portrait_img = $portrait_path."/portrait_for_user_by_user_".$mine->id.".jpeg";
+                        $mine->save();
+                    }
+                }
+
+            }
+            else throw new Exception("insert--user--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
     }
 
 

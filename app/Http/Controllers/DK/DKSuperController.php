@@ -263,6 +263,21 @@ class DKSuperController extends Controller
 
 
 
+    // 【用户】编辑
+    // 【用户-员工管理】添加
+    public function operate_user_staff_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
+    }
+    // 【用户-员工管理】编辑
+    public function operate_user_staff_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
+    }
+
+
     // 【用户】修改-密码
     public function operate_user_staff_password_super_change()
     {
