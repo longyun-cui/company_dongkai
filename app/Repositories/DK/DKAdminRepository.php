@@ -6907,9 +6907,9 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断操作权限
-        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
+        if(!in_array($me->user_type,[0,1,9,11,19,81,84,88])) return response_error([],"用户类型错误！");
 //        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
-        if(in_array($me->user_type,[81,82,88]))
+        if(in_array($me->user_type,[81,84,88]))
         {
             if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
         }
