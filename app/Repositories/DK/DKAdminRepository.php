@@ -7974,11 +7974,11 @@ class DKAdminRepository {
 
         if($column_key == "location_city")
         {
-            if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
         }
         else
         {
-            if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
         }
 
         if(in_array($me->user_type,['client_id','project_id']))

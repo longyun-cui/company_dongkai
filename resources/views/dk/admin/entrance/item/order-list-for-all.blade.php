@@ -186,7 +186,7 @@
 
 
             @if(in_array($me->department_district_id,[0]))
-            @if(in_array($me->user_type,[0,1,9,11,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
             <div class="box-footer" style="padding:4px 10px;">
                 <div class="row" style="margin:2px 0;">
                     <div class="col-md-offset-0 col-md-9 col-sm-9 col-xs-12">
