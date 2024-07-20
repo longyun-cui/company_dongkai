@@ -13953,7 +13953,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,61,66])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
 
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $staff_list = DK_User::select('id','username','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();

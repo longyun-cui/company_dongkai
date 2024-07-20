@@ -204,8 +204,8 @@
                 </a>
             </li>
 
-{{--            @if(in_array($me->user_type,[0,1,9,11,71,77]))--}}
-            @if($me->department_district_id == 0)
+            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+{{--            @if($me->department_district_id == 0)--}}
             <li class="treeview {{ $menu_active_of_statistic_export or '' }}">
                 <a href="{{ url('/statistic/statistic-export') }}">
                     <i class="fa fa-download text-default"></i> <span>数据导出</span>
