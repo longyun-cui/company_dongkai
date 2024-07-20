@@ -68,7 +68,7 @@
                         </select>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84]))
+                        @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
                         <select class="form-control form-filter select2-box order-select2-staff" name="order-staff" style="width:80px;">
                             <option value="-1">选择员工</option>
                             @foreach($staff_list as $v)
@@ -88,7 +88,7 @@
 
                         <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
                             <option value="-1">审核状态</option>
-                            @if(in_array($me->user_type,[0,1,9,11,41,81,84,88]))
+                            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
                             <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>
                             @endif
                             <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>
