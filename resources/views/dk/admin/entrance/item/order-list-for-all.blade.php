@@ -1889,7 +1889,7 @@
                                 }
 
                                 // 审核
-                                if("{{ in_array($me->user_type,[0,1,11,71,77]) }}")
+                                if("{{ in_array($me->user_type,[0,1,11,61,66,71,77]) }}")
                                 {
                                     if(row.inspector_id == 0)
                                     {
