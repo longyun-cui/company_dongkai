@@ -83,7 +83,7 @@
                             </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11]))
+                        @if(in_array($me->user_type,[0,1,9,11,61]))
                         <li class="header">
                             <a href="{{ url('/item/project-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加项目
