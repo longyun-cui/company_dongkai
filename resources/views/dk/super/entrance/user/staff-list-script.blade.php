@@ -40,9 +40,9 @@
         });
 
         // 【编辑】
-        $("#item-main-body").on('click', ".item-edit-submit", function() {
+        $("#item-main-body").on('click', ".item-super-edit-submit", function() {
             var $that = $(this);
-            window.location.href = "/user/user-edit?id="+$that.attr('data-id');
+            window.location.href = "/user/staff-edit?id="+$that.attr('data-id');
         });
 
 

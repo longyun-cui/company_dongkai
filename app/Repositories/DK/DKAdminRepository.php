@@ -7685,19 +7685,19 @@ class DKAdminRepository {
 
         if($column_key == "client_phone")
         {
-            if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
         }
         else if($column_key == "inspected_description")
         {
-            if(!in_array($me->user_type,[0,1,11,71,77])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77])) return response_error([],"你没有操作权限！");
         }
         else if($column_key == "description")
         {
-            if(!in_array($me->user_type,[0,1,11,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
         }
         else
         {
-            if(!in_array($me->user_type,[0,1,11,81,84,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,61,66,81,84,88])) return response_error([],"你没有操作权限！");
         }
 
         if(in_array($me->user_type,[84,88]) && $item->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
