@@ -190,7 +190,7 @@
                 </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,61]))
+            @if(in_array($me->user_type,[0,1,9,11,61]))
                 <li class="treeview {{ $menu_active_of_statistic_deliverer or '' }}">
                     <a href="{{ url('/statistic/statistic-deliverer') }}">
                         <i class="fa fa-bar-chart text-blue"></i> <span>运营看板</span>
