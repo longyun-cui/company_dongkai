@@ -12806,6 +12806,13 @@ class DKAdminRepository {
         $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
 
+        if(in_array($me->user_type,[41,81,84]))
+        {
+            $department_district_id = $me->department_district_id;
+        }
+        else $department_district_id = 0;
+
+
         // 团队统计
         $query_order = DK_Order::select('project_id')
             ->addSelect(DB::raw("
@@ -12817,6 +12824,9 @@ class DKAdminRepository {
                     count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "))
             ->whereDate(DB::raw("DATE(FROM_UNIXTIME(delivered_at))"),$the_day)
+            ->when($department_district_id, function ($query) use ($department_district_id) {
+                return $query->where('department_district_id', $department_district_id);
+            })
             ->groupBy('project_id')
             ->get()
             ->keyBy('project_id')
