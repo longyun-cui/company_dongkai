@@ -59,34 +59,4 @@ Route::group(['domain'=>env('DOMAIN_DK_CLIENT'), 'namespace'=>'DK'], function ()
     require(__DIR__ . '/DK/route-client.php');
 });
 
-Route::group(['domain'=>env('DOMAIN_DK_ADMIN2'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-admin.php');
-});
-Route::group(['domain'=>env('DOMAIN_DK_ADMIN3'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-admin.php');
-});
-
-Route::group(['domain'=>env('DOMAIN_DK_ADMIN4'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-admin.php');
-});
-
-Route::group(['domain'=>env('DOMAIN_DK_ADMIN5'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-admin.php');
-});
-
-Route::group(['domain'=>env('DOMAIN_DK_ADMIN6'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-admin.php');
-});
-
-Route::group(['domain'=>env('DOMAIN_DK_ADMIN7'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-admin.php');
-});
-
-Route::group(['domain'=>env('DOMAIN_DK_ADMIN8'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-admin.php');
-});
-
-Route::group(['domain'=>env('DOMAIN_DK_ADMIN9'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-admin.php');
-});
 
