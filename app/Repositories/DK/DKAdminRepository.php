@@ -105,19 +105,21 @@ class DKAdminRepository {
         $query_order = DK_Order::select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(created_type = 9, TRUE, NULL)) as order_count_for_export,
-                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_published,
-                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
-                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
-                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    count(IF(created_type = 1 AND is_published = 1, TRUE, NULL)) as order_count_for_published,
+                    count(IF(created_type = 1 AND is_published != 1, TRUE, NULL)) as order_count_for_unpublished,
+                    count(IF(created_type = 1 AND is_published = 1 AND is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
                     
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    count(IF(created_type = 1 AND is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(created_type = 1 AND delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(created_type = 1 AND delivered_result = '待交付', TRUE, NULL)) as order_count_for_delivered_uncompleted,
+                    count(IF(created_type = 1 AND delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(created_type = 1 AND delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(created_type = 1 AND delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(created_type = 1 AND delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
                 "));
 
 
@@ -143,6 +145,14 @@ class DKAdminRepository {
                 "));
 
 
+        // 团队经理
+        if($me->user_type == 41)
+        {
+
+            $query_order->where('department_district_id',$me->department_district_id);
+            $query_this_month->where('department_district_id',$me->department_district_id);
+            $query_last_month->where('department_district_id',$me->department_district_id);
+        }
         // 客服经理
         if($me->user_type == 81)
         {
@@ -270,6 +280,40 @@ class DKAdminRepository {
                 "));
 
 
+        // 客服经理
+        if($me->user_type == 41)
+        {
+//            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
+
+//            $query_order_count_for_all->whereIn('creator_id',$sub_subordinates_array);
+//            $query_order_count_for_unpublished->whereIn('creator_id',$sub_subordinates_array);
+//            $query_order_count_for_published->whereIn('creator_id',$sub_subordinates_array);
+//            $query_order_count_for_waiting_for_inspect->whereIn('creator_id',$sub_subordinates_array);
+//            $query_order_count_for_inspected->whereIn('creator_id',$sub_subordinates_array);
+//            $query_order_count_for_accepted->whereIn('creator_id',$sub_subordinates_array);
+//            $query_order_count_for_refused->whereIn('creator_id',$sub_subordinates_array);
+//            $query_order_count_for_accepted_inside->whereIn('creator_id',$sub_subordinates_array);
+//            $query_order_count_for_repeat->whereIn('creator_id',$sub_subordinates_array);
+
+//            $query_this_month->whereIn('creator_id',$sub_subordinates_array);
+//            $query_last_month->whereIn('creator_id',$sub_subordinates_array);
+
+
+            $query_order_count_for_all->where('department_manager_id',$me->id);
+            $query_order_count_for_export->where('department_manager_id',$me->id);
+            $query_order_count_for_unpublished->where('department_manager_id',$me->id);
+            $query_order_count_for_published->where('department_manager_id',$me->id);
+            $query_order_count_for_waiting_for_inspect->where('department_manager_id',$me->id);
+            $query_order_count_for_inspected->where('department_manager_id',$me->id);
+            $query_order_count_for_accepted->where('department_manager_id',$me->id);
+            $query_order_count_for_refused->where('department_manager_id',$me->id);
+            $query_order_count_for_accepted_inside->where('department_manager_id',$me->id);
+            $query_order_count_for_repeat->where('department_manager_id',$me->id);
+
+            $query_this_month->where('department_manager_id',$me->id);
+            $query_last_month->where('department_manager_id',$me->id);
+        }
         // 客服经理
         if($me->user_type == 81)
         {
@@ -406,7 +450,7 @@ class DKAdminRepository {
 
 
         $order_count_for_all = $query_order_count_for_all->count("*");
-        $query_order_count_for_export = $query_order_count_for_export->count("*");
+        $order_count_for_export = $query_order_count_for_export->count("*");
         $order_count_for_unpublished = $query_order_count_for_unpublished->count("*");
         $order_count_for_published = $query_order_count_for_published->count("*");
         $order_count_for_waiting_for_inspect = $query_order_count_for_waiting_for_inspect->count("*");
@@ -418,7 +462,7 @@ class DKAdminRepository {
 
 
         $return['order_count_for_all'] = $order_count_for_all;
-        $return['query_order_count_for_export'] = $query_order_count_for_export;
+        $return['order_count_for_export'] = $order_count_for_export;
         $return['order_count_for_unpublished'] = $order_count_for_unpublished;
         $return['order_count_for_published'] = $order_count_for_published;
         $return['order_count_for_waiting_for_inspect'] = $order_count_for_waiting_for_inspect;

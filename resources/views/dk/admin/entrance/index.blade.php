@@ -26,7 +26,7 @@
             <div class="callout-body">
                 <span>【总计】</span>
                 <span>总计 <text class="text-black font-24px">{{ $order_count->order_count_for_all or '0' }}</text> 单</span>
-                <span>导入 <text class="text-black font-24px">{{ $order_count->query_order_count_for_export or '0' }}</text> 单</span>
+                <span>导入 <text class="text-black font-24px">{{ $order_count->order_count_for_export or '0' }}</text> 单</span>
                 <span>已发布 <text class="text-black font-24px">{{ $order_count->order_count_for_published or '0' }}</text> 单</span>
                 <span>待发布 <text class="text-black font-24px">{{ $order_count->order_count_for_unpublished or '0' }}</text> 单</span>
             </div>
@@ -43,6 +43,7 @@
                 <span>【交付】</span>
                 <span>交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered or '0' }}</text> 单</span>
                 <span>已交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered_completed or '0' }}</text> 单</span>
+                <span>待交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered_uncompleted or '0' }}</text> 单</span>
                 <span>隔日交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered_tomorrow or '0' }}</text> 单</span>
                 <span>内部交付 <text class="text-green font-24px">{{ $order_count->order_count_for_delivered_inside or '0' }}</text> 单</span>
                 <span>重复 <text class="text-orange font-24px">{{ $order_count->order_count_for_delivered_repeated or '0' }}</text> 单 </span>
