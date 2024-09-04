@@ -75,6 +75,12 @@ return [
             'provider' => 'dk_clients',
         ],
 
+
+        'dk_finance_user' => [
+            'driver' => 'session',
+            'provider' => 'dk_finance_users',
+        ],
+
     ],
 
     /*
@@ -134,6 +140,11 @@ return [
         'dk_clients' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK\DK_Client::class,
+        ],
+
+        'dk_finance_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK_Finance\DK_Finance_User::class,
         ],
 
     ],

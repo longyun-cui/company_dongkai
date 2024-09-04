@@ -37,14 +37,28 @@
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户信息</label>
         <div class="col-md-8 ">
-            <div class="col-sm-6 col-md-6 padding-0">
+            <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
                 <input type="text" class="form-control" name="client_name" placeholder="客户姓名" value="" data-default="">
             </div>
-            <div class="col-sm-6 col-md-6 padding-0">
+            <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
                 <input type="text" class="form-control" name="client_phone" placeholder="客户电话" value="" data-default="">
             </div>
         </div>
     </div>
+    {{--客户意向--}}
+    <div class="form-group">
+        <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
+        <div class="col-md-8 ">
+            <select class="form-control select-select2" name="client_intention" id="" style="width:100%;">
+                <option value="">选择客户意向</option>
+                @foreach(config('info.client_intention') as $k => $v)
+                    <option value ="{{ $k }}">{{ $v }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+
     {{--团队大区--}}
 {{--    <div class="form-group">--}}
 {{--        <label class="control-label col-md-2">团队大区</label>--}}
@@ -81,7 +95,7 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <select class="form-control select-select2 select2-district-city" name="location_city" id="select-city-1" data-target="#select-district-1">
+                <select class="form-control select-select2 select2-district-city" name="location_city" id="select-city-1" data-target="#select-district-1" style="width:100%;">
                     <option value="">选择城市</option>
                     @if(!empty($district_city_list) && count($district_city_list) > 0)
                         @foreach($district_city_list as $v)
@@ -91,7 +105,7 @@
                 </select>
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <select class="form-control select-select2 select2-district-district" name="location_district" id="select-district-1" data-target="#select-city-1">
+                <select class="form-control select-select2 select2-district-district" name="location_district" id="select-district-1" data-target="#select-city-1" style="width:100%;">
                     <option value="">选择区域</option>
                 </select>
             </div>
@@ -101,10 +115,10 @@
     <div class="form-group _none">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 其他城市</label>
         <div class="col-md-8 ">
-            <div class="col-sm-6 col-md-6 padding-0">
+            <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
                 <input type="text" class="form-control" name="custom_location_city" placeholder="所在城市" id="custom-city">
             </div>
-            <div class="col-sm-6 col-md-6 padding-0">
+            <div class="col-sm-6 col-md-6 padding-0" style="width:50%;">
                 <input type="text" class="form-control" name="custom_location_district" placeholder="所在区域" id="custom-district">
             </div>
         </div>
@@ -113,7 +127,7 @@
     <div class="form-group">
         <label class="control-label col-md-2">牙齿数量</label>
         <div class="col-md-8 ">
-            <select class="form-control select-select2" name="teeth_count" id="">
+            <select class="form-control select-select2" name="teeth_count" id="" style="width:100%;">
                 <option value="">选择牙齿数量</option>
                 @foreach(config('info.teeth_count') as $v)
                     <option value ="{{ $v }}">{{ $v }}</option>

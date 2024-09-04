@@ -1498,6 +1498,46 @@
                         }
                     },
                     {
+                        "title": "客户意向",
+                        "data": "client_intention",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','客户意向');
+                                $(nTd).attr('data-key','client_intention').attr('data-value',data);
+                                $(nTd).attr('data-column-name','客户意向');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // if(!data) return '--';
+                            // return data;
+                            var $result_html = '';
+                            if(data == "A类")
+                            {
+                                $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
+                            }
+                            else if(data == "B类")
+                            {
+                                $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
+                            }
+                            else if(data == "C类")
+                            {
+                                $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                            }
+                            else
+                            {
+                                $result_html = '--';
+                            }
+                            return $result_html;
+                        }
+                    },
+                    {
                         "title": "是否重复",
                         "data": "is_repeat",
                         "className": "",

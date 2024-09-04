@@ -82,6 +82,19 @@
                     </div>
                 </div>
 
+                {{--客户意向--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control select-select2" name="client_intention" id="">
+                            <option value="">选择客户意向</option>
+                            @foreach(config('info.client_intention') as $k => $v)
+                            <option value ="{{ $k }}" @if($operate == 'edit' && $k == $data->client_intention) selected="selected" @endif>{{ $v }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 {{--所在城市--}}
 {{--                <div class="form-group">--}}
 {{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>--}}
@@ -203,7 +216,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">渠道来源</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="channel_source" id="">
+                        <select class="form-control select-select2" name="channel_source" id="">
                             <option value="">选择渠道</option>
                             @foreach(config('info.channel_source') as $v)
                                 <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->channel_source) selected="selected" @endif>{{ $v }}</option>
