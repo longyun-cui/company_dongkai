@@ -736,6 +736,14 @@
         @endforeach
     </div>
 
+    {{--客户意向--}}
+    <div id="option-list-for-client-intention">
+        <option value="-1">选择客户意向</option>
+        @foreach(config('info.client_intention') as $k => $v)
+            <option value="{{ $k }}">{{ $v }}</option>
+        @endforeach
+    </div>
+
 </div>
 
 
@@ -1506,7 +1514,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
+                                $(nTd).addClass('modal-show-for-info-select-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','客户意向');
                                 $(nTd).attr('data-key','client_intention').attr('data-value',data);
                                 $(nTd).attr('data-column-name','客户意向');
@@ -2210,6 +2218,7 @@
                                 else if(data == "project_id") return '项目';
                                 else if(data == "client_name") return '客户电话';
                                 else if(data == "client_phone") return '客户电话';
+                                else if(data == "client_intention") return '客户意向';
                                 else if(data == "is_wx") return '是否+V';
                                 else if(data == "wx_id") return '微信号';
                                 else if(data == "teeth_count") return '牙齿数量';

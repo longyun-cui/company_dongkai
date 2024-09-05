@@ -19,11 +19,101 @@
 {{--订单统计--}}
 <div class="row">
     <div class="col-md-12">
+
+        <div class="box _none">
+            <div class="box-header">
+                <h3 class="box-title">Application Buttons</h3>
+            </div>
+            <div class="box-body">
+                <a class="btn btn-app">
+                    <span class="badge bg-yellow">{{ $order_count->order_count_for_all or '0' }}</span>
+                    <i class="fa fa-bullhorn"></i> 总计
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-green">{{ $order_count->order_count_for_export or '0' }}</span>
+                    <i class="fa fa-barcode"></i> 导入
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-purple">{{ $order_count->order_count_for_published or '0' }}</span>
+                    <i class="fa fa-users"></i> 已发布
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-teal">{{ $order_count->order_count_for_unpublished or '0' }}</span>
+                    <i class="fa fa-inbox"></i> 待发布
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-aqua">12</span>
+                    <i class="fa fa-envelope"></i> Inbox
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-red">531</span>
+                    <i class="fa fa-heart-o"></i> Likes
+                </a>
+            </div>
+            <div class="box-body">
+                <a class="btn btn-app">
+                    <span class="badge bg-yellow">{{ $order_count->order_count_for_inspected or '0' }}</span>
+                    <i class="fa fa-bullhorn"></i> 已审
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-green">{{ $order_count->order_count_for_waiting_for_inspect or '0' }}</span>
+                    <i class="fa fa-barcode"></i> 待审
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-purple">{{ $order_count->order_count_for_accepted or '0' }}</span>
+                    <i class="fa fa-users"></i> 审核通过
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-teal">{{ $order_count->order_count_for_accepted_inside or '0' }}</span>
+                    <i class="fa fa-inbox"></i> 内部通过
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-aqua">{{ $order_count->order_count_for_accepted_inside or '0' }}</span>
+                    <i class="fa fa-envelope"></i> 重复
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-red">{{ $order_count->order_count_for_refused or '0' }}</span>
+                    <i class="fa fa-heart-o"></i> 拒绝
+                </a>
+            </div>
+            <div class="box-body">
+                <a class="btn btn-app">
+                    <span class="badge bg-yellow">{{ $order_count->order_count_for_delivered or '0' }}</span>
+                    <i class="fa fa-bullhorn"></i> 交付
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-green">{{ $order_count->order_count_for_delivered_completed or '0' }}</span>
+                    <i class="fa fa-barcode"></i> 已交付
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-purple">{{ $order_count->order_count_for_delivered_uncompleted or '0' }}</span>
+                    <i class="fa fa-users"></i> 待交付
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-aqua">{{ $order_count->order_count_for_delivered_tomorrow or '0' }}</span>
+                    <i class="fa fa-envelope"></i> 隔日交付
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-teal">{{ $order_count->order_count_for_delivered_inside or '0' }}</span>
+                    <i class="fa fa-inbox"></i> 内部交付
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-red">{{ $order_count->order_count_for_delivered_repeated or '0' }}</span>
+                    <i class="fa fa-heart-o"></i> 重复
+                </a>
+                <a class="btn btn-app">
+                    <span class="badge bg-red">{{ $order_count->order_count_for_delivered_rejected or '0' }}</span>
+                    <i class="fa fa-heart-o"></i> 拒绝
+                </a>
+            </div>
+        </div>
+
         <div class="callout callout-success- bg-white">
 
             <h4>工单统计</h4>
 
             <div class="callout-body">
+
                 <span>【总计】</span>
                 <span>总计 <text class="text-black font-24px">{{ $order_count->order_count_for_all or '0' }}</text> 单</span>
                 <span>导入 <text class="text-black font-24px">{{ $order_count->order_count_for_export or '0' }}</text> 单</span>
@@ -79,6 +169,7 @@
 @section('custom-style')
 <style>
     .main-content .callout .callout-body span { margin-right:12px; }
+    .btn-app>.badge { position: absolute; top: -6px; right: -10px; font-size: 12px; font-weight: 400; }
 </style>
 @endsection
 

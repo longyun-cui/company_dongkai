@@ -1279,6 +1279,10 @@
             {
                 var $option_html = $('#option-list-for-client').html();
             }
+            else if($that.attr("data-key") == "client_intention")
+            {
+                var $option_html = $('#option-list-for-client-intention').html();
+            }
             $('select[name=info-select-set-column-value]').html($option_html);
             $('select[name=info-select-set-column-value]').find("option[value='"+$that.attr("data-value")+"']").attr("selected","selected");
 
