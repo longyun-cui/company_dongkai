@@ -17,6 +17,197 @@
 @endsection
 @section('content')
 {{--订单统计--}}
+<div class="row _none">
+    <div class="col-md-12">
+
+        <div class="box _none-">
+
+            <div class="box-header">
+                <h3 class="box-title">工单统计</h3>
+            </div>
+
+            <div class="box-body">
+
+
+                {{--总计--}}
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="box box-success box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title comprehensive-month-title">总计</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <ul class="nav nav-stacked">
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-user text-red margin-right-4px"></i>
+                                        <span>总计</span>
+                                        <span class="pull-right"><b class="badge bg-green">{{ $order_count->order_count_for_all or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-clock-o text-red margin-right-4px"></i>
+                                        <span>导入</span>
+                                        <span class="pull-right"><b class="badge bg-aqua">{{ $order_count->order_count_for_export or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar text-green margin-right-4px"></i>
+                                        <span>已发布</span>
+                                        <span class="pull-right"><b class="badge bg-blue">{{ $order_count->order_count_for_published or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar-check-o text-green margin-right-4px"></i>
+                                        <span>待发布</span>
+                                        <span class="pull-right"><b class="badge bg-orange">{{ $order_count->order_count_for_unpublished or '0' }}</b></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                {{--审核--}}
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="box box-primary box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title comprehensive-month-title">审核</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <ul class="nav nav-stacked">
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-user text-red margin-right-4px"></i>
+                                        <span>已审</span>
+                                        <span class="pull-right"><b class="badge bg-green">{{ $order_count->order_count_for_inspected or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-clock-o text-red margin-right-4px"></i>
+                                        <span>待审</span>
+                                        <span class="pull-right"><b class="badge bg-aqua">{{ $order_count->order_count_for_waiting_for_inspect or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar text-green margin-right-4px"></i>
+                                        <span>审核通过</span>
+                                        <span class="pull-right"><b class="badge bg-blue">{{ $order_count->order_count_for_accepted or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar-check-o text-green margin-right-4px"></i>
+                                        <span>内部通过</span>
+                                        <span class="pull-right"><b class="badge bg-orange">{{ $order_count->order_count_for_accepted_inside or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar-minus-o text-red margin-right-4px"></i>
+                                        <span>重复</span>
+                                        <span class="pull-right"><b class="badge bg-red">{{ $order_count->order_count_for_repeat or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar-minus-o text-red margin-right-4px"></i>
+                                        <span>拒绝</span>
+                                        <span class="pull-right"><b class="badge bg-red">{{ $order_count->order_count_for_refused or '0' }}</b></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                {{--交付--}}
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="box box-danger box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title comprehensive-month-title">交付</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <ul class="nav nav-stacked">
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-user text-red margin-right-4px"></i>
+                                        <span>交付</span>
+                                        <span class="pull-right"><b class="badge bg-green">{{ $order_count->order_count_for_delivered or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-clock-o text-red margin-right-4px"></i>
+                                        <span>已交付</span>
+                                        <span class="pull-right"><b class="badge bg-aqua">{{ $order_count->order_count_for_delivered_completed or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar text-green margin-right-4px"></i>
+                                        <span>待交付</span>
+                                        <span class="pull-right"><b class="badge bg-blue">{{ $order_count->order_count_for_delivered_uncompleted or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar-check-o text-green margin-right-4px"></i>
+                                        <span>隔日交付</span>
+                                        <span class="pull-right"><b class="badge bg-orange">{{ $order_count->order_count_for_delivered_tomorrow or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar-plus-o text-green margin-right-4px"></i>
+                                        <span>内部交付</span>
+                                        <span class="pull-right"><b class="badge bg-red">{{ $order_count->order_count_for_delivered_inside or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar-minus-o text-red margin-right-4px"></i>
+                                        <span>重复</span>
+                                        <span class="pull-right"><b class="badge bg-red">{{ $order_count->order_count_for_delivered_repeated or '0' }}</b></span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="javascript:void(0);">
+                                        <i class="fa fa-calendar-minus-o text-red margin-right-4px"></i>
+                                        <span>拒绝</span>
+                                        <span class="pull-right"><b class="badge bg-red">{{ $order_count->order_count_for_delivered_rejected or '0' }}</b></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
 
