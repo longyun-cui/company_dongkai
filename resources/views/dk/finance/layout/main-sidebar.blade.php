@@ -55,44 +55,26 @@
             </li>
 
 
-            {{--客户管理--}}
-            @if(in_array($me->user_type,[0,1,9,11]))
-            <li class="header">客户管理</li>
-
-            <li class="treeview {{ $menu_active_of_client_list_for_all or '' }}">
-                <a href="{{ url('/user/client-list-for-all') }}">
-                    <i class="fa fa-user-secret text-red"></i>
-                    <span>客户列表</span>
-                </a>
-            </li>
-            @endif
-
-
             {{--部门管理--}}
             @if(in_array($me->user_type,[0,1,9,11,41]))
-            <li class="header">部门管理</li>
+            <li class="header">渠道管理</li>
 
             <li class="treeview {{ $menu_active_of_department_list_for_all or '' }}">
                 <a href="{{ url('/department/department-list-for-all') }}">
                     <i class="fa fa-columns text-blue"></i>
-                    <span>部门列表</span>
+                    <span>公司与渠道</span>
                 </a>
             </li>
             @endif
 
-
-            {{--员工管理--}}
-            @if(in_array($me->user_type,[0,1,9,11,41,81]))
-            <li class="header">员工管理</li>
-
-            <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
-                <a href="{{ url('/user/staff-list-for-all') }}">
-                    <i class="fa fa-user text-red"></i>
-                    <span>员工列表</span>
-                </a>
-            </li>
+            @if(in_array($me->user_type,[0,1,9,11,41,61,71,81]))
+                <li class="treeview {{ $menu_active_of_project_list or '' }} _none-">
+                    <a href="{{ url('/item/project-list')}}">
+                        <i class="fa fa-cube text-green"></i>
+                        <span>项目列表</span>
+                    </a>
+                </li>
             @endif
-
 
 
 
@@ -101,22 +83,22 @@
             <li class="header">业务管理</li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,61,71,81]))
-            <li class="treeview {{ $menu_active_of_project_list or '' }} _none-">
-                <a href="{{ url('/item/project-list')}}">
-                    <i class="fa fa-cube text-green"></i>
-                    <span>项目列表</span>
+            @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
+            <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
+                <a href="{{ url('/item/order-list-for-all')}}">
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>日报列表</span>
                 </a>
             </li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
-            <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
-                <a href="{{ url('/item/order-list-for-all')}}">
-                    <i class="fa fa-file-text text-yellow"></i>
-                    <span>工单列表</span>
-                </a>
-            </li>
+                <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
+                    <a href="{{ url('/item/order-list-for-all')}}">
+                        <i class="fa fa-file-text text-yellow"></i>
+                        <span>充值记录</span>
+                    </a>
+                </li>
             @endif
 
 

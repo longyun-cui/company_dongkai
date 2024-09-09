@@ -40,7 +40,7 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="project-title" placeholder="名称" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="project-name" placeholder="名称" />
 
                         {{--<select class="form-control form-filter" name="owner" style="width:96px;">--}}
                             {{--<option value ="-1">选择员工</option>--}}
