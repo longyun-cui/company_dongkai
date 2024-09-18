@@ -1064,7 +1064,7 @@
                         }
                     },
                     {
-                        "title": "公司名称",
+                        "title": "所属公司",
                         "data": "superior_company_id",
                         "className": "",
                         "width":"100px",

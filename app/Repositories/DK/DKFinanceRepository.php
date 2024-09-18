@@ -2427,9 +2427,9 @@ class DKFinanceRepository {
             $v->district_group_id = $v->district_id.'.'.$v->id;
         }
 //        $list = $list->sortBy(['district_id'=>'asc'])->values();
-        $list = $list->sortBy(function ($item, $key) {
-            return $item['district_group_id'];
-        })->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
 //        dd($list->toArray());
 
         return datatable_response($list, $draw, $total);
