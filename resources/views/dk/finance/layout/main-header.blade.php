@@ -29,58 +29,24 @@
                     <ul class="dropdown-menu">
 
                         {{--部门管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,41]))
-                        <li class="header">部门</li>
-                        @endif
+{{--                        @if(in_array($me->user_type,[0,1,9,11,41]))--}}
+{{--                        <li class="header">部门</li>--}}
+{{--                        @endif--}}
+
+{{--                        @if(in_array($me->user_type,[0,1,9,11]))--}}
+{{--                            <li class="header">--}}
+{{--                                <a href="{{ url('/user/client-create') }}">--}}
+{{--                                    <i class="fa fa-plus text-red"></i> 添加客户--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        @endif--}}
 
                         @if(in_array($me->user_type,[0,1,9,11,41]))
                         <li class="header">
-                            <a href="{{ url('/department/department-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加部门
+                            <a href="{{ url('/company/company-create') }}">
+                                <i class="fa fa-plus text-red"></i> 添加公司
                             </a>
                         </li>
-                        @endif
-
-
-                        {{--客户管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                            <li class="header">客户</li>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                            <li class="header">
-                                <a href="{{ url('/user/client-create') }}">
-                                    <i class="fa fa-plus text-red"></i> 添加客户
-                                </a>
-                            </li>
-                        @endif
-
-
-                        {{--员工管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,41,81]))
-                            <li class="header">员工</li>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,11,41,81]))
-                        <li class="header">
-                            <a href="{{ url('/user/staff-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加员工
-                            </a>
-                        </li>
-                        @endif
-
-
-                        {{--业务管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,61,84,88]))
-                        <li class="header">业务</li>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,11,61]))
-                            <li class="header">
-                                <a href="{{ url('/district/district-create') }}">
-                                    <i class="fa fa-plus text-blue"></i> 添加地域
-                                </a>
-                            </li>
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,61]))
@@ -91,18 +57,18 @@
                         </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,84,88]))
+                        @if(in_array($me->user_type,[0,1,9,11,61]))
                         <li class="header">
-                            <a href="{{ url('/item/order-create') }}">
-                                <i class="fa fa-plus text-yellow"></i> 添加工单
+                            <a href="{{ url('/item/daily-create') }}">
+                                <i class="fa fa-plus text-yellow"></i> 添加日报
                             </a>
                         </li>
                         @endif
 
-                        @if(env('APP_ENV') == 'local' && in_array($me->user_type,[0,1,9]))
+                        @if(in_array($me->user_type,[0,1,9,11,61]))
                         <li class="header">
-                            <a href="{{ url('/item/order-import') }}">
-                                <i class="fa fa-file-excel-o text-yellow"></i> 导入工单
+                            <a href="{{ url('/item/daily-import') }}">
+                                <i class="fa fa-file-excel-o text-yellow"></i> 导入日报
                             </a>
                         </li>
                         @endif
@@ -150,7 +116,7 @@
 
 
                 <!-- Notifications Menu -->
-                <li class="dropdown notifications-menu">
+                <li class="dropdown notifications-menu _none">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-qrcode"></i>
@@ -227,7 +193,7 @@
                             <img src="/AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                         @endif
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">{{ $me->true_name or '' }}</span>
+                        <span class="hidden-xs">{{ $me->username or '' }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->

@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\DK\DK_User;
-use App\Models\DK\YH_Item;
+use App\Models\DK_Finance\DK_Finance_User;
 
 use App\Repositories\DK\DKFinanceRepository;
 
@@ -64,7 +63,7 @@ class DKFinanceController extends Controller
 //            $admin = SuperAdministrator::whereEmail($email)->first();
 
             $mobile = request()->get('mobile');
-            $admin = DK_User::whereMobile($mobile)->first();
+            $admin = DK_Finance_User::whereMobile($mobile)->first();
 
             if($admin)
             {
@@ -150,7 +149,7 @@ class DKFinanceController extends Controller
     public function operate_user_user_login()
     {
         $user_id = request()->get('user_id');
-        $user = DK_User::select('*')->find($user_id);
+        $user = DK_Finance_User::select('*')->find($user_id);
         if($user)
         {
 //            $type = request()->get('type','');
@@ -181,65 +180,84 @@ class DKFinanceController extends Controller
 
 
 
+    /*
+     * SELECT2
+     */
+    // SELECT2 User
+    public function operate_select2_user()
+    {
+        return $this->repo->operate_select2_user(request()->all());
+    }
+    // SELECT2 User
+    public function operate_select2_company()
+    {
+        return $this->repo->operate_select2_company(request()->all());
+    }
+    // SELECT2 User
+    public function operate_select2_project()
+    {
+        return $this->repo->operate_select2_project(request()->all());
+    }
+
 
 
     /*
      * 客户管理
      */
     // 【客户管理】添加
-    public function operate_user_client_create()
+    public function operate_user_user_create()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_user_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_user_save(request()->all());
     }
     // 【客户管理】编辑
-    public function operate_user_client_edit()
+    public function operate_user_user_edit()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_user_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_user_save(request()->all());
     }
 
 
     // 【客户管理】修改-密码
-    public function operate_user_client_password_admin_change()
+    public function operate_user_user_password_admin_change()
     {
-        return $this->repo->operate_user_client_password_admin_change(request()->all());
+        return $this->repo->operate_user_user_password_admin_change(request()->all());
     }
     // 【客户管理】修改-密码
-    public function operate_user_client_password_admin_reset()
+    public function operate_user_user_password_admin_reset()
     {
-        return $this->repo->operate_user_client_password_admin_reset(request()->all());
+        return $this->repo->operate_user_user_password_admin_reset(request()->all());
     }
 
 
     // 【客户管理】启用
-    public function operate_user_client_admin_enable()
+    public function operate_user_user_admin_enable()
     {
-        return $this->repo->operate_user_client_admin_enable(request()->all());
+        return $this->repo->operate_user_user_admin_enable(request()->all());
     }
     // 【客户管理】禁用
-    public function operate_user_client_admin_disable()
+    public function operate_user_user_admin_disable()
     {
-        return $this->repo->operate_user_client_admin_disable(request()->all());
+        return $this->repo->operate_user_user_admin_disable(request()->all());
     }
 
 
     // 【客户管理】返回-列表-视图
-    public function view_user_client_list_for_all()
+    public function view_user_user_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_user_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_user_list_datatable(request()->all());
     }
 
 
     // 【客户管理】客户-登录
-    public function operate_user_client_login()
+    public function operate_user_user_login_1()
     {
         $user_id = request()->get('user_id');
         $user = DK_Client::select('*')->find($user_id);
         if($user)
         {
-            Auth::guard('dk_client')->login($user,true);
+            Auth::guard('dk_user')->login($user,true);
 
             $return['user'] = $user;
 
@@ -261,103 +279,136 @@ class DKFinanceController extends Controller
      * 部门管理
      */
     // 【用户】SELECT2 Leader 负责人
-    public function operate_department_select2_leader()
+    public function operate_company_select2_leader()
     {
-        return $this->repo->operate_department_select2_leader(request()->all());
+        return $this->repo->operate_company_select2_leader(request()->all());
     }
     // 【用户】SELECT2 Superior 上级部门
-    public function operate_department_select2_superior_department()
+    public function operate_company_select2_superior_company()
     {
-        return $this->repo->operate_department_select2_superior_department(request()->all());
+        return $this->repo->operate_company_select2_superior_company(request()->all());
     }
 
 
     // 【部门管理】添加
-    public function operate_department_create()
+    public function operate_company_create()
     {
-        if(request()->isMethod('get')) return $this->repo->view_department_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_department_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_company_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_company_save(request()->all());
     }
     // 【部门管理】编辑
-    public function operate_department_edit()
+    public function operate_company_edit()
     {
-        if(request()->isMethod('get')) return $this->repo->view_department_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_department_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_company_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_company_save(request()->all());
     }
 
 
     // 【部门管理】修改-文本-text-信息
-    public function operate_department_info_text_set()
+    public function operate_company_info_text_set()
     {
-        return $this->repo->operate_department_info_text_set(request()->all());
+        return $this->repo->operate_company_info_text_set(request()->all());
     }
     // 【部门管理】修改-时间-time-信息
-    public function operate_department_info_time_set()
+    public function operate_company_info_time_set()
     {
-        return $this->repo->operate_department_info_time_set(request()->all());
+        return $this->repo->operate_company_info_time_set(request()->all());
     }
     // 【部门管理】修改-选项-option-信息
-    public function operate_department_info_option_set()
+    public function operate_company_info_option_set()
     {
-        return $this->repo->operate_department_info_option_set(request()->all());
+        return $this->repo->operate_company_info_option_set(request()->all());
     }
     // 【部门管理】添加-附件-attachment-信息
-    public function operate_department_info_attachment_set()
+    public function operate_company_info_attachment_set()
     {
-        return $this->repo->operate_department_info_attachment_set(request()->all());
+        return $this->repo->operate_company_info_attachment_set(request()->all());
     }
     // 【部门管理】删除-附件-attachment-信息
-    public function operate_department_info_attachment_delete()
+    public function operate_company_info_attachment_delete()
     {
-        return $this->repo->operate_department_info_attachment_delete(request()->all());
+        return $this->repo->operate_company_info_attachment_delete(request()->all());
     }
     // 【部门管理】获取-附件-attachment-信息
-    public function operate_department_get_attachment_html()
+    public function operate_company_get_attachment_html()
     {
-        return $this->repo->operate_department_get_attachment_html(request()->all());
+        return $this->repo->operate_company_get_attachment_html(request()->all());
     }
 
 
     // 【部门管理】删除
-    public function operate_department_admin_delete()
+    public function operate_company_admin_delete()
     {
-        return $this->repo->operate_department_admin_delete(request()->all());
+        return $this->repo->operate_company_admin_delete(request()->all());
     }
     // 【部门管理】恢复
-    public function operate_department_admin_restore()
+    public function operate_company_admin_restore()
     {
-        return $this->repo->operate_department_admin_restore(request()->all());
+        return $this->repo->operate_company_admin_restore(request()->all());
     }
     // 【部门管理】永久删除
-    public function operate_department_admin_delete_permanently()
+    public function operate_company_admin_delete_permanently()
     {
-        return $this->repo->operate_department_admin_delete_permanently(request()->all());
+        return $this->repo->operate_company_admin_delete_permanently(request()->all());
     }
 
     // 【部门管理】启用
-    public function operate_department_admin_enable()
+    public function operate_company_admin_enable()
     {
-        return $this->repo->operate_department_admin_enable(request()->all());
+        return $this->repo->operate_company_admin_enable(request()->all());
     }
     // 【部门管理】禁用
-    public function operate_department_admin_disable()
+    public function operate_company_admin_disable()
     {
-        return $this->repo->operate_department_admin_disable(request()->all());
+        return $this->repo->operate_company_admin_disable(request()->all());
     }
 
 
     // 【部门管理】返回-列表-视图（全部任务）
-    public function view_department_list_for_all()
+    public function view_company_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_department_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_department_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_company_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_company_list_datatable(request()->all());
     }
     // 【部门管理】【修改记录】返回-列表-视图（全部任务）
-    public function view_department_modify_record()
+    public function view_company_modify_record()
     {
-        if(request()->isMethod('get')) return $this->repo->view_department_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_department_modify_record_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_company_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_company_modify_record_datatable(request()->all());
     }
+
+
+
+
+    // 【订单管理-财务往来记录】返回-列表-视图（全部任务）
+    public function view_company_recharge_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_company_recharge_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_company_recharge_record_datatable(request()->all());
+    }
+
+    // 【订单管理】添加-财务记录
+    public function operate_company_finance_record_create()
+    {
+        return $this->repo->operate_company_finance_record_create(request()->all());
+    }
+    // 【订单管理】修改-财务记录
+    public function operate_company_finance_record_edit()
+    {
+        return $this->repo->operate_company_finance_record_edit(request()->all());
+    }
+
+
+    // 【项目管理-使用记录】返回-列表-视图（全部任务）
+    public function view_company_funds_using_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_company_funds_using_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_company_funds_using_record_datatable(request()->all());
+    }
+
+
+
+
 
 
 
@@ -479,239 +530,7 @@ class DKFinanceController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_staff_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_staff_list_for_all_datatable(request()->all());
     }
-    // 【用户】【个人用户】返回-列表-视图
-    public function view_user_list_for_individual()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_list_for_individual(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_list_for_individual_datatable(request()->all());
-    }
-    // 【用户】【组织】返回-列表-视图
-    public function view_user_list_for_org()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_list_for_org(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_list_for_org_datatable(request()->all());
-    }
 
-
-
-
-
-
-
-
-    /*
-     * ITEM 内容管理
-     */
-    // 【内容】返回-列表-视图（全部内容）
-    public function view_item_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_list_for_all_datatable(request()->all());
-    }
-
-
-    // 【内容】添加
-    public function operate_item_item_create()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_item_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_item_save(request()->all());
-    }
-    // 【内容】编辑
-    public function operate_item_item_edit()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_item_edit(request()->all());
-        else if (request()->isMethod('post')) return $this->repo->operate_item_item_save(request()->all());
-    }
-
-    // 【内容】获取-详情
-    public function operate_item_item_get()
-    {
-        return $this->repo->operate_item_item_get(request()->all());
-    }
-
-
-    // 【内容】删除
-    public function operate_item_item_delete()
-    {
-        return $this->repo->operate_item_item_delete(request()->all());
-    }
-    // 【内容】恢复
-    public function operate_item_item_restore()
-    {
-        return $this->repo->operate_item_item_restore(request()->all());
-    }
-    // 【内容】永久删除
-    public function operate_item_item_delete_permanently()
-    {
-        return $this->repo->operate_item_item_delete_permanently(request()->all());
-    }
-
-
-    // 【内容】批量-删除
-    public function operate_item_item_delete_bulk()
-    {
-        return $this->repo->operate_item_item_delete_bulk(request()->all());
-    }
-    // 【内容】批量-恢复
-    public function operate_item_item_restore_bulk()
-    {
-        return $this->repo->operate_item_item_restore_bulk(request()->all());
-    }
-    // 【内容】批量-彻底删除
-    public function operate_item_item_delete_permanently_bulk()
-    {
-        return $this->repo->operate_item_item_delete_permanently_bulk(request()->all());
-    }
-    // 【内容】批量-操作
-    public function operate_item_item_operate_bulk()
-    {
-        return $this->repo->operate_item_item_operate_bulk(request()->all());
-    }
-
-
-    // 【内容】发布
-    public function operate_item_item_publish()
-    {
-        return $this->repo->operate_item_item_publish(request()->all());
-    }
-    // 【内容】完成
-    public function operate_item_item_complete()
-    {
-        return $this->repo->operate_item_item_complete(request()->all());
-    }
-    // 【内容】启用
-    public function operate_item_item_enable()
-    {
-        return $this->repo->operate_item_item_enable(request()->all());
-    }
-    // 【内容】禁用
-    public function operate_item_item_disable()
-    {
-        return $this->repo->operate_item_item_disable(request()->all());
-    }
-
-
-
-
-
-
-
-
-    /*
-     * 任务管理
-     */
-    // 【任务】导入
-    public function operate_item_task_list_import()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_task_list_import();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_task_list_import_save(request()->all());
-    }
-
-    // 【任务】返回-列表-视图（全部任务）
-    public function view_task_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_task_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_task_list_for_all_datatable(request()->all());
-    }
-
-
-
-    /*
-     * Task 任务管理
-     */
-
-
-    // 【任务管理】管理员-批量-操作
-    public function operate_item_task_admin_operate_bulk()
-    {
-        return $this->repo->operate_item_task_admin_operate_bulk(request()->all());
-    }
-    // 【任务管理】管理员-批量-删除
-    public function operate_item_task_admin_delete_bulk()
-    {
-        return $this->repo->operate_item_task_admin_delete_bulk(request()->all());
-    }
-    // 【任务管理】管理员-批量-恢复
-    public function operate_item_task_admin_restore_bulk()
-    {
-        return $this->repo->operate_item_task_admin_restore_bulk(request()->all());
-    }
-    // 【任务管理】管理员-批量-彻底删除
-    public function operate_item_task_admin_delete_permanently_bulk()
-    {
-        return $this->repo->operate_item_task_admin_delete_permanently_bulk(request()->all());
-    }
-
-
-
-
-
-
-
-
-    /*
-     * 地域管理
-     */
-
-    // 【地域管理】SELECT2 Superior 上级
-    public function operate_district_select2_city()
-    {
-        return $this->repo->operate_district_select2_city(request()->all());
-    }
-    // 【地域管理】SELECT2 Superior 上级
-    public function operate_district_select2_district()
-    {
-        return $this->repo->operate_district_select2_district(request()->all());
-    }
-
-    // 【地域管理】返回-列表-视图（全部任务）
-    public function view_item_district_list()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_district_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_district_list_datatable(request()->all());
-    }
-
-
-    // 【地域管理】添加
-    public function operate_item_district_create()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_district_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_district_save(request()->all());
-    }
-    // 【地域管理】编辑
-    public function operate_item_district_edit()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_district_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_district_save(request()->all());
-    }
-
-
-    // 【地域管理】删除
-    public function operate_item_district_admin_delete()
-    {
-        return $this->repo->operate_item_district_admin_delete(request()->all());
-    }
-    // 【地域管理】恢复
-    public function operate_item_district_admin_restore()
-    {
-        return $this->repo->operate_item_district_admin_restore(request()->all());
-    }
-    // 【地域管理】永久删除
-    public function operate_item_district_admin_delete_permanently()
-    {
-        return $this->repo->operate_item_district_admin_delete_permanently(request()->all());
-    }
-
-    // 【地域管理】启用
-    public function operate_item_district_admin_enable()
-    {
-        return $this->repo->operate_item_district_admin_enable(request()->all());
-    }
-    // 【地域管理】禁用
-    public function operate_item_district_admin_disable()
-    {
-        return $this->repo->operate_item_district_admin_disable(request()->all());
-    }
 
 
 
@@ -735,6 +554,29 @@ class DKFinanceController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_project_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_project_modify_record_datatable(request()->all());
     }
+
+
+
+
+    // 【项目管理-使用记录】返回-列表-视图（全部任务）
+    public function view_project_funds_using_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_project_funds_using_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_project_funds_using_record_datatable(request()->all());
+    }
+
+    // 【项目管理】添加-使用记录
+    public function operate_project_funds_using_create()
+    {
+        return $this->repo->operate_project_funds_using_create(request()->all());
+    }
+    // 【项目管理】修改-使用记录
+    public function operate_project_funds_using_edit()
+    {
+        return $this->repo->operate_project_funds_using_edit(request()->all());
+    }
+
+
 
 
     // 【项目管理】添加
@@ -817,7 +659,26 @@ class DKFinanceController extends Controller
 
 
 
-
+    // 【订单管理】SELECT2 User 员工
+    public function operate_item_select2_user()
+    {
+        return $this->repo->operate_item_select2_user(request()->all());
+    }
+    // 【订单管理】SELECT2 Team 团队
+    public function operate_item_select2_company()
+    {
+        return $this->repo->operate_item_select2_company(request()->all());
+    }
+    // 【订单管理】SELECT2 Client 项目
+    public function operate_item_select2_project()
+    {
+        return $this->repo->operate_item_select2_project(request()->all());
+    }
+    // 【订单管理】SELECT2 Client 客户
+    public function operate_item_select2_user_1()
+    {
+        return $this->repo->operate_item_select2_user_1(request()->all());
+    }
 
 
 
@@ -826,181 +687,143 @@ class DKFinanceController extends Controller
      * 订单管理
      */
     // 【订单管理】返回-列表-视图（全部任务）
-    public function view_item_order_list_for_all()
+    public function view_item_daily_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_order_list_for_all_datatable(request()->all());
-    }
-
-
-    // 【订单管理】SELECT2 User 员工
-    public function operate_item_select2_user()
-    {
-        return $this->repo->operate_item_select2_user(request()->all());
-    }
-    // 【订单管理】SELECT2 Team 团队
-    public function operate_item_select2_team()
-    {
-        return $this->repo->operate_item_select2_team(request()->all());
-    }
-    // 【订单管理】SELECT2 Client 项目
-    public function operate_item_select2_project()
-    {
-        return $this->repo->operate_item_select2_project(request()->all());
-    }
-    // 【订单管理】SELECT2 Client 客户
-    public function operate_item_select2_client()
-    {
-        return $this->repo->operate_item_select2_client(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_daily_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_daily_list_datatable(request()->all());
     }
 
 
     // 【订单管理】添加
-    public function operate_item_order_create()
+    public function operate_item_daily_create()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_order_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_daily_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_daily_save(request()->all());
     }
     // 【订单管理】编辑
-    public function operate_item_order_edit()
+    public function operate_item_daily_edit()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_order_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_daily_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_daily_save(request()->all());
     }
 
     // 【订单管理】导入
-    public function operate_item_order_import()
+    public function operate_item_daily_import()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_import();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_order_import_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_daily_import();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_daily_import_save(request()->all());
     }
 
 
     // 【订单管理】获取-详情
-    public function operate_item_order_get()
+    public function operate_item_daily_get()
     {
-        return $this->repo->operate_item_order_get(request()->all());
+        return $this->repo->operate_item_daily_get(request()->all());
     }
     // 【订单管理】获取-详情
-    public function operate_item_order_get_html()
+    public function operate_item_daily_get_html()
     {
-        return $this->repo->operate_item_order_get_html(request()->all());
+        return $this->repo->operate_item_daily_get_html(request()->all());
     }
     // 【订单管理】获取-附件
-    public function operate_item_order_get_attachment_html()
+    public function operate_item_daily_get_attachment_html()
     {
-        return $this->repo->operate_item_order_get_attachment_html(request()->all());
+        return $this->repo->operate_item_daily_get_attachment_html(request()->all());
     }
 
 
     // 【订单管理】删除
-    public function operate_item_order_delete()
+    public function operate_item_daily_delete()
     {
-        return $this->repo->operate_item_order_delete(request()->all());
+        return $this->repo->operate_item_daily_delete(request()->all());
     }
     // 【订单管理】发布
-    public function operate_item_order_publish()
+    public function operate_item_daily_publish()
     {
-        return $this->repo->operate_item_order_publish(request()->all());
+        return $this->repo->operate_item_daily_publish(request()->all());
     }
     // 【订单管理】完成
-    public function operate_item_order_complete()
+    public function operate_item_daily_complete()
     {
-        return $this->repo->operate_item_order_complete(request()->all());
+        return $this->repo->operate_item_daily_complete(request()->all());
     }
     // 【订单管理】弃用
-    public function operate_item_order_abandon()
+    public function operate_item_daily_abandon()
     {
-        return $this->repo->operate_item_order_abandon(request()->all());
+        return $this->repo->operate_item_daily_abandon(request()->all());
     }
     // 【订单管理】复用
-    public function operate_item_order_reuse()
+    public function operate_item_daily_reuse()
     {
-        return $this->repo->operate_item_order_reuse(request()->all());
+        return $this->repo->operate_item_daily_reuse(request()->all());
     }
     // 【订单管理】验证
-    public function operate_item_order_verify()
+    public function operate_item_daily_verify()
     {
-        return $this->repo->operate_item_order_verify(request()->all());
+        return $this->repo->operate_item_daily_verify(request()->all());
     }
     // 【订单管理】审核
-    public function operate_item_order_inspect()
+    public function operate_item_daily_inspect()
     {
-        return $this->repo->operate_item_order_inspect(request()->all());
+        return $this->repo->operate_item_daily_inspect(request()->all());
     }
     // 【订单管理】交付
-    public function operate_item_order_deliver()
+    public function operate_item_daily_deliver()
     {
-        return $this->repo->operate_item_order_deliver(request()->all());
+        return $this->repo->operate_item_daily_deliver(request()->all());
     }
     // 【订单管理】批量-交付
-    public function operate_item_order_bulk_deliver()
+    public function operate_item_daily_bulk_deliver()
     {
-        return $this->repo->operate_item_order_bulk_deliver(request()->all());
+        return $this->repo->operate_item_daily_bulk_deliver(request()->all());
     }
 
 
 
     // 【订单管理】修改-文本-信息
-    public function operate_item_order_info_text_set()
+    public function operate_item_daily_info_text_set()
     {
-        return $this->repo->operate_item_order_info_text_set(request()->all());
+        return $this->repo->operate_item_daily_info_text_set(request()->all());
     }
     // 【订单管理】修改-时间-信息
-    public function operate_item_order_info_time_set()
+    public function operate_item_daily_info_time_set()
     {
-        return $this->repo->operate_item_order_info_time_set(request()->all());
+        return $this->repo->operate_item_daily_info_time_set(request()->all());
     }
     // 【订单管理】修改-option-信息
-    public function operate_item_order_info_option_set()
+    public function operate_item_daily_info_option_set()
     {
-        return $this->repo->operate_item_order_info_option_set(request()->all());
+        return $this->repo->operate_item_daily_info_option_set(request()->all());
     }
     // 【订单管理】修改-radio-信息
-    public function operate_item_order_info_radio_set()
+    public function operate_item_daily_info_radio_set()
     {
-        return $this->repo->operate_item_order_info_option_set(request()->all());
+        return $this->repo->operate_item_daily_info_option_set(request()->all());
     }
     // 【订单管理】修改-select-信息
-    public function operate_item_order_info_select_set()
+    public function operate_item_daily_info_select_set()
     {
-        return $this->repo->operate_item_order_info_option_set(request()->all());
+        return $this->repo->operate_item_daily_info_option_set(request()->all());
     }
     // 【订单管理】添加-attachment-信息
-    public function operate_item_order_info_attachment_set()
+    public function operate_item_daily_info_attachment_set()
     {
-        return $this->repo->operate_item_order_info_attachment_set(request()->all());
+        return $this->repo->operate_item_daily_info_attachment_set(request()->all());
     }
     // 【订单管理】删除-attachment-信息
-    public function operate_item_order_info_attachment_delete()
+    public function operate_item_daily_info_attachment_delete()
     {
-        return $this->repo->operate_item_order_info_attachment_delete(request()->all());
-    }
-    // 【订单管理】修改-客户信息
-    public function operate_item_order_info_client_set()
-    {
-        return $this->repo->operate_item_order_info_option_set(request()->all());
-    }
-    // 【订单管理】修改-车辆信息
-    public function operate_item_order_info_car_set()
-    {
-        return $this->repo->operate_item_order_info_option_set(request()->all());
-    }
-
-    // 【订单管理】添加-行程记录
-    public function operate_item_order_travel_set()
-    {
-        return $this->repo->operate_item_order_travel_set(request()->all());
+        return $this->repo->operate_item_daily_info_attachment_delete(request()->all());
     }
 
 
 
 
     // 【订单管理-修改记录】返回-列表-视图（全部任务）
-    public function view_item_order_modify_record()
+    public function view_item_daily_modify_record()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_order_modify_record_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_daily_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_daily_modify_record_datatable(request()->all());
     }
 
 
@@ -1092,53 +915,64 @@ class DKFinanceController extends Controller
     }
 
 
-    // 【统计】项目看板
-    public function view_statistic_delivery()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_statistic_delivery(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery(request()->all());
-    }
-    // 【统计】项目看板
+
+
+    // 【统计】项目报表
     public function view_statistic_project()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_project(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_project(request()->all());
     }
-    // 【统计】部门看板
-    public function view_statistic_department()
+    //
+    public function get_statistic_data_for_project_of_daily_list_datatable()
     {
-        if(request()->isMethod('get')) return $this->repo->view_statistic_department(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_department(request()->all());
+        return $this->repo->get_statistic_data_for_project_of_daily_list_datatable(request()->all());
     }
-    // 【统计】客服看板
-    public function view_statistic_customer_service()
+    //
+    public function get_statistic_data_for_project_of_chart()
     {
-        if(request()->isMethod('get')) return $this->repo->view_statistic_customer_service(request()->all());
-//        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_customer_service(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_customer_service_by_group(request()->all());
-    }
-    // 【统计】质检看板
-    public function view_statistic_inspector()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_statistic_inspector(request()->all());
-//        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_inspector(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_inspector_by_group(request()->all());
-    }
-    // 【统计】运营看板
-    public function view_statistic_deliverer()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_statistic_deliverer(request()->all());
-//        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_deliverer(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_deliverer_by_group(request()->all());
+        return $this->repo->get_statistic_data_for_project_of_chart(request()->all());
     }
 
 
-    // 【统计】部门看板
-    public function view_staff_statistic_customer_service()
+    // 【统计】公司&渠道报表
+    public function view_statistic_company()
     {
-        if(request()->isMethod('get')) return $this->repo->view_staff_statistic_customer_service(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_staff_customer_service(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_statistic_company(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_company(request()->all());
     }
+    //
+    public function get_statistic_data_for_company_of_project_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_company_of_project_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_company_of_chart()
+    {
+        return $this->repo->get_statistic_data_for_company_of_chart(request()->all());
+    }
+
+
+    // 【统计】渠道报表
+    public function view_statistic_channel()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_company(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_company(request()->all());
+    }
+    //
+    public function get_statistic_data_for_channel_of_project_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_company_of_project_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_channel_of_chart()
+    {
+        return $this->repo->get_statistic_data_for_company_of_chart(request()->all());
+    }
+
+
+
+
 
 
 

@@ -48,27 +48,33 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
 
 
 
+
+    Route::match(['get','post'], '/select2/select2_user', $controller.'@operate_select2_user');
+    Route::match(['get','post'], '/select2/select2_company', $controller.'@operate_select2_company');
+    Route::match(['get','post'], '/select2/select2_project', $controller.'@operate_select2_project');
+
+
+
     /*
      * 客户管理
      */
     // 创建 & 修改
-    Route::match(['get','post'], '/user/client-create', $controller.'@operate_user_client_create');
-    Route::match(['get','post'], '/user/client-edit', $controller.'@operate_user_client_edit');
+    Route::match(['get','post'], '/user/user-create', $controller.'@operate_user_user_create');
+    Route::match(['get','post'], '/user/user-edit', $controller.'@operate_user_user_edit');
     // 【用户-员工管理】修改密码
-    Route::match(['get','post'], '/user/client-password-admin-change', $controller.'@operate_user_client_password_admin_change');
-    Route::match(['get','post'], '/user/client-password-admin-reset', $controller.'@operate_user_client_password_admin_reset');
-    Route::match(['get','post'], '/user/client-login', $controller.'@operate_user_client_login');
+    Route::match(['get','post'], '/user/user-password-admin-change', $controller.'@operate_user_user_password_admin_change');
+    Route::match(['get','post'], '/user/user-password-admin-reset', $controller.'@operate_user_user_password_admin_reset');
+    Route::match(['get','post'], '/user/user-login', $controller.'@operate_user_user_login');
     // 删除 & 恢复
-    Route::post('/user/client-admin-delete', $controller.'@operate_user_client_admin_delete');
-    Route::post('/user/client-admin-restore', $controller.'@operate_user_client_admin_restore');
-    Route::post('/user/client-admin-delete-permanently', $controller.'@operate_user_client_admin_delete_permanently');
+    Route::post('/user/user-admin-delete', $controller.'@operate_user_user_admin_delete');
+    Route::post('/user/user-admin-restore', $controller.'@operate_user_user_admin_restore');
+    Route::post('/user/user-admin-delete-permanently', $controller.'@operate_user_user_admin_delete_permanently');
     // 启用 & 禁用
-    Route::post('/user/client-admin-enable', $controller.'@operate_user_client_admin_enable');
-    Route::post('/user/client-admin-disable', $controller.'@operate_user_client_admin_disable');
+    Route::post('/user/user-admin-enable', $controller.'@operate_user_user_admin_enable');
+    Route::post('/user/user-admin-disable', $controller.'@operate_user_user_admin_disable');
 
     // 列表
-    Route::match(['get','post'], '/user/client-list', $controller.'@view_user_client_list');
-    Route::match(['get','post'], '/user/client-list-for-all', $controller.'@view_user_client_list_for_all');
+    Route::match(['get','post'], '/user/user-list', $controller.'@view_user_user_list');
 
 
 
@@ -78,35 +84,44 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
 
 
     /*
-     * 部门管理
+     * 公司&渠道管理
      */
-    Route::match(['get','post'], '/department/department_select2_leader', $controller.'@operate_department_select2_leader');
-    Route::match(['get','post'], '/department/department_select2_superior_department', $controller.'@operate_department_select2_superior_department');
+    Route::match(['get','post'], '/company/company_select2_leader', $controller.'@operate_company_select2_leader');
+    Route::match(['get','post'], '/company/company_select2_superior_company', $controller.'@operate_company_select2_superior_company');
     // 创建 & 修改
-    Route::match(['get','post'], '/department/department-create', $controller.'@operate_department_create');
-    Route::match(['get','post'], '/department/department-edit', $controller.'@operate_department_edit');
+    Route::match(['get','post'], '/company/company-create', $controller.'@operate_company_create');
+    Route::match(['get','post'], '/company/company-edit', $controller.'@operate_company_edit');
 
     // 编辑-信息
-    Route::post('/department/department-info-text-set', $controller.'@operate_department_info_text_set');
-    Route::post('/department/department-info-time-set', $controller.'@operate_department_info_time_set');
-    Route::post('/department/department-info-radio-set', $controller.'@operate_department_info_option_set');
-    Route::post('/department/department-info-select-set', $controller.'@operate_department_info_option_set');
-    Route::post('/department/department-info-select2-set', $controller.'@operate_department_info_option_set');
+    Route::post('/company/company-info-text-set', $controller.'@operate_company_info_text_set');
+    Route::post('/company/company-info-time-set', $controller.'@operate_company_info_time_set');
+    Route::post('/company/company-info-radio-set', $controller.'@operate_company_info_option_set');
+    Route::post('/company/company-info-select-set', $controller.'@operate_company_info_option_set');
+    Route::post('/company/company-info-select2-set', $controller.'@operate_company_info_option_set');
 
     // 删除 & 恢复
-    Route::post('/department/department-admin-delete', $controller.'@operate_department_admin_delete');
-    Route::post('/department/department-admin-restore', $controller.'@operate_department_admin_restore');
-    Route::post('/department/department-admin-delete-permanently', $controller.'@operate_department_admin_delete_permanently');
+    Route::post('/company/company-admin-delete', $controller.'@operate_company_admin_delete');
+    Route::post('/company/company-admin-restore', $controller.'@operate_company_admin_restore');
+    Route::post('/company/company-admin-delete-permanently', $controller.'@operate_company_admin_delete_permanently');
     // 启用 & 禁用
-    Route::post('/department/department-admin-enable', $controller.'@operate_department_admin_enable');
-    Route::post('/department/department-admin-disable', $controller.'@operate_department_admin_disable');
+    Route::post('/company/company-admin-enable', $controller.'@operate_company_admin_enable');
+    Route::post('/company/company-admin-disable', $controller.'@operate_company_admin_disable');
 
     // 列表
-    Route::match(['get','post'], '/department/department-list', $controller.'@view_department_list');
-    Route::match(['get','post'], '/department/department-list-for-all', $controller.'@view_department_list_for_all');
+    Route::match(['get','post'], '/company/company-list', $controller.'@view_company_list');
+    Route::match(['get','post'], '/company/company-list-for-all', $controller.'@view_company_list_for_all');
 
-    // 部门-修改信息
-    Route::match(['get','post'], '/department/department-modify-record', $controller.'@view_department_modify_record');
+
+    // 渠道-财务信息
+    Route::match(['get','post'], '/company/company-recharge-record', $controller.'@view_company_recharge_record');
+    Route::post('/company/company-finance-record-create', $controller.'@operate_company_finance_record_create');
+    Route::post('/company/company-finance-record-edit', $controller.'@operate_company_finance_record_edit');
+    // 渠道
+    Route::match(['get','post'], '/company/company-funds-using-record', $controller.'@view_company_funds_using_record');
+
+
+    // 修改信息
+    Route::match(['get','post'], '/company/company-modify-record', $controller.'@view_company_modify_record');
 
 
 
@@ -150,31 +165,6 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
 
 
     /*
-     * 地域管理
-     */
-    // select2
-    Route::match(['get','post'], '/district/district_select2_city', $controller.'@operate_district_select2_city');
-    Route::match(['get','post'], '/district/district_select2_district', $controller.'@operate_district_select2_district');
-    // 创建 & 修改
-    Route::match(['get','post'], '/district/district-create', $controller.'@operate_item_district_create');
-    Route::match(['get','post'], '/district/district-edit', $controller.'@operate_item_district_edit');
-    // 列表
-    Route::match(['get','post'], '/district/district-list', $controller.'@view_item_district_list');
-
-    // 删除 & 恢复
-    Route::post('/district/district-admin-delete', $controller.'@operate_item_district_admin_delete');
-    Route::post('/district/district-admin-restore', $controller.'@operate_item_district_admin_restore');
-    Route::post('/district/district-admin-delete-permanently', $controller.'@operate_item_district_admin_delete_permanently');
-    // 启用 & 禁用
-    Route::post('/district/district-admin-enable', $controller.'@operate_item_district_admin_enable');
-    Route::post('/district/district-admin-disable', $controller.'@operate_item_district_admin_disable');
-
-
-
-
-
-
-    /*
      * 项目管理
      */
     // 创建 & 修改
@@ -204,7 +194,14 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
     Route::match(['get','post'], '/item/project-list', $controller.'@view_item_project_list');
     Route::match(['get','post'], '/item/project-list-for-all', $controller.'@view_item_project_list_for_all');
 
-    // 车辆-修改信息
+
+    // 渠道-财务信息
+    Route::match(['get','post'], '/project/project-funds-using-record', $controller.'@view_project_funds_using_record');
+    Route::post('/project/project-funds-using-create', $controller.'@operate_project_funds_using_create');
+    Route::post('/project/project-funds-using-edit', $controller.'@operate_project_funds_using_edit');
+
+
+    // 修改信息
     Route::match(['get','post'], '/item/project-modify-record', $controller.'@view_item_project_modify_record');
 
 
@@ -231,147 +228,58 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
      */
     // select2
     Route::match(['get','post'], '/item/item_select2_user', $controller.'@operate_item_select2_user');
-    Route::match(['get','post'], '/item/item_select2_client', $controller.'@operate_item_select2_client');
     Route::match(['get','post'], '/item/item_select2_project', $controller.'@operate_item_select2_project');
-    Route::match(['get','post'], '/item/item_select2_team', $controller.'@operate_item_select2_team');
+    Route::match(['get','post'], '/item/item_select2_company', $controller.'@operate_item_select2_company');
 
-    Route::match(['get','post'], '/item/order_select2_project', $controller.'@operate_order_select2_project');
-    Route::match(['get','post'], '/item/order_select2_client', $controller.'@operate_order_select2_client');
 
     // 创建 & 修改
-    Route::match(['get','post'], '/item/order-create', $controller.'@operate_item_order_create');
-    Route::match(['get','post'], '/item/order-edit', $controller.'@operate_item_order_edit');
+    Route::match(['get','post'], '/item/daily-create', $controller.'@operate_item_daily_create');
+    Route::match(['get','post'], '/item/daily-edit', $controller.'@operate_item_daily_edit');
     // 导入
-    Route::match(['get','post'], '/item/order-import', $controller.'@operate_item_order_import');
+    Route::match(['get','post'], '/item/daily-import', $controller.'@operate_item_daily_import');
 
     // 获取
-    Route::match(['get','post'], '/item/order-get', $controller.'@operate_item_order_get');
-    Route::match(['get','post'], '/item/order-get-html', $controller.'@operate_item_order_get_html');
-    Route::match(['get','post'], '/item/order-get-attachment-html', $controller.'@operate_item_order_get_attachment_html');
+    Route::match(['get','post'], '/item/daily-get', $controller.'@operate_item_daily_get');
+    Route::match(['get','post'], '/item/daily-get-html', $controller.'@operate_item_daily_get_html');
+    Route::match(['get','post'], '/item/daily-get-attachment-html', $controller.'@operate_item_daily_get_attachment_html');
     // 删除 & 恢复
-    Route::post('/item/order-delete', $controller.'@operate_item_order_delete');
-    Route::post('/item/order-restore', $controller.'@operate_item_order_restore');
-    Route::post('/item/order-delete-permanently', $controller.'@operate_item_order_delete_permanently');
+    Route::post('/item/daily-delete', $controller.'@operate_item_daily_delete');
+    Route::post('/item/daily-restore', $controller.'@operate_item_daily_restore');
+    Route::post('/item/daily-delete-permanently', $controller.'@operate_item_daily_delete_permanently');
     // 启用 & 禁用
-    Route::post('/item/order-enable', $controller.'@operate_item_order_enable');
-    Route::post('/item/order-disable', $controller.'@operate_item_order_disable');
+    Route::post('/item/daily-enable', $controller.'@operate_item_daily_enable');
+    Route::post('/item/daily-disable', $controller.'@operate_item_daily_disable');
     // 发布 & 完成 & 备注
-    Route::post('/item/order-verify', $controller.'@operate_item_order_verify');
-    Route::post('/item/order-publish', $controller.'@operate_item_order_publish');
-    Route::post('/item/order-inspect', $controller.'@operate_item_order_inspect');
-    Route::post('/item/order-complete', $controller.'@operate_item_order_complete');
-    Route::post('/item/order-abandon', $controller.'@operate_item_order_abandon');
-    Route::post('/item/order-reuse', $controller.'@operate_item_order_reuse');
-    Route::post('/item/order-remark-edit', $controller.'@operate_item_order_remark_edit');
-    Route::post('/item/order-deliver', $controller.'@operate_item_order_deliver');
-    Route::post('/item/order-bulk-deliver', $controller.'@operate_item_order_bulk_deliver');
+    Route::post('/item/daily-verify', $controller.'@operate_item_daily_verify');
+    Route::post('/item/daily-publish', $controller.'@operate_item_daily_publish');
+    Route::post('/item/daily-inspect', $controller.'@operate_item_daily_inspect');
+    Route::post('/item/daily-complete', $controller.'@operate_item_daily_complete');
+    Route::post('/item/daily-abandon', $controller.'@operate_item_daily_abandon');
+    Route::post('/item/daily-reuse', $controller.'@operate_item_daily_reuse');
+    Route::post('/item/daily-remark-edit', $controller.'@operate_item_daily_remark_edit');
+    Route::post('/item/daily-deliver', $controller.'@operate_item_daily_deliver');
+    Route::post('/item/daily-bulk-deliver', $controller.'@operate_item_daily_bulk_deliver');
 
     // 列表
-    Route::match(['get','post'], '/item/order-list', $controller.'@view_item_order_list');
-    Route::match(['get','post'], '/item/order-list-for-all', $controller.'@view_item_order_list_for_all');
+    Route::match(['get','post'], '/item/daily-list', $controller.'@view_item_daily_list');
 
     // 订单-基本信息
-    Route::post('/item/order-info-text-set', $controller.'@operate_item_order_info_text_set');
-    Route::post('/item/order-info-time-set', $controller.'@operate_item_order_info_time_set');
-    Route::post('/item/order-info-radio-set', $controller.'@operate_item_order_info_option_set');
-    Route::post('/item/order-info-select-set', $controller.'@operate_item_order_info_option_set');
-    Route::post('/item/order-info-select2-set', $controller.'@operate_item_order_info_option_set');
-    Route::post('/item/order-info-client-set', $controller.'@operate_item_order_info_client_set');
-    Route::post('/item/order-info-car-set', $controller.'@operate_item_order_info_car_set');
+    Route::post('/item/daily-info-text-set', $controller.'@operate_item_daily_info_text_set');
+    Route::post('/item/daily-info-time-set', $controller.'@operate_item_daily_info_time_set');
+    Route::post('/item/daily-info-radio-set', $controller.'@operate_item_daily_info_option_set');
+    Route::post('/item/daily-info-select-set', $controller.'@operate_item_daily_info_option_set');
+    Route::post('/item/daily-info-select2-set', $controller.'@operate_item_daily_info_option_set');
     // 订单-附件
-    Route::post('/item/order-info-attachment-set', $controller.'@operate_item_order_info_attachment_set');
-    Route::post('/item/order-info-attachment-delete', $controller.'@operate_item_order_info_attachment_delete');
+    Route::post('/item/daily-info-attachment-set', $controller.'@operate_item_daily_info_attachment_set');
+    Route::post('/item/daily-info-attachment-delete', $controller.'@operate_item_daily_info_attachment_delete');
 
 
-    // 订单-行程信息
-    Route::post('/item/order-travel-set', $controller.'@operate_item_order_travel_set');
     // 订单-财务信息
-    Route::match(['get','post'], '/item/order-finance-record', $controller.'@view_item_order_finance_record');
-    Route::post('/item/order-finance-record-create', $controller.'@operate_item_order_finance_record_create');
-    Route::post('/item/order-finance-record-edit', $controller.'@operate_item_order_finance_record_edit');
+    Route::match(['get','post'], '/item/daily-finance-record', $controller.'@view_item_daily_finance_record');
+    Route::post('/item/daily-finance-record-create', $controller.'@operate_item_daily_finance_record_create');
+    Route::post('/item/daily-finance-record-edit', $controller.'@operate_item_daily_finance_record_edit');
     // 订单-修改信息
-    Route::match(['get','post'], '/item/order-modify-record', $controller.'@view_item_order_modify_record');
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-     * 内容管理
-     */
-    Route::match(['get','post'], '/item/item-create', $controller.'@operate_item_item_create');
-    Route::match(['get','post'], '/item/item-edit', $controller.'@operate_item_item_edit');
-    // 【内容管理】删除 & 恢复 & 永久删除
-    Route::post('/item/item-delete', $controller.'@operate_item_item_delete');
-    Route::post('/item/item-restore', $controller.'@operate_item_item_restore');
-    Route::post('/item/item-delete-permanently', $controller.'@operate_item_item_delete_permanently');
-    // 【内容管理】启用 & 禁用
-    Route::post('/item/item-enable', $controller.'@operate_item_item_enable');
-    Route::post('/item/item-disable', $controller.'@operate_item_item_disable');
-    // 【内容管理】发布
-    Route::post('/item/item-publish', $controller.'@operate_item_item_publish');
-    // 【内容管理】完成 & 备注
-    Route::post('/item/item-complete', $controller.'@operate_item_item_complete');
-    Route::post('/item/item-remark-edit', $controller.'@operate_item_item_remark_edit');
-
-    // 【内容管理】批量操作
-    Route::post('/item/item-operate-bulk', $controller.'@operate_item_item_operate_bulk');
-    // 【内容管理】批量操作 - 删除 & 恢复 & 永久删除
-    Route::post('/item/item-delete-bulk', $controller.'@operate_item_item_delete_bulk');
-    Route::post('/item/item-restore-bulk', $controller.'@operate_item_item_restore_bulk');
-    Route::post('/item/item-delete-permanently-bulk', $controller.'@operate_item_item_delete_permanently_bulk');
-    // 【内容管理】批量操作 - 启用 & 禁用
-    Route::post('/item/item-enable-bulk', $controller.'@operate_item_item_enable_bulk');
-    Route::post('/item/item-disable-bulk', $controller.'@operate_item_item_disable_bulk');
-
-
-
-
-    /*
-     * 任务管理
-     */
-    // 【任务管理】删除 & 恢复 & 永久删除
-    Route::post('/item/task-admin-delete', $controller.'@operate_item_task_admin_delete');
-    Route::post('/item/task-admin-restore', $controller.'@operate_item_task_admin_restore');
-    Route::post('/item/task-admin-delete-permanently', $controller.'@operate_item_task_admin_delete_permanently');
-    // 【任务管理】启用 & 禁用
-    Route::post('/item/task-admin-enable', $controller.'@operate_item_task_admin_enable');
-    Route::post('/item/task-admin-disable', $controller.'@operate_item_task_admin_disable');
-    // 【任务管理】批量操作
-    Route::post('/item/task-admin-operate-bulk', $controller.'@operate_item_task_admin_operate_bulk');
-    Route::post('/item/task-admin-delete-bulk', $controller.'@operate_item_task_admin_delete_bulk');
-    Route::post('/item/task-admin-restore-bulk', $controller.'@operate_item_task_admin_restore_bulk');
-    Route::post('/item/task-admin-delete-permanently-bulk', $controller.'@operate_item_task_admin_delete_permanently_bulk');
-
-
-
-
-
-    /*
-     * 任务管理
-     */
-    Route::match(['get','post'], '/item/task-list-import', $controller.'@operate_item_task_list_import');
-
-    Route::match(['get','post'], '/item/task-create', $controller.'@operate_item_task_create');
-    Route::match(['get','post'], '/item/task-edit', $controller.'@operate_item_task_edit');
-    Route::post('/item/task-enable', $controller.'@operate_item_task_enable');
-    Route::post('/item/task-disable', $controller.'@operate_item_task_disable');
-    Route::post('/item/task-delete', $controller.'@operate_item_task_delete');
-    Route::post('/item/task-restore', $controller.'@operate_item_task_restore');
-    Route::post('/item/task-delete-permanently', $controller.'@operate_item_task_delete_permanently');
-    Route::post('/item/task-publish', $controller.'@operate_item_task_publish');
-    Route::post('/item/task-complete', $controller.'@operate_item_task_complete');
-    Route::post('/item/task-remark-edit', $controller.'@operate_item_task_remark_edit');
-
-
+    Route::match(['get','post'], '/item/daily-modify-record', $controller.'@view_item_daily_modify_record');
 
 
 
@@ -393,26 +301,24 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
     Route::post('/statistic/statistic-get-data-for-order', $controller.'@get_statistic_data_for_order');
     Route::post('/statistic/statistic-get-data-for-finance', $controller.'@get_statistic_data_for_finance');
 
-
-    Route::match(['get','post'], '/statistic/statistic-rank', $controller.'@view_statistic_rank');
-    Route::match(['get','post'], '/statistic/statistic-rank-by-staff', $controller.'@view_statistic_rank_by_staff');
-    Route::match(['get','post'], '/statistic/statistic-rank-by-department', $controller.'@view_statistic_rank_by_department');
-
-    Route::match(['get','post'], '/statistic/statistic-recent', $controller.'@view_statistic_recent');
-
-    Route::match(['get','post'], '/statistic/statistic-delivery', $controller.'@view_statistic_delivery');
+    // 项目报表
     Route::match(['get','post'], '/statistic/statistic-project', $controller.'@view_statistic_project');
-    Route::match(['get','post'], '/statistic/statistic-department', $controller.'@view_statistic_department');
-    Route::match(['get','post'], '/statistic/statistic-customer-service', $controller.'@view_statistic_customer_service');
-    Route::match(['get','post'], '/statistic/statistic-inspector', $controller.'@view_statistic_inspector');
+    Route::post('/statistic/statistic-get-data-for-project', $controller.'@get_statistic_data_for_project');
+    Route::post('/statistic/statistic-get-data-for-project-of-daily-list', $controller.'@get_statistic_data_for_project_of_daily_list_datatable');
+    Route::post('/statistic/statistic-get-data-for-project-of-chart', $controller.'@get_statistic_data_for_project_of_chart');
 
-    Route::post('/statistic/statistic-get-data-for-department', $controller.'@get_statistic_data_for_department');
-    Route::post('/statistic/statistic-get-data-for-customer-service', $controller.'@get_statistic_data_for_customer_service');
-    Route::post('/statistic/statistic-get-data-for-inspector', $controller.'@get_statistic_data_for_inspector');
-    Route::post('/statistic/statistic-get-data-for-deliverer', $controller.'@get_statistic_data_for_deliverer');
+    // 渠道报表
+    Route::match(['get','post'], '/statistic/statistic-channel', $controller.'@view_statistic_channel');
+    Route::post('/statistic/statistic-get-data-for-channel', $controller.'@get_statistic_data_for_channel');
+    Route::post('/statistic/statistic-get-data-for-channel-of-project-list', $controller.'@get_statistic_data_for_channel_of_project_list_datatable');
+    Route::post('/statistic/statistic-get-data-for-channel-of-chart', $controller.'@get_statistic_data_for_channel_of_chart');
 
+    // 公司报表
+    Route::match(['get','post'], '/statistic/statistic-company', $controller.'@view_statistic_company');
+    Route::post('/statistic/statistic-get-data-for-company', $controller.'@get_statistic_data_for_company');
+    Route::post('/statistic/statistic-get-data-for-company-of-project-list', $controller.'@get_statistic_data_for_company_of_project_list_datatable');
+    Route::post('/statistic/statistic-get-data-for-company-of-chart', $controller.'@get_statistic_data_for_company_of_chart');
 
-    Route::match(['get','post'], '/staff-statistic/statistic-customer-service', $controller.'@view_staff_statistic_customer_service');
 
 
 
