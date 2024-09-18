@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '员工列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '用户列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')员工列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')用户列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -21,13 +21,13 @@
         <div class="box box-info">
 
             <div class="box-header with-border" style="margin:4px 0;">
-                <h3 class="box-title">员工列表</h3>
+                <h3 class="box-title">用户列表</h3>
 
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
                     <a href="{{ url('/user/user-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加员工</button>
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加用户</button>
                     </a>
                 </div>
 

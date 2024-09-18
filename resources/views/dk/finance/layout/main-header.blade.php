@@ -57,7 +57,7 @@
                         </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,61]))
+                        @if(in_array($me->user_type,[0,1,9,11,31]))
                         <li class="header">
                             <a href="{{ url('/item/daily-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加日报
@@ -65,7 +65,7 @@
                         </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,61]))
+                        @if(in_array($me->user_type,[0,1,9,11,31]))
                         <li class="header">
                             <a href="{{ url('/item/daily-import') }}">
                                 <i class="fa fa-file-excel-o text-yellow"></i> 导入日报

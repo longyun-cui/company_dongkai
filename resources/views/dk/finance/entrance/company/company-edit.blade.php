@@ -47,7 +47,9 @@
                                         <button type="button" class="btn">
                                             <span class="radio">
                                                 <label>
-                                                    @if($operate == 'edit' && $data->company_category == 1)
+                                                    @if($operate == 'create')
+                                                        <input type="radio" name="company_category" value="1" checked="checked"> 公司
+                                                    @elseif($operate == 'edit' && $data->company_category == 1)
                                                         <input type="radio" name="company_category" value="1" checked="checked"> 公司
                                                     @else
                                                         <input type="radio" name="company_category" value="1" checked="checked"> 公司
@@ -66,11 +68,7 @@
                                                     @if($operate == 'edit' && $data->company_category == 11)
                                                         <input type="radio" name="company_category" value="11" checked="checked"> 渠道
                                                     @else
-                                                        @if($me->user_type == 11)
-                                                            <input type="radio" name="company_category" value="11" checked="checked"> 渠道
-                                                        @else
-                                                            <input type="radio" name="company_category" value="11"> 渠道
-                                                        @endif
+                                                        <input type="radio" name="company_category" value="11"> 渠道
                                                     @endif
                                                 </label>
                                             </span>
@@ -105,7 +103,7 @@
                                         @endif
                                     @endif
 
-                                    @if(in_array($me->user_type, [0,1,11,41]))
+                                    @if(in_array($me->user_type, [0,1,11]))
                                         @if($operate == 'create' || ($operate == 'edit' && $data->company_type == 11))
                                             <button type="button" class="btn">
                                             <span class="radio">
@@ -113,11 +111,7 @@
                                                     @if($operate == 'edit' && $data->company_type == 11)
                                                         <input type="radio" name="company_type" value="11" checked="checked"> 代理
                                                     @else
-                                                        @if($me->user_type == 11)
-                                                            <input type="radio" name="company_type" value="11" checked="checked"> 代理
-                                                        @else
-                                                            <input type="radio" name="company_type" value="11"> 代理
-                                                        @endif
+                                                        <input type="radio" name="company_type" value="11"> 代理
                                                     @endif
                                                 </label>
                                             </span>
@@ -143,7 +137,7 @@
 
                         {{--上级部门--}}
                         <div class="form-group select2-superior-box">
-                            <label class="control-label col-md-2">选择公司</label>
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择所属公司</label>
                             <div class="col-md-8 ">
                                 <select class="form-control" name="superior_company_id" id="select2-superior-company" style="width:100%;">
                                     @if($operate == 'edit' && $data->superior_company_id)

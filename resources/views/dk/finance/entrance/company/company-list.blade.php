@@ -995,7 +995,7 @@
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                             var html =
-                                // '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
+                                '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
                                 $html_able+
 //                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
 //                                    $html_publish+
