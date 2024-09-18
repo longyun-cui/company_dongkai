@@ -7274,9 +7274,9 @@ class DKFinanceRepository {
         if(!empty($post_data['length']))
         {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
-            else $view_data['length'] = 20;
+            else $view_data['length'] = 50;
         }
-        else $view_data['length'] = 20;
+        else $view_data['length'] = 50;
         // 第几页
         if(!empty($post_data['page']))
         {
