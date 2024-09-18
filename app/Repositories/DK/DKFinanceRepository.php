@@ -5409,10 +5409,11 @@ class DKFinanceRepository {
             $project_name = trim($value['project_name']);
             if(!empty($project_name))
             {
-                $project = DK_Finance_Project::where('name',$project_name)->first();
-                if($project) $temp_date['project_id'] = $project->id;
-                else $temp_date['project_id'] = 0;
+//                $project = DK_Finance_Project::where('name',$project_name)->first();
+//                if($project) $temp_date['project_id'] = $project->id;
+//                else $temp_date['project_id'] = 0;
 
+                $temp_date['project_id'] = $value['project_id'];  // 项目id
                 $temp_date['assign_date'] = $value['assign_date'];  // 日期
                 $temp_date['outbound_background'] = $value['outbound_background'];  // 外呼后台
                 $temp_date['attendance_manpower'] = intval($value['attendance_manpower']);  // 出勤人力
