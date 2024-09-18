@@ -13265,6 +13265,215 @@ class DKFinanceRepository {
 
 
 
+
+
+    // 【财务管理】返回-列表-视图
+    public function view_record_funds_recharge_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $view_data["menu_active_of_record_funds_recharge"] = 'active';
+        $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.record.funds-recharge-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【财务管理】返回-列表-数据
+    public function get_record_funds_recharge_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $id  = $post_data["id"];
+        $query = DK_Finance_Funds_Recharge::select('*')
+            ->with([
+                'creator',
+                'confirmer',
+                'company_er'
+            ]);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['transaction_amount'])) $query->where('transaction_amount', $post_data['transaction_amount']);
+        if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
+        if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
+        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_payment_account', $post_data['transaction_payment_account']);
+        if(!empty($post_data['transaction_order'])) $query->where('transaction_order', $post_data['transaction_order']);
+
+        if(!empty($post_data['transaction_time'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), $post_data['transaction_time']);
+        if(!empty($post_data['transaction_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '>=', $post_data['transaction_start']);
+        if(!empty($post_data['transaction_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['transaction_ended']);
+
+
+        // 类型：收入 | 支出
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,91]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+        // 确认
+        if(isset($post_data['finance_confirm']))
+        {
+            if(in_array($post_data['finance_confirm'],[0,1]))
+            {
+                if($post_data['finance_confirm'] == 1) $query->where('is_confirmed', 1);
+                else if($post_data['finance_confirm'] == 0) $query->where('is_confirmed', '!=', 1);
+
+            }
+        }
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0]))
+            {
+                $query->where('creator_id', $post_data['staff']);
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+//            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+//            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【财务管理】返回-列表-视图
+    public function view_record_funds_using_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $view_data["menu_active_of_record_funds_using"] = 'active';
+        $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.record.funds-using-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【财务管理】返回-列表-数据
+    public function get_record_funds_using_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $id  = $post_data["id"];
+        $query = DK_Finance_Funds_Using::select('*')
+            ->with([
+                'creator',
+                'confirmer',
+                'project_er'
+            ]);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['transaction_amount'])) $query->where('transaction_amount', $post_data['transaction_amount']);
+        if(!empty($post_data['transaction_type'])) $query->where('transaction_type', $post_data['transaction_type']);
+        if(!empty($post_data['transaction_receipt_account'])) $query->where('transaction_receipt_account', $post_data['transaction_receipt_account']);
+        if(!empty($post_data['transaction_payment_account'])) $query->where('transaction_payment_account', $post_data['transaction_payment_account']);
+        if(!empty($post_data['transaction_order'])) $query->where('transaction_order', $post_data['transaction_order']);
+
+        if(!empty($post_data['transaction_time'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), $post_data['transaction_time']);
+        if(!empty($post_data['transaction_start'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '>=', $post_data['transaction_start']);
+        if(!empty($post_data['transaction_ended'])) $query->whereDate(DB::raw("FROM_UNIXTIME(transaction_time,'%Y-%m-%d')"), '<=', $post_data['transaction_ended']);
+
+
+        // 类型：收入 | 支出
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,91]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+        // 确认
+        if(isset($post_data['finance_confirm']))
+        {
+            if(in_array($post_data['finance_confirm'],[0,1]))
+            {
+                if($post_data['finance_confirm'] == 1) $query->where('is_confirmed', 1);
+                else if($post_data['finance_confirm'] == 0) $query->where('is_confirmed', '!=', 1);
+
+            }
+        }
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0]))
+            {
+                $query->where('creator_id', $post_data['staff']);
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+//            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+//            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
     /*
      * 说明
      *

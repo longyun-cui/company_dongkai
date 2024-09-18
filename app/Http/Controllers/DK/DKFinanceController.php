@@ -1014,5 +1014,20 @@ class DKFinanceController extends Controller
 
 
 
+    // 【统计】公司&渠道报表
+    public function view_record_funds_recharge_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_record_funds_recharge_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_record_funds_recharge_list_datatable(request()->all());
+    }
+    // 【统计】公司&渠道报表
+    public function view_record_funds_using_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_record_funds_using_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_record_funds_using_list_datatable(request()->all());
+    }
+
+
+
 
 }

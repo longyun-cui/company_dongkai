@@ -167,6 +167,28 @@
 
 
 
+
+            {{--数据统计--}}
+            <li class="header">操作记录</li>
+
+            @if(in_array($me->user_type,[0,1,9,11,31]))
+                <li class="treeview {{ $menu_active_of_record_funds_recharge or '' }}">
+                    <a href="{{ url('/record/funds-recharge-list') }}">
+                        <i class="fa fa-cny text-aqua"></i> <span>充值记录</span>
+                    </a>
+                </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,31]))
+                <li class="treeview {{ $menu_active_of_record_funds_using or '' }}">
+                    <a href="{{ url('/record/funds-using-list') }}">
+                        <i class="fa fa-cny text-aqua"></i> <span>结算记录</span>
+                    </a>
+                </li>
+            @endif
+
+
+
         </ul>
         <!-- /.sidebar-menu -->
     </section>

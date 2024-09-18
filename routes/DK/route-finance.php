@@ -324,9 +324,6 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
 
 
 
-
-
-
     /*
      * export 数据导出
      */
@@ -338,7 +335,12 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
 
 
 
-    Route::match(['get','post'], '/item/record-list-for-all', $controller.'@view_record_list_for_all');
+
+
+
+    Route::match(['get','post'], '/record/record-list-for-all', $controller.'@view_record_list_for_all');
+    Route::match(['get','post'], '/record/funds-recharge-list', $controller.'@view_record_funds_recharge_list');
+    Route::match(['get','post'], '/record/funds-using-list', $controller.'@view_record_funds_using_list');
 
 
 });
