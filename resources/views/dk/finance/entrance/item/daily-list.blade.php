@@ -1185,7 +1185,7 @@
                         render: function(data, type, row, meta) {
                             // var $call_charge_coefficient = parseFloat(row.call_charge_coefficient);
                             // var $call_charge_daily_cost = parseFloat(row.call_charge_daily_cost);
-                            // var $material_quantity = parseFloat(($call_charge_coefficient) * ($call_charge_daily_cost)).toFixed(2);
+                            // var $material_quantity = parseFloat(($call_charge_daily_cost) / ($call_charge_coefficient)).toFixed(2);
                             // return parseFloat($material_quantity);
                             return parseFloat(data);
                         }

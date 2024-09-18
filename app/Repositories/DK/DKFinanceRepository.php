@@ -5428,7 +5428,7 @@ class DKFinanceRepository {
 
                 $temp_date['manpower_daily_cost'] = $temp_date['manpower_daily_wage'] * $temp_date['attendance_manpower'];
                 $temp_date['material_daily_quantity'] = $temp_date['call_charge_daily_cost'] / $temp_date['call_charge_coefficient'];
-                $temp_date['material_daily_cost'] = $temp_date['call_charge_daily_cost'] * $temp_date['call_charge_coefficient'] * $temp_date['material_coefficient'];
+                $temp_date['material_daily_cost'] = ($temp_date['call_charge_daily_cost'] / $temp_date['call_charge_coefficient']) * $temp_date['material_coefficient'];
                 $temp_date['taxes_daily_cost'] = $temp_date['taxes_coefficient'] * $temp_date['delivery_quantity'];
                 $temp_date['total_daily_cost'] = $temp_date['manpower_daily_cost'] + $temp_date['call_charge_daily_cost'] + $temp_date['material_daily_cost'] + $temp_date['taxes_daily_cost'];
 
