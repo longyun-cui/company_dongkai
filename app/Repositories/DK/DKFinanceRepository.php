@@ -5416,7 +5416,7 @@ class DKFinanceRepository {
                 $temp_date['project_id'] = $value['project_id'];  // 项目id
                 $temp_date['assign_date'] = $value['assign_date'];  // 日期
                 $temp_date['outbound_background'] = $value['outbound_background'];  // 外呼后台
-                $temp_date['attendance_manpower'] = intval($value['attendance_manpower']);  // 出勤人力
+                $temp_date['attendance_manpower'] = floatval($value['attendance_manpower']);  // 出勤人力
                 $temp_date['delivery_quantity'] = intval($value['delivery_quantity']);  // 交付量
                 $temp_date['call_charge_daily_cost'] = floatval($value['call_charge_daily_cost']);  // 当日话费
                 $temp_date['manpower_daily_wage'] = floatval($value['manpower_daily_wage']);  // 人力日薪
