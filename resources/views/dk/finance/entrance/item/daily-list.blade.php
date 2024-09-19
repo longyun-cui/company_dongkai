@@ -762,8 +762,8 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": false,
-                // "scrollY": ($(document).height() - 448)+"px",
+                // "scrollY": false,
+                "scrollY": ($(document).height() - 360)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
 
