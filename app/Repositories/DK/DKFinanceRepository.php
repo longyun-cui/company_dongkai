@@ -7369,9 +7369,6 @@ class DKFinanceRepository {
         $user_list = DK_Finance_User::select('id','username')->where('user_category',11)->get();
         $view_data['user_list'] = $user_list;
 
-        $department_district_list = DK_Finance_Company::select('id','name')->get();
-        $view_data['department_district_list'] = $department_district_list;
-
         if($me->user_type == 41)
         {
             $staff_list = DK_Finance_User::select('id','username')
@@ -7379,6 +7376,13 @@ class DKFinanceRepository {
                 ->whereIn('user_type',[81,84,88])
                 ->get();
         }
+
+
+        $company_list = DK_Finance_Company::select('id','name')->where('company_category',1)->get();
+        $view_data['company_list'] = $company_list;
+
+        $channel_list = DK_Finance_Company::select('id','name')->where('company_category',11)->get();
+        $view_data['channel_list'] = $channel_list;
 
         $project_list = DK_Finance_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $view_data['project_list'] = $project_list;
@@ -7435,6 +7439,25 @@ class DKFinanceRepository {
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
 
+        // 公司
+        if(isset($post_data['company']))
+        {
+            if(!in_array($post_data['company'],[-1]))
+            {
+                $channel_list = DK_Finance_Company::select('id')->where('superior_company_id',$post_data['company'])->get()->toArray();
+                $project_list = DK_Finance_Project::select('id')->whereIn('channel_id',$channel_list)->get()->toArray();
+                $query->whereIn('project_id', $project_list);
+            }
+        }
+        // 渠道
+        if(isset($post_data['channel']))
+        {
+            if(!in_array($post_data['channel'],[-1]))
+            {
+                $project_list = DK_Finance_Project::select('id')->where('channel_id',$post_data['channel'])->get()->toArray();
+                $query->whereIn('project_id', $project_list);
+            }
+        }
         // 项目
         if(isset($post_data['project']))
         {
@@ -11751,6 +11774,9 @@ class DKFinanceRepository {
         $channel_list = DK_Finance_Company::select('id','name')->where('company_type',11)->get();
         $view_data['channel_list'] = $channel_list;
 
+        $project_list = DK_Finance_Project::select('id','name')->get();
+        $view_data['project_list'] = $project_list;
+
         $view_data['menu_active_of_statistic_company'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.statistic.statistic-company';
         return view($view_blade)->with($view_data);
@@ -12008,6 +12034,15 @@ class DKFinanceRepository {
                 $query->where('channel_id', $post_data['channel']);
             }
         }
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1]))
+            {
+                $query->where('id', $post_data['project']);
+            }
+        }
+
 
         // 状态 [|]
         if(!empty($post_data['item_status']))

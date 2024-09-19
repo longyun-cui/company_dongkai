@@ -54,6 +54,14 @@
                             @endif
                         </select>
                         @endif
+                        <select class="form-control form-filter select-select2 select2-box company-project" name="company-project" style="width:160px;">
+                            <option value="-1">选择项目</option>
+                            @if(!empty($project_list))
+                                @foreach($project_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
 
                         {{--按月查看--}}
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-company">
@@ -291,6 +299,7 @@
                         d.description = $('input[name="company-description"]').val();
                         d.company = $('select[name="company-company"]').val();
                         d.channel = $('select[name="company-channel"]').val();
+                        d.project = $('select[name="company-project"]').val();
                         d.month = $('input[name="company-month"]').val();
                         d.date = $('input[name="company-date"]').val();
                         d.assign_start = $('input[name="company-start"]').val();
