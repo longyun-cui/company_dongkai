@@ -6958,12 +6958,7 @@ class DKFinanceRepository {
                     $project = DK_Finance_Project::withTrashed()->find($column_value);
                     if(!$project) throw new Exception("该【项目】不存在，刷新页面重试！");
 
-                    $project_id = $item->project_id;
-                    $user_phone = $item->user_phone;
 
-                    $is_repeat = DK_Finance_Daily::where(['project_id'=>$column_value,'user_phone'=>$user_phone])
-                        ->where('id','<>',$id)->where('is_published','>',0)->count("*");
-                    $item->is_repeat = $is_repeat;
                 }
             }
             else if($column_key == "location_city")
