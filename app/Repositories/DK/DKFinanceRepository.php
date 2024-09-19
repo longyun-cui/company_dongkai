@@ -6957,8 +6957,6 @@ class DKFinanceRepository {
                 {
                     $project = DK_Finance_Project::withTrashed()->find($column_value);
                     if(!$project) throw new Exception("该【项目】不存在，刷新页面重试！");
-
-
                 }
             }
             else if($column_key == "location_city")
