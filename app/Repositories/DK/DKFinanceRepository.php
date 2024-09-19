@@ -5427,8 +5427,16 @@ class DKFinanceRepository {
                 $temp_date['description'] = trim($value['description']);  // 备注  [string]
 
                 $temp_date['manpower_daily_cost'] = $temp_date['manpower_daily_wage'] * $temp_date['attendance_manpower'];
-                $temp_date['material_daily_quantity'] = $temp_date['call_charge_daily_cost'] / $temp_date['call_charge_coefficient'];
-                $temp_date['material_daily_cost'] = ($temp_date['call_charge_daily_cost'] / $temp_date['call_charge_coefficient']) * $temp_date['material_coefficient'];
+                if($temp_date['call_charge_coefficient']  ==  0)
+                {
+                    $temp_date['material_daily_quantity'] = 0;
+                    $temp_date['material_daily_cost'] = 0;
+                }
+                else
+                {
+                    $temp_date['material_daily_quantity'] = $temp_date['call_charge_daily_cost'] / $temp_date['call_charge_coefficient'];
+                    $temp_date['material_daily_cost'] = ($temp_date['call_charge_daily_cost'] / $temp_date['call_charge_coefficient']) * $temp_date['material_coefficient'];
+                }
                 $temp_date['taxes_daily_cost'] = $temp_date['taxes_coefficient'] * $temp_date['delivery_quantity'];
                 $temp_date['total_daily_cost'] = $temp_date['manpower_daily_cost'] + $temp_date['call_charge_daily_cost'] + $temp_date['material_daily_cost'] + $temp_date['taxes_daily_cost'];
 
@@ -5682,8 +5690,16 @@ class DKFinanceRepository {
             unset($mine_data['operate_type']);
 
             $mine_data['manpower_daily_cost'] = $mine_data['manpower_daily_wage'] * $mine_data['attendance_manpower'];
-            $mine_data['material_daily_quantity'] = $mine_data['call_charge_daily_cost'] * $mine_data['call_charge_coefficient'];
-            $mine_data['material_daily_cost'] = $mine_data['call_charge_daily_cost'] * $mine_data['call_charge_coefficient'] * $mine_data['material_coefficient'];
+            if($mine_data['call_charge_coefficient'] == 0)
+            {
+                $mine_data['material_daily_quantity'] = 0;
+                $mine_data['material_daily_cost'] = 0;
+            }
+            else
+            {
+                $mine_data['material_daily_quantity'] = $mine_data['call_charge_daily_cost'] / $mine_data['call_charge_coefficient'];
+                $mine_data['material_daily_cost'] = $mine_data['call_charge_daily_cost'] * $mine_data['call_charge_coefficient'] * $mine_data['material_coefficient'];
+            }
             $mine_data['taxes_daily_cost'] = $mine_data['taxes_coefficient'] * $mine_data['delivery_quantity'];
             $mine_data['total_daily_cost'] = $mine_data['manpower_daily_cost'] + $mine_data['call_charge_daily_cost'] + $mine_data['material_daily_cost'] + $mine_data['taxes_daily_cost'];
 
@@ -6702,8 +6718,16 @@ class DKFinanceRepository {
             {
                 $item->$column_key = $column_value;
                 $item->manpower_daily_cost = $item->manpower_daily_wage * $item->attendance_manpower;
-                $item->material_daily_quantity = $item->call_charge_daily_cost * $item->call_charge_coefficient;
-                $item->material_daily_cost = $item->call_charge_daily_cost * $item->call_charge_coefficient * $item->material_coefficient;
+                if($item->call_charge_coefficient == 0)
+                {
+                    $item->material_daily_quantity = 0;
+                    $item->material_daily_cost = 0;
+                }
+                else
+                {
+                    $item->material_daily_quantity = $item->call_charge_daily_cost / $item->call_charge_coefficient;
+                    $item->material_daily_cost = $item->call_charge_daily_cost / $item->call_charge_coefficient * $item->material_coefficient;
+                }
                 $item->taxes_daily_cost = $item->taxes_coefficient * $item->delivery_quantity;
                 $item->total_daily_cost = $item->manpower_daily_cost + $item->call_charge_daily_cost + $item->material_daily_cost + $item->taxes_daily_cost;
             }
