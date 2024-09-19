@@ -5385,10 +5385,10 @@ class DKFinanceRepository {
         $data = Excel::load($attachment_file, function($reader) {
 
 //            $reader->takeColumns(50);
-            $reader->limitColumns(12);
+            $reader->limitColumns(20);
 
 //            $reader->takeRows(100);
-            $reader->limitRows(201);
+            $reader->limitRows(1001);
 
 //            $reader->ignoreEmpty();
 
