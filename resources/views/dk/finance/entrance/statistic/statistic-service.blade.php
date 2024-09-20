@@ -46,7 +46,7 @@
                             @endif
                         </select>
                         <select class="form-control form-filter select-select2 select2-box service-channel" name="service-channel" style="width:120px;">
-                            <option value="-1">选择渠道</option>
+                            <option value="-1">选择代理</option>
                             @if(!empty($channel_list))
                                 @foreach($channel_list as $v)
                                     <option value="{{ $v->id }}">{{ $v->name }}</option>
@@ -392,7 +392,7 @@
                         }
                     },
                     {
-                        "title": "所属渠道",
+                        "title": "所属代理",
                         "data": "channel_id",
                         "className": "text-center",
                         "width": "100px",

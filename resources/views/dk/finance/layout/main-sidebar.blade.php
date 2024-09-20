@@ -113,7 +113,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,31,41]))
-            <li class="treeview {{ $menu_active_of_statistic_company or '' }} _none-">
+            <li class="treeview {{ $menu_active_of_statistic_company or '' }} _none">
                 <a href="{{ url('/statistic/statistic-company') }}">
                     <i class="fa fa-bar-chart text-aqua"></i> <span>公司报表</span>
                 </a>
@@ -121,7 +121,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,31]))
-            <li class="treeview {{ $menu_active_of_statistic_channel or '' }} _none-">
+            <li class="treeview {{ $menu_active_of_statistic_channel or '' }} _none">
                 <a href="{{ url('/statistic/statistic-channel') }}">
                     <i class="fa fa-bar-chart text-aqua"></i> <span>渠道报表</span>
                 </a>
