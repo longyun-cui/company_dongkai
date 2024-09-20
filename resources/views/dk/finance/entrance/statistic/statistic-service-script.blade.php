@@ -243,7 +243,7 @@
         // 每日交付量
         var $delivery_quantity_res = new Array();
         $.each($data.statistics_data,function(key,v){
-            $delivery_quantity_res[(v.day - 1)] = { value:v.delivery_quantity_total, name:v.day };
+            $delivery_quantity_res[(v.day - 1)] = { value:(v.delivery_quantity_total), name:v.day };
         });
         // echarts show
         var $delivery_quantity_chart = {
@@ -314,7 +314,7 @@
         // 每日成本
         var $cost_total_res = new Array();
         $.each($data.statistics_data,function(key,v){
-            $cost_total_res[(v.day - 1)] = { value:v.total_daily_cost_total, name:v.day };
+            $cost_total_res[(v.day - 1)] = { value:parseFloat(parseFloat(v.total_daily_cost_total).toFixed(2)), name:v.day };
         });
         // echarts show
         var $cost_total_chart = {
@@ -385,7 +385,7 @@
         // 人均成本
         var $per_capita_res = new Array();
         $.each($data.statistics_data,function(key,v){
-            $per_capita_res[(v.day - 1)] = { value:v.per_capita, name:v.day };
+            $per_capita_res[(v.day - 1)] = { value:parseFloat(parseFloat(v.per_capita).toFixed(2)), name:v.day };
         });
         // echarts show
         var $per_capita_chart = {
@@ -457,6 +457,7 @@
         var $unit_average_res = new Array();
         $.each($data.statistics_data,function(key,v){
             $unit_average_res[(v.day - 1)] = { value:v.unit_average, name:v.day };
+            $unit_average_res[(v.day - 1)] = { value:parseFloat(parseFloat(v.unit_average).toFixed(2)), name:v.day };
         });
         // echarts show
         var $unit_average_chart = {
