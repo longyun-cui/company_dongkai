@@ -24,7 +24,7 @@
             $('#datatable_ajax_daily').DataTable().ajax.reload();
             $('#datatable_ajax_project').DataTable().ajax.reload();
 
-            statistic_get_data_for_service_daily_chart($the_month_str,
+            statistic_get_data_for_service_daily_chart("month",$the_month_str,
                 "myChart-for-delivery-quantity",
                 "myChart-for-cost-total",
                 "myChart-for-cost-per-capita",
@@ -34,7 +34,7 @@
         // 【项目报表】按天搜索
         $(".main-content").on('click', "#filter-submit-for-service-by-day", function() {
 
-            $("#statistic-for-service").find('input[name=service-time-type]').val('day');
+            $("#statistic-for-service").find('input[name=service-time-type]').val('date');
             var $staff_type_title = $('select[name=service-staff-type]').find("option:selected").text();
             $(".statistic-title").html($staff_type_title);
             $(".statistic-time-type-title").html('按天');
@@ -45,7 +45,7 @@
             $('#datatable_ajax_daily').DataTable().ajax.reload();
             $('#datatable_ajax_project').DataTable().ajax.reload();
 
-            statistic_get_data_for_service_daily_chart($the_month_str,
+            statistic_get_data_for_service_daily_chart("date",$the_date_str,
                 "myChart-for-delivery-quantity",
                 "myChart-for-cost-total",
                 "myChart-for-cost-per-capita",
@@ -192,34 +192,41 @@
 
 
 
-    function statistic_get_data_for_service_daily_chart($month, $target_delivery_quantity, $target_cost_total ,$target_per_capita ,$target_unit_average)
+    function statistic_get_data_for_service_daily_chart($time_type, $time, $target_delivery_quantity, $target_cost_total ,$target_per_capita ,$target_unit_average)
     {
         var $company = $('select[name="service-company"]').val();
         var $channel = $('select[name="service-channel"]').val();
         var $project = $('select[name="service-project"]').val();
 
-        var $month_arr = $month.split('-');
-        var $the_year = $month_arr[0];
-        var $the_month = $month_arr[1];
-
-        var $the_month_str = $the_year+'.'+$the_month+'月';
-
-
-        var $pre_year = '';
-        var $pre_month = '';
-
-        if(parseInt($the_month) == 1)
+        if($time_type == "month")
         {
-            $pre_year = parseInt($the_year) - 1;
-            $pre_month = 12;
+            var $month_arr = $time.split('-');
+            var $the_year = $month_arr[0];
+            var $the_month = $month_arr[1];
+
+            var $the_month_str = $the_year+'.'+$the_month+'月';
+
+
+            var $pre_year = '';
+            var $pre_month = '';
+
+            if(parseInt($the_month) == 1)
+            {
+                $pre_year = parseInt($the_year) - 1;
+                $pre_month = 12;
+            }
+            else
+            {
+                $pre_year = $the_year;
+                $pre_month = parseInt($the_month) - 1;
+                if($pre_month < 10) $pre_month = '0' + $pre_month;
+            }
+            var $the_time_str = $pre_year+'.'+$pre_month+'月';
         }
-        else
+        else if($time_type == "date")
         {
-            $pre_year = $the_year;
-            $pre_month = parseInt($the_month) - 1;
-            if($pre_month < 10) $pre_month = '0' + $pre_month;
+            var $the_time_str = $time;
         }
-        var $pre_month_str = $pre_year+'.'+$pre_month+'月';
 
 
         var $data = new Object();
@@ -233,7 +240,8 @@
                 company: $company,
                 channel: $channel,
                 project: $project,
-                month: $month,
+                time_type: $time_type,
+                time: $time,
                 operate:"statistic-service"
             },
             success:function(data){
@@ -270,7 +278,7 @@
                 }
             },
             legend: {
-                data: [$the_month_str, $pre_month_str],
+                data: [$the_time_str],
                 left: 20
             },
             toolbox: {
@@ -303,7 +311,7 @@
             ],
             series: [
                 {
-                    name: $the_month_str,
+                    name: $the_time_str,
                     type: 'line',
                     label: {
                         normal: {
@@ -341,7 +349,7 @@
                 }
             },
             legend: {
-                data: [$the_month_str, $pre_month_str],
+                data: [$the_time_str],
                 left: 20
             },
             toolbox: {
@@ -374,7 +382,7 @@
             ],
             series: [
                 {
-                    name: $the_month_str,
+                    name: $the_time_str,
                     type: 'line',
                     label: {
                         normal: {
@@ -412,7 +420,7 @@
                 }
             },
             legend: {
-                data: [$the_month_str, $pre_month_str],
+                data: [$the_time_str],
                 left: 20
             },
             toolbox: {
@@ -445,7 +453,7 @@
             ],
             series: [
                 {
-                    name: $the_month_str,
+                    name: $the_time_str,
                     type: 'line',
                     label: {
                         normal: {
@@ -484,7 +492,7 @@
                 }
             },
             legend: {
-                data: [$the_month_str, $pre_month_str],
+                data: [$the_time_str],
                 left: 20
             },
             toolbox: {
@@ -517,7 +525,7 @@
             ],
             series: [
                 {
-                    name: $the_month_str,
+                    name: $the_time_str,
                     type: 'line',
                     label: {
                         normal: {

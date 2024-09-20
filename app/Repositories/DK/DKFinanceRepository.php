@@ -12689,18 +12689,33 @@ class DKFinanceRepository {
 //            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
             ->groupBy('project_id');
 
-        if(!empty($post_data['month']))
+
+        if(!empty($post_data['time_type']))
         {
-            $month_arr = explode('-', $post_data['month']);
-            $month_year = $month_arr[0];
-            $month_month = $month_arr[1];
-            $query_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+            if($post_data['time_type'] == "month")
+            {
+                if(!empty($post_data['month']))
+                {
+                    $month_arr = explode('-', $post_data['month']);
+                    $month_year = $month_arr[0];
+                    $month_month = $month_arr[1];
+                    $query_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+                }
+            }
+            else if($post_data['time_type'] == "date")
+            {
+                if(!empty($post_data['date']))
+                {
+                    $query_daily->whereDate("assign_date", $post_data['date']);
+                }
+            }
+            else if($post_data['time_type'] == "period")
+            {
+            }
+            else
+            {}
         }
 
-        if(!empty($post_data['date']))
-        {
-            $query_daily->whereDate("assign_date", $post_data['date']);
-        }
 
         $query_daily = $query_daily->get()
             ->keyBy('project_id')
@@ -12890,17 +12905,30 @@ class DKFinanceRepository {
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
 
-        if(!empty($post_data['month']))
+        if(!empty($post_data['time_type']))
         {
-            $month_arr = explode('-', $post_data['month']);
-            $month_year = $month_arr[0];
-            $month_month = $month_arr[1];
-            $query->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
-        }
-
-        if(!empty($post_data['date']))
-        {
-            $query->whereDate("assign_date", $post_data['date']);
+            if($post_data['time_type'] == "month")
+            {
+                if(!empty($post_data['month']))
+                {
+                    $month_arr = explode('-', $post_data['month']);
+                    $month_year = $month_arr[0];
+                    $month_month = $month_arr[1];
+                    $query->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+                }
+            }
+            else if($post_data['time_type'] == "date")
+            {
+                if(!empty($post_data['date']))
+                {
+                    $query->whereDate("assign_date", $post_data['date']);
+                }
+            }
+            else if($post_data['time_type'] == "period")
+            {
+            }
+            else
+            {}
         }
 
 
@@ -13063,6 +13091,14 @@ class DKFinanceRepository {
                 $query_for_daily->whereIn('project_id', $project_list);
             }
         }
+        // 商务
+        if(isset($post_data['business']))
+        {
+            if(!in_array($post_data['business'],[-1]))
+            {
+                $query_for_daily->where('business_id', $post_data['business']);
+            }
+        }
         // 项目
         if(isset($post_data['project']))
         {
@@ -13072,14 +13108,36 @@ class DKFinanceRepository {
             }
         }
 
-        // 指定月份
-        if(!empty($post_data['month']))
+
+        if(!empty($post_data['time_type']))
         {
-            $month_arr = explode('-', $post_data['month']);
-            $month_year = $month_arr[0];
-            $month_month = $month_arr[1];
-            $query_for_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+            if($post_data['time_type'] == "month")
+            {
+                // 指定月份
+                if(!empty($post_data['time']))
+                {
+                    $month_arr = explode('-', $post_data['time']);
+                    $month_year = $month_arr[0];
+                    $month_month = $month_arr[1];
+                    $query_for_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+                }
+            }
+            else if($post_data['time_type'] == "date")
+            {
+                // 指定日期
+                if(!empty($post_data['time']))
+                {
+                    $query_for_daily->whereDate("assign_date", $post_data['time']);
+                }
+            }
+            else if($post_data['time_type'] == "period")
+            {
+            }
+            else
+            {}
         }
+
+
 
 
         $statistics_data_for_daily = $query_for_daily->get()->keyBy('day');

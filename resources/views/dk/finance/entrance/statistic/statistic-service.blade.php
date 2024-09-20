@@ -75,7 +75,7 @@
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="service-month" placeholder="选择月份" readonly="readonly" value_="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="service-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-next-for-service">
                             <i class="fa fa-chevron-right"></i>
                         </button>
@@ -88,7 +88,7 @@
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-service">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="service-date" placeholder="选择日期" readonly="readonly" value_="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="service-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-service">
                             <i class="fa fa-chevron-right"></i>
                         </button>
@@ -303,6 +303,7 @@
                         d.channel = $('select[name="service-channel"]').val();
                         d.business = $('select[name="service-business"]').val();
                         d.project = $('select[name="service-project"]').val();
+                        d.time_type = $('input[name="service-time-type"]').val();
                         d.month = $('input[name="service-month"]').val();
                         d.date = $('input[name="service-date"]').val();
                         d.assign_start = $('input[name="service-start"]').val();
@@ -723,6 +724,7 @@
                         d.channel = $('select[name="service-channel"]').val();
                         d.business = $('select[name="service-business"]').val();
                         d.project = $('select[name="service-project"]').val();
+                        d.time_type = $('input[name="service-time-type"]').val();
                         d.month = $('input[name="service-month"]').val();
                         d.date = $('input[name="service-date"]').val();
 //
