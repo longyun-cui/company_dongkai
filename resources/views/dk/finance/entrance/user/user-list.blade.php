@@ -54,8 +54,9 @@
                         @if(in_array($me->user_type,[0,1,9,11]))
                             <select class="form-control form-filter" name="staff-user-type" style="width:88px;">
                                 <option value="-1">全部人员</option>
-                                <option value="31">财务经理</option>
-                                <option value="41">团队·总经理</option>
+                                <option value="31">财务人员</option>
+                                <option value="41">代理人员</option>
+                                <option value="61">商务人员</option>
                             </select>
                         @endif
 
@@ -282,8 +283,9 @@
                             else if(data == 21) return '<small class="btn-xs bg-purple">人事经理</small>';
                             else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
                             else if(data == 31) return '<small class="btn-xs bg-orange">财务经理</small>';
-                            else if(data == 33) return '<small class="btn-xs bg-orange">财务</small>';
-                            else if(data == 41) return '<small class="btn-xs bg-purple">渠道·经理</small>';
+                            else if(data == 33) return '<small class="btn-xs bg-orange">财务人员</small>';
+                            else if(data == 41) return '<small class="btn-xs bg-purple">代理人</small>';
+                            else if(data == 61) return '<small class="btn-xs bg-aqua">商务人员</small>';
                             else return "有误";
                         }
                     },

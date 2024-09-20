@@ -15,7 +15,7 @@ class DK_Finance_Project extends Model
         'org_id', 'admin_id',
         'item_id', 'menu_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'company_id', 'channel_id',
+        'company_id', 'channel_id', 'business_id',
         'inspector_id',
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
@@ -75,6 +75,13 @@ class DK_Finance_Project extends Model
     function channel_er()
     {
         return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Company','channel_id','id');
+    }
+
+
+    // 商务人员
+    function business_or()
+    {
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_User','business_id','id');
     }
 
 

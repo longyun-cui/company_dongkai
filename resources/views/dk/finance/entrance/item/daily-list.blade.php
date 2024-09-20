@@ -56,7 +56,7 @@
                         <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:88px;" />
 
                         @if(in_array($me->user_type,[0,9,11,31]))
-                            <select class="form-control form-filter select-select2 select2-box order-company" name="order-company" style="width:160px;">
+                            <select class="form-control form-filter select-select2 select2-box order-company" name="order-company" style="width:120px;">
                                 <option value="-1">选择公司</option>
                                 @if(!empty($company_list))
                                     @foreach($company_list as $v)
@@ -64,16 +64,24 @@
                                     @endforeach
                                 @endif
                             </select>
-                            <select class="form-control form-filter select-select2 order-channel" name="order-channel" style="width:160px;">
-                                <option value="-1">选择渠道</option>
+                            <select class="form-control form-filter select-select2 select2-box order-channel" name="order-channel" style="width:120px;">
+                                <option value="-1">选择代理</option>
                                 @if(!empty($channel_list))
                                     @foreach($channel_list as $v)
                                         <option value="{{ $v->id }}">{{ $v->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
+                            <select class="form-control form-filter select-select2 select2-box order-business" name="order-business" style="width:120px;">
+                                <option value="-1">选择商务</option>
+                                @if(!empty($business_list))
+                                    @foreach($business_list as $v)
+                                        <option value="{{ $v->id }}">{{ $v->username }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
                         @endif
-                        <select class="form-control form-filter select2-box order-select2-project" name="order-project" style="width:160px;">
+                        <select class="form-control form-filter select-select2 select2-box order-select2-project" name="order-project" style="width:160px;">
                             @if($project_id > 0)
                                 <option value="-1">选择项目</option>
                                 <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
@@ -609,9 +617,9 @@
 
 
 
-    {{--渠道来源--}}
+    {{--代理来源--}}
     <div id="option-list-for-channel-source">
-        <option value="-1">选择渠道来源</option>
+        <option value="-1">选择代理来源</option>
         @foreach(config('info.channel_source') as $v)
             <option value="{{ $v }}">{{ $v }}</option>
         @endforeach
@@ -771,6 +779,7 @@
                         d.company = $('select[name="order-company"]').val();
                         d.channel = $('select[name="order-channel"]').val();
                         d.project = $('select[name="order-project"]').val();
+                        d.business = $('select[name="order-business"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
 //
@@ -1499,8 +1508,11 @@
                     if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
                     if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
                     if($('input[name="order-ended"]').val())  $obj.assign_ended = $('input[name="order-ended"]').val();
-                    if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
+                    if($('select[name="order-company"]').val() > 0)  $obj.company_id = $('select[name="order-company"]').val();
+                    if($('select[name="order-channel"]').val() > 0)  $obj.channel_id = $('select[name="order-channel"]').val();
+                    if($('select[name="order-business"]').val() > 0)  $obj.business_id = $('select[name="order-project"]').val();
+                    if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 50) $obj.length = $page_length;

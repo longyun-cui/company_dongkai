@@ -105,7 +105,7 @@
             <li class="header">数据统计</li>
 
             @if(in_array($me->user_type,[0,1,9,11,31,41]))
-            <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
+            <li class="treeview {{ $menu_active_of_statistic_project or '' }} _none">
                 <a href="{{ url('/statistic/statistic-project') }}">
                     <i class="fa fa-bar-chart text-aqua"></i> <span>项目报表</span>
                 </a>
@@ -113,7 +113,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,31,41]))
-            <li class="treeview {{ $menu_active_of_statistic_company or '' }}">
+            <li class="treeview {{ $menu_active_of_statistic_company or '' }} _none">
                 <a href="{{ url('/statistic/statistic-company') }}">
                     <i class="fa fa-bar-chart text-aqua"></i> <span>公司报表</span>
                 </a>
@@ -134,6 +134,14 @@
                     <i class="fa fa-bar-chart text-aqua"></i> <span>业务报表</span>
                 </a>
             </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,31]))
+                <li class="treeview {{ $menu_active_of_statistic_finance or '' }} _none">
+                    <a href="{{ url('/statistic/statistic-finance') }}">
+                        <i class="fa fa-bar-chart text-aqua"></i> <span>财务报表</span>
+                    </a>
+                </li>
             @endif
 
             <li class="treeview {{ $menu_active_of_statistic_index or '' }} _none">
@@ -157,7 +165,7 @@
             @if(in_array($me->user_type,[0,1,9,11,31]))
                 <li class="treeview {{ $menu_active_of_record_funds_recharge or '' }}">
                     <a href="{{ url('/record/funds-recharge-list') }}">
-                        <i class="fa fa-cny text-aqua"></i> <span>充值记录</span>
+                        <i class="fa fa-cny text-red"></i> <span>充值记录</span>
                     </a>
                 </li>
             @endif
@@ -165,7 +173,7 @@
             @if(in_array($me->user_type,[0,1,9,11,31]))
                 <li class="treeview {{ $menu_active_of_record_funds_using or '' }}">
                     <a href="{{ url('/record/funds-using-list') }}">
-                        <i class="fa fa-cny text-aqua"></i> <span>结算记录</span>
+                        <i class="fa fa-cny text-red"></i> <span>结算记录</span>
                     </a>
                 </li>
             @endif

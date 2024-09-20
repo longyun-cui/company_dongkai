@@ -37,7 +37,7 @@
                         <input type="hidden" name="service-time-type" value="" readonly>
 
                         @if(in_array($me->user_type,[0,9,11,31]))
-                        <select class="form-control form-filter select-select2 select2-box service-company" name="service-company" style="width:160px;">
+                        <select class="form-control form-filter select-select2 select2-box service-company" name="service-company" style="width:120px;">
                             <option value="-1">选择公司</option>
                             @if(!empty($company_list))
                                 @foreach($company_list as $v)
@@ -45,11 +45,19 @@
                                 @endforeach
                             @endif
                         </select>
-                        <select class="form-control form-filter select-select2 service-channel" name="service-channel" style="width:160px;">
+                        <select class="form-control form-filter select-select2 select2-box service-channel" name="service-channel" style="width:120px;">
                             <option value="-1">选择渠道</option>
                             @if(!empty($channel_list))
                                 @foreach($channel_list as $v)
                                     <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <select class="form-control form-filter select-select2 select2-box service-business" name="service-business" style="width:120px;">
+                            <option value="-1">选择商务</option>
+                            @if(!empty($business_list))
+                                @foreach($business_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->username }}</option>
                                 @endforeach
                             @endif
                         </select>
@@ -293,6 +301,7 @@
                         d.description = $('input[name="service-description"]').val();
                         d.company = $('select[name="service-company"]').val();
                         d.channel = $('select[name="service-channel"]').val();
+                        d.business = $('select[name="service-business"]').val();
                         d.project = $('select[name="service-project"]').val();
                         d.month = $('input[name="service-month"]').val();
                         d.date = $('input[name="service-date"]').val();
@@ -376,23 +385,34 @@
                         "title": "项目名称",
                         "data": "name",
                         "className": "text-center project-name",
-                        "width": "120px",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return '<a href="javascript:void(0);">'+data+'</a>';
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "120px",
                         "title": "所属渠道",
                         "data": "channel_id",
+                        "className": "text-center",
+                        "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         },
                         render: function(data, type, row, meta) {
                             if(row.channel_er == null) return '--';
                             else return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
+                        }
+                    },
+                    {
+                        "title": "商务人员",
+                        "data": "business_id",
+                        "className": "text-center",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.business_or == null) return '--';
+                            else return '<a href="javascript:void(0);">'+row.business_or.username+'</a>';
                         }
                     },
 //                     {
@@ -701,6 +721,7 @@
                         d.assign_ended = $('input[name="service-ended"]').val();
                         d.company = $('select[name="service-company"]').val();
                         d.channel = $('select[name="service-channel"]').val();
+                        d.business = $('select[name="service-business"]').val();
                         d.project = $('select[name="service-project"]').val();
                         d.month = $('input[name="service-month"]').val();
 //

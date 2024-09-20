@@ -567,10 +567,41 @@
             }
             else if($that.attr("data-key") == "channel_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').addClass('select2-channel');
+                $('select[name=info-select-set-column-value]').removeClass('select2-business').addClass('select2-channel');
                 $('.select2-channel').select2({
                     ajax: {
                         url: "{{ url('/select2/select2_company?category=channel') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+            }
+            else if($that.attr("data-key") == "business_id")
+            {
+                $('select[name=info-select-set-column-value]').removeClass('select2-channel').addClass('select2-business');
+                $('.select2-business').select2({
+                    ajax: {
+                        url: "{{ url('/select2/select2_user?type=business') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {

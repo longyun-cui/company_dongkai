@@ -414,7 +414,7 @@
 {{--option--}}
 <div class="option-container _none">
 
-    <div id="trailer_type-option-list">
+    <div id="option-list-for-abc">
         <option value="0">选择箱型</option>
         <option value="直板">直板</option>
         <option value="高栏">高栏</option>
@@ -422,40 +422,11 @@
         <option value="冷藏">冷藏</option>
     </div>
 
-    <div id="trailer_length-option-list">
-        <option value="0">选择车挂尺寸</option>
-        <option value="9.6">9.6</option>
-        <option value="12.5">12.5</option>
-        <option value="15">15</option>
-        <option value="16.5">16.5</option>
-        <option value="17.5">17.5</option>
-    </div>
-
-    <div id="trailer_volume-option-list">
-        <option value="0">选择承载方数</option>
-        <option value="125">125</option>
-        <option value="130">130</option>
-        <option value="135">135</option>
-    </div>
-
-    <div id="trailer_weight-option-list">
-        <option value="0">选择承载重量</option>
-        <option value="13">13吨</option>
-        <option value="20">20吨</option>
-        <option value="25">25吨</option>
-    </div>
-
-    <div id="trailer_axis_count-option-list">
-        <option value="0">选择轴数</option>
-        <option value="1">1轴</option>
-        <option value="2">2轴</option>
-        <option value="3">3轴</option>
-    </div>
 
 
 
 
-    <div id="receipt_need-option-list">
+    <div id="option-list-for-receipt_need">
 
         <label class="control-label col-md-2">是否需要回单</label>
         <div class="col-md-8">
@@ -1018,22 +989,22 @@
                         }
                     },
                     {
+                        "title": "所属代理",
+                        "data": "channel_id",
                         "className": "text-center",
                         "width": "120px",
-                        "title": "所属渠道",
-                        "data": "channel_id",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','所属渠道');
+                                $(nTd).attr('data-id',row.id).attr('data-name','所属代理');
                                 $(nTd).attr('data-key','channel_id').attr('data-value',data);
                                 if(row.project_er == null) $(nTd).attr('data-option-name','未指定');
                                 else {
                                     $(nTd).attr('data-option-name',row.channel_er.name);
                                 }
-                                $(nTd).attr('data-column-name','所属渠道');
+                                $(nTd).attr('data-column-name','所属代理');
                                 if(row.project_id) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1041,6 +1012,32 @@
                         render: function(data, type, row, meta) {
                             if(row.channel_er == null) return '--';
                             else return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
+                        }
+                    },
+                    {
+                        "title": "商务人员",
+                        "data": "business_id",
+                        "className": "text-center",
+                        "width": "120px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','商务人员');
+                                $(nTd).attr('data-key','business_id').attr('data-value',data);
+                                if(row.business_or == null) $(nTd).attr('data-option-name','未指定');
+                                else {
+                                    $(nTd).attr('data-option-name',row.business_or.username);
+                                }
+                                $(nTd).attr('data-column-name','商务人员');
+                                if(row.project_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.business_or == null) return '--';
+                            else return '<a href="javascript:void(0);">'+row.business_or.username+'</a>';
                         }
                     },
                     {
@@ -1122,7 +1119,7 @@
                         }
                     },
                     {
-                        "title": "渠道单价",
+                        "title": "代理单价",
                         "data": "channel_unit_price",
                         "className": "text-center bg-income",
                         "width": "60px",
@@ -1131,9 +1128,9 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','渠道单价');
+                                $(nTd).attr('data-id',row.id).attr('data-name','代理单价');
                                 $(nTd).attr('data-key','channel_unit_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','渠道单价');
+                                $(nTd).attr('data-column-name','代理单价');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1145,7 +1142,7 @@
                         }
                     },
                     {
-                        "title": "渠道费用",
+                        "title": "代理费用",
                         "data": "id",
                         "className": "text-center bg-income",
                         "width": "60px",
@@ -1206,7 +1203,7 @@
                             var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
                             // 总成本
                             var $total_cost = row.total_cost;
-                            // 渠道费用
+                            // 代理费用
                             var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
 
                             var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
@@ -1934,9 +1931,11 @@
                         render: function(data, type, row, meta) {
                             if(row.operate_category == 1)
                             {
-                                if(data == "name") return '车牌号';
+                                if(data == "name") return '项目名称';
+                                if(data == "channel_id") return '所属代理';
+                                if(data == "business_id") return '商务人员';
                                 else if(data == "delivery_invalid_quantity") return '无效单量';
-                                else if(data == "channel_unit_price") return '渠道单价';
+                                else if(data == "channel_unit_price") return '代理单价';
                                 else if(data == "cooperative_unit_price") return '合作单价';
                                 else if(data == "remark") return '备注';
                                 else return '有误';

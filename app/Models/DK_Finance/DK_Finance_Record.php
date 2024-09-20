@@ -46,54 +46,54 @@ class DK_Finance_Record extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_User','creator_id','id');
     }
     // 创作者（客户）
     function client_creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','creator_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Client','creator_id','id');
     }
     // 创作者
     function updater()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_User','updater_id','id');
     }
     // 创作者
     function completer()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_User','user_id','id');
     }
 
 
-    // 客户
-    function before_client_er()
+    // 用户
+    function before_user_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','before_client_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_User','before_id','id');
     }
     // 客户
-    function after_client_er()
+    function after_user_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','after_client_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_User','after_id','id');
     }
     // 项目
     function before_project_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Project','before_project_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Project','before_id','id');
     }
     // 项目
     function after_project_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Project','after_project_id','id');
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Project','after_id','id');
     }
 
 

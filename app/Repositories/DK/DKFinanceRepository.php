@@ -654,29 +654,32 @@ class DKFinanceRepository {
         if(empty($post_data['keyword']))
         {
             $query =DK_Finance_User::select(['id','username as text'])
-                ->where(['item_status'=>1]);
+                ->where(['user_status'=>1]);
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
-            $query =DK_Finance_Company::select(['id','username as text'])->where('name','like',"%$keyword%")
-                ->where(['item_status'=>1]);
+            $query =DK_Finance_User::select(['id','username as text'])->where('name','like',"%$keyword%")
+                ->where(['user_status'=>1]);
         }
 
         if(!empty($post_data['category']))
         {
             $category = $post_data['category'];
-            if($category == 'company') $query->where(['user_category'=>1]);
-            else if($category == 'channel') $query->where(['company_category'=>11]);
-//            else $query->where(['company_category'=>1]);
+            if($category == 'admin') $query->where(['user_category'=>1]);
+            else if($category == 'staff') $query->where(['user_category'=>11]);
+//            else $query->where(['user_category'=>1]);
         }
 //        else $query->where(['company_category'=>1]);
 
         if(!empty($post_data['type']))
         {
             $type = $post_data['type'];
-            if($type == 'direct') $query->where(['user_type'=>1]);
-            else if($type == 'agent') $query->where(['user_type'=>11]);
+            if($type == 'super') $query->where(['user_type'=>1]);
+            else if($type == 'admin') $query->where(['user_type'=>11]);
+            else if($type == 'finance') $query->where(['user_type'=>31]);
+            else if($type == 'channel') $query->where(['user_type'=>41]);
+            else if($type == 'business') $query->where(['user_type'=>61]);
 //            else $query->where(['user_type'=>1]);
         }
 //        else $query->where(['user_type'=>1]);
@@ -3775,7 +3778,7 @@ class DKFinanceRepository {
 
         $query = DK_Finance_Project::select('*')
             ->withTrashed()
-            ->with(['creator','company_er','channel_er']);
+            ->with(['creator','company_er','channel_er','business_or']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -7384,6 +7387,9 @@ class DKFinanceRepository {
         $channel_list = DK_Finance_Company::select('id','name')->where('company_category',11)->get();
         $view_data['channel_list'] = $channel_list;
 
+        $business_list = DK_Finance_User::select('id','username')->where('user_type',61)->get();
+        $view_data['business_list'] = $business_list;
+
         $project_list = DK_Finance_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $view_data['project_list'] = $project_list;
 
@@ -7455,6 +7461,15 @@ class DKFinanceRepository {
             if(!in_array($post_data['channel'],[-1]))
             {
                 $project_list = DK_Finance_Project::select('id')->where('channel_id',$post_data['channel'])->get()->toArray();
+                $query->whereIn('project_id', $project_list);
+            }
+        }
+        // 商务
+        if(isset($post_data['business']))
+        {
+            if(!in_array($post_data['business'],[-1]))
+            {
+                $project_list = DK_Finance_Project::select('id')->where('business_id',$post_data['business'])->get()->toArray();
                 $query->whereIn('project_id', $project_list);
             }
         }
@@ -12456,6 +12471,9 @@ class DKFinanceRepository {
         $channel_list = DK_Finance_Company::select('id','name')->where('company_category',11)->get();
         $view_data['channel_list'] = $channel_list;
 
+        $business_list = DK_Finance_User::select('id','username')->where('user_type',61)->get();
+        $view_data['business_list'] = $business_list;
+
         $project_list = DK_Finance_Project::select('id','name')->get();
         $view_data['project_list'] = $project_list;
 
@@ -12691,7 +12709,7 @@ class DKFinanceRepository {
 
         $query = DK_Finance_Project::select('*')
             ->withTrashed()
-            ->with(['creator','company_er','channel_er']);
+            ->with(['creator','company_er','channel_er','business_or']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -12714,6 +12732,14 @@ class DKFinanceRepository {
             if(!in_array($post_data['channel'],[-1]))
             {
                 $query->where('channel_id', $post_data['channel']);
+            }
+        }
+        // 商务
+        if(isset($post_data['business']))
+        {
+            if(!in_array($post_data['business'],[-1]))
+            {
+                $query->where('business_id', $post_data['business']);
             }
         }
         // 项目
@@ -12765,9 +12791,10 @@ class DKFinanceRepository {
 
         $total_data = [];
         $total_data['id'] = '总计';
-        $total_data['name'] = '--';
-        $total_data['date_day'] = '统计';
+        $total_data['name'] = '总计';
+        $total_data['date_day'] = '总计';
         $total_data['channel_id'] = 0;
+        $total_data['business_id'] = 0;
 
         $total_data['total_delivery_quantity'] = 0;
         $total_data['total_delivery_quantity_of_invalid'] = 0;
@@ -12887,6 +12914,15 @@ class DKFinanceRepository {
             if(!in_array($post_data['channel'],[-1]))
             {
                 $project_list = DK_Finance_Project::select('id')->where('channel_id',$post_data['channel'])->get()->toArray();
+                $query->whereIn('project_id', $project_list);
+            }
+        }
+        // 商务
+        if(isset($post_data['business']))
+        {
+            if(!in_array($post_data['business'],[-1]))
+            {
+                $project_list = DK_Finance_Project::select('id')->where('business_id',$post_data['business'])->get()->toArray();
                 $query->whereIn('project_id', $project_list);
             }
         }
