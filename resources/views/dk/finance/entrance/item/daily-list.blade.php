@@ -769,19 +769,19 @@
                         d.id = $('input[name="order-id"]').val();
                         d.remark = $('input[name="order-remark"]').val();
                         d.description = $('input[name="order-description"]').val();
-                        d.assign = $('input[name="order-assign"]').val();
-                        d.assign_start = $('input[name="order-start"]').val();
-                        d.assign_ended = $('input[name="order-ended"]').val();
                         d.name = $('input[name="order-name"]').val();
                         d.title = $('input[name="order-title"]').val();
                         d.keyword = $('input[name="order-keyword"]').val();
+                        d.order_type = $('select[name="order-type"]').val();
+                        d.status = $('select[name="order-status"]').val();
                         d.staff = $('select[name="order-staff"]').val();
                         d.company = $('select[name="order-company"]').val();
                         d.channel = $('select[name="order-channel"]').val();
-                        d.project = $('select[name="order-project"]').val();
                         d.business = $('select[name="order-business"]').val();
-                        d.status = $('select[name="order-status"]').val();
-                        d.order_type = $('select[name="order-type"]').val();
+                        d.project = $('select[name="order-project"]').val();
+                        d.assign = $('input[name="order-assign"]').val();
+                        d.assign_start = $('input[name="order-start"]').val();
+                        d.assign_ended = $('input[name="order-ended"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -851,6 +851,7 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            if(data == "合计") return data;
 
                             var $html_edit = '';
                             var $html_detail = '';
@@ -985,10 +986,32 @@
                         render: function(data, type, row, meta) {
                             if(row.project_er == null)
                             {
-                                return '未指定';
+                                return '--';
                             }
-                            else {
+                            else
+                            {
                                 return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "title": "所属渠道",
+                        "data": "project_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.project_er == null)
+                            {
+                                return '--';
+                            }
+                            else
+                            {
+                                if(row.project_er.channel_er == null)
+                                {
+                                    return '--';
+                                }
+                                else return '<a href="javascript:void(0);">'+row.project_er.channel_er.name+'</a>';
                             }
                         }
                     },
@@ -1380,6 +1403,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            if(data == "--") return data;
                            return parseFloat(data);
                         }
                     },
@@ -1402,6 +1426,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            if(data == "--") return data;
                             return parseFloat(data);
                         }
                     },
@@ -1424,6 +1449,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            if(data == "--") return data;
                             return parseFloat(data);
                         }
                     },
@@ -1446,6 +1472,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
+                            if(data == "--") return data;
                             return parseFloat(data);
                         }
                     },
@@ -1466,7 +1493,7 @@
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                            return row.creator == null ? '--' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                         }
                     },
                     {
@@ -1477,6 +1504,7 @@
                         "orderable": false,
                         "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
+                            if(data == "--") return data;
 //                            return data;
                             var $date = new Date(data*1000);
                             var $year = $date.getFullYear();
@@ -1515,7 +1543,7 @@
                     if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != 50) $obj.length = $page_length;
+                    if($page_length != {{ $length or 20 }}) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
                     var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($pagination > 1) $obj.page = $pagination;

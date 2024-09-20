@@ -7294,9 +7294,9 @@ class DKFinanceRepository {
         if(!empty($post_data['length']))
         {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
-            else $view_data['length'] = 50;
+            else $view_data['length'] = 40;
         }
-        else $view_data['length'] = 50;
+        else $view_data['length'] = 40;
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -7410,8 +7410,11 @@ class DKFinanceRepository {
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->with([
                 'creator',
-                'owner'=>function($query) { $query->select('id','username'); },
-                'project_er',
+                'project_er'=>function($query) {
+                    $query->with([
+                        'channel_er'=>function($query1) { $query1->select('id','name'); }
+                    ]);
+                },
             ]);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
@@ -7443,6 +7446,37 @@ class DKFinanceRepository {
         if(!empty($post_data['assign'])) $query->whereDate("assign_date", $post_data['assign']);
         if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+
+
+
+
+        if(!empty($post_data['time_type']))
+        {
+            if($post_data['time_type'] == "month")
+            {
+                // 指定月份
+                if(!empty($post_data['time']))
+                {
+                    $month_arr = explode('-', $post_data['time']);
+                    $month_year = $month_arr[0];
+                    $month_month = $month_arr[1];
+                    $query->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+                }
+            }
+            else if($post_data['time_type'] == "date")
+            {
+                // 指定日期
+                if(!empty($post_data['time']))
+                {
+                    $query->whereDate("assign_date", $post_data['time']);
+                }
+            }
+            else if($post_data['time_type'] == "period")
+            {
+            }
+            else
+            {}
+        }
 
 
         // 公司
@@ -7483,6 +7517,53 @@ class DKFinanceRepository {
         }
 
 
+        // 统计
+        $daily_total = (clone $query)->select(DB::raw("
+                    sum(attendance_manpower) as total_of_attendance_manpower,
+                    sum(delivery_quantity) as total_of_delivery_quantity,
+                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
+                    sum(call_charge_daily_cost) as total_of_call_charge_daily_cost,
+                    sum(manpower_daily_cost) as total_of_manpower_daily_cost,
+                    sum(material_daily_quantity) as total_of_material_daily_quantity,
+                    sum(material_daily_cost) as total_of_material_daily_cost,
+                    sum(taxes_daily_cost) as total_of_taxes_daily_cost,
+                    sum(total_daily_cost) as total_of_total_daily_cost
+                "))
+            ->get();
+//        dd($daily_total->toArray());
+        $daily_total = $daily_total[0];
+
+
+        $total_data = [];
+        $total_data['id'] = '合计';
+        $total_data['name'] = '--';
+        $total_data['project_id'] = '--';
+        $total_data['assign_date'] = '--';
+        $total_data['outbound_background'] = '--';
+        $total_data['date_day'] = '统计';
+        $total_data['creator_id'] = 0;
+        $total_data['channel_id'] = 0;
+
+        $total_data['attendance_manpower'] = $daily_total->total_of_attendance_manpower;
+        $total_data['delivery_quantity'] = $daily_total->total_of_delivery_quantity;
+        $total_data['delivery_quantity_of_invalid'] = $daily_total->total_of_delivery_quantity_of_invalid;
+
+        $total_data['manpower_daily_cost'] = $daily_total->total_of_manpower_daily_cost;
+        $total_data['call_charge_daily_cost'] = $daily_total->total_of_call_charge_daily_cost;
+        $total_data['material_daily_quantity'] = $daily_total->total_of_material_daily_quantity;
+        $total_data['material_daily_cost'] = $daily_total->total_of_material_daily_cost;
+        $total_data['taxes_daily_cost'] = $daily_total->total_of_taxes_daily_cost;
+        $total_data['total_daily_cost'] = $daily_total->total_of_total_daily_cost;
+
+        $total_data['manpower_daily_wage'] = "--";
+        $total_data['call_charge_coefficient'] = "--";
+        $total_data['material_coefficient'] = "--";
+        $total_data['taxes_coefficient'] = "--";
+
+        $total_data['created_at'] = "--";
+        $total_data['description'] = "--";
+
+
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
@@ -7518,6 +7599,9 @@ class DKFinanceRepository {
             }
         }
 //        dd($list->toArray());
+
+        $list[] = $total_data;
+        
         return datatable_response($list, $draw, $total);
     }
 
@@ -11591,7 +11675,6 @@ class DKFinanceRepository {
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->with([
                 'creator',
-                'owner'=>function($query) { $query->select('id','username'); },
                 'project_er',
             ]);
 //            ->whereIn('user_category',[11])

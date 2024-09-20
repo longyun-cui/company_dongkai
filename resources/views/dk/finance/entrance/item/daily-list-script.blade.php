@@ -26,7 +26,6 @@
         });
         // 【清空重选】
         $("#datatable-for-order-list").on('click', ".filter-empty", function() {
-            alert(1);
             $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
