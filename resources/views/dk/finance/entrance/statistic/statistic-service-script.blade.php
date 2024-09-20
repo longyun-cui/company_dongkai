@@ -41,7 +41,16 @@
             var $date_dom = $('input[name="service-date"]');
             var $the_date_str = $date_dom.val();
             $(".statistic-time-title").html('（'+$the_date_str+'）');
-            $('#datatable_ajax').DataTable().ajax.reload();
+
+            $('#datatable_ajax_daily').DataTable().ajax.reload();
+            $('#datatable_ajax_project').DataTable().ajax.reload();
+
+            statistic_get_data_for_service_daily_chart($the_month_str,
+                "myChart-for-delivery-quantity",
+                "myChart-for-cost-total",
+                "myChart-for-cost-per-capita",
+                "myChart-for-cost-unit-average"
+            );
         });
         // 【项目报表】【重置】
         $("#statistic-for-service").on('click', ".filter-cancel", function() {
