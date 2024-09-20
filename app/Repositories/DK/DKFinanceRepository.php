@@ -12428,6 +12428,651 @@ class DKFinanceRepository {
 
 
 
+    // 【统计】【业务报表】显示-视图
+    public function view_statistic_service()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,31,41])) return view($this->view_blade_403);
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 20;
+        }
+        else $view_data['length'] = 50;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+        $company_list = DK_Finance_Company::select('id','name')->where('company_category',1)->get();
+        $view_data['company_list'] = $company_list;
+
+        $channel_list = DK_Finance_Company::select('id','name')->where('company_category',11)->get();
+        $view_data['channel_list'] = $channel_list;
+
+        $project_list = DK_Finance_Project::select('id','name')->get();
+        $view_data['project_list'] = $project_list;
+
+        $view_data['menu_active_of_statistic_service'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.statistic.statistic-service';
+        return view($view_blade)->with($view_data);
+    }
+    public function get_statistic_data_for_service($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+
+        if(in_array($me->user_type,[41]))
+        {
+            $department_district_id = $me->department_district_id;
+        }
+        else $department_district_id = 0;
+
+
+        // 团队统计
+        $query_order = DK_Finance_Daily::select('project_id')
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                "))
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(delivered_at))"),$the_day)
+            ->when($department_district_id, function ($query) use ($department_district_id) {
+                return $query->where('department_district_id', $department_district_id);
+            })
+            ->groupBy('project_id')
+            ->get()
+            ->keyBy('project_id')
+            ->toArray();
+
+
+        $query = DK_Finance_Project::select('*')
+            ->where('item_status', 1)
+            ->withTrashed()
+            ->with(['creator','inspector_er','pivot_project_user','pivot_project_team']);
+
+        if(in_array($me->user_type,[41]))
+        {
+            $channel_id = $me->channel_id;
+            $project_list = DK_Finance_Project::select('id')->where('channel_id',$channel_id)->get();
+            $query->whereIn('id',$project_list);
+        }
+
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+
+        // 公司或渠道-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0]))
+            {
+                $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
+                    $query->where('team_id', $post_data['department_district']);
+                });
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("name", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+
+        $total_data = [];
+        $total_data['id'] = '统计';
+        $total_data['name'] = '所有项目';
+        $total_data['pivot_project_team'] = [];
+        $total_data['daily_goal'] = 0;
+
+        $total_data['order_count_for_delivered'] = 0;
+        $total_data['order_count_for_delivered_completed'] = 0;
+        $total_data['order_count_for_delivered_inside'] = 0;
+        $total_data['order_count_for_delivered_tomorrow'] = 0;
+        $total_data['order_count_for_delivered_repeated'] = 0;
+        $total_data['order_count_for_delivered_rejected'] = 0;
+
+        $total_data['order_count_for_delivered_per'] = 0;
+        $total_data['order_count_for_delivered_effective'] = 0;
+        $total_data['order_count_for_delivered_effective_per'] = 0;
+        $total_data['order_count_for_delivered_actual'] = 0;
+        $total_data['order_count_for_delivered_today'] = 0;
+
+        $total_data['remark'] = '';
+
+        foreach ($list as $k => $v)
+        {
+
+            if(isset($query_order[$v->id]))
+            {
+                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
+                $list[$k]->order_count_for_delivered_completed = $query_order[$v->id]['order_count_for_delivered_completed'];
+                $list[$k]->order_count_for_delivered_tomorrow = $query_order[$v->id]['order_count_for_delivered_tomorrow'];
+                $list[$k]->order_count_for_delivered_inside = $query_order[$v->id]['order_count_for_delivered_inside'];
+                $list[$k]->order_count_for_delivered_repeated = $query_order[$v->id]['order_count_for_delivered_repeated'];
+                $list[$k]->order_count_for_delivered_rejected = $query_order[$v->id]['order_count_for_delivered_rejected'];
+            }
+            else
+            {
+                $list[$k]->order_count_for_delivered = 0;
+                $list[$k]->order_count_for_delivered_completed = 0;
+                $list[$k]->order_count_for_delivered_tomorrow = 0;
+                $list[$k]->order_count_for_delivered_inside = 0;
+                $list[$k]->order_count_for_delivered_repeated = 0;
+                $list[$k]->order_count_for_delivered_rejected = 0;
+            }
+
+
+
+            // 交付
+            // 今日交付 = 已交付 + 内部交付
+            $list[$k]->order_count_for_delivered_today = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside + $v->order_count_for_delivered_repeated + $v->order_count_for_delivered_rejected;
+            // 有效交付 = 已交付 + 内部交付
+            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_inside;
+            // 实际产出 = 已交付 + 内部交付
+            $list[$k]->order_count_for_delivered_actual = $v->order_count_for_delivered_completed;
+
+
+            // 有效交付率
+            if($v->order_count_for_delivered_today > 0)
+            {
+                $list[$k]->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered_today),2);
+            }
+            else $list[$k]->order_rate_for_delivered_effective = 0;
+
+            // 实际交付率
+            if($v->order_count_for_delivered_today > 0)
+            {
+                $list[$k]->order_rate_for_delivered_actual = round(($v->order_count_for_delivered_actual * 100 / $v->order_count_for_delivered_today),2);
+            }
+            else $list[$k]->order_rate_for_delivered_actual = 0;
+
+
+            $total_data['daily_goal'] += $v->daily_goal;
+
+            $total_data['order_count_for_delivered'] += $v->order_count_for_delivered;
+            $total_data['order_count_for_delivered_completed'] += $v->order_count_for_delivered_completed;
+            $total_data['order_count_for_delivered_inside'] += $v->order_count_for_delivered_inside;
+            $total_data['order_count_for_delivered_tomorrow'] += $v->order_count_for_delivered_tomorrow;
+            $total_data['order_count_for_delivered_repeated'] += $v->order_count_for_delivered_repeated;
+            $total_data['order_count_for_delivered_rejected'] += $v->order_count_for_delivered_rejected;
+
+            $total_data['order_count_for_delivered_today'] += $v->order_count_for_delivered_today;
+            $total_data['order_count_for_delivered_effective'] += $v->order_count_for_delivered_effective;
+            $total_data['order_count_for_delivered_actual'] += $v->order_count_for_delivered_actual;
+
+        }
+
+
+        // 交付
+        // 有效交付率
+        if($total_data['order_count_for_delivered_today'] > 0)
+        {
+            $total_data['order_rate_for_delivered_effective'] = round(($total_data['order_count_for_delivered_effective'] * 100 / $total_data['order_count_for_delivered_today']),2);
+        }
+        else $total_data['order_rate_for_delivered_effective'] = 0;
+        // 实际交付率
+        if($total_data['order_count_for_delivered_today'] > 0)
+        {
+            $total_data['order_rate_for_delivered_actual'] = round(($total_data['order_count_for_delivered_actual'] * 100 / $total_data['order_count_for_delivered_today']),2);
+        }
+        else $total_data['order_rate_for_delivered_actual'] = 0;
+
+
+        return datatable_response($list, $draw, $total);
+
+    }
+    // 【统计】【业务报表】返回-项目列表-数据
+    public function get_statistic_data_for_service_of_project_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        // 团队统计
+        $query_daily = DK_Finance_Daily::select('project_id')
+            ->addSelect(DB::raw("
+                    sum(delivery_quantity) as total_delivery_quantity,
+                    sum(delivery_quantity_of_invalid) as total_delivery_quantity_of_invalid,
+                    sum(total_daily_cost) as total_cost
+                "))
+//            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+            ->groupBy('project_id');
+
+        if(!empty($post_data['month']))
+        {
+            $month_arr = explode('-', $post_data['month']);
+            $month_year = $month_arr[0];
+            $month_month = $month_arr[1];
+            $query_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+        }
+
+        if(!empty($post_data['date']))
+        {
+            $query_daily->whereDate("assign_date", $post_data['date']);
+        }
+
+        $query_daily = $query_daily->get()
+            ->keyBy('project_id')
+            ->toArray();
+
+
+        $query = DK_Finance_Project::select('*')
+            ->withTrashed()
+            ->with(['creator','company_er','channel_er']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+
+        // 公司
+        if(isset($post_data['company']))
+        {
+            if(!in_array($post_data['company'],[-1]))
+            {
+                $channel_list = DK_Finance_Company::select('id')->where('superior_company_id',$post_data['company'])->get()->toArray();
+                $query->whereIn('channel_id', $channel_list);
+            }
+        }
+        // 渠道
+        if(isset($post_data['channel']))
+        {
+            if(!in_array($post_data['channel'],[-1]))
+            {
+                $query->where('channel_id', $post_data['channel']);
+            }
+        }
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1]))
+            {
+                $query->where('id', $post_data['project']);
+            }
+        }
+
+
+        // 状态 [|]
+        if(!empty($post_data['item_status']))
+        {
+            if(!in_array($post_data['item_status'],[-1,0]))
+            {
+                $query->where('item_status', $post_data['item_status']);
+            }
+        }
+        else
+        {
+            $query->where('item_status', 1);
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 100;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("name", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+
+        $total_data = [];
+        $total_data['id'] = '总计';
+        $total_data['name'] = '--';
+        $total_data['date_day'] = '统计';
+        $total_data['channel_id'] = 0;
+
+        $total_data['total_delivery_quantity'] = 0;
+        $total_data['total_delivery_quantity_of_invalid'] = 0;
+        $total_data['delivery_effective_quantity'] = 0;
+        $total_data['total_cost'] = 0;
+        $total_data['channel_unit_price'] = 0;
+        $total_data['channel_cost'] = 0;
+        $total_data['cooperative_unit_price'] = 0;
+        $total_data['cooperative_cost'] = 0;
+        $total_data['settled_amount'] = 0;
+        $total_data['balance'] = 0;
+
+        foreach($list as $k => $v)
+        {
+
+            if(isset($query_daily[$v->id]))
+            {
+                $list[$k]->total_delivery_quantity = $query_daily[$v->id]['total_delivery_quantity'];
+                $list[$k]->total_delivery_quantity_of_invalid = $query_daily[$v->id]['total_delivery_quantity_of_invalid'];
+                $list[$k]->total_cost = $query_daily[$v->id]['total_cost'];
+            }
+            else
+            {
+                $list[$k]->total_delivery_quantity = 0;
+                $list[$k]->total_delivery_quantity_of_invalid = 0;
+                $list[$k]->total_cost = 0;
+            }
+            $list[$k]->channel_cost = 0;
+            $list[$k]->cooperative_cost = 0;
+            $list[$k]->balance = 0;
+            $list[$k]->cooperative_cost = ($v->cooperative_unit_price * ($v->total_delivery_quantity - $v->total_delivery_quantity_of_invalid));
+
+
+            $total_data['total_delivery_quantity'] += $v->total_delivery_quantity;
+            $total_data['total_delivery_quantity_of_invalid'] += $v->total_delivery_quantity_of_invalid;
+            $total_data['total_cost'] += $v->total_cost;
+
+            $total_data['channel_cost'] += ($v->channel_unit_price * $v->total_delivery_quantity);
+
+            $total_data['cooperative_cost'] += ($v->cooperative_unit_price * ($v->total_delivery_quantity - $v->total_delivery_quantity_of_invalid));
+
+            $total_data['settled_amount'] += $v->settled_amount;
+        }
+
+        $total_data['channel_unit_price'] = 0;
+        $total_data['cooperative_unit_price'] = 0;
+        $list[] = $total_data;
+
+        return datatable_response($list, $draw, $total);
+    }
+    // 【统计】【业务报表】返回-日报列表-数据
+    public function get_statistic_data_for_service_of_daily_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Finance_Daily::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
+            ->with([
+                'creator',
+                'owner'=>function($query) { $query->select('id','username'); },
+                'project_er',
+            ]);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+//        $me->load(['subordinate_er' => function ($query) {
+//            $query->select('id');
+//        }]);
+
+        if($me->user_type == 41)
+        {
+            $project_list = DK_Finance_Project::select('id')->where('channel_id',$me->channel_id)->get();
+            $query->whereIn('project_id',$project_list);
+        }
+
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['assign'])) $query->whereDate('assign_date', $post_data['assign']);
+        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
+        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+
+        if(!empty($post_data['month']))
+        {
+            $month_arr = explode('-', $post_data['month']);
+            $month_year = $month_arr[0];
+            $month_month = $month_arr[1];
+            $query->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+        }
+
+
+        // 公司
+        if(isset($post_data['company']))
+        {
+            if(!in_array($post_data['company'],[-1]))
+            {
+                $channel_list = DK_Finance_Company::select('id')->where('superior_company_id',$post_data['company'])->get()->toArray();
+                $project_list = DK_Finance_Project::select('id')->whereIn('channel_id',$channel_list)->get()->toArray();
+                $query->whereIn('project_id', $project_list);
+            }
+        }
+        // 渠道
+        if(isset($post_data['channel']))
+        {
+            if(!in_array($post_data['channel'],[-1]))
+            {
+                $project_list = DK_Finance_Project::select('id')->where('channel_id',$post_data['channel'])->get()->toArray();
+                $query->whereIn('project_id', $project_list);
+            }
+        }
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1]))
+            {
+                $query->where('project_id', $post_data['project']);
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("assign_date", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+
+        $total_data = [];
+        $total_data['id'] = '总计';
+        $total_data['name'] = '--';
+        $total_data['project_id'] = '--';
+        $total_data['assign_date'] = '--';
+        $total_data['outbound_background'] = '--';
+        $total_data['date_day'] = '统计';
+        $total_data['channel_id'] = 0;
+
+        $total_data['attendance_manpower'] = 0;
+        $total_data['delivery_quantity'] = 0;
+        $total_data['delivery_quantity_of_invalid'] = 0;
+
+        $total_data['manpower_daily_cost'] = 0;
+        $total_data['call_charge_daily_cost'] = 0;
+        $total_data['material_daily_quantity'] = 0;
+        $total_data['material_daily_cost'] = 0;
+        $total_data['taxes_daily_cost'] = 0;
+        $total_data['total_daily_cost'] = 0;
+
+        $total_data['manpower_daily_wage'] = "--";
+        $total_data['call_charge_coefficient'] = "--";
+        $total_data['material_coefficient'] = "--";
+        $total_data['taxes_coefficient'] = "--";
+
+        foreach ($list as $k => $v)
+        {
+            if($v->creator_id == $me->id)
+            {
+                $list[$k]->is_me = 1;
+                $v->is_me = 1;
+            }
+            else
+            {
+                $list[$k]->is_me = 0;
+                $v->is_me = 0;
+            }
+
+            $total_data['attendance_manpower'] += $v->attendance_manpower;
+            $total_data['delivery_quantity'] += $v->delivery_quantity;
+            $total_data['delivery_quantity_of_invalid'] += $v->delivery_quantity_of_invalid;
+
+            $total_data['manpower_daily_cost'] += $v->manpower_daily_cost;
+            $total_data['call_charge_daily_cost'] += $v->call_charge_daily_cost;
+            $total_data['material_daily_cost'] += $v->material_daily_cost;
+            $total_data['taxes_daily_cost'] += $v->taxes_daily_cost;
+            $total_data['total_daily_cost'] += $v->total_daily_cost;
+        }
+//        dd($list->toArray());
+
+        $list[] = $total_data;
+
+        return datatable_response($list, $draw, $total);
+    }
+    // 【统计】【项目报表】返回-图标-数据
+    public function get_statistic_data_for_service_of_daily_chart($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query_for_daily = DK_Finance_Daily::select('*')
+//            ->where('finance_type',1)
+            ->groupBy("assign_date")
+            ->select(DB::raw("
+                    assign_date as date,
+                    DAY(assign_date) as day,
+                    count(*) as quantity,
+                    sum(attendance_manpower) as attendance_manpower_total,
+                    sum(delivery_quantity) as delivery_quantity_total,
+                    sum(delivery_quantity_of_invalid) as delivery_quantity_of_invalid_total,
+                    sum(total_daily_cost) as total_daily_cost_total
+                "));
+
+        if($me->user_type == 41)
+        {
+            $project_list = DK_Finance_Project::select('id')->where('channel_id',$me->channel_id)->get();
+            $query_for_daily->whereIn('project_id',$project_list);
+        }
+
+
+        // 公司
+        if(isset($post_data['company']))
+        {
+            if(!in_array($post_data['company'],[-1]))
+            {
+                $channel_list = DK_Finance_Company::select('id')->where('superior_company_id',$post_data['company'])->get()->toArray();
+                $project_list = DK_Finance_Project::select('id')->whereIn('channel_id',$channel_list)->get()->toArray();
+                $query_for_daily->whereIn('project_id', $project_list);
+            }
+        }
+        // 渠道
+        if(isset($post_data['channel']))
+        {
+            if(!in_array($post_data['channel'],[-1]))
+            {
+                $project_list = DK_Finance_Project::select('id')->where('channel_id',$post_data['channel'])->get()->toArray();
+                $query_for_daily->whereIn('project_id', $project_list);
+            }
+        }
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1]))
+            {
+                $query_for_daily->where('project_id', $post_data['project']);
+            }
+        }
+
+        // 指定月份
+        if(!empty($post_data['month']))
+        {
+            $month_arr = explode('-', $post_data['month']);
+            $month_year = $month_arr[0];
+            $month_month = $month_arr[1];
+            $query_for_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+        }
+
+
+        $statistics_data_for_daily = $query_for_daily->get()->keyBy('day');
+
+        foreach($statistics_data_for_daily as $k => $v)
+        {
+            // 人均
+            if($v->attendance_manpower_total == 0)
+            {
+                $statistics_data_for_daily[$k]->per_capita = 0;
+            }
+            else
+            {
+                $statistics_data_for_daily[$k]->per_capita = $v->total_daily_cost_total / $v->attendance_manpower_total;
+            }
+
+            // 单均
+            if($v->delivery_quantity_total == 0)
+            {
+                $statistics_data_for_daily[$k]->unit_average = 0;
+            }
+            else
+            {
+                $statistics_data_for_daily[$k]->unit_average = $v->total_daily_cost_total / $v->delivery_quantity_total;
+            }
+        }
+//        dd($statistics_data_for_daily->toArray());
+        $return_data['statistics_data'] = $statistics_data_for_daily;
+
+        return response_success($return_data,"");
+    }
+
+
+
+
     // 【流量统计】返回-列表-视图
     public function view_statistic_list_for_all($post_data)
     {

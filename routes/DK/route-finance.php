@@ -319,6 +319,13 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change
     Route::post('/statistic/statistic-get-data-for-company-of-project-list', $controller.'@get_statistic_data_for_company_of_project_list_datatable');
     Route::post('/statistic/statistic-get-data-for-company-of-chart', $controller.'@get_statistic_data_for_company_of_chart');
 
+    // 业务报表
+    Route::match(['get','post'], '/statistic/statistic-service', $controller.'@view_statistic_service');
+    Route::post('/statistic/statistic-get-data-for-service', $controller.'@get_statistic_data_for_service');
+    Route::post('/statistic/statistic-get-data-for-service-of-daily-list', $controller.'@get_statistic_data_for_service_of_daily_list_datatable');
+    Route::post('/statistic/statistic-get-data-for-service-of-project-list', $controller.'@get_statistic_data_for_service_of_project_list_datatable');
+    Route::post('/statistic/statistic-get-data-for-service-of-daily-chart', $controller.'@get_statistic_data_for_service_of_daily_chart');
+
 
 
 

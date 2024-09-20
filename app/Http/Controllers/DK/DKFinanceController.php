@@ -973,6 +973,31 @@ class DKFinanceController extends Controller
 
 
 
+    // 【统计】业务报表
+    public function view_statistic_service()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_service(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_service(request()->all());
+    }
+    //
+    public function get_statistic_data_for_service_of_project_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_service_of_project_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_service_of_daily_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_service_of_daily_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_service_of_daily_chart()
+    {
+        return $this->repo->get_statistic_data_for_service_of_daily_chart(request()->all());
+    }
+
+
+
+
 
 
 
@@ -1008,19 +1033,19 @@ class DKFinanceController extends Controller
     // 【内容】【全部】返回-列表-视图
     public function view_record_list_for_all()
     {
-        if(request()->isMethod('get')) return $this->repo->view_record_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_record_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_record_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_record_list_datatable(request()->all());
     }
 
 
 
-    // 【统计】公司&渠道报表
+    // 【记录】资金-充值记录
     public function view_record_funds_recharge_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_record_funds_recharge_list(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_record_funds_recharge_list_datatable(request()->all());
     }
-    // 【统计】公司&渠道报表
+    // 【记录】资金-使用记录
     public function view_record_funds_using_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_record_funds_using_list(request()->all());

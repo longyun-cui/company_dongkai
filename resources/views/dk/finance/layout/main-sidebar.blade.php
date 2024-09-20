@@ -70,12 +70,12 @@
 
             {{--部门管理--}}
             @if(in_array($me->user_type,[0,1,9,11,31]))
-            <li class="header">公司管理</li>
+            <li class="header">业务管理</li>
 
             <li class="treeview {{ $menu_active_of_company_list or '' }}">
                 <a href="{{ url('/company/company-list') }}">
                     <i class="fa fa-columns text-green"></i>
-                    <span>渠道列表</span>
+                    <span>公司列表</span>
                 </a>
             </li>
             @endif
@@ -87,13 +87,6 @@
                     <span>项目列表</span>
                 </a>
             </li>
-            @endif
-
-
-
-
-            @if(in_array($me->user_type,[0,1,9,11,31,41]))
-            <li class="header">业务管理</li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,31,41]))
@@ -112,25 +105,33 @@
             <li class="header">数据统计</li>
 
             @if(in_array($me->user_type,[0,1,9,11,31,41]))
-                <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
-                    <a href="{{ url('/statistic/statistic-project') }}">
-                        <i class="fa fa-bar-chart text-aqua"></i> <span>项目报表</span>
-                    </a>
-                </li>
+            <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
+                <a href="{{ url('/statistic/statistic-project') }}">
+                    <i class="fa fa-bar-chart text-aqua"></i> <span>项目报表</span>
+                </a>
+            </li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,31,41]))
-                <li class="treeview {{ $menu_active_of_statistic_company or '' }}">
-                    <a href="{{ url('/statistic/statistic-company') }}">
-                        <i class="fa fa-bar-chart text-aqua"></i> <span>公司&渠道报表</span>
-                    </a>
-                </li>
+            <li class="treeview {{ $menu_active_of_statistic_company or '' }}">
+                <a href="{{ url('/statistic/statistic-company') }}">
+                    <i class="fa fa-bar-chart text-aqua"></i> <span>公司报表</span>
+                </a>
+            </li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,31]))
             <li class="treeview {{ $menu_active_of_statistic_channel or '' }} _none">
                 <a href="{{ url('/statistic/statistic-channel') }}">
                     <i class="fa fa-bar-chart text-aqua"></i> <span>渠道报表</span>
+                </a>
+            </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,31]))
+            <li class="treeview {{ $menu_active_of_statistic_service or '' }}">
+                <a href="{{ url('/statistic/statistic-service') }}">
+                    <i class="fa fa-bar-chart text-aqua"></i> <span>业务报表</span>
                 </a>
             </li>
             @endif
