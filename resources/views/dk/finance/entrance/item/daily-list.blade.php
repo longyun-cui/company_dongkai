@@ -1016,6 +1016,27 @@
                         }
                     },
                     {
+                        "title": "商务",
+                        "data": "project_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.project_er == null)
+                            {
+                                return '--';
+                            }
+                            else
+                            {
+                                if(row.project_er.business_or == null)
+                                {
+                                    return '--';
+                                }
+                                else return '<a href="javascript:void(0);">'+row.project_er.business_or.username+'</a>';
+                            }
+                        }
+                    },
+                    {
                         "title": "日期",
                         "data": 'assign_date',
                         "className": "text-center",

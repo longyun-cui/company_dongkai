@@ -705,7 +705,7 @@
                 "serverSide": true,
                 "searching": false,
                 "iDisplayStart": {{ ($page - 1) * $length }},
-                "iDisplayLength": {{ $length or 50 }},
+                "iDisplayLength": {{ $length or 20 }},
                 "ajax": {
                     'url': "{{ url('/statistic/statistic-get-data-for-service-of-daily-list') }}",
                     "type": 'POST',
@@ -798,10 +798,52 @@
                         render: function(data, type, row, meta) {
                             if(row.project_er == null)
                             {
-                                return '未指定';
+                                return '--';
                             }
                             else {
                                 return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "title": "所属渠道",
+                        "data": "project_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.project_er == null)
+                            {
+                                return '--';
+                            }
+                            else
+                            {
+                                if(row.project_er.channel_er == null)
+                                {
+                                    return '--';
+                                }
+                                else return '<a href="javascript:void(0);">'+row.project_er.channel_er.name+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "title": "商务",
+                        "data": "project_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.project_er == null)
+                            {
+                                return '--';
+                            }
+                            else
+                            {
+                                if(row.project_er.business_or == null)
+                                {
+                                    return '--';
+                                }
+                                else return '<a href="javascript:void(0);">'+row.project_er.business_or.username+'</a>';
                             }
                         }
                     },
@@ -1303,7 +1345,7 @@
                     if($('input[name="service-month"]').val())  $obj.month = $('input[name="service-month"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != {{ $length or 50 }}) $obj.length = $page_length;
+                    if($page_length != {{ $length or 20 }}) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
                     var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($pagination > 1) $obj.page = $pagination;

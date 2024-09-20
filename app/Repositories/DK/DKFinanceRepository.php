@@ -7411,8 +7411,9 @@ class DKFinanceRepository {
             ->with([
                 'creator',
                 'project_er'=>function($query) {
-                    $query->with([
-                        'channel_er'=>function($query1) { $query1->select('id','name'); }
+                    $query->select('id','name','channel_id','business_id')->with([
+                        'channel_er'=>function($query1) { $query1->select('id','name'); },
+                        'business_or'=>function($query2) { $query2->select('id','username'); }
                     ]);
                 },
             ]);
@@ -11675,7 +11676,12 @@ class DKFinanceRepository {
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->with([
                 'creator',
-                'project_er',
+                'project_er'=>function($query) {
+                    $query->select('id','name')->with([
+                        'channel_er'=>function($query1) { $query1->select('id','name'); },
+                        'business_or'=>function($query1) { $query1->select('id','username'); }
+                    ]);
+                },
             ]);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
@@ -11762,7 +11768,7 @@ class DKFinanceRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("assign_date", "desc");
+        else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
@@ -12539,7 +12545,7 @@ class DKFinanceRepository {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
             else $view_data['length'] = 20;
         }
-        else $view_data['length'] = 50;
+        else $view_data['length'] = 40;
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -12953,8 +12959,12 @@ class DKFinanceRepository {
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->with([
                 'creator',
-                'owner'=>function($query) { $query->select('id','username'); },
-                'project_er',
+                'project_er'=>function($query) {
+                    $query->select('id','name','channel_id','business_id')->with([
+                        'channel_er'=>function($query1) { $query1->select('id','name'); },
+                        'business_or'=>function($query2) { $query2->select('id','username'); }
+                    ]);
+                },
             ]);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
