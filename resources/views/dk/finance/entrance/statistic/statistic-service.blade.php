@@ -724,6 +724,7 @@
                         d.business = $('select[name="service-business"]').val();
                         d.project = $('select[name="service-project"]').val();
                         d.month = $('input[name="service-month"]').val();
+                        d.date = $('input[name="service-date"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();

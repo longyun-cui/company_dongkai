@@ -12889,12 +12889,18 @@ class DKFinanceRepository {
         if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
+
         if(!empty($post_data['month']))
         {
             $month_arr = explode('-', $post_data['month']);
             $month_year = $month_arr[0];
             $month_month = $month_arr[1];
             $query->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+        }
+
+        if(!empty($post_data['date']))
+        {
+            $query->whereDate("assign_date", $post_data['date']);
         }
 
 
