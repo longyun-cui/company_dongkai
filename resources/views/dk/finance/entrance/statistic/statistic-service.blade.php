@@ -306,7 +306,7 @@
                 "scrollX": true,
 //                "scrollY": true,
 //                 "scrollY": false,
-                "scrollY": ($(window).height() - 400)+"px",
+                "scrollY": ($(window).height() - 300)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
@@ -716,7 +716,7 @@
                 "orderCellsTop": true,
                 "scrollX": true,
                 "scrollY": false,
-                "scrollY": ($(window).height() - 360)+"px",
+                "scrollY": ($(window).height() - 300)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
 
