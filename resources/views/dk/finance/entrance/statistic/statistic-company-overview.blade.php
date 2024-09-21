@@ -838,7 +838,8 @@
                             // 总成本
                             var $total_cost = row.total_cost;
                             // 渠道费用
-                            var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
+                            // var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
+                            var $channel_unit_price = row.channel_cost;
 
                             var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
                             if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
