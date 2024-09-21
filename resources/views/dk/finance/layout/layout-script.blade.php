@@ -370,4 +370,23 @@
     // copyToClipboard('135');
 
 
+
+
+    //
+    function moneyAddCommas(num)
+    {
+        var numToFixed = Number(num).toFixed(2);
+        var numArr = numToFixed.split('.');
+        var integerPart = numArr[0];
+        integerPart = integerPart.replace(/\B(?=(\d{4})+(?!\d))/g, ",");
+
+        if(numArr[1] == "00") return integerPart;
+        return integerPart + "." + numArr[1];
+    }
+
+    function formatWithCommas(number)
+    {
+        return new Intl.NumberFormat().format(number);
+    }
+
 </script>

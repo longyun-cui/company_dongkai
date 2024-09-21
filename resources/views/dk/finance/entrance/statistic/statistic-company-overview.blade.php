@@ -326,13 +326,9 @@
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(['总计','合计'].includes(row.id))
                             {
-                                $(nTd).addClass('modal-show-for-attachment');
-                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
-                                $(nTd).attr('data-key','attachment_list').attr('data-value','');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('_bold text-green');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -384,9 +380,15 @@
                         "className": "",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
                         }
                     },
                     {
@@ -395,9 +397,15 @@
                         "className": "",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(data);
+                            return moneyAddCommas(data);
                         }
                     },
                     {
@@ -406,9 +414,15 @@
                         "className": "",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return moneyAddCommas(parseFloat(data));
                         }
                     },
                     {
@@ -417,9 +431,15 @@
                         "className": "",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
                         }
                     },
                     {
@@ -428,9 +448,15 @@
                         "className": "",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
                         }
                     },
                     {
@@ -439,9 +465,15 @@
                         "className": "",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return formatWithCommas(parseFloat(data).toFixed(2));
                         }
                     },
                     {
@@ -450,9 +482,15 @@
                         "className": "all_cost",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
                         }
                     },
                     {
@@ -461,9 +499,15 @@
                         "className": "",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
                         }
                     },
                     {
@@ -472,9 +516,15 @@
                         "className": "",
                         "width": "100px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
                         }
                     },
                 ],
@@ -586,13 +636,9 @@
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(['总计','合计'].includes(row.id))
                             {
-                                $(nTd).addClass('modal-show-for-attachment-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
-                                $(nTd).attr('data-key','attachment_list').attr('data-value','');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('_bold text-green');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -678,6 +724,12 @@
                         "className": "text-center bg-journey",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return parseFloat(data);
                         }
@@ -690,15 +742,9 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(['总计','合计'].includes(row.id))
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','总无效量');
-                                $(nTd).attr('data-key','delivery_invalid_quantity').attr('data-value',data);
-                                $(nTd).attr('data-column-name','总无效量');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('_bold text-green');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -711,6 +757,12 @@
                         "className": "text-center bg-journey",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
                         }
@@ -721,8 +773,14 @@
                         "className": "text-center bg-route",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
-                            return parseFloat(parseFloat(data).toFixed(2));
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
                         }
                     },
                     {
@@ -731,6 +789,12 @@
                         "className": "text-center bg-route",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
                             var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
@@ -750,20 +814,14 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(['总计','合计'].includes(row.id))
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','渠道单价');
-                                $(nTd).attr('data-key','channel_unit_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','渠道单价');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('_bold text-green');
                             }
                         },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(data);
+                            return moneyAddCommas(data);
                         }
                     },
                     {
@@ -772,13 +830,19 @@
                         "className": "text-center bg-income",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0)
                             {
                                 var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
-                                return parseFloat($channel_unit_price);
+                                return moneyAddCommas($channel_unit_price);
                             }
-                            else return data;
+                            else return moneyAddCommas(data);
                         }
                     },
                     {
@@ -788,20 +852,14 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(['总计','合计'].includes(row.id))
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','合作单价');
-                                $(nTd).attr('data-key','cooperative_unit_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','合作单价');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('_bold text-green');
                             }
                         },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(data);
+                            return moneyAddCommas(data);
                         }
                     },
                     {
@@ -810,6 +868,12 @@
                         "className": "text-center bg-deduction",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == 0)
                             {
@@ -820,7 +884,7 @@
                                 // else return parseFloat($settlement_amount);
                                 return "--";
                             }
-                            else return data;
+                            else return moneyAddCommas(data);
                         }
                     },
                     {
@@ -829,6 +893,12 @@
                         "className": "text-center bg-finance",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             // 应结算金额
                             // // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
@@ -842,8 +912,8 @@
                             var $channel_unit_price = row.channel_cost;
 
                             var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
-                            if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
-                            else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
+                            if(parseFloat($profile) < 0) return '<b class="text-red">' + moneyAddCommas($profile) + '</b>';
+                            else  return '<b class="text-green">' + moneyAddCommas($profile) + '</b>';
                         }
                     },
                     {
@@ -852,6 +922,12 @@
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(true)
                             {
@@ -862,7 +938,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return parseFloat(data);
+                            return moneyAddCommas(data);
                         }
                     },
                     {
@@ -871,6 +947,12 @@
                         "className": "text-center bg-empty",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             // 应结算金额
                             // // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
@@ -881,8 +963,8 @@
                             var $settled_amount = parseFloat(row.settled_amount);
                             var $balance = parseFloat($settled_amount - $settlement_amount);
                             if(parseFloat($balance) == 0) return '--';
-                            else if(parseFloat($balance) < 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
-                            else return parseFloat($balance);
+                            else if(parseFloat($balance) < 0) return '<b class="text-red">' + moneyAddCommas($balance) + '</b>';
+                            else return moneyAddCommas($balance);
                         }
                     },
                 ],
