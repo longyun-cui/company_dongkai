@@ -998,6 +998,21 @@ class DKFinanceController extends Controller
 
 
 
+    // 【统计】业务报表
+    public function view_statistic_company_overview()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_company_overview(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_company_overview(request()->all());
+    }
+    //
+    public function get_statistic_data_for_company_overview_of_channel_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_company_overview_of_channel_list_datatable(request()->all());
+    }
+
+
+
+
 
 
 

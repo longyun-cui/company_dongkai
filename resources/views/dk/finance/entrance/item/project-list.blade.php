@@ -1119,7 +1119,7 @@
                         }
                     },
                     {
-                        "title": "代理单价",
+                        "title": "渠道单价",
                         "data": "channel_unit_price",
                         "className": "text-center bg-income",
                         "width": "60px",
@@ -1142,7 +1142,7 @@
                         }
                     },
                     {
-                        "title": "代理费用",
+                        "title": "渠道费用",
                         "data": "id",
                         "className": "text-center bg-income",
                         "width": "60px",

@@ -23,9 +23,78 @@
         <!-- Application buttons -->
         <div class="box box-primary">
             <div class="box-header">
-                <h3 class="box-title">Application Buttons</h3>
+                <h3 class="box-title">公司财务</h3>
             </div>
             <div class="box-body">
+
+                @foreach($company_list as $v)
+                <div class="col-md-3">
+                    <!-- Widget: user widget style 1 -->
+                    <div class="box box-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-primary">
+                            <div class="widget-user-image">
+                                <img class="img-circle" src="/AdminLTE/dist/img/user1-128x128.jpg" alt="User Avatar">
+                            </div>
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-username">{{ $v->name or '' }}</h3>
+                            <h5 class="widget-user-desc">Lead Developer</h5>
+                        </div>
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">0</h5>
+                                        <span class="description-text">充值</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">0</h5>
+                                        <span class="description-text">结算</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">0</h5>
+                                        <span class="description-text">余额</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.row -->
+
+                        </div>
+
+                        <div class="box-footer no-padding">
+                            <ul class="nav nav-stacked">
+                                <li>
+                                    <a target="_blank" href="{{ url('/statistic/statistic-company-overview?company_id='.$v->id) }}">
+                                        财务总览 <span class="pull-right badge bg-blue _none">31</span>
+                                    </a>
+                                </li>
+{{--                                <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>--}}
+{{--                                <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>--}}
+{{--                                <li><a href="#">Followers <span class="pull-right badge bg-red">842</span></a></li>--}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 _none">
+        <!-- Application buttons -->
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">公司财务</h3>
+            </div>
+            <div class="box-body">
+
                 <a class="btn btn-app">
                     <span class="badge bg-yellow">3</span>
                     <i class="fa fa-bullhorn"></i> Notifications
@@ -50,13 +119,13 @@
                     <span class="badge bg-red">531</span>
                     <i class="fa fa-heart-o"></i> Likes
                 </a>
+
             </div>
-            <!-- /.box-body -->
         </div>
-        <!-- /.box -->
     </div>
 
-    <div class="col-md-12">
+
+    <div class="col-md-12 _none">
         <div class="callout callout-success- bg-white">
 
             <h4>工单统计</h4>
