@@ -34,7 +34,7 @@
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header bg-primary">
                             <div class="widget-user-image">
-                                <img class="img-circle" src="/AdminLTE/dist/img/user1-128x128.jpg" alt="User Avatar">
+                                <img class="img-circle" src="/AdminLTE/dist/img/user{{ $v->id + 2 }}-128x128.jpg" alt="User Avatar">
                             </div>
                             <!-- /.widget-user-image -->
                             <h3 class="widget-user-username">{{ $v->name or '' }}</h3>
