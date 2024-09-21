@@ -12821,6 +12821,14 @@ class DKFinanceRepository {
             }
             else if($post_data['time_type'] == "period")
             {
+                if(!empty($post_data['assign_start']))
+                {
+                    $query_daily->whereDate("assign_date", ">=", $post_data['assign_start']);
+                }
+                if(!empty($post_data['assign_ended']))
+                {
+                    $query_daily->whereDate("assign_date", "<=", $post_data['assign_ended']);
+                }
             }
             else
             {}
@@ -13386,6 +13394,14 @@ class DKFinanceRepository {
             }
             else if($post_data['time_type'] == "period")
             {
+                if(!empty($post_data['assign_start']))
+                {
+                    $query_daily->whereDate("assign_date", ">=", $post_data['assign_start']);
+                }
+                if(!empty($post_data['assign_ended']))
+                {
+                    $query_daily->whereDate("assign_date", "<=", $post_data['assign_ended']);
+                }
             }
             else
             {}
@@ -13543,32 +13559,47 @@ class DKFinanceRepository {
 
         foreach($list as $k => $v)
         {
-            $list[$k]->total_of_attendance_manpower = $channel_list[($v->id)]["total_of_attendance_manpower"];
-            $list[$k]->total_of_delivery_quantity = $channel_list[($v->id)]["total_of_delivery_quantity"];
-            $list[$k]->total_of_delivery_quantity_of_invalid = $channel_list[($v->id)]["total_of_delivery_quantity_of_invalid"];
-            $list[$k]->total_of_call_charge_daily_cost = $channel_list[($v->id)]["total_of_call_charge_daily_cost"];
-            $list[$k]->total_of_total_cost = $channel_list[($v->id)]["total_of_total_cost"];
-            $list[$k]->total_of_channel_cost = $channel_list[($v->id)]["total_of_channel_cost"];
+            if(!empty($channel_list[($v->id)]))
+            {
+                $list[$k]->total_of_attendance_manpower = $channel_list[($v->id)]["total_of_attendance_manpower"];
+                $list[$k]->total_of_delivery_quantity = $channel_list[($v->id)]["total_of_delivery_quantity"];
+                $list[$k]->total_of_delivery_quantity_of_invalid = $channel_list[($v->id)]["total_of_delivery_quantity_of_invalid"];
+                $list[$k]->total_of_call_charge_daily_cost = $channel_list[($v->id)]["total_of_call_charge_daily_cost"];
+                $list[$k]->total_of_total_cost = $channel_list[($v->id)]["total_of_total_cost"];
+                $list[$k]->total_of_channel_cost = $channel_list[($v->id)]["total_of_channel_cost"];
 
-            $total_of_all_cost = $channel_list[($v->id)]["total_of_total_cost"] + $channel_list[($v->id)]["total_of_channel_cost"];
-            $list[$k]->total_of_all_cost = $total_of_all_cost;
+                $total_of_all_cost = $channel_list[($v->id)]["total_of_total_cost"] + $channel_list[($v->id)]["total_of_channel_cost"];
+                $list[$k]->total_of_all_cost = $total_of_all_cost;
 
-            $list[$k]->total_of_revenue = $channel_list[($v->id)]["total_of_revenue"];
+                $list[$k]->total_of_revenue = $channel_list[($v->id)]["total_of_revenue"];
 
-            $total_of_profile = $channel_list[($v->id)]["total_of_revenue"] - $total_of_all_cost;
-            $list[$k]->total_of_profile = $total_of_profile;
+                $total_of_profile = $channel_list[($v->id)]["total_of_revenue"] - $total_of_all_cost;
+                $list[$k]->total_of_profile = $total_of_profile;
 
-            $total_data['total_of_attendance_manpower'] += $channel_list[($v->id)]["total_of_attendance_manpower"];
-            $total_data['total_of_delivery_quantity'] += $channel_list[($v->id)]["total_of_delivery_quantity"];
-            $total_data['total_of_delivery_quantity_of_invalid'] += $channel_list[($v->id)]["total_of_delivery_quantity_of_invalid"];
-            $total_data['total_of_call_charge_daily_cost'] += $channel_list[($v->id)]["total_of_call_charge_daily_cost"];
-            $total_data['total_of_total_cost'] += $channel_list[($v->id)]["total_of_total_cost"];
-            $total_data['total_of_channel_cost'] += $channel_list[($v->id)]["total_of_channel_cost"];
+                $total_data['total_of_attendance_manpower'] += $channel_list[($v->id)]["total_of_attendance_manpower"];
+                $total_data['total_of_delivery_quantity'] += $channel_list[($v->id)]["total_of_delivery_quantity"];
+                $total_data['total_of_delivery_quantity_of_invalid'] += $channel_list[($v->id)]["total_of_delivery_quantity_of_invalid"];
+                $total_data['total_of_call_charge_daily_cost'] += $channel_list[($v->id)]["total_of_call_charge_daily_cost"];
+                $total_data['total_of_total_cost'] += $channel_list[($v->id)]["total_of_total_cost"];
+                $total_data['total_of_channel_cost'] += $channel_list[($v->id)]["total_of_channel_cost"];
 
-            $total_data['total_of_all_cost'] += $total_of_all_cost;
+                $total_data['total_of_all_cost'] += $total_of_all_cost;
 
-            $total_data['total_of_revenue'] += $channel_list[($v->id)]["total_of_revenue"];
-            $total_data['total_of_profile'] += $total_of_profile;
+                $total_data['total_of_revenue'] += $channel_list[($v->id)]["total_of_revenue"];
+                $total_data['total_of_profile'] += $total_of_profile;
+            }
+            else
+            {
+                $list[$k]->total_of_attendance_manpower = 0;
+                $list[$k]->total_of_delivery_quantity = 0;
+                $list[$k]->total_of_delivery_quantity_of_invalid = 0;
+                $list[$k]->total_of_call_charge_daily_cost = 0;
+                $list[$k]->total_of_total_cost = 0;
+                $list[$k]->total_of_channel_cost = 0;
+                $list[$k]->total_of_all_cost = 0;
+                $list[$k]->total_of_revenue = 0;
+                $list[$k]->total_of_profile = 0;
+            }
         }
 //        $list = $list->sortBy(['district_id'=>'asc'])->values();
 //        $list = $list->sortBy(function ($item, $key) {
