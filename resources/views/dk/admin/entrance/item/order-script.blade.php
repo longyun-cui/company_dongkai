@@ -617,6 +617,85 @@
             $('#datatable_ajax').find('tr').removeClass('operating');
             $row.addClass('operating');
 
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            var $html = '';
+
+            $.post(
+                "{{ url('/item/order-deliver-get-delivered') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-deliver-get-delivered",
+                    item_id: $that.attr('data-id')
+                },
+                function(data){
+
+                    layer.closeAll('loading');
+
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
+                    else
+                    {
+                        if(data.data.order_repeat.length)
+                        {
+                            $html += '<div>【已交付项目】</div>';
+                            var $order_list = data.data.order_repeat;
+                            $.each($order_list, function(index,$order) {
+
+                                var $client_username = '';
+                                if($order.client_er) $client_username = $order.client_er.username;
+
+                                var $project_name = '';
+                                if($order.project_er) $project_name = $order.project_er.name;
+
+                                var $html_order =
+                                    '<div>'+
+                                    '<span style="width:100px;float:left;">[订单]' + $order.id + '</span>' +
+                                    '<span style="width:120px;float:left;">[客户]' + $client_username + '</span>' +
+                                    '[项目]' + $project_name +
+                                    '</div>';
+                                $html += $html_order;
+                            })
+                            $html += '<br>';
+                        }
+                        if(data.data.deliver_repeat.length)
+                        {
+                            $html += '<div>【已交付客户】</div>';
+                            var $deliver_list = data.data.deliver_repeat;
+                            $.each($deliver_list, function(index,$deliver) {
+
+                                var $client_username = '';
+                                if($deliver.client_er) $client_username = $deliver.client_er.username;
+
+                                var $project_name = '';
+                                if($deliver.project_er) $project_name = $deliver.project_er.name;
+
+                                var $html_deliver =
+                                    '<div>' +
+                                    '<span style="width:160px;float:left;">[客户] ' + $client_username + '</span>' +
+                                    '[项目] '+ $project_name +
+                                    '</div>';
+                                $html += $html_deliver;
+                            })
+                            $html += '<br>';
+                        }
+                        $html += '<br>';
+
 
             var $option_html_for_client = $('#option-list-for-client').html();
             var $option_html_for_delivered_result = $('#option-list-for-delivered-result').html();
@@ -630,7 +709,9 @@
                 time: 0
                 ,btn: ['确定', '取消']
                 ,title: '选择客户！'
+                ,area:['480px;']
                 ,content:
+                    $html+
                     '<select class="form-control select-primary" name="select-client-id" style="width:48%;" id="">'+
                     $option_html_for_client+
                     '</select>'+
@@ -676,7 +757,7 @@
                                     $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
                                 }
                                 $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
-                                $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
+                                // $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
 
 
                                 var $date = new Date();
@@ -694,6 +775,14 @@
                     );
                 }
             });
+
+
+
+                    }
+                },
+                'json'
+            );
+
         });
 
 

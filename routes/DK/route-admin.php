@@ -265,6 +265,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/item/order-remark-edit', $controller.'@operate_item_order_remark_edit');
     Route::post('/item/order-deliver', $controller.'@operate_item_order_deliver');
     Route::post('/item/order-bulk-deliver', $controller.'@operate_item_order_bulk_deliver');
+    Route::post('/item/order-deliver-get-delivered', $controller.'@operate_item_order_deliver_get_delivered');
 
     // 列表
     Route::match(['get','post'], '/item/order-list', $controller.'@view_item_order_list');

@@ -929,6 +929,11 @@ class DKAdminController extends Controller
         return $this->repo->operate_item_order_inspect(request()->all());
     }
     // 【订单管理】交付
+    public function operate_item_order_deliver_get_delivered()
+    {
+        return $this->repo->operate_item_order_deliver_get_delivered(request()->all());
+    }
+    // 【订单管理】交付
     public function operate_item_order_deliver()
     {
         return $this->repo->operate_item_order_deliver(request()->all());
@@ -985,12 +990,6 @@ class DKAdminController extends Controller
     public function operate_item_order_info_car_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
-    }
-
-    // 【订单管理】添加-行程记录
-    public function operate_item_order_travel_set()
-    {
-        return $this->repo->operate_item_order_travel_set(request()->all());
     }
 
 

@@ -3,6 +3,7 @@ namespace App\Repositories\DK;
 
 use App\Models\DK\DK_Department;
 use App\Models\DK\DK_District;
+use App\Models\DK\DK_Pivot_Client_Delivery;
 use App\Models\DK\DK_User;
 use App\Models\DK\YH_UserExt;
 use App\Models\DK\DK_Project;
@@ -7533,6 +7534,19 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
+            if($client_id != "-1")
+            {
+                $pivot_delivery = new DK_Pivot_Client_Delivery;
+                $pivot_delivery_data["client_id"] = $client_id;
+                $pivot_delivery_data["order_id"] = $item->id;
+                $pivot_delivery_data["project_id"] = $item->project_id;
+                $pivot_delivery_data["client_phone"] = $item->client_phone;
+                $pivot_delivery_data["creator_id"] = $me->id;
+
+                $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+            }
+
             $item->client_id = $client_id;
             $item->deliverer_id = $me->id;
             $item->delivered_status = 1;
@@ -7690,6 +7704,59 @@ class DKAdminRepository {
 //            exit($e->getMessage());
             return response_fail([],$msg);
         }
+
+    }
+    // 【工单管理】【获取】已交付记录
+    public function operate_item_order_deliver_get_delivered($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-deliver-get-delivered') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $client_phone = $item->client_phone;
+
+
+        $order_repeat = DK_Order::select('id','client_id','project_id','client_phone','creator_id')
+            ->with([
+                'creator'=>function($query) { $query->select('id','username'); },
+                'client_er'=>function($query) { $query->select('id','username'); },
+                'project_er'=>function($query) { $query->select('id','name'); }
+            ])->where(['client_phone'=>$client_phone])
+            ->where('id','<>',$id)->where('is_published','>',0)->get();
+        $return['order_repeat'] = $order_repeat;
+
+        $deliver_repeat = DK_Pivot_Client_Delivery::select('id','client_id','order_id','project_id','client_phone','creator_id')
+            ->with([
+                'creator'=>function($query) { $query->select('id','username'); },
+                'client_er'=>function($query) { $query->select('id','username'); },
+                'project_er'=>function($query) { $query->select('id','name'); }
+            ])->where(['client_phone'=>$client_phone])->get();
+        $return['deliver_repeat'] = $deliver_repeat;
+
+
+        return response_success($return,"");
 
     }
 
@@ -8351,105 +8418,6 @@ class DKAdminRepository {
             else throw new Exception("attachment--delete--fail");
 
             DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】【修改信息】设置-行程时间
-    public function operate_item_order_travel_set($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-order-travel-set') return response_error([],"参数[operate]有误！");
-        $id = $post_data["order_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $travel_type = $post_data["travel_type"];
-        $travel_time = strtotime($post_data['travel_time']);
-
-        if($travel_time > time('Y-m-d')) return response_error([],"设定时间不能大于当前！");
-
-        if($travel_type == "actual_departure")
-        {
-        }
-        else if($travel_type == "stopover_arrival")
-        {
-            if(!$item->actual_departure_time) return response_error([],"请按顺序添加时间！");
-            if($travel_time < $item->actual_departure_time) return response_error([],"经停到达时间需要在实际出发时间之后！");
-        }
-        else if($travel_type == "stopover_departure")
-        {
-            if(!$item->stopover_arrival_time) return response_error([],"请按顺序添加时间！");
-            if($travel_time < $item->stopover_arrival_time) return response_error([],"经停出发时间需要在经停到达时间之后！");
-        }
-        else if($travel_type == "actual_arrival")
-        {
-            if($item->stopover_place)
-            {
-                if(!$item->stopover_arrival_time) return response_error([],"请按顺序添加时间！");
-                if($travel_time < $item->stopover_arrival_time) return response_error([],"实际到达时间需要在经停出发时间之后！");
-            }
-            else
-            {
-                if(!$item->actual_departure_time) return response_error([],"请按顺序添加时间！");
-                if($travel_time < $item->actual_departure_time) return response_error([],"实际到达时间需要在实际出发时间之后！");
-            }
-        }
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            if($travel_type == "actual_departure")
-            {
-                $item->actual_departure_time = $travel_time;
-            }
-            else if($travel_type == "stopover_arrival")
-            {
-                $item->stopover_arrival_time = $travel_time;
-            }
-            else if($travel_type == "stopover_departure")
-            {
-                $item->stopover_departure_time = $travel_time;
-            }
-            else if($travel_type == "actual_arrival")
-            {
-                $item->actual_arrival_time = $travel_time;
-            }
-
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            DB::commit();
-
             return response_success([]);
         }
         catch (Exception $e)

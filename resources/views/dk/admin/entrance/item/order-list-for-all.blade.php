@@ -1958,7 +1958,7 @@
                                     }
                                     else
                                     {
-                                        $html_deliver = '<a class="btn btn-xs bg-green disabled">已交</a>';
+                                        $html_deliver = '<a class="btn btn-xs bg-green disabled- item-deliver-submit" data-id="'+data+'">再交</a>';
                                     }
                                     @endif
                                     $html_edit = '';
