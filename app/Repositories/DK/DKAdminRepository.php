@@ -7655,6 +7655,21 @@ class DKAdminRepository {
                 $item = DK_Order::withTrashed()->find($id);
                 if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
+
+                if($client_id != "-1")
+                {
+                    $pivot_delivery = new DK_Pivot_Client_Delivery;
+                    $pivot_delivery_data["client_id"] = $client_id;
+                    $pivot_delivery_data["order_id"] = $item->id;
+                    $pivot_delivery_data["project_id"] = $item->project_id;
+                    $pivot_delivery_data["client_phone"] = $item->client_phone;
+                    $pivot_delivery_data["creator_id"] = $me->id;
+
+                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+                }
+
+
                 $before = $item->delivered_result;
 
                 $item->client_id = $client_id;

@@ -653,7 +653,7 @@
                     {
                         if(data.data.order_repeat.length)
                         {
-                            $html += '<div>【已交付项目】</div>';
+                            $html += '<div>【已交付订单】</div>';
                             var $order_list = data.data.order_repeat;
                             $.each($order_list, function(index,$order) {
 
@@ -1933,7 +1933,7 @@
                                         $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
                                     }
                                     $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
-                                    $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
+                                    // $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
 
 
                                     var $date = new Date();
