@@ -648,7 +648,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $item_type = 'item';
         $item_type_text = '客户';
@@ -673,7 +673,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $id = request("id",0);
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-edit';
@@ -745,7 +745,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,11,19,61])) return response_error([],"你没有操作权限！");
 
 
         $operate = $post_data["operate"];
@@ -1040,7 +1040,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $return['menu_active_of_client_list_for_all'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-list-for-all';
@@ -1055,7 +1055,7 @@ class DKAdminRepository {
         $query = DK_Client::select('*')
             ->with(['creator'])
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 

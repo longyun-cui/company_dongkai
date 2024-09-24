@@ -24,7 +24,7 @@
 
                 <h3 class="box-title">{{ $title_text or '客户列表' }}</h3>
 
-                @if(in_array($me->user_type,[0,1,9,11]))
+                @if(in_array($me->user_type,[0,1,9,11,61]))
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
