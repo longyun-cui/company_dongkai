@@ -1556,7 +1556,6 @@
 
         // 【批量操作】全选or反选
         $(".main-content").on('click', '#check-review-all', function () {
-            console.log(1);
             $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
         // 【批量操作】
