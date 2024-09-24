@@ -145,11 +145,11 @@ Route::group(['middleware' => ['dk.client.login']], function () {
     Route::match(['get','post'], '/item/project-edit', $controller.'@operate_item_project_edit');
 
     // 编辑-信息
-    Route::post('/item/car-info-text-set', $controller.'@operate_item_car_info_text_set');
-    Route::post('/item/car-info-time-set', $controller.'@operate_item_car_info_time_set');
-    Route::post('/item/car-info-radio-set', $controller.'@operate_item_car_info_option_set');
-    Route::post('/item/car-info-select-set', $controller.'@operate_item_car_info_option_set');
-    Route::post('/item/car-info-select2-set', $controller.'@operate_item_car_info_option_set');
+    Route::post('/item/project-info-text-set', $controller.'@operate_item_project_info_text_set');
+    Route::post('/item/project-info-time-set', $controller.'@operate_item_project_info_time_set');
+    Route::post('/item/project-info-radio-set', $controller.'@operate_item_project_info_option_set');
+    Route::post('/item/project-info-select-set', $controller.'@operate_item_project_info_option_set');
+    Route::post('/item/project-info-select2-set', $controller.'@operate_item_project_info_option_set');
     // 编辑-附件
     Route::match(['get','post'], '/item/project-get-attachment-html', $controller.'@operate_item_project_get_attachment_html');
     Route::post('/item/project-info-attachment-set', $controller.'@operate_item_project_info_attachment_set');
@@ -176,6 +176,28 @@ Route::group(['middleware' => ['dk.client.login']], function () {
 
 
 
+    // 列表
+    Route::match(['get','post'], '/item/delivery-list', $controller.'@view_item_delivery_list');
+    // 删除 & 恢复
+    Route::post('/item/delivery-delete', $controller.'@operate_item_delivery_delete');
+    Route::post('/item/delivery-restore', $controller.'@operate_item_delivery_restore');
+    Route::post('/item/delivery-delete-permanently', $controller.'@operate_item_delivery_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/item/delivery-enable', $controller.'@operate_item_delivery_enable');
+    Route::post('/item/delivery-disable', $controller.'@operate_item_delivery_disable');
+    // 发布 & 完成 & 备注
+    Route::post('/item/delivery-verify', $controller.'@operate_item_delivery_verify');
+    Route::post('/item/delivery-inspect', $controller.'@operate_item_delivery_inspect');
+    Route::post('/item/delivery-publish', $controller.'@operate_item_delivery_publish');
+    Route::post('/item/delivery-complete', $controller.'@operate_item_delivery_complete');
+    Route::post('/item/delivery-abandon', $controller.'@operate_item_delivery_abandon');
+    Route::post('/item/delivery-reuse', $controller.'@operate_item_delivery_reuse');
+    Route::post('/item/delivery-remark-edit', $controller.'@operate_item_delivery_remark_edit');
+    Route::post('/item/delivery-follow', $controller.'@operate_item_delivery_follow');
+    Route::post('/item/delivery-quality-evaluate', $controller.'@operate_item_delivery_quality_evaluate');
+
+
+
 
     /*
      * 订单管理
@@ -186,12 +208,12 @@ Route::group(['middleware' => ['dk.client.login']], function () {
 
     Route::match(['get','post'], '/item/order_select2_project', $controller.'@operate_order_select2_project');
     Route::match(['get','post'], '/item/order_select2_client', $controller.'@operate_order_select2_client');
-    Route::match(['get','post'], '/item/order_select2_car', $controller.'@operate_order_select2_car');
+    Route::match(['get','post'], '/item/order_select2_project', $controller.'@operate_order_select2_project');
     Route::match(['get','post'], '/item/order_select2_circle', $controller.'@operate_order_select2_circle');
     Route::match(['get','post'], '/item/order_select2_route', $controller.'@operate_order_select2_route');
     Route::match(['get','post'], '/item/order_select2_pricing', $controller.'@operate_order_select2_pricing');
     Route::match(['get','post'], '/item/order_select2_trailer', $controller.'@operate_order_select2_trailer');
-    Route::match(['get','post'], '/item/order_list_select2_car', $controller.'@operate_order_list_select2_car');
+    Route::match(['get','post'], '/item/order_list_select2_project', $controller.'@operate_order_list_select2_project');
     Route::match(['get','post'], '/item/order_select2_driver', $controller.'@operate_order_select2_driver');
 
     // 创建 & 修改
@@ -233,7 +255,7 @@ Route::group(['middleware' => ['dk.client.login']], function () {
     Route::post('/item/order-info-select-set', $controller.'@operate_item_order_info_option_set');
     Route::post('/item/order-info-select2-set', $controller.'@operate_item_order_info_option_set');
     Route::post('/item/order-info-client-set', $controller.'@operate_item_order_info_client_set');
-    Route::post('/item/order-info-car-set', $controller.'@operate_item_order_info_car_set');
+    Route::post('/item/order-info-project-set', $controller.'@operate_item_order_info_project_set');
     // 订单-附件
     Route::post('/item/order-info-attachment-set', $controller.'@operate_item_order_info_attachment_set');
     Route::post('/item/order-info-attachment-delete', $controller.'@operate_item_order_info_attachment_delete');

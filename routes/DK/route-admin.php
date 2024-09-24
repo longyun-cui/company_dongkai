@@ -284,8 +284,6 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/item/order-info-attachment-delete', $controller.'@operate_item_order_info_attachment_delete');
 
 
-    // 订单-行程信息
-    Route::post('/item/order-travel-set', $controller.'@operate_item_order_travel_set');
     // 订单-财务信息
     Route::match(['get','post'], '/item/order-finance-record', $controller.'@view_item_order_finance_record');
     Route::post('/item/order-finance-record-create', $controller.'@operate_item_order_finance_record_create');
@@ -296,6 +294,32 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
 
+
+
+
+
+    // 列表
+    Route::match(['get','post'], '/item/delivery-list', $controller.'@view_item_delivery_list');
+    // 删除 & 恢复
+    Route::post('/item/delivery-delete', $controller.'@operate_item_delivery_delete');
+    Route::post('/item/delivery-restore', $controller.'@operate_item_delivery_restore');
+    Route::post('/item/delivery-delete-permanently', $controller.'@operate_item_delivery_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/item/delivery-enable', $controller.'@operate_item_delivery_enable');
+    Route::post('/item/delivery-disable', $controller.'@operate_item_delivery_disable');
+    // 发布 & 完成 & 备注
+    Route::post('/item/delivery-exported', $controller.'@operate_item_delivery_exported');
+    Route::post('/item/delivery-bulk-exported', $controller.'@operate_item_delivery_bulk_exported');
+
+    Route::post('/item/delivery-verify', $controller.'@operate_item_delivery_verify');
+    Route::post('/item/delivery-inspect', $controller.'@operate_item_delivery_inspect');
+    Route::post('/item/delivery-publish', $controller.'@operate_item_delivery_publish');
+    Route::post('/item/delivery-complete', $controller.'@operate_item_delivery_complete');
+    Route::post('/item/delivery-abandon', $controller.'@operate_item_delivery_abandon');
+    Route::post('/item/delivery-reuse', $controller.'@operate_item_delivery_reuse');
+    Route::post('/item/delivery-remark-edit', $controller.'@operate_item_delivery_remark_edit');
+    Route::post('/item/delivery-follow', $controller.'@operate_item_delivery_follow');
+    Route::post('/item/delivery-quality-evaluate', $controller.'@operate_item_delivery_quality_evaluate');
 
 
 

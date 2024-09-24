@@ -987,7 +987,7 @@ class DKAdminController extends Controller
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
     // 【订单管理】修改-车辆信息
-    public function operate_item_order_info_car_set()
+    public function operate_item_order_info_project_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
@@ -1008,6 +1008,36 @@ class DKAdminController extends Controller
 
 
 
+
+
+
+
+    /*
+     * 交付管理
+     */
+    // 【交付管理】返回-列表-视图（全部任务）
+    public function view_item_delivery_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_delivery_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_delivery_list_datatable(request()->all());
+    }
+
+
+    // 【交付管理】删除
+    public function operate_item_delivery_delete()
+    {
+        return $this->repo->operate_item_delivery_delete(request()->all());
+    }
+    // 【交付管理】导出
+    public function operate_item_delivery_exported()
+    {
+        return $this->repo->operate_item_delivery_exported(request()->all());
+    }
+    // 【订单管理】批量-交付
+    public function operate_item_delivery_bulk_exported()
+    {
+        return $this->repo->operate_item_delivery_bulk_exported(request()->all());
+    }
 
 
 

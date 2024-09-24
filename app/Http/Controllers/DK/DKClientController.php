@@ -175,6 +175,31 @@ class DKClientController extends Controller
      * 订单管理
      */
     // 【订单管理】返回-列表-视图（全部任务）
+    public function view_item_delivery_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_delivery_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_delivery_list_datatable(request()->all());
+    }
+    // 【内容】质量评估
+    public function operate_item_delivery_quality_evaluate()
+    {
+        return $this->repo->operate_item_delivery_quality_evaluate(request()->all());
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /*
+     * 订单管理
+     */
+    // 【订单管理】返回-列表-视图（全部任务）
     public function view_item_order_list_for_all()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_list_for_all(request()->all());
@@ -312,7 +337,7 @@ class DKClientController extends Controller
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
     // 【订单管理】修改-车辆信息
-    public function operate_item_order_info_car_set()
+    public function operate_item_order_info_project_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }

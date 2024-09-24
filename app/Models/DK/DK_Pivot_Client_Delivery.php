@@ -11,6 +11,7 @@ class DK_Pivot_Client_Delivery extends Model
     protected $fillable = [
         'pivot_active', 'pivot_category', 'pivot_type',
         'relation_active', 'relation_category', 'relation_type',
+        'is_exported',
         'user_id', 'client_id', 'project_id', 'order_id',
         'client_phone', 'delivered_result',
         'creator_id', 'updater_id'
@@ -58,6 +59,12 @@ class DK_Pivot_Client_Delivery extends Model
     function project_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Project','project_id','id');
+    }
+
+    // 项目
+    function order_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Order','order_id','id');
     }
 
 
