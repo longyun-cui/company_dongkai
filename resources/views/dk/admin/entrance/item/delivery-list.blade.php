@@ -48,14 +48,42 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-                        <select class="form-control form-filter select2-box order-select2-project" name="order-project" style="width:120px;">
-                            @if($project_id > 0)
-                                <option value="-1">选择项目</option>
-                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
-                            @else
-                                <option value="-1">选择项目</option>
+
+                        <select class="form-control form-filter select-select2 select2-box delivery-client" name="delivery-client" style="width:120px;">
+                            <option value="-1">选择客户</option>
+                            @if(!empty($client_list))
+                                @foreach($client_list as $v)
+                                    @if(!empty($client_id))
+                                        @if($v->id == $client_id)
+                                            <option value="{{ $v->id }}" selected="selected">{{ $v->username }}</option>
+                                        @else
+                                            <option value="{{ $v->id }}">{{ $v->username }}</option>
+                                        @endif
+                                    @else
+                                        <option value="{{ $v->id }}">{{ $v->username }}</option>
+                                    @endif
+                                @endforeach
                             @endif
                         </select>
+
+
+                        <select class="form-control form-filter select-select2 select2-box delivery-project" name="delivery-project" style="width:120px;">
+                            <option value="-1">选择项目</option>
+                            @if(!empty($project_list))
+                                @foreach($project_list as $v)
+                                    @if(!empty($project_id))
+                                        @if($v->id == $project_id)
+                                            <option value="{{ $v->id }}" selected="selected">{{ $v->name }}</option>
+                                        @else
+                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                        @endif
+                                    @else
+                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </select>
+
 
                         <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
                             <option value="-1">审核状态</option>
@@ -755,8 +783,8 @@
                         d.title = $('input[name="order-title"]').val();
                         d.keyword = $('input[name="order-keyword"]').val();
                         d.department_district = $('select[name="order-department-district[]"]').val();
-                        d.staff = $('select[name="order-staff"]').val();
-                        d.project = $('select[name="order-project"]').val();
+                        d.client = $('select[name="delivery-client"]').val();
+                        d.project = $('select[name="delivery-project"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
                         d.client_name = $('input[name="order-client-name"]').val();

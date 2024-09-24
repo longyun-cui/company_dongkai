@@ -9176,6 +9176,23 @@ class DKAdminRepository {
 
 
 
+        // 客户
+        if(!empty($post_data['client_id']))
+        {
+            if(is_numeric($post_data['client_id']) && $post_data['client_id'] > 0)
+            {
+                $client = DK_Client::select(['id','username'])->find($post_data['client_id']);
+                if($client)
+                {
+                    $view_data['client_id'] = $post_data['client_id'];
+                    $view_data['client_name'] = $client->username;
+                }
+                else $view_data['client_id'] = -1;
+            }
+            else $view_data['client_id'] = -1;
+        }
+        else $view_data['client_id'] = -1;
+
 
         // 项目
         if(!empty($post_data['project_id']))
@@ -9193,6 +9210,7 @@ class DKAdminRepository {
             else $view_data['project_id'] = -1;
         }
         else $view_data['project_id'] = -1;
+
 
         // 客户姓名
         if(!empty($post_data['client_name']))
@@ -9218,7 +9236,12 @@ class DKAdminRepository {
         else $view_data['inspected_status'] = -1;
 
 
-        $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
+
+
+        $client_list = DK_Client::select('id','username')->get();
+        $view_data['client_list'] = $client_list;
+
+        $project_list = DK_Project::select('id','name')->get();
         $view_data['project_list'] = $project_list;
 
         $view_data['menu_active_of_delivery_list'] = 'active menu-open';
@@ -9272,10 +9295,20 @@ class DKAdminRepository {
         if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
         if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
 
-        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(published_at)"), $post_data['assign']);
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
         if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
+
+
+        // 客户
+        if(isset($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1]))
+            {
+                $query->where('client_id', $post_data['client']);
+            }
+        }
 
 
         // 项目
