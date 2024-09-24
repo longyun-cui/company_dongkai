@@ -56,7 +56,7 @@
 
 
             {{--客户管理--}}
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,11,61]))
             <li class="header">客户管理</li>
 
             <li class="treeview {{ $menu_active_of_client_list_for_all or '' }}">
