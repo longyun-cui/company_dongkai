@@ -4994,7 +4994,7 @@ class DKAdminRepository {
 
         $query = DK_Project::select('*')
             ->withTrashed()
-            ->with(['creator','inspector_er']);
+            ->with(['creator','client_er','inspector_er']);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -5332,7 +5332,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Project::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5423,7 +5423,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Project::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5515,7 +5515,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Project::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5551,11 +5551,14 @@ class DKAdminRepository {
                     $item->pivot_project_user()->wherePivot('department_id',$me->department_district_id)->detach();
                 }
             }
+            else
+            {
+                $item->timestamps = false;
+                $item->$column_key = $column_value;
+                $bool = $item->save();
+                if(!$bool) throw new Exception("item--update--fail");
+            }
 
-//            $item->timestamps = false;
-//            $item->$column_key = $column_value;
-//            $bool = $item->save();
-//            if(!$bool) throw new Exception("item--update--fail");
             if(false) throw new Exception("item--update--fail");
             else
             {
@@ -5640,7 +5643,7 @@ class DKAdminRepository {
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Project::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -5865,7 +5868,7 @@ class DKAdminRepository {
         $item = DK_Project::with([
                 'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
             ])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该【车辆】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -7519,6 +7522,11 @@ class DKAdminRepository {
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $client_id = $post_data["client_id"];
+        if($client_id == "-1")
+        {
+            $project = DK_Project::find($item->project_id);
+            if($project->client_id != 0) $client_id = $project->client_id;
+        }
 //        $client = DK_Client::find($client_id);
 //        if(!$client) return response_error([],"客户不存在！");
 
@@ -7534,8 +7542,8 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-            if($client_id != "-1")
-            {
+//            if($client_id != "-1")
+//            {
                 $pivot_delivery = new DK_Pivot_Client_Delivery;
                 $pivot_delivery_data["client_id"] = $client_id;
                 $pivot_delivery_data["order_id"] = $item->id;
@@ -7545,7 +7553,7 @@ class DKAdminRepository {
 
                 $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
                 if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
-            }
+//            }
 
             $item->client_id = $client_id;
             $item->deliverer_id = $me->id;
@@ -7652,14 +7660,22 @@ class DKAdminRepository {
 
             foreach($ids_array as $key => $id)
             {
+                $this_client_id = $client_id;
+
                 $item = DK_Order::withTrashed()->find($id);
                 if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
-
-                if($client_id != "-1")
+                if($this_client_id == "-1")
                 {
+                    $project = DK_Project::find($item->project_id);
+                    if($project->client_id != 0) $this_client_id = $project->client_id;
+                }
+
+
+//                if($this_client_id != "-1")
+//                {
                     $pivot_delivery = new DK_Pivot_Client_Delivery;
-                    $pivot_delivery_data["client_id"] = $client_id;
+                    $pivot_delivery_data["client_id"] = $this_client_id;
                     $pivot_delivery_data["order_id"] = $item->id;
                     $pivot_delivery_data["project_id"] = $item->project_id;
                     $pivot_delivery_data["client_phone"] = $item->client_phone;
@@ -7667,12 +7683,12 @@ class DKAdminRepository {
 
                     $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
                     if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
-                }
+//                }
 
 
                 $before = $item->delivered_result;
 
-                $item->client_id = $client_id;
+                $item->client_id = $this_client_id;
                 $item->deliverer_id = $me->id;
                 $item->delivered_status = 1;
                 $item->delivered_result = $delivered_result;
@@ -7759,7 +7775,14 @@ class DKAdminRepository {
                 'client_er'=>function($query) { $query->select('id','username'); },
                 'project_er'=>function($query) { $query->select('id','name'); }
             ])->where(['client_phone'=>$client_phone])
-            ->where('id','<>',$id)->where('is_published','>',0)->get();
+//            ->where('id','<>',$id)
+//            ->where('delivered_status',1)
+            ->where(function ($query) use($id) {
+                $query->where('id','<>',$id)
+                    ->orWhere(function($query) use($id) { $query->where('id',$id)->where('delivered_status',1); } );
+            })
+            ->where('is_published','>',0)
+            ->get();
         $return['order_repeat'] = $order_repeat;
 
         $deliver_repeat = DK_Pivot_Client_Delivery::select('id','client_id','order_id','project_id','client_phone','creator_id')
@@ -9954,7 +9977,7 @@ class DKAdminRepository {
                     $client_id = $post_data['client'];
                 }
             }
-            // 车辆
+            // 项目
             if(!empty($post_data['car']))
             {
                 if(!in_array($post_data['car'],[-1,0]))

@@ -47,6 +47,21 @@
                         </div>
 
 
+                        {{--客户--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2">选择客户</label>
+                            <div class="col-md-8 ">
+                                <select class="form-control" name="client_id" id="select2-client">
+                                    @if($operate == 'edit' && $data->client_id)
+                                        <option data-id="{{ $data->client_id or 0 }}" value="{{ $data->client_id or 0 }}">{{ $data->client_er->username }}</option>
+                                    @else
+                                        <option data-id="0" value="0">未指定</option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
+
                         {{--质检员--}}
 {{--                        <div class="form-group">--}}
 {{--                            <label class="control-label col-md-2">选择质检员</label>--}}
@@ -222,6 +237,39 @@
                 }
             };
             $("#form-edit-item").ajaxSubmit(options);
+        });
+
+
+        //
+        $('#select2-client').select2({
+            ajax: {
+                url: "{{ url('/item/item_select2_client') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            templateSelection: function(data, container) {
+                return data.text;
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
         });
 
 

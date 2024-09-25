@@ -198,14 +198,14 @@
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
 
                             <select name="bulk-operate-delivered-client" class="form-control form-filter select2-box" style="width:25%;height:100%;">
-                                <option value="-1">交付客户</option>
+                                <option value="-1">选择交付客户</option>
                                 @foreach($client_list as $v)
                                     <option value="{{ $v->id }}">{{ $v->username }}</option>
                                 @endforeach
                             </select>
 
                             <select name="bulk-operate-delivered-result" class="form-control form-filter select2-box" style="width:25%;height:100%;">
-                                <option value="-1">交付结果</option>
+                                <option value="-1">选择交付结果</option>
                                 @foreach(config('info.delivered_result') as $v)
                                     <option value="{{ $v }}">{{ $v }}</option>
                                 @endforeach

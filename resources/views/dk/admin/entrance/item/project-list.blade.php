@@ -745,6 +745,32 @@
                             return data;
                         }
                     },
+                    {
+                        "title": "客户",
+                        "data": "client_id",
+                        "className": "",
+                        "width": "240px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','客户');
+                                $(nTd).attr('data-key','client_id').attr('data-value',data);
+                                if(row.client_er == null) $(nTd).attr('data-option-name','未指定');
+                                else {
+                                    $(nTd).attr('data-option-name',row.client_er.username);
+                                }
+                                $(nTd).attr('data-column-name','客户');
+                                if(row.client_id) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.client_er == null) return '--';
+                            else return '<a href="javascript:void(0);">'+row.client_er.username+' </a>';
+                        }
+                    },
                     // {
                     //     "className": "text-center",
                     //     "width": "240px",

@@ -529,7 +529,7 @@
 
             if($that.attr("data-key") == "inspector_list")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-driver').addClass('select2-inspector');
+                $('select[name=info-select-set-column-value]').removeClass('select2-client').addClass('select2-inspector');
                 $('.select2-inspector').select2({
                     ajax: {
                         url: "{{ url('/item/item_select2_user?type=inspector') }}",
@@ -565,12 +565,12 @@
                     theme: 'classic'
                 });
             }
-            else if($that.attr("data-key") == "driver_id")
+            else if($that.attr("data-key") == "client_id")
             {
-                $('select[name=info-select-set-column-value]').removeClass('select2-client').addClass('select2-driver');
-                $('.select2-driver').select2({
+                $('select[name=info-select-set-column-value]').removeClass('select2-inspector').addClass('select2-client');
+                $('.select2-client').select2({
                     ajax: {
-                        url: "{{ url('/item/order_select2_driver') }}",
+                        url: "{{ url('/item/item_select2_client') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {

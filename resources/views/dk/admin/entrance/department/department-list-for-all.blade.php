@@ -754,7 +754,7 @@
                                     $(nTd).attr('data-option-name',row.leader.username);
                                 }
                                 $(nTd).attr('data-column-name','负责人');
-                                if(row.project_id) $(nTd).attr('data-operate-type','edit');
+                                if(row.leader_id) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
 
                                 if(row.department_type == 11)

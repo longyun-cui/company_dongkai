@@ -15,6 +15,7 @@ class DK_Project extends Model
         'org_id', 'admin_id',
         'item_id', 'menu_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+        'client_id',
         'inspector_id',
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
@@ -59,6 +60,15 @@ class DK_Project extends Model
     function user()
     {
         return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
+    }
+
+
+
+
+    // 客户
+    function client_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
     }
 
 
