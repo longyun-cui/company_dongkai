@@ -156,11 +156,11 @@
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出Excel</span>
 
                             <select name="bulk-operate-status" class="form-control form-filter">
-                                <option value="-1">请选择操作类型</option>
-                                <option value="1">导出</option>
+                                <option value="-1">请选导出状态</option>
+                                <option value="1">已导出</option>
                                 <option value="0">待导出</option>
                             </select>
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported"><i class="fa fa-check"></i> 批量操作</span>
+                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported"><i class="fa fa-check"></i> 批量更改导出状态</span>
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
                         </div>
                     </div>
@@ -929,6 +929,7 @@
                         render: function(data, type, row, meta) {
                             if(data == 0) return '<small class="btn-xs btn-primary">未导出</small>';
                             else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
+                            else if(data == -1) return '<small class="btn-xs btn-warning">未选择</small>';
                             return data;
                         }
                     },
@@ -1049,6 +1050,39 @@
                         render: function(data, type, row, meta) {
                             if(row.order_er) return row.order_er.wx_id;
                             return "--";
+                        }
+                    },
+                    {
+                        "title": "客户意向",
+                        "data": "order_id",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            // if(!data) return '--';
+                            // return data;
+                            var $result_html = '';
+                            if(row.order_er)
+                            {
+                                var $data = row.order_er.client_intention;
+                                if($data == "A类")
+                                {
+                                    $result_html = '<small class="btn-xs bg-red">'+$data+'</small>';
+                                }
+                                else if($data == "B类")
+                                {
+                                    $result_html = '<small class="btn-xs bg-blue">'+$data+'</small>';
+                                }
+                                else if($data == "C类")
+                                {
+                                    $result_html = '<small class="btn-xs bg-green">'+$data+'</small>';
+                                }
+                                else
+                                {
+                                    $result_html = '--';
+                                }
+                            }
+                            return $result_html;
                         }
                     },
                     {
