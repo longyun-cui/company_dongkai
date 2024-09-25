@@ -28,7 +28,7 @@ Route::group(['middleware' => ['dk.finance.user.login']], function () {
     Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
 });
 
-Route::group(['middleware' => ['dk.finance.user.login','dk.admin.password_change']], function () {
+Route::group(['middleware' => ['dk.finance.user.login','dk.finance.password_change']], function () {
 
     $controller = 'DKFinanceController';
 
