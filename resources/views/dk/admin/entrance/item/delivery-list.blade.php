@@ -989,6 +989,37 @@
                         }
                     },
                     {
+                        "title": "交付结果",
+                        "data": "delivered_result",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $result_html = '';
+                            if(data == "已交付")
+                            {
+                                $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                            }
+                            else if(data == "待交付")
+                            {
+                                $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
+                            }
+                            else if(data == "驳回")
+                            {
+                                $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
+                            }
+                            else if(data == "等待再审" || data == "隔日交付")
+                            {
+                                $result_html = '<small class="btn-xs bg-yellow">'+data+'</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
+                            }
+                            return $result_html;
+                        }
+                    },
+                    {
                         "title": "客户",
                         "data": "client_id",
                         "className": "",

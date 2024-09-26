@@ -7549,6 +7549,7 @@ class DKAdminRepository {
                 $pivot_delivery_data["order_id"] = $item->id;
                 $pivot_delivery_data["project_id"] = $item->project_id;
                 $pivot_delivery_data["client_phone"] = $item->client_phone;
+                $pivot_delivery_data["delivered_result"] = $delivered_result;
                 $pivot_delivery_data["creator_id"] = $me->id;
 
                 $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
@@ -7679,6 +7680,7 @@ class DKAdminRepository {
                     $pivot_delivery_data["order_id"] = $item->id;
                     $pivot_delivery_data["project_id"] = $item->project_id;
                     $pivot_delivery_data["client_phone"] = $item->client_phone;
+                    $pivot_delivery_data["delivered_result"] = $delivered_result;
                     $pivot_delivery_data["creator_id"] = $me->id;
 
                     $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
