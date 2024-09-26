@@ -995,6 +995,7 @@
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
+                            if(!data) return "--";
                             var $result_html = '';
                             if(data == "已交付")
                             {
