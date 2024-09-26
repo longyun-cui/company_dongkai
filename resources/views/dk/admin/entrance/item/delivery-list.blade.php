@@ -39,7 +39,8 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="delivery-id" placeholder="ID" value="{{ $id or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="delivery-order-id" placeholder="订单ID" value="{{ $order_id or '' }}" style="width:88px;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
@@ -773,7 +774,8 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="order-id"]').val();
+                        d.id = $('input[name="delivery-id"]').val();
+                        d.order_id = $('input[name="delivery-order-id"]').val();
                         d.remark = $('input[name="order-remark"]').val();
                         d.description = $('input[name="order-description"]').val();
                         d.assign = $('input[name="order-assign"]').val();
