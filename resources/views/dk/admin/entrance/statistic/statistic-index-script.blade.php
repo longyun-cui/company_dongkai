@@ -99,8 +99,58 @@
 
 
 
+            // 全部
             // 客服-报单
-            $(".order_of_today_for_all").find('b').html($data.order_of_today_for_all);
+            $(".order_of_all_for_published").find('b').html($data.order_of_all_for_published);
+            $(".order_of_all_for_inspected_all").find('b').html($data.order_of_all_for_inspected_all);
+            $(".order_of_all_for_delivered_all").find('b').html($data.order_of_all_for_delivered_all);
+            $(".order_of_all_for_delivered_completed").find('b').html($data.order_of_all_for_delivered_completed);
+            $(".order_of_all_for_delivered_inside").find('b').html($data.order_of_all_for_delivered_inside);
+            $(".order_of_all_for_delivered_tomorrow").find('b').html($data.order_of_all_for_delivered_tomorrow);
+            $(".order_of_all_for_delivered_repeated").find('b').html($data.order_of_all_for_delivered_repeated);
+            $(".order_of_all_for_delivered_rejected").find('b').html($data.order_of_all_for_delivered_rejected);
+            $(".order_of_all_for_delivered_effective").find('b').html($data.order_of_all_for_delivered_effective);
+            $(".order_of_all_for_delivered_effective_rate").find('b').html($data.order_of_all_for_delivered_effective_rate);
+
+            $(".order_of_all_for_accepted").find('b').html($data.order_of_all_for_accepted);
+            $(".order_of_all_for_accepted_inside").find('b').html($data.order_of_tall_for_accepted_inside);
+            $(".order_of_all_for_refused").find('b').html($data.order_of_all_for_refused);
+            $(".order_of_all_for_repeated").find('b').html($data.order_of_all_for_repeated);
+            $(".order_of_all_for_rate").find('b').html($data.order_of_all_for_rate);
+
+
+            // 运营-交付
+            $(".deliverer_of_all_for_all").find('b').html($data.deliverer_of_all_for_all);
+            $(".deliverer_of_all_for_all_by_same_day").find('b').html($data.deliverer_of_all_for_all_by_same_day);
+            $(".deliverer_of_all_for_all_by_other_day").find('b').html($data.deliverer_of_all_for_all_by_other_day);
+
+            $(".deliverer_of_all_for_completed").find('b').html($data.deliverer_of_all_for_completed);
+            $(".deliverer_of_all_for_completed_by_same_day").find('b').html($data.deliverer_of_all_for_completed_by_same_day);
+            $(".deliverer_of_all_for_completed_by_other_day").find('b').html($data.deliverer_of_all_for_completed_by_other_day);
+
+            $(".deliverer_of_all_for_inside").find('b').html($data.deliverer_of_all_for_inside);
+            $(".deliverer_of_all_for_inside_by_same_day").find('b').html($data.deliverer_of_all_for_inside_by_same_day);
+            $(".deliverer_of_all_for_inside_by_other_day").find('b').html($data.deliverer_of_all_for_inside_by_other_day);
+
+            $(".deliverer_of_all_for_tomorrow").find('b').html($data.deliverer_of_all_for_tomorrow);
+            $(".deliverer_of_all_for_repeated").find('b').html($data.deliverer_of_all_for_repeated);
+            $(".deliverer_of_tall_for_rejected").find('b').html($data.deliverer_of_all_for_rejected);
+            // $(".deliverer_of_all_for_effective").find('b').html($data.deliverer_of_all_for_effective);
+            // $(".deliverer_of_all_for_effective_rate").find('b').html($data.deliverer_of_all_for_effective_rate);
+
+            // 质检-审核
+            $(".order_of_all_for_inspected_all").find('b').html($data.order_of_all_for_inspected_all);
+            $(".order_of_all_for_inspected_accepted").find('b').html($data.order_of_all_for_inspected_accepted);
+            $(".order_of_all_for_inspected_accepted_inside").find('b').html($data.order_of_all_for_inspected_accepted_inside);
+            $(".order_of_all_for_inspected_refused").find('b').html($data.order_of_all_for_inspected_refused);
+            $(".order_of_all_for_inspected_repeated").find('b').html($data.order_of_all_for_inspected_repeated);
+
+
+
+
+            // 日
+            // 客服-报单
+            $(".order_of_today_for_published").find('b').html($data.order_of_today_for_published);
             $(".order_of_today_for_inspected_all").find('b').html($data.order_of_today_for_inspected_all);
             $(".order_of_today_for_delivered_all").find('b').html($data.order_of_today_for_delivered_all);
             $(".order_of_today_for_delivered_completed").find('b').html($data.order_of_today_for_delivered_completed);
@@ -143,6 +193,55 @@
             $(".order_of_today_for_inspected_accepted_inside").find('b').html($data.order_of_today_for_inspected_accepted_inside);
             $(".order_of_today_for_inspected_refused").find('b').html($data.order_of_today_for_inspected_refused);
             $(".order_of_today_for_inspected_repeated").find('b').html($data.order_of_today_for_inspected_repeated);
+
+
+
+
+            // 月
+            // 客服-报单
+            $(".order_of_month_for_published").find('b').html($data.order_of_month_for_published);
+            $(".order_of_month_for_inspected_all").find('b').html($data.order_of_month_for_inspected_all);
+            $(".order_of_month_for_delivered_all").find('b').html($data.order_of_month_for_delivered_all);
+            $(".order_of_month_for_delivered_completed").find('b').html($data.order_of_month_for_delivered_completed);
+            $(".order_of_month_for_delivered_inside").find('b').html($data.order_of_month_for_delivered_inside);
+            $(".order_of_month_for_delivered_tomorrow").find('b').html($data.order_of_month_for_delivered_tomorrow);
+            $(".order_of_month_for_delivered_repeated").find('b').html($data.order_of_month_for_delivered_repeated);
+            $(".order_of_month_for_delivered_rejected").find('b').html($data.order_of_month_for_delivered_rejected);
+            $(".order_of_month_for_delivered_effective").find('b').html($data.order_of_month_for_delivered_effective);
+            $(".order_of_month_for_delivered_effective_rate").find('b').html($data.order_of_month_for_delivered_effective_rate);
+
+            $(".order_of_month_for_accepted").find('b').html($data.order_of_month_for_accepted);
+            $(".order_of_month_for_accepted_inside").find('b').html($data.order_of_month_for_accepted_inside);
+            $(".order_of_month_for_refused").find('b').html($data.order_of_month_for_refused);
+            $(".order_of_month_for_repeated").find('b').html($data.order_of_month_for_repeated);
+            $(".order_of_month_for_rate").find('b').html($data.order_of_month_for_rate);
+
+
+            // 运营-交付
+            $(".deliverer_of_month_for_all").find('b').html($data.deliverer_of_month_for_all);
+            $(".deliverer_of_month_for_all_by_same_day").find('b').html($data.deliverer_of_month_for_all_by_same_day);
+            $(".deliverer_of_month_for_all_by_other_day").find('b').html($data.deliverer_of_month_for_all_by_other_day);
+
+            $(".deliverer_of_month_for_completed").find('b').html($data.deliverer_of_month_for_completed);
+            $(".deliverer_of_month_for_completed_by_same_day").find('b').html($data.deliverer_of_month_for_completed_by_same_day);
+            $(".deliverer_of_month_for_completed_by_other_day").find('b').html($data.deliverer_of_month_for_completed_by_other_day);
+
+            $(".deliverer_of_month_for_inside").find('b').html($data.deliverer_of_month_for_inside);
+            $(".deliverer_of_month_for_inside_by_same_day").find('b').html($data.deliverer_of_month_for_inside_by_same_day);
+            $(".deliverer_of_month_for_inside_by_other_day").find('b').html($data.deliverer_of_month_for_inside_by_other_day);
+
+            $(".deliverer_of_month_for_tomorrow").find('b').html($data.deliverer_of_month_for_tomorrow);
+            $(".deliverer_of_month_for_repeated").find('b').html($data.deliverer_of_month_for_repeated);
+            $(".deliverer_of_month_for_rejected").find('b').html($data.deliverer_of_month_for_rejected);
+            // $(".deliverer_of_month_for_effective").find('b').html($data.deliverer_of_month_for_effective);
+            // $(".deliverer_of_month_for_effective_rate").find('b').html($data.deliverer_of_month_for_effective_rate);
+
+            // 质检-审核
+            $(".order_of_month_for_inspected_all").find('b').html($data.order_of_month_for_inspected_all);
+            $(".order_of_month_for_inspected_accepted").find('b').html($data.order_of_month_for_inspected_accepted);
+            $(".order_of_month_for_inspected_accepted_inside").find('b').html($data.order_of_month_for_inspected_accepted_inside);
+            $(".order_of_month_for_inspected_refused").find('b').html($data.order_of_month_for_inspected_refused);
+            $(".order_of_month_for_inspected_repeated").find('b').html($data.order_of_month_for_inspected_repeated);
 
 
 
