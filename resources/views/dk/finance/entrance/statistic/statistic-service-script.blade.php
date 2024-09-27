@@ -1,7 +1,7 @@
 <script>
     $(function() {
 
-        // 【项目报表】全部搜索
+        // 【搜索】
         $(".main-content").on('click', "#filter-submit-for-service", function() {
 
             $("#statistic-for-service").find('input[name=service]').val('all');
@@ -10,49 +10,30 @@
             $(".statistic-time-type-title").html('总量');
             $('#datatable_ajax').DataTable().ajax.reload();
         });
-        // 【项目报表】按月搜索
-        $(".main-content").on('click', "#filter-submit-for-service-by-month", function() {
-
-            $("#statistic-for-service").find('input[name=service-time-type]').val('month');
-            var $staff_type_title = $('select[name=service-staff-type]').find("option:selected").text();
-            $(".statistic-title").html($staff_type_title);
-            $(".statistic-time-type-title").html('按月');
-            var $month_dom = $('input[name="service-month"]');
-            var $the_month_str = $month_dom.val();
-            $(".statistic-time-title").html('（'+$the_month_str+'月）');
-
-            $('#datatable_ajax_daily').DataTable().ajax.reload();
-            $('#datatable_ajax_project').DataTable().ajax.reload();
-
-            statistic_get_data_for_service_daily_chart("month",$the_month_str,
-                "myChart-for-delivery-quantity",
-                "myChart-for-cost-total",
-                "myChart-for-cost-per-capita",
-                "myChart-for-cost-unit-average"
-            );
+        // 【搜索】【回车】
+        $("#statistic-for-service").on('keyup', ".filter-keyup", function(event) {
+            if(event.keyCode ==13)
+            {
+                $("#statistic-for-service").find(".filter-submit").click();
+            }
         });
-        // 【项目报表】按天搜索
-        $(".main-content").on('click', "#filter-submit-for-service-by-day", function() {
+        // 【清空重选】
+        $("#statistic-for-service").on('click', ".filter-empty", function() {
+            $("#statistic-for-service").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+            $(".select2-box").val(-1).trigger("change");
+            $(".select2-box").select2("val", "");
 
-            $("#statistic-for-service").find('input[name=service-time-type]').val('date');
-            var $staff_type_title = $('select[name=service-staff-type]').find("option:selected").text();
-            $(".statistic-title").html($staff_type_title);
-            $(".statistic-time-type-title").html('按天');
-            var $date_dom = $('input[name="service-date"]');
-            var $the_date_str = $date_dom.val();
-            $(".statistic-time-title").html('（'+$the_date_str+'）');
-
-            $('#datatable_ajax_daily').DataTable().ajax.reload();
-            $('#datatable_ajax_project').DataTable().ajax.reload();
-
-            statistic_get_data_for_service_daily_chart("date",$the_date_str,
-                "myChart-for-delivery-quantity",
-                "myChart-for-cost-total",
-                "myChart-for-cost-per-capita",
-                "myChart-for-cost-unit-average"
-            );
+//            $('select.form-filter').selectpicker('refresh');
+            $("#statistic-for-service").find('select.form-filter option').attr("selected",false);
+            $("#statistic-for-service").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
-        // 【项目报表】【重置】
+        // 【刷新】
+        $("#statistic-for-service").on('click', ".filter-refresh", function() {
+            $('#datatable_ajax').DataTable().ajax.reload(null,false);
+        });
+        // 【重置】
         $("#statistic-for-service").on('click', ".filter-cancel", function() {
             $("#statistic-for-service").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
@@ -81,9 +62,116 @@
         });
 
 
+        // 【业务报表】按【月】搜索
+        $(".main-content").on('click', "#filter-submit-for-service-by-month", function() {
+
+            $("#statistic-for-service").find('input[name=service-time-type]').val('month');
+
+            var $statistic_title = '';
+
+            var $company = $('select[name=service-company]').find("option:selected");
+            if($company.val() != "-1")
+            {
+                var $company_title = $company.text();
+                $statistic_title = $company_title;
+            }
+
+            var $channel = $('select[name=service-channel]').find("option:selected");
+            if($channel.val() != "-1")
+            {
+                var $channel_title = $channel.text();
+                $statistic_title = $channel_title;
+            }
+
+            var $business = $('select[name=service-business]').find("option:selected");
+            if($business.val() != "-1")
+            {
+                var $business_title = $business.text();
+                $statistic_title = $business_title;
+            }
+
+            var $project = $('select[name=service-project]').find("option:selected");
+            if($project.val() != "-1")
+            {
+                var $project_title = $project.text();
+                $statistic_title = $project_title;
+            }
+
+            if($statistic_title)
+            {
+                $statistic_title = "【" + $statistic_title + "】";
+                $(".statistic-title").html($statistic_title);
+            }
+
+            $(".statistic-time-type-title").html('按月');
+            var $month_dom = $('input[name="service-month"]');
+            var $the_month_str = $month_dom.val();
+            $(".statistic-time-title").html('（'+$the_month_str+'月）');
+
+            $('#datatable_ajax_daily').DataTable().ajax.reload();
+            $('#datatable_ajax_project').DataTable().ajax.reload();
+
+            statistic_get_data_for_service_daily_chart("month",$the_month_str,
+                "myChart-for-delivery-quantity",
+                "myChart-for-cost-total",
+                "myChart-for-cost-per-capita",
+                "myChart-for-cost-unit-average"
+            );
+        });
+        // 【业务报表】按【天】搜索
+        $(".main-content").on('click', "#filter-submit-for-service-by-day", function() {
+
+            $("#statistic-for-service").find('input[name=service-time-type]').val('date');
+
+            var $company_title = $('select[name=service-company]').find("option:selected").text();
+            var $statistic_title = "【" + $company_title + "】";
+            $(".statistic-title").html($statistic_title);
+
+            $(".statistic-time-type-title").html('按天');
+            var $date_dom = $('input[name="service-date"]');
+            var $the_date_str = $date_dom.val();
+            $(".statistic-time-title").html('（'+$the_date_str+'）');
+
+            $('#datatable_ajax_daily').DataTable().ajax.reload();
+            $('#datatable_ajax_project').DataTable().ajax.reload();
+
+            statistic_get_data_for_service_daily_chart("date",$the_date_str,
+                "myChart-for-delivery-quantity",
+                "myChart-for-cost-total",
+                "myChart-for-cost-per-capita",
+                "myChart-for-cost-unit-average"
+            );
+        });
+        // 【业务报表】按【时间段】搜索
+        $(".main-content").on('click', "#filter-submit-for-service-by-period", function() {
+
+            $("#statistic-for-service").find('input[name=service-time-type]').val('period');
+
+            var $company_title = $('select[name=overview-company]').find("option:selected").text();
+            var $statistic_title = "【" + $company_title + "】";
+            $(".statistic-title").html($statistic_title);
+
+            $(".statistic-time-type-title").html('按时间段查询');
+            var $date_start = $('input[name="service-start"]');
+            var $date_ended = $('input[name="service-ended"]');
+            var $the_date_str = $date_start.val() + " - " + $date_ended.val();
+            $(".statistic-time-title").html('（'+$the_date_str+'）');
+
+            $('#datatable_ajax_daily').DataTable().ajax.reload();
+            $('#datatable_ajax_project').DataTable().ajax.reload();
+
+            statistic_get_data_for_service_daily_chart("date",$the_date_str,
+                "myChart-for-delivery-quantity",
+                "myChart-for-cost-total",
+                "myChart-for-cost-per-capita",
+                "myChart-for-cost-unit-average"
+            );
+        });
 
 
-        // 【项目报表】【前一月】
+
+
+        // 【业务报表】【前一月】
         $(".main-content").on('click', ".month-pick-pre-for-service", function() {
 
             var $month_dom = $('input[name="service-month"]');
@@ -110,7 +198,7 @@
             // $('#datatable_ajax').DataTable().ajax.reload();
 
         });
-        // 【项目报表】【后一月】
+        // 【业务报表】【后一月】
         $(".main-content").on('click', ".month-pick-next-for-service", function() {
 
             var $month_dom = $('input[name="service-month"]');
@@ -140,7 +228,7 @@
 
         });
 
-        // 【项目报表】【前一天】
+        // 【业务报表】【前一天】
         $(".main-content").on('click', ".date-pick-pre-for-service", function() {
 
             var $date_dom = $('input[name="service-date"]');
@@ -163,7 +251,7 @@
             // $('#datatable_ajax').DataTable().ajax.reload();
 
         });
-        // 【项目报表】【后一天】
+        // 【业务报表】【后一天】
         $(".main-content").on('click', ".date-pick-next-for-service", function() {
 
             var $date_dom = $('input[name="service-date"]');

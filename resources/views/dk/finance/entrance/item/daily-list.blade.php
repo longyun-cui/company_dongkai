@@ -100,6 +100,14 @@
                         </button>
 
 
+                        {{--按时间段查看--}}
+{{--                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-start" placeholder="起始日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />--}}
+{{--                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-ended" placeholder="结束日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />--}}
+{{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order-by-period" style="width:100px;">--}}
+{{--                            <i class="fa fa-search"></i> 按时间段查询--}}
+{{--                        </button>--}}
+
+
                         <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
                             <i class="fa fa-remove"></i> 清空重选
                         </button>
@@ -779,6 +787,9 @@
                         d.channel = $('select[name="order-channel"]').val();
                         d.business = $('select[name="order-business"]').val();
                         d.project = $('select[name="order-project"]').val();
+                        d.time_type = $('input[name="order-time-type"]').val();
+                        d.month = $('input[name="order-month"]').val();
+                        d.date = $('input[name="order-date"]').val();
                         d.assign = $('input[name="order-assign"]').val();
                         d.assign_start = $('input[name="order-start"]').val();
                         d.assign_ended = $('input[name="order-ended"]').val();

@@ -22,8 +22,8 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">
-                    【<span class="statistic-title-">全部项目</span>】
-                    <span class="statistic-time-type-title-"></span>
+                    <span class="statistic-title">全部</span>
+                    <span class="statistic-time-type-title"></span>
                     <span class="statistic-time-title">（全部）</span>
                 </h3>
             </div>
@@ -97,9 +97,26 @@
                         </button>
 
 
+                        {{--按时间段查看--}}
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="service-start" placeholder="起始日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="service-ended" placeholder="结束日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-service-by-period" style="width:100px;">
+                            <i class="fa fa-search"></i> 按时间段查询
+                        </button>
+
+
 {{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-service">--}}
 {{--                            <i class="fa fa-search"></i> 全部查询--}}
 {{--                        </button>--}}
+                        <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-service">
+                            <i class="fa fa-remove"></i> 清空重选
+                        </button>
+{{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-service">--}}
+{{--                            <i class="fa fa-search"></i> 搜索--}}
+{{--                        </button>--}}
+                        <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-service">
+                            <i class="fa fa-circle-o-notch"></i> 刷新
+                        </button>
                         <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-service">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
@@ -1336,13 +1353,16 @@
 
                     var $obj = new Object();
                     if($('input[name="service-id"]').val())  $obj.order_id = $('input[name="service-id"]').val();
-                    if($('input[name="service-assign"]').val())  $obj.assign = $('input[name="service-assign"]').val();
-                    if($('input[name="service-start"]').val())  $obj.assign_start = $('input[name="service-start"]').val();
-                    if($('input[name="service-ended"]').val())  $obj.assign_ended = $('input[name="service-ended"]').val();
                     if($('select[name="service-company"]').val() > 0)  $obj.company_id = $('select[name="service-company"]').val();
                     if($('select[name="service-channel"]').val() > 0)  $obj.channel_id = $('select[name="service-channel"]').val();
                     if($('select[name="service-project"]').val() > 0)  $obj.project_id = $('select[name="service-project"]').val();
+
+                    if($('input[name="service-time-type"]').val())  $obj.time_type = $('input[name="service-time-type"]').val();
                     if($('input[name="service-month"]').val())  $obj.month = $('input[name="service-month"]').val();
+                    if($('input[name="service-date"]').val())  $obj.date = $('input[name="service-date"]').val();
+                    if($('input[name="service-assign"]').val())  $obj.assign = $('input[name="service-assign"]').val();
+                    if($('input[name="service-start"]').val())  $obj.assign_start = $('input[name="service-start"]').val();
+                    if($('input[name="service-ended"]').val())  $obj.assign_ended = $('input[name="service-ended"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != {{ $length or 20 }}) $obj.length = $page_length;
@@ -1351,16 +1371,16 @@
                     if($pagination > 1) $obj.page = $pagination;
 
 
-                    if(JSON.stringify($obj) != "{}")
-                    {
-                        var $url = url_build('',$obj);
-                        history.replaceState({page: 1}, "", $url);
-                    }
-                    else
-                    {
-                        $url = "{{ url('/statistic/statistic-service') }}";
-                        if(window.location.search) history.replaceState({page: 1}, "", $url);
-                    }
+                    {{--if(JSON.stringify($obj) != "{}")--}}
+                    {{--{--}}
+                    {{--    var $url = url_build('',$obj);--}}
+                    {{--    history.replaceState({page: 1}, "", $url);--}}
+                    {{--}--}}
+                    {{--else--}}
+                    {{--{--}}
+                    {{--    $url = "{{ url('/statistic/statistic-service') }}";--}}
+                    {{--    if(window.location.search) history.replaceState({page: 1}, "", $url);--}}
+                    {{--}--}}
 
                 },
                 "language": { url: '/common/dataTableI18n' },

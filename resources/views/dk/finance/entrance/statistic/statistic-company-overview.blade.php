@@ -105,7 +105,7 @@
                         </button>
 
 
-                        {{--按天查看--}}
+                        {{--按时间段查看--}}
                         <input type="text" class="form-control form-filter filter-keyup date_picker" name="overview-start" placeholder="起始日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
                         <input type="text" class="form-control form-filter filter-keyup date_picker" name="overview-ended" placeholder="结束日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-overview-by-period" style="width:100px;">
