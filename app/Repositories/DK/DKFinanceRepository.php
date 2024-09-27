@@ -13515,7 +13515,8 @@ class DKFinanceRepository {
         {
             if(!in_array($post_data['project'],[-1]))
             {
-                $query->where('id', $post_data['project']);
+                $project = DK_Finance_Project::find($post_data['project']);
+                $query->where('id', $project->channel_id);
             }
         }
 
