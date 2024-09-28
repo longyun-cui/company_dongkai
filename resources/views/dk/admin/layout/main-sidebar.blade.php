@@ -97,7 +97,7 @@
 
 
 
-            @if(in_array($me->user_type,[0,1,9,11,41,71,77,81,84,88]))
+            @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
             <li class="header">业务管理</li>
             @endif
 
