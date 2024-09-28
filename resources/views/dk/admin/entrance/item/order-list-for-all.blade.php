@@ -1971,7 +1971,22 @@
                                     {
                                         $html_deliver = '<a class="btn btn-xs bg-green disabled- item-deliver-submit" data-id="'+data+'">再交</a>';
                                     }
-                                    $html_distribute = '<a class="btn btn-xs bg-green item-distribute-submit" data-id="'+data+'">分发</a>';
+                                    if(row.project_er == null)
+                                    {
+                                        $html_distribute = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">分发</a>';
+                                    }
+                                    else
+                                    {
+                                        if(row.project_er.is_distributive == 1)
+                                        {
+
+                                            $html_distribute = '<a class="btn btn-xs bg-green item-distribute-submit" data-id="'+data+'">分发</a>';
+                                        }
+                                        else
+                                        {
+                                            $html_distribute = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">分发</a>';
+                                        }
+                                    }
                                     @endif
                                     $html_edit = '';
                                     $html_publish = '';
