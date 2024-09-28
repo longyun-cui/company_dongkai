@@ -9,7 +9,7 @@
 
 
 @section('header','')
-@section('description')交付列表 - 录单系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')分发列表 - 录单系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -20,7 +20,7 @@
 
             <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
 
-                <h3 class="box-title">交付列表</h3>
+                <h3 class="box-title">分发列表</h3>
 
                 <div class="pull-right _none">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
@@ -1651,5 +1651,5 @@
 //            TableDatatablesAjax_record.init();
 //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.delivery-list-script')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.item.distribution-list-script')
 @endsection

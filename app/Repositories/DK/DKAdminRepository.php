@@ -9253,6 +9253,9 @@ class DKAdminRepository {
 
 
 
+    /*
+     * 交付管理
+     */
     // 【交付管理】返回-列表-视图
     public function view_item_delivery_list($post_data)
     {
@@ -9284,8 +9287,6 @@ class DKAdminRepository {
             else $view_data['page'] = 1;
         }
         else $view_data['page'] = 1;
-
-
 
 
         // 工单ID
@@ -9321,7 +9322,6 @@ class DKAdminRepository {
         else $view_data['ended'] = '';
 
 
-
         // 客户
         if(!empty($post_data['client_id']))
         {
@@ -9338,7 +9338,6 @@ class DKAdminRepository {
             else $view_data['client_id'] = -1;
         }
         else $view_data['client_id'] = -1;
-
 
         // 项目
         if(!empty($post_data['project_id']))
@@ -9357,7 +9356,6 @@ class DKAdminRepository {
         }
         else $view_data['project_id'] = -1;
 
-
         // 客户姓名
         if(!empty($post_data['client_name']))
         {
@@ -9373,15 +9371,12 @@ class DKAdminRepository {
         }
         else $view_data['client_phone'] = '';
 
-
         // 审核状态
         if(!empty($post_data['inspected_status']))
         {
             $view_data['inspected_status'] = $post_data['inspected_status'];
         }
         else $view_data['inspected_status'] = -1;
-
-
 
 
         $client_list = DK_Client::select('id','username')->get();
@@ -9431,7 +9426,6 @@ class DKAdminRepository {
         }
 
 
-
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
@@ -9447,7 +9441,6 @@ class DKAdminRepository {
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
 
-
         // 客户
         if(isset($post_data['client']))
         {
@@ -9456,7 +9449,6 @@ class DKAdminRepository {
                 $query->where('client_id', $post_data['client']);
             }
         }
-
 
         // 项目
         if(isset($post_data['project']))
@@ -9467,7 +9459,6 @@ class DKAdminRepository {
             }
         }
 
-
         // 交付结果
         if(!empty($post_data['delivered_result']))
         {
@@ -9476,8 +9467,6 @@ class DKAdminRepository {
                 $query->whereIn('delivered_result', $post_data['delivered_result']);
             }
         }
-
-
 
 
         $total = $query->count();
@@ -9512,7 +9501,7 @@ class DKAdminRepository {
     }
 
 
-    // 【工单管理】删除
+    // 【交付管理】删除
     public function operate_item_delivery_delete($post_data)
     {
         $messages = [
@@ -9621,7 +9610,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单管理】发布
+    // 【交付管理】发布
     public function operate_item_delivery_exported($post_data)
     {
         $messages = [
@@ -9690,7 +9679,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单管理】批量-交付
+    // 【交付管理】批量-交付
     public function operate_item_delivery_bulk_exported($post_data)
     {
         $messages = [
@@ -9785,6 +9774,260 @@ class DKAdminRepository {
             return response_fail([],$msg);
         }
 
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 分发管理
+     */
+    // 【分发管理】返回-列表-视图
+    public function view_item_distribution_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
+
+
+        // 显示数量
+        if(!empty($post_data['record']))
+        {
+            if($post_data['record'] == 'record')
+            {
+                $this->record_for_user_operate(21,11,1,$me->id,0,71,0);
+            }
+        }
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 20;
+        }
+        else $view_data['length'] = 20;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+        // 工单ID
+        if(!empty($post_data['order_id']))
+        {
+            if(is_numeric($post_data['order_id']) && $post_data['order_id'] > 0) $view_data['order_id'] = $post_data['order_id'];
+            else $view_data['order_id'] = '';
+        }
+        else $view_data['order_id'] = '';
+
+        // 提交日期
+        if(!empty($post_data['assign']))
+        {
+            if($post_data['assign']) $view_data['assign'] = $post_data['assign'];
+            else $view_data['assign'] = '';
+        }
+        else $view_data['assign'] = '';
+
+        // 起始时间
+        if(!empty($post_data['assign_start']))
+        {
+            if($post_data['assign_start']) $view_data['start'] = $post_data['assign_start'];
+            else $view_data['start'] = '';
+        }
+        else $view_data['start'] = '';
+
+        // 截止时间
+        if(!empty($post_data['assign_ended']))
+        {
+            if($post_data['assign_ended']) $view_data['ended'] = $post_data['assign_ended'];
+            else $view_data['ended'] = '';
+        }
+        else $view_data['ended'] = '';
+
+
+        // 客户
+        if(!empty($post_data['client_id']))
+        {
+            if(is_numeric($post_data['client_id']) && $post_data['client_id'] > 0)
+            {
+                $client = DK_Client::select(['id','username'])->find($post_data['client_id']);
+                if($client)
+                {
+                    $view_data['client_id'] = $post_data['client_id'];
+                    $view_data['client_name'] = $client->username;
+                }
+                else $view_data['client_id'] = -1;
+            }
+            else $view_data['client_id'] = -1;
+        }
+        else $view_data['client_id'] = -1;
+
+        // 项目
+        if(!empty($post_data['project_id']))
+        {
+            if(is_numeric($post_data['project_id']) && $post_data['project_id'] > 0)
+            {
+                $project = DK_Project::select(['id','name'])->find($post_data['project_id']);
+                if($project)
+                {
+                    $view_data['project_id'] = $post_data['project_id'];
+                    $view_data['project_name'] = $project->name;
+                }
+                else $view_data['project_id'] = -1;
+            }
+            else $view_data['project_id'] = -1;
+        }
+        else $view_data['project_id'] = -1;
+
+        // 客户姓名
+        if(!empty($post_data['client_name']))
+        {
+            if($post_data['client_name']) $view_data['client_name'] = $post_data['client_name'];
+            else $view_data['client_name'] = '';
+        }
+        else $view_data['client_'] = '';
+        // 客户电话
+        if(!empty($post_data['client_phone']))
+        {
+            if($post_data['client_phone']) $view_data['client_phone'] = $post_data['client_phone'];
+            else $view_data['client_phone'] = '';
+        }
+        else $view_data['client_phone'] = '';
+
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $view_data['inspected_status'] = $post_data['inspected_status'];
+        }
+        else $view_data['inspected_status'] = -1;
+
+
+        $client_list = DK_Client::select('id','username')->get();
+        $view_data['client_list'] = $client_list;
+
+        $project_list = DK_Project::select('id','name')->get();
+        $view_data['project_list'] = $project_list;
+
+        $view_data['menu_active_of_distribution_list'] = 'active menu-open';
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.distribution-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【分发管理】返回-列表-数据
+    public function get_item_distribution_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Pivot_Client_Delivery::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
+//            ->where('client_id',$me->id)
+            ->with([
+                'inspector_er',
+                'client_er',
+                'project_er',
+                'order_er',
+                'creator'
+            ]);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+//        $me->load(['subordinate_er' => function ($query) {
+//            $query->select('id');
+//        }]);
+
+        if(in_array($me->user_type,[66]))
+        {
+            $query->where('creator_id',$me->id);
+        }
+
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
+        if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
+
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
+        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
+        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+
+
+        // 客户
+        if(isset($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1]))
+            {
+                $query->where('client_id', $post_data['client']);
+            }
+        }
+
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1]))
+            {
+                $query->where('project_id', $post_data['project']);
+            }
+        }
+
+        // 交付结果
+        if(!empty($post_data['delivered_result']))
+        {
+            if(count($post_data['delivered_result']))
+            {
+                $query->whereIn('delivered_result', $post_data['delivered_result']);
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
+
+            $list[$k]->content_decode = json_decode($v->content);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
     }
 
 

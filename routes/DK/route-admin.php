@@ -299,6 +299,9 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
 
+    /*
+     * 交付
+     */
     // 列表
     Route::match(['get','post'], '/item/delivery-list', $controller.'@view_item_delivery_list');
     // 删除 & 恢复
@@ -325,6 +328,11 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
 
+    /*
+     * 分发
+     */
+    // 列表
+    Route::match(['get','post'], '/item/distribution-list', $controller.'@view_item_distribution_list');
 
 
 

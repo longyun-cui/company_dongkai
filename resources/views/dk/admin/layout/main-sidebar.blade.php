@@ -129,12 +129,21 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <li class="treeview {{ $menu_active_of_delivery_list or '' }}">
-                    <a href="{{ url('/item/delivery-list')}}">
-                        <i class="fa fa-file-text text-yellow"></i>
-                        <span>交付列表</span>
-                    </a>
-                </li>
+            <li class="treeview {{ $menu_active_of_delivery_list or '' }} _none">
+                <a href="{{ url('/item/delivery-list')}}">
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>交付列表</span>
+                </a>
+            </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            <li class="treeview {{ $menu_active_of_distribution_list or '' }}">
+                <a href="{{ url('/item/distribution-list')}}">
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>分发列表</span>
+                </a>
+            </li>
             @endif
 
 

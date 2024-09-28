@@ -1014,9 +1014,6 @@ class DKAdminController extends Controller
 
 
 
-
-
-
     /*
      * 交付管理
      */
@@ -1042,6 +1039,40 @@ class DKAdminController extends Controller
     public function operate_item_delivery_bulk_exported()
     {
         return $this->repo->operate_item_delivery_bulk_exported(request()->all());
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 交付管理
+     */
+    // 【交付管理】返回-列表-视图（全部任务）
+    public function view_item_distribution_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_distribution_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_distribution_list_datatable(request()->all());
+    }
+
+
+    // 【交付管理】删除
+    public function operate_item_distribution_delete()
+    {
+        return $this->repo->operate_item_distribution_delete(request()->all());
+    }
+    // 【交付管理】导出
+    public function operate_item_distribution_exported()
+    {
+        return $this->repo->operate_item_distribution_exported(request()->all());
+    }
+    // 【订单管理】批量-交付
+    public function operate_item_distribution_bulk_exported()
+    {
+        return $this->repo->operate_item_distribution_bulk_exported(request()->all());
     }
 
 
