@@ -1879,6 +1879,7 @@
                             var $html_detail_inspected = '';
                             var $html_push = '';
                             var $html_deliver = '';
+                            var $html_distribute = '';
 
 
                             if(row.item_status == 1)
@@ -1950,6 +1951,7 @@
                                         $html_inspected = '<a class="btn btn-xs bg-blue item-inspect-submit" data-id="'+data+'">再审</a>';
                                         $html_detail_inspected = '<a class="btn btn-xs bg-blue item-modal-show-for-detail-inspected" data-id="'+data+'">再审</a>';
                                     }
+
                                     @if($me->department_district_id == 0)
                                     if(row.client_id == 0)
                                     {
@@ -1960,6 +1962,16 @@
                                     {
                                         $html_deliver = '<a class="btn btn-xs bg-green disabled- item-deliver-submit" data-id="'+data+'">再交</a>';
                                     }
+                                    if((row.delivered_result == "已交付") || (row.delivered_result = "123"))
+                                    {
+                                        // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
+                                        $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
+                                    }
+                                    else
+                                    {
+                                        $html_deliver = '<a class="btn btn-xs bg-green disabled- item-deliver-submit" data-id="'+data+'">再交</a>';
+                                    }
+                                    $html_distribute = '<a class="btn btn-xs bg-green item-distribute-submit" data-id="'+data+'">分发</a>';
                                     @endif
                                     $html_edit = '';
                                     $html_publish = '';
@@ -2009,6 +2021,7 @@
                                 $html_delete+
                                 $html_push+
                                 $html_deliver+
+                                $html_distribute+
                                 $html_record+
                                 // $html_abandon+
 //                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
@@ -2197,6 +2210,7 @@
                             else if(data == 91) return '<small class="btn-xs bg-yellow">验证</small>';
                             else if(data == 92) return '<small class="btn-xs bg-yellow">审核</small>';
                             else if(data == 95) return '<small class="btn-xs bg-green">交付</small>';
+                            else if(data == 96) return '<small class="btn-xs bg-red">分发</small>';
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
                             else if(data == 98) return '<small class="btn-xs bg-teal">复用</small>';
                             else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
@@ -2243,6 +2257,12 @@
                                 if(data == "client_id") return '客户';
                                 else if(data == "delivered_result") return '交付结果';
                                 else return '交付';
+                            }
+                            else if(row.operate_category == 96)
+                            {
+                                if(data == "client_id") return '客户';
+                                else if(data == "delivered_result") return '分发结果';
+                                else return '分发';
                             }
                             else return '';
                         }
@@ -2453,8 +2473,8 @@
 //            TableDatatablesAjax_record.init();
 //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.order-script')
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.order-script-for-info')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-script')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-script-for-info')
 
 @include(env('TEMPLATE_DK_ADMIN').'component.order-create-script')
 @endsection

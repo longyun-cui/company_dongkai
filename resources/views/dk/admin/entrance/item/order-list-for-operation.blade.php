@@ -2139,8 +2139,8 @@
 //            TableDatatablesAjax_record.init();
 //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.order-script')
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.order-script-for-info')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-script')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-script-for-info')
 
 @include(env('TEMPLATE_DK_ADMIN').'component.order-create-script')
 @endsection

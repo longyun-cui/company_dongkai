@@ -943,6 +943,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_item_order_bulk_deliver(request()->all());
     }
+    // 【订单管理】分发
+    public function operate_item_order_distribute()
+    {
+        return $this->repo->operate_item_order_distribute(request()->all());
+    }
 
 
 

@@ -7545,16 +7545,16 @@ class DKAdminRepository {
         {
 //            if($client_id != "-1")
 //            {
-                $pivot_delivery = new DK_Pivot_Client_Delivery;
-                $pivot_delivery_data["client_id"] = $client_id;
-                $pivot_delivery_data["order_id"] = $item->id;
-                $pivot_delivery_data["project_id"] = $item->project_id;
-                $pivot_delivery_data["client_phone"] = $item->client_phone;
-                $pivot_delivery_data["delivered_result"] = $delivered_result;
-                $pivot_delivery_data["creator_id"] = $me->id;
-
-                $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
-                if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+//                $pivot_delivery = new DK_Pivot_Client_Delivery;
+//                $pivot_delivery_data["client_id"] = $client_id;
+//                $pivot_delivery_data["order_id"] = $item->id;
+//                $pivot_delivery_data["project_id"] = $item->project_id;
+//                $pivot_delivery_data["client_phone"] = $item->client_phone;
+//                $pivot_delivery_data["delivered_result"] = $delivered_result;
+//                $pivot_delivery_data["creator_id"] = $me->id;
+//
+//                $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+//                if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
 //            }
 
             $item->client_id = $client_id;
@@ -7676,16 +7676,16 @@ class DKAdminRepository {
 
 //                if($this_client_id != "-1")
 //                {
-                    $pivot_delivery = new DK_Pivot_Client_Delivery;
-                    $pivot_delivery_data["client_id"] = $this_client_id;
-                    $pivot_delivery_data["order_id"] = $item->id;
-                    $pivot_delivery_data["project_id"] = $item->project_id;
-                    $pivot_delivery_data["client_phone"] = $item->client_phone;
-                    $pivot_delivery_data["delivered_result"] = $delivered_result;
-                    $pivot_delivery_data["creator_id"] = $me->id;
-
-                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
-                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+//                    $pivot_delivery = new DK_Pivot_Client_Delivery;
+//                    $pivot_delivery_data["client_id"] = $this_client_id;
+//                    $pivot_delivery_data["order_id"] = $item->id;
+//                    $pivot_delivery_data["project_id"] = $item->project_id;
+//                    $pivot_delivery_data["client_phone"] = $item->client_phone;
+//                    $pivot_delivery_data["delivered_result"] = $delivered_result;
+//                    $pivot_delivery_data["creator_id"] = $me->id;
+//
+//                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+//                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
 //                }
 
 
@@ -7798,6 +7798,120 @@ class DKAdminRepository {
 
 
         return response_success($return,"");
+
+    }
+    // 【工单管理】交付
+    public function operate_item_order_distribute($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-distribute') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $client_id = $post_data["client_id"];
+        if($client_id == "-1")
+        {
+            $project = DK_Project::find($item->project_id);
+            if($project->client_id != 0) $client_id = $project->client_id;
+        }
+//        $client = DK_Client::find($client_id);
+//        if(!$client) return response_error([],"客户不存在！");
+
+        $delivered_result = $post_data["delivered_result"];
+        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        $before = $item->delivered_result;
+
+        $delivered_description = $post_data["delivered_description"];
+        $recording_address = $post_data["recording_address"];
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            if($client_id != "-1")
+//            {
+            $pivot_delivery = new DK_Pivot_Client_Delivery;
+            $pivot_delivery_data["client_id"] = $client_id;
+            $pivot_delivery_data["order_id"] = $item->id;
+            $pivot_delivery_data["project_id"] = $item->project_id;
+            $pivot_delivery_data["client_phone"] = $item->client_phone;
+            $pivot_delivery_data["delivered_result"] = $delivered_result;
+            $pivot_delivery_data["creator_id"] = $me->id;
+
+            $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+            if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+//            }
+
+//            $item->client_id = $client_id;
+//            $item->deliverer_id = $me->id;
+//            $item->delivered_status = 1;
+//            $item->delivered_result = $delivered_result;
+//            $item->delivered_description = $delivered_description;
+//            $item->recording_address = $recording_address;
+//            $item->delivered_at = time();
+//            $bool = $item->save();
+//            if(!$bool) throw new Exception("item--update--fail");
+//            else
+//            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 96;
+                $record_data["operate_type"] = 1;
+                $record_data["column_name"] = "client_id";
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $client_id;
+
+//                $record_data["before_client_id"] = $before;
+//                $record_data["after_client_id"] = $client_id;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+//            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
 
     }
 
@@ -9094,6 +9208,11 @@ class DKAdminRepository {
             ->where(['order_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!in_array($me->user_type,[0,1,9,11,61,66]))
+        {
+            $query->whereNotIn('operate_category',[96]);
+        }
 
         $total = $query->count();
 

@@ -675,7 +675,7 @@
                         }
                         if(data.data.deliver_repeat.length)
                         {
-                            $html += '<div>【已交付客户】</div>';
+                            $html += '<div>【已分发客户】</div>';
                             var $deliver_list = data.data.deliver_repeat;
                             $.each($deliver_list, function(index,$deliver) {
 
@@ -708,7 +708,7 @@
             layer.open({
                 time: 0
                 ,btn: ['确定', '取消']
-                ,title: '选择客户！'
+                ,title: '工单【交付】！'
                 ,area:['480px;']
                 ,content:
                     $html+
@@ -775,6 +775,154 @@
                     );
                 }
             });
+
+
+
+                    }
+                },
+                'json'
+            );
+
+        });
+        // 【分发】
+        $(".main-content").on('click', ".item-distribute-submit", function() {
+
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            $('#datatable_ajax').find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            var $html = '';
+
+            $.post(
+                "{{ url('/item/order-deliver-get-delivered') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-deliver-get-delivered",
+                    item_id: $that.attr('data-id')
+                },
+                function(data){
+
+                    layer.closeAll('loading');
+
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
+                    else
+                    {
+                        if(data.data.order_repeat.length)
+                        {
+                            $html += '<div>【已交付订单】</div>';
+                            var $order_list = data.data.order_repeat;
+                            $.each($order_list, function(index,$order) {
+
+                                var $client_username = '';
+                                if($order.client_er) $client_username = $order.client_er.username;
+
+                                var $project_name = '';
+                                if($order.project_er) $project_name = $order.project_er.name;
+
+                                var $html_order =
+                                    '<div>'+
+                                    '<span style="width:100px;float:left;">[订单]' + $order.id + '</span>' +
+                                    '<span style="width:120px;float:left;">[客户]' + $client_username + '</span>' +
+                                    '[项目]' + $project_name +
+                                    '</div>';
+                                $html += $html_order;
+                            })
+                            $html += '<br>';
+                        }
+                        if(data.data.deliver_repeat.length)
+                        {
+                            $html += '<div>【已分发客户】</div>';
+                            var $deliver_list = data.data.deliver_repeat;
+                            $.each($deliver_list, function(index,$deliver) {
+
+                                var $client_username = '';
+                                if($deliver.client_er) $client_username = $deliver.client_er.username;
+
+                                var $project_name = '';
+                                if($deliver.project_er) $project_name = $deliver.project_er.name;
+
+                                var $html_deliver =
+                                    '<div>' +
+                                    '<span style="width:160px;float:left;">[客户] ' + $client_username + '</span>' +
+                                    '[项目] '+ $project_name +
+                                    '</div>';
+                                $html += $html_deliver;
+                            })
+                            $html += '<br>';
+                        }
+                        $html += '<br>';
+
+
+                        var $option_html_for_client = $('#option-list-for-client').html();
+                        var $option_html_for_delivered_result = $('#option-list-for-delivered-result').html();
+
+                        var $delivered_result = $('select[name="select-delivered-result"]').val();
+                        var $client_id = $('select[name="select-client-id"]').val();
+                        var $client_name = $('select[name="select-client-id"]').find('option:selected').html();
+                        // console.log($client_name);
+
+                        layer.open({
+                            time: 0
+                            ,btn: ['确定', '取消']
+                            ,title: '工单【分发】！'
+                            ,area:['480px;']
+                            ,content:
+                                $html+
+                                '<select class="form-control select-primary" name="select-client-id" style="width:48%;" id="">'+
+                                $option_html_for_client+
+                                '</select>'+
+                                '<select class="form-control select-primary" name="select-delivered-result" style="width:48%;" id="">'+
+                                $option_html_for_delivered_result+
+                                '</select>'+
+                                '<input type="text" class="form-control" name="input-recording-address" rows="2" placeholder="录音地址"></textarea>'+
+                                '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="交付说明"></textarea>'
+                            ,yes: function(index){
+                                $.post(
+                                    "{{ url('/item/order-distribute') }}",
+                                    {
+                                        _token: $('meta[name="_token"]').attr('content'),
+                                        operate: "order-distribute",
+                                        item_id: $that.attr('data-id'),
+                                        client_id: $('select[name="select-client-id"]').val(),
+                                        delivered_result: $('select[name="select-delivered-result"]').val(),
+                                        recording_address: $('input[name="input-recording-address"]').val(),
+                                        delivered_description: $('textarea[name="textarea-delivered-description"]').val()
+                                    },
+                                    function(data){
+                                        layer.close(index);
+                                        // layer.form.render();
+                                        if(!data.success)
+                                        {
+                                            layer.msg(data.msg);
+                                        }
+                                        else
+                                        {
+                                            layer.msg("已分发");
+                                        }
+                                    },
+                                    'json'
+                                );
+                            }
+                        });
 
 
 

@@ -266,6 +266,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/item/order-deliver', $controller.'@operate_item_order_deliver');
     Route::post('/item/order-bulk-deliver', $controller.'@operate_item_order_bulk_deliver');
     Route::post('/item/order-deliver-get-delivered', $controller.'@operate_item_order_deliver_get_delivered');
+    Route::post('/item/order-distribute', $controller.'@operate_item_order_distribute');
 
     // 列表
     Route::match(['get','post'], '/item/order-list', $controller.'@view_item_order_list');
@@ -278,7 +279,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/item/order-info-select-set', $controller.'@operate_item_order_info_option_set');
     Route::post('/item/order-info-select2-set', $controller.'@operate_item_order_info_option_set');
     Route::post('/item/order-info-client-set', $controller.'@operate_item_order_info_client_set');
-    Route::post('/item/order-info-car-set', $controller.'@operate_item_order_info_car_set');
+    Route::post('/item/order-info-project-set', $controller.'@operate_item_order_info_project_set');
     // 订单-附件
     Route::post('/item/order-info-attachment-set', $controller.'@operate_item_order_info_attachment_set');
     Route::post('/item/order-info-attachment-delete', $controller.'@operate_item_order_info_attachment_delete');
