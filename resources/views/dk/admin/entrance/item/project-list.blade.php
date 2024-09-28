@@ -234,7 +234,7 @@
 
                     {{ csrf_field() }}
                     <input type="hidden" name="info-radio-set-operate" value="item-project-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-project-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
 
@@ -414,57 +414,26 @@
 {{--option--}}
 <div class="option-container _none">
 
-    <div id="trailer_type-option-list">
-        <option value="0">选择箱型</option>
-        <option value="直板">直板</option>
-        <option value="高栏">高栏</option>
-        <option value="平板">平板</option>
-        <option value="冷藏">冷藏</option>
-    </div>
-
-    <div id="trailer_length-option-list">
-        <option value="0">选择车挂尺寸</option>
-        <option value="9.6">9.6</option>
-        <option value="12.5">12.5</option>
-        <option value="15">15</option>
-        <option value="16.5">16.5</option>
-        <option value="17.5">17.5</option>
-    </div>
-
-    <div id="trailer_volume-option-list">
-        <option value="0">选择承载方数</option>
-        <option value="125">125</option>
-        <option value="130">130</option>
-        <option value="135">135</option>
-    </div>
-
-    <div id="trailer_weight-option-list">
-        <option value="0">选择承载重量</option>
-        <option value="13">13吨</option>
-        <option value="20">20吨</option>
-        <option value="25">25吨</option>
-    </div>
-
-    <div id="trailer_axis_count-option-list">
-        <option value="0">选择轴数</option>
-        <option value="1">1轴</option>
-        <option value="2">2轴</option>
-        <option value="3">3轴</option>
+    <div id="option-list-for-select-name">
+        <option value="-1">选择xx</option>
+        <option value="xx">xx</option>
+        <option value="yyy">yyy</option>
+        <option value="zzzz">zzzz</option>
     </div>
 
 
 
 
-    <div id="receipt_need-option-list">
+    <div id="option-list-for-is_distributive">
 
-        <label class="control-label col-md-2">是否需要回单</label>
+        <label class="control-label col-md-2">是否分发</label>
         <div class="col-md-8">
             <div class="btn-group">
 
                 <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="receipt_need" value="0" class="info-set-column"> 不需要
+                            <input type="radio" name="is_distributive" value="0" class="info-set-column"> 否
                         </label>
                     </span>
                 </button>
@@ -472,7 +441,7 @@
                 <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="receipt_need" value="1" class="info-set-column"> 需要
+                            <input type="radio" name="is_distributive" value="1" class="info-set-column"> 是
                         </label>
                     </span>
                 </button>
@@ -733,6 +702,27 @@
                             {
                                 return '<small class="btn-xs btn-danger">禁用</small>';
                             }
+                        }
+                    },
+                    {
+                        "title": "分发",
+                        "data": "is_distributive",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-radio-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','分发');
+                                $(nTd).attr('data-key','is_distributive').attr('data-value',data);
+                                $(nTd).attr('data-column-name','分发');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                            else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                            else return '--';
                         }
                     },
                     {

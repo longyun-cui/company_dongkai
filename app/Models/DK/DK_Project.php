@@ -15,6 +15,7 @@ class DK_Project extends Model
         'org_id', 'admin_id',
         'item_id', 'menu_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+        'is_distributive',
         'client_id',
         'inspector_id',
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',

@@ -451,6 +451,95 @@
 
 
 
+        // 【修改-radio-属性】【显示】
+        $(".main-content").on('dblclick', ".modal-show-for-info-radio-set", function() {
+
+            $('select[name=info-radio-set-column-value]').attr("selected","");
+            $('select[name=info-radio-set-column-value]').find('option').eq(0).val(0).text('');
+            $('select[name=info-radio-set-column-value]').find('option:not(:first)').remove();
+
+            var $that = $(this);
+            $('.info-radio-set-title').html($that.attr("data-id"));
+            $('.info-radio-set-column-name').html($that.attr("data-name"));
+            $('input[name=info-radio-set-item-id]').val($that.attr("data-id"));
+            $('input[name=info-radio-set-column-key]').val($that.attr("data-key"));
+            $('input[name=info-radio-set-operate-type]').val($that.attr('data-operate-type'));
+
+
+            if($that.attr("data-key") == "is_distributive")
+            {
+                var $option_html = $('#option-list-for-is_distributive').html();
+                $('.radio-box').html($option_html);
+                $('input[name=is_distributive][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
+            }
+            else if($that.attr("data-key") == "is_wx")
+            {
+                var $option_html = $('#option-list-for-is-wx').html();
+                $('.radio-box').html($option_html);
+                $('input[name=is_wx][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
+            }
+
+
+            $('#modal-body-for-info-radio-set').modal('show');
+
+        });
+        // 【修改-radio-属性】【取消】
+        $(".main-content").on('click', "#item-cancel-for-info-radio-set", function() {
+            var that = $(this);
+            $('#modal-body-for-info-radio-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【修改-radio-属性】【提交】
+        $(".main-content").on('click', "#item-submit-for-info-radio-set", function() {
+            var $that = $(this);
+            var $column_key = $('input[name="info-radio-set-column-key"]').val();
+            var $column_value = $('#modal-info-radio-set-form').find('input:radio:checked').val();
+
+            // layer.msg('确定"提交"么？', {
+            //     time: 0
+            //     ,btn: ['确定', '取消']
+            //     ,yes: function(index){
+            //     }
+            // });
+
+            $.post(
+                "{{ url('/item/project-info-radio-set') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: $('input[name="info-radio-set-operate"]').val(),
+                    item_id: $('input[name="info-radio-set-item-id"]').val(),
+                    operate_type: $('input[name="info-radio-set-operate-type"]').val(),
+                    column_key: $column_key,
+                    column_value: $column_value,
+                },
+                function(data){
+                    // layer.close(index);
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
+                    else
+                    {
+                        $('#modal-body-for-info-radio-set').modal('hide').on("hidden.bs.modal", function () {
+                            $("body").addClass("modal-open");
+                        });
+
+//                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
+////                                TableDatatablesAjax_inner.init($keyword_id);
+
+                        $('#datatable_ajax').DataTable().ajax.reload(null, false);
+//                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
+                    }
+                },
+                'json'
+            );
+
+        });
+
+
+
+
         // 【修改-select-属性】【显示】
         $(".main-content").on('dblclick', ".modal-show-for-info-select-set", function() {
 
@@ -471,30 +560,14 @@
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
 
-            $('select[name=info-select-set-column-value]').removeClass('select2-project').removeClass('select2-client');
-            if($that.attr("data-key") == "receipt_status")
+            $('select[name=info-select-set-column-value]').removeClass('select2-inspector').removeClass('select2-client');
+            if($that.attr("data-key") == "is_distributive")
             {
-                var $option_html = $('#receipt_status-option-list').html();
+                var $option_html = $('#option-list-for-is_distributive').html();
             }
-            else if($that.attr("data-key") == "trailer_type")
+            else if($that.attr("data-key") == "select_name")
             {
-                var $option_html = $('#trailer_type-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_length")
-            {
-                var $option_html = $('#trailer_length-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_volume")
-            {
-                var $option_html = $('#trailer_volume-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_weight")
-            {
-                var $option_html = $('#trailer_weight-option-list').html();
-            }
-            else if($that.attr("data-key") == "trailer_axis_count")
-            {
-                var $option_html = $('#trailer_axis_count-option-list').html();
+                var $option_html = $('#option-list-for-select-name').html();
             }
             $('select[name=info-select-set-column-value]').html($option_html);
             $('select[name=info-select-set-column-value]').find("option[value='"+$that.attr("data-value")+"']").attr("selected","selected");
