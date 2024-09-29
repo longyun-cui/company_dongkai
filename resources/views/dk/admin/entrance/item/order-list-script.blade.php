@@ -666,7 +666,7 @@
                                 var $html_order =
                                     '<div>'+
                                     '<span style="width:100px;float:left;">[订单]' + $order.id + '</span>' +
-                                    '<span style="width:120px;float:left;">[客户]' + $client_username + '</span>' +
+                                    '<span style="width:160px;float:left;">[客户]' + $client_username + '</span>' +
                                     '[项目]' + $project_name +
                                     '</div>';
                                 $html += $html_order;
