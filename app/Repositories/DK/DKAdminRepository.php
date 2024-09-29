@@ -7546,6 +7546,7 @@ class DKAdminRepository {
 //            if($client_id != "-1")
 //            {
 //                $pivot_delivery = new DK_Pivot_Client_Delivery;
+//                $pivot_delivery_data["pivot_type"] = 95;
 //                $pivot_delivery_data["client_id"] = $client_id;
 //                $pivot_delivery_data["order_id"] = $item->id;
 //                $pivot_delivery_data["project_id"] = $item->project_id;
@@ -7677,6 +7678,7 @@ class DKAdminRepository {
 //                if($this_client_id != "-1")
 //                {
 //                    $pivot_delivery = new DK_Pivot_Client_Delivery;
+//                    $pivot_delivery_data["pivot_type"] = 95;
 //                    $pivot_delivery_data["client_id"] = $this_client_id;
 //                    $pivot_delivery_data["order_id"] = $item->id;
 //                    $pivot_delivery_data["project_id"] = $item->project_id;
@@ -7856,6 +7858,7 @@ class DKAdminRepository {
 //            if($client_id != "-1")
 //            {
             $pivot_delivery = new DK_Pivot_Client_Delivery;
+            $pivot_delivery_data["pivot_type"] = 96;
             $pivot_delivery_data["client_id"] = $client_id;
             $pivot_delivery_data["order_id"] = $item->id;
             $pivot_delivery_data["project_id"] = $item->project_id;
