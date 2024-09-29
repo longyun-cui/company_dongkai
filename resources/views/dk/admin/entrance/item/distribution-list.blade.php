@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '交付列表' }} - 录单系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '分发列表' }} - 录单系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
