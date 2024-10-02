@@ -13022,9 +13022,9 @@ class DKFinanceRepository {
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
-        if(!empty($post_data['assign'])) $query->whereDate('assign_date', $post_data['assign']);
-        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
-        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+//        if(!empty($post_data['assign'])) $query->whereDate('assign_date', $post_data['assign']);
+//        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
+//        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
 
         if(!empty($post_data['time_type']))
@@ -13112,6 +13112,7 @@ class DKFinanceRepository {
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
 
 
         $total_data = [];
