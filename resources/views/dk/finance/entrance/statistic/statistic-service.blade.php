@@ -1091,7 +1091,9 @@
                             // var $call_charge_daily_cost = parseFloat(row.call_charge_daily_cost);
                             // var $material_quantity = parseFloat(($call_charge_coefficient) * ($call_charge_daily_cost)).toFixed(2);
                             // return parseFloat($material_quantity);
-                            return parseFloat(data);
+                            // return parseFloat(data);
+                            // return parseInt(data);
+                            return Math.round(data);
                         }
                     },
                     {
