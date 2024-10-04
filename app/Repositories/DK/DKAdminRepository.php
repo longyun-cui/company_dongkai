@@ -958,7 +958,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"你没有操作权限！");
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -1009,7 +1009,7 @@ class DKAdminRepository {
 
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"你没有操作权限！");
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -8957,6 +8957,9 @@ class DKAdminRepository {
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
 
+        if(!empty($post_data['delivered_date'])) $query->whereDate(DB::Raw("from_unixtime(delivered_at)"), $post_data['delivered_date']);
+
+
 //        if(!empty($post_data['district_city'])) $query->where('location_city', $post_data['district_city']);
 //        if(!empty($post_data['district_district'])) $query->where('location_district', $post_data['district_district']);
         if(!empty($post_data['district_city']))
@@ -13367,7 +13370,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,41,71])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,9,11,41,71,61])) return view($this->view_blade_403);
 
         $view_data['menu_active_of_statistic_inspector'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-inspector';

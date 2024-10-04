@@ -59,6 +59,8 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" style="width:80px;text-align:center;" />
+
                         @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77]))
                         <select class="form-control form-filter select2-box" name="order-department-district[]" id="order-department-district" multiple="multiple"  style="width:80px;">
                             <option value="-1">选择团队</option>
@@ -898,6 +900,7 @@
                         d.id = $('input[name="order-id"]').val();
                         d.remark = $('input[name="order-remark"]').val();
                         d.description = $('input[name="order-description"]').val();
+                        d.delivered_date = $('input[name="order-delivered_date"]').val();
                         d.assign = $('input[name="order-assign"]').val();
                         d.assign_start = $('input[name="order-start"]').val();
                         d.assign_ended = $('input[name="order-ended"]').val();
