@@ -9267,7 +9267,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,61,66])) return view($this->view_blade_403);
 
 
         // 显示数量
@@ -9797,7 +9797,7 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
+        if(!in_array($me->user_type,[0,1,11,19,61,66])) return view($this->view_blade_403);
 
 
         // 显示数量
