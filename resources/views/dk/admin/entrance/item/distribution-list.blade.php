@@ -146,7 +146,7 @@
             </div>
 
 
-            @if(in_array($me->user_type,[0,1,9,11,61]))
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <div class="box-footer" style="padding:4px 10px;">
                 <div class="row" style="margin:2px 0;">
                     <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
