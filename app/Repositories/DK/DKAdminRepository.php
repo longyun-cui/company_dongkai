@@ -7857,7 +7857,7 @@ class DKAdminRepository {
             return response_error([],"该客户已经交付过该号码，不可以重复交付！");
         }
 
-        $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone])->get();
+        $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'已交付'])->get();
         if(count($is_order_list) > 0)
         {
             foreach($is_order_list as $o)
