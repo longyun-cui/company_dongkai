@@ -2641,7 +2641,7 @@ class DKFinanceRepository {
 
         $transaction_amount = $post_data["transaction_amount"];
         if(!is_numeric($transaction_amount)) return response_error([],"交易金额必须为数字！");
-        if($transaction_amount <= 0) return response_error([],"交易金额必须大于零！");
+//        if($transaction_amount <= 0) return response_error([],"交易金额必须大于零！");
 
         // 启动数据库事务
         DB::beginTransaction();

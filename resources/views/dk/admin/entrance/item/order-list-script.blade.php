@@ -890,7 +890,7 @@
                                 '<select class="form-control select-primary" name="select-client-id" style="width:48%;" id="">'+
                                 $option_html_for_client+
                                 '</select>'+
-                                '<select class="form-control select-primary" name="select-delivered-result" style="width:48%;" id="">'+
+                                '<select class="form-control select-primary select2-box" name="select-delivered-result" style="width:48%;" id="">'+
                                 $option_html_for_delivered_result+
                                 '</select>'+
                                 '<input type="text" class="form-control" name="input-recording-address" rows="2" placeholder="录音地址"></textarea>'+
