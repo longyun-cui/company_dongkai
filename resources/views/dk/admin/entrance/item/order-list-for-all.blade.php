@@ -650,6 +650,83 @@
     </div>
 </div>
 
+{{--分发-distribute--}}
+<div class="modal fade modal-main-body" id="modal-body-for-distribute-set">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">订单分发【<span class="distribute-set-title"></span>】</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-distribute-select-set-form">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="distribute-set-operate" value="item-order-distribute-option-set" readonly>
+                    <input type="hidden" name="distribute-set-operate-type" value="add" readonly>
+                    <input type="hidden" name="distribute-set-order-id" value="0" readonly>
+                    <input type="hidden" name="distribute-set-column-key" value="" readonly>
+
+
+                    <div class="form-group _none">
+                        <label class="control-label col-md-2">已交付结果</label>
+                        <div class="col-md-8 " id="distribute-set-distributed-list">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">已交付订单</label>
+                        <div class="col-md-8 " id="distribute-set-distributed-order-list">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">已分发客户</label>
+                        <div class="col-md-8 " id="distribute-set-distributed-client-list">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">选择客户</label>
+                        <div class="col-md-8 ">
+                            <select class="form-control select2-box" name="distribute-set-client-id" style="width:48%;" id="">
+                                <option value="-1">选择客户</option>
+                                @foreach($client_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->username }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">分发结果</label>
+                        <div class="col-md-8 ">
+                            <select class="form-control select2-box" name="distribute-set-delivered-result" style="width:48%;" id="">
+                                <option value="-1">交付结果</option>
+                                @foreach(config('info.delivered_result') as $v)
+                                    <option value="{{ $v }}">{{ $v }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-distribute-set"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-distribute-set">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 
 {{--option--}}
 <div class="option-container _none">
@@ -698,7 +775,7 @@
 
 
 
-    {{--审核结果--}}
+    {{--选择客户--}}
     <div id="option-list-for-client">
         <option value="-1">选择客户</option>
         @foreach($client_list as $v)
@@ -714,7 +791,7 @@
         @endforeach
     </div>
 
-    {{--审核结果--}}
+    {{--交付结果--}}
     <div id="option-list-for-delivered-result">
         <option value="-1">交付结果</option>
         @foreach(config('info.delivered_result') as $v)
@@ -1983,7 +2060,8 @@
                                         if(row.project_er.is_distributive == 1)
                                         {
 
-                                            $html_distribute = '<a class="btn btn-xs bg-green item-distribute-submit" data-id="'+data+'">分发</a>';
+                                            // $html_distribute = '<a class="btn btn-xs bg-green item-distribute-submit" data-id="'+data+'">分发</a>';
+                                            $html_distribute = '<a class="btn btn-xs bg-green item-distribute-show" data-id="'+data+'">分发</a>';
                                         }
                                         else
                                         {

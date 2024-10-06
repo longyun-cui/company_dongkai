@@ -7810,10 +7810,12 @@ class DKAdminRepository {
         $messages = [
             'operate.required' => 'operate.required.',
             'item_id.required' => 'item_id.required.',
+            'client_id.required' => '请选择客户',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'item_id' => 'required',
+            'client_id' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -7828,6 +7830,7 @@ class DKAdminRepository {
 
         $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        $client_phone = $item->client_phone;
 
         $this->get_me();
         $me = $this->me;
@@ -7837,19 +7840,45 @@ class DKAdminRepository {
         $client_id = $post_data["client_id"];
         if($client_id == "-1")
         {
-            $project = DK_Project::find($item->project_id);
-            if($project->client_id != 0) $client_id = $project->client_id;
+            return response_error([],"请选择客户！");
+//            $project = DK_Project::find($item->project_id);
+//            if($project->client_id != 0) $client_id = $project->client_id;
         }
-//        $client = DK_Client::find($client_id);
-//        if(!$client) return response_error([],"客户不存在！");
+        $client = DK_Client::find($client_id);
+        if(!$client) return response_error([],"客户不存在！");
 
         $delivered_result = $post_data["delivered_result"];
         if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
 
+        // 是否已经分发
+        $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])->get();
+        if(count($is_distributed_list) > 0)
+        {
+            return response_error([],"该客户已经交付过该号码，不可以重复交付！");
+        }
+
+        $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone])->get();
+        if(count($is_order_list) > 0)
+        {
+            foreach($is_order_list as $o)
+            {
+                if($o->client_id == $client_id)
+                {
+                    return response_error([],"该号码已在其他工单交付过该客户，不可以重复交付！");
+                }
+
+                if($o->project_er->client_id == $client_id)
+                {
+                    return response_error([],"该号码已在其他工单交付过默认客户，不可以重复交付！");
+                }
+            }
+        }
+
+
         $before = $item->delivered_result;
 
-        $delivered_description = $post_data["delivered_description"];
-        $recording_address = $post_data["recording_address"];
+//        $delivered_description = $post_data["delivered_description"];
+//        $recording_address = $post_data["recording_address"];
 
         // 启动数据库事务
         DB::beginTransaction();

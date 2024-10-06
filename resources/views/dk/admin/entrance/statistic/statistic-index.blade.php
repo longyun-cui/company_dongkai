@@ -98,19 +98,19 @@
                         <div class="box-body">
                             <ul class="nav nav-stacked">
                                 <li class="order_of_today_for_published">
-                                    <a href="javascript:void(0);">报单量（客服） <span class="pull-right"><b class="badge bg-black"></b> 单</span></a>
+                                    <a href="javascript:void(0);">报单量（客服提交） <span class="pull-right"><b class="badge bg-black"></b> 单</span></a>
                                 </li>
                                 <li class="order_of_today_for_inspected_all">
-                                    <a href="javascript:void(0);">审核量（质检） <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
+                                    <a href="javascript:void(0);">审核量（质检处理） <span class="pull-right"><b class="badge bg-blue"></b> 单</span></a>
                                 </li>
                                 <li class="order_of_today_for_delivered_all">
-                                    <a href="javascript:void(0);">交付量（运营）<span class="pull-right"><b class="badge bg-purple"></b> 单</span></a>
+                                    <a href="javascript:void(0);">交付量（运营处理）<span class="pull-right"><b class="badge bg-purple"></b> 单</span></a>
                                 </li>
                                 <li class="order_of_today_for_delivered_effective">
                                     <a href="javascript:void(0);">有效量（客服业绩量） <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_of_today_for_delivered_completed">
-                                    <a href="javascript:void(0);">已交付<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                    <a href="javascript:void(0);">已交付（交付客户）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
                                 <li class="order_of_today_for_delivered_tomorrow">
                                     <a href="javascript:void(0);">隔日交付（今转明）<span class="pull-right"><b class="badge bg-green"></b> 单</span></a>

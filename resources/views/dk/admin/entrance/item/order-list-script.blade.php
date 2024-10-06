@@ -841,7 +841,7 @@
                                 var $html_order =
                                     '<div>'+
                                     '<span style="width:100px;float:left;">[订单]' + $order.id + '</span>' +
-                                    '<span style="width:120px;float:left;">[客户]' + $client_username + '</span>' +
+                                    '<span style="width:160px;float:left;">s[客户]' + $client_username + '</span>' +
                                     '[项目]' + $project_name +
                                     '</div>';
                                 $html += $html_order;
@@ -931,6 +931,183 @@
                 'json'
             );
 
+        });
+        // 【分发】显示
+        $(".main-content").on('click', ".item-distribute-show", function() {
+
+
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            $('#datatable_ajax').find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+            $('.distribute-set-title').html($that.attr("data-id"));
+            $('.distribute-set-column-name').html($that.attr("data-name"));
+            $('input[name=distribute-set-order-id]').val($that.attr("data-id"));
+            $('input[name=distribute-set-column-key]').val($that.attr("data-key"));
+            $('#distribute-set-distributed-list').html('');
+            $('#distribute-set-distributed-order-list').html('');
+            $('#distribute-set-distributed-client-list').html('');
+
+            $('#modal-body-for-distribute-set').modal('show');
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            var $html = '';
+            var $html_for_order = '';
+            var $html_for_distributed = '';
+
+            $.post(
+                "{{ url('/item/order-deliver-get-delivered') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-deliver-get-delivered",
+                    item_id: $that.attr('data-id')
+                },
+                function(data){
+
+                    layer.closeAll('loading');
+
+                    if(!data.success)
+                    {
+                        layer.msg(data.msg);
+                    }
+                    else
+                    {
+                        if(data.data.order_repeat.length)
+                        {
+                            $html += '<div>【已交付订单】</div>';
+                            var $order_list = data.data.order_repeat;
+                            $.each($order_list, function(index,$order) {
+
+                                var $client_username = '';
+                                if($order.client_er) $client_username = $order.client_er.username;
+
+                                var $project_name = '';
+                                if($order.project_er) $project_name = $order.project_er.name;
+
+                                var $html_order =
+                                    '<div>'+
+                                    '<span style="width:120px;float:left;">[订单]' + $order.id + '</span>' +
+                                    '<span style="width:200px;float:left;">[客户]' + $client_username + '</span>' +
+                                    '[项目]' + $project_name +
+                                    '</div>';
+                                $html += $html_order;
+                                $html_for_order += $html_order;
+                            });
+                            $html += '<br>';
+                        }
+                        if(data.data.deliver_repeat.length)
+                        {
+                            $html += '<div>【已分发客户】</div>';
+                            var $deliver_list = data.data.deliver_repeat;
+                            $.each($deliver_list, function(index,$deliver) {
+
+                                var $client_username = '';
+                                if($deliver.client_er) $client_username = $deliver.client_er.username;
+
+                                var $project_name = '';
+                                if($deliver.project_er) $project_name = $deliver.project_er.name;
+
+                                var $html_deliver =
+                                    '<div>' +
+                                    '<span style="width:200px;float:left;">[客户] ' + $client_username + '</span>' +
+                                    '[项目] '+ $project_name +
+                                    '</div>';
+                                $html += $html_deliver;
+                                $html_for_distributed += $html_deliver;
+                            })
+                            $html += '<br>';
+                        }
+                        $html += '<br>';
+                        $('#distribute-set-distributed-list').html($html);
+                        $('#distribute-set-distributed-order-list').html($html_for_order);
+                        $('#distribute-set-distributed-client-list').html($html_for_distributed);
+
+
+                        var $option_html_for_client = $('#option-list-for-client').html();
+                        var $option_html_for_delivered_result = $('#option-list-for-delivered-result').html();
+
+                    }
+                },
+                'json'
+            );
+
+        });
+        // 【分发】【取消】
+        $(".main-content").on('click', "#item-cancel-for-distribute-set", function() {
+            var that = $(this);
+            $('#modal-body-for-distribute-set').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【分发】确认
+        $(".main-content").on('click', "#item-submit-for-distribute-set", function() {
+            var $that = $(this);
+            layer.msg('确定"分发"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在发布</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    $.post(
+                        "{{ url('/item/order-distribute') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-distribute",
+                            item_id: $('input[name="distribute-set-order-id"]').val(),
+                            client_id: $('select[name="distribute-set-client-id"]').val(),
+                            delivered_result: $('select[name="distribute-set-delivered-result"]').val()
+                        },
+                        function(data){
+
+                            layer.closeAll('loading');
+                            // layer.close(index);
+                            // layer.form.render();
+
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+                                layer.msg("已分发");
+                                $('#modal-body-for-distribute-set').modal('hide').on("hidden.bs.modal", function () {
+                                    $("body").addClass("modal-open");
+                                });
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
         });
 
 
