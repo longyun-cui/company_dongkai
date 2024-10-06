@@ -100,6 +100,7 @@
 
 
             // 全部
+            $(".distributed_of_all_for_all").find('b').html($data.distributed_of_all_for_all);
             // 客服-报单
             $(".order_of_all_for_published").find('b').html($data.order_of_all_for_published);
             $(".order_of_all_for_inspected_all").find('b').html($data.order_of_all_for_inspected_all);
@@ -149,6 +150,7 @@
 
 
             // 日
+            $(".distributed_of_today_for_all").find('b').html($data.distributed_of_today_for_all);
             // 客服-报单
             $(".order_of_today_for_published").find('b').html($data.order_of_today_for_published);
             $(".order_of_today_for_inspected_all").find('b').html($data.order_of_today_for_inspected_all);
@@ -198,6 +200,7 @@
 
 
             // 月
+            $(".distributed_of_month_for_all").find('b').html($data.distributed_of_month_for_all);
             // 客服-报单
             $(".order_of_month_for_published").find('b').html($data.order_of_month_for_published);
             $(".order_of_month_for_inspected_all").find('b').html($data.order_of_month_for_inspected_all);

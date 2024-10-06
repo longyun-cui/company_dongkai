@@ -151,6 +151,11 @@
                                 <li class="deliverer_of_today_for_completed_by_other_day">
                                     <a href="javascript:void(0);">-- 昨转今工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
+                                @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                                <li class="distributed_of_today_for_all">
+                                    <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -216,6 +221,11 @@
 {{--                                <li class="deliverer_of_today_for_effective_rate">--}}
 {{--                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
 {{--                                </li>--}}
+                                @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                                <li class="distributed_of_today_for_all">
+                                    <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -321,6 +331,11 @@
                                 <li class="deliverer_of_month_for_completed_by_other_day">
                                     <a href="javascript:void(0);">-- 昨转今工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
+                                @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                                <li class="distributed_of_month_for_all">
+                                    <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -386,6 +401,11 @@
 {{--                                <li class="deliverer_of_month_for_effective_rate">--}}
 {{--                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
 {{--                                </li>--}}
+                                @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                                <li class="distributed_of_month_for_all">
+                                    <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -491,6 +511,11 @@
                                 <li class="deliverer_of_all_for_completed_by_other_day">
                                     <a href="javascript:void(0);">-- 昨转今工单 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
                                 </li>
+                                @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                                <li class="distributed_of_all_for_all">
+                                    <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -556,6 +581,11 @@
 {{--                                <li class="deliverer_of_all_for_effective_rate">--}}
 {{--                                    <a href="javascript:void(0);">有效交付率 <span class="pull-right"><b class="badge bg-aqua"></b> %</span></a>--}}
 {{--                                </li>--}}
+                                @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                                <li class="distributed_of_all_for_all">
+                                    <a href="javascript:void(0);">总分发量 <span class="pull-right"><b class="badge bg-green"></b> 单</span></a>
+                                </li>
+                                @endif
                             </ul>
                         </div>
                     </div>

@@ -10536,6 +10536,7 @@ class DKAdminRepository {
 
 
         $query = DK_Order::select('id');
+        $query_distributed = DK_Pivot_Client_Delivery::select('id');
 
         if($me->user_type == 41)
         {
@@ -10569,6 +10570,7 @@ class DKAdminRepository {
             if(!in_array($post_data['project'],[-1,0]))
             {
                 $query->where('project_id', $post_data['project']);
+                $query_distributed->where('project_id', $post_data['project']);
             }
         }
 
@@ -10588,6 +10590,21 @@ class DKAdminRepository {
                 $query->whereIn('department_district_id', $post_data['department_district']);
             }
         }
+
+
+
+
+
+
+
+
+        // 分发当天数据
+        $query_distributed_of_all = (clone $query_distributed)
+            ->select(DB::raw("
+                    count(*) as distributed_count_for_all
+                "))
+            ->get();
+        $return_data['distributed_of_all_for_all'] = $query_distributed_of_all[0]->distributed_count_for_all;
 
 
 
@@ -10692,6 +10709,17 @@ class DKAdminRepository {
 
 
 
+
+
+
+
+        // 分发当天数据
+        $query_distributed_of_today = (clone $query_distributed)->whereDate(DB::raw("DATE(FROM_UNIXTIME(created_at))"),$the_date)
+            ->select(DB::raw("
+                    count(*) as distributed_count_for_all
+                "))
+            ->get();
+        $return_data['distributed_of_today_for_all'] = $query_distributed_of_today[0]->distributed_count_for_all;
 
 
 
@@ -10844,6 +10872,17 @@ class DKAdminRepository {
 
 
 
+
+
+
+
+        // 分发当天数据
+        $query_distributed_of_month = (clone $query_distributed)->whereBetween('created_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->select(DB::raw("
+                    count(*) as distributed_count_for_all
+                "))
+            ->get();
+        $return_data['distributed_of_month_for_all'] = $query_distributed_of_month[0]->distributed_count_for_all;
 
 
 
