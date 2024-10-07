@@ -160,7 +160,7 @@
 
 
             {{--数据统计--}}
-            <li class="header">操作记录</li>
+            <li class="header">财务记录</li>
 
             @if(in_array($me->user_type,[0,1,9,11,31]))
                 <li class="treeview {{ $menu_active_of_record_funds_recharge or '' }}">

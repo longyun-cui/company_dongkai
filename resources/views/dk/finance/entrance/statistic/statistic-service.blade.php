@@ -553,8 +553,8 @@
                         render: function(data, type, row, meta) {
                             if(data == 0)
                             {
-                                var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
-                                return parseFloat($channel_unit_price);
+                                var $channel_cost = row.channel_unit_price * row.total_delivery_quantity;
+                                return parseFloat($channel_cost);
                             }
                             else return data;
                         }
@@ -616,9 +616,16 @@
                             // 总成本
                             var $total_cost = row.total_cost;
                             // 渠道费用
-                            var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
+                            // var $channel_cost = row.channel_unit_price * row.total_delivery_quantity;
+                            // var $channel_cost = row.channel_cost;
+                            var $channel_cost = 0;
+                            if(row.channel_cost == 0)
+                            {
+                                $channel_cost = parseFloat(row.channel_unit_price * row.total_delivery_quantity);
+                            }
+                            else $channel_cost = row.channel_cost;
 
-                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
+                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_cost).toFixed(2);
                             if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
                             else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
                         }
