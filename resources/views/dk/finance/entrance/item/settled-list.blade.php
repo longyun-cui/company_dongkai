@@ -1585,6 +1585,18 @@
                         "className": "bg-income",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','利润比例');
+                                $(nTd).attr('data-key','profit_proportion').attr('data-value',data);
+                                $(nTd).attr('data-column-name','利润比例');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             return parseFloat(data);
                         }
