@@ -8600,6 +8600,43 @@ class DKFinanceRepository {
 
 
 
+        // 统计
+        $settled_total = (clone $query)->select(DB::raw("
+                    sum(delivery_quantity) as total_of_delivery_quantity,
+                    sum(delivery_quantity_of_effective) as total_of_delivery_quantity_of_effective,
+                    sum(total_cost) as total_of_total_cost,
+                    sum(channel_cost) as total_of_channel_cost,
+                    sum(should_settled) as total_of_should_settled,
+                    sum(already_settled) as total_of_already_settled
+                "))
+            ->get();
+//        dd($daily_total->toArray());
+        $settled_total = $settled_total[0];
+
+        $total_data = [];
+        $total_data['id'] = '合计';
+        $total_data['name'] = '--';
+        $total_data['project_id'] = '--';
+        $total_data['channel_id'] = '--';
+        $total_data['assign_start'] = '--';
+        $total_data['assign_ended'] = '--';
+        $total_data['delivery_quantity'] = $settled_total->total_of_delivery_quantity;
+        $total_data['delivery_quantity_of_effective'] = $settled_total->total_of_delivery_quantity_of_effective;
+
+        $total_data['channel_unit_price'] = 0;
+        $total_data['total_cost'] = $settled_total->total_of_total_cost;
+        $total_data['channel_cost'] = $settled_total->total_of_channel_cost;
+        $total_data['cooperative_unit_price'] = 0;
+
+        $total_data['should_settled'] = $settled_total->total_of_should_settled;
+        $total_data['already_settled'] = $settled_total->total_of_already_settled;
+        $total_data['profit_proportion'] = 0;
+
+        $total_data['creator_id'] = "--";
+        $total_data['created_at'] = "--";
+        $total_data['description'] = "--";
+
+
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
@@ -8635,6 +8672,8 @@ class DKFinanceRepository {
             }
         }
 //        dd($list->toArray());
+
+        $list[] = $total_data;
 
 
         return datatable_response($list, $draw, $total);

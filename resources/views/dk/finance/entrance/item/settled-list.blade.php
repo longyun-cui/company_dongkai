@@ -1503,7 +1503,8 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return parseFloat(data);
+                            if(data) return parseFloat(data);
+                            else return "--";
                         }
                     },
                     {
@@ -1547,7 +1548,8 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return parseFloat(data);
+                            if(data) return parseFloat(data);
+                            else return "--";
                         }
                     },
                     {
@@ -1598,7 +1600,8 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return parseFloat(data);
+                            if(data) return parseFloat(data);
+                            else return "--";
                         }
                     },
                     {
