@@ -819,7 +819,7 @@
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
                 "aLengthMenu": [[100, 200, -1], ["100", "200", "全部"]],
                 "processing": true,
-                "serverSide": true,
+                "serverSide": false,
                 "searching": false,
                 "ajax": {
                     'url': "{{ url('/item/project-list') }}",
@@ -1181,7 +1181,8 @@
                         "data": "id",
                         "className": "text-center bg-deduction",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
                             var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
@@ -1195,7 +1196,26 @@
                         "data": "id",
                         "className": "text-center bg-finance",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                // 应结算金额
+                                // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
+                                var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
+                                var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
+                                // 总成本
+                                var $total_cost = row.total_cost;
+                                // 代理费用
+                                var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
+
+                                var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
+                                if(parseFloat($profile) == 0) $(nTd).addClass('');
+                                if(parseFloat($profile) < 0) $(nTd).addClass('_bold').addClass('text-red');
+                                else return $(nTd).addClass('_bold').addClass('text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             // 应结算金额
                             // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
@@ -1207,9 +1227,10 @@
                             var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
 
                             var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
-                            if(parseFloat($profile) == 0) return '--';
-                            if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
-                            else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
+                            return parseFloat($profile);
+                            // if(parseFloat($profile) == 0) return '--';
+                            // if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
+                            // else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
                         }
                     },
                     {
@@ -1236,7 +1257,23 @@
                         "data": "id",
                         "className": "text-center bg-empty",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                // 应结算金额
+                                // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
+                                var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
+                                var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
+                                // 已结算金额
+                                var $settled_amount = parseFloat(row.settled_amount);
+                                var $balance = parseFloat($settled_amount - $settlement_amount);
+                                if(parseFloat($balance) == 0) $(nTd).addClass('');
+                                else if(parseFloat($balance) < 0) $(nTd).addClass('_bold').addClass('text-red');
+                                else return $(nTd).addClass('_bold').addClass('text-green');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             // 应结算金额
                             // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
@@ -1245,8 +1282,9 @@
                             // 已结算金额
                             var $settled_amount = parseFloat(row.settled_amount);
                             var $balance = parseFloat($settled_amount - $settlement_amount);
-                            if(parseFloat($balance) < 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
-                            else return parseFloat($balance);
+                            return parseFloat($balance);
+                            // if(parseFloat($balance) < 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
+                            // else return parseFloat($balance);
                         }
                     },
                     {

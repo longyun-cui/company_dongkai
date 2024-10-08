@@ -82,13 +82,13 @@
 
             @if(in_array($me->user_type,[0,1,9,11,31]))
             <li class="treeview {{ $menu_active_of_project_list or '' }}">
-{{--                <a href="{{ url('/item/project-list')}}">--}}
-{{--                    <i class="fa fa-cube text-green"></i>--}}
-{{--                    <span>项目列表</span>--}}
-{{--                </a>--}}
-                <a href="{{ url('/item/project-list-2')}}">
+                <a href="{{ url('/item/project-list')}}">
                     <i class="fa fa-cube text-green"></i>
                     <span>项目列表</span>
+                </a>
+                <a href="{{ url('/item/project-list-2')}}">
+                    <i class="fa fa-cube text-green"></i>
+                    <span>项目列表2</span>
                 </a>
             </li>
             @endif
