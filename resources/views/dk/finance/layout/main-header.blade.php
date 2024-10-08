@@ -58,6 +58,14 @@
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,31]))
+                            <li class="header">
+                                <a href="{{ url('/item/settled-create') }}">
+                                    <i class="fa fa-plus text-yellow"></i> 添加结算
+                                </a>
+                            </li>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11,31]))
                         <li class="header">
                             <a href="{{ url('/item/daily-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加日报
