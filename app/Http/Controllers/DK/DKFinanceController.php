@@ -548,6 +548,12 @@ class DKFinanceController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_project_list(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_project_list_datatable(request()->all());
     }
+    // 【项目管理】返回-列表-视图（全部任务）
+    public function view_item_project_list_2()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_project_list_2(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_project_list_datatable_2(request()->all());
+    }
     // 【项目管理】【修改记录】返回-列表-视图（全部任务）
     public function view_item_project_modify_record()
     {
@@ -826,6 +832,111 @@ class DKFinanceController extends Controller
         else if(request()->isMethod('post')) return $this->repo->get_item_daily_modify_record_datatable(request()->all());
     }
 
+
+
+
+
+
+
+
+    /*
+     * 结算管理
+     */
+    // 【结算管理】返回-列表-视图（全部任务）
+    public function view_item_settled_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_settled_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_settled_list_datatable(request()->all());
+    }
+
+
+    // 【结算管理-修改记录】返回-列表-视图（全部任务）
+    public function view_item_settled_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_settled_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_settled_modify_record_datatable(request()->all());
+    }
+
+
+    // 【结算管理】添加
+    public function operate_item_settled_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_settled_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_settled_save(request()->all());
+    }
+    // 【结算管理】编辑
+    public function operate_item_settled_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_settled_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_settled_save(request()->all());
+    }
+
+    // 【结算管理】导入
+    public function operate_item_settled_import()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_settled_import();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_settled_import_save(request()->all());
+    }
+
+
+
+
+    // 【结算管理】修改-文本-信息
+    public function operate_item_settled_info_text_set()
+    {
+        return $this->repo->operate_item_settled_info_text_set(request()->all());
+    }
+    // 【结算管理】修改-时间-信息
+    public function operate_item_settled_info_time_set()
+    {
+        return $this->repo->operate_item_settled_info_time_set(request()->all());
+    }
+    // 【结算管理】修改-option-信息
+    public function operate_item_settled_info_option_set()
+    {
+        return $this->repo->operate_item_settled_info_option_set(request()->all());
+    }
+    // 【结算管理】修改-radio-信息
+    public function operate_item_settled_info_radio_set()
+    {
+        return $this->repo->operate_item_settled_info_option_set(request()->all());
+    }
+    // 【结算管理】修改-select-信息
+    public function operate_item_settled_info_select_set()
+    {
+        return $this->repo->operate_item_settled_info_option_set(request()->all());
+    }
+    // 【结算管理】添加-attachment-信息
+    public function operate_item_settled_info_attachment_set()
+    {
+        return $this->repo->operate_item_settled_info_attachment_set(request()->all());
+    }
+    // 【结算管理】删除-attachment-信息
+    public function operate_item_settled_info_attachment_delete()
+    {
+        return $this->repo->operate_item_settled_info_attachment_delete(request()->all());
+    }
+
+
+
+
+    // 【结算管理-使用记录】返回-列表-视图（全部任务）
+    public function view_settled_funds_using_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_settled_funds_using_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_settled_funds_using_record_datatable(request()->all());
+    }
+
+    // 【结算管理】添加-使用记录
+    public function operate_settled_funds_using_create()
+    {
+        return $this->repo->operate_settled_funds_using_create(request()->all());
+    }
+    // 【结算管理】修改-使用记录
+    public function operate_settled_funds_using_edit()
+    {
+        return $this->repo->operate_settled_funds_using_edit(request()->all());
+    }
 
 
 

@@ -72,7 +72,7 @@
                         </select>
 
                         {{--按月查看--}}
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-">
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-service">
                             <i class="fa fa-chevron-left"></i>
                         </button>
                         <input type="text" class="form-control form-filter filter-keyup month_picker" name="service-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
@@ -92,7 +92,7 @@
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-service">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-service-by-day">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-service-by-date">
                             <i class="fa fa-search"></i> 按日查询
                         </button>
 

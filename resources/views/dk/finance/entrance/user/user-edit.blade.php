@@ -130,9 +130,9 @@
                 {{--代理--}}
                 @if(in_array($me->user_type, [0,1,11]))
                 <div class="form-group channel-box" style="display:none;">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 代理</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择代理商</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="channel_id" id="select2-channel" data-type="">
+                        <select class="form-control" name="channel_id" id="select2-channel" data-type="" style="width:100%;">
                             @if($operate == 'edit' && $data->channel_id)
                                 <option data-id="{{ $data->channel_id or 0 }}" value="{{ $data->channel_id or 0 }}">{{ $data->channel_er->name }}</option>
                             @else

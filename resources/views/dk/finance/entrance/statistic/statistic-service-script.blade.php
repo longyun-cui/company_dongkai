@@ -119,13 +119,45 @@
             );
         });
         // 【业务报表】按【天】搜索
-        $(".main-content").on('click', "#filter-submit-for-service-by-day", function() {
+        $(".main-content").on('click', "#filter-submit-for-service-by-date", function() {
 
             $("#statistic-for-service").find('input[name=service-time-type]').val('date');
 
-            var $company_title = $('select[name=service-company]').find("option:selected").text();
-            var $statistic_title = "【" + $company_title + "】";
-            $(".statistic-title").html($statistic_title);
+            var $statistic_title = '';
+
+            var $company = $('select[name=service-company]').find("option:selected");
+            if($company.val() != "-1")
+            {
+                var $company_title = $company.text();
+                $statistic_title = $company_title;
+            }
+
+            var $channel = $('select[name=service-channel]').find("option:selected");
+            if($channel.val() != "-1")
+            {
+                var $channel_title = $channel.text();
+                $statistic_title = $channel_title;
+            }
+
+            var $business = $('select[name=service-business]').find("option:selected");
+            if($business.val() != "-1")
+            {
+                var $business_title = $business.text();
+                $statistic_title = $business_title;
+            }
+
+            var $project = $('select[name=service-project]').find("option:selected");
+            if($project.val() != "-1")
+            {
+                var $project_title = $project.text();
+                $statistic_title = $project_title;
+            }
+
+            if($statistic_title)
+            {
+                $statistic_title = "【" + $statistic_title + "】";
+                $(".statistic-title").html($statistic_title);
+            }
 
             $(".statistic-time-type-title").html('按天');
             var $date_dom = $('input[name="service-date"]');
@@ -147,9 +179,41 @@
 
             $("#statistic-for-service").find('input[name=service-time-type]').val('period');
 
-            var $company_title = $('select[name=overview-company]').find("option:selected").text();
-            var $statistic_title = "【" + $company_title + "】";
-            $(".statistic-title").html($statistic_title);
+            var $statistic_title = '';
+
+            var $company = $('select[name=service-company]').find("option:selected");
+            if($company.val() != "-1")
+            {
+                var $company_title = $company.text();
+                $statistic_title = $company_title;
+            }
+
+            var $channel = $('select[name=service-channel]').find("option:selected");
+            if($channel.val() != "-1")
+            {
+                var $channel_title = $channel.text();
+                $statistic_title = $channel_title;
+            }
+
+            var $business = $('select[name=service-business]').find("option:selected");
+            if($business.val() != "-1")
+            {
+                var $business_title = $business.text();
+                $statistic_title = $business_title;
+            }
+
+            var $project = $('select[name=service-project]').find("option:selected");
+            if($project.val() != "-1")
+            {
+                var $project_title = $project.text();
+                $statistic_title = $project_title;
+            }
+
+            if($statistic_title)
+            {
+                $statistic_title = "【" + $statistic_title + "】";
+                $(".statistic-title").html($statistic_title);
+            }
 
             $(".statistic-time-type-title").html('按时间段查询');
             var $date_start = $('input[name="service-start"]');
@@ -247,7 +311,7 @@
             $date_dom.val($yesterday_date_str);
 
 
-            $("#filter-submit-for-service-by-day").click();
+            $("#filter-submit-for-service-by-date").click();
             // $('#datatable_ajax').DataTable().ajax.reload();
 
         });
@@ -269,7 +333,7 @@
             var $tomorrow_date_str = $tomorrow_year + '-' + $tomorrow_month + '-' + $tomorrow_day;
             $date_dom.val($tomorrow_date_str);
 
-            $("#filter-submit-for-service-by-day").click();
+            $("#filter-submit-for-service-by-date").click();
             // $('#datatable_ajax').DataTable().ajax.reload();
 
         });

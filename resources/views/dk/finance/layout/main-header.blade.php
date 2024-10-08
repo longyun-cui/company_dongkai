@@ -188,9 +188,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <!-- The user image in the navbar-->
                         @if(!empty($me->portrait_img))
-                            <img src="{{ url(env('DOMAIN_CDN').'/'.$me->portrait_img) }}" class="user-image" alt="User">
+                            <img class="user-image" src="{{ url(env('DOMAIN_CDN').'/'.$me->portrait_img) }}" alt="User">
                         @else
-                            <img src="/AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <img class="user-image" src="/AdminLTE/dist/img/user2-160x160.jpg" alt="User Image">
                         @endif
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
                         <span class="hidden-xs">{{ $me->username or '' }}</span>

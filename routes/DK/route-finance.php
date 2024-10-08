@@ -192,10 +192,10 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.finance.password_chan
 
     // 列表
     Route::match(['get','post'], '/item/project-list', $controller.'@view_item_project_list');
-    Route::match(['get','post'], '/item/project-list-for-all', $controller.'@view_item_project_list_for_all');
+    Route::match(['get','post'], '/item/project-list-2', $controller.'@view_item_project_list_2');
 
 
-    // 渠道-财务信息
+    // 项目-财务信息
     Route::match(['get','post'], '/project/project-funds-using-record', $controller.'@view_project_funds_using_record');
     Route::post('/project/project-funds-using-create', $controller.'@operate_project_funds_using_create');
     Route::post('/project/project-funds-using-edit', $controller.'@operate_project_funds_using_edit');
@@ -224,7 +224,7 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.finance.password_chan
 
 
     /*
-     * 订单管理
+     * 日报管理
      */
     // select2
     Route::match(['get','post'], '/item/item_select2_user', $controller.'@operate_item_select2_user');
@@ -282,6 +282,36 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.finance.password_chan
     Route::match(['get','post'], '/item/daily-modify-record', $controller.'@view_item_daily_modify_record');
 
 
+
+
+
+
+    /*
+     * 结算管理
+     */
+    // 创建 & 修改
+    Route::match(['get','post'], '/item/settled-create', $controller.'@operate_item_settled_create');
+    Route::match(['get','post'], '/item/settled-edit', $controller.'@operate_item_settled_edit');
+    // 导入
+    Route::match(['get','post'], '/item/settled-import', $controller.'@operate_item_settled_import');
+
+    // 列表
+    Route::match(['get','post'], '/item/settled-list', $controller.'@view_item_settled_list');
+    // 修改信息
+    Route::match(['get','post'], '/item/settled-modify-record', $controller.'@view_item_settled_modify_record');
+
+    // 订单-基本信息
+    Route::post('/item/settled-info-text-set', $controller.'@operate_item_settled_info_text_set');
+    Route::post('/item/settled-info-time-set', $controller.'@operate_item_settled_info_time_set');
+    Route::post('/item/settled-info-radio-set', $controller.'@operate_item_settled_info_option_set');
+    Route::post('/item/settled-info-select-set', $controller.'@operate_item_settled_info_option_set');
+    Route::post('/item/settled-info-select2-set', $controller.'@operate_item_settled_info_option_set');
+
+
+    // 项目-财务信息
+    Route::match(['get','post'], '/item/settled-funds-using-record', $controller.'@view_settled_funds_using_record');
+    Route::post('/item/settled-funds-using-create', $controller.'@operate_settled_funds_using_create');
+    Route::post('/item/settled-funds-using-edit', $controller.'@operate_settled_funds_using_edit');
 
 
 

@@ -18,6 +18,7 @@ class DK_Finance_Funds_Using extends Model
         'create_type',
         'admin_id',
         'menu_id', 'item_id', 'order_id', 'company_id', 'project_id',
+        'settled_id',
         'transaction_amount', 'transaction_time', 'transaction_type', 'transaction_account', 'transaction_receipt_account', 'transaction_payment_account', 'transaction_order',
         'total_funds', 'balance_funds', 'available_funds', 'init_freeze_funds', 'freeze_funds',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
@@ -87,6 +88,12 @@ class DK_Finance_Funds_Using extends Model
     function project_er()
     {
         return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Project','project_id','id');
+    }
+
+
+    function settled_er()
+    {
+        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Settled','settled_id','id');
     }
 
 

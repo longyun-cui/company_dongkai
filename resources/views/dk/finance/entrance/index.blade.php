@@ -27,6 +27,7 @@
             </div>
             <div class="box-body">
 
+                @if(in_array($me->user_type,[0,1,11,19,31]))
                 @foreach($company_list as $v)
                 <div class="col-md-3">
                     <!-- Widget: user widget style 1 -->
@@ -45,19 +46,19 @@
                             <div class="row">
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">0</h5>
+                                        <h5 class="description-header">{{ $v->funds_recharge_total or '' }}</h5>
                                         <span class="description-text">充值</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">0</h5>
+                                        <h5 class="description-header">{{ $v->funds_recharge_total or '' }}</h5>
                                         <span class="description-text">结算</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">0</h5>
+                                        <h5 class="description-header">{{ $v->funds_recharge_total or '' }}</h5>
                                         <span class="description-text">余额</span>
                                     </div>
                                 </div>
@@ -81,6 +82,62 @@
                     </div>
                 </div>
                 @endforeach
+                @elseif(in_array($me->user_type,[41]))
+                    <div class="col-md-3">
+                        <!-- Widget: user widget style 1 -->
+                        <div class="box box-widget widget-user-2">
+                            <!-- Add the bg color to the header using any of the bg-* classes -->
+                            <div class="widget-user-header bg-primary">
+                                <div class="widget-user-image">
+                                    @if(!empty($me->portrait_img))
+                                        <img class="user-image" src="{{ url(env('DOMAIN_CDN').'/'.$me->portrait_img) }}" alt="User">
+                                    @else
+                                        <img class="user-image" src="/AdminLTE/dist/img/user2-160x160.jpg" alt="User Image">
+                                    @endif
+                                </div>
+                                <!-- /.widget-user-image -->
+                                <h3 class="widget-user-username">{{ $me->username or '' }}</h3>
+                                <h5 class="widget-user-desc">{{ $me->channel_er->name or '' }}</h5>
+                            </div>
+
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-4 border-right">
+                                        <div class="description-block">
+                                            <h5 class="description-header">{{ $me->channel_er->funds_recharge_total or '' }}</h5>
+                                            <span class="description-text">充值</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4 border-right">
+                                        <div class="description-block">
+                                            <h5 class="description-header">{{ $me->channel_er->settled_amount or '' }}</h5>
+                                            <span class="description-text">结算</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4 border-right">
+                                        <div class="description-block">
+                                            <h5 class="description-header">{{ $me->channel_er->funds_recharge_total - $me->channel_er->settled_amount }}</h5>
+                                            <span class="description-text">余额</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+
+                            </div>
+
+                            <div class="box-footer no-padding">
+                                <ul class="nav nav-stacked">
+                                    <li>
+{{--                                        <a target="_blank" href="{{ url('/statistic/statistic-company-overview?company_id='.$v->id) }}">--}}
+{{--                                            财务总览 <span class="pull-right badge bg-blue _none">31</span>--}}
+{{--                                        </a>--}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                @endif
 
             </div>
         </div>

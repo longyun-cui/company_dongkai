@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 {{--真实名称--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">真实名称</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="true_name" placeholder="请输入真实名称" value="{{ $data->true_name or '' }}">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 {{--邮箱--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">邮箱</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="email" placeholder="请输入邮箱" value="{{ $data->email or '' }}">

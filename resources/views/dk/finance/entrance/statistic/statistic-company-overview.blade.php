@@ -57,7 +57,15 @@
                             <option value="-1">选择代理</option>
                             @if(!empty($channel_list))
                                 @foreach($channel_list as $v)
-                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                    @if(!empty($channel_id))
+                                        @if($v->id == $channel_id)
+                                            <option value="{{ $v->id }}" selected="selected">{{ $v->name }}</option>
+                                        @else
+                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                        @endif
+                                    @else
+                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                    @endif
                                 @endforeach
                             @endif
                         </select>

@@ -63,6 +63,12 @@
                             <option value ="9">禁用</option>
                         </select>
 
+                        <select class="form-control form-filter _none" name="project-result" style="width:96px;">
+                            <option value ="-1">全部</option>
+                            <option value ="已收款">已收款</option>
+                            <option value ="待收款">待收款</option>
+                        </select>
+
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
@@ -819,10 +825,10 @@
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
                 "aLengthMenu": [[100, 200, -1], ["100", "200", "全部"]],
                 "processing": true,
-                "serverSide": true,
+                "serverSide": false,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/item/project-list') }}",
+                    'url': "{{ url('/item/project-list-2') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -832,6 +838,7 @@
                         d.title = $('input[name="project-title"]').val();
                         d.keyword = $('input[name="project-keyword"]').val();
                         d.item_status = $('select[name="project-status"]').val();
+                        d.item_result = $('select[name="project-result"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",
@@ -925,7 +932,7 @@
                                 $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
                             }
 
-                            $html_settle = '<a class="btn btn-xs bg-orange item-modal-show-for-settle" data-id="'+data+'">结算</a>';
+                            // $html_settle = '<a class="btn btn-xs bg-orange item-modal-show-for-settle" data-id="'+data+'">结算</a>';
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                             var html =
@@ -933,7 +940,7 @@
                                 $html_able+
 //                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
 //                                    $html_publish+
-                                $html_settle+
+//                                 $html_settle+
                                 $html_record+
                                 // $html_delete+
 //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
@@ -1045,47 +1052,23 @@
                         "data": "total_delivery_quantity",
                         "className": "text-center bg-journey",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
                             return parseFloat(data);
                         }
                     },
                     {
-                        "title": "总无效量",
-                        // "data": "delivery_invalid_quantity",
-                        "data": "total_delivery_quantity_of_invalid",
+                        "title": "总有效量",
+                        "data": "total_delivery_quantity_of_effective",
                         "className": "text-center bg-journey",
                         "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','总无效量');
-                                $(nTd).attr('data-key','delivery_invalid_quantity').attr('data-value',data);
-                                $(nTd).attr('data-column-name','总无效量');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "总有效量",
-                        "data": "delivery_effective_quantity",
-                        "className": "text-center bg-journey",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            // return row.total_delivery_quantity - row.delivery_invalid_quantity;
-                            var $effective = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                            if($effective == 0) return "--";
-                            return $effective;
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -1100,77 +1083,11 @@
                         }
                     },
                     {
-                        "title": "单均成本",
-                        "data": "id",
-                        "className": "text-center bg-route",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
-                            var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                            var $per = 0;
-                            if($delivery_effective_quantity > 0)
-                            {
-                                $per = parseFloat(row.total_cost / $delivery_effective_quantity).toFixed(2);
-                            }
-
-                            if($per == 0) return "--";
-                            return $per;
-                        }
-                    },
-                    {
-                        "title": "渠道单价",
-                        "data": "channel_unit_price",
-                        "className": "text-center bg-income",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','代理单价');
-                                $(nTd).attr('data-key','channel_unit_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','代理单价');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return "--";
-                            return parseFloat(data);
-                        }
-                    },
-                    {
                         "title": "渠道费用",
-                        "data": "id",
+                        "data": "channel_cost",
                         "className": "text-center bg-income",
                         "width": "60px",
                         "orderable": false,
-                        render: function(data, type, row, meta) {
-                            var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
-                            if($channel_unit_price == 0) return "--";
-                            return parseFloat($channel_unit_price);
-                        }
-                    },
-                    {
-                        "title": "合作单价",
-                        "data": "cooperative_unit_price",
-                        "className": "text-center bg-deduction",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','合作单价');
-                                $(nTd).attr('data-key','cooperative_unit_price').attr('data-value',data);
-                                $(nTd).attr('data-column-name','合作单价');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
                             return parseFloat(data);
@@ -1178,16 +1095,14 @@
                     },
                     {
                         "title": "应结算",
-                        "data": "id",
+                        "data": "should_settled",
                         "className": "text-center bg-deduction",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
-                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
-                            var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                            var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
-                            if($settlement_amount == 0) return "--";
-                            return parseFloat($settlement_amount);
+                            if(data == 0) return "--";
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -1195,21 +1110,16 @@
                         "data": "id",
                         "className": "text-center bg-finance",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
-                            // 应结算金额
-                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
-                            var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                            var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
-                            // 总成本
-                            var $total_cost = row.total_cost;
-                            // 代理费用
-                            var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
+                            var $should_settled = parseFloat(row.should_settled);
 
-                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
-                            if(parseFloat($profile) == 0) return '--';
-                            if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
-                            else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
+                            var $total_cost = row.total_cost;
+                            var $channel_cost = row.channel_cost;
+
+                            var $profile = $should_settled - $total_cost - $channel_cost;
+                            return parseFloat($profile);
                         }
                     },
                     {
@@ -1217,7 +1127,8 @@
                         "data": "settled_amount",
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(true)
                             {
@@ -1232,21 +1143,20 @@
                         }
                     },
                     {
-                        "title": "余额",
+                        "title": "待收款",
                         "data": "id",
                         "className": "text-center bg-empty",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(parseFloat(row.should_settled - row.already_settled) >  0)
+                            {
+                                $(nTd).addClass('_bold').addClass('text-red');
+                            }
+                        },
                         render: function(data, type, row, meta) {
-                            // 应结算金额
-                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
-                            var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                            var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
-                            // 已结算金额
-                            var $settled_amount = parseFloat(row.settled_amount);
-                            var $balance = parseFloat($settled_amount - $settlement_amount);
-                            if(parseFloat($balance) < 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
-                            else return parseFloat($balance);
+                            return parseFloat(row.should_settled - row.already_settled);
                         }
                     },
                     {

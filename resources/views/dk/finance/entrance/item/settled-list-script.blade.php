@@ -3,44 +3,44 @@
 
 
         // 【搜索】
-        $("#datatable-for-daily-list").on('click', ".filter-submit", function() {
+        $("#datatable-for-settled-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【刷新】
-        $("#datatable-for-daily-list").on('click', ".filter-refresh", function() {
+        $("#datatable-for-settled-list").on('click', ".filter-refresh", function() {
             $('#datatable_ajax').DataTable().ajax.reload(null,false);
         });
         // 【重置】
-        $("#datatable-for-daily-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-daily-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-settled-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-settled-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-daily-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-daily-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-settled-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-settled-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $("#datatable-for-daily-list").on('click', ".filter-empty", function() {
-            $("#datatable-for-daily-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-settled-list").on('click', ".filter-empty", function() {
+            $("#datatable-for-settled-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-daily-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-daily-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-settled-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-settled-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $("#datatable-for-daily-list").on('keyup', ".filter-keyup", function(event) {
+        $("#datatable-for-settled-list").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-daily-list").find(".filter-submit").click();
+                $("#datatable-for-settled-list").find(".filter-submit").click();
             }
         });
 
@@ -52,7 +52,7 @@
         // 【综合概览】【前一天】
         $(".main-content").on('click', ".date-pick-pre-for-order", function() {
 
-            var $assign_dom = $('input[name="daily-assign"]');
+            var $assign_dom = $('input[name="settled-assign"]');
             var $the_date = $assign_dom.val();
 
             if($the_date)
@@ -73,13 +73,13 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-daily-list").find(".filter-submit").click();
+            $("#datatable-for-settled-list").find(".filter-submit").click();
 
         });
         // 【综合概览】【后一添】
         $(".main-content").on('click', ".date-pick-next-for-order", function() {
 
-            var $assign_dom = $('input[name="daily-assign"]');
+            var $assign_dom = $('input[name="settled-assign"]');
             var $the_date = $assign_dom.val();
 
             if($the_date)
@@ -100,16 +100,16 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-daily-list").find(".filter-submit").click();
+            $("#datatable-for-settled-list").find(".filter-submit").click();
 
         });
 
 
 
         // 【日报列表】【前一天】
-        $(".main-content").on('click', ".date-pick-pre-for-daily", function() {
+        $(".main-content").on('click', ".date-pick-pre-for-settled", function() {
 
-            var $date_dom = $('input[name="daily-date"]');
+            var $date_dom = $('input[name="settled-date"]');
             var $the_date_str = $date_dom.val();
 
             var $date = new Date($the_date_str);
@@ -125,14 +125,14 @@
             $date_dom.val($yesterday_date_str);
 
 
-            // $("#filter-submit-for-daily-by-date").click();
+            // $("#filter-submit-for-settled-by-date").click();
             $('#datatable_ajax').DataTable().ajax.reload();
 
         });
         // 【日报列表】【后一天】
-        $(".main-content").on('click', ".date-pick-next-for-daily", function() {
+        $(".main-content").on('click', ".date-pick-next-for-settled", function() {
 
-            var $date_dom = $('input[name="daily-date"]');
+            var $date_dom = $('input[name="settled-date"]');
             var $the_date_str = $date_dom.val();
 
             var $date = new Date($the_date_str);
@@ -147,16 +147,16 @@
             var $tomorrow_date_str = $tomorrow_year + '-' + $tomorrow_month + '-' + $tomorrow_day;
             $date_dom.val($tomorrow_date_str);
 
-            // $("#filter-submit-for-daily-by-date").click();
+            // $("#filter-submit-for-settled-by-date").click();
             $('#datatable_ajax').DataTable().ajax.reload();
 
         });
 
 
         // 【日报列表】【前一月】
-        $(".main-content").on('click', ".month-pick-pre-for-daily", function() {
+        $(".main-content").on('click', ".month-pick-pre-for-settled", function() {
 
-            var $month_dom = $('input[name="daily-month"]');
+            var $month_dom = $('input[name="settled-month"]');
             var $the_month = $month_dom.val();
             var $date = new Date($the_month);
             var $year = $date.getFullYear();
@@ -176,14 +176,14 @@
             var $pre_month_str = $pre_year+'-'+$pre_month;
             $month_dom.val($pre_month_str);
 
-            // $("#filter-submit-for-daily-by-month").click();
+            // $("#filter-submit-for-settled-by-month").click();
             $('#datatable_ajax').DataTable().ajax.reload();
 
         });
         // 【日报列表】【后一月】
-        $(".main-content").on('click', ".month-pick-next-for-daily", function() {
+        $(".main-content").on('click', ".month-pick-next-for-settled", function() {
 
-            var $month_dom = $('input[name="daily-month"]');
+            var $month_dom = $('input[name="settled-month"]');
             var $the_month_str = $month_dom.val();
 
             var $date = new Date($the_month_str);
@@ -205,41 +205,41 @@
             var $next_month_str = $next_year+'-'+$next_month;
             $month_dom.val($next_month_str);
 
-            // $("#filter-submit-for-daily-by-month").click();
+            // $("#filter-submit-for-settled-by-month").click();
             $('#datatable_ajax').DataTable().ajax.reload();
 
         });
 
 
         // 【日报列表】按【月】搜索
-        $(".main-content").on('click', "#filter-submit-for-daily-by-month", function() {
+        $(".main-content").on('click', "#filter-submit-for-settled-by-month", function() {
 
-            $("#datatable-for-daily-list").find('input[name=daily-time-type]').val('month');
+            $("#datatable-for-settled-list").find('input[name=settled-time-type]').val('month');
 
             var $statistic_title = '';
 
-            var $company = $('select[name=daily-company]').find("option:selected");
+            var $company = $('select[name=settled-company]').find("option:selected");
             if($company.val() != "-1")
             {
                 var $company_title = $company.text();
                 $statistic_title = $company_title;
             }
 
-            var $channel = $('select[name=daily-channel]').find("option:selected");
+            var $channel = $('select[name=settled-channel]').find("option:selected");
             if($channel.val() != "-1")
             {
                 var $channel_title = $channel.text();
                 $statistic_title = $channel_title;
             }
 
-            var $business = $('select[name=daily-business]').find("option:selected");
+            var $business = $('select[name=settled-business]').find("option:selected");
             if($business.val() != "-1")
             {
                 var $business_title = $business.text();
                 $statistic_title = $business_title;
             }
 
-            var $project = $('select[name=daily-project]').find("option:selected");
+            var $project = $('select[name=settled-project]').find("option:selected");
             if($project.val() != "-1")
             {
                 var $project_title = $project.text();
@@ -253,44 +253,44 @@
             }
 
             $(".statistic-time-type-title").html('按月');
-            var $month_dom = $('input[name="daily-month"]');
+            var $month_dom = $('input[name="settled-month"]');
             var $the_month_str = $month_dom.val();
             $(".statistic-time-title").html('（'+$the_month_str+'月）');
 
             $('#datatable_ajax').DataTable().ajax.reload();
-            // $('#datatable_ajax_daily').DataTable().ajax.reload();
+            // $('#datatable_ajax_settled').DataTable().ajax.reload();
             // $('#datatable_ajax_project').DataTable().ajax.reload();
 
         });
         // 【日报列表】按【天】搜索
-        $(".main-content").on('click', "#filter-submit-for-daily-by-date", function() {
+        $(".main-content").on('click', "#filter-submit-for-settled-by-date", function() {
 
-            $("#datatable-for-daily-list").find('input[name=daily-time-type]').val('date');
+            $("#datatable-for-settled-list").find('input[name=settled-time-type]').val('date');
 
             var $statistic_title = '';
 
-            var $company = $('select[name=daily-company]').find("option:selected");
+            var $company = $('select[name=settled-company]').find("option:selected");
             if($company.val() != "-1")
             {
                 var $company_title = $company.text();
                 $statistic_title = $company_title;
             }
 
-            var $channel = $('select[name=daily-channel]').find("option:selected");
+            var $channel = $('select[name=settled-channel]').find("option:selected");
             if($channel.val() != "-1")
             {
                 var $channel_title = $channel.text();
                 $statistic_title = $channel_title;
             }
 
-            var $business = $('select[name=daily-business]').find("option:selected");
+            var $business = $('select[name=settled-business]').find("option:selected");
             if($business.val() != "-1")
             {
                 var $business_title = $business.text();
                 $statistic_title = $business_title;
             }
 
-            var $project = $('select[name=daily-project]').find("option:selected");
+            var $project = $('select[name=settled-project]').find("option:selected");
             if($project.val() != "-1")
             {
                 var $project_title = $project.text();
@@ -304,44 +304,44 @@
             }
 
             $(".statistic-time-type-title").html('按天');
-            var $date_dom = $('input[name="daily-date"]');
+            var $date_dom = $('input[name="settled-date"]');
             var $the_date_str = $date_dom.val();
             $(".statistic-time-title").html('（'+$the_date_str+'）');
 
             $('#datatable_ajax').DataTable().ajax.reload();
-            // $('#datatable_ajax_daily').DataTable().ajax.reload();
+            // $('#datatable_ajax_settled').DataTable().ajax.reload();
             // $('#datatable_ajax_project').DataTable().ajax.reload();
 
         });
         // 【日报列表】按【时间段】搜索
-        $(".main-content").on('click', "#filter-submit-for-daily-by-period", function() {
+        $(".main-content").on('click', "#filter-submit-for-settled-by-period", function() {
 
-            $("#datatable-for-daily-list").find('input[name=daily-time-type]').val('period');
+            $("#datatable-for-settled-list").find('input[name=settled-time-type]').val('period');
 
             var $statistic_title = '';
 
-            var $company = $('select[name=daily-company]').find("option:selected");
+            var $company = $('select[name=settled-company]').find("option:selected");
             if($company.val() != "-1")
             {
                 var $company_title = $company.text();
                 $statistic_title = $company_title;
             }
 
-            var $channel = $('select[name=daily-channel]').find("option:selected");
+            var $channel = $('select[name=settled-channel]').find("option:selected");
             if($channel.val() != "-1")
             {
                 var $channel_title = $channel.text();
                 $statistic_title = $channel_title;
             }
 
-            var $business = $('select[name=daily-business]').find("option:selected");
+            var $business = $('select[name=settled-business]').find("option:selected");
             if($business.val() != "-1")
             {
                 var $business_title = $business.text();
                 $statistic_title = $business_title;
             }
 
-            var $project = $('select[name=daily-project]').find("option:selected");
+            var $project = $('select[name=settled-project]').find("option:selected");
             if($project.val() != "-1")
             {
                 var $project_title = $project.text();
@@ -355,14 +355,21 @@
             }
 
             $(".statistic-time-type-title").html('按时间段查询');
-            var $date_start = $('input[name="daily-start"]');
-            var $date_ended = $('input[name="daily-ended"]');
+            var $date_start = $('input[name="settled-start"]');
+            var $date_ended = $('input[name="settled-ended"]');
             var $the_date_str = $date_start.val() + " - " + $date_ended.val();
             $(".statistic-time-title").html('（'+$the_date_str+'）');
 
             $('#datatable_ajax').DataTable().ajax.reload();
-            // $('#datatable_ajax_daily').DataTable().ajax.reload();
+            // $('#datatable_ajax_settled').DataTable().ajax.reload();
             // $('#datatable_ajax_project').DataTable().ajax.reload();
+
+        });
+        // 【日报列表】按【时间段】搜索
+        $(".main-content").on('click', "#filter-submit-for-settled-by-all", function() {
+
+            $("#datatable-for-settled-list").find('input[name=settled-time-type]').val('all');
+            $('#datatable_ajax').DataTable().ajax.reload();
 
         });
 
@@ -390,13 +397,13 @@
         // 【编辑】
         $(".main-content").on('click', ".item-create-show", function() {
             var $that = $(this);
-            $('#modal-body-for-daily-create').modal('show');
+            $('#modal-body-for-settled-create').modal('show');
         });
 
         // 【编辑】
         $(".main-content").on('click', ".item-create-link", function() {
             var $that = $(this);
-            var $url = "/item/daily-create?&referrer="+encodeURIComponent(window.location.href);
+            var $url = "/item/settled-create?&referrer="+encodeURIComponent(window.location.href);
             // window.location.href = $url;
             window.open($url);
         });
@@ -404,7 +411,7 @@
         // 【编辑】
         $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);
-            var $url = "/item/daily-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
+            var $url = "/item/settled-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
             window.location.href = $url;
             // window.open($url);
         });
@@ -422,7 +429,7 @@
             {{--    type:"post",--}}
             {{--    dataType:'json',--}}
             {{--    async:false,--}}
-            {{--    url: "{{ url('/item/daily-get-html') }}",--}}
+            {{--    url: "{{ url('/item/settled-get-html') }}",--}}
             {{--    data: {--}}
             {{--        _token: $('meta[name="_token"]').attr('content'),--}}
             {{--        operate:"item-get",--}}
@@ -438,7 +445,7 @@
             {{--});--}}
 
 //            $('input[name=id]').val($that.attr('data-id'));
-            $('input[name=info-set-daily-id]').val($that.attr('data-id'));
+            $('input[name=info-set-settled-id]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));
 
@@ -473,7 +480,7 @@
             $('#datatable_ajax').find('tr').removeClass('inspecting');
             $row.addClass('inspecting');
 
-            $('input[name="detail-inspected-daily-id"]').val($that.attr('data-id'));
+            $('input[name="detail-inspected-settled-id"]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));
 
@@ -517,16 +524,16 @@
         $(".main-content").on('click', ".item-summit-for-detail-inspected", function() {
             var $that = $(this);
 
-            var $id = $('input[name="detail-inspected-daily-id"]').val();
+            var $id = $('input[name="detail-inspected-settled-id"]').val();
             var $inspected_result = $('select[name="detail-inspected-result"]').val();
             var $inspected_description = $('textarea[name="detail-inspected-description"]').val();
 
             $.post(
-                "{{ url('/item/daily-inspect') }}",
+                "{{ url('/item/settled-inspect') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "daily-inspect",
-                    item_id: $('input[name="detail-inspected-daily-id"]').val(),
+                    operate: "settled-inspect",
+                    item_id: $('input[name="detail-inspected-settled-id"]').val(),
                     inspected_result: $('select[name="detail-inspected-result"]').val(),
                     inspected_description: $('textarea[name="detail-inspected-description"]').val()
                 },
@@ -588,7 +595,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-daily-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-settled-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
@@ -621,10 +628,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/daily-delete') }}",
+                        "{{ url('/item/settled-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-delete",
+                            operate: "settled-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -651,10 +658,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/daily-abandon') }}",
+                        "{{ url('/item/settled-abandon') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-abandon",
+                            operate: "settled-abandon",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -681,10 +688,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/daily-reuse') }}",
+                        "{{ url('/item/settled-reuse') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-reuse",
+                            operate: "settled-reuse",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -727,10 +734,10 @@
                     });
 
                     $.post(
-                        "{{ url('/item/daily-publish') }}",
+                        "{{ url('/item/settled-publish') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-publish",
+                            operate: "settled-publish",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -762,10 +769,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/daily-complete') }}",
+                        "{{ url('/item/settled-complete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-complete",
+                            operate: "settled-complete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -792,10 +799,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/daily-verify') }}",
+                        "{{ url('/item/settled-verify') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-verify",
+                            operate: "settled-verify",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -834,10 +841,10 @@
                     '<textarea class="form-control" name="inspected-description" placeholder="审核说明" rows="3"></textarea>'
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/daily-inspect') }}",
+                        "{{ url('/item/settled-inspect') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-inspect",
+                            operate: "settled-inspect",
                             item_id: $that.attr('data-id'),
                             inspected_result: $('select[name="inspected-result"]').val(),
                             inspected_description: $('textarea[name="inspected-description"]').val()
@@ -891,10 +898,10 @@
                     '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="交付说明"></textarea>'
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/daily-deliver') }}",
+                        "{{ url('/item/settled-deliver') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-deliver",
+                            operate: "settled-deliver",
                             item_id: $that.attr('data-id'),
                             client_id: $('select[name="select-client-id"]').val(),
                             delivered_result: $('select[name="select-delivered-result"]').val(),
@@ -1129,7 +1136,7 @@
 
             $('.info-text-set-title').html($that.attr("data-id"));
             $('.info-text-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-text-set-daily-id]').val($that.attr("data-id"));
+            $('input[name=info-text-set-settled-id]').val($that.attr("data-id"));
             $('input[name=info-text-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-text-set-operate-type]').val($that.attr('data-operate-type'));
             // console.log($that.attr("data-value"));
@@ -1181,11 +1188,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/daily-info-text-set') }}",
+                        "{{ url('/item/settled-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-text-set-operate"]').val(),
-                            order_id: $('input[name="info-text-set-daily-id"]').val(),
+                            order_id: $('input[name="info-text-set-settled-id"]').val(),
                             operate_type: $('input[name="info-text-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1224,7 +1231,7 @@
             $('.info-time-set-title').html($that.attr("data-id"));
             $('.info-time-set-column-name').html($that.attr("data-name"));
             $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
-            $('input[name=info-time-set-daily-id]').val($that.attr("data-id"));
+            $('input[name=info-time-set-settled-id]').val($that.attr("data-id"));
             $('input[name=info-time-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-time-set-time-type]').val($that.attr('data-time-type'));
             $('input[name=info-time-set-time-data-type]').val($that.attr('data-time-data-type'));
@@ -1274,11 +1281,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/daily-info-time-set') }}",
+                        "{{ url('/item/settled-info-time-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),
-                            order_id: $('input[name="info-time-set-daily-id"]').val(),
+                            order_id: $('input[name="info-time-set-settled-id"]').val(),
                             operate_type: $('input[name="info-time-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1319,7 +1326,7 @@
             var $that = $(this);
             $('.info-radio-set-title').html($that.attr("data-id"));
             $('.info-radio-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-radio-set-daily-id]').val($that.attr("data-id"));
+            $('input[name=info-radio-set-settled-id]').val($that.attr("data-id"));
             $('input[name=info-radio-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-radio-set-operate-type]').val($that.attr('data-operate-type'));
 
@@ -1362,11 +1369,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/daily-info-radio-set') }}",
+                        "{{ url('/item/settled-info-radio-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-radio-set-operate"]').val(),
-                            order_id: $('input[name="info-radio-set-daily-id"]').val(),
+                            order_id: $('input[name="info-radio-set-settled-id"]').val(),
                             operate_type: $('input[name="info-radio-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1408,7 +1415,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-daily-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-settled-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
@@ -1468,7 +1475,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-daily-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-settled-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-select-set-column-key2]').val($that.attr("data-key2"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
@@ -1682,11 +1689,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/daily-info-select-set') }}",
+                        "{{ url('/item/settled-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
-                            order_id: $('input[name="info-select-set-daily-id"]').val(),
+                            order_id: $('input[name="info-select-set-settled-id"]').val(),
                             operate_type: $('input[name="info-select-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_key2: $column_key2,
@@ -1726,7 +1733,7 @@
 
             $('.attachment-set-title').html($that.attr("data-id"));
             $('.info-set-column-name').html($that.attr("data-name"));
-            $('input[name=attachment-set-daily-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-settled-id]').val($that.attr("data-id"));
             $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
             $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
             $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
@@ -1743,7 +1750,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/item/daily-get-attachment-html') }}",
+                url: "{{ url('/item/settled-get-attachment-html') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -1799,7 +1806,7 @@
             });
 
                     var options = {
-                        url: "{{ url('/item/daily-info-attachment-set') }}",
+                        url: "{{ url('/item/settled-info-attachment-set') }}",
                         type: "post",
                         dataType: "json",
                         // target: "#div2",
@@ -1826,7 +1833,7 @@
                                     type:"post",
                                     dataType:'json',
                                     async:false,
-                                    url: "{{ url('/item/daily-get-attachment-html') }}",
+                                    url: "{{ url('/item/settled-get-attachment-html') }}",
                                     data: {
                                         _token: $('meta[name="_token"]').attr('content'),
                                         operate:"item-get",
@@ -1863,17 +1870,17 @@
         });
 
         // 【附件-attachment-属性】【删除】
-        $(".main-content").on('click', ".daily-attachment-delete-this", function() {
+        $(".main-content").on('click', ".settled-attachment-delete-this", function() {
             var $that = $(this);
             layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/daily-info-attachment-delete') }}",
+                        "{{ url('/item/settled-info-attachment-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-attachment-delete",
+                            operate: "settled-attachment-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -1920,7 +1927,7 @@
             $ids = $ids.slice(0, -1);
             // console.log($ids);
 
-            var $url = url_build('/statistic/statistic-export-for-daily-by-ids?ids='+$ids);
+            var $url = url_build('/statistic/statistic-export-for-settled-by-ids?ids='+$ids);
             window.open($url);
 
             {{--layer.msg('确定"批量审核"么', {--}}
@@ -1966,7 +1973,7 @@
             $ids = $ids.slice(0, -1);
             // console.log($ids);
 
-            // var $url = url_build('/statistic/statistic-export-for-daily-by-ids?ids='+$ids);
+            // var $url = url_build('/statistic/statistic-export-for-settled-by-ids?ids='+$ids);
             // window.open($url);
 
             layer.msg('确定"批量交付"么', {
@@ -1975,10 +1982,10 @@
                 ,yes: function(index){
 
                     $.post(
-                        "{{ url('/item/daily-bulk-deliver') }}",
+                        "{{ url('/item/settled-bulk-deliver') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-delivered-bulk",
+                            operate: "settled-delivered-bulk",
                             ids: $ids,
                             client_id:$('select[name="bulk-operate-delivered-client"]').val(),
                             delivered_result:$('select[name="bulk-operate-delivered-result"]').val(),
@@ -2039,6 +2046,187 @@
 
 
 
+
+
+        // 【财务记录】添加-显示
+        $(".main-content").on('click', ".item-modal-show-for-settle", function() {
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+            var $row = $that.parents('tr');
+            var $project_id = $row.find('.project-option').attr("data-project-id");
+            var $project_name = $row.find('.project-option').html();
+
+
+            $('input[name="finance-create-settled-id"]').val($id);
+            $('input[name="finance-create-project-id"]').val($project_id);
+            $('.finance-create-project-name').html($project_name);
+
+            $('#modal-body-for-finance-create').modal('show');
+
+            // $('#modal-body-for-finance-create').modal({show: true,backdrop: 'static'});
+            // $('.modal-backdrop').each(function() {
+            //     $(this).attr('id', 'id_' + Math.random());
+            // });
+
+        });
+        // 【财务记录】添加-取消
+        $(".main-content").on('click', "#item-cancel-for-finance-create", function() {
+            var that = $(this);
+            $('input[name=detect-set-id]').val(0);
+            $('.detect-set-keyword').html('');
+            $('.detect-set-id').html(0);
+            $('.detect-set-date').html('');
+            $('.detect-set-original-rank').html('');
+            $('input[name=detect-set-rank]').val('');
+
+            $('#modal-body-for-finance-create').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【财务记录】添加-提交
+        $(".main-content").on('click', "#item-submit-for-finance-create", function() {
+            var that = $(this);
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    $.post(
+                        "{{ url('/item/settled-funds-using-create') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: $('input[name="finance-create-operate"]').val(),
+                            settled_id: $('input[name="finance-create-settled-id"]').val(),
+                            project_id: $('input[name="finance-create-project-id"]').val(),
+                            finance_type: $("input[name='finance-create-type']:checked").val(),
+                            transaction_amount: $('input[name="finance-create-transaction-amount"]').val(),
+                            transaction_date: $('input[name="finance-create-transaction-date"]').val(),
+                            transaction_type: $('input[name="finance-create-transaction-type"]').val(),
+//                            transaction_account: $('input[name="finance-create-transaction-account"]').val(),
+                            transaction_receipt_account: $('input[name="finance-create-transaction-receipt-account"]').val(),
+                            transaction_payment_account: $('input[name="finance-create-transaction-payment-account"]').val(),
+                            transaction_order: $('input[name="finance-create-transaction-order"]').val(),
+                            transaction_title: $('input[name="finance-create-transaction-title"]').val(),
+                            transaction_description: $('textarea[name="finance-create-transaction-description"]').val(),
+                        },
+                        function(data){
+
+                            layer.close(index);
+                            layer.closeAll('loading');
+
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+                                // location.reload();
+
+                                $("#modal-form-for-finance-create").find('input[type=text], textarea').each(function () {
+                                    $(this).val($(this).attr('data-default'));
+                                });
+                                $("#modal-form-for-finance-create").find("input[name=finance-create-type][value='1']").click();
+
+                                $('#modal-body-for-finance-create').modal('hide').on("hidden.bs.modal", function () {
+                                    $("body").addClass("modal-open");
+                                });
+
+//                                TableDatatablesAjax_finance.init($('input[name="finance-create-order-id"]').val());
+
+                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                // $('#datatable_ajax_finance').DataTable().ajax.reload(null, false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+        // 【财务记录】【显示】
+        $(".main-content").on('click', ".item-modal-show-for-settle-record", function() {
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+        // 【财务记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-finance", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+
+
+        // 【财务记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-settle", function() {
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+        // 【财务-收入-记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-finance-income", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id,"income");
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+        // 【财务-支出-记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-finance-expenditure", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id,"expenditure");
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+
+
+
+
+
+
         $('.select2-box').select2({
             theme: 'classic'
         });
@@ -2077,7 +2265,7 @@
 
 
         // select2 项目
-        $('.daily-select2-project').select2({
+        $('.settled-select2-project').select2({
             ajax: {
                 url: "{{ url('/item/item_select2_project') }}",
                 dataType: 'json',

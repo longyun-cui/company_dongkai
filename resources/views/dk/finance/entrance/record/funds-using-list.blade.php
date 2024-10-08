@@ -557,7 +557,7 @@
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
-                    "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
+                    "rightColumns": "@if($is_mobile_equipment) 0 @else 0 @endif"
                 },
                 "columns": [
 //                    {
@@ -717,6 +717,28 @@
                         render: function(data, type, row, meta) {
                             if(row.project_er == null) return '--';
                             else return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+
+                        }
+                    },
+                    {
+                        "width": "60px",
+                        "title": "结算单",
+                        "data": "settled_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.project_er == null) return '--';
+                            else return '<a href="javascript:void(0);">'+data+'</a>';
+
+                        }
+                    },
+                    {
+                        "width": "160px",
+                        "title": "结算时间",
+                        "data": "settled_id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.settled_er == null) return '--';
+                            else return row.settled_er.assign_start+' - '+row.settled_er.assign_ended;
 
                         }
                     },
