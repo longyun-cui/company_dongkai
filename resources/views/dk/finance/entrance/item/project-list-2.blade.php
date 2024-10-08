@@ -57,6 +57,26 @@
 {{--                            <option value ="19">非工作状态</option>--}}
 {{--                        </select>--}}
 
+
+                        @if(in_array($me->user_type,[0,9,11,31]))
+                        <select class="form-control form-filter select-select2 select2-box project-channel" name="project-channel" style="width:120px;">
+                            <option value="-1">选择代理</option>
+                            @if(!empty($channel_list))
+                                @foreach($channel_list as $v)
+                                    @if(!empty($channel_id))
+                                        @if($v->id == $channel_id)
+                                            <option value="{{ $v->id }}" selected="selected">{{ $v->name }}</option>
+                                        @else
+                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                        @endif
+                                    @else
+                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </select>
+                        @endif
+
                         <select class="form-control form-filter" name="project-status" style="width:96px;">
                             <option value ="-1">全部</option>
                             <option value ="1">启用</option>
@@ -839,6 +859,10 @@
                         d.keyword = $('input[name="project-keyword"]').val();
                         d.item_status = $('select[name="project-status"]').val();
                         d.item_result = $('select[name="project-result"]').val();
+                        d.company = $('select[name="project-company"]').val();
+                        d.channel = $('select[name="project-channel"]').val();
+                        d.business = $('select[name="project-business"]').val();
+                        d.project = $('select[name="project-project"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",

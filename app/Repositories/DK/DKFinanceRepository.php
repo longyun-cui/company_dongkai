@@ -69,6 +69,7 @@ class DKFinanceRepository {
         $this->get_me();
         $me = $this->me;
 
+
         if(in_array($me->user_type,[0,1,9,11,31]))
         {
         }
@@ -78,17 +79,61 @@ class DKFinanceRepository {
         }
 
 
-        $company_list = DK_Finance_Company::select('id','name')->where('company_category',1)->get();
+        $company_list = DK_Finance_Company::select('*')->where('company_category',1)->get();
         $view_data['company_list'] = $company_list;
 
-        $channel_list = DK_Finance_Company::select('id','name')->where('company_category',11)->get();
+        $channel_list = DK_Finance_Company::select('*')->where('company_category',11)->get();
         $view_data['channel_list'] = $channel_list;
 
-        $business_list = DK_Finance_User::select('id','username')->where('user_type',61)->get();
+        $business_list = DK_Finance_User::select('*')->where('user_type',61)->get();
         $view_data['business_list'] = $business_list;
 
         $project_list = DK_Finance_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $view_data['project_list'] = $project_list;
+
+
+
+        // 结算统计
+        $query_settled = DK_Finance_Settled::select('project_id')
+            ->addSelect(DB::raw("
+                    sum(delivery_quantity) as total_delivery_quantity,
+                    sum(delivery_quantity_of_effective) as total_delivery_quantity_of_effective,
+                    sum(total_cost) as total_cost,
+                    sum(channel_cost) as channel_cost,
+                    sum(should_settled) as should_settled,
+                    sum(already_settled) as already_settled
+                "))
+            ->with(['project_er'=>function($query) { $query->select(['id','name','channel_id']); },])
+//            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+            ->groupBy('project_id')
+            ->get()
+            ->keyBy('project_id')
+            ->toArray();
+//        dd($query_settled);
+
+        foreach($channel_list as $k => $v)
+        {
+            $channel_list[$k]->total_delivery_quantity = 0;
+            $channel_list[$k]->total_delivery_quantity_of_effective = 0;
+            $channel_list[$k]->total_cost = 0;
+            $channel_list[$k]->channel_cost = 0;
+            $channel_list[$k]->should_settled = 0;
+            $channel_list[$k]->already_settled = 0;
+
+            foreach($query_settled as $settled_k => $settled_v)
+            {
+                if($settled_v['project_er']['channel_id'] == $v->id)
+                {
+                    $channel_list[$k]->total_delivery_quantity += $settled_v['total_delivery_quantity'];
+                    $channel_list[$k]->total_delivery_quantity_of_effective += $settled_v['total_delivery_quantity_of_effective'];
+                    $channel_list[$k]->total_cost += $settled_v['total_cost'];
+                    $channel_list[$k]->channel_cost += $settled_v['channel_cost'];
+                    $channel_list[$k]->should_settled += $settled_v['should_settled'];
+                    $channel_list[$k]->already_settled += $settled_v['already_settled'];
+                }
+            }
+        }
+
 
         $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.index';
         return view($view_blade)->with($view_data);
@@ -3882,13 +3927,45 @@ class DKFinanceRepository {
         $this->get_me();
         $me = $this->me;
 
-        $return['menu_active_of_project_list'] = 'active menu-open';
+
+        // 代理ID
+        if(!empty($post_data['channel_id']))
+        {
+            if(is_numeric($post_data['channel_id']) && $post_data['channel_id'] > 0)
+            {
+                $company = DK_Finance_Company::find($post_data['channel_id']);
+                if($company)
+                {
+                    $view_data['channel_id'] = $post_data['channel_id'];
+                    $view_data['channel_name'] = $company->name;
+                }
+                else $view_data['channel_id'] = '';
+            }
+            else $view_data['channel_id'] = '';
+        }
+        else $view_data['channel_id'] = '';
+
+
+//        $company_list = DK_Finance_Company::select('id','name')->where('company_category',1)->get();
+//        $view_data['company_list'] = $company_list;
+
+        $channel_list = DK_Finance_Company::select('id','name')->where('company_category',11)->get();
+        $view_data['channel_list'] = $channel_list;
+
+//        $business_list = DK_Finance_User::select('id','username')->where('user_type',61)->get();
+//        $view_data['business_list'] = $business_list;
+
+//        $project_list = DK_Finance_Project::select('id','name')->get();
+//        $view_data['project_list'] = $project_list;
+
+
+        $view_data['menu_active_of_project_list'] = 'active menu-open';
         if(in_array($me->user_type, [41,71,81]))
         {
             $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.item.project-list-for-department';
         }
         else $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.item.project-list-2';
-        return view($view_blade)->with($return);
+        return view($view_blade)->with($view_data);
     }
     // 【项目】返回-列表-数据
     public function get_item_project_list_datatable_2($post_data)
@@ -3896,7 +3973,7 @@ class DKFinanceRepository {
         $this->get_me();
         $me = $this->me;
 
-        // 团队统计
+        // 结算统计
         $query_settled = DK_Finance_Settled::select('project_id')
             ->addSelect(DB::raw("
                     sum(delivery_quantity) as total_delivery_quantity,
@@ -3919,6 +3996,34 @@ class DKFinanceRepository {
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+
+        // 公司
+        if(isset($post_data['company']))
+        {
+            if(!in_array($post_data['company'],[-1]))
+            {
+                $channel_list = DK_Finance_Company::select('id')->where('superior_company_id',$post_data['company'])->get()->toArray();
+                $query->whereIn('channel_id', $channel_list);
+            }
+        }
+        // 渠道
+        if(isset($post_data['channel']))
+        {
+            if(!in_array($post_data['channel'],[-1]))
+            {
+                $query->where('channel_id', $post_data['channel']);
+            }
+        }
+        // 商务
+        if(isset($post_data['business']))
+        {
+            if(!in_array($post_data['business'],[-1]))
+            {
+                $query->where('business_id', $post_data['business']);
+            }
+        }
 
         // 状态 [|]
         if(!empty($post_data['item_status']))
@@ -15090,7 +15195,7 @@ class DKFinanceRepository {
         else $view_data['company_id'] = '';
 
 
-        // 公司ID
+        // 代理ID
         if(!empty($post_data['channel_id']))
         {
             if(is_numeric($post_data['channel_id']) && $post_data['channel_id'] > 0)

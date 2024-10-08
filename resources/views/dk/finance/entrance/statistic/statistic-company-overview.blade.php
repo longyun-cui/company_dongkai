@@ -22,7 +22,14 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">
-                    <span class="statistic-title">【{{ $company_name or '全部公司' }}】</span>
+                    @if(!empty($channel_name))
+                        <span class="statistic-title">【{{ $channel_name or '' }}】</span>
+                    @elseif(!empty($company_name))
+                        <span class="statistic-title">【{{ $company_name or '' }}】</span>
+                    @else
+                        <span class="statistic-title">【全部】</span>
+                    @endif
+
                     <span class="statistic-time-type-title">按月查询</span>
                     <span class="statistic-time-title">（{{ date('Y-m') }}月）</span>
                 </h3>
@@ -37,7 +44,7 @@
                         <input type="hidden" name="overview-time-type" value="month" readonly>
 
                         @if(in_array($me->user_type,[0,9,11,31]))
-                        <select class="form-control form-filter select-select2 select2-box overview-company" name="overview-company" style="width:100px;">
+                        <select class="form-control form-filter select-select2 select2-box overview-company" name="overview-company" style="width:120px;">
                             <option value="-1">选择公司</option>
                             @if(!empty($company_list))
                                 @foreach($company_list as $v)
@@ -53,7 +60,7 @@
                                 @endforeach
                             @endif
                         </select>
-                        <select class="form-control form-filter select-select2 select2-box overview-channel" name="overview-channel" style="width:100px;">
+                        <select class="form-control form-filter select-select2 select2-box overview-channel" name="overview-channel" style="width:120px;">
                             <option value="-1">选择代理</option>
                             @if(!empty($channel_list))
                                 @foreach($channel_list as $v)

@@ -19,15 +19,16 @@
 {{--订单统计--}}
 <div class="row">
 
+
+    @if(in_array($me->user_type,[0,1,11,19,31]))
     <div class="col-md-12">
         <!-- Application buttons -->
         <div class="box box-primary">
             <div class="box-header">
-                <h3 class="box-title">公司财务</h3>
+                <h3 class="box-title">公司</h3>
             </div>
             <div class="box-body">
 
-                @if(in_array($me->user_type,[0,1,11,19,31]))
                 @foreach($company_list as $v)
                 <div class="col-md-3">
                     <!-- Widget: user widget style 1 -->
@@ -82,66 +83,146 @@
                     </div>
                 </div>
                 @endforeach
-                @elseif(in_array($me->user_type,[41]))
-                    <div class="col-md-3">
-                        <!-- Widget: user widget style 1 -->
-                        <div class="box box-widget widget-user-2">
-                            <!-- Add the bg color to the header using any of the bg-* classes -->
-                            <div class="widget-user-header bg-primary">
-                                <div class="widget-user-image">
-                                    @if(!empty($me->portrait_img))
-                                        <img class="user-image" src="{{ url(env('DOMAIN_CDN').'/'.$me->portrait_img) }}" alt="User">
-                                    @else
-                                        <img class="user-image" src="/AdminLTE/dist/img/user2-160x160.jpg" alt="User Image">
-                                    @endif
-                                </div>
-                                <!-- /.widget-user-image -->
-                                <h3 class="widget-user-username">{{ $me->username or '' }}</h3>
-                                <h5 class="widget-user-desc">{{ $me->channel_er->name or '' }}</h5>
-                            </div>
-
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-xs-6 col-sm-4 border-right">
-                                        <div class="description-block">
-                                            <h5 class="description-header">{{ $me->channel_er->funds_recharge_total or '' }}</h5>
-                                            <span class="description-text">充值</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 col-sm-4 border-right">
-                                        <div class="description-block">
-                                            <h5 class="description-header">{{ $me->channel_er->settled_amount or '' }}</h5>
-                                            <span class="description-text">结算</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 col-sm-4 border-right">
-                                        <div class="description-block">
-                                            <h5 class="description-header">{{ $me->channel_er->funds_recharge_total - $me->channel_er->settled_amount }}</h5>
-                                            <span class="description-text">余额</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.row -->
-
-                            </div>
-
-                            <div class="box-footer no-padding">
-                                <ul class="nav nav-stacked">
-                                    <li>
-{{--                                        <a target="_blank" href="{{ url('/statistic/statistic-company-overview?company_id='.$v->id) }}">--}}
-{{--                                            财务总览 <span class="pull-right badge bg-blue _none">31</span>--}}
-{{--                                        </a>--}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                @endif
 
             </div>
         </div>
     </div>
+    @endif
+
+
+    @if(in_array($me->user_type,[0,1,11,19,31]))
+    <div class="col-md-12">
+        <!-- Application buttons -->
+
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">代理概览</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table no-margin">
+                        <thead>
+                        <tr>
+                            <th>代理</th>
+                            <th>充值</th>
+                            <th>余额</th>
+                            <th>应结算</th>
+                            <th>已结算</th>
+                            <th>待收款</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($channel_list as $v)
+                        <tr>
+                            <td>
+                                <a target="_blank" href="{{ url('/item/settled-list?channel_id='.$v->id) }}">
+                                    {{ $v->name or '' }}
+                                </a>
+                            </td>
+                            <td>{{ (float)($v->funds_recharge_total) }}</td>
+                            <td>{{ (float)($v->funds_recharge_total - $v->should_settled) }}</td>
+                            <td>{{ (float)($v->should_settled) }}</td>
+                            <td>{{ (float)($v->already_settled) }}</td>
+                            <td>
+                                @if($v->should_settled > $v->already_settled)
+                                    <span class="label label-danger">{{ (float)($v->should_settled - $v->already_settled) }}</span>
+                                @else
+                                    <span>{{ (float)($v->should_settled - $v->already_settled) }}</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix _none">
+                <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+                <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+            </div>
+            <!-- /.box-footer -->
+        </div>
+
+    </div>
+    @endif
+
+
+    @if(in_array($me->user_type,[41]))
+    <div class="col-md-12">
+        <!-- Application buttons -->
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">{{ $me->channel_er->name or '' }}</h3>
+            </div>
+            <div class="box-body">
+
+                <div class="col-md-3">
+                    <!-- Widget: user widget style 1 -->
+                    <div class="box box-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-primary">
+                            <div class="widget-user-image">
+                                @if(!empty($me->portrait_img))
+                                    <img class="user-image" src="{{ url(env('DOMAIN_CDN').'/'.$me->portrait_img) }}" alt="User">
+                                @else
+                                    <img class="user-image" src="/AdminLTE/dist/img/user2-160x160.jpg" alt="User Image">
+                                @endif
+                            </div>
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-username">{{ $me->username or '' }}</h3>
+                            <h5 class="widget-user-desc">{{ $me->channel_er->name or '' }}</h5>
+                        </div>
+
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">{{ $me->channel_er->funds_recharge_total or '' }}</h5>
+                                        <span class="description-text">充值</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">{{ $me->channel_er->settled_amount or '' }}</h5>
+                                        <span class="description-text">结算</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header">{{ $me->channel_er->funds_recharge_total - $me->channel_er->settled_amount }}</h5>
+                                        <span class="description-text">余额</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.row -->
+
+                        </div>
+
+                        <div class="box-footer no-padding">
+                            <ul class="nav nav-stacked">
+                                <li>
+                                    {{--                                        <a target="_blank" href="{{ url('/statistic/statistic-company-overview?company_id='.$v->id) }}">--}}
+                                    {{--                                            财务总览 <span class="pull-right badge bg-blue _none">31</span>--}}
+                                    {{--                                        </a>--}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @endif
 
 
     <div class="col-md-12 _none">
