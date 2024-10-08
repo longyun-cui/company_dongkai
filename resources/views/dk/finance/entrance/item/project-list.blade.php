@@ -1045,7 +1045,8 @@
                         "data": "total_delivery_quantity",
                         "className": "text-center bg-journey",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
                             return parseFloat(data);
@@ -1057,7 +1058,8 @@
                         "data": "total_delivery_quantity_of_invalid",
                         "className": "text-center bg-journey",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
@@ -1080,7 +1082,8 @@
                         "data": "delivery_effective_quantity",
                         "className": "text-center bg-journey",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             // return row.total_delivery_quantity - row.delivery_invalid_quantity;
                             var $effective = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
@@ -1093,7 +1096,8 @@
                         "data": "total_cost",
                         "className": "text-center bg-route",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
                             return parseFloat(data);
