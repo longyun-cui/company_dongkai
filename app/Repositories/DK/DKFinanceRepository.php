@@ -160,11 +160,6 @@ class DKFinanceRepository {
             {
                 if($daily_v['project_er']['channel_id'] == $v->id)
                 {
-
-                    if($daily_v['project_er']['channel_id'] == 10)
-                    {
-                        echo $daily_v['project_er']['channel_id'].'--'.$v->id."<br>";
-                    }
                     $channel_list[$k]->total_delivery_quantity += $daily_v['total_delivery_quantity'];
                     $channel_list[$k]->total_delivery_quantity_of_invalid += $daily_v['total_delivery_quantity_of_invalid'];
                     $channel_list[$k]->total_delivery_quantity_of_effective += ($daily_v['total_delivery_quantity'] - $daily_v['total_delivery_quantity_of_invalid']);
