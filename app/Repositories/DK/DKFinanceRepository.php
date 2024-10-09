@@ -5698,8 +5698,16 @@ class DKFinanceRepository {
             if(!empty($project_name))
             {
                 $project = DK_Finance_Project::where('name',$project_name)->first();
-                if($project) $temp_date['project_id'] = $project->id;
-                else $temp_date['project_id'] = 0;
+                if($project)
+                {
+                    $temp_date['channel_id'] = $project->channel_id;
+                    $temp_date['project_id'] = $project->id;
+                }
+                else
+                {
+                    $temp_date['channel_id'] = 0;
+                    $temp_date['project_id'] = 0;
+                }
 
 //                $temp_date['project_id'] = $value['project_id'];  // 项目id
                 $temp_date['assign_date'] = $value['assign_date'];  // 日期
@@ -5743,6 +5751,7 @@ class DKFinanceRepository {
 
                 $daily->created_type = 9;
                 $daily->creator_id = $me->id;
+                $daily->channel_id = $value['channel_id'];  // 代理id
                 $daily->project_id = $value['project_id'];  // 项目id
                 $daily->assign_date = $value['assign_date'];  // 日期
                 $daily->outbound_background = $value['outbound_background'];  // 外呼后台
