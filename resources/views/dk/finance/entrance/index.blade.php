@@ -129,12 +129,12 @@
                             <td>{{ (float)($v->funds_recharge_total) }}</td>
                             <td>{{ (float)($v->funds_recharge_total - $v->should_settled) }}</td>
                             <td>{{ (float)($v->should_settled) }}</td>
-                            <td>{{ (float)($v->already_settled) }}</td>
+                            <td>{{ (float)($v->settled_amount) }}</td>
                             <td>
-                                @if($v->should_settled > $v->already_settled)
-                                    <span class="label label-danger">{{ (float)($v->should_settled - $v->already_settled) }}</span>
+                                @if($v->should_settled > $v->settled_amount)
+                                    <span class="label label-danger">{{ (float)($v->should_settled - $v->settled_amount) }}</span>
                                 @else
-                                    <span>{{ (float)($v->should_settled - $v->already_settled) }}</span>
+                                    <span>{{ (float)($v->should_settled - $v->settled_amount) }}</span>
                                 @endif
                             </td>
                         </tr>

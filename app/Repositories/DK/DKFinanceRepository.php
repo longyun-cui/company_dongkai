@@ -94,22 +94,59 @@ class DKFinanceRepository {
 
 
         // 结算统计
-        $query_settled = DK_Finance_Settled::select('project_id')
+//        $query_settled = DK_Finance_Settled::select('project_id')
+//            ->addSelect(DB::raw("
+//                    sum(delivery_quantity) as total_delivery_quantity,
+//                    sum(delivery_quantity_of_effective) as total_delivery_quantity_of_effective,
+//                    sum(total_cost) as total_cost,
+//                    sum(channel_cost) as channel_cost,
+//                    sum(should_settled) as should_settled,
+//                    sum(already_settled) as already_settled
+//                "))
+//            ->with(['project_er'=>function($query) { $query->select(['id','name','channel_id']); },])
+////            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+//            ->groupBy('project_id')
+//            ->get()
+//            ->keyBy('project_id')
+//            ->toArray();
+
+//        foreach($channel_list as $k => $v)
+//        {
+//            $channel_list[$k]->total_delivery_quantity = 0;
+//            $channel_list[$k]->total_delivery_quantity_of_effective = 0;
+//            $channel_list[$k]->total_cost = 0;
+//            $channel_list[$k]->channel_cost = 0;
+//            $channel_list[$k]->should_settled = 0;
+//            $channel_list[$k]->already_settled = 0;
+//
+//            foreach($query_settled as $settled_k => $settled_v)
+//            {
+//                if($settled_v['project_er']['channel_id'] == $v->id)
+//                {
+//                    $channel_list[$k]->total_delivery_quantity += $settled_v['total_delivery_quantity'];
+//                    $channel_list[$k]->total_delivery_quantity_of_effective += $settled_v['total_delivery_quantity_of_effective'];
+//                    $channel_list[$k]->total_cost += $settled_v['total_cost'];
+//                    $channel_list[$k]->channel_cost += $settled_v['channel_cost'];
+//                    $channel_list[$k]->should_settled += $settled_v['should_settled'];
+//                    $channel_list[$k]->already_settled += $settled_v['already_settled'];
+//                }
+//            }
+//        }
+
+
+        // 团队统计
+        $query_daily = DK_Finance_Daily::select('project_id')
             ->addSelect(DB::raw("
                     sum(delivery_quantity) as total_delivery_quantity,
-                    sum(delivery_quantity_of_effective) as total_delivery_quantity_of_effective,
-                    sum(total_cost) as total_cost,
-                    sum(channel_cost) as channel_cost,
-                    sum(should_settled) as should_settled,
-                    sum(already_settled) as already_settled
+                    sum(delivery_quantity_of_invalid) as total_delivery_quantity_of_invalid,
+                    sum(total_daily_cost) as total_cost
                 "))
-            ->with(['project_er'=>function($query) { $query->select(['id','name','channel_id']); },])
 //            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+            ->with(['project_er'=>function($query) { $query->select(['id','name','channel_id','channel_unit_price','cooperative_unit_price']); }])
             ->groupBy('project_id')
             ->get()
             ->keyBy('project_id')
             ->toArray();
-//        dd($query_settled);
 
         foreach($channel_list as $k => $v)
         {
@@ -120,16 +157,17 @@ class DKFinanceRepository {
             $channel_list[$k]->should_settled = 0;
             $channel_list[$k]->already_settled = 0;
 
-            foreach($query_settled as $settled_k => $settled_v)
+            foreach($query_daily as $daily_k => $daily_v)
             {
-                if($settled_v['project_er']['channel_id'] == $v->id)
+                if($daily_v['project_er']['channel_id'] == $v->id)
                 {
-                    $channel_list[$k]->total_delivery_quantity += $settled_v['total_delivery_quantity'];
-                    $channel_list[$k]->total_delivery_quantity_of_effective += $settled_v['total_delivery_quantity_of_effective'];
-                    $channel_list[$k]->total_cost += $settled_v['total_cost'];
-                    $channel_list[$k]->channel_cost += $settled_v['channel_cost'];
-                    $channel_list[$k]->should_settled += $settled_v['should_settled'];
-                    $channel_list[$k]->already_settled += $settled_v['already_settled'];
+                    $channel_list[$k]->total_delivery_quantity += $daily_v['total_delivery_quantity'];
+                    $channel_list[$k]->total_delivery_quantity_of_invalid += $daily_v['total_delivery_quantity_of_invalid'];
+                    $channel_list[$k]->total_delivery_quantity_of_effective += ($daily_v['total_delivery_quantity'] - $daily_v['total_delivery_quantity_of_invalid']);
+                    $channel_list[$k]->total_cost += $daily_v['total_cost'];
+                    $channel_list[$k]->channel_cost += ($daily_v['project_er']['channel_unit_price'] * $daily_v['total_delivery_quantity']);
+                    $channel_list[$k]->should_settled += ($daily_v['project_er']['cooperative_unit_price'] * ($daily_v['total_delivery_quantity'] - $daily_v['total_delivery_quantity_of_invalid']));
+//                    $channel_list[$k]->already_settled += $daily_v['already_settled'];
                 }
             }
         }
