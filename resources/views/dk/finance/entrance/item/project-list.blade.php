@@ -1108,7 +1108,8 @@
                         "data": "id",
                         "className": "text-center bg-route",
                         "width": "60px",
-                        "orderable": false,
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
                             var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;

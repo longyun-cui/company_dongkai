@@ -83,7 +83,6 @@ class DKFinanceRepository {
         $view_data['company_list'] = $company_list;
 
         $channel_list = DK_Finance_Company::select('*')->where('company_category',11)->get();
-        $view_data['channel_list'] = $channel_list;
 
         $business_list = DK_Finance_User::select('*')->where('user_type',61)->get();
         $view_data['business_list'] = $business_list;
@@ -155,12 +154,17 @@ class DKFinanceRepository {
             $channel_list[$k]->total_cost = 0;
             $channel_list[$k]->channel_cost = 0;
             $channel_list[$k]->should_settled = 0;
-            $channel_list[$k]->already_settled = 0;
+//            $channel_list[$k]->already_settled = 0;
 
             foreach($query_daily as $daily_k => $daily_v)
             {
                 if($daily_v['project_er']['channel_id'] == $v->id)
                 {
+
+                    if($daily_v['project_er']['channel_id'] == 10)
+                    {
+                        echo $daily_v['project_er']['channel_id'].'--'.$v->id."<br>";
+                    }
                     $channel_list[$k]->total_delivery_quantity += $daily_v['total_delivery_quantity'];
                     $channel_list[$k]->total_delivery_quantity_of_invalid += $daily_v['total_delivery_quantity_of_invalid'];
                     $channel_list[$k]->total_delivery_quantity_of_effective += ($daily_v['total_delivery_quantity'] - $daily_v['total_delivery_quantity_of_invalid']);
@@ -171,6 +175,7 @@ class DKFinanceRepository {
                 }
             }
         }
+        $view_data['channel_list'] = $channel_list;
 
 
         $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.index';
