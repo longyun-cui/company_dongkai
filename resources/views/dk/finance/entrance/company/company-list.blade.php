@@ -1209,6 +1209,28 @@
                         }
                     },
                     {
+                        "title": "提示阈值",
+                        "data": "funds_balance_prompt_threshold",
+                        "className": "text-center",
+                        "width": "100px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','提示阈值');
+                                $(nTd).attr('data-key','funds_balance_prompt_threshold').attr('data-value',data);
+                                $(nTd).attr('data-column-name','提示阈值');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
                         "title": "备注",
                         "data": "remark",
                         "className": "text-center",

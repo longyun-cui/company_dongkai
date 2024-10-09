@@ -7079,7 +7079,7 @@ class DKFinanceRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-order-info-time-set') return response_error([],"参数[operate]有误！");
+        if($operate != 'item-daily-info-time-set') return response_error([],"参数[operate]有误！");
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -7190,7 +7190,7 @@ class DKFinanceRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-order-info-option-set') return response_error([],"参数[operate]有误！");
+        if($operate != 'item-daily-info-option-set') return response_error([],"参数[operate]有误！");
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 

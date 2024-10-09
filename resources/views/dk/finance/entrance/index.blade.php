@@ -127,7 +127,8 @@
                                 </a>
                             </td>
                             <td>{{ (float)($v->funds_recharge_total) }}</td>
-                            <td>{{ (float)($v->funds_recharge_total - $v->should_settled) }}</td>
+                            <td>{{ (float)($v->funds_recharge_total - $v->settled_amount) }}</td>
+{{--                            <td>{{ (float)($v->funds_recharge_total - $v->should_settled) }}</td>--}}
                             <td>{{ (float)($v->should_settled) }}</td>
                             <td>{{ (float)($v->settled_amount) }}</td>
                             <td>
