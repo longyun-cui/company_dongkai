@@ -6962,7 +6962,7 @@ class DKFinanceRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'item-order-info-text-set') return response_error([],"参数[operate]有误！");
+        if($operate != 'item-daily-info-text-set') return response_error([],"参数[operate]有误！");
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
