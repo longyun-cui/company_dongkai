@@ -903,35 +903,6 @@
                         }
                     },
                     {
-                        "title": "利润",
-                        "data": "id",
-                        "className": "text-center bg-finance",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            // 应结算金额
-                            // // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
-                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                            // var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
-                            var $settlement_amount = row.cooperative_cost;
-                            // 总成本
-                            var $total_cost = row.total_cost;
-                            // 渠道费用
-                            // var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
-                            var $channel_unit_price = row.channel_cost;
-
-                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
-                            if(parseFloat($profile) < 0) return '<b class="text-red">' + moneyAddCommas($profile) + '</b>';
-                            else  return '<b class="text-green">' + moneyAddCommas($profile) + '</b>';
-                        }
-                    },
-                    {
                         "title": "已结算",
                         "data": "settled_amount",
                         "className": "item-show-for-settle bg-empty",
@@ -957,9 +928,22 @@
                         }
                     },
                     {
-                        "title": "余额",
+                        "title": "坏账",
+                        "data": 'funds_bad_debt',
+                        "className": "item-show-for-settle bg-empty",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == "--") return data;
+                            if(!data) return "--";
+                            else if(data == 0 || data == 0.00) return "--";
+                            else return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "待收款",
                         "data": "balance",
-                        "className": "text-center bg-empty",
+                        "className": "bg-empty",
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -976,10 +960,44 @@
                             var $settlement_amount = row.cooperative_cost;
                             // 已结算金额
                             var $settled_amount = parseFloat(row.settled_amount);
-                            var $balance = parseFloat($settled_amount - $settlement_amount);
+                            // 坏账金额
+                            var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+
+                            var $balance = parseFloat($settlement_amount - $settled_amount - $funds_bad_debt);
                             if(parseFloat($balance) == 0) return '--';
-                            else if(parseFloat($balance) < 0) return '<b class="text-red">' + moneyAddCommas($balance) + '</b>';
+                            else if(parseFloat($balance) > 0) return '<b class="text-red">' + moneyAddCommas($balance) + '</b>';
                             else return moneyAddCommas($balance);
+                        }
+                    },
+                    {
+                        "title": "利润",
+                        "data": "id",
+                        "className": "text-center bg-finance",
+                        "width": "60px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // 应结算金额
+                            // // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
+                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
+                            // var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
+                            var $settlement_amount = row.cooperative_cost;
+                            // 总成本
+                            var $total_cost = row.total_cost;
+                            // 渠道费用
+                            // var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
+                            var $channel_unit_price = row.channel_cost;
+                            // 坏账金额
+                            var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+
+                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price - $funds_bad_debt).toFixed(2);
+                            if(parseFloat($profile) < 0) return '<b class="text-red">' + moneyAddCommas($profile) + '</b>';
+                            else  return '<b class="text-green">' + moneyAddCommas($profile) + '</b>';
                         }
                     },
                 ],
