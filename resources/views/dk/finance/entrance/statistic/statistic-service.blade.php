@@ -602,6 +602,61 @@
                         }
                     },
                     {
+                        "title": "已结算",
+                        "data": "settled_amount",
+                        "className": "item-show-for-settle bg-empty",
+                        "width": "60px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','已结算');
+                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','已结算');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return "--";
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "坏账",
+                        "data": 'funds_bad_debt',
+                        "className": "item-show-for-settle bg-empty",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == "--") return data;
+                            if(!data) return "--";
+                            else if(data == 0 || data == 0.00) return "--";
+                            else return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "待收款",
+                        "data": "balance",
+                        "className": "text-center bg-empty",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            // 应结算金额
+                            // // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
+                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
+                            // var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
+                            var $settlement_amount = row.cooperative_cost;
+                            // 已结算金额
+                            var $settled_amount = parseFloat(row.settled_amount);
+                            // 坏账金额
+                            var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+
+                            var $balance = parseFloat($settlement_amount - $settled_amount - $funds_bad_debt);
+                            if(parseFloat($balance) == 0) return '--';
+                            else if(parseFloat($balance) > 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
+                            else return parseFloat($balance);
+                        }
+                    },
+                    {
                         "title": "利润",
                         "data": "id",
                         "className": "text-center bg-finance",
@@ -628,45 +683,6 @@
                             var $profile = parseFloat($settlement_amount - $total_cost - $channel_cost).toFixed(2);
                             if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
                             else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
-                        }
-                    },
-                    {
-                        "title": "已结算",
-                        "data": "settled_amount",
-                        "className": "item-show-for-settle bg-empty",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(true)
-                            {
-                                $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
-                                $(nTd).attr('data-column-name','已结算');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return "--";
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "title": "余额",
-                        "data": "balance",
-                        "className": "text-center bg-empty",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            // 应结算金额
-                            // // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
-                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                            // var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
-                            var $settlement_amount = row.cooperative_cost;
-                            // 已结算金额
-                            var $settled_amount = parseFloat(row.settled_amount);
-                            var $balance = parseFloat($settled_amount - $settlement_amount);
-                            if(parseFloat($balance) == 0) return '--';
-                            else if(parseFloat($balance) < 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
-                            else return parseFloat($balance);
                         }
                     },
                 ],

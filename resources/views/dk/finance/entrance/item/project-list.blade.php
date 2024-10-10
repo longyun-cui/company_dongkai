@@ -1192,7 +1192,7 @@
                     {
                         "title": "应结算",
                         "data": "id",
-                        "className": "text-center bg-deduction",
+                        "className": "bg-deduction",
                         "width": "60px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -1229,9 +1229,19 @@
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','已结算');
+                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','已结算');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == "--") return data;
-                            return parseFloat(data);
+                            if(!data) return "--";
+                            else if(data == 0 || data == 0.00) return "--";
+                            else return parseFloat(data);
                         }
                     },
                     {
@@ -1250,9 +1260,12 @@
                                 var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
                                 // 已结算金额
                                 var $settled_amount = parseFloat(row.settled_amount);
-                                var $balance = parseFloat($settled_amount - $settlement_amount);
+                                // 坏账金额
+                                var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+
+                                var $balance = parseFloat($settlement_amount - $settled_amount - $funds_bad_debt);
                                 if(parseFloat($balance) == 0) $(nTd).addClass('');
-                                else if(parseFloat($balance) < 0) $(nTd).addClass('_bold').addClass('text-red');
+                                else if(parseFloat($balance) > 0) $(nTd).addClass('_bold').addClass('text-red');
                                 else return $(nTd).addClass('_bold').addClass('text-green');
                             }
                         },
@@ -1263,7 +1276,10 @@
                             var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
                             // 已结算金额
                             var $settled_amount = parseFloat(row.settled_amount);
-                            var $balance = parseFloat($settled_amount - $settlement_amount);
+                            // 坏账金额
+                            var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+
+                            var $balance = parseFloat($settlement_amount - $settled_amount - $funds_bad_debt);
                             return parseFloat($balance);
                             // if(parseFloat($balance) < 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
                             // else return parseFloat($balance);

@@ -14912,6 +14912,7 @@ class DKFinanceRepository {
         $total_data['cooperative_unit_price'] = 0;
         $total_data['cooperative_cost'] = 0;
         $total_data['settled_amount'] = 0;
+        $total_data['funds_bad_debt'] = 0;
         $total_data['balance'] = 0;
 
         foreach($list as $k => $v)
@@ -14944,6 +14945,7 @@ class DKFinanceRepository {
             $total_data['cooperative_cost'] += ($v->cooperative_unit_price * ($v->total_delivery_quantity - $v->total_delivery_quantity_of_invalid));
 
             $total_data['settled_amount'] += $v->settled_amount;
+            $total_data['funds_bad_debt'] += $v->funds_bad_debt;
         }
 
         $total_data['channel_unit_price'] = 0;

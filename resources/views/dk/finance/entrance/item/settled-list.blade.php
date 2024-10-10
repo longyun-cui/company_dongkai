@@ -1586,18 +1586,28 @@
                         },
                         render: function(data, type, row, meta) {
                             if(data == "--") return data;
-                           return parseFloat(data);
+                            return parseFloat(data);
                         }
                     },
                     {
                         "title": "坏账",
                         "data": 'funds_bad_debt',
-                        "className": "bg-income item-show-for-settle",
+                        "className": "item-show-for-settle bg-income",
                         "width": "60px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','已结算');
+                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-column-name','已结算');
+                            }
+                        },
                         render: function(data, type, row, meta) {
                             if(data == "--") return data;
-                            return parseFloat(data);
+                            if(!data) return "--";
+                            else if(data == 0 || data == 0.00) return "--";
+                            else return parseFloat(data);
                         }
                     },
                     {
