@@ -2729,7 +2729,7 @@ class DKFinanceRepository {
 
         // 交易类型 收入 || 支出
         $finance_type = $post_data["finance_type"];
-        if(!in_array($finance_type,[1,21])) return response_error([],"交易类型错误！");
+        if(!in_array($finance_type,[1,91,101])) return response_error([],"交易类型错误！");
 
         $transaction_amount = $post_data["transaction_amount"];
         if(!is_numeric($transaction_amount)) return response_error([],"交易金额必须为数字！");
@@ -2780,7 +2780,7 @@ class DKFinanceRepository {
                         $company->funds_recharge_total = $company->funds_recharge_total + $transaction_amount;
 //                        $company->funds_balance = $company->funds_balance + $transaction_amount;
                     }
-                    else if($finance_type == 91)
+                    else if($finance_type == 101)
                     {
                         $company->funds_recharge_total = $company->funds_recharge_total - $transaction_amount;
 //                        $company->funds_balance = $company->funds_balance - $transaction_amount;
@@ -2793,7 +2793,7 @@ class DKFinanceRepository {
                         $company->funds_recharge_total = $company->funds_recharge_total + $transaction_amount;
 //                        $company->funds_balance = $company->funds_balance + $transaction_amount;
                     }
-                    else if($finance_type == 91)
+                    else if($finance_type == 101)
                     {
                         $company->funds_recharge_total = $company->funds_recharge_total - $transaction_amount;
 //                        $company->funds_balance = $company->funds_balance - $transaction_amount;
@@ -4327,7 +4327,7 @@ class DKFinanceRepository {
 
         // 交易类型 收入 || 支出
         $finance_type = $post_data["finance_type"];
-        if(!in_array($finance_type,[1,21])) return response_error([],"交易类型错误！");
+        if(!in_array($finance_type,[1,91,101])) return response_error([],"交易类型错误！");
 
         $transaction_amount = $post_data["transaction_amount"];
         if(!is_numeric($transaction_amount)) return response_error([],"交易金额必须为数字！");
@@ -4335,7 +4335,10 @@ class DKFinanceRepository {
 
         $company = DK_Finance_Company::find($project->channel_id);
         $balance = $company->funds_recharge_total - $company->settled_amount;
-        if($balance < $transaction_amount) return response_error([],"余额不足，请先充值！");
+        if($finance_type == 1)
+        {
+            if($balance < $transaction_amount) return response_error([],"余额不足，请先充值！");
+        }
 
 
         // 启动数据库事务
@@ -4386,6 +4389,11 @@ class DKFinanceRepository {
                     }
                     else if($finance_type == 91)
                     {
+                        $project->funds_bad_debt = $project->funds_bad_debt + $transaction_amount;
+                        $company->funds_bad_debt = $company->funds_bad_debt + $transaction_amount;
+                    }
+                    else if($finance_type == 101)
+                    {
                         $project->settled_amount = $project->settled_amount - $transaction_amount;
                         $company->settled_amount = $company->settled_amount - $transaction_amount;
                     }
@@ -4398,6 +4406,11 @@ class DKFinanceRepository {
                         $company->settled_amount = $company->settled_amount + $transaction_amount;
                     }
                     else if($finance_type == 91)
+                    {
+                        $project->funds_bad_debt = $project->funds_bad_debt + $transaction_amount;
+                        $company->funds_bad_debt = $company->funds_bad_debt + $transaction_amount;
+                    }
+                    else if($finance_type == 101)
                     {
                         $project->settled_amount = $project->settled_amount - $transaction_amount;
                         $company->settled_amount = $company->settled_amount - $transaction_amount;
@@ -8654,7 +8667,8 @@ class DKFinanceRepository {
                     sum(total_cost) as total_of_total_cost,
                     sum(channel_cost) as total_of_channel_cost,
                     sum(should_settled) as total_of_should_settled,
-                    sum(already_settled) as total_of_already_settled
+                    sum(already_settled) as total_of_already_settled,
+                    sum(funds_bad_debt) as total_of_funds_bad_debt
                 "))
             ->get();
 //        dd($daily_total->toArray());
@@ -8677,6 +8691,7 @@ class DKFinanceRepository {
 
         $total_data['should_settled'] = $settled_total->total_of_should_settled;
         $total_data['already_settled'] = $settled_total->total_of_already_settled;
+        $total_data['funds_bad_debt'] = $settled_total->total_of_funds_bad_debt;
         $total_data['profit_proportion'] = 0;
 
         $total_data['creator_id'] = "--";
@@ -9435,7 +9450,7 @@ class DKFinanceRepository {
 
         // 交易类型 收入 || 支出
         $finance_type = $post_data["finance_type"];
-        if(!in_array($finance_type,[1,21])) return response_error([],"交易类型错误！");
+        if(!in_array($finance_type,[1,91,101])) return response_error([],"交易类型错误！");
 
         $transaction_amount = $post_data["transaction_amount"];
         if(!is_numeric($transaction_amount)) return response_error([],"交易金额必须为数字！");
@@ -9443,7 +9458,10 @@ class DKFinanceRepository {
 
         $company = DK_Finance_Company::find($project->channel_id);
         $balance = $company->funds_recharge_total - $company->settled_amount;
-        if($balance < $transaction_amount) return response_error([],"余额不足，请先充值！");
+        if($finance_type == 1)
+        {
+            if($balance < $transaction_amount) return response_error([],"余额不足，请先充值！");
+        }
 
 
         // 启动数据库事务
@@ -9497,6 +9515,12 @@ class DKFinanceRepository {
                     }
                     else if($finance_type == 91)
                     {
+                        $settled->funds_bad_debt = $settled->funds_bad_debt + $transaction_amount;
+                        $project->funds_bad_debt = $project->funds_bad_debt + $transaction_amount;
+                        $company->funds_bad_debt = $company->funds_bad_debt + $transaction_amount;
+                    }
+                    else if($finance_type == 101)
+                    {
                         $settled->already_settled = $settled->already_settled - $transaction_amount;
                         $project->settled_amount = $project->settled_amount - $transaction_amount;
                         $company->settled_amount = $company->settled_amount - $transaction_amount;
@@ -9511,6 +9535,12 @@ class DKFinanceRepository {
                         $company->settled_amount = $company->settled_amount + $transaction_amount;
                     }
                     else if($finance_type == 91)
+                    {
+                        $settled->funds_bad_debt = $settled->funds_bad_debt + $transaction_amount;
+                        $project->funds_bad_debt = $project->funds_bad_debt + $transaction_amount;
+                        $company->funds_bad_debt = $company->funds_bad_debt + $transaction_amount;
+                    }
+                    else if($finance_type == 101)
                     {
                         $settled->already_settled = $settled->already_settled - $transaction_amount;
                         $project->settled_amount = $project->settled_amount - $transaction_amount;

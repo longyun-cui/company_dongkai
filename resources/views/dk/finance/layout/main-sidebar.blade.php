@@ -86,10 +86,10 @@
                     <i class="fa fa-cube text-green"></i>
                     <span>项目列表</span>
                 </a>
-                <a href="{{ url('/item/project-list-2')}}">
-                    <i class="fa fa-cube text-green"></i>
-                    <span>项目列表2</span>
-                </a>
+{{--                <a href="{{ url('/item/project-list-2')}}">--}}
+{{--                    <i class="fa fa-cube text-green"></i>--}}
+{{--                    <span>项目列表2</span>--}}
+{{--                </a>--}}
             </li>
             @endif
 

@@ -658,7 +658,8 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 1) return '<small class="btn-xs bg-olive">结算</small>';
-                            else if(data == 91) return '<small class="btn-xs bg-orange">退款</small>';
+                            else if(data == 91) return '<small class="btn-xs bg-orange">坏账</small>';
+                            else if(data == 101) return '<small class="btn-xs bg-red">退款</small>';
                             else return "有误";
                         }
                     },

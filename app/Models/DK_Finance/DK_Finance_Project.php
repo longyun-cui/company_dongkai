@@ -16,6 +16,13 @@ class DK_Finance_Project extends Model
         'item_id', 'menu_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'company_id', 'channel_id', 'business_id',
+
+        'manpower_daily_wage', 'call_charge_coefficient', 'material_coefficient', 'taxes_coefficient',
+        'delivery_quantity', 'delivery_quantity_of_effective', 'delivery_quantity_of_invalid',
+        'channel_unit_price', 'cooperative_unit_price', 'settlement_amount', 'settled_amount',
+        'funds_bad_debt',
+        'funds_balance_prompt_threshold',
+
         'inspector_id',
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',

@@ -477,7 +477,7 @@
                         <select class="form-control form-filter" name="finance-finance_type" style="width:96px;">
                             <option value ="-1">选择</option>
                             <option value ="1">充值</option>
-                            <option value ="91">退款</option>
+                            <option value ="101">退款</option>
                         </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance">

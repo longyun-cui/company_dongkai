@@ -39,6 +39,7 @@ class DK_Finance_Settled extends Model
         'cooperative_unit_price',
         'profit_proportion',
         'should_settled', 'already_settled',
+        'funds_bad_debt',
 
 
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description', 'inspected_at',

@@ -487,7 +487,8 @@
                         <select class="form-control form-filter" name="finance-finance_type" style="width:96px;">
                             <option value ="-1">选择</option>
                             <option value ="1">充值</option>
-                            <option value ="91">退款</option>
+                            <option value ="91">坏账</option>
+                            <option value ="101">退款</option>
                         </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance">
@@ -595,7 +596,12 @@
                             </button>
                             <button type="button" class="btn radio">
                                 <label>
-                                    <input type="radio" name="finance-create-type" value=21> 退费
+                                    <input type="radio" name="finance-create-type" value=91> 坏账
+                                </label>
+                            </button>
+                            <button type="button" class="btn radio">
+                                <label>
+                                    <input type="radio" name="finance-create-type" value=101> 退费
                                 </label>
                             </button>
                         </div>
@@ -623,6 +629,7 @@
                     </div>
                     <datalist id="_transaction_title">
                         <option value="结算" />
+                        <option value="坏账" />
                         <option value="退费" />
                         <option value="其他" />
                     </datalist>
@@ -639,6 +646,7 @@
                         <option value="支付宝" />
                         <option value="银行卡" />
                         <option value="现金" />
+                        <option value="坏账" />
                         <option value="其他" />
                     </datalist>
                     {{--收款账号--}}
@@ -1197,48 +1205,6 @@
                         }
                     },
                     {
-                        "title": "利润",
-                        "data": "id",
-                        "className": "text-center bg-finance",
-                        "width": "60px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(true)
-                            {
-                                // 应结算金额
-                                // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
-                                var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                                var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
-                                // 总成本
-                                var $total_cost = row.total_cost;
-                                // 代理费用
-                                var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
-
-                                var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
-                                if(parseFloat($profile) == 0) $(nTd).addClass('');
-                                if(parseFloat($profile) < 0) $(nTd).addClass('_bold').addClass('text-red');
-                                else return $(nTd).addClass('_bold').addClass('text-green');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            // 应结算金额
-                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
-                            var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
-                            var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
-                            // 总成本
-                            var $total_cost = row.total_cost;
-                            // 代理费用
-                            var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
-
-                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price).toFixed(2);
-                            return parseFloat($profile);
-                            // if(parseFloat($profile) == 0) return '--';
-                            // if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
-                            // else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
-                        }
-                    },
-                    {
                         "title": "已结算",
                         "data": "settled_amount",
                         "className": "item-show-for-settle bg-empty",
@@ -1258,7 +1224,18 @@
                         }
                     },
                     {
-                        "title": "余额",
+                        "title": "坏账",
+                        "data": 'funds_bad_debt',
+                        "className": "item-show-for-settle bg-empty",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == "--") return data;
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "待收款",
                         "data": "id",
                         "className": "text-center bg-empty",
                         "width": "60px",
@@ -1290,6 +1267,52 @@
                             return parseFloat($balance);
                             // if(parseFloat($balance) < 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
                             // else return parseFloat($balance);
+                        }
+                    },
+                    {
+                        "title": "利润",
+                        "data": "id",
+                        "className": "text-center bg-finance",
+                        "width": "60px",
+                        "orderable": true,
+                        "orderSequence": ["desc", "asc"],
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                // 应结算金额
+                                // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
+                                var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
+                                var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
+                                // 总成本
+                                var $total_cost = row.total_cost;
+                                // 渠道费用
+                                var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
+                                // 退款
+                                var $funds_bad_debt = row.funds_bad_debt;
+
+                                var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price - $funds_bad_debt).toFixed(2);
+                                if(parseFloat($profile) == 0) $(nTd).addClass('');
+                                if(parseFloat($profile) < 0) $(nTd).addClass('_bold').addClass('text-red');
+                                else return $(nTd).addClass('_bold').addClass('text-green');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // 应结算金额
+                            // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
+                            var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
+                            var $settlement_amount = row.cooperative_unit_price * $delivery_effective_quantity;
+                            // 总成本
+                            var $total_cost = row.total_cost;
+                            // 代理费用
+                            var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
+                            // 退款
+                            var $funds_bad_debt = row.funds_bad_debt;
+
+                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price - $funds_bad_debt).toFixed(2);
+                            return parseFloat($profile);
+                            // if(parseFloat($profile) == 0) return '--';
+                            // if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
+                            // else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
                         }
                     },
                     {
@@ -1493,8 +1516,8 @@
                             var html =
                                 $html_confirm+
                                 $html_delete+
-                                //                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-                                //                                '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
+                                // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
+                                // '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
                                 '';
                             return html;
 
@@ -1523,7 +1546,8 @@
                         render: function(data, type, row, meta) {
 //                            return data;
                             if(row.finance_type == 1) return '<small class="btn-xs bg-olive">充值</small>';
-                            else if(row.finance_type == 91) return '<small class="btn-xs bg-orange">退款</small>';
+                            if(row.finance_type == 91) return '<small class="btn-xs bg-orange">坏账</small>';
+                            else if(row.finance_type == 101) return '<small class="btn-xs bg-red">退款</small>';
                             else return '有误';
                         }
                     },

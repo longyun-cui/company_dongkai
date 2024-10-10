@@ -19,6 +19,7 @@ class DK_Finance_Company extends Model
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
 
         'finance_recharge_total', 'finance_consumption', 'finance_balance', 'funds_balance_prompt_threshold',
+        'funds_bad_debt',
 
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
