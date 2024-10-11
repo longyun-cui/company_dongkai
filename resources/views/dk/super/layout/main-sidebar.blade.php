@@ -68,6 +68,11 @@
                     <i class="fa fa-user"></i><span>客户列表</span>
                 </a>
             </li>
+            <li class="treeview {{ $menu_active_of_finance_user_list_for_all or '' }}">
+                <a href="{{ url('/user/finance-user-list-for-all') }}">
+                    <i class="fa fa-user"></i><span>财务用户列表</span>
+                </a>
+            </li>
 
 
 

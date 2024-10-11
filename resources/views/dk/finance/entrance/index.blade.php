@@ -190,19 +190,19 @@
                             <div class="row">
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">{{ $me->channel_er->funds_recharge_total or '' }}</h5>
+                                        <h5 class="description-header">{{ format_number((float)$me->channel_er->funds_recharge_total) }}</h5>
                                         <span class="description-text">累计充值</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">{{ $me->channel_er->funds_already_settled_total or '' }}</h5>
+                                        <h5 class="description-header">{{ format_number((float)$me->channel_er->funds_already_settled_total) }}</h5>
                                         <span class="description-text">已结算</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">{{ $me->channel_er->funds_recharge_total - $me->channel_er->funds_already_settled_total }}</h5>
+                                        <h5 class="description-header">{{ format_number((float)($me->channel_er->funds_recharge_total - $me->channel_er->funds_already_settled_total)) }}</h5>
                                         <span class="description-text">余额</span>
                                     </div>
                                 </div>
@@ -265,14 +265,14 @@
                                         {{ $v->name or '' }}
                                     </a>
                                 </td>
-                                <td>{{ (float)($v->funds_should_settled_total) }}</td>
-                                <td>{{ (float)($v->funds_already_settled_total) }}</td>
-                                <td>{{ (float)($v->funds_bad_debt_total) }}</td>
+                                <td>{{ format_number((float)($v->funds_should_settled_total)) }}</td>
+                                <td>{{ format_number((float)($v->funds_already_settled_total)) }}</td>
+                                <td>{{ format_number((float)($v->funds_bad_debt_total)) }}</td>
                                 <td>
                                     @if(($v->funds_should_settled_total - $v->funds_already_settled_total - $v->funds_bad_debt_total) > 0)
-                                        <b class="label label-danger">{{ (float)($v->funds_should_settled_total - $v->funds_already_settled_total - $v->funds_bad_debt_total) }}</b>
+                                        <b class="label label-danger">{{ format_number((float)($v->funds_should_settled_total - $v->funds_already_settled_total - $v->funds_bad_debt_total)) }}</b>
                                     @else
-                                        <b>{{ (float)($v->funds_should_settled_total - $v->funds_already_settled_total - $v->funds_bad_debt_total) }}</b>
+                                        <b>{{ format_number((float)($v->funds_should_settled_total - $v->funds_already_settled_total - $v->funds_bad_debt_total)) }}</b>
                                     @endif
                                 </td>
                             </tr>

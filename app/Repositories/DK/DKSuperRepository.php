@@ -10,6 +10,7 @@ use App\Models\DK\YH_Item;
 use App\Models\DK\YH_Pivot_Item_Relation;
 
 use App\Models\DK\YH_UserExt;
+use App\Models\DK_Finance\DK_Finance_User;
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade;
@@ -817,6 +818,113 @@ class DKSuperRepository {
 
         $query = DK_User::select('*')
             ->with(['creator','superior','department_district_er','department_group_er'])
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[0,1,9,11,19,21,22,31,33,41,61,66,71,77,81,84,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->with('ep','parent','fund')
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0]))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
+
+        // 员工类型
+        if(!empty($post_data['user_type']))
+        {
+            if(!in_array($post_data['user_type'],[-9,-11,-41,-6,-7,-8,-1,0]))
+            {
+                $query->where('user_type', $post_data['user_type']);
+            }
+
+            if($post_data['user_type'] == -9)
+            {
+                $query->whereIn('user_type', [11,41,61]);
+            }
+            if($post_data['user_type'] == -11)
+            {
+                $query->whereIn('user_type', [11,41,61,71,81,84]);
+            }
+            if($post_data['user_type'] == -41)
+            {
+                $query->whereIn('user_type', [41,71,81,84]);
+            }
+            if($post_data['user_type'] == -6)
+            {
+                $query->whereIn('user_type', [61,66]);
+            }
+            if($post_data['user_type'] == -7)
+            {
+                $query->whereIn('user_type', [71,77]);
+            }
+            if($post_data['user_type'] == -8)
+            {
+                $query->whereIn('user_type', [81,84,88]);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+    // 【用户】【员工管理】返回-列表-视图
+    public function view_user_finance_user_list_for_all($post_data)
+    {
+        $this->get_me();
+
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $return['department_district_list'] = $department_district_list;
+
+        $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.finance-user-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【用户】【员工管理】返回-列表-数据
+    public function get_user_finance_user_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Finance_User::select('*')
+            ->with(['creator'])
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,31,33,41,61,66,71,77,81,84,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
