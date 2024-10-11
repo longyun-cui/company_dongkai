@@ -212,6 +212,55 @@
 
 
         // 【日报列表】按【月】搜索
+        $(".main-content").on('click', "#filter-submit-for-daily-by-all", function() {
+
+            $("#datatable-for-daily-list").find('input[name=daily-time-type]').val('all');
+
+            var $statistic_title = '';
+
+            var $company = $('select[name=daily-company]').find("option:selected");
+            if($company.val() != "-1")
+            {
+                var $company_title = $company.text();
+                $statistic_title = $company_title;
+            }
+
+            var $channel = $('select[name=daily-channel]').find("option:selected");
+            if($channel.val() != "-1")
+            {
+                var $channel_title = $channel.text();
+                $statistic_title = $channel_title;
+            }
+
+            var $business = $('select[name=daily-business]').find("option:selected");
+            if($business.val() != "-1")
+            {
+                var $business_title = $business.text();
+                $statistic_title = $business_title;
+            }
+
+            var $project = $('select[name=daily-project]').find("option:selected");
+            if($project.val() != "-1")
+            {
+                var $project_title = $project.text();
+                $statistic_title = $project_title;
+            }
+
+            if($statistic_title)
+            {
+                $statistic_title = "【" + $statistic_title + "】";
+                $(".statistic-title").html($statistic_title);
+            }
+
+            $(".statistic-time-type-title").html('全部');
+            $(".statistic-time-title").html('');
+
+            $('#datatable_ajax').DataTable().ajax.reload();
+            // $('#datatable_ajax_daily').DataTable().ajax.reload();
+            // $('#datatable_ajax_project').DataTable().ajax.reload();
+
+        });
+        // 【日报列表】按【月】搜索
         $(".main-content").on('click', "#filter-submit-for-daily-by-month", function() {
 
             $("#datatable-for-daily-list").find('input[name=daily-time-type]').val('month');

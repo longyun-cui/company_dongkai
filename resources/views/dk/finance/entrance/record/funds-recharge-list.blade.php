@@ -502,7 +502,7 @@
 @section('custom-style')
     <style>
         .tableArea .main-table {
-            min-width:1800px;
+            min-width:100%;
         }
     </style>
 @endsection
@@ -577,19 +577,20 @@
 //                        'orderable': false
 //                    },
                     {
-                        "className": "font-12px",
-                        "width": "50px",
                         "title": "ID",
                         "data": "id",
+                        "className": "",
+                        "width": "50px",
                         "orderable": true,
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
+                    @if($me->user_type != 41)
                     {
-                        "width": "120px",
                         "title": "操作",
                         "data": 'id',
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -627,7 +628,7 @@
 
 
                             var html =
-                                    $html_confirm+
+                                    // $html_confirm+
                                     $html_delete+
                                     $html_record+
 //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
@@ -637,24 +638,25 @@
 
                         }
                     },
+                    @endif
+                    // {
+                    //     "width": "60px",
+                    //     "title": "状态",
+                    //     "data": "is_confirmed",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.deleted_at == null)
+                    //         {
+                    //             if(data == 1) return '<small class="btn-xs btn-success">已确认</small>';
+                    //             else return '<small class="btn-xs btn-danger">待确认</small>';
+                    //         }
+                    //         else return '<small class="btn-xs bg-black">已删除</small>';
+                    //     }
+                    // },
                     {
-                        "width": "60px",
-                        "title": "状态",
-                        "data": "is_confirmed",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.deleted_at == null)
-                            {
-                                if(data == 1) return '<small class="btn-xs btn-success">已确认</small>';
-                                else return '<small class="btn-xs btn-danger">待确认</small>';
-                            }
-                            else return '<small class="btn-xs bg-black">已删除</small>';
-                        }
-                    },
-                    {
-                        "width": "60px",
                         "title": "收支类型",
                         "data": 'finance_type',
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 1) return '<small class="btn-xs bg-olive">充值</small>';
@@ -663,56 +665,56 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "60px",
                         "title": "创建者",
                         "data": "creator_id",
+                        "className": "",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                         }
                     },
+//                     {
+//                         "className": "text-center",
+//                         "width": "60px",
+//                         "title": "确认者",
+//                         "data": "confirmer_id",
+//                         "orderable": false,
+//                         render: function(data, type, row, meta) {
+//                             return row.confirmer == null ? '' : '<a href="javascript:void(0);">'+row.confirmer.username+'</a>';
+//                         }
+//                     },
+//                     {
+//                         "className": "text-center",
+//                         "width": "108px",
+//                         "title": "确认时间",
+//                         "data": "confirmed_at",
+//                         "orderable": false,
+//                         render: function(data, type, row, meta) {
+//                             if(!data) return '';
+//
+//                             var $date = new Date(data*1000);
+//                             var $year = $date.getFullYear();
+//                             var $month = ('00'+($date.getMonth()+1)).slice(-2);
+//                             var $day = ('00'+($date.getDate())).slice(-2);
+//                             var $hour = ('00'+$date.getHours()).slice(-2);
+//                             var $minute = ('00'+$date.getMinutes()).slice(-2);
+//                             var $second = ('00'+$date.getSeconds()).slice(-2);
+//
+// //                            return $year+'-'+$month+'-'+$day;
+// //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+// //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+//
+//                             var $currentYear = new Date().getFullYear();
+//                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                             else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//
+//                         }
+//                     },
                     {
-                        "className": "text-center",
-                        "width": "60px",
-                        "title": "确认者",
-                        "data": "confirmer_id",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return row.confirmer == null ? '' : '<a href="javascript:void(0);">'+row.confirmer.username+'</a>';
-                        }
-                    },
-                    {
-                        "className": "text-center",
-                        "width": "108px",
-                        "title": "确认时间",
-                        "data": "confirmed_at",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(!data) return '';
-
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-
-                        }
-                    },
-                    {
-                        "width": "160px",
                         "title": "渠道",
                         "data": "company_id",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.company_er == null) return '--';
@@ -721,10 +723,10 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "88px",
                         "title": "交易日期",
                         "data": "transaction_time",
+                        "className": "",
+                        "width": "88px",
                         "orderable": true,
                         render: function(data, type, row, meta) {
 //                            return data;
@@ -747,10 +749,10 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "60px",
                         "title": "金额",
                         "data": "transaction_amount",
+                        "className": "",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.finance_type == 1) return '<b class="text-olive">'+parseFloat(data)+'</b>';
@@ -759,9 +761,10 @@
                         }
                     },
                     {
-                        "width": "80px",
                         "title": "费用名目",
                         "data": "title",
+                        "width": "80px",
+                        "className": "",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             // if(row.is_confirmed != 1)
@@ -780,9 +783,10 @@
                         }
                     },
                     {
-                        "width": "80px",
                         "title": "支付方式",
                         "data": "transaction_type",
+                        "width": "80px",
+                        "className": "",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             // if(row.is_confirmed != 1)
@@ -801,10 +805,10 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "120px",
                         "title": "收款账户",
                         "data": "transaction_receipt_account",
+                        "className": "",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             // if(row.is_confirmed != 1)
@@ -823,10 +827,10 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "120px",
                         "title": "支出账户",
                         "data": "transaction_payment_account",
+                        "className": "",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             // if(row.is_confirmed != 1)
@@ -845,10 +849,10 @@
                         }
                     },
                     {
-                        "className": "",
-                        "width": "120px",
                         "title": "交易单号",
                         "data": "transaction_order",
+                        "className": "",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             // if(row.is_confirmed != 1)
@@ -867,10 +871,10 @@
                         }
                     },
                     {
-                        "className": "text-center",
-                        "width": "",
                         "title": "备注",
                         "data": "remark",
+                        "className": "text-center",
+                        "width": "",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_confirmed != 1 && row.item_status != 97)
@@ -891,10 +895,10 @@
                         }
                     },
                     {
-                        "className": "font-12px",
-                        "width": "108px",
                         "title": "创建时间",
                         "data": 'created_at',
+                        "className": "font-12px",
+                        "width": "108px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;

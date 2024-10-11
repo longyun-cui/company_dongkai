@@ -249,6 +249,30 @@
         });
 
 
+
+
+        $(".overview-company").on("select2:select", function() {
+            $(".overview-channel").val(-1).trigger("change");
+            $(".overview-business").val(-1).trigger("change");
+            $(".overview-project").val(-1).trigger("change");
+        });
+        $(".overview-channel").on("select2:select", function() {
+            $(".overview-company").val(-1).trigger("change");
+            $(".overview-business").val(-1).trigger("change");
+            $(".overview-project").val(-1).trigger("change");
+        });
+        $(".overview-business").on("select2:select", function() {
+            $(".overview-company").val(-1).trigger("change");
+            $(".overview-channel").val(-1).trigger("change");
+            $(".overview-project").val(-1).trigger("change");
+        });
+        $(".overview-project").on("select2:select", function() {
+            $(".overview-company").val(-1).trigger("change");
+            $(".overview-business").val(-1).trigger("change");
+            $(".overview-channel").val(-1).trigger("change");
+        });
+
+
     });
 
 

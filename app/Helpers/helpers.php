@@ -788,6 +788,38 @@ if (! function_exists('storage_resource_path'))
     }
 }
 
+
+
+/*数字转换*/
+if (! function_exists('format_number'))
+{
+    function format_number($number,$digits = 4) {
+        // 将数字转换为字符串
+        $number_str = (string)$number;
+        // 使用正则表达式每4位数字后添加逗号
+        $formatted_number = preg_replace('/(?<=[0-9])(?=(?:[0-9]{'.$digits.'})+(?![0-9]))/', ',',$number_str);
+        return $formatted_number;
+    }
+}
+/*检查是否是手机号码*/
+if (! function_exists('money_format_comma'))
+{
+    function money_format_comma($money) {
+        if(is_numeric($money))
+        {
+            list($int, $decimal) = explode('.', $money);
+            $int = preg_replace('/(?<=[0-9])(?=(?:[0-9]{4})+(?![0-9]))/', ',',$int);
+            if($decimal) $money = $int .'.'. $decimal;
+            else $money = $int;
+            return $money;
+        }
+        else return $money;
+    }
+}
+
+
+
+
 /*检查是否是手机号码*/
 if(! function_exists('isMobile'))
 {

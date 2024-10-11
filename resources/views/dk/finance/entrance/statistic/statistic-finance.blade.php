@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '公司概览' }} - 财务系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '财务报表' }} - 财务系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')公司概览 - 财务系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')财务报表 - 财务系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -22,61 +22,38 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">
-                    @if(!empty($channel_name))
-                        <span class="statistic-title">【{{ $channel_name or '' }}】</span>
-                    @elseif(!empty($company_name))
-                        <span class="statistic-title">【{{ $company_name or '' }}】</span>
-                    @else
-                        <span class="statistic-title">【全部】</span>
-                    @endif
-
-                    <span class="statistic-time-type-title">按月查询</span>
-                    <span class="statistic-time-title">（{{ date('Y-m') }}月）</span>
+                    <span class="statistic-title">全部</span>
+                    <span class="statistic-time-type-title"></span>
+                    <span class="statistic-time-title">（全部）</span>
                 </h3>
             </div>
 
-            <div class="box-body datatable-body item-main-body" id="statistic-for-overview">
+            <div class="box-body datatable-body item-main-body" id="statistic-for-finance">
 
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="hidden" name="overview-time-type" value="month" readonly>
+                        <input type="hidden" name="finance-time-type" value="" readonly>
 
                         @if(in_array($me->user_type,[0,9,11,31]))
-                        <select class="form-control form-filter select-select2 select2-box overview-company" name="overview-company" style="width:120px;">
+                        <select class="form-control form-filter select-select2 select2-box finance-company" name="finance-company" style="width:120px;">
                             <option value="-1">选择公司</option>
                             @if(!empty($company_list))
                                 @foreach($company_list as $v)
-                                    @if(!empty($company_id))
-                                        @if($v->id == $company_id)
-                                            <option value="{{ $v->id }}" selected="selected">{{ $v->name }}</option>
-                                        @else
-                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                        @endif
-                                    @else
-                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                    @endif
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
                                 @endforeach
                             @endif
                         </select>
-                        <select class="form-control form-filter select-select2 select2-box overview-channel" name="overview-channel" style="width:120px;">
+                        <select class="form-control form-filter select-select2 select2-box finance-channel" name="finance-channel" style="width:120px;">
                             <option value="-1">选择代理</option>
                             @if(!empty($channel_list))
                                 @foreach($channel_list as $v)
-                                    @if(!empty($channel_id))
-                                        @if($v->id == $channel_id)
-                                            <option value="{{ $v->id }}" selected="selected">{{ $v->name }}</option>
-                                        @else
-                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                        @endif
-                                    @else
-                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                    @endif
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
                                 @endforeach
                             @endif
                         </select>
-                        <select class="form-control form-filter select-select2 select2-box overview-business" name="overview-business" style="width:120px;">
+                        <select class="form-control form-filter select-select2 select2-box finance-business" name="finance-business" style="width:120px;">
                             <option value="-1">选择商务</option>
                             @if(!empty($business_list))
                                 @foreach($business_list as $v)
@@ -85,7 +62,7 @@
                             @endif
                         </select>
                         @endif
-                        <select class="form-control form-filter select-select2 select2-box overview-project" name="overview-project" style="width:160px;">
+                        <select class="form-control form-filter select-select2 select2-box finance-project" name="finance-project" style="width:160px;">
                             <option value="-1">选择项目</option>
                             @if(!empty($project_list))
                                 @foreach($project_list as $v)
@@ -94,54 +71,55 @@
                             @endif
                         </select>
 
-                        {{--按月查看--}}
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-overview">
+
+                        {{--全部查询--}}
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance-by-all">
+                            <i class="fa fa-search"></i> 全部查询
+                        </button>
+
+
+                        {{--按月查询--}}
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-finance">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="overview-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-next-for-overview">
+                        <input type="text" class="form-control form-filter filter-keyup month_picker" name="finance-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-next-for-finance">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-overview-by-month">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance-by-month">
                             <i class="fa fa-search"></i> 按月查询
                         </button>
 
 
-                        {{--按天查看--}}
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-overview">
+                        {{--按天查询--}}
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-finance">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="overview-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-overview">
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="finance-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-finance">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-overview-by-date">
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance-by-date">
                             <i class="fa fa-search"></i> 按日查询
                         </button>
 
 
-                        {{--按时间段查看--}}
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="overview-start" placeholder="起始日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="overview-ended" placeholder="结束日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-overview-by-period" style="width:100px;">
+                        {{--按时间段查询--}}
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="finance-start" placeholder="起始日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="finance-ended" placeholder="结束日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance-by-period" style="width:100px;">
                             <i class="fa fa-search"></i> 按时间段查询
                         </button>
 
 
-{{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-overview">--}}
-{{--                            <i class="fa fa-search"></i> 全部查询--}}
-{{--                        </button>--}}
-                        <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-overview">
+                        <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-finance">
                             <i class="fa fa-remove"></i> 清空重选
                         </button>
-{{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-overview">--}}
-{{--                            <i class="fa fa-search"></i> 搜索--}}
-{{--                        </button>--}}
-                        <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-overview">
+                        <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-finance">
                             <i class="fa fa-circle-o-notch"></i> 刷新
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-overview">
-                            <i class="fa fa-undo"></i> 重置
+                        <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-finance">
+                            <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
                     </div>
@@ -154,54 +132,71 @@
     </div>
 </div>
 
-
 <div class="row">
     <div class="col-md-12">
 
 
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">财务概览</h3>
 
-        {{--渠道列表--}}
-        <div class="box box-info main-list-body">
-
-            <div class="box-header with-border" style="margin:4px 0;">
-                <h3 class="box-title">
-                    <span class="statistic-title-for-channel">代理列表</span>
-                </h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                </div>
             </div>
-
-            <div class="box-body datatable-body item-main-body" id="datatable-for-channel">
-
-                <div class="tableArea">
-                    <table class='table table-striped table-bordered- table-hover main-table' id='datatable_ajax_channel'>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table class="table no-margin">
                         <thead>
-                        <tr role='row' class='heading'>
+                        <tr>
+                            <th>累计充值</th>
+                            <th>退款</th>
+                            <th>应结算</th>
+                            <th>已结算</th>
+                            <th>坏账</th>
+                            <th>待收款</th>
                         </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td><b class="recharge_total"></b></td>
+                                <td><b class="recharge_refund_total"></b></td>
+                                <td><b class="recharge_balance"></b></td>
+                                <td><b class="using_settled_total"></b></td>
+                                <td><b class="using_bad_total"></b></td>
+                                <td><b class="using_refund_total"></b></td>
+                                <td><b class="recharge_balance"></b></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-
+                <!-- /.table-responsive -->
             </div>
-
+            <!-- /.box-body -->
+            <div class="box-footer clearfix _none">
+                <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+                <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+            </div>
+            <!-- /.box-footer -->
         </div>
 
 
+        @if(in_array($me->user_type,[0,1,9,11,31]))
         <div class="box box-primary bg-white">
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">
-                    <span class="statistic-title-for-project">项目列表</span>
+                    <span class="statistic-title-">代理列表</span>
                 </h3>
             </div>
 
-            <div class="box-body datatable-body item-main-body" id="statistic-for-project">
-
+            <div class="box-body datatable-body item-main-body" id="statistic-for-channel">
                 <div class="tableArea">
-                    <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax_project'>
+                    <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax_channel'>
                         <thead>
-                            <tr role='row' class='heading'>
-                            </tr>
                         </thead>
                         <tbody>
                         </tbody>
@@ -209,14 +204,34 @@
                         </tfoot>
                     </table>
                 </div>
-
             </div>
 
         </div>
+        @endif
 
 
+        <div class="box box-primary bg-white">
 
+            <div class="box-header with-border" style="margin:4px 0;">
+                <h3 class="box-title">
+                    <span class="statistic-title-">项目列表</span>
+                </h3>
+            </div>
 
+            <div class="box-body datatable-body item-main-body" id="statistic-for-project">
+                <div class="tableArea">
+                    <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax_project'>
+                        <thead>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+        </div>
 
     </div>
 </div>
@@ -245,7 +260,7 @@
         .bg-delivered { background:#8FEBE5; }
         .bg-group { background:#E2FCAB; }
         .bg-district { background:#F6C5FC; }
-        .bg-overview-customer { background:#C3FAF7; }
+        .bg-finance-customer { background:#C3FAF7; }
 
         .bg-fee-2 { background:#C3FAF7; }
         .bg-fee { background:#8FEBE5; }
@@ -267,7 +282,7 @@
     <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
-@include(env('TEMPLATE_DK_FINANCE').'entrance.statistic.statistic-company-overview-script')
+@include(env('TEMPLATE_DK_FINANCE').'entrance.statistic.statistic-finance-script')
 <script>
     var TableDatatablesAjax_channel = function () {
         var datatableAjax_channel = function () {
@@ -280,30 +295,30 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/statistic/statistic-get-data-for-company-overview-of-channel-list') }}",
+                    'url': "{{ url('/statistic/statistic-get-data-for-finance-of-channel-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="overview-id"]').val();
-                        d.name = $('input[name="overview-name"]').val();
-                        d.title = $('input[name="overview-title"]').val();
-                        d.keyword = $('input[name="overview-keyword"]').val();
-                        d.remark = $('input[name="overview-remark"]').val();
-                        d.description = $('input[name="overview-description"]').val();
-                        d.status = $('select[name="overview-status"]').val();
-                        d.company_category = $('select[name="overview-category"]').val();
-                        d.company_type = $('select[name="overview-type"]').val();
+                        d.id = $('input[name="finance-id"]').val();
+                        d.name = $('input[name="finance-name"]').val();
+                        d.title = $('input[name="finance-title"]').val();
+                        d.keyword = $('input[name="finance-keyword"]').val();
+                        d.remark = $('input[name="finance-remark"]').val();
+                        d.description = $('input[name="finance-description"]').val();
+                        d.status = $('select[name="finance-status"]').val();
+                        d.company_category = $('select[name="finance-category"]').val();
+                        d.company_type = $('select[name="finance-type"]').val();
                         d.work_status = $('select[name="work_status"]').val();
-                        d.company = $('select[name="overview-company"]').val();
-                        d.channel = $('select[name="overview-channel"]').val();
-                        d.business = $('select[name="overview-business"]').val();
-                        d.project = $('select[name="overview-project"]').val();
-                        d.time_type = $('input[name="overview-time-type"]').val();
-                        d.month = $('input[name="overview-month"]').val();
-                        d.date = $('input[name="overview-date"]').val();
-                        d.assign_start = $('input[name="overview-start"]').val();
-                        d.assign_ended = $('input[name="overview-ended"]').val();
+                        d.company = $('select[name="finance-company"]').val();
+                        d.channel = $('select[name="finance-channel"]').val();
+                        d.business = $('select[name="finance-business"]').val();
+                        d.project = $('select[name="finance-project"]').val();
+                        d.time_type = $('input[name="finance-time-type"]').val();
+                        d.month = $('input[name="finance-month"]').val();
+                        d.date = $('input[name="finance-date"]').val();
+                        d.assign_start = $('input[name="finance-start"]').val();
+                        d.assign_ended = $('input[name="finance-ended"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",
@@ -592,26 +607,26 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/statistic/statistic-get-data-for-service-of-project-list') }}",
+                    'url': "{{ url('/statistic/statistic-get-data-for-finance-of-project-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="overview-id"]').val();
-                        d.name = $('input[name="overview-name"]').val();
-                        d.title = $('input[name="overview-title"]').val();
-                        d.keyword = $('input[name="overview-keyword"]').val();
-                        d.remark = $('input[name="overview-remark"]').val();
-                        d.description = $('input[name="overview-description"]').val();
-                        d.company = $('select[name="overview-company"]').val();
-                        d.channel = $('select[name="overview-channel"]').val();
-                        d.business = $('select[name="overview-business"]').val();
-                        d.project = $('select[name="overview-project"]').val();
-                        d.time_type = $('input[name="overview-time-type"]').val();
-                        d.month = $('input[name="overview-month"]').val();
-                        d.date = $('input[name="overview-date"]').val();
-                        d.assign_start = $('input[name="overview-start"]').val();
-                        d.assign_ended = $('input[name="overview-ended"]').val();
+                        d.id = $('input[name="finance-id"]').val();
+                        d.name = $('input[name="finance-name"]').val();
+                        d.title = $('input[name="finance-title"]').val();
+                        d.keyword = $('input[name="finance-keyword"]').val();
+                        d.remark = $('input[name="finance-remark"]').val();
+                        d.description = $('input[name="finance-description"]').val();
+                        d.company = $('select[name="finance-company"]').val();
+                        d.channel = $('select[name="finance-channel"]').val();
+                        d.business = $('select[name="finance-business"]').val();
+                        d.project = $('select[name="finance-project"]').val();
+                        d.time_type = $('input[name="finance-time-type"]').val();
+                        d.month = $('input[name="finance-month"]').val();
+                        d.date = $('input[name="finance-date"]').val();
+                        d.assign_start = $('input[name="finance-start"]').val();
+                        d.assign_ended = $('input[name="finance-ended"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",
@@ -651,9 +666,13 @@
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('_bold text-green');
+                                $(nTd).addClass('modal-show-for-attachment-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','附件');
+                                $(nTd).attr('data-key','attachment_list').attr('data-value','');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -695,7 +714,7 @@
                     {
                         "title": "所属代理",
                         "data": "channel_id",
-                        "className": "",
+                        "className": "text-center",
                         "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -708,7 +727,7 @@
                     {
                         "title": "商务人员",
                         "data": "business_id",
-                        "className": "",
+                        "className": "text-center",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -719,7 +738,7 @@
 //                     {
 //                         "title": "团队",
 //                         "data": "pivot_project_team",
-//                         "className": "",
+//                         "className": "text-center",
 //                         "width": "160px",
 //                         "orderable": false,
 //                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -739,12 +758,6 @@
                         "className": "text-center bg-journey",
                         "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             return parseFloat(data);
                         }
@@ -757,9 +770,15 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('_bold text-green');
+                                $(nTd).addClass('modal-show-for-info-text-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','总无效量');
+                                $(nTd).attr('data-key','delivery_invalid_quantity').attr('data-value',data);
+                                $(nTd).attr('data-column-name','总无效量');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -772,12 +791,6 @@
                         "className": "text-center bg-journey",
                         "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             return row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
                         }
@@ -788,14 +801,8 @@
                         "className": "text-center bg-route",
                         "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
                         render: function(data, type, row, meta) {
-                            return moneyAddCommas(parseFloat(data).toFixed(2));
+                            return parseFloat(parseFloat(data).toFixed(2));
                         }
                     },
                     {
@@ -804,12 +811,6 @@
                         "className": "text-center bg-route",
                         "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
                             var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
@@ -829,14 +830,20 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('_bold text-green');
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','渠道单价');
+                                $(nTd).attr('data-key','channel_unit_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','渠道单价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return moneyAddCommas(data);
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -845,19 +852,13 @@
                         "className": "text-center bg-income",
                         "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             if(data == 0)
                             {
-                                var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
-                                return moneyAddCommas($channel_unit_price);
+                                var $channel_cost = row.channel_unit_price * row.total_delivery_quantity;
+                                return parseFloat($channel_cost);
                             }
-                            else return moneyAddCommas(data);
+                            else return data;
                         }
                     },
                     {
@@ -867,14 +868,20 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
+                            if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('_bold text-green');
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','合作单价');
+                                $(nTd).attr('data-key','cooperative_unit_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','合作单价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return moneyAddCommas(data);
+                            return parseFloat(data);
                         }
                     },
                     {
@@ -883,12 +890,6 @@
                         "className": "text-center bg-deduction",
                         "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             if(data == 0)
                             {
@@ -899,37 +900,31 @@
                                 // else return parseFloat($settlement_amount);
                                 return "--";
                             }
-                            else return moneyAddCommas(data);
+                            else return data;
                         }
                     },
                     {
                         "title": "已结算",
-                        "data": "settled_amount",
+                        "data": "funds_already_settled_total",
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(true)
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
                                 $(nTd).attr('data-column-name','已结算');
                             }
                         },
                         render: function(data, type, row, meta) {
                             if(data == 0) return "--";
-                            return moneyAddCommas(data);
+                            return parseFloat(data);
                         }
                     },
                     {
                         "title": "坏账",
-                        "data": 'funds_bad_debt',
+                        "data": 'funds_bad_debt_total',
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
                         "orderable": false,
@@ -943,15 +938,9 @@
                     {
                         "title": "待收款",
                         "data": "balance",
-                        "className": "bg-empty",
+                        "className": "text-center bg-empty",
                         "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             // 应结算金额
                             // // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
@@ -959,14 +948,14 @@
                             // var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
                             var $settlement_amount = row.cooperative_cost;
                             // 已结算金额
-                            var $settled_amount = parseFloat(row.settled_amount);
+                            var $funds_already_settled_total = parseFloat(row.funds_already_settled_total);
                             // 坏账金额
-                            var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+                            var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
 
-                            var $balance = parseFloat($settlement_amount - $settled_amount - $funds_bad_debt);
+                            var $balance = parseFloat($settlement_amount - $funds_already_settled_total - $funds_bad_debt_total);
                             if(parseFloat($balance) == 0) return '--';
-                            else if(parseFloat($balance) > 0) return '<b class="text-red">' + moneyAddCommas($balance) + '</b>';
-                            else return moneyAddCommas($balance);
+                            else if(parseFloat($balance) > 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
+                            else return parseFloat($balance);
                         }
                     },
                     {
@@ -975,12 +964,6 @@
                         "className": "text-center bg-finance",
                         "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(['总计','合计'].includes(row.id))
-                            {
-                                $(nTd).addClass('_bold text-green');
-                            }
-                        },
                         render: function(data, type, row, meta) {
                             // 应结算金额
                             // // var $delivery_effective_quantity = row.total_delivery_quantity - row.delivery_invalid_quantity;
@@ -990,14 +973,18 @@
                             // 总成本
                             var $total_cost = row.total_cost;
                             // 渠道费用
-                            // var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
-                            var $channel_unit_price = row.channel_cost;
-                            // 坏账金额
-                            var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+                            // var $channel_cost = row.channel_unit_price * row.total_delivery_quantity;
+                            // var $channel_cost = row.channel_cost;
+                            var $channel_cost = 0;
+                            if(row.channel_cost == 0)
+                            {
+                                $channel_cost = parseFloat(row.channel_unit_price * row.total_delivery_quantity);
+                            }
+                            else $channel_cost = row.channel_cost;
 
-                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price - $funds_bad_debt).toFixed(2);
-                            if(parseFloat($profile) < 0) return '<b class="text-red">' + moneyAddCommas($profile) + '</b>';
-                            else  return '<b class="text-green">' + moneyAddCommas($profile) + '</b>';
+                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_cost).toFixed(2);
+                            if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
+                            else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
                         }
                     },
                 ],

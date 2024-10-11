@@ -339,6 +339,30 @@
         });
 
 
+
+
+        $(".service-company").on("select2:select", function() {
+            $(".service-channel").val(-1).trigger("change");
+            $(".service-business").val(-1).trigger("change");
+            $(".service-project").val(-1).trigger("change");
+        });
+        $(".service-channel").on("select2:select", function() {
+            $(".service-company").val(-1).trigger("change");
+            $(".service-business").val(-1).trigger("change");
+            $(".service-project").val(-1).trigger("change");
+        });
+        $(".service-business").on("select2:select", function() {
+            $(".service-company").val(-1).trigger("change");
+            $(".service-channel").val(-1).trigger("change");
+            $(".service-project").val(-1).trigger("change");
+        });
+        $(".service-project").on("select2:select", function() {
+            $(".service-company").val(-1).trigger("change");
+            $(".service-business").val(-1).trigger("change");
+            $(".service-channel").val(-1).trigger("change");
+        });
+
+
     });
 
 

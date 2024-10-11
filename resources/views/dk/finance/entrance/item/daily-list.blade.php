@@ -149,12 +149,12 @@
 {{--                        </button>--}}
 
 
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit-" id="filter-submit-for-daily-by-all">
+                            <i class="fa fa-search"></i> 全部搜索
+                        </button>
                         <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
                             <i class="fa fa-remove"></i> 清空重选
                         </button>
-{{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">--}}
-{{--                            <i class="fa fa-search"></i> 搜索--}}
-{{--                        </button>--}}
                         <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-order">
                             <i class="fa fa-circle-o-notch"></i> 刷新
                         </button>

@@ -585,7 +585,7 @@
                             </button>
                             <button type="button" class="btn radio">
                                 <label>
-                                    <input type="radio" name="finance-create-type" value=91> 退费
+                                    <input type="radio" name="finance-create-type" value=101> 退款
                                 </label>
                             </button>
                         </div>
@@ -613,7 +613,7 @@
                     </div>
                     <datalist id="_transaction_title">
                         <option value="充值" />
-                        <option value="退费" />
+                        <option value="退款" />
                         <option value="其他" />
                     </datalist>
                     {{--支付方式--}}
@@ -624,9 +624,9 @@
                         </div>
                     </div>
                     <datalist id="_transaction_type">
+                        <option value="银行转账" />
                         <option value="微信" />
                         <option value="支付宝" />
-                        <option value="银行卡" />
                         <option value="现金" />
                         <option value="其他" />
                     </datalist>
@@ -719,7 +719,7 @@
                         <select class="form-control form-filter" name="funds_using-finance_type" style="width:96px;">
                             <option value ="-1">选择</option>
                             <option value ="1">充值</option>
-                            <option value ="91">退款</option>
+                            <option value ="101">退款</option>
                         </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-funds_using">
@@ -988,7 +988,14 @@
                             {
                                 $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
                             }
-                            $html_recharge = '<a class="btn btn-xs bg-orange item-modal-show-for-recharge" data-id="'+data+'">充值</a>';
+                            if(row.company_category == 1)
+                            {
+                                $html_recharge = '<a class="btn btn-xs bg-default" data-id="'+data+'">充值</a>';
+                            }
+                            else
+                            {
+                                $html_recharge = '<a class="btn btn-xs bg-orange item-modal-show-for-recharge" data-id="'+data+'">充值</a>';
+                            }
 
                             $html_recharge_record = '<a class="btn btn-xs bg-orange item-modal-show-for-recharge-record" data-id="'+data+'">财务记录</a>';
 
@@ -1168,7 +1175,7 @@
                     },
                     {
                         "title": "已结算",
-                        "data": "settled_amount",
+                        "data": "funds_already_settled_total",
                         "className": "item-show-for-using",
                         "width": "100px",
                         "orderable": false,
@@ -1176,7 +1183,7 @@
                             if(true)
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
                                 $(nTd).attr('data-column-name','已结算');
                             }
                         },
@@ -1192,7 +1199,7 @@
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            var $balance = parseFloat(row.funds_recharge_total - row.settled_amount);
+                            var $balance = parseFloat(row.funds_recharge_total - row.funds_already_settled_total);
                             if($balance == 0) return "--";
                             return $balance;
                         }
@@ -1496,8 +1503,8 @@
                             var html =
                                 $html_confirm+
                                 $html_delete+
-                                //                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-                                //                                '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
+                                // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
+                                // '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
                                 '';
                             return html;
 
@@ -1573,7 +1580,8 @@
                         render: function(data, type, row, meta) {
 //                            return data;
                             if(row.finance_type == 1) return '<small class="btn-xs bg-olive">充值</small>';
-                            else if(row.finance_type == 91) return '<small class="btn-xs bg-orange">退款</small>';
+                            else if(row.finance_type == 91) return '<small class="btn-xs bg-orange">坏账</small>';
+                            else if(row.finance_type == 101) return '<small class="btn-xs bg-red">退款</small>';
                             else return '有误';
                         }
                     },
@@ -1631,7 +1639,8 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.finance_type == 1) return '<b class="text-olive">'+parseFloat(data)+'</b>';
-                            else if(row.finance_type == 21) return '<b class="text-red">'+parseFloat(data)+'</b>';
+                            else if(row.finance_type == 91) return '<b class="text-orange">'+parseFloat(data)+'</b>';
+                            else if(row.finance_type == 101) return '<b class="text-red">'+parseFloat(data)+'</b>';
                             else return parseFloat(data);
                         }
                     },

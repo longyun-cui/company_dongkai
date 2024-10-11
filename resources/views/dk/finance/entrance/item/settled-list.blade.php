@@ -747,7 +747,7 @@
                             </button>
                             <button type="button" class="btn radio">
                                 <label>
-                                    <input type="radio" name="finance-create-type" value=101> 退费
+                                    <input type="radio" name="finance-create-type" value=101> 退款
                                 </label>
                             </button>
                         </div>
@@ -776,7 +776,7 @@
                     <datalist id="_transaction_title">
                         <option value="结算" />
                         <option value="坏账" />
-                        <option value="退费" />
+                        <option value="退款" />
                         <option value="其他" />
                     </datalist>
                     {{--支付方式--}}
@@ -1457,7 +1457,7 @@
                         }
                     },
                     {
-                        "title": "总成本",
+                        "title": "工单成本",
                         "data": "total_cost",
                         "className": "bg-fee-2",
                         "width": "60px",
@@ -1562,7 +1562,7 @@
                     },
                     {
                         "title": "应结算",
-                        "data": "should_settled",
+                        "data": "funds_should_settled_total",
                         "className": "bg-income _bold",
                         "width": "60px",
                         "orderable": false,
@@ -1572,15 +1572,15 @@
                     },
                     {
                         "title": "已结算",
-                        "data": 'already_settled',
-                        "className": "bg-income item-show-for-settle",
+                        "data": 'funds_already_settled_total',
+                        "className": "item-show-for-settle bg-income",
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(true)
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
                                 $(nTd).attr('data-column-name','已结算');
                             }
                         },
@@ -1591,7 +1591,7 @@
                     },
                     {
                         "title": "坏账",
-                        "data": 'funds_bad_debt',
+                        "data": 'funds_bad_debt_total',
                         "className": "item-show-for-settle bg-income",
                         "width": "60px",
                         "orderable": false,
@@ -1599,7 +1599,7 @@
                             if(true)
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
                                 $(nTd).attr('data-column-name','已结算');
                             }
                         },
@@ -1617,13 +1617,13 @@
                         "width": "60px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(parseFloat(row.should_settled - row.already_settled) >  0)
+                            if(parseFloat(row.funds_should_settled_total - row.funds_already_settled_total) >  0)
                             {
                                 $(nTd).addClass('_bold').addClass('text-red');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return parseFloat(row.should_settled - row.already_settled - row.funds_bad_debt);
+                            return parseFloat(row.funds_should_settled_total - row.funds_already_settled_total - row.funds_bad_debt_total);
                         }
                     },
                     {
@@ -1636,13 +1636,13 @@
                             // var $cooperative_unit_price = parseFloat(row.cooperative_unit_price);  // 出勤人力数
                             // var $delivery_quantity_of_effective = parseFloat(row.delivery_quantity_of_effective);
                             // var $income = $cooperative_unit_price * $delivery_quantity_of_effective;
-                            var $should_settled = parseFloat(row.should_settled);
+                            var $funds_should_settled_total = parseFloat(row.funds_should_settled_total);
 
                             var $total_cost = row.total_cost;
                             var $channel_cost = row.channel_cost;
-                            var $funds_bad_debt = row.funds_bad_debt;
+                            var $funds_bad_debt_total = row.funds_bad_debt_total;
 
-                            var $profile = $should_settled - $total_cost - $channel_cost - $funds_bad_debt;
+                            var $profile = $funds_should_settled_total - $total_cost - $channel_cost - $funds_bad_debt_total;
                             return parseFloat($profile);
                         }
                     },

@@ -110,7 +110,23 @@ class DKFinanceController extends Controller
     // 返回主页视图
     public function view_finance_index()
     {
-        return $this->repo->view_finance_index_0();
+        if(Auth::guard("dk_finance_user")->check())
+        {
+            $me = Auth::guard("dk_finance_user")->user();
+            if(in_array($me->user_type,[0,1,9,11,31]))
+            {
+                return $this->repo->view_finance_index_0();
+            }
+            else if(in_array($me->user_type,[41]))
+            {
+                return $this->repo->view_finance_index_for_agent();
+            }
+        }
+    }
+    // 返回主页视图
+    public function view_statistic_channel_settled()
+    {
+        return $this->repo->view_statistic_channel_settled();
     }
 
 
@@ -388,14 +404,14 @@ class DKFinanceController extends Controller
     }
 
     // 【订单管理】添加-财务记录
-    public function operate_company_finance_record_create()
+    public function operate_company_finance_recharge_create()
     {
-        return $this->repo->operate_company_finance_record_create(request()->all());
+        return $this->repo->operate_company_finance_recharge_create(request()->all());
     }
     // 【订单管理】修改-财务记录
-    public function operate_company_finance_record_edit()
+    public function operate_company_finance_recharge_edit()
     {
-        return $this->repo->operate_company_finance_record_edit(request()->all());
+        return $this->repo->operate_company_finance_recharge_edit(request()->all());
     }
 
 
@@ -1084,6 +1100,41 @@ class DKFinanceController extends Controller
 
 
 
+    // 【统计】财务报表
+    public function view_statistic_finance()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_finance(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_finance(request()->all());
+    }
+    //
+    public function get_statistic_data_for_finance_of_dealings()
+    {
+        return $this->repo->get_statistic_data_for_finance_of_dealings(request()->all());
+    }
+    //
+    public function get_statistic_data_for_finance_of_channel_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_finance_of_channel_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_finance_of_project_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_finance_of_project_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_finance_of_daily_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_finance_of_daily_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_finance_of_daily_chart()
+    {
+        return $this->repo->get_statistic_data_for_finance_of_daily_chart(request()->all());
+    }
+
+
+
+
     // 【统计】业务报表
     public function view_statistic_service()
     {
@@ -1109,7 +1160,7 @@ class DKFinanceController extends Controller
 
 
 
-    // 【统计】业务报表
+    // 【统计】公司概览
     public function view_statistic_company_overview()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_company_overview(request()->all());

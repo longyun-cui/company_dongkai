@@ -29,9 +29,8 @@
             </div>
             <div class="box-body">
 
-                @if(!empty($company_list))
                 @foreach($company_list as $v)
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <!-- Widget: user widget style 1 -->
                     <div class="box box-widget widget-user-2">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -49,18 +48,18 @@
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
                                         <h5 class="description-header">{{ format_number($v->funds_recharge_total) }}</h5>
-                                        <span class="description-text">累计充值</span>
+                                        <span class="description-text">充值</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">{{ format_number($v->funds_already_settled_total) }}</h5>
-                                        <span class="description-text">已结算</span>
+                                        <h5 class="description-header">{{ format_number($v->settled_amount) }}</h5>
+                                        <span class="description-text">结算</span>
                                     </div>
                                 </div>
-                                <div class="col-xs-6 col-sm-4 border-right-">
+                                <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">{{ format_number($v->funds_recharge_total - $v->funds_already_settled_total) }}</h5>
+                                        <h5 class="description-header">{{ format_number($v->funds_recharge_total - $v->settled_amount) }}</h5>
                                         <span class="description-text">余额</span>
                                     </div>
                                 </div>
@@ -84,7 +83,6 @@
                     </div>
                 </div>
                 @endforeach
-                @endif
 
             </div>
         </div>
@@ -129,16 +127,17 @@
                                     {{ $v->name or '' }}
                                 </a>
                             </td>
-                            <td>{{ format_number((float)($v->funds_recharge_total)) }}</td>
-                            <td>{{ format_number((float)($v->funds_recharge_total - $v->funds_already_settled_total)) }}</td>
-                            <td>{{ format_number((float)($v->should_settled)) }}</td>
-                            <td>{{ format_number((float)($v->funds_already_settled_total)) }}</td>
-                            <td>{{ format_number((float)($v->funds_bad_debt_total)) }}</td>
+                            <td>{{ (float)($v->funds_recharge_total) }}</td>
+                            <td>{{ (float)($v->funds_recharge_total - $v->settled_amount) }}</td>
+{{--                            <td>{{ (float)($v->funds_recharge_total - $v->should_settled) }}</td>--}}
+                            <td>{{ (float)($v->should_settled) }}</td>
+                            <td>{{ (float)($v->settled_amount) }}</td>
+                            <td>{{ (float)($v->funds_bad_debt) }}</td>
                             <td>
-                                @if(($v->should_settled - $v->funds_already_settled_total - $v->funds_bad_debt_total) > 0)
-                                    <span class="label label-danger">{{ format_number((float)($v->should_settled - $v->funds_already_settled_total - $v->funds_bad_debt_total)) }}</span>
+                                @if($v->should_settled > $v->settled_amount)
+                                    <span class="label label-danger">{{ (float)($v->should_settled - $v->settled_amount - $v->funds_bad_debt) }}</span>
                                 @else
-                                    <span>{{ format_number((float)($v->should_settled - $v->funds_already_settled_total - $v->funds_bad_debt_total)) }}</span>
+                                    <span>{{ (float)($v->should_settled - $v->settled_amount) }}</span>
                                 @endif
                             </td>
                         </tr>
@@ -169,7 +168,7 @@
             </div>
             <div class="box-body">
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <!-- Widget: user widget style 1 -->
                     <div class="box box-widget widget-user-2">
                         <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -191,18 +190,18 @@
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
                                         <h5 class="description-header">{{ $me->channel_er->funds_recharge_total or '' }}</h5>
-                                        <span class="description-text">累计充值</span>
+                                        <span class="description-text">充值</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">{{ $me->channel_er->funds_already_settled_total or '' }}</h5>
-                                        <span class="description-text">已结算</span>
+                                        <h5 class="description-header">{{ $me->channel_er->settled_amount or '' }}</h5>
+                                        <span class="description-text">结算</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-4 border-right">
                                     <div class="description-block">
-                                        <h5 class="description-header">{{ $me->channel_er->funds_recharge_total - $me->channel_er->funds_already_settled_total }}</h5>
+                                        <h5 class="description-header">{{ $me->channel_er->funds_recharge_total - $me->channel_er->settled_amount }}</h5>
                                         <span class="description-text">余额</span>
                                     </div>
                                 </div>
@@ -214,9 +213,9 @@
                         <div class="box-footer no-padding">
                             <ul class="nav nav-stacked">
                                 <li>
-                                    {{--<a target="_blank" href="{{ url('/statistic/statistic-company-overview?company_id='.$v->id) }}">--}}
-                                    {{--财务总览 <span class="pull-right badge bg-blue _none">31</span>--}}
-                                    {{-- </a>--}}
+                                    {{--                                        <a target="_blank" href="{{ url('/statistic/statistic-company-overview?company_id='.$v->id) }}">--}}
+                                    {{--                                            财务总览 <span class="pull-right badge bg-blue _none">31</span>--}}
+                                    {{--                                        </a>--}}
                                 </li>
                             </ul>
                         </div>
@@ -225,72 +224,6 @@
 
             </div>
         </div>
-    </div>
-    @endif
-
-
-    @if(in_array($me->user_type,[41]))
-    <div class="col-md-12">
-        <!-- Application buttons -->
-
-        <div class="box box-info">
-            <div class="box-header with-border">
-                <h3 class="box-title">项目概览</h3>
-
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <div class="table-responsive">
-                    <table class="table no-margin">
-                        <thead>
-                        <tr>
-                            <th>项目</th>
-                            <th>应结算</th>
-                            <th>已结算</th>
-                            <th>坏账</th>
-                            <th>待收款</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @if(!empty($project_list))
-                        @foreach($project_list as $v)
-                            <tr>
-                                <td>
-                                    <a target="_blank" href="{{ url('/item/settled-list?channel_id='.$v->id) }}">
-                                        {{ $v->name or '' }}
-                                    </a>
-                                </td>
-                                <td>{{ (float)($v->funds_should_settled_total) }}</td>
-                                <td>{{ (float)($v->funds_already_settled_total) }}</td>
-                                <td>{{ (float)($v->funds_bad_debt_total) }}</td>
-                                <td>
-                                    @if(($v->funds_should_settled_total - $v->funds_already_settled_total - $v->funds_bad_debt_total) > 0)
-                                        <b class="label label-danger">{{ (float)($v->funds_should_settled_total - $v->funds_already_settled_total - $v->funds_bad_debt_total) }}</b>
-                                    @else
-                                        <b>{{ (float)($v->funds_should_settled_total - $v->funds_already_settled_total - $v->funds_bad_debt_total) }}</b>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                        @endif
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.table-responsive -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer clearfix _none">
-                <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
-                <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
-            </div>
-            <!-- /.box-footer -->
-        </div>
-
     </div>
     @endif
 
@@ -329,33 +262,6 @@
                 </a>
 
             </div>
-        </div>
-    </div>
-
-
-    <div class="col-md-12 _none">
-        <div class="callout callout-success- bg-white">
-
-            <h4>工单统计</h4>
-
-            <div class="box box-info margin-top-32px">
-
-                {{--<div class="box-header">--}}
-                {{--</div>--}}
-
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div id="eChart-order-statistics" style="width:100%;height:320px;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                {{--<div class="box-footer">--}}
-                {{--</div>--}}
-
-            </div>
-
         </div>
     </div>
 

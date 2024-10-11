@@ -19,8 +19,12 @@ class DK_Finance_Project extends Model
 
         'manpower_daily_wage', 'call_charge_coefficient', 'material_coefficient', 'taxes_coefficient',
         'delivery_quantity', 'delivery_quantity_of_effective', 'delivery_quantity_of_invalid',
-        'channel_unit_price', 'cooperative_unit_price', 'settlement_amount', 'settled_amount',
-        'funds_bad_debt',
+        'channel_unit_price', 'cooperative_unit_price',
+
+        'funds_bad_debt_total',
+        'funds_should_settled_total',
+        'funds_already_settled_total',
+        'funds_balance',
         'funds_balance_prompt_threshold',
 
         'inspector_id',

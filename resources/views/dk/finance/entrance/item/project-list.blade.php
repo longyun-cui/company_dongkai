@@ -57,6 +57,33 @@
 {{--                            <option value ="19">非工作状态</option>--}}
 {{--                        </select>--}}
 
+                        @if(in_array($me->user_type,[0,9,11,31]))
+                        <select class="form-control form-filter select-select2 select2-box project-company" name="project-company" style="width:120px;">
+                            <option value="-1">选择公司</option>
+                            @if(!empty($company_list))
+                                @foreach($company_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <select class="form-control form-filter select-select2 select2-box project-channel" name="project-channel" style="width:120px;">
+                            <option value="-1">选择代理</option>
+                            @if(!empty($channel_list))
+                                @foreach($channel_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <select class="form-control form-filter select-select2 select2-box project-business" name="project-business" style="width:120px;">
+                            <option value="-1">选择商务</option>
+                            @if(!empty($business_list))
+                                @foreach($business_list as $v)
+                                    <option value="{{ $v->id }}">{{ $v->username }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        @endif
+
                         <select class="form-control form-filter" name="project-status" style="width:96px;">
                             <option value ="-1">全部</option>
                             <option value ="1">启用</option>
@@ -601,7 +628,7 @@
                             </button>
                             <button type="button" class="btn radio">
                                 <label>
-                                    <input type="radio" name="finance-create-type" value=101> 退费
+                                    <input type="radio" name="finance-create-type" value=101> 退款
                                 </label>
                             </button>
                         </div>
@@ -630,7 +657,7 @@
                     <datalist id="_transaction_title">
                         <option value="结算" />
                         <option value="坏账" />
-                        <option value="退费" />
+                        <option value="退款" />
                         <option value="其他" />
                     </datalist>
                     {{--支付方式--}}
@@ -642,11 +669,11 @@
                     </div>
                     <datalist id="_transaction_type">
                         <option value="余额结算" />
+                        <option value="坏账" />
+                        <option value="银行转账" />
                         <option value="微信" />
                         <option value="支付宝" />
-                        <option value="银行卡" />
                         <option value="现金" />
-                        <option value="坏账" />
                         <option value="其他" />
                     </datalist>
                     {{--收款账号--}}
@@ -840,6 +867,9 @@
                         d.title = $('input[name="project-title"]').val();
                         d.keyword = $('input[name="project-keyword"]').val();
                         d.item_status = $('select[name="project-status"]').val();
+                        d.company = $('select[name="project-company"]').val();
+                        d.channel = $('select[name="project-channel"]').val();
+                        d.business = $('select[name="project-business"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",
@@ -1000,7 +1030,7 @@
                         "title": "所属代理",
                         "data": "channel_id",
                         "className": "text-center",
-                        "width": "120px",
+                        "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1206,7 +1236,7 @@
                     },
                     {
                         "title": "已结算",
-                        "data": "settled_amount",
+                        "data": "funds_already_settled_total",
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
                         "orderable": false,
@@ -1214,7 +1244,7 @@
                             if(true)
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
                                 $(nTd).attr('data-column-name','已结算');
                             }
                         },
@@ -1225,7 +1255,7 @@
                     },
                     {
                         "title": "坏账",
-                        "data": 'funds_bad_debt',
+                        "data": 'funds_bad_debt_total',
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
                         "orderable": false,
@@ -1233,7 +1263,7 @@
                             if(true)
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
                                 $(nTd).attr('data-column-name','已结算');
                             }
                         },
@@ -1259,11 +1289,11 @@
                                 var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
                                 var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
                                 // 已结算金额
-                                var $settled_amount = parseFloat(row.settled_amount);
+                                var $funds_already_settled_total = parseFloat(row.funds_already_settled_total);
                                 // 坏账金额
-                                var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+                                var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
 
-                                var $balance = parseFloat($settlement_amount - $settled_amount - $funds_bad_debt);
+                                var $balance = parseFloat($settlement_amount - $funds_already_settled_total - $funds_bad_debt_total);
                                 if(parseFloat($balance) == 0) $(nTd).addClass('');
                                 else if(parseFloat($balance) > 0) $(nTd).addClass('_bold').addClass('text-red');
                                 else return $(nTd).addClass('_bold').addClass('text-green');
@@ -1275,11 +1305,11 @@
                             var $delivery_effective_quantity = row.total_delivery_quantity - row.total_delivery_quantity_of_invalid;
                             var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
                             // 已结算金额
-                            var $settled_amount = parseFloat(row.settled_amount);
+                            var $funds_already_settled_total = parseFloat(row.funds_already_settled_total);
                             // 坏账金额
-                            var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+                            var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
 
-                            var $balance = parseFloat($settlement_amount - $settled_amount - $funds_bad_debt);
+                            var $balance = parseFloat($settlement_amount - $funds_already_settled_total - $funds_bad_debt_total);
                             return parseFloat($balance);
                             // if(parseFloat($balance) < 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
                             // else return parseFloat($balance);
@@ -1304,9 +1334,9 @@
                                 // 渠道费用
                                 var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
                                 // 退款
-                                var $funds_bad_debt = row.funds_bad_debt;
+                                var $funds_bad_debt_total = row.funds_bad_debt_total;
 
-                                var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price - $funds_bad_debt).toFixed(2);
+                                var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price - $funds_bad_debt_total).toFixed(2);
                                 if(parseFloat($profile) == 0) $(nTd).addClass('');
                                 if(parseFloat($profile) < 0) $(nTd).addClass('_bold').addClass('text-red');
                                 else return $(nTd).addClass('_bold').addClass('text-green');
@@ -1322,39 +1352,39 @@
                             // 代理费用
                             var $channel_unit_price = row.channel_unit_price * row.total_delivery_quantity;
                             // 退款
-                            var $funds_bad_debt = row.funds_bad_debt;
+                            var $funds_bad_debt_total = row.funds_bad_debt_total;
 
-                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price - $funds_bad_debt).toFixed(2);
+                            var $profile = parseFloat($settlement_amount - $total_cost - $channel_unit_price - $funds_bad_debt_total).toFixed(2);
                             return parseFloat($profile);
                             // if(parseFloat($profile) == 0) return '--';
                             // if(parseFloat($profile) < 0) return '<b class="text-red">' + parseFloat($profile) + '</b>';
                             // else  return '<b class="text-green">' + parseFloat($profile) + '</b>';
                         }
                     },
-                    {
-                        "title": "说明",
-                        "data": "description",
-                        "className": "text-center",
-                        "width": "160px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','说明');
-                                $(nTd).attr('data-key','description').attr('data-value',data);
-                                $(nTd).attr('data-column-name','说明');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            // else return '';
-                        }
-                    },
+                    // {
+                    //     "title": "说明",
+                    //     "data": "description",
+                    //     "className": "text-left",
+                    //     "width": "160px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-text-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','说明');
+                    //             $(nTd).attr('data-key','description').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','说明');
+                    //             $(nTd).attr('data-text-type','textarea');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         return data;
+                    //         // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                    //         // else return '';
+                    //     }
+                    // },
                     {
                         "className": "text-center",
                         "width": "80px",

@@ -42,13 +42,8 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="{{url('/'.config('common.super.admin.prefix').'/softorg/index')}}">
+                        <a href="{{ url('/info/index') }}">
                             <i class="fa fa-circle-o text-aqua"></i>基本信息
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{url('/'.config('common.super.admin.prefix').'/softorg/edit')}}">
-                            <i class="fa fa-circle-o text-aqua"></i>编辑基本信息
                         </a>
                     </li>
                 </ul>
@@ -93,7 +88,7 @@
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,31,41]))
+            @if(in_array($me->user_type,[0,1,9,11,31]))
                 <li class="treeview {{ $menu_active_of_settled_list or '' }}">
                     <a href="{{ url('/item/settled-list')}}">
                         <i class="fa fa-file-text-o text-yellow"></i>
@@ -141,20 +136,20 @@
             </li>
             @endif
 
+            @if(in_array($me->user_type,[0,1,9,11,31,41]))
+            <li class="treeview {{ $menu_active_of_statistic_finance or '' }}">
+                <a href="{{ url('/statistic/statistic-finance') }}">
+                    <i class="fa fa-line-chart text-aqua"></i> <span>财务报表</span>
+                </a>
+            </li>
+            @endif
+
             @if(in_array($me->user_type,[0,1,9,11,31]))
             <li class="treeview {{ $menu_active_of_statistic_service or '' }}">
                 <a href="{{ url('/statistic/statistic-service') }}">
                     <i class="fa fa-bar-chart text-aqua"></i> <span>业务报表</span>
                 </a>
             </li>
-            @endif
-
-            @if(in_array($me->user_type,[0,1,9,11,31]))
-                <li class="treeview {{ $menu_active_of_statistic_finance or '' }} _none">
-                    <a href="{{ url('/statistic/statistic-finance') }}">
-                        <i class="fa fa-bar-chart text-aqua"></i> <span>财务报表</span>
-                    </a>
-                </li>
             @endif
 
             <li class="treeview {{ $menu_active_of_statistic_index or '' }} _none">
@@ -175,7 +170,7 @@
             {{--数据统计--}}
             <li class="header">财务记录</li>
 
-            @if(in_array($me->user_type,[0,1,9,11,31]))
+            @if(in_array($me->user_type,[0,1,9,11,31,41]))
                 <li class="treeview {{ $menu_active_of_record_funds_recharge or '' }}">
                     <a href="{{ url('/record/funds-recharge-list') }}">
                         <i class="fa fa-cny text-red"></i> <span>充值记录</span>
@@ -183,7 +178,7 @@
                 </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,31]))
+            @if(in_array($me->user_type,[0,1,9,11,31,41]))
                 <li class="treeview {{ $menu_active_of_record_funds_using or '' }}">
                     <a href="{{ url('/record/funds-using-list') }}">
                         <i class="fa fa-cny text-red"></i> <span>结算记录</span>

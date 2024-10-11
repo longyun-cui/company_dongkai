@@ -813,7 +813,7 @@
                     });
 
                     $.post(
-                        "{{ url('/company/company-finance-record-create') }}",
+                        "{{ url('/company/company-finance-recharge-create') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="finance-create-operate"]').val(),

@@ -38,8 +38,10 @@ class DK_Finance_Settled extends Model
         'channel_unit_price', 'channel_cost',
         'cooperative_unit_price',
         'profit_proportion',
-        'should_settled', 'already_settled',
-        'funds_bad_debt',
+
+        'funds_should_settled_total',
+        'funds_already_settled_total',
+        'funds_bad_debt_total',
 
 
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description', 'inspected_at',

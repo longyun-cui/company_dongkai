@@ -494,7 +494,7 @@
                         }
                     },
                     {
-                        "title": "总成本",
+                        "title": "工单成本",
                         "data": "total_cost",
                         "className": "text-center bg-route",
                         "width": "60px",
@@ -603,7 +603,7 @@
                     },
                     {
                         "title": "已结算",
-                        "data": "settled_amount",
+                        "data": "funds_already_settled_total",
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
                         "orderable": false,
@@ -611,7 +611,7 @@
                             if(true)
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','settled_amount').attr('data-value',data);
+                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
                                 $(nTd).attr('data-column-name','已结算');
                             }
                         },
@@ -622,7 +622,7 @@
                     },
                     {
                         "title": "坏账",
-                        "data": 'funds_bad_debt',
+                        "data": 'funds_bad_debt_total',
                         "className": "item-show-for-settle bg-empty",
                         "width": "60px",
                         "orderable": false,
@@ -646,11 +646,11 @@
                             // var $settlement_amount = parseFloat(row.cooperative_unit_price * $delivery_effective_quantity);
                             var $settlement_amount = row.cooperative_cost;
                             // 已结算金额
-                            var $settled_amount = parseFloat(row.settled_amount);
+                            var $funds_already_settled_total = parseFloat(row.funds_already_settled_total);
                             // 坏账金额
-                            var $funds_bad_debt = parseFloat(row.funds_bad_debt);
+                            var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
 
-                            var $balance = parseFloat($settlement_amount - $settled_amount - $funds_bad_debt);
+                            var $balance = parseFloat($settlement_amount - $funds_already_settled_total - $funds_bad_debt_total);
                             if(parseFloat($balance) == 0) return '--';
                             else if(parseFloat($balance) > 0) return '<b class="text-red">' + parseFloat($balance) + '</b>';
                             else return parseFloat($balance);
