@@ -97,7 +97,7 @@
                 </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,31,41]))
+            @if(in_array($me->user_type,[0,1,9,11,31]))
             <li class="treeview {{ $menu_active_of_daily_list or '' }}">
                 <a href="{{ url('/item/daily-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
@@ -110,7 +110,9 @@
 
 
             {{--数据统计--}}
+            @if(in_array($me->user_type,[0,1,9,11,31]))
             <li class="header">数据统计</li>
+            @endif
 
             @if(in_array($me->user_type,[0,1,9,11,31,41]))
             <li class="treeview {{ $menu_active_of_statistic_project or '' }} _none">
@@ -136,7 +138,7 @@
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,31,41]))
+            @if(in_array($me->user_type,[0,1,9,11,31]))
             <li class="treeview {{ $menu_active_of_statistic_finance or '' }}">
                 <a href="{{ url('/statistic/statistic-finance') }}">
                     <i class="fa fa-line-chart text-aqua"></i> <span>财务报表</span>
