@@ -7442,6 +7442,8 @@ class DKAdminRepository {
         if(!in_array($inspected_result,config('info.inspected_result'))) return response_error([],"审核结果非法！");
         $inspected_description = $post_data["inspected_description"];
 
+        $is_distributive_condition = $post_data["is_distributive_condition"];
+
         $before = $item->inspected_result;
 
         // 启动数据库事务
@@ -7449,6 +7451,7 @@ class DKAdminRepository {
         try
         {
             $item->inspector_id = $me->id;
+            $item->is_distributive_condition = $is_distributive_condition;
             $item->inspected_status = 1;
             $item->inspected_result = $inspected_result;
             if($inspected_description) $item->inspected_description = $inspected_description;

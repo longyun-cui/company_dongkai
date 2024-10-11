@@ -278,7 +278,8 @@
                     operate: "order-inspect",
                     item_id: $('input[name="detail-inspected-order-id"]').val(),
                     inspected_result: $('select[name="detail-inspected-result"]').val(),
-                    inspected_description: $('textarea[name="detail-inspected-description"]').val()
+                    inspected_description: $('textarea[name="detail-inspected-description"]').val(),
+                    is_distributive_condition: $('input[name="is_distributive_condition"]:checked').val()
                 },
                 function(data){
                     // layer.close(index);
@@ -590,7 +591,8 @@
                             operate: "order-inspect",
                             item_id: $that.attr('data-id'),
                             inspected_result: $('select[name="inspected-result"]').val(),
-                            inspected_description: $('textarea[name="inspected-description"]').val()
+                            inspected_description: $('textarea[name="inspected-description"]').val(),
+                            is_distributive_condition: $('input[name="is_distributive_condition"]:checked').val()
                         },
                         function(data){
                             layer.close(index);
@@ -1572,11 +1574,11 @@
             $('input[name=info-radio-set-operate-type]').val($that.attr('data-operate-type'));
 
 
-            if($that.attr("data-key") == "receipt_need")
+            if($that.attr("data-key") == "is_distributive_condition")
             {
-                var $option_html = $('#receipt_need-option-list').html();
+                var $option_html = $('#option-list-for-is_distributive_condition').html();
                 $('.radio-box').html($option_html);
-                $('input[name=receipt_need][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
+                $('input[name=option_is_distributive_condition][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
             }
             else if($that.attr("data-key") == "is_wx")
             {

@@ -845,7 +845,7 @@ class DKSuperRepository {
         // 员工类型
         if(!empty($post_data['user_type']))
         {
-            if(!in_array($post_data['user_type'],[-9,-11,-41,-6,-7,-8,-1,0]))
+            if(!in_array($post_data['user_type'],['-9','-11','-41','-6','-7','-8','-1','0']))
             {
                 $query->where('user_type', $post_data['user_type']);
             }

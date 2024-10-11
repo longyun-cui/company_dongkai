@@ -343,6 +343,30 @@
                             <textarea class="form-control" name="detail-inspected-description" rows="3" cols="100%"></textarea>
                         </div>
                     </div>
+                    {{--是否符合分发条件--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">是否符合分发</label>
+                        <div class="col-md-8 ">
+                            <div class="btn-group">
+
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label>
+                                                <input type="radio" name="is_distributive_condition" value="0" checked="checked"> 否
+                                        </label>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label>
+                                                <input type="radio" name="is_distributive_condition" value="1"> 是
+                                        </label>
+                                    </span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </form>
@@ -772,6 +796,30 @@
             </div>
         </div>
     </div>
+    {{--是否+V--}}
+    <div id="option-list-for-is_distributive_condition">
+        <label class="control-label col-md-2">是否符合分发</label>
+        <div class="col-md-8">
+            <div class="btn-group">
+
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="option_is_distributive_condition" value="0" class="info-set-column"> 否
+                        </label>
+                    </span>
+                </button>
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="option_is_distributive_condition" value="1" class="info-set-column"> 是
+                        </label>
+                    </span>
+                </button>
+
+            </div>
+        </div>
+    </div>
 
 
 
@@ -1027,10 +1075,17 @@
                 "columnDefs": [
 {{--                    @if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
-                    {
-                        "targets": [0,7,8,9,10],
-                        "visible": false,
-                    }
+                        @if(in_array($me->user_type,[71,77]))
+                        {
+                            "targets": [0,8,9,10,11],
+                            "visible": false,
+                        }
+                        @else
+                        {
+                            "targets": [0,4,8,9,10,11],
+                            "visible": false,
+                        }
+                        @endif
                     @endif
                 ],
                 "columns": [
@@ -1170,6 +1225,41 @@
                             else
                             {
                                 $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
+                            }
+                            return $result_html;
+                        }
+                    },
+                    {
+                        "title": "符合分发",
+                        "data": "is_distributive_condition",
+                        "className": "",
+                        "width": "72px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-radio-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','是否符合分发');
+                                $(nTd).attr('data-key','is_distributive_condition').attr('data-value',data);
+                                $(nTd).attr('data-column-name','是否符合分发');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!row.inspected_at) return '--';
+                            var $result_html = '';
+                            if(data == 0)
+                            {
+                                $result_html = '--';
+                            }
+                            else if(data == 1)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">是</small>';
+                            }
+                            else
+                            {
+                                $result_html = '--';
                             }
                             return $result_html;
                         }
