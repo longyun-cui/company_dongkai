@@ -278,8 +278,7 @@
                     operate: "order-inspect",
                     item_id: $('input[name="detail-inspected-order-id"]').val(),
                     inspected_result: $('select[name="detail-inspected-result"]').val(),
-                    inspected_description: $('textarea[name="detail-inspected-description"]').val(),
-                    is_distributive_condition: $('input[name="is_distributive_condition"]:checked').val()
+                    inspected_description: $('textarea[name="detail-inspected-description"]').val()
                 },
                 function(data){
                     // layer.close(index);
@@ -701,11 +700,12 @@
 
             var $option_html_for_client = $('#option-list-for-client').html();
             var $option_html_for_delivered_result = $('#option-list-for-delivered-result').html();
+            var $option_html_for_is_distributive_condition = $('#option-list-for-is_distributive_condition-2').html();
 
             var $delivered_result = $('select[name="select-delivered-result"]').val();
             var $client_id = $('select[name="select-client-id"]').val();
             var $client_name = $('select[name="select-client-id"]').find('option:selected').html();
-            // console.log($client_name);
+            var $is_distributive_condition = $('input[name="option_is_distributive_condition"]:checked').val();
 
             layer.open({
                 time: 0
@@ -721,7 +721,8 @@
                     $option_html_for_delivered_result+
                     '</select>'+
                     '<input type="text" class="form-control" name="input-recording-address" rows="2" placeholder="录音地址"></textarea>'+
-                    '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="交付说明"></textarea>'
+                    '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="交付说明"></textarea>'+
+                    $option_html_for_is_distributive_condition
                 ,yes: function(index){
                     $.post(
                         "{{ url('/item/order-deliver') }}",
@@ -732,7 +733,8 @@
                             client_id: $('select[name="select-client-id"]').val(),
                             delivered_result: $('select[name="select-delivered-result"]').val(),
                             recording_address: $('input[name="input-recording-address"]').val(),
-                            delivered_description: $('textarea[name="textarea-delivered-description"]').val()
+                            delivered_description: $('textarea[name="textarea-delivered-description"]').val(),
+                            is_distributive_condition: $('input[name="option_is_distributive_condition"]:checked').val()
                         },
                         function(data){
                             layer.close(index);
@@ -748,11 +750,21 @@
                                 var $delivered_result = $('select[name="select-delivered-result"]').val();
                                 var $client_id = $('select[name="select-client-id"]').val();
                                 var $client_name = $('select[name="select-client-id"]').find('option:selected').html();
-                                console.log($client_name);
+                                var $is_distributive_condition = $('input[name="option_is_distributive_condition"]:checked').val();
 
                                 $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
                                 $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
                                 $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');
+                                // 是否符合分发条件
+                                if($is_distributive_condition == 0)
+                                {
+                                    $row.find('td[data-key=is_distributive_condition]').html('--');
+                                }
+                                else if($is_distributive_condition == 1)
+                                {
+                                    $row.find('td[data-key=is_distributive_condition]').html('<small class="btn-xs bg-red">是</small>');
+                                }
+
                                 $row.find('td[data-key=client_id]').attr('data-value',$client_id);
                                 if($client_id != "-1")
                                 {

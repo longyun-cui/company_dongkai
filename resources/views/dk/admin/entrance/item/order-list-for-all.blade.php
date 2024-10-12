@@ -343,30 +343,6 @@
                             <textarea class="form-control" name="detail-inspected-description" rows="3" cols="100%"></textarea>
                         </div>
                     </div>
-                    {{--是否符合分发条件--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2">是否符合分发</label>
-                        <div class="col-md-8 ">
-                            <div class="btn-group">
-
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                                <input type="radio" name="is_distributive_condition" value="0" checked="checked"> 否
-                                        </label>
-                                    </span>
-                                </button>
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                                <input type="radio" name="is_distributive_condition" value="1"> 是
-                                        </label>
-                                    </span>
-                                </button>
-
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </form>
@@ -820,6 +796,29 @@
             </div>
         </div>
     </div>
+    <div id="option-list-for-is_distributive_condition-2">
+        <label class="control-label col-md-2">是否符合分发</label>
+        <div class="col-md-8">
+            <div class="btn-group">
+
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="option_is_distributive_condition" value="0" class="info-set-column" checked="checked"> 否
+                        </label>
+                    </span>
+                </button>
+                <button type="button" class="btn">
+                    <span class="radio">
+                        <label>
+                            <input type="radio" name="option_is_distributive_condition" value="1" class="info-set-column"> 是
+                        </label>
+                    </span>
+                </button>
+
+            </div>
+        </div>
+    </div>
 
 
 
@@ -1073,19 +1072,12 @@
                 },
                 "showRefresh": true,
                 "columnDefs": [
-{{--                    @if(!in_array($me->user_type,[0,1,11]))--}}
+                        {{--@if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
-                        @if(in_array($me->user_type,[71,77]))
-                        {
-                            "targets": [0,8,9,10,11],
-                            "visible": false,
-                        }
-                        @else
                         {
                             "targets": [0,4,8,9,10,11],
                             "visible": false,
                         }
-                        @endif
                     @endif
                 ],
                 "columns": [
