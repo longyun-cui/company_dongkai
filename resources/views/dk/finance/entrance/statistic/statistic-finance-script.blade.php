@@ -105,43 +105,10 @@
         // 【财务报表】按【全部】搜索
         $(".main-content").on('click', "#filter-submit-for-finance-by-all", function() {
 
-            $("#statistic-for-finance").find('input[name=service-time-type]').val('all');
+            $("#statistic-for-finance").find('input[name=finance-time-type]').val('all');
 
-            var $statistic_title = '';
-
-            var $company = $('select[name=finance-company]').find("option:selected");
-            if($company.val() != "-1")
-            {
-                var $company_title = $company.text();
-                $statistic_title = $company_title;
-            }
-
-            var $channel = $('select[name=finance-channel]').find("option:selected");
-            if($channel.val() != "-1")
-            {
-                var $channel_title = $channel.text();
-                $statistic_title = $channel_title;
-            }
-
-            var $business = $('select[name=finance-business]').find("option:selected");
-            if($business.val() != "-1")
-            {
-                var $business_title = $business.text();
-                $statistic_title = $business_title;
-            }
-
-            var $project = $('select[name=finance-project]').find("option:selected");
-            if($project.val() != "-1")
-            {
-                var $project_title = $project.text();
-                $statistic_title = $project_title;
-            }
-
-            if($statistic_title)
-            {
-                $statistic_title = "【" + $statistic_title + "】";
-                $(".statistic-title").html($statistic_title);
-            }
+            $(".statistic-time-type-title").html('全部');
+            $(".statistic-time-title").html('');
 
             filter_submit_for_finance();
 

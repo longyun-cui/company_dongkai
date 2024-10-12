@@ -4541,7 +4541,7 @@ class DKFinanceRepository {
 
         $project_id = $post_data["project_id"];
         $project = DK_Finance_Project::find($project_id);
-        if(!$project) return response_error([],"该【渠道】不存在，刷新页面重试！");
+        if(!$project) return response_error([],"该【项目】不存在，刷新页面重试！");
 
         // 交易类型 收入 || 支出
         $finance_type = $post_data["finance_type"];
@@ -4573,6 +4573,7 @@ class DKFinanceRepository {
             $FinanceRecord_data['creator_id'] = $me->id;
             $FinanceRecord_data['finance_category'] = 11;
             $FinanceRecord_data['finance_type'] = $finance_type;
+            $FinanceRecord_data['channel_id'] = $project->channel_id;
             $FinanceRecord_data['project_id'] = $post_data["project_id"];
             $FinanceRecord_data['title'] = $post_data["transaction_title"];
             $FinanceRecord_data['transaction_date'] = $transaction_date;
@@ -9699,6 +9700,7 @@ class DKFinanceRepository {
             $FinanceRecord_data['finance_category'] = 11;
             $FinanceRecord_data['finance_type'] = $finance_type;
             $FinanceRecord_data['settled_id'] = $post_data["settled_id"];
+            $FinanceRecord_data['channel_id'] = $project->channel_id;
             $FinanceRecord_data['project_id'] = $post_data["project_id"];
             $FinanceRecord_data['title'] = $post_data["transaction_title"];
             $FinanceRecord_data['transaction_date'] = $transaction_date;
@@ -15154,91 +15156,6 @@ class DKFinanceRepository {
         $me = $this->me;
 
 
-        // 日报统计
-        $query_daily = DK_Finance_Daily::select('project_id')
-            ->addSelect(DB::raw("
-                    sum(attendance_manpower) as total_of_attendance_manpower,
-                    sum(delivery_quantity) as total_of_delivery_quantity,
-                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
-                    sum(call_charge_daily_cost) as total_of_call_charge_daily_cost,
-                    sum(total_daily_cost) as total_cost
-                "))
-//            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
-            ->with(["project_er"=>function($query) { $query->select('id','channel_id','channel_unit_price','cooperative_unit_price'); }])
-            ->groupBy('project_id');
-
-
-        if(!empty($post_data['time_type']))
-        {
-            if($post_data['time_type'] == "month")
-            {
-                if(!empty($post_data['month']))
-                {
-                    $month_arr = explode('-', $post_data['month']);
-                    $month_year = $month_arr[0];
-                    $month_month = $month_arr[1];
-                    $query_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
-                }
-            }
-            else if($post_data['time_type'] == "date")
-            {
-                if(!empty($post_data['date']))
-                {
-                    $query_daily->whereDate("assign_date", $post_data['date']);
-                }
-            }
-            else if($post_data['time_type'] == "period")
-            {
-                if(!empty($post_data['assign_start']))
-                {
-                    $query_daily->whereDate("assign_date", ">=", $post_data['assign_start']);
-                }
-                if(!empty($post_data['assign_ended']))
-                {
-                    $query_daily->whereDate("assign_date", "<=", $post_data['assign_ended']);
-                }
-            }
-            else
-            {}
-        }
-
-
-        $daily_for_project = $query_daily->get()
-            ->keyBy('project_id')
-            ->toArray();
-//        dd($daily_for_project);
-
-        $channel_list = [];
-        foreach($daily_for_project as $k => $v)
-        {
-            if($v["project_er"])
-            {
-                $channel_id = $v["project_er"]["channel_id"];
-                if(empty($channel_list[$channel_id]))
-                {
-                    $channel_list[$channel_id] = [];
-                    $channel_list[$channel_id]["total_of_attendance_manpower"] = $v["total_of_attendance_manpower"];
-                    $channel_list[$channel_id]["total_of_delivery_quantity"] = $v["total_of_delivery_quantity"];
-                    $channel_list[$channel_id]["total_of_delivery_quantity_of_invalid"] = $v["total_of_delivery_quantity_of_invalid"];
-                    $channel_list[$channel_id]["total_of_call_charge_daily_cost"] = $v["total_of_call_charge_daily_cost"];
-                    $channel_list[$channel_id]["total_of_total_cost"] = $v["total_cost"];
-                    $channel_list[$channel_id]["total_of_channel_cost"] = $v["total_of_delivery_quantity"] * $v["project_er"]["channel_unit_price"];
-                    $channel_list[$channel_id]["total_of_revenue"] = ($v["total_of_delivery_quantity"] - $v["total_of_delivery_quantity_of_invalid"]) * $v["project_er"]["cooperative_unit_price"];
-                }
-                else
-                {
-                    $channel_list[$channel_id]["total_of_attendance_manpower"] += $v["total_of_attendance_manpower"];
-                    $channel_list[$channel_id]["total_of_delivery_quantity"] += $v["total_of_delivery_quantity"];
-                    $channel_list[$channel_id]["total_of_delivery_quantity_of_invalid"] += $v["total_of_delivery_quantity_of_invalid"];
-                    $channel_list[$channel_id]["total_of_call_charge_daily_cost"] += $v["total_of_call_charge_daily_cost"];
-                    $channel_list[$channel_id]["total_of_total_cost"] += $v["total_cost"];
-                    $channel_list[$channel_id]["total_of_channel_cost"] += ($v["total_of_delivery_quantity"] * $v["project_er"]["channel_unit_price"]);
-                    $channel_list[$channel_id]["total_of_revenue"] += (($v["total_of_delivery_quantity"] - $v["total_of_delivery_quantity_of_invalid"]) * $v["project_er"]["cooperative_unit_price"]);
-                }
-            }
-        }
-
-
 
         $query = DK_Finance_Company::select('*')
             ->withTrashed()
@@ -15338,6 +15255,141 @@ class DKFinanceRepository {
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
+
+
+
+        // 日报统计
+        $query_daily = DK_Finance_Daily::select('project_id')
+            ->addSelect(DB::raw("
+                    sum(attendance_manpower) as total_of_attendance_manpower,
+                    sum(delivery_quantity) as total_of_delivery_quantity,
+                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
+                    sum(call_charge_daily_cost) as total_of_call_charge_daily_cost,
+                    sum(total_daily_cost) as total_cost
+                "))
+//            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+            ->with(["project_er"=>function($query) { $query->select('id','channel_id','channel_unit_price','cooperative_unit_price'); }])
+            ->groupBy('project_id');
+
+
+        // 资金使用统计
+        $query_for_using = DK_Finance_Funds_Using::select('id','finance_type','channel_id')
+//            ->where('finance_type',1)
+            ->addSelect(DB::raw("
+                    transaction_date as date,
+                    DAY(transaction_date) as day,
+                    count(*) as quantity,
+                    sum(transaction_amount) AS total_of_transaction_amount
+                "))
+            ->groupBy('channel_id')
+            ->groupBy('finance_type');
+
+
+        if(!empty($post_data['time_type']))
+        {
+            if($post_data['time_type'] == "month")
+            {
+                if(!empty($post_data['month']))
+                {
+                    $month_arr = explode('-', $post_data['month']);
+                    $month_year = $month_arr[0];
+                    $month_month = $month_arr[1];
+                    $query_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+                    $query_for_using->whereYear("transaction_date", $month_year)->whereMonth("transaction_date", $month_month);
+                }
+            }
+            else if($post_data['time_type'] == "date")
+            {
+                if(!empty($post_data['date']))
+                {
+                    $query_daily->whereDate("assign_date", $post_data['date']);
+                    $query_for_using->whereDate("transaction_date", $post_data['date']);
+                }
+            }
+            else if($post_data['time_type'] == "period")
+            {
+                if(!empty($post_data['assign_start']))
+                {
+                    $query_daily->whereDate("assign_date", ">=", $post_data['assign_start']);
+                    $query_for_using->whereDate("transaction_date", ">=", $post_data['assign_start']);
+                }
+                if(!empty($post_data['assign_ended']))
+                {
+                    $query_daily->whereDate("assign_date", "<=", $post_data['assign_ended']);
+                    $query_for_using->whereDate("transaction_date", "<=", $post_data['assign_ended']);
+                }
+            }
+            else
+            {}
+        }
+
+
+        $daily_for_project = $query_daily->get()
+            ->keyBy('project_id')
+            ->toArray();
+//        dd($daily_for_project);
+
+
+        $data_of_using = $query_for_using->get();
+
+
+        $channel_list = [];
+        foreach($daily_for_project as $k => $v)
+        {
+            if($v["project_er"])
+            {
+                $channel_id = $v["project_er"]["channel_id"];
+                if(empty($channel_list[$channel_id]))
+                {
+                    $channel_list[$channel_id] = [];
+                    $channel_list[$channel_id]["total_of_attendance_manpower"] = $v["total_of_attendance_manpower"];
+                    $channel_list[$channel_id]["total_of_delivery_quantity"] = $v["total_of_delivery_quantity"];
+                    $channel_list[$channel_id]["total_of_delivery_quantity_of_invalid"] = $v["total_of_delivery_quantity_of_invalid"];
+                    $channel_list[$channel_id]["total_of_call_charge_daily_cost"] = $v["total_of_call_charge_daily_cost"];
+                    $channel_list[$channel_id]["total_of_total_cost"] = $v["total_cost"];
+                    $channel_list[$channel_id]["total_of_channel_cost"] = $v["total_of_delivery_quantity"] * $v["project_er"]["channel_unit_price"];
+                    $channel_list[$channel_id]["total_of_revenue"] = ($v["total_of_delivery_quantity"] - $v["total_of_delivery_quantity_of_invalid"]) * $v["project_er"]["cooperative_unit_price"];
+                    $channel_list[$channel_id]["total_of_already_settled"] = 0;
+                    $channel_list[$channel_id]["total_of_bad_debt"] = 0;
+                }
+                else
+                {
+                    $channel_list[$channel_id]["total_of_attendance_manpower"] += $v["total_of_attendance_manpower"];
+                    $channel_list[$channel_id]["total_of_delivery_quantity"] += $v["total_of_delivery_quantity"];
+                    $channel_list[$channel_id]["total_of_delivery_quantity_of_invalid"] += $v["total_of_delivery_quantity_of_invalid"];
+                    $channel_list[$channel_id]["total_of_call_charge_daily_cost"] += $v["total_of_call_charge_daily_cost"];
+                    $channel_list[$channel_id]["total_of_total_cost"] += $v["total_cost"];
+                    $channel_list[$channel_id]["total_of_channel_cost"] += ($v["total_of_delivery_quantity"] * $v["project_er"]["channel_unit_price"]);
+                    $channel_list[$channel_id]["total_of_revenue"] += (($v["total_of_delivery_quantity"] - $v["total_of_delivery_quantity_of_invalid"]) * $v["project_er"]["cooperative_unit_price"]);
+                }
+            }
+        }
+
+        foreach($data_of_using as $k => $v)
+        {
+            $channel_id = $v->channel_id;
+            if(!empty($channel_list[$channel_id]))
+            {
+                if($v->finance_type == 1)
+                {
+                    $channel_list[$channel_id]["total_of_already_settled"] = $v->total_of_transaction_amount;
+                }
+                else if($v->finance_type == 91)
+                {
+                    $channel_list[$channel_id]["total_of_bad_debt"] = $v->total_of_transaction_amount;
+                }
+            }
+            else
+            {
+                $channel_list[$channel_id]["total_of_already_settled"] = 0;
+                $channel_list[$channel_id]["total_of_bad_debt"] = 0;
+            }
+        }
+
+
+
+
+
         $total_data = [];
         $total_data['id'] = '总计';
         $total_data['superior_company_id'] = 0;
@@ -15352,6 +15404,8 @@ class DKFinanceRepository {
         $total_data['total_of_all_cost'] = 0;
         $total_data['total_of_revenue'] = 0;
         $total_data['total_of_profile'] = 0;
+        $total_data['total_of_already_settled'] = 0;
+        $total_data['total_of_bad_debt'] = 0;
 
         foreach($list as $k => $v)
         {
@@ -15372,6 +15426,14 @@ class DKFinanceRepository {
                 $total_of_profile = $channel_list[($v->id)]["total_of_revenue"] - $total_of_all_cost;
                 $list[$k]->total_of_profile = $total_of_profile;
 
+                $total_of_already_settled = $channel_list[($v->id)]["total_of_already_settled"];
+                $list[$k]->total_of_already_settled = $total_of_already_settled;
+
+                $total_of_bad_debt = $channel_list[($v->id)]["total_of_bad_debt"];
+                $list[$k]->total_of_bad_debt = $total_of_bad_debt;
+
+
+                // 总计
                 $total_data['total_of_attendance_manpower'] += $channel_list[($v->id)]["total_of_attendance_manpower"];
                 $total_data['total_of_delivery_quantity'] += $channel_list[($v->id)]["total_of_delivery_quantity"];
                 $total_data['total_of_delivery_quantity_of_invalid'] += $channel_list[($v->id)]["total_of_delivery_quantity_of_invalid"];
@@ -15383,6 +15445,8 @@ class DKFinanceRepository {
 
                 $total_data['total_of_revenue'] += $channel_list[($v->id)]["total_of_revenue"];
                 $total_data['total_of_profile'] += $total_of_profile;
+                $total_data['total_of_already_settled'] += $total_of_already_settled;
+                $total_data['total_of_bad_debt'] += $total_of_bad_debt;
             }
             else
             {
@@ -15395,6 +15459,8 @@ class DKFinanceRepository {
                 $list[$k]->total_of_all_cost = 0;
                 $list[$k]->total_of_revenue = 0;
                 $list[$k]->total_of_profile = 0;
+                $list[$k]->total_of_already_settled = 0;
+                $list[$k]->total_of_bad_debt = 0;
             }
         }
 //        $list = $list->sortBy(['district_id'=>'asc'])->values();
@@ -15430,12 +15496,26 @@ class DKFinanceRepository {
             ->groupBy('project_id');
 
 
+        // 资金使用统计
+        $query_for_using = DK_Finance_Funds_Using::select('id','finance_type','project_id')
+//            ->where('finance_type',1)
+            ->addSelect(DB::raw("
+                    transaction_date as date,
+                    DAY(transaction_date) as day,
+                    count(*) as quantity,
+                    sum(transaction_amount) AS total_of_transaction_amount
+                "))
+            ->groupBy('project_id')
+            ->groupBy('finance_type');
+
+
         // 我是代理人
         if($me->user_type == 41)
         {
             $project_list = DK_Finance_Project::select('id')->where('channel_id',$me->channel_id)->get();
             $query->whereIn('id', $project_list);
             $query_daily->whereIn('project_id', $project_list);
+            $query_for_using->whereIn('project_id', $project_list);
         }
 
 
@@ -15449,6 +15529,7 @@ class DKFinanceRepository {
                     $month_year = $month_arr[0];
                     $month_month = $month_arr[1];
                     $query_daily->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+                    $query_for_using->whereYear("transaction_date", $month_year)->whereMonth("transaction_date", $month_month);
                 }
             }
             else if($post_data['time_type'] == "date")
@@ -15456,6 +15537,7 @@ class DKFinanceRepository {
                 if(!empty($post_data['date']))
                 {
                     $query_daily->whereDate("assign_date", $post_data['date']);
+                    $query_for_using->whereDate("transaction_date", $post_data['date']);
                 }
             }
             else if($post_data['time_type'] == "period")
@@ -15463,10 +15545,12 @@ class DKFinanceRepository {
                 if(!empty($post_data['assign_start']))
                 {
                     $query_daily->whereDate("assign_date", ">=", $post_data['assign_start']);
+                    $query_for_using->whereDate("transaction_date", ">=", $post_data['assign_start']);
                 }
                 if(!empty($post_data['assign_ended']))
                 {
                     $query_daily->whereDate("assign_date", "<=", $post_data['assign_ended']);
+                    $query_for_using->whereDate("transaction_date", "<=", $post_data['assign_ended']);
                 }
             }
             else
@@ -15478,6 +15562,9 @@ class DKFinanceRepository {
             ->keyBy('project_id')
             ->toArray();
 
+
+        $data_of_using = $query_for_using->get();
+//        dd($data_of_using->toArray());
 
 
 
@@ -15579,6 +15666,8 @@ class DKFinanceRepository {
 
         foreach($list as $k => $v)
         {
+            $list[$k]->funds_already_settled_total = 0;
+            $list[$k]->funds_bad_debt_total = 0;
 
             if(isset($query_daily[$v->id]))
             {
@@ -15597,7 +15686,16 @@ class DKFinanceRepository {
             $list[$k]->balance = 0;
             $list[$k]->cooperative_cost = ($v->cooperative_unit_price * ($v->total_delivery_quantity - $v->total_delivery_quantity_of_invalid));
 
+            foreach($data_of_using as $using_k => $using_v)
+            {
+                if($using_v->project_id == $v->id)
+                {
+                    if($using_v->finance_type == 1) $list[$k]->funds_already_settled_total = $using_v->total_of_transaction_amount;
+                    else if($using_v->finance_type == 91) $list[$k]->funds_bad_debt_total = $using_v->total_of_transaction_amount;
+                }
+            }
 
+            // 全部
             $total_data['total_delivery_quantity'] += $v->total_delivery_quantity;
             $total_data['total_delivery_quantity_of_invalid'] += $v->total_delivery_quantity_of_invalid;
             $total_data['total_cost'] += $v->total_cost;
@@ -15606,8 +15704,8 @@ class DKFinanceRepository {
 
             $total_data['cooperative_cost'] += ($v->cooperative_unit_price * ($v->total_delivery_quantity - $v->total_delivery_quantity_of_invalid));
 
-            $total_data['funds_already_settled_total'] += $v->funds_already_settled_total;
-            $total_data['funds_bad_debt_total'] += $v->funds_bad_debt_total;
+            $total_data['funds_already_settled_total'] += $list[$k]->funds_already_settled_total;
+            $total_data['funds_bad_debt_total'] += $list[$k]->funds_bad_debt_total;
         }
 
         $total_data['channel_unit_price'] = 0;

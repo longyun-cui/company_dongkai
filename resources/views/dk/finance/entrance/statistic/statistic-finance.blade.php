@@ -541,6 +541,58 @@
                         }
                     },
                     {
+                        "title": "已收款",
+                        "data": "total_of_already_settled",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return "--";
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
+                        }
+                    },
+                    {
+                        "title": "坏账",
+                        "data": "total_of_bad_debt",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return "--";
+                            return moneyAddCommas(parseFloat(data).toFixed(2));
+                        }
+                    },
+                    {
+                        "title": "待收款",
+                        "data": "id",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(['总计','合计'].includes(row.id))
+                            {
+                                $(nTd).addClass('_bold text-green');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            var $a = parseFloat(row.total_of_revenue - row.total_of_already_settled - row.total_of_bad_debt).toFixed(2);
+                            if($a == 0) return "--";
+                            return moneyAddCommas($a);
+                        }
+                    },
+                    {
                         "title": "总利润",
                         "data": "total_of_profile",
                         "className": "",
