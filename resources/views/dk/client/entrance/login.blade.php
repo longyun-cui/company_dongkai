@@ -15,7 +15,7 @@
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">用户登陆</p>
+        <p class="login-box-msg">客户登陆</p>
 
         <form action="/login" method="post" id="form-admin-login">
             {{ csrf_field() }}
