@@ -15170,9 +15170,6 @@ class DKFinanceRepository {
         {
             $query->where('superior_company_id',$me->superior_company_id);
         }
-        else if(in_array($me->user_type,[61]))
-        {
-        }
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -17127,9 +17124,9 @@ class DKFinanceRepository {
         if(!empty($post_data['length']))
         {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
-            else $view_data['length'] = 20;
+            else $view_data['length'] = -1;
         }
-        else $view_data['length'] = 40;
+        else $view_data['length'] = -1;
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -17168,9 +17165,16 @@ class DKFinanceRepository {
     {
         $this->get_me();
         $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,31,41])) return response_error();
+
+        if(in_array($me->user_type,[41]))
+        {
+            $post_data['channel'] = $me->channel_id;
+        }
 
         $channel_id = -1;
         $empty_collect = collect([]);
+
         // 代理
         if(isset($post_data['channel']))
         {
@@ -17224,7 +17228,6 @@ class DKFinanceRepository {
 
         if($limit == -1) $list = $query_for_daily->get();
         else $list = $query_for_daily->skip($skip)->take($limit)->get();
-        $total = count($list);
 
 
         // 资金使用统计
@@ -17295,6 +17298,7 @@ class DKFinanceRepository {
             $formatted_list[] = $formatted_date;
         }
 //        dd($formatted_list);
+        $total = count($formatted_list);
 
 
         return datatable_response(collect($formatted_list), $draw, $total);
@@ -17341,7 +17345,16 @@ class DKFinanceRepository {
         }
         else $view_data['project_id'] = '';
 
-        $project_list = DK_Finance_Project::select('id','name')->get();
+
+        if(in_array($me->user_type,[41]))
+        {
+            $project_list = DK_Finance_Project::select('id','name')->where('channel_id',$me->channel_id)->get();
+        }
+        else
+        {
+            $project_list = DK_Finance_Project::select('id','name')->get();
+        }
+
         $view_data['project_list'] = $project_list;
 
         $view_data['menu_active_of_statistic_monthly_by_project'] = 'active menu-open';
@@ -17353,9 +17366,11 @@ class DKFinanceRepository {
     {
         $this->get_me();
         $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,31,41])) return response_error();
 
         $project_id = -1;
         $empty_collect = collect([]);
+
         // 选择项目
         if(isset($post_data['project']))
         {

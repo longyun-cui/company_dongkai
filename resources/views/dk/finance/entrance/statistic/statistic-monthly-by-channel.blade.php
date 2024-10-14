@@ -15,6 +15,7 @@
     <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
 @section('content')
+@if(in_array($me->user_type,[0,1,9,11,31]))
 <div class="row">
     <div class="col-md-12">
 
@@ -22,7 +23,7 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">
-                    <span class="statistic-title">全部</span>
+                    <span class="statistic-title">【{{ $channel_name or '' }}】</span>
                     <span class="statistic-time-type-title"></span>
                     <span class="statistic-time-title"></span>
                 </h3>
@@ -77,17 +78,18 @@
 
     </div>
 </div>
+@endif
 
 <div class="row">
     <div class="col-md-12">
 
 
-        @if(in_array($me->user_type,[0,1,9,11,31]))
+        @if(in_array($me->user_type,[0,1,9,11,31,41]))
         <div class="box box-primary bg-white">
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">
-                    <span class="statistic-title-">代理列表</span>
+                    <span class="statistic-title-">月报列表</span>
                 </h3>
             </div>
 
@@ -226,7 +228,7 @@
                         "title": "月份",
                         "data": "formatted_year_month",
                         "className": "",
-                        "width": "50px",
+                        "width": "60px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -236,7 +238,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return data + "月";
                         }
                     },
                     {

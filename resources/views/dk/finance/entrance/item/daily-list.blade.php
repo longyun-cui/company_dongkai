@@ -1047,7 +1047,7 @@
                             }
                             else
                             {
-                                return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                                return '<a target="_blank" href="/statistic/statistic-monthly-by-project?project_id='+data+'">'+row.project_er.name+'</a>';
                             }
                         }
                     },
@@ -1068,7 +1068,7 @@
                                 {
                                     return '--';
                                 }
-                                else return '<a href="javascript:void(0);">'+row.project_er.channel_er.name+'</a>';
+                                else return '<a target="_blank" href="/statistic/statistic-monthly-by-channel?channel_id='+row.project_er.channel_er.id+'">'+row.project_er.channel_er.name+'</a>';
                             }
                         }
                     },

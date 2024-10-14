@@ -1115,7 +1115,7 @@
                             }
                             else if(row.company_category == 11)
                             {
-                                return '<a href="javascript:void(0);">'+data+'</a>';
+                                return '<a target="_blank" href="/statistic/statistic-monthly-by-channel?channel_id='+row.id+'">'+data+'</a>';
                             }
                         }
                     },

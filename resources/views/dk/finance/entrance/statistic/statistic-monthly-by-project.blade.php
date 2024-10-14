@@ -162,7 +162,7 @@
             var dt = $('#datatable_ajax_project');
             var ajax_datatable_project = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[-1, 100, 200], ["全部", "100", "200"]],
+                "aLengthMenu": [[-1], ["全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -219,7 +219,7 @@
 //                        'orderable': false
 //                    },
                     {
-                        "title": "ID",
+                        "title": "月份",
                         "data": "formatted_year_month",
                         "className": "",
                         "width": "60px",
@@ -236,7 +236,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return data;
+                            return data + "月";
                         }
                     },
 //                     {

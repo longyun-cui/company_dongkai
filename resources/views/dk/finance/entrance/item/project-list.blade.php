@@ -1049,7 +1049,7 @@
                         },
                         render: function(data, type, row, meta) {
                             if(row.channel_er == null) return '--';
-                            else return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
+                            else return '<a target="_blank" href="/statistic/statistic-monthly-by-channel?channel_id='+row.channel_er.id+'">'+row.channel_er.name+'</a>';
                         }
                     },
                     {

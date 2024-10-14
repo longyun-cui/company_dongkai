@@ -154,7 +154,7 @@
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,31]))
+            @if(in_array($me->user_type,[0,1,9,11,31,41]))
                 <li class="treeview {{ $menu_active_of_statistic_monthly_by_channel or '' }}">
                     <a href="{{ url('/statistic/statistic-monthly-by-channel') }}">
                         <i class="fa fa-calendar text-yellow"></i> <span>代理月报</span>
@@ -162,7 +162,7 @@
                 </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,31]))
+            @if(in_array($me->user_type,[0,1,9,11,31,41]))
                 <li class="treeview {{ $menu_active_of_statistic_monthly_by_project or '' }}">
                     <a href="{{ url('/statistic/statistic-monthly-by-project') }}">
                         <i class="fa fa-calendar text-yellow"></i> <span>项目月报</span>
