@@ -71,6 +71,12 @@
                             @endif
                         </select>
 
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-service">
+                            <i class="fa fa-search"></i> 全部查询
+                        </button>
+
+
                         {{--按月查看--}}
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-service">
                             <i class="fa fa-chevron-left"></i>
@@ -105,9 +111,6 @@
                         </button>
 
 
-{{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-service">--}}
-{{--                            <i class="fa fa-search"></i> 全部查询--}}
-{{--                        </button>--}}
                         <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-service">
                             <i class="fa fa-remove"></i> 清空重选
                         </button>
