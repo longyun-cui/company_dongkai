@@ -1023,7 +1023,7 @@
                             }
                         },
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">'+data+'</a>';
+                            return '<a target="_blank" href="/statistic/statistic-monthly-by-project?project_id='+row.id+'">'+data+'</a>';
                         }
                     },
                     {

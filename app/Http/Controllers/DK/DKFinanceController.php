@@ -1175,6 +1175,28 @@ class DKFinanceController extends Controller
 
 
 
+    // 【统计】月报-公司
+    public function view_statistic_monthly_by_company()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_monthly_by_company(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_of_monthly_by_company(request()->all());
+    }
+    // 【统计】月报-代理
+    public function view_statistic_monthly_by_channel()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_monthly_by_channel(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_of_monthly_by_channel(request()->all());
+    }
+    // 【统计】月报-代理
+    public function view_statistic_monthly_by_project()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_monthly_by_project(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_of_monthly_by_project(request()->all());
+    }
+
+
+
+
 
 
 

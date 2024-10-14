@@ -16788,9 +16788,9 @@ class DKFinanceRepository {
         if(!empty($post_data['length']))
         {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
-            else $view_data['length'] = 20;
+            else $view_data['length'] = -1;
         }
-        else $view_data['length'] = 40;
+        else $view_data['length'] = -1;
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -17109,6 +17109,354 @@ class DKFinanceRepository {
 //        dd($list->toArray());
 
         $list[] = $total_data;
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+    // 【统计】【月报-代理】显示-视图
+    public function view_statistic_monthly_by_channel($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,31,41])) return view($this->view_blade_403);
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 20;
+        }
+        else $view_data['length'] = 40;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+        // 代理ID
+        if(!empty($post_data['channel_id']))
+        {
+            if(is_numeric($post_data['channel_id']) && $post_data['channel_id'] > 0)
+            {
+                $company = DK_Finance_Company::find($post_data['channel_id']);
+                if($company)
+                {
+                    $view_data['channel_id'] = $post_data['channel_id'];
+                    $view_data['channel_name'] = $company->name;
+                }
+                else $view_data['channel_id'] = '';
+            }
+            else $view_data['channel_id'] = '';
+        }
+        else $view_data['channel_id'] = '';
+
+        $channel_list = DK_Finance_Company::select('id','name')->where('company_category',11)->get();
+        $view_data['channel_list'] = $channel_list;
+
+        $view_data['menu_active_of_statistic_monthly_by_channel'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.statistic.statistic-monthly-by-channel';
+        return view($view_blade)->with($view_data);
+    }
+    // 【统计】【月报-代理】返回-列表-数据
+    public function get_statistic_data_of_monthly_by_channel($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $channel_id = -1;
+        $empty_collect = collect([]);
+        // 代理
+        if(isset($post_data['channel']))
+        {
+            if(is_numeric($post_data['channel']) && strpos($post_data['channel'],".") == false)
+            {
+                $channel_id = $post_data['channel'];
+                $project_ids = DK_Finance_Project::select('id')->where('channel_id',$channel_id)->get();
+            }
+            else
+            {
+                return datatable_response($empty_collect);
+            }
+        }
+        else return datatable_response($empty_collect);
+
+
+        // 日报统计
+        $query_for_daily = DK_Finance_Daily::select('assign_date','project_id')
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(assign_date, '%Y-%m') as formatted_year_month,
+                    sum(attendance_manpower) as total_of_attendance_manpower,
+                    sum(delivery_quantity) as total_of_delivery_quantity,
+                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
+                    sum(call_charge_daily_cost) as total_of_call_charge_daily_cost,
+                    sum(total_daily_cost) as total_of_daily_cost
+                "))
+//            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+            ->with(["project_er"=>function($query) { $query->select('id','channel_id','channel_unit_price','cooperative_unit_price'); }])
+            ->whereIn('project_id', $project_ids)
+            ->groupBy('formatted_year_month')
+            ->groupBy('project_id');
+
+
+//        $total = $query_for_daily->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query_for_daily->orderBy($field, $order_dir);
+        }
+        else $query_for_daily->orderBy("formatted_year_month", "desc");
+
+        if($limit == -1) $list = $query_for_daily->get();
+        else $list = $query_for_daily->skip($skip)->take($limit)->get();
+        $total = count($list);
+
+
+        // 资金使用统计
+        $query_for_using = DK_Finance_Funds_Using::select('id','finance_type','channel_id','project_id')
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(transaction_date, '%Y-%m') as formatted_year_month,
+                    Year(transaction_date) as year,
+                    Month(transaction_date) as month,
+                    DAY(transaction_date) as day,
+                    count(*) as quantity,
+                    sum(transaction_amount) AS total_of_transaction_amount
+                "))
+//            ->where('finance_type',1)
+            ->groupBy('formatted_year_month')
+            ->groupBy('finance_type');
+
+        $data_of_using = $query_for_using->get()->groupBy('formatted_year_month');
+
+        $list = $list->groupBy('formatted_year_month');
+
+        $formatted_list = [];
+
+        foreach($list as $k => $v)
+        {
+            $formatted_date = [];
+            $formatted_date['formatted_year_month'] = $k;
+            $formatted_date['total_of_attendance_manpower'] = 0;
+            $formatted_date['total_of_delivery_quantity'] = 0;
+            $formatted_date['total_of_delivery_quantity_of_invalid'] = 0;
+            $formatted_date['total_of_delivery_quantity_of_effective'] = 0;
+            $formatted_date['total_of_call_charge_daily_cost'] = 0;
+            $formatted_date['total_of_daily_cost'] = 0;
+            $formatted_date['total_of_channel_cost'] = 0;
+            $formatted_date['total_of_all_cost'] = 0;
+            $formatted_date['total_of_revenue'] = 0;
+            $formatted_date['total_of_already_settled'] = 0;
+            $formatted_date['total_of_bad_debt'] = 0;
+            $formatted_date['total_of_profile'] = 0;
+
+            // 项目累加
+            foreach($v as $project_k => $project_v)
+            {
+                $channel_unit_price = $project_v->project_er->channel_unit_price;
+                $cooperative_unit_price = $project_v->project_er->cooperative_unit_price;
+
+                $formatted_date['total_of_attendance_manpower'] += $project_v->total_of_attendance_manpower;
+                $formatted_date['total_of_delivery_quantity'] += $project_v->total_of_delivery_quantity;
+                $formatted_date['total_of_delivery_quantity_of_invalid'] += $project_v->total_of_delivery_quantity_of_invalid;
+                $formatted_date['total_of_delivery_quantity_of_effective'] += ($project_v->total_of_delivery_quantity - $project_v->total_of_delivery_quantity_of_invalid);
+                $formatted_date['total_of_call_charge_daily_cost'] += $project_v->total_of_call_charge_daily_cost;
+                $formatted_date['total_of_daily_cost'] += $project_v->total_of_daily_cost;
+                $formatted_date['total_of_channel_cost'] += ($channel_unit_price * $project_v->total_of_delivery_quantity);
+                $formatted_date['total_of_all_cost'] += $project_v->total_of_daily_cost + ($channel_unit_price * $project_v->total_of_delivery_quantity);
+                $formatted_date['total_of_revenue'] += ($cooperative_unit_price * ($project_v->total_of_delivery_quantity - $project_v->total_of_delivery_quantity_of_invalid));
+            }
+
+            // 资金使用
+            $formatted_year_month = $k;
+            if(!empty($data_of_using[$formatted_year_month]))
+            {
+                foreach($data_of_using[$formatted_year_month] as $using_k => $using_v)
+                {
+                    if($using_v->finance_type == 1) $formatted_date['total_of_already_settled'] = $using_v->total_of_transaction_amount;
+                    else if($using_v->finance_type == 91) $formatted_date['total_of_bad_debt'] = $using_v->total_of_transaction_amount;
+                }
+            }
+
+            $formatted_list[] = $formatted_date;
+        }
+//        dd($formatted_list);
+
+
+        return datatable_response(collect($formatted_list), $draw, $total);
+    }
+
+
+    // 【统计】【月报-项目】显示-视图
+    public function view_statistic_monthly_by_project($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,31,41])) return view($this->view_blade_403);
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = -1;
+        }
+        else $view_data['length'] = -1;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+        // 项目ID
+        if(!empty($post_data['project_id']))
+        {
+            if(is_numeric($post_data['project_id']) && $post_data['project_id'] > 0)
+            {
+                $project = DK_Finance_Project::find($post_data['project_id']);
+                if($project)
+                {
+                    $view_data['project_id'] = $post_data['project_id'];
+                    $view_data['project_name'] = $project->name;
+                }
+                else $view_data['project_id'] = '';
+            }
+            else $view_data['project_id'] = '';
+        }
+        else $view_data['project_id'] = '';
+
+        $project_list = DK_Finance_Project::select('id','name')->get();
+        $view_data['project_list'] = $project_list;
+
+        $view_data['menu_active_of_statistic_monthly_by_project'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.statistic.statistic-monthly-by-project';
+        return view($view_blade)->with($view_data);
+    }
+    // 【统计】【月报-项目】返回-列表-数据
+    public function get_statistic_data_of_monthly_by_project($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $project_id = -1;
+        $empty_collect = collect([]);
+        // 选择项目
+        if(isset($post_data['project']))
+        {
+            if(is_numeric($post_data['project']) && strpos($post_data['project'],".") == false)
+            {
+                $project_id = $post_data['project'];
+                $project = DK_Finance_Project::find($project_id);
+            }
+            else
+            {
+                return datatable_response($empty_collect);
+            }
+        }
+        else return datatable_response($empty_collect);
+
+
+        // 日报统计
+        $query_for_daily = DK_Finance_Daily::select('project_id','assign_date')
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(assign_date, '%Y-%m') as formatted_year_month,
+                    sum(attendance_manpower) as total_of_attendance_manpower,
+                    sum(delivery_quantity) as total_of_delivery_quantity,
+                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
+                    sum(call_charge_daily_cost) as total_of_call_charge_daily_cost,
+                    sum(total_daily_cost) as total_cost
+                "))
+//            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day)
+//            ->with([
+//                "project_er"=>function($query) {
+//                    $query->select('id','channel_id','channel_unit_price','cooperative_unit_price');
+//                }]
+//            )
+            ->where('project_id', $project_id)
+            ->groupBy('formatted_year_month')
+            ->groupBy('project_id');
+
+
+//        $total = $query_for_daily->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query_for_daily->orderBy($field, $order_dir);
+        }
+        else $query_for_daily->orderBy("formatted_year_month", "desc");
+
+        if($limit == -1) $list = $query_for_daily->get();
+        else $list = $query_for_daily->skip($skip)->take($limit)->get();
+        $total = count($list);
+
+
+//        dd($project_list_from_daily->toArray());
+
+
+
+        // 资金使用统计
+        $query_for_using = DK_Finance_Funds_Using::select('id','finance_type','channel_id','project_id')
+//            ->where('finance_type',1)
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(transaction_date, '%Y-%m') as formatted_year_month,
+                    Year(transaction_date) as year,
+                    Month(transaction_date) as month,
+                    DAY(transaction_date) as day,
+                    count(*) as quantity,
+                    sum(transaction_amount) AS total_of_transaction_amount
+                "))
+            ->where('project_id', $project_id)
+            ->groupBy('formatted_year_month')
+            ->groupBy('project_id');
+
+        $data_of_using = $query_for_using->get()->groupBy('formatted_year_month');
+
+
+        foreach($list as $k => $v)
+        {
+            $v->channel_unit_price = $project->channel_unit_price;
+            $v->cooperative_unit_price = $project->cooperative_unit_price;
+            $v->funds_already_settled_total = 0;
+            $v->funds_bad_debt_total = 0;
+
+            // 资金使用
+            $formatted_year_month = $v->formatted_year_month;
+            if(!empty($data_of_using[$formatted_year_month]))
+            {
+                foreach($data_of_using[$formatted_year_month] as $using_k => $using_v)
+                {
+                    if($using_v->finance_type == 1) $v->funds_already_settled_total = $using_v->total_of_transaction_amount;
+                    else if($using_v->finance_type == 91) $v->funds_bad_debt_total = $using_v->total_of_transaction_amount;
+                }
+            }
+
+        }
 
         return datatable_response($list, $draw, $total);
     }

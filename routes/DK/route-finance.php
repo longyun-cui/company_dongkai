@@ -359,6 +359,7 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.finance.password_chan
     Route::post('/statistic/statistic-get-data-for-finance-of-daily-list', $controller.'@get_statistic_data_for_finance_of_daily_list_datatable');
     Route::post('/statistic/statistic-get-data-for-finance-of-daily-chart', $controller.'@get_statistic_data_for_finance_of_daily_chart');
 
+
     // 业务报表
     Route::match(['get','post'], '/statistic/statistic-service', $controller.'@view_statistic_service');
     Route::post('/statistic/statistic-get-data-for-service', $controller.'@get_statistic_data_for_service');
@@ -375,8 +376,14 @@ Route::group(['middleware' => ['dk.finance.user.login','dk.finance.password_chan
 //    Route::post('/statistic/statistic-get-data-for-service-of-daily-chart', $controller.'@get_statistic_data_for_service_of_daily_chart');
 
 
-    // 业务报表
-    Route::match(['get','post'], '/statistic/statistic-channel-settled', $controller.'@view_statistic_channel_settled');
+    // 公司概览
+    Route::match(['get','post'], '/statistic/statistic-company-overview', $controller.'@view_statistic_company_overview');
+
+
+    // 月报
+    Route::match(['get','post'], '/statistic/statistic-monthly-by-company', $controller.'@view_statistic_monthly_by_company');
+    Route::match(['get','post'], '/statistic/statistic-monthly-by-channel', $controller.'@view_statistic_monthly_by_channel');
+    Route::match(['get','post'], '/statistic/statistic-monthly-by-project', $controller.'@view_statistic_monthly_by_project');
 
 
 
