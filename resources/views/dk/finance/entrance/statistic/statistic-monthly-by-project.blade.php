@@ -22,7 +22,7 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">
-                    <span class="statistic-title">{{ $project_name or '' }}</span>
+                    <span class="statistic-title">【{{ $project_name or '' }}】</span>
                     <span class="statistic-time-type-title"></span>
                     <span class="statistic-time-title"></span>
                 </h3>
@@ -86,7 +86,7 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">
-                    <span class="statistic-title-">项目列表</span>
+                    <span class="statistic-title-">项目月报</span>
                 </h3>
             </div>
 

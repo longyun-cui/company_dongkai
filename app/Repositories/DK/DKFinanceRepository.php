@@ -17336,8 +17336,12 @@ class DKFinanceRepository {
                 $project = DK_Finance_Project::find($post_data['project_id']);
                 if($project)
                 {
-                    $view_data['project_id'] = $post_data['project_id'];
-                    $view_data['project_name'] = $project->name;
+                    if(in_array($me->user_type,[41]) && $project->channel_id == $me->channel_id)
+                    {
+                        $view_data['project_id'] = $post_data['project_id'];
+                        $view_data['project_name'] = $project->name;
+                    }
+                    else $view_data['project_id'] = '';
                 }
                 else $view_data['project_id'] = '';
             }
