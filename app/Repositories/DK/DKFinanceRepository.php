@@ -8384,7 +8384,7 @@ class DKFinanceRepository {
         $this->get_me();
 
         $item_type = 'item';
-        $item_type_text = '结算';
+        $item_type_text = '报表';
         $title_text = '添加'.$item_type_text;
         $list_text = $item_type_text.'列表';
         $list_link = '/item/settled-list';
@@ -8411,7 +8411,7 @@ class DKFinanceRepository {
         $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.item.settled-edit';
 
         $item_type = 'item';
-        $item_type_text = '结算';
+        $item_type_text = '报表';
         $title_text = '编辑'.$item_type_text;
         $list_text = $item_type_text.'列表';
         $list_link = '/item/settled-list';
@@ -8460,34 +8460,36 @@ class DKFinanceRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
-            'project_id.required' => '请填选择项目！',
-            'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
+            'created_type.required' => 'created_type.required.',
+            'project_id.required' => '请填选择项目11！',
+            'project_id.numeric' => '项目参数有误！',
+            'project_id.min' => '项目参数有误！',
             'assign_start.required' => '请填写开始日期！',
             'assign_ended.required' => '请填写结束日期！',
-            'delivery_quantity.required' => '请填交付量！',
-            'delivery_quantity.numeric' => '交付量需为整数！',
-            'delivery_quantity_of_effective.required' => '请填写有效交付量！',
-            'delivery_quantity_of_effective.numeric' => '有效交付量需为整数！',
-            'total_cost.required' => '请填写总成本！',
-            'channel_unit_price.required' => '请填写渠道单价！',
-            'channel_cost.required' => '请填写去到成本！',
-            'cooperative_unit_price.required' => '请填写合作单价！',
-            'profit_proportion.required' => '请填写利润分成比例！',
+//            'delivery_quantity.required' => '请填交付量！',
+//            'delivery_quantity.numeric' => '交付量需为整数！',
+//            'delivery_quantity_of_effective.required' => '请填写有效交付量！',
+//            'delivery_quantity_of_effective.numeric' => '有效交付量需为整数！',
+//            'total_cost.required' => '请填写总成本！',
+//            'channel_unit_price.required' => '请填写渠道单价！',
+//            'channel_cost.required' => '请填写去到成本！',
+//            'cooperative_unit_price.required' => '请填写合作单价！',
+//            'profit_proportion.required' => '请填写利润分成比例！',
 //            'description.required' => '请输入备注！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
+            'created_type' => 'required',
             'project_id' => 'required|numeric|min:1',
             'assign_start' => 'required',
             'assign_ended' => 'required',
-            'delivery_quantity' => 'required|numeric',
-            'delivery_quantity_of_effective' => 'required|numeric',
-            'total_cost' => 'required',
-            'channel_unit_price' => 'required',
-            'channel_cost' => 'required',
-            'cooperative_unit_price' => 'required',
-            'profit_proportion' => 'required',
+//            'delivery_quantity' => 'required|numeric',
+//            'delivery_quantity_of_effective' => 'required|numeric',
+//            'total_cost' => 'required',
+//            'channel_unit_price' => 'required',
+//            'channel_cost' => 'required',
+//            'cooperative_unit_price' => 'required',
+//            'profit_proportion' => 'required',
 //            'description' => 'required',
         ], $messages);
         if ($v->fails())
@@ -8503,6 +8505,8 @@ class DKFinanceRepository {
 
         $operate = $post_data["operate"];
         $operate_id = $post_data["operate_id"];
+        $created_type = $post_data["created_type"];
+        if(!in_array($created_type,[1,11])) return response_error([],"创建类型错误！");
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
@@ -8532,31 +8536,60 @@ class DKFinanceRepository {
         }
 
 
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
+        if($created_type == 1)
         {
+            // 日报统计
+            $statistics_of_daily = DK_Finance_Daily::select('assign_date','project_id')
+                ->addSelect(DB::raw("
+                    sum(attendance_manpower) as total_of_attendance_manpower,
+                    sum(delivery_quantity) as total_of_delivery_quantity,
+                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
+                    sum(call_charge_daily_cost) as total_of_call_charge_daily_cost,
+                    sum(total_daily_cost) as total_of_daily_cost
+                "))
+                ->with(["project_er"=>function($query) { $query->select('id','channel_id','channel_unit_price','cooperative_unit_price'); }])
+                ->where('project_id', $post_data['project_id'])
+                ->whereDate("assign_date", ">=", $post_data['assign_start'])
+                ->whereDate("assign_date", "<=", $post_data['assign_ended'])
+                ->first();
 
+            $mine_data = [];
+            $mine_data['project_id'] = $post_data['project_id'];
+            $mine_data['assign_start'] = $post_data['assign_start'];
+            $mine_data['assign_ended'] = $post_data['assign_ended'];
+            $mine_data['delivery_quantity'] = $statistics_of_daily->total_of_delivery_quantity;
+            $mine_data['delivery_quantity_of_invalid'] = $statistics_of_daily->total_of_delivery_quantity_of_invalid;
+            $mine_data['delivery_quantity_of_effective'] = $statistics_of_daily->total_of_delivery_quantity - $statistics_of_daily->total_of_delivery_quantity_of_invalid;
+            $mine_data['attendance_manpower'] = $statistics_of_daily->total_of_attendance_manpower;
+            $mine_data['call_charge_daily_cost'] = $statistics_of_daily->total_of_call_charge_daily_cost;
+            $mine_data['total_daily_cost'] = $statistics_of_daily->total_of_daily_cost;
+            $mine_data['channel_unit_price'] = $statistics_of_daily->project_er->channel_unit_price;
+            $mine_data['channel_cost'] = ($mine_data['channel_unit_price'] * $mine_data['delivery_quantity_of_effective']);
+            $mine_data['total_cost'] = ($mine_data['total_daily_cost'] + $mine_data['channel_cost']);
+            $mine_data['cooperative_unit_price'] = $statistics_of_daily->project_er->cooperative_unit_price;
+            $mine_data['funds_should_settled_total'] = ($mine_data['cooperative_unit_price'] * $mine_data['delivery_quantity_of_effective']);
+//            $mine_data['profit_proportion'] = $statistics_of_daily->project_er->profit_proportion;
+
+        }
+        else if($created_type == 11)
+        {
             $mine_data = $post_data;
-            $mine_data['should_settled'] = $post_data['cooperative_unit_price'] * $post_data['delivery_quantity_of_effective'];
+            $mine_data['funds_should_settled_total'] = $post_data['cooperative_unit_price'] * $post_data['delivery_quantity_of_effective'];
 
             unset($mine_data['operate']);
             unset($mine_data['operate_id']);
             unset($mine_data['operate_category']);
             unset($mine_data['operate_type']);
+        }
 
 
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
-//                if(!empty($post_data['circle_id']))
-//                {
-//                    $circle_data['order_id'] = $mine->id;
-//                    $circle_data['creator_id'] = $me->id;
-//                    $circle->pivot_order_list()->attach($circle_data);  //
-////                    $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
-//                }
             }
             else throw new Exception("insert--settled--fail");
 

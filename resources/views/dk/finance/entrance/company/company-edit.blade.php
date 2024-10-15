@@ -270,7 +270,6 @@
     $(function() {
 
         var $company_category = $("input[name=company_category]").val();
-        console.log($company_category);
         if($company_category == 1)
         {
             $('#select2-superior-company').prop('data-type','company');

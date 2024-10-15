@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '结算列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '自定义报表' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')结算列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')自定义报表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -21,7 +21,7 @@
             <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
 
                 <h3 class="box-title">
-                    <span class="statistic-title">结算列表</span>
+                    <span class="statistic-title">自定义报表</span>
                     <span class="statistic-time-type-title"></span>
                     <span class="statistic-time-title">（全部）</span>
                 </h3>
@@ -36,7 +36,7 @@
 {{--                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加工单</button>--}}
 {{--                    </a>--}}
                     <a href="{{ url('/item/settled-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加结算</button>
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加报表</button>
                     </a>
                 </div>
 
@@ -59,7 +59,7 @@
 
                         <input type="hidden" name="settled-time-type" value="all" readonly>
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="settled-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:88px;" />
+{{--                        <input type="text" class="form-control form-filter filter-keyup" name="settled-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:88px;" />--}}
 
                         @if(in_array($me->user_type,[0,9,11,31]))
                             <select class="form-control form-filter select-select2 select2-box settled-company" name="settled-company" style="width:120px;">
@@ -87,7 +87,7 @@
                                 @endif
                             </select>
                         @endif
-                        <select class="form-control form-filter select-select2 select2-box settled-select2-project" name="settled-project" style="width:160px;">
+                        <select class="form-control form-filter select-select2 select2-box settled-select2-project" name="settled-project" style="width:120px;">
                             @if($project_id > 0)
                                 <option value="-1">选择项目</option>
                                 <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
@@ -101,6 +101,9 @@
                             <option value ="已收款">已收款</option>
                             <option value ="待收款">待收款</option>
                         </select>
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit-" id="filter-submit-for-settled-by-all">
+                            <i class="fa fa-search"></i>全部搜索
+                        </button>
 
 
                         {{--按日查看--}}
@@ -113,19 +116,6 @@
 {{--                        </button>--}}
 
 
-                        {{--按天查看--}}
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-settled">
-                            <i class="fa fa-chevron-left"></i>
-                        </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="settled-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-settled">
-                            <i class="fa fa-chevron-right"></i>
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit-" id="filter-submit-for-settled-by-date">
-                            <i class="fa fa-search"></i> 按日查询
-                        </button>
-
-
                         {{--按月查看--}}
                         <button type="button" class="form-control btn btn-flat btn-default time-picker-btn month-pick-pre-for-settled">
                             <i class="fa fa-chevron-left"></i>
@@ -136,6 +126,19 @@
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit-" id="filter-submit-for-settled-by-month">
                             <i class="fa fa-search"></i> 按月查询
+                        </button>
+
+
+                        {{--按天查看--}}
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-settled">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="settled-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-settled">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit-" id="filter-submit-for-settled-by-date">
+                            <i class="fa fa-search"></i> 按日查询
                         </button>
 
 
@@ -155,9 +158,6 @@
 {{--                        </button>--}}
 
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit-" id="filter-submit-for-settled-by-all">
-                            <i class="fa fa-search"></i>全部搜索
-                        </button>
                         <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
                             <i class="fa fa-remove"></i> 清空重选
                         </button>
@@ -1169,7 +1169,7 @@
                         "title": "操作",
                         "data": 'id',
                         "className": "",
-                        "width": "120px",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == "合计") return data;
@@ -1189,23 +1189,13 @@
                             var $html_settle = '';
 
 
-                            if(row.item_status == 1)
-                            {
-                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
 
 //                            if(row.is_me == 1 && row.item_active == 0)
                             if(row.is_published == 0)
                             {
                                 $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
                                 $html_edit = '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>';
-                                $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
                                 $html_verified = '<a class="btn btn-xs btn-default disabled">验证</a>';
-                                $html_delete = '<a class="btn btn-xs bg-black item-delete-submit" data-id="'+data+'">删除</a>';
                             }
                             else
                             {
@@ -1215,7 +1205,6 @@
                                     $html_publish = '<a class="btn btn-xs bg-olive item-publish-submit" data-id="'+data+'">发布</a>';
                                 }
                                 $html_detail = '<a class="btn btn-xs bg-primary item-modal-show-for-detail" data-id="'+data+'">详情</a>';
-                                $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
 
                                 if(row.is_completed == 1)
@@ -1236,6 +1225,8 @@
 
                             }
 
+                            $html_delete = '<a class="btn btn-xs bg-black item-delete-submit" data-id="'+data+'">删除</a>';
+                            $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
                             $html_settle = '<a class="btn btn-xs bg-orange item-modal-show-for-settle" data-id="'+data+'">结算</a>';
 
 //                            if(row.deleted_at == null)
@@ -1245,7 +1236,9 @@
 //                            else
 //                            {
 //                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
+//                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>';
 //                            }
+//                                $html_delete = '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>';
 
                             var $more_html =
                                 '<div class="btn-group">'+
@@ -1265,22 +1258,11 @@
 
                             var $html =
 //                                    $html_able+
-//                                    '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
-//                                 $html_completed+
 //                                 $html_edit+
-//                                 $html_publish+
-                                // $html_detail+
-                                // $html_verified+
-                                // $html_detail_inspected+
-                                // $html_inspected+
-                                // $html_delete+
-                                // $html_push+
-                                // $html_deliver+
-                                $html_settle+
+                                // $html_settle+
+                                $html_delete+
                                 $html_record+
                                 // $html_abandon+
-                                // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-                                // '<a class="btn btn-xs bg-olive item-download-qr-code-submit" data-id="'+data+'">下载二维码</a>'+
                                 // $more_html+
                                 '';
                             return $html;
@@ -1434,7 +1416,7 @@
                         }
                     },
                     {
-                        "title": "有效交付量",
+                        "title": "有效量",
                         "data": "delivery_quantity_of_effective",
                         "className": "",
                         "width": "60px",
@@ -1561,71 +1543,71 @@
                         }
                     },
                     {
-                        "title": "应结算",
+                        "title": "营收",
                         "data": "funds_should_settled_total",
-                        "className": "bg-income _bold",
+                        "className": "bg-fee-2 _bold",
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return parseFloat(data);
                         }
                     },
-                    {
-                        "title": "已结算",
-                        "data": 'funds_already_settled_total',
-                        "className": "item-show-for-settle bg-income",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(true)
-                            {
-                                $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
-                                $(nTd).attr('data-column-name','已结算');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == "--") return data;
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "title": "坏账",
-                        "data": 'funds_bad_debt_total',
-                        "className": "item-show-for-settle bg-income",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(true)
-                            {
-                                $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                                $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
-                                $(nTd).attr('data-column-name','已结算');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == "--") return data;
-                            if(!data) return "--";
-                            else if(data == 0 || data == 0.00) return "--";
-                            else return parseFloat(data);
-                        }
-                    },
-                    {
-                        "title": "待收款",
-                        "data": "id",
-                        "className": "bg-finance",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(parseFloat(row.funds_should_settled_total - row.funds_already_settled_total) >  0)
-                            {
-                                $(nTd).addClass('_bold').addClass('text-red');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return parseFloat(row.funds_should_settled_total - row.funds_already_settled_total - row.funds_bad_debt_total);
-                        }
-                    },
+                    // {
+                    //     "title": "已结算",
+                    //     "data": 'funds_already_settled_total',
+                    //     "className": "item-show-for-settle bg-income",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(true)
+                    //         {
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','已结算');
+                    //             $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','已结算');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data == "--") return data;
+                    //         return parseFloat(data);
+                    //     }
+                    // },
+                    // {
+                    //     "title": "坏账",
+                    //     "data": 'funds_bad_debt_total',
+                    //     "className": "item-show-for-settle bg-income",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(true)
+                    //         {
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','已结算');
+                    //             $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','已结算');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data == "--") return data;
+                    //         if(!data) return "--";
+                    //         else if(data == 0 || data == 0.00) return "--";
+                    //         else return parseFloat(data);
+                    //     }
+                    // },
+                    // {
+                    //     "title": "待收款",
+                    //     "data": "id",
+                    //     "className": "bg-finance",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(parseFloat(row.funds_should_settled_total - row.funds_already_settled_total) >  0)
+                    //         {
+                    //             $(nTd).addClass('_bold').addClass('text-red');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         return parseFloat(row.funds_should_settled_total - row.funds_already_settled_total - row.funds_bad_debt_total);
+                    //     }
+                    // },
                     {
                         "title": "利润",
                         "data": "id",
@@ -1642,33 +1624,33 @@
                             var $channel_cost = row.channel_cost;
                             var $funds_bad_debt_total = row.funds_bad_debt_total;
 
-                            var $profile = $funds_should_settled_total - $total_cost - $channel_cost - $funds_bad_debt_total;
+                            var $profile = parseFloat($funds_should_settled_total - $total_cost - $channel_cost - $funds_bad_debt_total).toFixed(2);
                             return parseFloat($profile);
                         }
                     },
-                    {
-                        "title": "利润比例",
-                        "data": "profit_proportion",
-                        "className": "bg-income",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','利润比例');
-                                $(nTd).attr('data-key','profit_proportion').attr('data-value',data);
-                                $(nTd).attr('data-column-name','利润比例');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data) return parseFloat(data);
-                            else return "--";
-                        }
-                    },
+                    // {
+                    //     "title": "利润比例",
+                    //     "data": "profit_proportion",
+                    //     "className": "bg-income",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-text-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','利润比例');
+                    //             $(nTd).attr('data-key','profit_proportion').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','利润比例');
+                    //             $(nTd).attr('data-text-type','text');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return parseFloat(data);
+                    //         else return "--";
+                    //     }
+                    // },
                     {
                         "title": "说明",
                         "data": "description",

@@ -36,6 +36,51 @@
                 <input type="hidden" name="operate_type" value="{{ $operate_type or 'order' }}" readonly>
 
 
+                {{--类别--}}
+                <div class="form-group form-category">
+                    <label class="control-label col-md-2">类型</label>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+
+                            @if(in_array($me->user_type, [0,1,11]))
+                                @if($operate == 'create' || ($operate == 'edit' && $data->created_type == 1))
+                                    <button type="button" class="btn">
+                                            <span class="radio">
+                                                <label>
+                                                    @if($operate == 'create')
+                                                        <input type="radio" name="created_type" value="1" checked="checked"> 创建
+                                                    @elseif($operate == 'edit' && $data->created_type == 1)
+                                                        <input type="radio" name="created_type" value="1" checked="checked"> 创建
+                                                    @else
+                                                        <input type="radio" name="created_type" value="1" checked="checked"> 创建
+                                                    @endif
+                                                </label>
+                                            </span>
+                                    </button>
+                                @endif
+                            @endif
+
+                            @if(in_array($me->user_type, [0,1,11,41]))
+                                @if($operate == 'create' || ($operate == 'edit' && $data->created_type == 11))
+                                    <button type="button" class="btn">
+                                            <span class="radio">
+                                                <label>
+                                                    @if($operate == 'edit' && $data->created_type == 11)
+                                                        <input type="radio" name="created_type" value="11" checked="checked"> 自定义补录
+                                                    @else
+                                                        <input type="radio" name="created_type" value="11"> 自定义补录
+                                                    @endif
+                                                </label>
+                                            </span>
+                                    </button>
+                                @endif
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+
+
                 {{--自定义标题--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 自定义标题</label>
@@ -58,7 +103,7 @@
                     </div>
                 </div>
 
-                {{--提交日期--}}
+                {{--开始日期--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 开始日期</label>
                     <div class="col-md-8 ">
@@ -71,7 +116,7 @@
                     </div>
                 </div>
 
-                {{--提交日期--}}
+                {{--结束日期--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 结束日期</label>
                     <div class="col-md-8 ">
@@ -85,21 +130,21 @@
                 </div>
 
                 {{--交付量--}}
-                <div class="form-group">
+                <div class="form-group custom-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 交付量</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="delivery_quantity" placeholder="交付量" value="{{ $data->delivery_quantity or '' }}">
                     </div>
                 </div>
                 {{--有效交付量--}}
-                <div class="form-group">
+                <div class="form-group custom-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 有效交付量</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="delivery_quantity_of_effective" placeholder="有效交付量" value="{{ $data->delivery_quantity_of_effective or '' }}">
                     </div>
                 </div>
                 {{--总成本--}}
-                <div class="form-group">
+                <div class="form-group custom-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 总成本</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="total_cost" placeholder="总成本" value="{{ $data->total_cost or '' }}">
@@ -108,28 +153,28 @@
 
 
                 {{--渠道单价--}}
-                <div class="form-group">
+                <div class="form-group custom-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道单价</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="channel_unit_price" placeholder="渠道单价" value="{{ $data->channel_unit_price or '' }}">
                     </div>
                 </div>
                 {{--渠道成本--}}
-                <div class="form-group">
+                <div class="form-group custom-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 渠道成本</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="channel_cost" placeholder="渠道成本" value="{{ $data->channel_cost or '' }}">
                     </div>
                 </div>
                 {{--合作单价--}}
-                <div class="form-group">
+                <div class="form-group custom-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 合作单价</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="cooperative_unit_price" placeholder="合作单价" value="{{ $data->cooperative_unit_price or '' }}">
                     </div>
                 </div>
                 {{--利润分成比例--}}
-                <div class="form-group">
+                <div class="form-group custom-box">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 利润分成比例</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="profit_proportion" placeholder="利润分成比例" value="{{ $data->profit_proportion or '' }}">
@@ -190,22 +235,32 @@
             showUpload: false
         });
 
+        var $created_type = $("input[name=created_type]").val();
+        if($created_type == 1)
+        {
+            $('.custom-box').hide();
+        }
+        else if($created_type == 11)
+        {
+            $('.custom-box').show();
+        }
 
-        $('input[name=assign_date]').datetimepicker({
-            locale: moment.locale('zh-cn'),
-            format: "YYYY-MM-DD",
-            ignoreReadonly: true
-        });
-
-        $('input[name=should_departure]').datetimepicker({
-            locale: moment.locale('zh-cn'),
-            format:"YYYY-MM-DD HH:mm",
-            ignoreReadonly: true
-        });
-        $('input[name=should_arrival]').datetimepicker({
-            locale: moment.locale('zh-cn'),
-            format: "YYYY-MM-DD HH:mm",
-            ignoreReadonly: true
+        // 【选择部门类型】
+        $("#form-edit-item").on('click', "input[name=created_type]", function() {
+            // radio
+            var $value = $(this).val();
+            if($value == 1)
+            {
+                $('.custom-box').hide();
+            }
+            else if($value == 11)
+            {
+                $('.custom-box').show();
+            }
+            else
+            {
+                $('.custom-box').hide();
+            }
         });
 
 

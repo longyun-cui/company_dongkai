@@ -28,20 +28,20 @@
                     </a>
                     <ul class="dropdown-menu">
 
-                        {{--部门管理--}}
-{{--                        @if(in_array($me->user_type,[0,1,9,11,41]))--}}
-{{--                        <li class="header">部门</li>--}}
-{{--                        @endif--}}
+                        {{--添加--}}
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                        <li class="header">添加</li>
+                        @endif
 
-{{--                        @if(in_array($me->user_type,[0,1,9,11]))--}}
-{{--                            <li class="header">--}}
-{{--                                <a href="{{ url('/user/client-create') }}">--}}
-{{--                                    <i class="fa fa-plus text-red"></i> 添加客户--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                        @endif--}}
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                            <li class="header">
+                                <a href="{{ url('/user/user-create') }}">
+                                    <i class="fa fa-plus text-red"></i> 添加客户
+                                </a>
+                            </li>
+                        @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,41]))
+                        @if(in_array($me->user_type,[0,1,9,11]))
                         <li class="header">
                             <a href="{{ url('/company/company-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加公司
@@ -49,7 +49,7 @@
                         </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,61]))
+                        @if(in_array($me->user_type,[0,1,9,11]))
                         <li class="header">
                             <a href="{{ url('/item/project-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加项目
@@ -57,7 +57,7 @@
                         </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,31]))
+                        @if(in_array($me->user_type,[0,1,9,11]))
                             <li class="header">
                                 <a href="{{ url('/item/settled-create') }}">
                                     <i class="fa fa-plus text-yellow"></i> 添加结算
