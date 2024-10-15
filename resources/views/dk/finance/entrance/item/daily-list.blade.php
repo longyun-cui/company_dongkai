@@ -26,6 +26,21 @@
                     <span class="statistic-time-title">（全部）</span>
                 </h3>
 
+                @if(in_array($me->user_type,[0,1,9,11,31]))
+                <div class="caption pull-right margin-left-8px">
+                    <i class="icon-pin font-blue"></i>
+                    <span class="caption-subject font-blue sbold uppercase"></span>
+{{--                    <a class="item-create-link">--}}
+{{--                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加订单</button>--}}
+{{--                    </a>--}}
+{{--                    <a class="item-create-show">--}}
+{{--                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加工单</button>--}}
+{{--                    </a>--}}
+                    <a href="{{ url('/item/daily-import') }}">
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-file-excel-o"></i> 导入日报</button>
+                    </a>
+                </div>
+
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
@@ -39,6 +54,7 @@
                         <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加日报</button>
                     </a>
                 </div>
+                @endif
 
                 <div class="pull-right _none">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">

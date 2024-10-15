@@ -66,7 +66,7 @@
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,31]))
-                        <li class="header _none">
+                        <li class="header">
                             <a href="{{ url('/item/daily-import') }}">
                                 <i class="fa fa-file-excel-o text-blue"></i> 导入日报
                             </a>
