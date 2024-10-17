@@ -1156,6 +1156,7 @@
                             // else return $year+'-'+$month+'-'+$day;
                         }
                     },
+                    @if(in_array($me->user_type,[0,1,9,11,19,31]))
                     {
                         "title": "外呼后台",
                         "data": "outbound_background",
@@ -1178,6 +1179,7 @@
                             return data;
                         }
                     },
+                    @endif
                     {
                         "title": "出勤人力",
                         "data": "attendance_manpower",
@@ -1325,6 +1327,7 @@
                             return parseFloat($per_value);
                         }
                     },
+                    @if(in_array($me->user_type,[0,1,9,11,19,31]))
                     {
                         "title": "物料量",
                         "data": "material_daily_quantity",
@@ -1341,6 +1344,7 @@
                             return Math.round(data);
                         }
                     },
+                    @endif
                     {
                         "title": "物料成本",
                         "data": "material_daily_cost",
