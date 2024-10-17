@@ -852,7 +852,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[100, 200, -1], ["100", "200", "全部"]],
+                "aLengthMenu": [[-1, 200, 500], ["全部", "100", "200"]],
                 "processing": true,
                 "serverSide": false,
                 "searching": false,
