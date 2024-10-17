@@ -1479,6 +1479,7 @@
                             return parseFloat($per_value);
                         }
                     },
+                    @if(in_array($me->user_type,[0,1,9,11,19,31]))
                     {
                         "title": "人力日薪",
                         "data": 'manpower_daily_wage',
@@ -1582,6 +1583,7 @@
                             return data;
                         }
                     },
+                    @endif
                     {
                         "title": "创建人",
                         "data": "creator_id",
