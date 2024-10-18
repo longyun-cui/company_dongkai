@@ -62,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('/AdminLTE/plugins/datatables/dataTables.bootstrap.css') }}">
 
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css">--}}
-    <link rel="stylesheet" href="{{ asset('fileinput-4.4.8.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/resource/component/css/fileinput-4.4.8.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resource/component/css/fileinput-only.css') }}">
 
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">--}}
@@ -87,6 +87,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     @yield('style')
     @yield('custom-css')
     @yield('custom-style')
+
+    {{--layout-style--}}
+    @include(env('TEMPLATE_DK_SUPER').'layout.layout-style')
 
 </head>
 <!--
@@ -190,8 +193,19 @@ desired effect
 {{--<script src="https://cdn.bootcss.com/lightcase/2.5.0/js/lightcase.min.js"></script>--}}
 <script src="{{ asset('/resource/component/js/lightcase-2.5.0.min.js') }}"></script>
 
+{{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
+<script src="{{ asset('/resource/component/js/select2-4.0.5.min.js') }}"></script>
 
-<script src="{{ asset('/resource/custom/super/admin/js/index.js') }}"></script>
+{{--<script src="{{ asset('/resource/component/js/echarts-3.7.2.min.js') }}"></script>--}}
+<script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
+
+
+{{--<script src="{{ asset('/resource/custom/super/admin/js/index.js') }}"></script>--}}
+
+
+{{--layout-script--}}
+@include(env('TEMPLATE_DK_SUPER').'layout.layout-script')
+
 
 @yield('js')
 @yield('script')
