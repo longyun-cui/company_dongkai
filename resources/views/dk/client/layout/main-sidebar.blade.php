@@ -39,7 +39,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
-                <li class="treeview {{ $menu_active_of_delivery_list or '' }}">
+                <li class="treeview {{ $menu_active_of_delivery_list or '' }} _none">
                     <a href="{{ url('/item/delivery-list')}}">
                         <i class="fa fa-file-text text-yellow"></i>
                         <span>交付列表</span>
@@ -48,7 +48,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
-            <li class="treeview {{ $menu_active_of_order_list_for_all or '' }} _none">
+            <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
                 <a href="{{ url('/item/order-list-for-all')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>工单列表</span>
