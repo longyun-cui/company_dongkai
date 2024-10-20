@@ -93,13 +93,10 @@
                         </select>
 
 
-{{--                        <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">--}}
+{{--                        <select class="form-control form-filter" name="order-delivered-status" style="width:88px;">--}}
 {{--                            <option value="-1">交付状态</option>--}}
-{{--                            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))--}}
-{{--                            <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>--}}
-{{--                            @endif--}}
-{{--                            <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>--}}
-{{--                            <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>--}}
+{{--                            <option value="待交付" @if("待审核" == $delivered_status) selected="selected" @endif>待交付</option>--}}
+{{--                            <option value="已交付" @if("已审核" == $delivered_status) selected="selected" @endif>已交付</option>--}}
 {{--                        </select>--}}
 
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
@@ -801,8 +798,8 @@
                         d.client_phone = $('input[name="order-client-phone"]').val();
                         d.is_wx = $('select[name="order-is-wx"]').val();
                         d.is_repeat = $('select[name="order-is-repeat"]').val();
-                        d.inspected_status = $('select[name="order-inspected-status"]').val();
-                        d.inspected_result = $('select[name="order-inspected-result[]"]').val();
+                        d.delivered_status = $('select[name="order-delivered-status"]').val();
+                        d.delivered_result = $('select[name="order-delivered-result[]"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -1271,7 +1268,8 @@
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
                     if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
-                    if($('select[name="order-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="order-inspected-status"]').val();
+                    // if($('select[name="order-delivered-status"]').val() != -1)  $obj.delivered_status = $('select[name="order-delivered-status"]').val();
+                    if($('select[name="order-delivery-type"]').val() != -1)  $obj.delivery_type = $('select[name="order-delivery-type"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 20) $obj.length = $page_length;
