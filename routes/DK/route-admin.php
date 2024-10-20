@@ -435,6 +435,8 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::match(['get','post'], '/statistic/statistic-recent', $controller.'@view_statistic_recent');
 
     Route::match(['get','post'], '/statistic/statistic-delivery', $controller.'@view_statistic_delivery');
+    Route::match(['get','post'], '/statistic/statistic-delivery-by-client', $controller.'@view_statistic_delivery_by_client');
+    Route::match(['get','post'], '/statistic/statistic-delivery-by-project', $controller.'@view_statistic_delivery_by_project');
     Route::match(['get','post'], '/statistic/statistic-project', $controller.'@view_statistic_project');
     Route::match(['get','post'], '/statistic/statistic-department', $controller.'@view_statistic_department');
     Route::match(['get','post'], '/statistic/statistic-customer-service', $controller.'@view_statistic_customer_service');

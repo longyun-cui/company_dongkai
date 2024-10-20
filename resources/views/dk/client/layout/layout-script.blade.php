@@ -31,6 +31,24 @@
         {{--);--}}
 
 
+        $.post(
+            "/is_ip_login",
+            {
+                _token: $('meta[name="_token"]').attr("content")
+            },
+            function(result){
+                if(result.result != 'access')
+                {
+                    // layer.msg('该账户在其他设备登录或退出，即将跳转登录页面！');
+                    layer.msg('IP禁止登录！');
+                    setTimeout(function(){
+                        location.href = "{{ url('/logout_without_token') }}";
+                    }, 600);
+                }
+            }
+        );
+
+
         // 【清空只读文本框】
         $(".main-content").on('click', ".readonly-clear-this", function() {
             var $that = $(this);

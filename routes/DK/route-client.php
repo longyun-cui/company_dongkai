@@ -23,6 +23,7 @@ Route::group(['middleware' => ['dk.client.login']], function () {
 
 
     Route::post('/is_only_me', $controller.'@check_is_only_me');
+    Route::post('/is_ip_login', $controller.'@check_is_ip_login');
     Route::get('/', $controller.'@view_admin_index');
     Route::get('/404', $controller.'@view_admin_404');
 

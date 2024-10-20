@@ -1157,11 +1157,23 @@ class DKAdminController extends Controller
     }
 
 
-    // 【统计】项目看板
+    // 【统计】交付看板
     public function view_statistic_delivery()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_delivery(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery(request()->all());
+    }
+    // 【统计】交付看板
+    public function view_statistic_delivery_by_client()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_delivery_by_client(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery_by_client(request()->all());
+    }
+    // 【统计】交付看板
+    public function view_statistic_delivery_by_project()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_delivery_by_project(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery_by_project(request()->all());
     }
     // 【统计】项目看板
     public function view_statistic_project()

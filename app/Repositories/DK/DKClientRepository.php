@@ -413,7 +413,7 @@ class DKClientRepository {
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $view_data['project_list'] = $project_list;
 
-        $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
+        $view_data['menu_active_of_delivery_list'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.item.delivery-list';
         return view($view_blade)->with($view_data);
@@ -3178,7 +3178,7 @@ class DKClientRepository {
         $view_data['staff_list'] = $staff_list;
         $view_data['client_list'] = $client_list;
         $view_data['project_list'] = $project_list;
-        $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
+        $view_data['menu_active_of_delivery_list'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.item.order-list-for-all';
         return view($view_blade)->with($view_data);

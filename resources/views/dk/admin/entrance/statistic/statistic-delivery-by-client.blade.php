@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '交付看板（项目）' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '交付看板（客户）' }} - 管理员系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -21,7 +21,7 @@
 
                 <div class="box-header with-border" style="margin:4px 0;">
                     <h3 class="box-title">
-                        【<span class="statistic-title-">交付看板（项目）</span>】
+                        【<span class="statistic-title-">交付看板（客户）</span>】
                         <span class="statistic-time-type-title-"></span>
                         <span class="statistic-time-title">（{{ date('Y-m-d') }}）</span>
                     </h3>
@@ -33,16 +33,18 @@
                     <div class="row col-md-12 datatable-search-row">
                         <div class="input-group">
 
-                            @if(in_array($me->user_type,[0,1,9,11]))
-                                <select class="form-control form-filter select-select2 rank-department-district" name="rank-department-district" style="width:100px;">
-                                    <option value="-1">选择大区</option>
-                                    @if(!empty($department_district_list))
-                                        @foreach($department_district_list as $v)
-                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            @endif
+                            <input type="text" class="form-control form-filter filter-keyup" name="rank-username" placeholder="客户名" value="" style="width:100px;" />
+
+{{--                            @if(in_array($me->user_type,[0,1,9,11]))--}}
+{{--                                <select class="form-control form-filter select-select2 rank-department-district" name="rank-department-district" style="width:100px;">--}}
+{{--                                    <option value="-1">选择大区</option>--}}
+{{--                                    @if(!empty($department_district_list))--}}
+{{--                                        @foreach($department_district_list as $v)--}}
+{{--                                            <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    @endif--}}
+{{--                                </select>--}}
+{{--                            @endif--}}
 
                             {{--按天查看--}}
                             <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-rank">
@@ -151,7 +153,7 @@
     <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
-    @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-delivery-script')
+    @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-delivery-by-client-script')
     <script>
         var TableDatatablesAjax = function () {
             var datatableAjax = function () {
@@ -164,7 +166,7 @@
                     "serverSide": false,
                     "searching": false,
                     "ajax": {
-                        'url': "{{ url('/statistic/statistic-delivery') }}",
+                        'url': "{{ url('/statistic/statistic-delivery-by-client') }}",
                         "type": 'POST',
                         "dataType" : 'json',
                         "data": function (d) {
@@ -173,6 +175,7 @@
                             d.name = $('input[name="rank-name"]').val();
                             d.title = $('input[name="rank-title"]').val();
                             d.keyword = $('input[name="rank-keyword"]').val();
+                            d.username = $('input[name="rank-username"]').val();
                             d.status = $('select[name="rank-status"]').val();
                             d.time_type = $('input[name="rank-time-type"]').val();
                             d.time_month = $('input[name="rank-month"]').val();
@@ -205,9 +208,9 @@
 //                        "orderable": false
 //                    },
                         {
-                            "title": "项目ID",
+                            "title": "客户ID",
                             "data": "id",
-                            "className": "text-center",
+                            "className": "",
                             "width": "80px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -221,10 +224,10 @@
                             }
                         },
                         {
-                            "title": "项目名称",
-                            "data": "name",
-                            "className": "text-center",
-                            "width": "120px",
+                            "title": "客户名称",
+                            "data": "username",
+                            "className": "",
+                            "width": "160px",
                             "orderable": false,
                             "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                                 if(row.id == "统计")
@@ -235,45 +238,6 @@
                             render: function(data, type, row, meta) {
                                 return data;
 
-                            }
-                        },
-                        @if($me->department_district_id == 0)
-                        {
-                            "title": "团队",
-                            "data": "pivot_project_team",
-                            "className": "text-center",
-                            "width": "200px",
-                            "orderable": false,
-                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                                if(row.id == "统计")
-                                {
-                                    $(nTd).addClass('_bold');
-                                }
-                            },
-                            render: function(data, type, row, meta) {
-                                var html = '';
-                                $.each(data,function( key, val ) {
-//                                console.log( key, val, this );
-                                    html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp;';
-                                });
-                                return html;
-                            }
-                        },
-                        @endif
-                        {
-                            "title": "每日目标",
-                            "data": "daily_goal",
-                            "className": "text-center text-green",
-                            "width": "80px",
-                            "orderable": false,
-                            "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                                if(row.id == "统计")
-                                {
-                                    $(nTd).addClass('_bold');
-                                }
-                            },
-                            render: function(data, type, row, meta) {
-                                return data;
                             }
                         },
                         // {

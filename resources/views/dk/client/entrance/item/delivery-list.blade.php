@@ -916,24 +916,21 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             var $currentYear = new Date().getFullYear();
-                            // if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            // else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-
-                            if($year == $currentYear) return $month+'-'+$day;
-                            else return $year+'-'+$month+'-'+$day;
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
                     },
-                    {
-                        "title": "工单ID",
-                        "data": "order_id",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data) return data;
-                            return "--";
-                        }
-                    },
+                    // {
+                    //     "title": "工单ID",
+                    //     "data": "order_id",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(data) return data;
+                    //         return "--";
+                    //     }
+                    // },
                     {
                         "title": "项目",
                         "data": "project_id",

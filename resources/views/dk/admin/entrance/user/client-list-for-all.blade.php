@@ -102,7 +102,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[50, 100, 200], ["50", "100", "200"]],
+                "aLengthMenu": [[100, 200, -1], ["100", "200", "全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -227,7 +227,7 @@
                     {
                         "title": "客户名称",
                         "data": "id",
-                        "className": "text-center",
+                        "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -237,7 +237,7 @@
                     {
                         "title": "手机",
                         "data": "mobile",
-                        "className": "text-center",
+                        "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -245,9 +245,43 @@
                         }
                     },
                     {
+                        "title": "启用ip",
+                        "data": "is_ip",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                            else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                            return "--";
+                        }
+                    },
+                    {
+                        "title": "ip白名单",
+                        "data": "ip_whitelist",
+                        "className": "",
+                        "width": "200px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','ip白名单');
+                                $(nTd).attr('data-key','ip_whitelist').attr('data-value',data);
+                                $(nTd).attr('data-column-name','ip白名单');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "备注",
                         "data": "remark",
-                        "className": "text-center",
+                        "className": "text-left",
                         "width": "",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {

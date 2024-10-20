@@ -23,6 +23,7 @@ class DK_Client extends Authenticatable
         'wx_unionid',
         'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id', 'superior_id',
         'district_category', 'district_type', 'district_id',
+        'is_ip', 'ip_whitelist',
         'introduction_id', 'advertising_id',
         'QQ_number',
         'wx_id', 'wx_qr_code_img',

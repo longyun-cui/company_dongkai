@@ -40,7 +40,7 @@
                     <div class="input-group">
 
                         <input type="text" class="form-control form-filter filter-keyup" name="delivery-id" placeholder="ID" value="{{ $id or '' }}" style="width:88px;" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="delivery-order-id" placeholder="订单ID" value="{{ $order_id or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="delivery-order-id" placeholder="工单ID" value="{{ $order_id or '' }}" style="width:88px;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
@@ -83,6 +83,13 @@
                                     @endif
                                 @endforeach
                             @endif
+                        </select>
+
+
+                        <select class="form-control form-filter" name="order-delivery-type" style="width:88px;">
+                            <option value="-1">交付类型</option>
+                            <option value="95">交付</option>
+                            <option value="96">分发</option>
                         </select>
 
 
@@ -788,6 +795,7 @@
                         d.client = $('select[name="delivery-client"]').val();
                         d.project = $('select[name="delivery-project"]').val();
                         d.status = $('select[name="order-status"]').val();
+                        d.delivery_type = $('select[name="order-delivery-type"]').val();
                         d.order_type = $('select[name="order-type"]').val();
                         d.client_name = $('input[name="order-client-name"]').val();
                         d.client_phone = $('input[name="order-client-phone"]').val();
@@ -961,10 +969,10 @@
                         }
                     },
                     {
-                        "title": "交付日期",
-                        "data": 'created_at',
+                        "title": "交付时间",
+                        "data": 'updated_at',
                         "className": "",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
@@ -983,11 +991,22 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             var $currentYear = new Date().getFullYear();
-                            // if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            // else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-
-                            if($year == $currentYear) return $month+'-'+$day;
-                            else return $year+'-'+$month+'-'+$day;
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                        }
+                    },
+                    {
+                        "title": "交付类型",
+                        "data": "pivot_type",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(!data) return "--";
+                            var $result_html = '';
+                            if(data == 95) return '<small class="btn-xs bg-green">交付</small>';
+                            else if(data == 96) return '<small class="btn-xs bg-orange">分发</small>';
+                            return $result_html;
                         }
                     },
                     {

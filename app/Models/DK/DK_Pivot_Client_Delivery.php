@@ -11,6 +11,7 @@ class DK_Pivot_Client_Delivery extends Model
     protected $fillable = [
         'pivot_active', 'pivot_category', 'pivot_type',
         'relation_active', 'relation_category', 'relation_type',
+        'delivery_type',
         'is_exported',
         'user_id', 'client_id', 'project_id', 'order_id',
         'client_phone', 'delivered_result',

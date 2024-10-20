@@ -76,7 +76,17 @@
                             @foreach($staff_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
                             @endforeach
+
                         </select>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                            <select class="form-control form-filter select2-box order-select2-client" name="order-client" style="width:160px;">
+                                <option value="-1">选择客户</option>
+                                @foreach($client_list as $v)
+                                    <option value="{{ $v->id }}" @if($v->id == $client_id) selected="selected" @endif>{{ $v->username }}</option>
+                                @endforeach
+                            </select>
                         @endif
 
                         <select class="form-control form-filter select2-box order-select2-project" name="order-project" style="width:120px;">
@@ -130,7 +140,7 @@
                             @endforeach
                             @endif
                         </select>
-                        <select class="form-control form-filter select2-box select2-district-district" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple" placeholder="选择区域" style="width:120px;">
+                        <select class="form-control form-filter select2-box select2-district-district" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple" placeholder="选择区域" style="width:160px;">
                             <option value="-1">选择区域</option>
                             @if(!empty($district_district_list) && count($district_district_list) > 0)
                             @foreach($district_district_list as $v)
@@ -703,7 +713,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-2">分发结果</label>
+                        <label class="control-label col-md-2">交付结果</label>
                         <div class="col-md-8 ">
                             <select class="form-control select2-box" name="deliver-set-delivered-result" style="width:48%;" id="">
                                 <option value="-1">交付结果</option>
@@ -711,6 +721,42 @@
                                     <option value="{{ $v }}">{{ $v }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">录音地址</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="deliver-set-recording-address" autocomplete="off" placeholder="" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">交付说明</label>
+                        <div class="col-md-8 ">
+                            <textarea class="form-control" name="deliver-set-delivered-description" rows="4" cols="100%"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">交付说明</label>
+                        <div class="col-md-8 ">
+                            <div class="btn-group">
+
+                                <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="deliver-set-is_distributive_condition" value="0" class="info-set-column" checked="checked"> 否
+                                    </label>
+                                </span>
+                                </button>
+
+                                <button type="button" class="btn">
+                                    <span class="radio">
+                                        <label>
+                                            <input type="radio" name="deliver-set-is_distributive_condition" value="1" class="info-set-column"> 是
+                                        </label>
+                                    </span>
+                                </button>
+
+                            </div>
                         </div>
                     </div>
 
@@ -1121,6 +1167,7 @@
                         d.department_district = $('select[name="order-department-district[]"]').val();
                         d.staff = $('select[name="order-staff"]').val();
                         d.project = $('select[name="order-project"]').val();
+                        d.client = $('select[name="order-client"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
                         d.client_name = $('input[name="order-client-name"]').val();
@@ -2205,7 +2252,8 @@
                                     if(row.client_id == 0)
                                     {
                                         // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
-                                        $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
+                                        // $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
+                                        $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-show" data-id="'+data+'">交付</a>';
                                     }
                                     else
                                     {
@@ -2214,7 +2262,8 @@
                                     if((row.delivered_result == "已交付") || (row.delivered_result = "123"))
                                     {
                                         // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
-                                        $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
+                                        // $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
+                                        $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-show" data-id="'+data+'">交付</a>';
                                     }
                                     else
                                     {

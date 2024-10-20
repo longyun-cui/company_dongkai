@@ -129,7 +129,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-            <li class="treeview {{ $menu_active_of_delivery_list or '' }} _none">
+            <li class="treeview {{ $menu_active_of_delivery_list or '' }}">
                 <a href="{{ url('/item/delivery-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>交付列表</span>
@@ -138,7 +138,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-            <li class="treeview {{ $menu_active_of_distribution_list or '' }}">
+            <li class="treeview {{ $menu_active_of_distribution_list or '' }} _none">
                 <a href="{{ url('/item/distribution-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>分发列表</span>
@@ -152,6 +152,13 @@
             {{--数据统计--}}
             <li class="header">数据统计</li>
 
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                <li class="treeview {{ $menu_active_of_statistic_delivery_by_client or '' }}">
+                    <a href="{{ url('/statistic/statistic-delivery-by-client') }}">
+                        <i class="fa fa-area-chart text-teal"></i> <span>交付看板(客户)</span>
+                    </a>
+                </li>
+            @endif
             @if(in_array($me->user_type,[0,1,9,11,41,61,66,81,84]))
                 <li class="treeview {{ $menu_active_of_statistic_delivery or '' }}">
                     <a href="{{ url('/statistic/statistic-delivery') }}">

@@ -48,15 +48,6 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-                        <select class="form-control form-filter select2-box select2-district-district" name="order-district" id="order-district" data-target="order-city" style="width:120px;">
-                            <option value="-1">选择区域</option>
-                            @if(!empty($district_district_list) && count($district_district_list) > 0)
-                                @foreach($district_district_list as $v)
-                                    <option value="{{ $v }}" @if($district_district == $v) selected="selected" @endif>{{ $v }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-
 {{--                        <select class="form-control form-filter select2-box order-select2-project" name="order-project" style="width:120px;">--}}
 {{--                            @if($project_id > 0)--}}
 {{--                                <option value="-1">选择项目</option>--}}

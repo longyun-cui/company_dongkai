@@ -35,7 +35,6 @@ class DKClientController extends Controller
         if(Auth::guard('dk_client')->check())
         {
             $me = Auth::guard('dk_client')->user();
-            $me = Auth::guard('dk_client')->user();
             $token = request('_token');
 
             if($me->admin_token == $token)
@@ -47,6 +46,34 @@ class DKClientController extends Controller
 
         return Response::json($result);
     }
+
+
+    // 账号IP登录
+    public function check_is_ip_login()
+    {
+        $result['message'] = 'failed';
+        $result['result'] = 'denied';
+
+        if(Auth::guard('dk_client')->check())
+        {
+            $me = Auth::guard('dk_client')->user();
+
+            // 判断用户是否开启ip登录
+            if($me->is_ip == 1)
+            {
+                $ip = Get_IP();
+                $array = explode(' ', $me->ip_whitelist);
+                if(in_array($ip, $array))
+                {
+                    $result['message'] = 'success';
+                    $result['result'] = 'access';
+                }
+            }
+        }
+
+        return Response::json($result);
+    }
+
 
     // 登陆
     public function login()
