@@ -895,7 +895,7 @@
                     },
                     {
                         "title": "交付日期",
-                        "data": 'created_at',
+                        "data": 'updated_at',
                         "className": "",
                         "width": "100px",
                         "orderable": false,

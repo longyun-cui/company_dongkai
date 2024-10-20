@@ -457,7 +457,7 @@ class DKClientRepository {
         if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
         if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
 
-        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(published_at)"), $post_data['assign']);
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(updated_at)"), $post_data['assign']);
         if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
