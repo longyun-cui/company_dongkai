@@ -54,15 +54,15 @@
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" style="width:100px;text-align:center;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" style="width:80px;text-align:center;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" style="width:100px;text-align:center;" />
 
                         @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77]))
-                        <select class="form-control form-filter select2-box" name="order-department-district[]" id="order-department-district" multiple="multiple"  style="width:80px;">
+                        <select class="form-control form-filter select2-box" name="order-department-district[]" id="order-department-district" multiple="multiple"  style="width:100px;">
                             <option value="-1">选择团队</option>
                             @foreach($department_district_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $department_district_id) selected="selected" @endif>{{ $v->name }}</option>
@@ -71,7 +71,7 @@
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
-                        <select class="form-control form-filter select2-box order-select2-staff" name="order-staff" style="width:80px;">
+                        <select class="form-control form-filter select2-box order-select2-staff" name="order-staff" style="width:120px;">
                             <option value="-1">选择员工</option>
                             @foreach($staff_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
@@ -88,7 +88,7 @@
                             @endif
                         </select>
 
-                        <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
+                        <select class="form-control form-filter" name="order-inspected-status" style="width:100px;">
                             <option value="-1">审核状态</option>
                             @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
                             <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>
@@ -97,21 +97,21 @@
                             <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>
                         </select>
 
-                        <select class="form-control form-filter select2-box" name="order-inspected-result[]" multiple="multiple" style="width:88px;">
+                        <select class="form-control form-filter select2-box" name="order-inspected-result[]" multiple="multiple" style="width:100px;">
                             <option value="-1">审核结果</option>
                             @foreach(config('info.inspected_result') as $v)
                                 <option value="{{ $v }}">{{ $v }}</option>
                             @endforeach
                         </select>
 
-                        <select class="form-control form-filter" name="order-delivered-status" style="width:88px;">
+                        <select class="form-control form-filter" name="order-delivered-status" style="width:100px;">
                             <option value="-1">交付状态</option>
                             <option value="待交付" @if("待交付" == $delivered_status) selected="selected" @endif>待交付</option>
 {{--                            <option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
                             <option value="已操作" @if("已操作" == $delivered_status) selected="selected" @endif>已操作</option>
                         </select>
 
-                        <select class="form-control form-filter select2-box" name="order-delivered-result[]" multiple="multiple" style="width:88px;">
+                        <select class="form-control form-filter select2-box" name="order-delivered-result[]" multiple="multiple" style="width:100px;">
                             <option value="-1">交付结果</option>
                             @foreach(config('info.delivered_result') as $v)
                                 <option value="{{ $v }}">{{ $v }}</option>
@@ -122,7 +122,7 @@
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
 
 
-                        <select class="form-control form-filter select2-box select2-district-city" name="order-city" id="order-city" data-target="#order-district" style="width:120px;">
+                        <select class="form-control form-filter select2-box select2-district-city" name="order-city" id="order-city" data-target="#order-district" style="width:120px;height:100%;">
                             <option value="-1">选择城市</option>
                             @if(!empty($district_city_list) && count($district_city_list) > 0)
                             @foreach($district_city_list as $v)
@@ -130,7 +130,7 @@
                             @endforeach
                             @endif
                         </select>
-                        <select class="form-control form-filter select2-box select2-district-district" name="order-district" id="order-district" data-target="order-city" style="width:120px;">
+                        <select class="form-control form-filter select2-box select2-district-district" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple" placeholder="选择区域" style="width:120px;">
                             <option value="-1">选择区域</option>
                             @if(!empty($district_district_list) && count($district_district_list) > 0)
                             @foreach($district_district_list as $v)
@@ -1069,6 +1069,9 @@
 
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
+
+    .select2-container--classic .select2-selection--multiple  { height:34px; border-radius:0; }
+
     .bg-fee-2 { background:#C3FAF7; }
     .bg-fee { background:#8FEBE5; }
     .bg-deduction { background:#C3FAF7; }
@@ -1129,7 +1132,7 @@
                         d.delivered_status = $('select[name="order-delivered-status"]').val();
                         d.delivered_result = $('select[name="order-delivered-result[]"]').val();
                         d.district_city = $('select[name="order-city"]').val();
-                        d.district_district = $('select[name="order-district"]').val();
+                        d.district_district = $('select[name="order-district[]"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -2318,8 +2321,8 @@
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
                     if($('select[name="order-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="order-inspected-status"]').val();
                     if($('select[name="order-delivered-status"]').val() != -1)  $obj.delivered_status = $('select[name="order-delivered-status"]').val();
-                    if($('select[name="order-city"]').val() != -1)  $obj.district_city = $('select[name="order-city"]').val();
-                    if($('select[name="order-district"]').val() != -1)  $obj.district_district = $('select[name="order-district"]').val();
+                    // if($('select[name="order-city"]').val() != -1)  $obj.district_city = $('select[name="order-city"]').val();
+                    // if($('select[name="order-district"]').val() != -1)  $obj.district_district = $('select[name="order-district"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 20) $obj.length = $page_length;

@@ -7546,20 +7546,20 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-//            if($client_id != "-1")
-//            {
-//                $pivot_delivery = new DK_Pivot_Client_Delivery;
-//                $pivot_delivery_data["pivot_type"] = 95;
-//                $pivot_delivery_data["client_id"] = $client_id;
-//                $pivot_delivery_data["order_id"] = $item->id;
-//                $pivot_delivery_data["project_id"] = $item->project_id;
-//                $pivot_delivery_data["client_phone"] = $item->client_phone;
-//                $pivot_delivery_data["delivered_result"] = $delivered_result;
-//                $pivot_delivery_data["creator_id"] = $me->id;
-//
-//                $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
-//                if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
-//            }
+            if($client_id != "-1" && $delivered_result == "已交付")
+            {
+                $pivot_delivery = new DK_Pivot_Client_Delivery;
+                $pivot_delivery_data["pivot_type"] = 95;
+                $pivot_delivery_data["client_id"] = $client_id;
+                $pivot_delivery_data["order_id"] = $item->id;
+                $pivot_delivery_data["project_id"] = $item->project_id;
+                $pivot_delivery_data["client_phone"] = $item->client_phone;
+                $pivot_delivery_data["delivered_result"] = $delivered_result;
+                $pivot_delivery_data["creator_id"] = $me->id;
+
+                $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+            }
 
             $item->is_distributive_condition = $is_distributive_condition;
             $item->client_id = $client_id;
@@ -7679,20 +7679,20 @@ class DKAdminRepository {
                 }
 
 
-//                if($this_client_id != "-1")
-//                {
-//                    $pivot_delivery = new DK_Pivot_Client_Delivery;
-//                    $pivot_delivery_data["pivot_type"] = 95;
-//                    $pivot_delivery_data["client_id"] = $this_client_id;
-//                    $pivot_delivery_data["order_id"] = $item->id;
-//                    $pivot_delivery_data["project_id"] = $item->project_id;
-//                    $pivot_delivery_data["client_phone"] = $item->client_phone;
-//                    $pivot_delivery_data["delivered_result"] = $delivered_result;
-//                    $pivot_delivery_data["creator_id"] = $me->id;
-//
-//                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
-//                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
-//                }
+                if($this_client_id != "-1" && $delivered_result == "已交付")
+                {
+                    $pivot_delivery = new DK_Pivot_Client_Delivery;
+                    $pivot_delivery_data["pivot_type"] = 95;
+                    $pivot_delivery_data["client_id"] = $this_client_id;
+                    $pivot_delivery_data["order_id"] = $item->id;
+                    $pivot_delivery_data["project_id"] = $item->project_id;
+                    $pivot_delivery_data["client_phone"] = $item->client_phone;
+                    $pivot_delivery_data["delivered_result"] = $delivered_result;
+                    $pivot_delivery_data["creator_id"] = $me->id;
+
+                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+                }
 
 
                 $before = $item->delivered_result;
@@ -9006,7 +9006,8 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['district_district'],[-1]))
             {
-                $query->where('location_district', $post_data['district_district']);
+//                $query->where('location_district', $post_data['district_district']);
+                $query->whereIn('location_district', $post_data['district_district']);
             }
         }
 
