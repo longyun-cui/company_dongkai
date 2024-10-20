@@ -14533,7 +14533,7 @@ class DKAdminRepository {
         }
         else $total_data['order_rate_for_accepted'] = 0;
         // 完成率
-        if($total_data['order_count_for_all'] > 0)
+        if($total_data['daily_goal'] > 0)
         {
             $total_data['order_rate_for_achieved'] = round(($total_data['order_count_for_accepted'] * 100 / $total_data['daily_goal']),2);
         }

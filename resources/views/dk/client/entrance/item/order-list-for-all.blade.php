@@ -43,28 +43,37 @@
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-                        <select class="form-control form-filter select2-box order-select2-project" name="order-project" style="width:120px;">
-                            @if($project_id > 0)
-                                <option value="-1">选择项目</option>
-                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
-                            @else
-                                <option value="-1">选择项目</option>
+                        <select class="form-control form-filter select2-box select2-district-district" name="order-district" id="order-district" data-target="order-city" style="width:120px;">
+                            <option value="-1">选择区域</option>
+                            @if(!empty($district_district_list) && count($district_district_list) > 0)
+                                @foreach($district_district_list as $v)
+                                    <option value="{{ $v }}" @if($district_district == $v) selected="selected" @endif>{{ $v }}</option>
+                                @endforeach
                             @endif
                         </select>
 
-                        <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
-                            <option value="-1">审核状态</option>
-                            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
-                            <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>
-                            @endif
-                            <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>
-                            <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>
-                        </select>
+{{--                        <select class="form-control form-filter select2-box order-select2-project" name="order-project" style="width:120px;">--}}
+{{--                            @if($project_id > 0)--}}
+{{--                                <option value="-1">选择项目</option>--}}
+{{--                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>--}}
+{{--                            @else--}}
+{{--                                <option value="-1">选择项目</option>--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
+
+{{--                        <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">--}}
+{{--                            <option value="-1">审核状态</option>--}}
+{{--                            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))--}}
+{{--                            <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>--}}
+{{--                            @endif--}}
+{{--                            <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>--}}
+{{--                            <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>--}}
+{{--                        </select>--}}
 
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
@@ -845,11 +854,8 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             var $currentYear = new Date().getFullYear();
-                            // if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            // else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-
-                            if($year == $currentYear) return $month+'-'+$day;
-                            else return $year+'-'+$month+'-'+$day;
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
                     },
                     {
@@ -972,15 +978,15 @@
                         }
                     },
                     {
-                        "title": "所在城市",
-                        "data": "location_city",
+                        "title": "所在区域",
+                        "data": "location_district",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).addClass('modal-show-for-info-select2-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
                                 $(nTd).attr('data-key','location_city').attr('data-value',data);
                                 $(nTd).attr('data-key2','location_district').attr('data-value2',row.location_district);
@@ -992,8 +998,9 @@
                         render: function(data, type, row, meta) {
                             if(!data) return '--';
                             else {
-                                if(!row.location_district) return data;
-                                else return data+' - '+row.location_district;
+                                return data;
+                                // if(!row.location_district) return data;
+                                // else return data+' - '+row.location_district;
                             }
                         }
                     },
@@ -1006,7 +1013,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).addClass('modal-show-for-info-select-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');
                                 $(nTd).attr('data-key','channel_source').attr('data-value',data);
                                 $(nTd).attr('data-column-name','渠道来源');
