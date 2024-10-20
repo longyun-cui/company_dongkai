@@ -2249,7 +2249,7 @@
                                     }
 
                                     @if($me->department_district_id == 0)
-                                    if(row.client_id == 0)
+                                    if(row.delivered_status == 1)
                                     {
                                         // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
                                         // $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
@@ -2257,18 +2257,10 @@
                                     }
                                     else
                                     {
-                                        $html_deliver = '<a class="btn btn-xs bg-green disabled- item-deliver-submit" data-id="'+data+'">再交</a>';
+                                        // $html_deliver = '<a class="btn btn-xs bg-green disabled- item-deliver-submit" data-id="'+data+'">再交4</a>';
+                                        $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-show" data-id="'+data+'">重交</a>';
                                     }
-                                    if((row.delivered_result == "已交付") || (row.delivered_result = "123"))
-                                    {
-                                        // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
-                                        // $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
-                                        $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-show" data-id="'+data+'">交付</a>';
-                                    }
-                                    else
-                                    {
-                                        $html_deliver = '<a class="btn btn-xs bg-green disabled- item-deliver-submit" data-id="'+data+'">再交</a>';
-                                    }
+
                                     if(row.project_er == null)
                                     {
                                         $html_distribute = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">分发</a>';

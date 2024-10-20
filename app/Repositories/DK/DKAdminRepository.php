@@ -7692,17 +7692,28 @@ class DKAdminRepository {
 
                 if($this_client_id != "-1" && $delivered_result == "已交付")
                 {
-                    $pivot_delivery = new DK_Pivot_Client_Delivery;
-                    $pivot_delivery_data["pivot_type"] = 95;
-                    $pivot_delivery_data["client_id"] = $this_client_id;
-                    $pivot_delivery_data["order_id"] = $item->id;
-                    $pivot_delivery_data["project_id"] = $item->project_id;
-                    $pivot_delivery_data["client_phone"] = $item->client_phone;
-                    $pivot_delivery_data["delivered_result"] = $delivered_result;
-                    $pivot_delivery_data["creator_id"] = $me->id;
+                    $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
+                    if($pivot_delivery)
+                    {
+                        $pivot_delivery->client_id = $this_client_id;
+                        $pivot_delivery->delivered_result = $delivered_result;
+                        $bool_0 = $pivot_delivery->save();
+                        if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
+                    }
+                    else
+                    {
+                        $pivot_delivery = new DK_Pivot_Client_Delivery;
+                        $pivot_delivery_data["pivot_type"] = 95;
+                        $pivot_delivery_data["client_id"] = $this_client_id;
+                        $pivot_delivery_data["order_id"] = $item->id;
+                        $pivot_delivery_data["project_id"] = $item->project_id;
+                        $pivot_delivery_data["client_phone"] = $item->client_phone;
+                        $pivot_delivery_data["delivered_result"] = $delivered_result;
+                        $pivot_delivery_data["creator_id"] = $me->id;
 
-                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
-                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+                        $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                        if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+                    }
                 }
 
 
@@ -10563,7 +10574,7 @@ class DKAdminRepository {
 
 
         $query = DK_Order::select('id');
-        $query_distributed = DK_Pivot_Client_Delivery::select('id');
+        $query_distributed = DK_Pivot_Client_Delivery::select('id')->where('pivot_type',96);
 
         if($me->user_type == 41)
         {
@@ -10741,7 +10752,7 @@ class DKAdminRepository {
 
 
         // 分发当天数据
-        $query_distributed_of_today = (clone $query_distributed)->whereDate(DB::raw("DATE(FROM_UNIXTIME(created_at))"),$the_date)
+        $query_distributed_of_today = (clone $query_distributed)->whereDate(DB::raw("DATE(FROM_UNIXTIME(updated_at))"),$the_date)
             ->select(DB::raw("
                     count(*) as distributed_count_for_all
                 "))
@@ -10903,8 +10914,8 @@ class DKAdminRepository {
 
 
 
-        // 分发当天数据
-        $query_distributed_of_month = (clone $query_distributed)->whereBetween('created_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+        // 分发当月数据
+        $query_distributed_of_month = (clone $query_distributed)->whereBetween('updated_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->select(DB::raw("
                     count(*) as distributed_count_for_all
                 "))

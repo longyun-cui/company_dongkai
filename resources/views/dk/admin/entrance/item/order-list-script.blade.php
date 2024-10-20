@@ -869,7 +869,7 @@
                                 var $html_order =
                                     '<div>'+
                                     '<span style="width:120px;float:left;">[工单ID]' + $order.id + '</span>' +
-                                    '<span style="width:200px;float:left;">[客户]' + $client_username + '</span>' +
+                                    '<span style="width:240px;float:left;">[客户]' + $client_username + '</span>' +
                                     '[项目]' + $project_name +
                                     '</div>';
                                 $html += $html_order;
@@ -892,7 +892,7 @@
                                 var $html_deliver =
                                     '<div>' +
                                     '<span style="width:120px;float:left;">[交付ID] ' + $deliver.id + '</span>' +
-                                    '<span style="width:200px;float:left;">[客户] ' + $client_username + '</span>' +
+                                    '<span style="width:240px;float:left;">[客户] ' + $client_username + '</span>' +
                                     '[项目] '+ $project_name +
                                     '</div>';
                                 $html += $html_deliver;
@@ -1199,7 +1199,7 @@
                                 var $html_order =
                                     '<div>'+
                                     '<span style="width:120px;float:left;">[工单ID]' + $order.id + '</span>' +
-                                    '<span style="width:200px;float:left;">[客户]' + $client_username + '</span>' +
+                                    '<span style="width:240px;float:left;">[客户]' + $client_username + '</span>' +
                                     '[项目]' + $project_name +
                                     '</div>';
                                 $html += $html_order;
@@ -1222,7 +1222,7 @@
                                 var $html_deliver =
                                     '<div>' +
                                     '<span style="width:120px;float:left;">[交付ID] ' + $deliver.id + '</span>' +
-                                    '<span style="width:200px;float:left;">[客户] ' + $client_username + '</span>' +
+                                    '<span style="width:240px;float:left;">[客户] ' + $client_username + '</span>' +
                                     '[项目] '+ $project_name +
                                     '</div>';
                                 $html += $html_deliver;
