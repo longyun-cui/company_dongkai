@@ -44,31 +44,13 @@
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
 
-                        <select class="form-control form-filter select-select2 select2-box delivery-client" name="delivery-client" style="width:120px;">
-                            <option value="-1">选择客户</option>
-                            @if(!empty($client_list))
-                                @foreach($client_list as $v)
-                                    @if(!empty($client_id))
-                                        @if($v->id == $client_id)
-                                            <option value="{{ $v->id }}" selected="selected">{{ $v->username }}</option>
-                                        @else
-                                            <option value="{{ $v->id }}">{{ $v->username }}</option>
-                                        @endif
-                                    @else
-                                        <option value="{{ $v->id }}">{{ $v->username }}</option>
-                                    @endif
-                                @endforeach
-                            @endif
-                        </select>
-
-
-                        <select class="form-control form-filter select-select2 select2-box delivery-project" name="delivery-project" style="width:120px;">
+                        <select class="form-control form-filter select-select2 select2-box delivery-project" name="delivery-project" style="width:160px;">
                             <option value="-1">选择项目</option>
                             @if(!empty($project_list))
                                 @foreach($project_list as $v)
@@ -86,6 +68,24 @@
                         </select>
 
 
+                        <select class="form-control form-filter select-select2 select2-box delivery-client" name="delivery-client" style="width:160px;">
+                            <option value="-1">选择客户</option>
+                            @if(!empty($client_list))
+                                @foreach($client_list as $v)
+                                    @if(!empty($client_id))
+                                        @if($v->id == $client_id)
+                                            <option value="{{ $v->id }}" selected="selected">{{ $v->username }}</option>
+                                        @else
+                                            <option value="{{ $v->id }}">{{ $v->username }}</option>
+                                        @endif
+                                    @else
+                                        <option value="{{ $v->id }}">{{ $v->username }}</option>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </select>
+
+
                         <select class="form-control form-filter" name="order-delivery-type" style="width:88px;">
                             <option value="-1">交付类型</option>
                             <option value="95">交付</option>
@@ -93,14 +93,14 @@
                         </select>
 
 
-                        <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
-                            <option value="-1">审核状态</option>
-                            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
-                            <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>
-                            @endif
-                            <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>
-                            <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>
-                        </select>
+{{--                        <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">--}}
+{{--                            <option value="-1">交付状态</option>--}}
+{{--                            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))--}}
+{{--                            <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>--}}
+{{--                            @endif--}}
+{{--                            <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>--}}
+{{--                            <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>--}}
+{{--                        </select>--}}
 
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
@@ -964,7 +964,8 @@
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data) return data;
+
+                            if(data) return '<a target="_blank" href="http://admin.local-dongkai.com/item/order-list-for-all?order_id='+data+'">'+data+'</a>';;
                             return "--";
                         }
                     },
