@@ -69,6 +69,11 @@ class DKClientController extends Controller
                     $result['result'] = 'access';
                 }
             }
+            else
+            {
+                $result['message'] = 'success';
+                $result['result'] = 'access';
+            }
         }
 
         return Response::json($result);
