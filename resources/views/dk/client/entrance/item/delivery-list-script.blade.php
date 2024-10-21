@@ -1479,7 +1479,8 @@
 
             var $ids = '';
             $('input[name="bulk-id"]:checked').each(function() {
-                $ids += $(this).val()+'-';
+                // $ids += $(this).val()+'-';
+                $ids += $(this).attr('data-order-id')+'-';
             });
             $ids = $ids.slice(0, -1);
             // console.log($ids);
