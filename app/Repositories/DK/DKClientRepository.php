@@ -6514,7 +6514,7 @@ class DKClientRepository {
             $cellData[$k]['id'] = $v['id'];
 
 //            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
-            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
+//            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['delivered_at']);
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
             $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['client_name'] = $v['client_name'];
@@ -6548,7 +6548,7 @@ class DKClientRepository {
         $title_row = [
             'id'=>'ID',
 //            'creator_name'=>'创建人',
-            'published_time'=>'提交时间',
+//            'published_time'=>'提交时间',
             'project_er_name'=>'项目',
             'channel_source'=>'渠道来源',
             'client_name'=>'客户姓名',
