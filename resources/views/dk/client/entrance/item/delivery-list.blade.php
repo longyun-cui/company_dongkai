@@ -734,7 +734,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[20,50, 100, 200])) {{ $length.',' }} @endif 20,50, 100, 200], [ @if(!in_array($length,[20,50, 100, 200])) {{ $length.',' }} @endif "20", "50", "100", "200"]],
+                "aLengthMenu": [[ @if(!in_array($length,[20,50, 100, 200, 500, 1000])) {{ $length.',' }} @endif 20,50, 100, 200, 500, 1000], [ @if(!in_array($length,[20,50, 100, 200, 500, 1000])) {{ $length.',' }} @endif "20", "50", "100", "200", "500", "1000"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
