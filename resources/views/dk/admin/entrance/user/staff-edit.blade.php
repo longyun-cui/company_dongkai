@@ -178,7 +178,7 @@
                                 <button type="button" class="btn">
                                     <span class="radio">
                                         <label>
-                                            @if($operate == 'edit' && $data->user_type == 66)
+                                            @if(($operate == 'edit' && $data->user_type == 66) || $me->user_type == 61)
                                                 <input type="radio" name="user_type" value="66" checked="checked"> 运营人员
                                             @else
                                                 <input type="radio" name="user_type" value="66"> 运营人员
@@ -240,9 +240,9 @@
 
                 {{--手机--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 登录手机</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 登录手机（工号）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="mobile" placeholder="登录手机" value="{{ $data->mobile or '' }}">
+                        <input type="text" class="form-control" name="mobile" placeholder="登录手机（工号）" value="{{ $data->mobile or '' }}">
                     </div>
                 </div>
                 {{--真实姓名--}}

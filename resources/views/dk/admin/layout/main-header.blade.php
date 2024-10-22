@@ -45,7 +45,7 @@
 
                         {{--部门管理--}}
                         @if(in_array($me->user_type,[0,1,9,11,41]))
-                        <li class="header">部门&员工</li>
+                        <li class="header">部门</li>
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,41]))
@@ -58,11 +58,11 @@
 
 
                         {{--员工管理--}}
-{{--                        @if(in_array($me->user_type,[0,1,9,11,41,81]))--}}
-{{--                            <li class="header">员工</li>--}}
-{{--                        @endif--}}
+                        @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
+                            <li class="header">员工</li>
+                        @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,41,81]))
+                        @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
                         <li class="header">
                             <a href="{{ url('/user/staff-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加员工
