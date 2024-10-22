@@ -1955,28 +1955,28 @@
                             }
                         }
                     },
-                    {
-                        "title": "渠道来源",
-                        "data": "channel_source",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');
-                                $(nTd).attr('data-key','channel_source').attr('data-value',data);
-                                $(nTd).attr('data-column-name','渠道来源');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(!data) return '--';
-                            return data;
-                        }
-                    },
+                    {{--{--}}
+                    {{--    "title": "渠道来源",--}}
+                    {{--    "data": "channel_source",--}}
+                    {{--    "className": "",--}}
+                    {{--    "width": "60px",--}}
+                    {{--    "orderable": false,--}}
+                    {{--    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {--}}
+                    {{--        if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))--}}
+                    {{--        {--}}
+                    {{--            $(nTd).addClass('modal-show-for-info-select-set');--}}
+                    {{--            $(nTd).attr('data-id',row.id).attr('data-name','渠道来源');--}}
+                    {{--            $(nTd).attr('data-key','channel_source').attr('data-value',data);--}}
+                    {{--            $(nTd).attr('data-column-name','渠道来源');--}}
+                    {{--            if(data) $(nTd).attr('data-operate-type','edit');--}}
+                    {{--            else $(nTd).attr('data-operate-type','add');--}}
+                    {{--        }--}}
+                    {{--    },--}}
+                    {{--    render: function(data, type, row, meta) {--}}
+                    {{--        if(!data) return '--';--}}
+                    {{--        return data;--}}
+                    {{--    }--}}
+                    {{--},--}}
                     {
                         "title": "通话小结",
                         "data": "description",

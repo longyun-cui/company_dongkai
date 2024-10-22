@@ -15916,7 +15916,7 @@ class DKAdminRepository {
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
 
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
-            $cellData[$k]['channel_source'] = $v['channel_source'];
+//            $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
             if(in_array($me->user_type,[71,77]))
@@ -15962,7 +15962,7 @@ class DKAdminRepository {
             'team'=>'团队',
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
-            'channel_source'=>'渠道来源',
+//            'channel_source'=>'渠道来源',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'wx_id'=>'微信号',
@@ -16123,7 +16123,7 @@ class DKAdminRepository {
             $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
 
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
-            $cellData[$k]['channel_source'] = $v['channel_source'];
+//            $cellData[$k]['channel_source'] = $v['channel_source'];
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
             if(in_array($me->user_type,[71,77]))
@@ -16169,7 +16169,7 @@ class DKAdminRepository {
             'team'=>'团队',
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
-            'channel_source'=>'渠道来源',
+//            'channel_source'=>'渠道来源',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'wx_id'=>'微信号',

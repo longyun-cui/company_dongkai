@@ -163,7 +163,7 @@
 
                 {{--牙齿数量--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">牙齿数量</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 牙齿数量</label>
                     <div class="col-md-8 ">
                         <select class="form-control select-select2" name="teeth_count" id="">
                             <option value="">选择牙齿数量</option>
@@ -212,18 +212,18 @@
                     </div>
                 </div>
 
-                {{--渠道来源--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">渠道来源</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control select-select2" name="channel_source" id="">
-                            <option value="">选择渠道</option>
-                            @foreach(config('info.channel_source') as $v)
-                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->channel_source) selected="selected" @endif>{{ $v }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+{{--                --}}{{--渠道来源--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">渠道来源</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control select-select2" name="channel_source" id="">--}}
+{{--                            <option value="">选择渠道</option>--}}
+{{--                            @foreach(config('info.channel_source') as $v)--}}
+{{--                                <option value ="{{ $v }}" @if($operate == 'edit' && $v == $data->channel_source) selected="selected" @endif>{{ $v }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
                 {{--通话小结--}}
                 <div class="form-group">
