@@ -7,7 +7,7 @@ class DK_Department extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_department";
+    protected $table = "dk_admin_department";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort', 'item_active', 'item_status', 'item_category', 'item_type',
         'department_active', 'department_status', 'department_category', 'department_type',

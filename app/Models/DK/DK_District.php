@@ -9,7 +9,7 @@ class DK_District extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_district";
+    protected $table = "dk_admin_district";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'form', 'sort',
         'district_active', 'district_status', 'district_result', 'district_category', 'district_type', 'item_form',

@@ -7,7 +7,7 @@ class DK_Project extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_project";
+    protected $table = "dk_admin_project";
     protected $fillable = [
         'active', 'status', 'item_active', 'item_status', 'item_category', 'item_type', 'category', 'type', 'sort',
         'owner_active',

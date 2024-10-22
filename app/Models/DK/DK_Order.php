@@ -9,7 +9,7 @@ class DK_Order extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_order";
+    protected $table = "dk_admin_order";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'form', 'sort',
         'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',

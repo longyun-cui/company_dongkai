@@ -5,7 +5,7 @@ use App\Models\DK\DK_Department;
 use App\Models\DK\DK_District;
 use App\Models\DK\DK_Pivot_Client_Delivery;
 use App\Models\DK\DK_User;
-use App\Models\DK\YH_UserExt;
+use App\Models\DK\DK_UserExt;
 use App\Models\DK\DK_Project;
 use App\Models\DK\DK_Pivot_User_Project;
 use App\Models\DK\DK_Pivot_Team_Project;
@@ -402,7 +402,7 @@ class DKAdminRepository {
         // 质检经理
         if($me->user_type == 71)
         {
-//            $subordinates = YH_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
+//            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
 //            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($subordinates) {
 //                $query->whereIn('user_id', $subordinates);
 //            });
@@ -2684,7 +2684,7 @@ class DKAdminRepository {
             {
                 if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
                 {
-                    $user_ext = new YH_UserExt;
+                    $user_ext = new DK_UserExt;
                     $user_ext_create['user_id'] = $mine->id;
                     $bool_2 = $user_ext->fill($user_ext_create)->save();
                     if(!$bool_2) throw new Exception("insert--user-ext--failed");

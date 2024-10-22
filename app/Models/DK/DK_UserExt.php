@@ -4,7 +4,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class YH_UserExt extends Authenticatable
+class DK_UserExt extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
@@ -12,7 +12,7 @@ class YH_UserExt extends Authenticatable
 //    protected $connection = 'mysql0';
 //    protected $connection = 'mysql_def';
 
-    protected $table = "yh_user_ext";
+    protected $table = "dk_admin_user_ext";
 
     protected $fillable = [
         'active', 'status', 'user_active', 'user_status', 'user_category', 'user_group', 'user_type', 'user_id',
