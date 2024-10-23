@@ -75,11 +75,13 @@ Route::group(['middleware' => ['dk.client.login']], function () {
     /*
      * 用户-员工管理
      */
+
     Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
     Route::match(['get','post'], '/user/user_select2_sales', $controller.'@operate_user_select2_sales');
     Route::match(['get','post'], '/user/user_select2_superior', $controller.'@operate_user_select2_superior');
     Route::match(['get','post'], '/user/user_select2_department', $controller.'@operate_user_select2_department');
-
+    // 列表
+    Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
     // 【用户-员工管理】创建 & 修改
     Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
     Route::match(['get','post'], '/user/staff-edit', $controller.'@operate_user_staff_edit');
@@ -94,10 +96,6 @@ Route::group(['middleware' => ['dk.client.login']], function () {
     // 【用户-员工管理】启用 & 禁用
     Route::post('/user/staff-admin-enable', $controller.'@operate_user_staff_admin_enable');
     Route::post('/user/staff-admin-disable', $controller.'@operate_user_staff_admin_disable');
-
-    // 列表
-    Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
-    Route::match(['get','post'], '/user/staff-list-for-all', $controller.'@view_staff_list_for_all');
 
 
 
@@ -139,7 +137,7 @@ Route::group(['middleware' => ['dk.client.login']], function () {
 
 
     /*
-     * 车辆管理
+     * 项目管理
      */
     // 创建 & 修改
     Route::match(['get','post'], '/item/project-create', $controller.'@operate_item_project_create');

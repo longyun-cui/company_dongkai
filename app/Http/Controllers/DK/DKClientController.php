@@ -183,6 +183,215 @@ class DKClientController extends Controller
 
 
 
+
+    /*
+     * 部门管理
+     */
+    // 【用户】SELECT2 Leader 负责人
+    public function operate_department_select2_leader()
+    {
+        return $this->repo->operate_department_select2_leader(request()->all());
+    }
+    // 【用户】SELECT2 Superior 上级部门
+    public function operate_department_select2_superior_department()
+    {
+        return $this->repo->operate_department_select2_superior_department(request()->all());
+    }
+
+
+    // 【部门管理】添加
+    public function operate_department_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_department_save(request()->all());
+    }
+    // 【部门管理】编辑
+    public function operate_department_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_department_save(request()->all());
+    }
+
+
+    // 【部门管理】修改-文本-text-信息
+    public function operate_department_info_text_set()
+    {
+        return $this->repo->operate_department_info_text_set(request()->all());
+    }
+    // 【部门管理】修改-时间-time-信息
+    public function operate_department_info_time_set()
+    {
+        return $this->repo->operate_department_info_time_set(request()->all());
+    }
+    // 【部门管理】修改-选项-option-信息
+    public function operate_department_info_option_set()
+    {
+        return $this->repo->operate_department_info_option_set(request()->all());
+    }
+    // 【部门管理】添加-附件-attachment-信息
+    public function operate_department_info_attachment_set()
+    {
+        return $this->repo->operate_department_info_attachment_set(request()->all());
+    }
+    // 【部门管理】删除-附件-attachment-信息
+    public function operate_department_info_attachment_delete()
+    {
+        return $this->repo->operate_department_info_attachment_delete(request()->all());
+    }
+    // 【部门管理】获取-附件-attachment-信息
+    public function operate_department_get_attachment_html()
+    {
+        return $this->repo->operate_department_get_attachment_html(request()->all());
+    }
+
+
+    // 【部门管理】删除
+    public function operate_department_admin_delete()
+    {
+        return $this->repo->operate_department_admin_delete(request()->all());
+    }
+    // 【部门管理】恢复
+    public function operate_department_admin_restore()
+    {
+        return $this->repo->operate_department_admin_restore(request()->all());
+    }
+    // 【部门管理】永久删除
+    public function operate_department_admin_delete_permanently()
+    {
+        return $this->repo->operate_department_admin_delete_permanently(request()->all());
+    }
+
+    // 【部门管理】启用
+    public function operate_department_admin_enable()
+    {
+        return $this->repo->operate_department_admin_enable(request()->all());
+    }
+    // 【部门管理】禁用
+    public function operate_department_admin_disable()
+    {
+        return $this->repo->operate_department_admin_disable(request()->all());
+    }
+
+
+    // 【部门管理】返回-列表-视图（全部任务）
+    public function view_department_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_department_list_for_all_datatable(request()->all());
+    }
+    // 【部门管理】【修改记录】返回-列表-视图（全部任务）
+    public function view_department_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_department_modify_record_datatable(request()->all());
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 员工管理
+     */
+    // 【员工管理】【全部用户】返回-列表-视图
+    public function view_staff_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_staff_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_staff_list_datatable(request()->all());
+    }
+
+    // 【用户-员工管理】添加
+    public function operate_user_staff_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
+    }
+    // 【用户-员工管理】编辑
+    public function operate_user_staff_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
+    }
+
+
+    // 【用户】登录
+    public function operate_user_staff_login()
+    {
+        $user_id = request()->get('user_id');
+        $user = User::where('id',$user_id)->first();
+        if($user)
+        {
+            Auth::guard('yh_admin')->login($user,true);
+
+            $return['user'] = $user;
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_STAFF'));
+            else if(request()->isMethod('post')) return response_success($return);
+        }
+        else return response_error([]);
+
+    }
+    // 【用户】修改-密码
+    public function operate_user_staff_password_admin_change()
+    {
+        return $this->repo->operate_user_staff_password_admin_change(request()->all());
+    }
+    // 【用户】修改-密码
+    public function operate_user_staff_password_admin_reset()
+    {
+        return $this->repo->operate_user_staff_password_admin_reset(request()->all());
+    }
+
+
+    // 【用户-员工管理】管理员-删除
+    public function operate_user_staff_admin_delete()
+    {
+        return $this->repo->operate_user_staff_admin_delete(request()->all());
+    }
+    // 【用户-员工管理】管理员-恢复
+    public function operate_user_staff_admin_restore()
+    {
+        return $this->repo->operate_user_staff_admin_restore(request()->all());
+    }
+    // 【用户-员工管理】管理员-永久删除
+    public function operate_user_staff_admin_delete_permanently()
+    {
+        return $this->repo->operate_user_staff_admin_delete_permanently(request()->all());
+    }
+
+
+    // 【用户-员工管理】启用
+    public function operate_user_staff_admin_enable()
+    {
+        return $this->repo->operate_user_staff_admin_enable(request()->all());
+    }
+    // 【用户-员工管理】禁用
+    public function operate_user_staff_admin_disable()
+    {
+        return $this->repo->operate_user_staff_admin_disable(request()->all());
+    }
+
+
+    // 【用户-员工管理】晋升
+    public function operate_user_staff_admin_promote()
+    {
+        return $this->repo->operate_user_staff_admin_promote(request()->all());
+    }
+    // 【用户-员工管理】降职
+    public function operate_user_staff_admin_demote()
+    {
+        return $this->repo->operate_user_staff_admin_demote(request()->all());
+    }
+
+
+
+
+
+
+
     /*
      * USER-STAFF 用户-员工管理
      *

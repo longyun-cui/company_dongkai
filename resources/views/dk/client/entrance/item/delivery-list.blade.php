@@ -894,8 +894,8 @@
                         }
                     },
                     {
-                        "title": "交付日期",
-                        "data": 'updated_at',
+                        "title": "交付时间",
+                        "data": 'created_at',
                         "className": "",
                         "width": "100px",
                         "orderable": false,
@@ -1051,6 +1051,33 @@
                                 else return "--";
                             }
                             else return "--";
+                        }
+                    },
+                    {
+                        "title": "更改时间",
+                        "data": 'updated_at',
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        "orderSequence": ["desc", "asc"],
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(!data) return '';
+                            var $date = new Date(data*1000);
+                            var $year = $date.getFullYear();
+                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                            var $day = ('00'+($date.getDate())).slice(-2);
+                            var $hour = ('00'+$date.getHours()).slice(-2);
+                            var $minute = ('00'+$date.getMinutes()).slice(-2);
+                            var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            var $currentYear = new Date().getFullYear();
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
                     }
                 ],

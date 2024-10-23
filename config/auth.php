@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\DK\DK_Client;
+
 return [
 
     /*
@@ -75,6 +77,11 @@ return [
             'provider' => 'dk_clients',
         ],
 
+        'dk_client_staff' => [
+            'driver' => 'session',
+            'provider' => 'dk_clients_staffs',
+        ],
+
 
         'dk_finance_user' => [
             'driver' => 'session',
@@ -137,10 +144,17 @@ return [
             'model' => App\Models\DK\DK_User::class,
         ],
 
+
         'dk_clients' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK\DK_Client::class,
         ],
+
+        'dk_clients_staffs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK_Client\DK_Client_User::class,
+        ],
+
 
         'dk_finance_users' => [
             'driver' => 'eloquent',
