@@ -23,9 +23,14 @@ class DK_Pivot_Client_Delivery extends Model
 
         'is_exported',
         'exported_status',
+
+        'assign_status',
+
         'delivered_status',
         'delivered_result',
-        'creator_id', 'updater_id'
+
+        'creator_id',
+        'updater_id'
     ];
     protected $dateFormat = 'U';
 

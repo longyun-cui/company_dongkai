@@ -128,12 +128,19 @@
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
 
-                            <select name="bulk-operate-exported-status" class="form-control form-filter">
-                                <option value="-1">请选导出状态</option>
-                                <option value="1">已导出</option>
-                                <option value="0">待导出</option>
+{{--                            <select name="bulk-operate-exported-status" class="form-control form-filter">--}}
+{{--                                <option value="-1">请选导出状态</option>--}}
+{{--                                <option value="1">已导出</option>--}}
+{{--                                <option value="0">待导出</option>--}}
+{{--                            </select>--}}
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>--}}
+
+                            <select name="bulk-operate-assign-status" class="form-control form-filter">
+                                <option value="-1">请选分配状态</option>
+                                <option value="1">已分配</option>
+                                <option value="0">待分配</option>
                             </select>
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>
+                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-status"><i class="fa fa-check"></i> 批量更改导出状态</span>
 
                             <select name="bulk-operate-staff-id" class="form-control form-filter">
                                 <option value="-1">选择员工</option>
@@ -877,28 +884,28 @@
 
                         }
                     },
-                    {
-                        "title": "导出状态",
-                        "data": "exported_status",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('exported_status');
-                                $(nTd).attr('data-id',row.id).attr('data-name','导出状态');
-                                $(nTd).attr('data-key','exported_status').attr('data-value',row.id);
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return '<small class="btn-xs btn-warning">待导出</small>';
-                            else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "导出状态",
+                    //     "data": "exported_status",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('exported_status');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','导出状态');
+                    //             $(nTd).attr('data-key','exported_status').attr('data-value',row.id);
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data == 0) return '<small class="btn-xs btn-warning">未导出</small>';
+                    //         else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
+                    //         return data;
+                    //     }
+                    // },
                     {
                         "title": "工单质量",
                         "data": "order_quality",
@@ -948,6 +955,28 @@
                             var $currentYear = new Date().getFullYear();
                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                             else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                        }
+                    },
+                    {
+                        "title": "分配状态",
+                        "data": "assign_status",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('assign_status');
+                                $(nTd).attr('data-id',row.id).attr('data-name','分配状态');
+                                $(nTd).attr('data-key','assign_status').attr('data-value',row.id);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '<small class="btn-xs btn-warning">待分配</small>';
+                            else if(data == 1) return '<small class="btn-xs btn-success">已分配</small>';
+                            return data;
                         }
                     },
                     {

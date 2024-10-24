@@ -448,6 +448,11 @@ class DKClientController extends Controller
     {
         return $this->repo->operate_item_delivery_bulk_exported_status(request()->all());
     }
+    // 【订单管理】批量-更改导出状态
+    public function operate_item_delivery_bulk_assign_status()
+    {
+        return $this->repo->operate_item_delivery_bulk_assign_status(request()->all());
+    }
     // 【订单管理】批量-分派
     public function operate_item_delivery_bulk_assign_staff()
     {

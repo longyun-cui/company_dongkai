@@ -3052,6 +3052,99 @@ class DKClientRepository {
         }
 
     }
+    // 【交付管理】批量-分配状态
+    public function operate_item_delivery_bulk_assign_status($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+            'operate_assign_status.required' => 'operate_assign_status.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+            'operate_assign_status' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'delivery-assign-status-bulk') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_assign_status = $post_data["operate_assign_status"];
+//        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $delivered_para['assign_status'] = $operate_assign_status;
+
+//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
+//            if(!$bool) throw new Exception("item--update--fail");
+//            else
+//            {
+//            }
+
+            foreach($ids_array as $key => $id)
+            {
+                $item = DK_Pivot_Client_Delivery::withTrashed()->find($id);
+                if(!$item) return response_error([],"该【交付】不存在，刷新页面重试！");
+
+
+                $before = $item->$operate_assign_status;
+
+                $item->assign_status = $operate_assign_status;
+                $bool = $item->save();
+                if(!$bool) throw new Exception("item--update--fail");
+                else
+                {
+                    $record = new DK_Client_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 91;
+                    $record_data["operate_category"] = 99;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "assign_status";
+
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $operate_assign_status;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("insert--record--fail");
+                }
+
+            }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
     // 【交付管理】批量-分配
     public function operate_item_delivery_bulk_assign_staff($post_data)
     {
@@ -9005,6 +9098,149 @@ class DKClientRepository {
     }
     // 【数据导出】工单
     public function operate_statistic_export_for_order_by_ids($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $record_operate_type = 100;
+        $record_column_type = 'ids';
+        $record_before = '';
+        $record_after = '';
+        $record_title = $ids;
+
+        // 工单
+        $query = DK_Pivot_Client_Delivery::select('*')
+            ->with([
+                'order_er'=>function($query) { $query->select('*'); },
+                'project_er'=>function($query) { $query->select('id','name'); },
+            ])
+            ->whereIn('id',$ids_array);
+
+
+
+        $data = $query->orderBy('id','desc')->get();
+        $data = $data->toArray();
+//        $data = $data->groupBy('car_id')->toArray();
+//        dd($data);
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+//            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+//            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            if($v['assign_status'] == 1) $cellData[$k]['assign_status'] = "已分配";
+            else $cellData[$k]['assign_status'] = "未分配";
+
+            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+            $cellData[$k]['client_name'] = $v['order_er']['client_name'];
+            $cellData[$k]['client_phone'] = $v['order_er']['client_phone'];
+
+
+            // 微信号 & 是否+V
+            $cellData[$k]['wx_id'] = $v['order_er']['wx_id'];
+//            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
+//            else $cellData[$k]['is_wx'] = '--';
+
+            $cellData[$k]['location_city'] = $v['order_er']['location_city'];
+            $cellData[$k]['location_district'] = $v['order_er']['location_district'];
+
+            $cellData[$k]['teeth_count'] = $v['order_er']['teeth_count'];
+
+            $cellData[$k]['description'] = $v['order_er']['description'];
+            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+
+            // 是否重复
+//            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+//            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+//            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
+//            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+//            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+        }
+
+
+        $title_row = [
+            'id'=>'ID',
+//            'creator_name'=>'创建人',
+//            'published_time'=>'提交时间',
+            'assign_status'=>'是否分配',
+            'project_er_name'=>'项目',
+//            'channel_source'=>'渠道来源',
+            'client_name'=>'客户姓名',
+            'client_phone'=>'客户电话',
+            'wx_id'=>'微信号',
+//            'is_wx'=>'是否+V',
+            'location_city'=>'所在城市',
+            'location_district'=>'行政区',
+            'teeth_count'=>'牙齿数量',
+            'description'=>'通话小结',
+            'recording_address'=>'录音地址',
+//            'is_repeat'=>'是否重复',
+//            'inspector_name'=>'审核人',
+//            'inspected_time'=>'审核时间',
+//            'inspected_result'=>'审核结果',
+        ];
+        array_unshift($cellData, $title_row);
+
+
+        $record = new DK_Client_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 31;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 71;
+        $record_data["operate_category"] = 109;
+        $record_data["operate_type"] = $record_operate_type;
+        $record_data["column_type"] = $record_column_type;
+        $record_data["before"] = $record_before;
+        $record_data["after"] = $record_after;
+        $record_data["title"] = $record_title;
+
+        $record->fill($record_data)->save();
+
+
+
+
+        $title = '【工单】'.date('Ymd.His').'_by_ids';
+
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('全部工单', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setWidth(array(
+                    'A'=>10,
+                    'B'=>20,
+                    'C'=>20,
+                    'D'=>20,
+                    'E'=>20,
+                    'F'=>20,
+                    'G'=>16,
+                    'H'=>10,
+                    'I'=>10,
+                    'J'=>16,
+                    'K'=>40,
+                    'L'=>30
+                ));
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
+
+
+
+
+
+    }
+    // 【数据导出】工单
+    public function operate_statistic_export_for_order_by_order_ids($post_data)
     {
         $this->get_me();
         $me = $this->me;

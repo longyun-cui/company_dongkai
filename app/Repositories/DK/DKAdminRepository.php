@@ -7906,7 +7906,7 @@ class DKAdminRepository {
         return response_success($return,"");
 
     }
-    // 【工单管理】交付
+    // 【工单管理】分发
     public function operate_item_order_distribute($post_data)
     {
 //        dd($post_data);

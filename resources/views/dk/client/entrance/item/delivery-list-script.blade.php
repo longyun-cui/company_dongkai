@@ -1479,8 +1479,8 @@
 
             var $ids = '';
             $('input[name="bulk-id"]:checked').each(function() {
-                // $ids += $(this).val()+'-';
-                $ids += $(this).attr('data-order-id')+'-';
+                $ids += $(this).val()+'-';
+                // $ids += $(this).attr('data-order-id')+'-';
             });
             $ids = $ids.slice(0, -1);
             // console.log($ids);
@@ -1516,7 +1516,7 @@
             {{--});--}}
 
         });
-        // 【批量操作】批量-导出
+        // 【批量操作】批量-导出状态
         $(".main-content").on('click', '#bulk-submit-for-exported-status', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
@@ -1568,6 +1568,74 @@
                                     else if($operate_status == "0")
                                     {
                                         $row.find('td[data-key=exported_status]').html('<small class="btn-xs btn-warning">未导出</small>');
+                                    }
+                                    else
+                                    {
+                                    }
+
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+        // 【批量操作】批量-分配状态
+        $(".main-content").on('click', '#bulk-submit-for-assign-status', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量导出"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/delivery-bulk-assign-status') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "delivery-assign-status-bulk",
+                            ids: $ids,
+                            operate_assign_status:$('select[name="bulk-operate-assign-status"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $operate_status = $('select[name="bulk-operate-assign-status"]').val();
+
+                                    if($operate_status == "1")
+                                    {
+                                        $row.find('td[data-key=assign_status]').html('<small class="btn-xs btn-success">已分配</small>');
+                                    }
+                                    else if($operate_status == "0")
+                                    {
+                                        $row.find('td[data-key=assign_status]').html('<small class="btn-xs btn-warning">待分配</small>');
                                     }
                                     else
                                     {
