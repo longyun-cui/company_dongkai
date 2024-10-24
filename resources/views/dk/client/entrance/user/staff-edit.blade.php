@@ -43,21 +43,21 @@
                         <div class="btn-group">
 
 
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 81))
-                                    <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 81)
-                                            <input type="radio" name="user_type" value="81" checked="checked"> 经理
-                                        @else
-                                            <input type="radio" name="user_type" value="81"> 经理
-                                        @endif
-                                    </label>
-                                </span>
-                                    </button>
-                                @endif
-                            @endif
+{{--                            @if(in_array($me->user_type, [0,1,11,41]))--}}
+{{--                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 81))--}}
+{{--                                    <button type="button" class="btn">--}}
+{{--                                <span class="radio">--}}
+{{--                                    <label>--}}
+{{--                                        @if($operate == 'edit' && $data->user_type == 81)--}}
+{{--                                            <input type="radio" name="user_type" value="81" checked="checked"> 经理--}}
+{{--                                        @else--}}
+{{--                                            <input type="radio" name="user_type" value="81"> 经理--}}
+{{--                                        @endif--}}
+{{--                                    </label>--}}
+{{--                                </span>--}}
+{{--                                    </button>--}}
+{{--                                @endif--}}
+{{--                            @endif--}}
 
                             @if(in_array($me->user_type, [0,1,11,41]))
                                 @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 84))

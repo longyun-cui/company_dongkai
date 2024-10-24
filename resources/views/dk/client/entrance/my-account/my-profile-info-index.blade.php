@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 {{--真实姓名--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">真实姓名</label>
                     <div class="col-md-8 ">
                         <div><label class="control-label">{{ $data->true_name or '' }}</label></div>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 {{--邮箱--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2">邮箱</label>
                     <div class="col-md-8 ">
                         <div><label class="control-label">{{ $data->email or '' }}</label></div>
