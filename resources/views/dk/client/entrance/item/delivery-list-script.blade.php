@@ -3,44 +3,44 @@
 
 
         // 【搜索】
-        $("#datatable-for-order-list").on('click', ".filter-submit", function() {
+        $("#datatable-for-delivery-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【刷新】
-        $("#datatable-for-order-list").on('click', ".filter-refresh", function() {
+        $("#datatable-for-delivery-list").on('click', ".filter-refresh", function() {
             $('#datatable_ajax').DataTable().ajax.reload(null,false);
         });
         // 【重置】
-        $("#datatable-for-order-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-delivery-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-delivery-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-delivery-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-delivery-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $("#datatable-for-order-list").on('click', ".filter-empty", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-delivery-list").on('click', ".filter-empty", function() {
+            $("#datatable-for-delivery-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-delivery-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-delivery-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $("#datatable-for-order-list").on('keyup', ".filter-keyup", function(event) {
+        $("#datatable-for-delivery-list").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-order-list").find(".filter-submit").click();
+                $("#datatable-for-delivery-list").find(".filter-submit").click();
             }
         });
 
@@ -95,7 +95,7 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-order-list").find(".filter-submit").click();
+            $("#datatable-for-delivery-list").find(".filter-submit").click();
 
         });
         // 【综合概览】【后一添】
@@ -122,7 +122,7 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-order-list").find(".filter-submit").click();
+            $("#datatable-for-delivery-list").find(".filter-submit").click();
 
         });
 
@@ -1516,6 +1516,131 @@
             {{--});--}}
 
         });
+        // 【批量操作】批量-导出
+        $(".main-content").on('click', '#bulk-submit-for-exported-status', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量导出"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/delivery-bulk-exported-status') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "delivery-exported-bulk",
+                            ids: $ids,
+                            operate_exported_status:$('select[name="bulk-operate-exported-status"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $operate_status = $('select[name="bulk-operate-exported-status"]').val();
+
+                                    if($operate_status == "1")
+                                    {
+                                        $row.find('td[data-key=exported_status]').html('<small class="btn-xs btn-success">已导出</small>');
+                                    }
+                                    else if($operate_status == "0")
+                                    {
+                                        $row.find('td[data-key=exported_status]').html('<small class="btn-xs btn-warning">未导出</small>');
+                                    }
+                                    else
+                                    {
+                                    }
+
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+        // 【批量操作】批量-导出
+        $(".main-content").on('click', '#bulk-submit-for-assign-staff', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量导出"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/delivery-bulk-assign-staff') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "delivery-assign-staff-bulk",
+                            ids: $ids,
+                            operate_staff_id:$('select[name="bulk-operate-staff-id"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $username = $('select[name="bulk-operate-staff-id"]').find('option:selected').html();
+
+                                    $row.find('td[data-key=client_staff_id]').html('<a href="javascript:void(0);">'+$username+'</a>');
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
 
 
 
@@ -1560,9 +1685,9 @@
 
 
         // select2 项目
-        $('.order-select2-project').select2({
+        $('.select2-district').select2({
             ajax: {
-                url: "{{ url('/item/item_select2_project') }}",
+                url: "{{ url('/select2/select2_district') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

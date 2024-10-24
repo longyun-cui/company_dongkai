@@ -235,8 +235,18 @@
                         }
                     },
                     {
-                        "title": "手机",
-                        "data": "mobile",
+                        "title": "管理员名称",
+                        "data": "client_admin_name",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "管理员登录手机",
+                        "data": "client_admin_mobile",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
@@ -411,5 +421,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.user.client-script')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.user.client-list-script')
 @endsection

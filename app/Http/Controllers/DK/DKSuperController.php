@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\DK;
 
 use App\Models\DK\DK_Client;
+use App\Models\DK_Client\DK_Client_User;
 use App\Models\DK_Finance\DK_Finance_User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -240,6 +241,29 @@ class DKSuperController extends Controller
         else return response_error([]);
     }
     // 【用户-管理员】登录
+    public function operate_user_client_staff_login()
+    {
+        $user_id = request()->get('user_id');
+        $user = DK_Client_User::where('id',$user_id)->first();
+        if($user)
+        {
+            Auth::guard('dk_client_staff')->login($user,true);
+            $token = request()->get('_token');
+            Auth::guard('dk_client_staff')->user()->admin_token = $token;
+            Auth::guard('dk_client_staff')->user()->save();
+
+            $return['user'] = $user;
+            $return['url'] = env('DOMAIN_DK_CLIENT');
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_CLIENT'));
+            else if(request()->isMethod('post'))
+            {
+                return response_success($return);
+            }
+        }
+        else return response_error([]);
+    }
+    // 【用户-管理员】登录
     public function operate_user_finance_login()
     {
         $user_id = request()->get('user_id');
@@ -283,6 +307,12 @@ class DKSuperController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
+    }
+    // 【用户】【全部用户】返回-列表-视图
+    public function view_user_client_staff_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_client_staff_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_client_staff_list_datatable(request()->all());
     }
     // 【用户】【全部用户】返回-列表-视图
     public function view_user_finance_user_list_for_all()

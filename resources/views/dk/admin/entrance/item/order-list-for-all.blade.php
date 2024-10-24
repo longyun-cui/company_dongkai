@@ -76,7 +76,6 @@
                             @foreach($staff_list as $v)
                                 <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
                             @endforeach
-
                         </select>
                         @endif
 

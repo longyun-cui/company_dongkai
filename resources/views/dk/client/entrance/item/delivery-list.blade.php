@@ -18,7 +18,7 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
 
-            <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
+            <div class="box-header with-border _none" style="padding:6px 10px;margin:4px;">
 
                 <h3 class="box-title">工单列表</h3>
 
@@ -34,7 +34,7 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-order-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-delivery-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
@@ -43,27 +43,19 @@
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
-                        <select class="form-control form-filter select2-box order-select2-project" name="order-project" style="width:120px;">
-                            @if($project_id > 0)
-                                <option value="-1">选择项目</option>
-                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
-                            @else
-                                <option value="-1">选择项目</option>
-                            @endif
+                        <select class="form-control form-filter select2-box select2-district" name="order-district[]" multiple="multiple" style="width:160px;">
+                            <option value="-1">选择区域</option>
                         </select>
 
-                        <select class="form-control form-filter" name="order-inspected-status" style="width:88px;">
-                            <option value="-1">审核状态</option>
-                            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
-                            <option value="待发布" @if("待发布" == $inspected_status) selected="selected" @endif>待发布</option>
-                            @endif
-                            <option value="待审核" @if("待审核" == $inspected_status) selected="selected" @endif>待审核</option>
-                            <option value="已审核" @if("已审核" == $inspected_status) selected="selected" @endif>已审核</option>
+                        <select class="form-control form-filter" name="order-exported-status" style="width:88px;">
+                            <option value="-1">导出状态</option>
+                            <option value="0" @if($exported_status == 0) selected="selected" @endif>待导出</option>
+                            <option value="1" @if($exported_status == 1) selected="selected" @endif>已导出</option>
                         </select>
 
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
@@ -117,7 +109,7 @@
             </div>
 
 
-            @if(in_array($me->user_type,[0,1,9,11,71,77]))
+            @if(in_array($me->user_type,[0,1,9,11]))
             <div class="box-footer" style="padding:4px 10px;">
                 <div class="row" style="margin:2px 0;">
                     <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
@@ -135,6 +127,21 @@
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
+
+                            <select name="bulk-operate-exported-status" class="form-control form-filter">
+                                <option value="-1">请选导出状态</option>
+                                <option value="1">已导出</option>
+                                <option value="0">待导出</option>
+                            </select>
+                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>
+
+                            <select name="bulk-operate-staff-id" class="form-control form-filter">
+                                <option value="-1">选择员工</option>
+                                @foreach($staff_list as $v)
+                                    <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
+                                @endforeach
+                            </select>
+                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-staff"><i class="fa fa-check"></i> 批量分配</span>
                         </div>
                     </div>
                 </div>
@@ -734,7 +741,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[20,50, 100, 200, 500, 1000])) {{ $length.',' }} @endif 20,50, 100, 200, 500, 1000], [ @if(!in_array($length,[20,50, 100, 200, 500, 1000])) {{ $length.',' }} @endif "20", "50", "100", "200", "500", "1000"]],
+                "aLengthMenu": [[ @if(!in_array($length,[20, 50, 100, 200, 500, 1000])) {{ $length.',' }} @endif 20, 50, 100, 200, 500, 1000], [ @if(!in_array($length,[20, 50, 100, 200, 500, 1000])) {{ $length.',' }} @endif "20", "50", "100", "200", "500", "1000"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -755,7 +762,6 @@
                         d.name = $('input[name="order-name"]').val();
                         d.title = $('input[name="order-title"]').val();
                         d.keyword = $('input[name="order-keyword"]').val();
-                        d.department_district = $('select[name="order-department-district[]"]').val();
                         d.staff = $('select[name="order-staff"]').val();
                         d.project = $('select[name="order-project"]').val();
                         d.status = $('select[name="order-status"]').val();
@@ -764,8 +770,9 @@
                         d.client_phone = $('input[name="order-client-phone"]').val();
                         d.is_wx = $('select[name="order-is-wx"]').val();
                         d.is_repeat = $('select[name="order-is-repeat"]').val();
-                        d.inspected_status = $('select[name="order-inspected-status"]').val();
-                        d.inspected_result = $('select[name="order-inspected-result[]"]').val();
+                        d.exported_status = $('select[name="order-exported-status"]').val();
+                        d.city = $('select[name="order-city[]"]').val();
+                        d.district = $('select[name="order-district[]"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -778,7 +785,8 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": ($(document).height() - 448)+"px",
+                "scrollY": false,
+                // "scrollY": ($(document).height() - 448)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
@@ -870,6 +878,28 @@
                         }
                     },
                     {
+                        "title": "导出状态",
+                        "data": "exported_status",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('exported_status');
+                                $(nTd).attr('data-id',row.id).attr('data-name','导出状态');
+                                $(nTd).attr('data-key','exported_status').attr('data-value',row.id);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '<small class="btn-xs btn-warning">待导出</small>';
+                            else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
+                            return data;
+                        }
+                    },
+                    {
                         "title": "工单质量",
                         "data": "order_quality",
                         "className": "",
@@ -918,6 +948,32 @@
                             var $currentYear = new Date().getFullYear();
                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                             else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                        }
+                    },
+                    {
+                        "title": "分派员工",
+                        "data": "client_staff_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('client_staff');
+                                $(nTd).attr('data-id',row.id).attr('data-name','分派员工');
+                                $(nTd).attr('data-key','client_staff_id').attr('data-value',row.id);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.client_staff_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.client_staff_er.username+'</a>';
+                            }
                         }
                     },
                     // {
@@ -990,6 +1046,28 @@
                             return "--";
                         }
                     },
+                    // {
+                    //     "title": "所在城市",
+                    //     "data": "order_id",
+                    //     "className": "",
+                    //     "width": "120px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.order_er)
+                    //         {
+                    //             if(row.order_er.location_city)
+                    //             {
+                    //                 if(row.order_er.location_district)
+                    //                 {
+                    //                     return row.order_er.location_city + ' - ' + row.order_er.location_district;
+                    //                 }
+                    //                 else return row.order_er.location_city;
+                    //             }
+                    //             else return '--';
+                    //         }
+                    //         else return '--';
+                    //     }
+                    // },
                     {
                         "title": "所在城市",
                         "data": "order_id",
@@ -1001,11 +1079,7 @@
                             {
                                 if(row.order_er.location_city)
                                 {
-                                    if(row.order_er.location_district)
-                                    {
-                                        return row.order_er.location_city + ' - ' + row.order_er.location_district;
-                                    }
-                                    else return row.order_er.location_city;
+                                    return row.order_er.location_city;
                                 }
                                 else return '--';
                             }
@@ -1013,16 +1087,34 @@
                         }
                     },
                     {
-                        "title": "渠道来源",
+                        "title": "所在区域",
                         "data": "order_id",
                         "className": "",
-                        "width": "60px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.order_er) return row.order_er.channel_source;
-                            return "--";
+                            if(row.order_er)
+                            {
+                                if(row.order_er.location_district)
+                                {
+                                    return row.order_er.location_district;
+                                }
+                                else return '--';
+                            }
+                            else return '--';
                         }
                     },
+                    // {
+                    //     "title": "渠道来源",
+                    //     "data": "order_id",
+                    //     "className": "",
+                    //     "width": "60px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.order_er) return row.order_er.channel_source;
+                    //         return "--";
+                    //     }
+                    // },
                     {
                         "title": "通话小结",
                         "data": "order_id",
@@ -1102,7 +1194,7 @@
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
                     if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
-                    if($('select[name="order-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="order-inspected-status"]').val();
+                    if($('select[name="order-exported-status"]').val() != -1)  $obj.exported_status = $('select[name="order-exported-status"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 20) $obj.length = $page_length;
@@ -1118,7 +1210,7 @@
                     }
                     else
                     {
-                        $url = "{{ url('/item/order-list-for-all') }}";
+                        $url = "{{ url('/item/delivery-list') }}";
                         if(window.location.search) history.replaceState({page: 1}, "", $url);
                     }
 

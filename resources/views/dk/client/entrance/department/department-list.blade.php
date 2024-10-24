@@ -57,11 +57,11 @@
 {{--                            <option value ="19">非工作状态</option>--}}
 {{--                        </select>--}}
 
-                        <select class="form-control form-filter" name="department-type" style="width:96px;">
-                            <option value ="-1">全部</option>
-                            <option value ="11">大区</option>
-                            <option value ="21">组</option>
-                        </select>
+{{--                        <select class="form-control form-filter" name="department-type" style="width:96px;">--}}
+{{--                            <option value ="-1">全部</option>--}}
+{{--                            <option value ="11">大区</option>--}}
+{{--                            <option value ="21">组</option>--}}
+{{--                        </select>--}}
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
@@ -554,7 +554,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/department/department-list-for-all') }}",
+                    'url': "{{ url('/department/department-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -688,91 +688,101 @@
                             }
                         }
                     },
+                    // {
+                    //     "title": "部门类型",
+                    //     "data": 'department_type',
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
+                    //         else if(data == 11) return '<small class="btn-xs bg-primary">大区</small>';
+                    //         else if(data == 21) return '<small class="btn-xs bg-purple">小组</small>';
+                    //         else return "有误";
+                    //     }
+                    // },
                     {
-                        "title": "部门类型",
-                        "data": 'department_type',
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
-                            else if(data == 11) return '<small class="btn-xs bg-primary">大区</small>';
-                            else if(data == 21) return '<small class="btn-xs bg-purple">小组</small>';
-                            else return "有误";
-                        }
-                    },
-                    {
-                        "title": "大区名称",
-                        "data": "superior_department_id",
-                        "className": "",
-                        "width":"100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.department_type == 11)
-                            {
-                                return '<a href="javascript:void(0);">'+row.name+'</a>';
-                            }
-                            else if(row.department_type == 21)
-                            {
-                                if(row.superior_department_er) {
-                                    return '<a href="javascript:void(0);">'+row.superior_department_er.name+'</a>';
-                                }
-                                else return '--';
-                            }
-                        }
-                    },
-                    {
-                        "title": "小组名称",
+                        "title": "名称",
                         "data": "name",
-                        "className": "text-center",
-                        "width": "100px",
+                        "className": "",
+                        "width":"160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.department_type == 11)
-                            {
-                                return '--';
-                            }
-                            else if(row.department_type == 21)
-                            {
-                                return '<a href="javascript:void(0);">'+data+'</a>';
-                            }
+                            return '<a href="javascript:void(0);">'+data+'</a>';
                         }
                     },
-                    {
-                        "title": "负责人",
-                        "data": "leader_id",
-                        "className": "text-center",
-                        "width": "160px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','负责人');
-                                $(nTd).attr('data-key','leader_id').attr('data-value',data);
-                                if(row.leader == null) $(nTd).attr('data-option-name','未指定');
-                                else {
-                                    $(nTd).attr('data-option-name',row.leader.username);
-                                }
-                                $(nTd).attr('data-column-name','负责人');
-                                if(row.leader_id) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-
-                                if(row.department_type == 11)
-                                {
-                                    $(nTd).attr('data-department-type','manager');
-                                }
-                                else if(row.department_type == 21)
-                                {
-                                    $(nTd).attr('data-department-type','supervisor');
-                                }
-
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(row.leader == null) return '--';
-                            else return '<a href="javascript:void(0);">'+row.leader.username+' ('+row.leader.id+')'+'</a>';
-                        }
-                    },
+                    // {
+                    //     "title": "大区名称",
+                    //     "data": "superior_department_id",
+                    //     "className": "",
+                    //     "width":"100px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.department_type == 11)
+                    //         {
+                    //             return '<a href="javascript:void(0);">'+row.name+'</a>';
+                    //         }
+                    //         else if(row.department_type == 21)
+                    //         {
+                    //             if(row.superior_department_er) {
+                    //                 return '<a href="javascript:void(0);">'+row.superior_department_er.name+'</a>';
+                    //             }
+                    //             else return '--';
+                    //         }
+                    //     }
+                    // },
+                    // {
+                    //     "title": "小组名称",
+                    //     "data": "name",
+                    //     "className": "text-center",
+                    //     "width": "100px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.department_type == 11)
+                    //         {
+                    //             return '--';
+                    //         }
+                    //         else if(row.department_type == 21)
+                    //         {
+                    //             return '<a href="javascript:void(0);">'+data+'</a>';
+                    //         }
+                    //     }
+                    // },
+                    // {
+                    //     "title": "负责人",
+                    //     "data": "leader_id",
+                    //     "className": "text-center",
+                    //     "width": "160px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-select2-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','负责人');
+                    //             $(nTd).attr('data-key','leader_id').attr('data-value',data);
+                    //             if(row.leader == null) $(nTd).attr('data-option-name','未指定');
+                    //             else {
+                    //                 $(nTd).attr('data-option-name',row.leader.username);
+                    //             }
+                    //             $(nTd).attr('data-column-name','负责人');
+                    //             if(row.leader_id) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //
+                    //             if(row.department_type == 11)
+                    //             {
+                    //                 $(nTd).attr('data-department-type','manager');
+                    //             }
+                    //             else if(row.department_type == 21)
+                    //             {
+                    //                 $(nTd).attr('data-department-type','supervisor');
+                    //             }
+                    //
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.leader == null) return '--';
+                    //         else return '<a href="javascript:void(0);">'+row.leader.username+' ('+row.leader.id+')'+'</a>';
+                    //     }
+                    // },
                     {
                         "title": "备注",
                         "data": "remark",
@@ -782,7 +792,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).addClass('modal-show-for-info-text-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','备注');
                                 $(nTd).attr('data-key','remark').attr('data-value',data);
                                 $(nTd).attr('data-column-name','备注');

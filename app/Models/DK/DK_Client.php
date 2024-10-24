@@ -16,20 +16,31 @@ class DK_Client extends Authenticatable
     protected $table = "dk_admin_client";
 
     protected $fillable = [
-        'active', 'status', 'user_active', 'user_status', 'user_category', 'user_group', 'user_type', 'category', 'group', 'type',
+        'active', 'status', 'user_active', 'user_status',
+        'user_group', 'user_category', 'user_type',
+        'group', 'category', 'type',
+
         'creator_id', 'parent_id', 'p_id',
         'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
         'mobile', 'telephone', 'email', 'password',
+
         'wx_unionid',
         'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id', 'superior_id',
         'district_category', 'district_type', 'district_id',
         'is_ip', 'ip_whitelist',
+
+        'client_admin_id', 'client_admin_name', 'client_admin_mobile',
+
         'introduction_id', 'advertising_id',
+
         'QQ_number',
-        'wx_id', 'wx_qr_code_img',
-        'wb_name', 'wb_address',
+        'wx_id',
+        'wx_qr_code_img',
+        'wb_name',
+        'wb_address',
         'website',
         'address',
+
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
         'company', 'department', 'position', 'business_description',

@@ -1034,7 +1034,7 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_item_delivery_exported(request()->all());
     }
-    // 【订单管理】批量-交付
+    // 【订单管理】批量-更改导出状态
     public function operate_item_delivery_bulk_exported()
     {
         return $this->repo->operate_item_delivery_bulk_exported(request()->all());

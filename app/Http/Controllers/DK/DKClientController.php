@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\DK;
 
 use App\Models\DK\DK_Client;
+use App\Models\DK_Client\DK_Client_User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -32,9 +33,9 @@ class DKClientController extends Controller
         $result['message'] = 'failed';
         $result['result'] = 'denied';
 
-        if(Auth::guard('dk_client')->check())
+        if(Auth::guard('dk_client_staff')->check())
         {
-            $me = Auth::guard('dk_client')->user();
+            $me = Auth::guard('dk_client_staff')->user();
             $token = request('_token');
 
             if($me->admin_token == $token)
@@ -54,9 +55,9 @@ class DKClientController extends Controller
         $result['message'] = 'failed';
         $result['result'] = 'denied';
 
-        if(Auth::guard('dk_client')->check())
+        if(Auth::guard('dk_client_staff')->check())
         {
-            $me = Auth::guard('dk_client')->user();
+            $me = Auth::guard('dk_client_staff')->user();
 
             // 判断用户是否开启ip登录
             if($me->is_ip == 1)
@@ -98,7 +99,7 @@ class DKClientController extends Controller
 //            $admin = SuperAdministrator::whereEmail($email)->first();
 
             $mobile = request()->get('mobile');
-            $admin = DK_Client::whereMobile($mobile)->first();
+            $admin = DK_Client_User::whereMobile($mobile)->first();
 
             if($admin)
             {
@@ -109,10 +110,10 @@ class DKClientController extends Controller
                     if(password_check($password,$admin->password))
                     {
                         $remember = request()->get('remember');
-                        if($remember) Auth::guard('dk_client')->login($admin,true);
-                        else Auth::guard('dk_client')->login($admin);
-                        Auth::guard('dk_client')->user()->admin_token = $token;
-                        Auth::guard('dk_client')->user()->save();
+                        if($remember) Auth::guard('dk_client_staff')->login($admin,true);
+                        else Auth::guard('dk_client_staff')->login($admin);
+                        Auth::guard('dk_client_staff')->user()->admin_token = $token;
+                        Auth::guard('dk_client_staff')->user()->save();
                         return response_success();
                     }
                     else return response_error([],'账户or密码不正确！');
@@ -126,16 +127,16 @@ class DKClientController extends Controller
     // 退出
     public function logout()
     {
-        Auth::guard('dk_client')->user()->admin_token = '';
-        Auth::guard('dk_client')->user()->save();
-        Auth::guard('dk_client')->logout();
+        Auth::guard('dk_client_staff')->user()->admin_token = '';
+        Auth::guard('dk_client_staff')->user()->save();
+        Auth::guard('dk_client_staff')->logout();
         return redirect('/login');
     }
 
     // 退出
     public function logout_without_token()
     {
-        Auth::guard('dk_client')->logout();
+        Auth::guard('dk_client_staff')->logout();
         return redirect('/login');
     }
 
@@ -175,6 +176,22 @@ class DKClientController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_my_account_password_change();
         else if (request()->isMethod('post')) return $this->repo->operate_my_account_password_change_save(request()->all());
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 用户基本信息
+     */
+    // SELECT2
+    public function operate_select2_district()
+    {
+        return $this->repo->operate_select2_district(request()->all());
     }
 
 
@@ -274,10 +291,10 @@ class DKClientController extends Controller
 
 
     // 【部门管理】返回-列表-视图（全部任务）
-    public function view_department_list_for_all()
+    public function view_department_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_department_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_department_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_department_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_department_list_datatable(request()->all());
     }
     // 【部门管理】【修改记录】返回-列表-视图（全部任务）
     public function view_department_modify_record()
@@ -297,10 +314,10 @@ class DKClientController extends Controller
      * 员工管理
      */
     // 【员工管理】【全部用户】返回-列表-视图
-    public function view_staff_list_for_all()
+    public function view_user_staff_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_staff_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_staff_list_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_datatable(request()->all());
     }
 
     // 【用户-员工管理】添加
@@ -425,6 +442,16 @@ class DKClientController extends Controller
     public function operate_item_delivery_quality_evaluate()
     {
         return $this->repo->operate_item_delivery_quality_evaluate(request()->all());
+    }
+    // 【订单管理】批量-更改导出状态
+    public function operate_item_delivery_bulk_exported_status()
+    {
+        return $this->repo->operate_item_delivery_bulk_exported_status(request()->all());
+    }
+    // 【订单管理】批量-分派
+    public function operate_item_delivery_bulk_assign_staff()
+    {
+        return $this->repo->operate_item_delivery_bulk_assign_staff(request()->all());
     }
 
 

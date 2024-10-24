@@ -37,50 +37,50 @@
 
 
                         {{--类别--}}
-                        <div class="form-group form-category">
-                            <label class="control-label col-md-2">类型</label>
-                            <div class="col-md-8">
-                                <div class="btn-group">
+{{--                        <div class="form-group form-category _none">--}}
+{{--                            <label class="control-label col-md-2">类型</label>--}}
+{{--                            <div class="col-md-8">--}}
+{{--                                <div class="btn-group">--}}
 
-                                    @if(in_array($me->user_type, [0,1,11]))
-                                        @if($operate == 'create' || ($operate == 'edit' && $data->department_type == 11))
-                                        <button type="button" class="btn">
-                                            <span class="radio">
-                                                <label>
-                                                    @if($operate == 'edit' && $data->department_type == 11)
-                                                        <input type="radio" name="department_type" value="11" checked="checked"> 大区
-                                                    @else
-                                                        <input type="radio" name="department_type" value="11" checked="checked"> 大区
-                                                    @endif
-                                                </label>
-                                            </span>
-                                        </button>
-                                        @endif
-                                    @endif
+{{--                                    @if(in_array($me->user_type, [0,1,11]))--}}
+{{--                                        @if($operate == 'create' || ($operate == 'edit' && $data->department_type == 11))--}}
+{{--                                        <button type="button" class="btn">--}}
+{{--                                            <span class="radio">--}}
+{{--                                                <label>--}}
+{{--                                                    @if($operate == 'edit' && $data->department_type == 11)--}}
+{{--                                                        <input type="radio" name="department_type" value="11" checked="checked"> 大区--}}
+{{--                                                    @else--}}
+{{--                                                        <input type="radio" name="department_type" value="11" checked="checked"> 大区--}}
+{{--                                                    @endif--}}
+{{--                                                </label>--}}
+{{--                                            </span>--}}
+{{--                                        </button>--}}
+{{--                                        @endif--}}
+{{--                                    @endif--}}
 
-                                    @if(in_array($me->user_type, [0,1,11,41]))
-                                        @if($operate == 'create' || ($operate == 'edit' && $data->department_type == 21))
-                                        <button type="button" class="btn">
-                                            <span class="radio">
-                                                <label>
-                                                    @if($operate == 'edit' && $data->department_type == 21)
-                                                        <input type="radio" name="department_type" value="21" checked="checked"> 组
-                                                    @else
-                                                        @if($me->user_type == 41)
-                                                            <input type="radio" name="department_type" value="21" checked="checked"> 组
-                                                        @else
-                                                            <input type="radio" name="department_type" value="21"> 组
-                                                        @endif
-                                                    @endif
-                                                </label>
-                                            </span>
-                                        </button>
-                                        @endif
-                                    @endif
+{{--                                    @if(in_array($me->user_type, [0,1,11,41]))--}}
+{{--                                        @if($operate == 'create' || ($operate == 'edit' && $data->department_type == 21))--}}
+{{--                                        <button type="button" class="btn">--}}
+{{--                                            <span class="radio">--}}
+{{--                                                <label>--}}
+{{--                                                    @if($operate == 'edit' && $data->department_type == 21)--}}
+{{--                                                        <input type="radio" name="department_type" value="21" checked="checked"> 组--}}
+{{--                                                    @else--}}
+{{--                                                        @if($me->user_type == 41)--}}
+{{--                                                            <input type="radio" name="department_type" value="21" checked="checked"> 组--}}
+{{--                                                        @else--}}
+{{--                                                            <input type="radio" name="department_type" value="21"> 组--}}
+{{--                                                        @endif--}}
+{{--                                                    @endif--}}
+{{--                                                </label>--}}
+{{--                                            </span>--}}
+{{--                                        </button>--}}
+{{--                                        @endif--}}
+{{--                                    @endif--}}
 
-                                </div>
-                            </div>
-                        </div>
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
 
 
@@ -95,35 +95,35 @@
 
 
                         {{--上级部门--}}
-                        <div class="form-group select2-superior-box">
-                            <label class="control-label col-md-2">选择上级部门</label>
-                            <div class="col-md-8 ">
-                                <select class="form-control" name="superior_department_id" id="select2-superior-department">
-                                    @if($operate == 'edit' && $data->superior_department_id)
-                                        <option data-id="{{ $data->superior_department_id or 0 }}" value="{{ $data->superior_department_id or 0 }}">{{ $data->superior_department_er->name }}</option>
-                                    @else
-                                        <option data-id="0" value="0">未指定</option>
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
+{{--                        <div class="form-group select2-superior-box">--}}
+{{--                            <label class="control-label col-md-2">选择上级部门</label>--}}
+{{--                            <div class="col-md-8 ">--}}
+{{--                                <select class="form-control" name="superior_department_id" id="select2-superior-department">--}}
+{{--                                    @if($operate == 'edit' && $data->superior_department_id)--}}
+{{--                                        <option data-id="{{ $data->superior_department_id or 0 }}" value="{{ $data->superior_department_id or 0 }}">{{ $data->superior_department_er->name }}</option>--}}
+{{--                                    @else--}}
+{{--                                        <option data-id="0" value="0">未指定</option>--}}
+{{--                                    @endif--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
 
                         {{--负责人--}}
-                        <div class="form-group">
-                            <label class="control-label col-md-2">选择负责人</label>
-                            <div class="col-md-8 ">
-                                <select class="form-control" name="leader_id" id="select2-leader"
-                                        @if($operate == 'edit' && $data->department_type == 21) data-type="supervisor" @else data-type="manager" @endif
-                                >
-                                    @if($operate == 'edit' && $data->leader_id)
-                                        <option data-id="{{ $data->leader_id or 0 }}" value="{{ $data->leader_id or 0 }}">{{ $data->leader->username }}</option>
-                                    @else
-                                        <option data-id="0" value="0">未指定</option>
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label class="control-label col-md-2">选择负责人</label>--}}
+{{--                            <div class="col-md-8 ">--}}
+{{--                                <select class="form-control" name="leader_id" id="select2-leader"--}}
+{{--                                        @if($operate == 'edit' && $data->department_type == 21) data-type="supervisor" @else data-type="manager" @endif--}}
+{{--                                >--}}
+{{--                                    @if($operate == 'edit' && $data->leader_id)--}}
+{{--                                        <option data-id="{{ $data->leader_id or 0 }}" value="{{ $data->leader_id or 0 }}">{{ $data->leader->username }}</option>--}}
+{{--                                    @else--}}
+{{--                                        <option data-id="0" value="0">未指定</option>--}}
+{{--                                    @endif--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
 
                         {{--描述--}}
@@ -322,7 +322,7 @@
                     else
                     {
                         layer.msg(data.msg);
-                        location.href = "{{ url('/department/department-list-for-all') }}";
+                        location.href = "{{ url('/department/department-list') }}";
                     }
                 }
             };

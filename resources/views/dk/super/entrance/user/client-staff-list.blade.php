@@ -1,17 +1,17 @@
-@extends(env('TEMPLATE_DK_CLIENT').'layout.layout')
+@extends(env('TEMPLATE_DK_SUPER').'layout.layout')
 
 
 @section('head_title')
-    {{ $title_text or '员工列表' }} - 客户系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '客户列表' }} - SUPER - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')员工列表 - 客户系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '客户列表' }} - SUPER - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
-    <li><a href="{{url('/')}}"><i class="fa fa-dashboard"></i>首页</a></li>
+    <li><a href="{{url('/admin')}}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
 @section('content')
@@ -20,14 +20,14 @@
         <!-- BEGIN PORTLET-->
         <div class="box box-info">
 
-            <div class="box-header with-border" style="margin:4px 0;">
-                <h3 class="box-title">员工列表</h3>
+            <div class="box-header with-border" style="margin:16px 0;">
+                <h3 class="box-title">全部用户</h3>
 
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/user/staff-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加员工</button>
+                    <a href="{{ url('/user/user-create') }}">
+                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加用户</button>
                     </a>
                 </div>
 
@@ -47,31 +47,7 @@
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="staff-mobile" placeholder="登录工号" />
-                        <input type="text" class="form-control form-filter item-search-keyup" name="staff-username" placeholder="用户名" />
-
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                            <select class="form-control form-filter select2-box" name="staff-department-district" style="width:88px;">
-                                <option value="-1">选择大区</option>
-                                @foreach($department_district_list as $v)
-                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                @endforeach
-                            </select>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                            <select class="form-control form-filter" name="staff-user-type" style="width:88px;">
-                                <option value="-1">全部人员</option>
-                                <option value="41">团队·总经理</option>
-                                <option value="88">客服</option>
-                                <option value="84">客服主管</option>
-                                <option value="81">客服经理</option>
-                                <option value="77">质检员</option>
-                                <option value="71">质检经理</option>
-                                <option value="66">运营人员</option>
-                                <option value="61">运营经理</option>
-                            </select>
-                        @endif
+                        <input type="text" class="form-control form-filter item-search-keyup" name="username" placeholder="用户名" />
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
@@ -85,17 +61,25 @@
 
 
                 <!-- datatable start -->
-                <table class='table table-striped table-bordered- table-hover' id='datatable_ajax'>
+                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
+                            <th>ID</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
                 <!-- datatable end -->
-
-
             </div>
 
             <div class="box-footer">
@@ -121,17 +105,17 @@
                 <div class="box- box-info- form-container">
 
                     <div class="box-header with-border" style="margin:16px 0;">
-                        <h3 class="box-title">修改【<span class="user-name"></span>】的密码</h3>
+                        <h3 class="box-title">修改密码</h3>
                         <div class="box-tools pull-right">
                         </div>
                     </div>
 
-                    <form action="" method="post" class="form-horizontal form-bordered" id="form-password-admin-change-modal">
+                    <form action="" method="post" class="form-horizontal form-bordered" id="form-change-password-modal">
                         <div class="box-body">
 
-                            {{ csrf_field() }}
-                            <input type="hidden" name="operate" value="staff-password-admin-change" readonly>
-                            <input type="hidden" name="user_id" value="0" readonly>
+                            {{csrf_field()}}
+                            <input type="hidden" name="operate" value="change-password" readonly>
+                            <input type="hidden" name="id" value="0" readonly>
 
                             {{--类别--}}
 
@@ -141,7 +125,7 @@
                                 <label class="control-label col-md-2">新密码</label>
                                 <div class="col-md-8 control-label" style="text-align:left;">
                                     <input type="password" class="form-control form-filter" name="user-password" value="">
-                                    6-20位英文、数字、下划线构成
+                                    6-20位英文、数值、下划线构成
                                 </div>
                             </div>
                             {{--用户名--}}
@@ -159,8 +143,8 @@
                     <div class="box-footer">
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-                                <button type="button" class="btn btn-success" id="item-password-admin-change-submit"><i class="fa fa-check"></i> 提交</button>
-                                <button type="button" class="btn btn-default" id="item-password-admin-change-cancel">取消</button>
+                                <button type="button" class="btn btn-success" id="item-change-password-submit"><i class="fa fa-check"></i> 提交</button>
+                                <button type="button" class="btn btn-default" id="item-change-password-cancel">取消</button>
                             </div>
                         </div>
                     </div>
@@ -173,8 +157,6 @@
 @endsection
 
 
-
-
 @section('custom-script')
 <script>
     var TableDatatablesAjax = function () {
@@ -182,23 +164,27 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-               // "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-               // "aLengthMenu": [[-1], ["全部"]],
-               // "aLengthMenu": [[200, -1], ["200", "全部"]],
-                "aLengthMenu": [[50, 100, 200, -1], ["50", "100", "200", "全部"]],
+//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[50, 100, 200], ["50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/user/staff-list') }}",
+                    'url': "{{ url('/user/client-staff-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.mobile = $('input[name="staff-mobile"]').val();
-                        d.username = $('input[name="staff-username"]').val();
-                        d.department_district = $('select[name="staff-department-district"]').val();
-                        d.user_type = $('select[name="staff-user-type"]').val();
+                        d.username = $('input[name="username"]').val();
+//                        d.nickname 	= $('input[name="nickname"]').val();
+//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
+//                        d.certificate_state = $('select[name="certificate_state"]').val();
+//                        d.admin_name = $('input[name="admin_name"]').val();
+//
+//                        d.created_at_from = $('input[name="created_at_from"]').val();
+//                        d.created_at_to = $('input[name="created_at_to"]').val();
+//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
+//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
 
                     },
                 },
@@ -208,9 +194,8 @@
                 "columns": [
                     {
                         "title": "ID",
+                        "width": "48px",
                         "data": "id",
-                        "className": "font-12px",
-                        "width": "60px",
                         "orderable": true,
                         render: function(data, type, row, meta) {
                             return data;
@@ -218,17 +203,18 @@
                     },
                     {
                         "title": "操作",
+                        "width": "300px",
                         "data": "id",
-                        "width": "240px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.user_status == 1)
                             {
-                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                                $html_able =
+                                    '<a class="btn btn-xs btn-danger user-super-disable-submit" data-id="'+data+'">禁用</a>';
                             }
                             else
                             {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                                $html_able = '<a class="btn btn-xs btn-success user-super-enable-submit" data-id="'+data+'">启用</a>';
                             }
 
                             if(row.user_category == 1)
@@ -237,48 +223,27 @@
                             }
                             else
                             {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
+                                $html_edit = '<a class="btn btn-xs btn-primary item-super-edit-submit" data-id="'+data+'">编辑</a>';
                             }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            if(row.user_type == 88)
-                            {
-                                $html_promote = '<a class="btn btn-xs bg-olive item-admin-promote-submit" data-id="'+data+'">晋升</a>';
-                            }
-                            else if(row.user_type == 84)
-                            {
-                                $html_promote = '<a class="btn btn-xs bg-blue item-admin-demote-submit" data-id="'+data+'">降职</a>';
-                            }
-                            else
-                            {
-                                $html_promote = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">晋升</a>';
-                            }
-
 
                             var html =
                                 $html_edit+
-                                // '<a class="btn btn-xs bg-maroon item-password-admin-change-show" data-id="'+data+'" data-name="'+row.username+'">修改密码</a>'+
-                                '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
-                                $html_promote+
                                 $html_able+
-                                $html_delete+
-//                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
-//                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
+                                // '<a class="btn btn-xs item-download-qrcode-submit" data-id="'+value+'">下载二维码</a>'+
+                                // '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
+                                // '<a class="btn btn-xs bg-maroon item-password-super-change-show" data-id="'+data+'">修改密码</a>'+
+                                '<a class="btn btn-xs bg-maroon item-password-super-reset-submit" data-id="'+data+'">重置密码</a>'+
+                                '<a class="btn btn-xs bg-olive item-client-login-submit" data-id="'+data+'">登录</a>'+
+                                // '<a class="btn btn-xs bg-olive item-staff-login-submit" data-id="'+data+'">员工登录</a>'+
+                                '<a class="btn btn-xs bg-navy item-super-delete-submit" data-id="'+data+'" >删除</a>'+
+                                '<a class="btn btn-xs bg-purple item-statistic-submit" data-id="'+data+'">流量统计</a>'+
                                 '';
                             return html;
                         }
                     },
                     {
                         "title": "状态",
-                        "width": "80px",
+                        "width": "64px",
                         "data": "active",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -294,133 +259,145 @@
                             }
                             else
                             {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
+                                return '<small class="btn-xs btn-danger">已封禁</small>';
                             }
                         }
                     },
                     {
-                        "title": "员工职位",
-                        "data": 'user_type',
+                        "title": "用户类型",
                         "width": "80px",
+                        "data": 'user_type',
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
-                            else if(data == 11) return '<small class="btn-xs btn-danger">总经理</small>';
+                            else if(data == 11) return '<small class="btn-xs bg-primary">总经理</small>';
                             else if(data == 21) return '<small class="btn-xs bg-purple">人事经理</small>';
                             else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
-                            else if(data == 31) return '<small class="btn-xs bg-orange">财务经理</small>';
-                            else if(data == 33) return '<small class="btn-xs bg-orange">财务</small>';
-                            else if(data == 41) return '<small class="btn-xs bg-purple">团队·总经理</small>';
-                            else if(data == 71) return '<small class="btn-xs bg-purple">质检</small><small class="btn-xs btn-danger">经理</small>';
+                            else if(data == 41) return '<small class="btn-xs bg-orange">财务经理</small>';
+                            else if(data == 42) return '<small class="btn-xs bg-orange">财务</small>';
+                            else if(data == 71) return '<small class="btn-xs bg-purple">质检经理</small>';
                             else if(data == 77) return '<small class="btn-xs bg-purple">质检员</small>';
-                            else if(data == 81) return '<small class="btn-xs btn-danger">经理</small>';
-                            else if(data == 84) return '<small class="btn-xs bg-purple">主管</small>';
-                            else if(data == 88) return '<small class="btn-xs bg-olive">员工</small>';
-                            else if(data == 61) return '<small class="btn-xs bg-blue">运营</small><small class="btn-xs btn-danger">经理</small>';
-                            else if(data == 66) return '<small class="btn-xs bg-blue">运营人员</small>';
+                            else if(data == 81) return '<small class="btn-xs bg-olive">客服·经理</small>';
+                            else if(data == 84) return '<small class="btn-xs bg-olive">客服·主管</small>';
+                            else if(data == 88) return '<small class="btn-xs bg-olive">客服</small>';
                             else return "有误";
                         }
                     },
                     {
-                        "title": "登录手机（工号）",
-                        "data": "mobile",
-                        "className": "",
+                        "title": "名称",
+                        "className": "text-left",
                         "width": "120px",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<a target="_blank" href="/user/'+data+'">'+row.username+'</a>';
+                        }
+                    },
+                    {
+                        "title": "真实姓名",
+                        "className": "text-left",
+                        "width": "120px",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
+                        }
+                    },
+                    {
+                        "title": "手机号",
+                        "className": "text-left",
+                        "width": "120px",
+                        "data": "mobile",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
+//                    {
+//                        "className": "text-left",
+//                        "width":"128px",
+//                        "title": "负责人",
+//                        "data": "id",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            if(row.principal) {
+//                                return '<a target="_blank" href="/user/'+data+'">'+row.principal.username+'</a>';
+//                            }
+//                            else return '--';
+//                        }
+//                    },
+//                    {
+//                        "width":"72px",
+//                        "title": "成员数",
+//                        "data": "id",
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            if(row.member_count && row.member_count > 0)
+//                            {
+//                                return '<a target="_blank" href="/admin/user/member?user-id='+data+'">'+row.member_count+'</a>';
+//                            }
+//                            else return '--';
+//                        }
+//                    },
+//                    {
+//                        "width":"72px",
+//                        "title": "粉丝数",
+//                        "data": "fund_total",
+//                        "orderable": true,
+//                        render: function(data, type, row, meta) {
+//                            if(row.fans_count && row.fans_count > 0)
+//                            {
+//                                return '<a target="_blank" href="/admin/user/fans?user-id='+data+'">'+row.fans_count+'</a>';
+//                            }
+//                            else return '--';
+//                        }
+//                    },
                     {
-                        "title": "用户名",
-                        "data": "username",
-                        "className": "",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">'+data+'</a>';
-                        }
-                    },
-                    // {
-                    //     "title": "大区",
-                    //     "data": "department_district_id",
-                    //     "className": "",
-                    //     "width": "80px",
-                    //     "orderable": false,
-                    //     render: function(data, type, row, meta) {
-                    //         if(row.department_district_er) {
-                    //             return '<a href="javascript:void(0);">'+row.department_district_er.name+'</a>';
-                    //         }
-                    //         else return '--';
-                    //     }
-                    // },
-                    // {
-                    //     "title": "小组",
-                    //     "data": "department_group_id",
-                    //     "className": "",
-                    //     "width":"80px",
-                    //     "orderable": false,
-                    //     render: function(data, type, row, meta) {
-                    //         if(row.department_group_er) {
-                    //             return '<a href="javascript:void(0);">'+row.department_group_er.name+'</a>';
-                    //         }
-                    //         else return '--';
-                    //     }
-                    // },
-                    {
-                       "title": "团队",
-                       "data": "department_id",
-                       "className": "",
-                       "width":"160px",
-                       "orderable": false,
-                       render: function(data, type, row, meta) {
-                           if(row.department_er) {
-                               return '<a href="javascript:void(0);">'+row.department_er.name+'</a>';
-                           }
-                           else return '--';
-                       }
-                    },
-                    {
-                        "title": "备注",
-                        "data": "remark",
-                        "className": "text-center",
-                        "width": "",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
-                                $(nTd).attr('data-key','remark').attr('data-value',data);
-                                $(nTd).attr('data-column-name','备注');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
+                        "title": "浏览",
+                        "width": "40px",
+                        "data": "visit_num",
+                        "orderable": true,
                         render: function(data, type, row, meta) {
                             return data;
-                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            // else return '';
                         }
                     },
                     {
-                        "title": "创建人",
-                        "data": "creator_id",
+                        "title": "分享",
+                        "width": "40px",
+                        "data": "share_num",
+                        "orderable": true,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+//                    {
+//                        "data": 'menu_id',
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+////                            return row.menu == null ? '未分类' : row.menu.title;
+//                            if(row.menu == null) return '<small class="label btn-info">未分类</small>';
+//                            else {
+//                                return '<a href="/org-admin/item/menu?id='+row.menu.encode_id+'">'+row.menu.title+'</a>';
+//                            }
+//                        }
+//                    },
+//                    {
+//                        "data": 'id',
+//                        "orderable": false,
+//                        render: function(data, type, row, meta) {
+//                            return row.menu == null ? '未分类' : row.menu.title;
+////                            var html = '';
+////                            $.each(data,function( key, val ) {
+////                                html += '<a href="/org-admin/item/menu?id='+this.id+'">'+this.title+'</a><br>';
+////                            });
+////                            return html;
+//                        }
+//                    },
+                    {
                         "className": "font-12px",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return '未知';
-                            // return row.creator.true_name;
-                            return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
-                        }
-                    },
-                    {
+                        "width": "120px",
                         "title": "创建时间",
                         "data": 'created_at',
-                        "className": "font-12px",
-                        "width": "160px",
                         "orderable": true,
                         render: function(data, type, row, meta) {
 //                            return data;
@@ -440,7 +417,9 @@
 
                             // return $year+'-'+$month+'-'+$day;
                             // return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+                            // return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                         }
                     }
                 ],
@@ -512,5 +491,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_DK_CLIENT').'entrance.user.staff-list-script')
+@include(env('TEMPLATE_DK_SUPER').'entrance.user.client-staff-list-script')
 @endsection

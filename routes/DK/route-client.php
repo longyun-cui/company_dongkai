@@ -17,7 +17,7 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
  * 超级管理员系统（后台）
  * 需要登录
  */
-Route::group(['middleware' => ['dk.client.login']], function () {
+Route::group(['middleware' => ['dk.client.staff.login']], function () {
 
     $controller = 'DKClientController';
 
@@ -36,6 +36,13 @@ Route::group(['middleware' => ['dk.client.login']], function () {
     Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
 
 
+
+
+    /*
+     * select2
+     */
+    Route::match(['get','post'], '/select2/select2_city', $controller.'@operate_select2_city');
+    Route::match(['get','post'], '/select2/select2_district', $controller.'@operate_select2_district');
 
 
     /*
@@ -96,6 +103,9 @@ Route::group(['middleware' => ['dk.client.login']], function () {
     // 【用户-员工管理】启用 & 禁用
     Route::post('/user/staff-admin-enable', $controller.'@operate_user_staff_admin_enable');
     Route::post('/user/staff-admin-disable', $controller.'@operate_user_staff_admin_disable');
+    // 【用户-员工管理】晋升
+    Route::post('/user/staff-admin-promote', $controller.'@operate_user_staff_admin_promote');
+    Route::post('/user/staff-admin-demote', $controller.'@operate_user_staff_admin_demote');
 
 
 
@@ -194,6 +204,8 @@ Route::group(['middleware' => ['dk.client.login']], function () {
     Route::post('/item/delivery-remark-edit', $controller.'@operate_item_delivery_remark_edit');
     Route::post('/item/delivery-follow', $controller.'@operate_item_delivery_follow');
     Route::post('/item/delivery-quality-evaluate', $controller.'@operate_item_delivery_quality_evaluate');
+    Route::post('/item/delivery-bulk-exported-status', $controller.'@operate_item_delivery_bulk_exported_status');
+    Route::post('/item/delivery-bulk-assign-staff', $controller.'@operate_item_delivery_bulk_assign_staff');
 
 
 

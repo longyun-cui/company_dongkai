@@ -45,13 +45,6 @@
                         <input type="text" class="form-control" name="username" placeholder="客户名称" value="{{ $data->username or '' }}">
                     </div>
                 </div>
-                {{--手机--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 手机</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="mobile" placeholder="手机" value="{{ $data->mobile or '' }}">
-                    </div>
-                </div>
 
 
                 {{--启用ip--}}
@@ -93,6 +86,21 @@
                     <label class="control-label col-md-2">ip白名单</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="ip_whitelist" placeholder="ip白名单" value="{{ $data->ip_whitelist or '' }}">
+                    </div>
+                </div>
+
+                {{--管理员名称--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理员名称</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="admin_name" placeholder="管理员名称" value="{{ $data->admin_name or '' }}">
+                    </div>
+                </div>
+                {{--管理员手机--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理员登录手机</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="admin_mobile" placeholder="管理员登录手机" value="{{ $data->admin_mobile or '' }}">
                     </div>
                 </div>
 

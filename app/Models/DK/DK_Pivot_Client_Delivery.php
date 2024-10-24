@@ -12,9 +12,19 @@ class DK_Pivot_Client_Delivery extends Model
         'pivot_active', 'pivot_category', 'pivot_type',
         'relation_active', 'relation_category', 'relation_type',
         'delivery_type',
+
+        'user_id',
+        'client_id',
+        'project_id',
+        'order_id',
+        'client_staff_id',
+
+        'client_phone',
+
         'is_exported',
-        'user_id', 'client_id', 'project_id', 'order_id',
-        'client_phone', 'delivered_result',
+        'exported_status',
+        'delivered_status',
+        'delivered_result',
         'creator_id', 'updater_id'
     ];
     protected $dateFormat = 'U';
@@ -44,16 +54,24 @@ class DK_Pivot_Client_Delivery extends Model
     }
 
 
+
+
     // 审核人
     function inspector_er()
     {
         return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
     }
 
-    // 审核人
+    // 客户
     function client_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
+    }
+
+    // 客户员工
+    function client_staff_er()
+    {
+        return $this->belongsTo('App\Models\DK_Client\DK_Client_User','client_staff_id','id');
     }
 
     // 项目

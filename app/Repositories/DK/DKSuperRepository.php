@@ -6,11 +6,12 @@ use App\Models\DK\DK_Department;
 use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Record;
 use App\Models\DK\DK_User;
-use App\Models\DK\YH_Item;
-use App\Models\DK\YH_Pivot_Item_Relation;
+use App\Models\DK\DK_UserExt;
 
-use App\Models\DK\YH_UserExt;
+use App\Models\DK_Client\DK_Client_User;
+
 use App\Models\DK_Finance\DK_Finance_User;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade;
@@ -33,7 +34,6 @@ class DKSuperRepository {
     public function __construct()
     {
         $this->modelUser = new DK_User;
-        $this->modelItem = new YH_Item;
 
 
         $this->view_blade_403 = env('TEMPLATE_DK_SUPER').'entrance.errors.403';
@@ -1431,6 +1431,66 @@ class DKSuperRepository {
             $query->orderBy($field, $order_dir);
         }
         else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【用户】【客户】返回-列表-视图
+    public function view_user_client_staff_list($post_data)
+    {
+        $this->get_me();
+
+        $return['menu_active_of_client_staff_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_SUPER').'entrance.user.client-staff-list';
+        return view($view_blade)->with($return);
+    }
+    // 【用户】【客户】返回-列表-数据
+    public function get_user_client_staff_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Client_User::select('*')
+//            ->with(['district'])
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,71,77,81,84,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->with('ep','parent','fund')
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->withTrashed()->get();

@@ -13,6 +13,8 @@ use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Record;
 use App\Models\DK\DK_Client;
 
+use App\Models\DK_Client\DK_Client_User;
+
 use App\Models\DK\YH_Attachment;
 use App\Models\DK\YH_Item;
 
@@ -753,19 +755,82 @@ class DKAdminRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            $is_exist = DK_Client::select('id')->where('username',$post_data["username"])->count();
-            if($is_exist) return response_error([],"该客户名已存在，请勿重复添加！");
+            $is_username_exist = DK_Client::select('id')->where('username',$post_data["username"])->count();
+            if($is_username_exist) return response_error([],"该客户名已存在，请勿重复添加！");
 
-            $mine = new DK_Client;
-            $post_data["user_category"] = 11;
-            $post_data["active"] = 1;
-            $post_data["creator_id"] = $me->id;
-            $post_data["password"] = password_encode("12345678");
+            $is_mobile_exist = DK_Client::select('id')->where('mobile',$post_data["admin_mobile"])->count();
+            if($is_mobile_exist) return response_error([],"该电话已存在，请勿重复添加！");
+
+            $is_mobile_exist = DK_Client_User::select('id')->where('mobile',$post_data["admin_mobile"])->count();
+            if($is_mobile_exist) return response_error([],"该电话已存在，请勿重复添加！");
+
+            $client = new DK_Client;
+            $client_data["user_category"] = 11;
+            $client_staff_data["user_type"] = 11;
+            $client_data["active"] = 1;
+            $client_data["creator_id"] = $me->id;
+            $client_data["username"] = $post_data["username"];
+            $client_data["mobile"] = $post_data["admin_mobile"];
+            $client_data["client_admin_name"] = $post_data["admin_name"];
+            $client_data["client_admin_mobile"] = $post_data["admin_mobile"];
+            $client_data["is_ip"] = $post_data["is_ip"];
+            $client_data["ip_whitelist"] = $post_data["ip_whitelist"];
+            $client_data["password"] = password_encode("12345678");
+
+            $client_staff = new DK_Client_User;
+            $client_staff_data["user_category"] = 11;
+            $client_staff_data["user_type"] = 11;
+            $client_staff_data["active"] = 1;
+            $client_staff_data["username"] = $post_data["admin_name"];
+            $client_staff_data["mobile"] = $post_data["admin_mobile"];
+            $client_staff_data["creator_id"] = 0;
+            $client_staff_data["password"] = password_encode("12345678");
         }
         else if($operate == 'edit') // 编辑
         {
-            $mine = DK_Client::find($operate_id);
-            if(!$mine) return response_error([],"该客户不存在，刷新页面重试！");
+            // 该客户是否存在
+            $client = DK_Client::find($operate_id);
+            if(!$client) return response_error([],"该客户不存在，刷新页面重试！");
+
+            $client_data["username"] = $post_data["username"];
+            $client_data["mobile"] = $post_data["admin_mobile"];
+            $client_data["client_admin_name"] = $post_data["admin_name"];
+            $client_data["client_admin_mobile"] = $post_data["admin_mobile"];
+            $client_data["is_ip"] = $post_data["is_ip"];
+            $client_data["ip_whitelist"] = $post_data["ip_whitelist"];
+
+            // 客户名是否存在
+            $is_username_exist = DK_Client::select('id')->where('id','<>',$operate_id)->where('username',$post_data["username"])->count();
+            if($is_username_exist) return response_error([],"该客户名已存在，不能修改成此客户名！");
+
+            // 客户管理员是否存在
+            $client_staff = DK_Client_User::where('id', $client->admin_id)->first();
+            if($client_staff)
+            {
+                // 客户管理员存在
+
+                // 判断电话是否重复
+                $is_mobile_exist = DK_Client_User::select('id')->where('id','<>',$client->admin_id)->where('mobile',$post_data["admin_mobile"])->count();
+                if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
+
+                $client_staff_data["username"] = $post_data["admin_name"];
+                $client_staff_data["mobile"] = $post_data["admin_mobile"];
+            }
+            else
+            {
+                // 客户管理员不存在
+
+                $client_staff = new DK_Client_User;
+                $client_staff_data["user_category"] = 11;
+                $client_staff_data["user_type"] = 11;
+                $client_staff_data["active"] = 1;
+                $client_staff_data["client_id"] = $client->id;
+                $client_staff_data["username"] = $post_data["admin_name"];
+                $client_staff_data["mobile"] = $post_data["admin_mobile"];
+                $client_staff_data["creator_id"] = 0;
+                $client_staff_data["password"] = password_encode("12345678");
+            }
+
         }
         else return response_error([],"参数有误！");
 
@@ -778,21 +843,31 @@ class DKAdminRepository {
                 $post_data['custom'] = json_encode($post_data['custom']);
             }
 
-            $mine_data = $post_data;
 
-            unset($mine_data['operate']);
-            unset($mine_data['operate_id']);
-            unset($mine_data['category']);
-            unset($mine_data['type']);
-
-            $bool = $mine->fill($mine_data)->save();
+            $bool = $client->fill($client_data)->save();
             if($bool)
             {
+                if($operate == 'create')
+                {
+                    $client_staff_data["client_id"] = $client->id;
+                }
+
+                $bool_1 = $client_staff->fill($client_staff_data)->save();
+                if($bool_1)
+                {
+                    if($operate == 'create')
+                    {
+                        $client->client_admin_id = $client_staff->id;
+                        $bool = $client->save();
+                        if(!$bool) throw new Exception("update--client--fail");
+                    }
+                }
+                else throw new Exception("insert--client-staff--fail");
             }
-            else throw new Exception("insert--user--fail");
+            else throw new Exception("insert--client--fail");
 
             DB::commit();
-            return response_success(['id'=>$mine->id]);
+            return response_success(['id'=>$client->id]);
         }
         catch (Exception $e)
         {
@@ -896,8 +971,11 @@ class DKAdminRepository {
         $id = $post_data["user_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $user = DK_Client::withTrashed()->find($id);
-        if(!$user) return response_error([],"该员工不存在，刷新页面重试！");
+        $client = DK_Client::withTrashed()->find($id);
+        if(!$client) return response_error([],"该客户不存在，刷新页面重试！");
+
+        $client_staff = DK_Client_User::withTrashed()->where('client_id',$client->id);
+        if(!$client_staff) return response_error([],"该客户不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -912,9 +990,9 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-            $user->password = password_encode('12345678');
-            $bool = $user->save();
-            if(!$bool) throw new Exception("update--user--fail");
+            $client_staff->password = password_encode('12345678');
+            $bool = $client_staff->save();
+            if(!$bool) throw new Exception("update--client-staff--fail");
 
             DB::commit();
             return response_success([]);
@@ -4439,7 +4517,7 @@ class DKAdminRepository {
         {
             $keyword = "%{$post_data['keyword']}%";
             $query =DK_District::select(['id','district_district as text'])->where('district_district','like',"%$keyword%")
-                ->where(['item_status'=>1]);
+                ->where(['district_status'=>1]);
         }
 
         $city = $post_data['district_city'];
@@ -9683,7 +9761,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【交付管理】发布
+    // 【交付管理】导出状态
     public function operate_item_delivery_exported($post_data)
     {
         $messages = [
@@ -9752,7 +9830,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【交付管理】批量-交付
+    // 【交付管理】批量-导出状态
     public function operate_item_delivery_bulk_exported($post_data)
     {
         $messages = [

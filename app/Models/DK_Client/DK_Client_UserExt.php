@@ -1,10 +1,10 @@
 <?php
-namespace App\Models\DK;
+namespace App\Models\DK_Client;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_UserExt extends Authenticatable
+class DK_Client_UserExt extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
@@ -12,12 +12,12 @@ class DK_UserExt extends Authenticatable
 //    protected $connection = 'mysql0';
 //    protected $connection = 'mysql_def';
 
-    protected $table = "dk_admin_user_ext";
+    protected $table = "dk_client_user_ext";
 
     protected $fillable = [
         'active', 'status', 'user_active', 'user_status',
         'user_group', 'user_category', 'user_type', 'user_id',
-        'group', 'category', 'type',
+        'group','category', 'type',
 
         'parent_id', 'p_id',
         'name', 'username', 'nickname', 'true_name', 'description', 'portrait_img',

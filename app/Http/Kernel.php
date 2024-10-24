@@ -75,6 +75,8 @@ class Kernel extends HttpKernel
         'dk.finance.password_change' => \App\Http\Middleware\dk\DKFinancePasswordChangeMiddleware::class,
 
         'dk.client.login' => \App\Http\Middleware\dk\DKClientLoginMiddleware::class,
+        'dk.client.staff.login' => \App\Http\Middleware\dk\DKClientStaffLoginMiddleware::class,
+
         'dk.finance.user.login' => \App\Http\Middleware\dk\DKFinanceUserLoginMiddleware::class,
     ];
 }

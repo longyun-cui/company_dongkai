@@ -42,151 +42,53 @@
                     <div class="col-md-8">
                         <div class="btn-group">
 
-                            @if(in_array($me->user_type, [0,1]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 11))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                        @if($operate == 'edit' && $data->user_type == 11)
-                                            <input type="radio" name="user_type" value="11" checked="checked"> 总经理
-                                        @else
-                                            <input type="radio" name="user_type" value="11"> 总经理
-                                        @endif
-                                            {{--<input type="radio" name="user_type" value=11--}}
-                                            {{--@if($operate == 'edit' && $data->user_type == 11) checked="checked" @endif--}}
-                                            {{--> 总经理--}}
-                                        </label>
-                                    </span>
-                                </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 41))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 41)
-                                            <input type="radio" name="user_type" value="41" checked="checked"> 团队·总经理
-                                        @else
-                                            <input type="radio" name="user_type" value="41"> 团队·总经理
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
 
                             @if(in_array($me->user_type, [0,1,11,41]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 81))
-                            <button type="button" class="btn">
+                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 81))
+                                    <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
                                         @if($operate == 'edit' && $data->user_type == 81)
-                                            <input type="radio" name="user_type" value="81" checked="checked"> 客服经理
+                                            <input type="radio" name="user_type" value="81" checked="checked"> 经理
                                         @else
-                                            <input type="radio" name="user_type" value="81"> 客服经理
+                                            <input type="radio" name="user_type" value="81"> 经理
                                         @endif
                                     </label>
                                 </span>
-                            </button>
-                            @endif
+                                    </button>
+                                @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,41,81]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 84))
-                            <button type="button" class="btn">
+                            @if(in_array($me->user_type, [0,1,11,41]))
+                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 84))
+                                    <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
                                         @if($operate == 'edit' && $data->user_type == 84)
-                                            <input type="radio" name="user_type" value="84" checked="checked"> 客服主管
+                                            <input type="radio" name="user_type" value="84" checked="checked"> 主管
                                         @else
-                                            <input type="radio" name="user_type" value="84"> 客服主管
+                                            <input type="radio" name="user_type" value="84"> 主管
                                         @endif
                                     </label>
                                 </span>
-                            </button>
-                            @endif
+                                    </button>
+                                @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11,41,81]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 88))
-                            <button type="button" class="btn">
+                            @if(in_array($me->user_type, [0,1,11,41]))
+                                @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 88))
+                                    <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
                                         @if($operate == 'edit' && $data->user_type == 88)
-                                            <input type="radio" name="user_type" value="88" checked="checked"> 客服
+                                            <input type="radio" name="user_type" value="88" checked="checked"> 员工
                                         @else
-                                            <input type="radio" name="user_type" value="88" checked="checked"> 客服
+                                            <input type="radio" name="user_type" value="88" checked="checked"> 员工
                                         @endif
                                     </label>
                                 </span>
-                            </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 71))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 71)
-                                            <input type="radio" name="user_type" value="71" checked="checked"> 质检经理
-                                        @else
-                                            <input type="radio" name="user_type" value="71"> 质检经理
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 77))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 77)
-                                            <input type="radio" name="user_type" value="77" checked="checked"> 质检员
-                                        @else
-                                            <input type="radio" name="user_type" value="77"> 质检员
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 61))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            @if($operate == 'edit' && $data->user_type == 61)
-                                                <input type="radio" name="user_type" value="61" checked="checked"> 运营经理
-                                            @else
-                                                <input type="radio" name="user_type" value="61"> 运营经理
-                                            @endif
-                                        </label>
-                                    </span>
-                                </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,61]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 66))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            @if(($operate == 'edit' && $data->user_type == 66) || $me->user_type == 61)
-                                                <input type="radio" name="user_type" value="66" checked="checked"> 运营人员
-                                            @else
-                                                <input type="radio" name="user_type" value="66"> 运营人员
-                                            @endif
-                                        </label>
-                                    </span>
-                                </button>
-                            @endif
+                                    </button>
+                                @endif
                             @endif
 
                         </div>
@@ -194,48 +96,50 @@
                 </div>
 
                 {{--上级--}}
-                <div class="form-group superior-box" style="display:none;">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 上级</label>
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 部门</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="superior_id" id="select2-superior" data-type="">
-                            @if($operate == 'edit' && $data->superior_id)
-                                <option data-id="{{ $data->superior_id or 0 }}" value="{{ $data->superior_id or 0 }}">{{ $data->superior->true_name }}</option>
-                            @else
-                                <option data-id="0" value="0">未指定</option>
+                        <select class="form-control select2-box" name="department_id" data-type="department">
+                            <option value="-1">选择团队</option>
+                            @if(count($department_list) > 0)
+                            @foreach($department_list as $v)
+                                <option value="{{ $v->id }}" @if($operate == 'edit' && $v->id == $data->department_id) selected="selected" @endif>{{ $v->name }}</option>
+                            @endforeach
                             @endif
                         </select>
                     </div>
                 </div>
+
 
                 {{--部门-大区--}}
-                @if(in_array($me->user_type, [0,1,11]))
-                <div class="form-group department-box department-district-box" style="display:none;">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 大区</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="department_district_id" id="select2-department-district" data-type="">
-                            @if($operate == 'edit' && $data->department_district_id)
-                                <option data-id="{{ $data->department_district_id or 0 }}" value="{{ $data->department_district_id or 0 }}">{{ $data->department_district_er->name }}</option>
-                            @else
-                                <option data-id="0" value="0">未指定</option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
-                @endif
+{{--                @if(in_array($me->user_type, [0,1,11]))--}}
+{{--                <div class="form-group department-box department-district-box _none" style="display:none;">--}}
+{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 大区</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control" name="department_district_id" id="select2-department-district" data-type="">--}}
+{{--                            @if($operate == 'edit' && $data->department_district_id)--}}
+{{--                                <option data-id="{{ $data->department_district_id or 0 }}" value="{{ $data->department_district_id or 0 }}">{{ $data->department_district_er->name }}</option>--}}
+{{--                            @else--}}
+{{--                                <option data-id="0" value="0">未指定</option>--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                @endif--}}
 
                 {{--部门-小组--}}
-                <div class="form-group department-box department-group-box" style="display:none;">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 小组</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="department_group_id" id="select2-department-group" data-type="">
-                            @if($operate == 'edit' && $data->department_group_id)
-                                <option data-id="{{ $data->department_group_id or 0 }}" value="{{ $data->department_group_id or 0 }}">{{ $data->department_group_er->name }}</option>
-                            @else
-                                <option data-id="0" value="0">未指定</option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
+{{--                <div class="form-group department-box department-group-box _none" style="display:none;">--}}
+{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 小组</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control" name="department_group_id" id="select2-department-group" data-type="">--}}
+{{--                            @if($operate == 'edit' && $data->department_group_id)--}}
+{{--                                <option data-id="{{ $data->department_group_id or 0 }}" value="{{ $data->department_group_id or 0 }}">{{ $data->department_group_er->name }}</option>--}}
+{{--                            @else--}}
+{{--                                <option data-id="0" value="0">未指定</option>--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
 
                 {{--手机--}}
@@ -246,14 +150,15 @@
                     </div>
                 </div>
                 {{--真实姓名--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">真实姓名</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <input type="text" class="form-control" name="true_name" placeholder="真实姓名" value="{{ $data->true_name or '' }}">--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+                {{--用户名--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 真实姓名</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="true_name" placeholder="真实姓名" value="{{ $data->true_name or '' }}">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2">用户名</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 用户名</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="username" placeholder="用户名" value="{{ $data->username or '' }}">
                     </div>
@@ -374,7 +279,7 @@
                     else
                     {
                         layer.msg(data.msg);
-                        location.href = "{{ url('/user/staff-list-for-all') }}";
+                        location.href = "{{ url('/user/staff-list') }}";
                     }
                 }
             };
@@ -458,16 +363,16 @@
         });
 
         //
-        $('#select2-superior').select2({
+        $('#select2-department').select2({
             ajax: {
-                url: "{{ url('/user/user_select2_superior') }}",
+                url: "{{ url('/select2/select2_department') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
                     return {
                         keyword: params.term, // search term
                         page: params.page,
-                        type: $('#select2-superior').prop('data-type')
+                        type: $('#select2-department').prop('data-type')
                     };
                 },
                 processResults: function (data, params) {
