@@ -48,18 +48,24 @@
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:100px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:100px;" />
+
                         <select class="form-control form-filter select2-box select2-district" name="order-district[]" multiple="multiple" style="width:160px;">
                             <option value="-1">选择区域</option>
                         </select>
 
-                        <select class="form-control form-filter" name="order-exported-status" style="width:88px;">
-                            <option value="-1">导出状态</option>
-                            <option value="0" @if($exported_status == 0) selected="selected" @endif>待导出</option>
-                            <option value="1" @if($exported_status == 1) selected="selected" @endif>已导出</option>
-                        </select>
+{{--                        <select class="form-control form-filter" name="order-exported-status" style="width:100px;">--}}
+{{--                            <option value="-1">导出状态</option>--}}
+{{--                            <option value="0" @if($exported_status == 0) selected="selected" @endif>待导出</option>--}}
+{{--                            <option value="1" @if($exported_status == 1) selected="selected" @endif>已导出</option>--}}
+{{--                        </select>--}}
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
+                        <select class="form-control form-filter" name="order-assign-status" style="width:100px;">
+                            <option value="-1">分配状态</option>
+                            <option value="0" @if($assign_status == 0) selected="selected" @endif>待导出</option>
+                            <option value="1" @if($assign_status == 1) selected="selected" @endif>已导出</option>
+                        </select>
 
 {{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
 {{--                            <option value="-1">是否+V</option>--}}
@@ -777,6 +783,7 @@
                         d.client_phone = $('input[name="order-client-phone"]').val();
                         d.is_wx = $('select[name="order-is-wx"]').val();
                         d.is_repeat = $('select[name="order-is-repeat"]').val();
+                        d.assign_status = $('select[name="order-assign-status"]').val();
                         d.exported_status = $('select[name="order-exported-status"]').val();
                         d.city = $('select[name="order-city[]"]').val();
                         d.district = $('select[name="order-district[]"]').val();
@@ -1223,6 +1230,7 @@
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
                     if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
+                    if($('select[name="order-assign-status"]').val() != -1)  $obj.assign_status = $('select[name="order-assign-status"]').val();
                     if($('select[name="order-exported-status"]').val() != -1)  $obj.exported_status = $('select[name="order-exported-status"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少

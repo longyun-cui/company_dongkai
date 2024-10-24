@@ -1,6 +1,8 @@
 <style>
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
+    .select2-container--classic .select2-selection--multiple  { height:34px; border-radius:0; }
+
     .sidebar-menu>li>a {
         padding: 12px 4px 12px 8px;
         font-size:12px;

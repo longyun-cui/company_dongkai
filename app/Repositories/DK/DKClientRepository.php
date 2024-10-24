@@ -2718,7 +2718,15 @@ class DKClientRepository {
         else $view_data['client_phone'] = '';
 
 
-        // 审核状态
+        // 分配状态
+        if(!empty($post_data['assign_status']))
+        {
+            $view_data['assign_status'] = $post_data['assign_status'];
+        }
+        else $view_data['assign_status'] = -1;
+
+
+        // 导出状态
         if(!empty($post_data['exported_status']))
         {
             $view_data['exported_status'] = $post_data['exported_status'];
