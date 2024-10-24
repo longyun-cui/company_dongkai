@@ -9133,7 +9133,8 @@ class DKClientRepository {
             $cellData[$k]['id'] = $v['id'];
 
 //            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
-//            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            $cellData[$k]['created_time'] = date('Y-m-d H:i:s', $v['created_at']);
+
             if($v['assign_status'] == 1) $cellData[$k]['assign_status'] = "已分配";
             else $cellData[$k]['assign_status'] = "未分配";
 
@@ -9169,7 +9170,7 @@ class DKClientRepository {
         $title_row = [
             'id'=>'ID',
 //            'creator_name'=>'创建人',
-//            'published_time'=>'提交时间',
+            'created_time'=>'交付时间',
             'assign_status'=>'是否分配',
             'project_er_name'=>'项目',
 //            'channel_source'=>'渠道来源',
