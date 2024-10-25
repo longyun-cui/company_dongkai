@@ -63,8 +63,8 @@
 
                         <select class="form-control form-filter" name="order-assign-status" style="width:100px;">
                             <option value="-1">分配状态</option>
-                            <option value="0" @if($assign_status == 0) selected="selected" @endif>待导出</option>
-                            <option value="1" @if($assign_status == 1) selected="selected" @endif>已导出</option>
+                            <option value="0" @if($assign_status == 0) selected="selected" @endif>待分配</option>
+                            <option value="1" @if($assign_status == 1) selected="selected" @endif>已分配</option>
                         </select>
 
 {{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
