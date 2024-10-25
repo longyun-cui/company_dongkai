@@ -758,10 +758,10 @@ class DKAdminRepository {
             $is_username_exist = DK_Client::select('id')->where('username',$post_data["username"])->count();
             if($is_username_exist) return response_error([],"该客户名已存在，请勿重复添加！");
 
-            $is_mobile_exist = DK_Client::select('id')->where('mobile',$post_data["admin_mobile"])->count();
+            $is_mobile_exist = DK_Client::select('id')->where('mobile',$post_data["client_admin_mobile"])->count();
             if($is_mobile_exist) return response_error([],"该电话已存在，请勿重复添加！");
 
-            $is_mobile_exist = DK_Client_User::select('id')->where('mobile',$post_data["admin_mobile"])->count();
+            $is_mobile_exist = DK_Client_User::select('id')->where('mobile',$post_data["client_admin_mobile"])->count();
             if($is_mobile_exist) return response_error([],"该电话已存在，请勿重复添加！");
 
             $client = new DK_Client;
@@ -770,9 +770,9 @@ class DKAdminRepository {
             $client_data["active"] = 1;
             $client_data["creator_id"] = $me->id;
             $client_data["username"] = $post_data["username"];
-            $client_data["mobile"] = $post_data["admin_mobile"];
-            $client_data["client_admin_name"] = $post_data["admin_name"];
-            $client_data["client_admin_mobile"] = $post_data["admin_mobile"];
+            $client_data["mobile"] = $post_data["client_admin_mobile"];
+            $client_data["client_admin_name"] = $post_data["client_admin_name"];
+            $client_data["client_admin_mobile"] = $post_data["client_admin_mobile"];
             $client_data["is_ip"] = $post_data["is_ip"];
             $client_data["ip_whitelist"] = $post_data["ip_whitelist"];
             $client_data["password"] = password_encode("12345678");
@@ -781,8 +781,8 @@ class DKAdminRepository {
             $client_staff_data["user_category"] = 11;
             $client_staff_data["user_type"] = 11;
             $client_staff_data["active"] = 1;
-            $client_staff_data["username"] = $post_data["admin_name"];
-            $client_staff_data["mobile"] = $post_data["admin_mobile"];
+            $client_staff_data["username"] = $post_data["client_admin_name"];
+            $client_staff_data["mobile"] = $post_data["client_admin_mobile"];
             $client_staff_data["creator_id"] = 0;
             $client_staff_data["password"] = password_encode("12345678");
         }
@@ -793,9 +793,9 @@ class DKAdminRepository {
             if(!$client) return response_error([],"该客户不存在，刷新页面重试！");
 
             $client_data["username"] = $post_data["username"];
-            $client_data["mobile"] = $post_data["admin_mobile"];
-            $client_data["client_admin_name"] = $post_data["admin_name"];
-            $client_data["client_admin_mobile"] = $post_data["admin_mobile"];
+            $client_data["mobile"] = $post_data["client_admin_mobile"];
+            $client_data["client_admin_name"] = $post_data["client_admin_name"];
+            $client_data["client_admin_mobile"] = $post_data["client_admin_mobile"];
             $client_data["is_ip"] = $post_data["is_ip"];
             $client_data["ip_whitelist"] = $post_data["ip_whitelist"];
 
@@ -810,11 +810,11 @@ class DKAdminRepository {
                 // 客户管理员存在
 
                 // 判断电话是否重复
-                $is_mobile_exist = DK_Client_User::select('id')->where('id','<>',$client->admin_id)->where('mobile',$post_data["admin_mobile"])->count();
+                $is_mobile_exist = DK_Client_User::select('id')->where('id','<>',$client->admin_id)->where('mobile',$post_data["client_admin_mobile"])->count();
                 if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
 
-                $client_staff_data["username"] = $post_data["admin_name"];
-                $client_staff_data["mobile"] = $post_data["admin_mobile"];
+                $client_staff_data["username"] = $post_data["client_admin_name"];
+                $client_staff_data["mobile"] = $post_data["client_admin_mobile"];
             }
             else
             {
@@ -825,8 +825,8 @@ class DKAdminRepository {
                 $client_staff_data["user_type"] = 11;
                 $client_staff_data["active"] = 1;
                 $client_staff_data["client_id"] = $client->id;
-                $client_staff_data["username"] = $post_data["admin_name"];
-                $client_staff_data["mobile"] = $post_data["admin_mobile"];
+                $client_staff_data["username"] = $post_data["client_admin_name"];
+                $client_staff_data["mobile"] = $post_data["client_admin_mobile"];
                 $client_staff_data["creator_id"] = 0;
                 $client_staff_data["password"] = password_encode("12345678");
             }

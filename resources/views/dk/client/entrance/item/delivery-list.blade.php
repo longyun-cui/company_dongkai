@@ -799,8 +799,8 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": false,
-                // "scrollY": ($(document).height() - 448)+"px",
+                // "scrollY": false,
+                "scrollY": ($(document).height() - 350)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
@@ -1023,22 +1023,22 @@
                     //         return "--";
                     //     }
                     // },
-                    {
-                        "title": "项目",
-                        "data": "project_id",
-                        "className": "",
-                        "width": "120px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.project_er == null)
-                            {
-                                return '未指定';
-                            }
-                            else {
-                                return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
-                            }
-                        }
-                    },
+                    // {
+                    //     "title": "项目",
+                    //     "data": "project_id",
+                    //     "className": "",
+                    //     "width": "120px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         if(row.project_er == null)
+                    //         {
+                    //             return '未指定';
+                    //         }
+                    //         else {
+                    //             return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                    //         }
+                    //     }
+                    // },
                     {
                         "title": "客户姓名",
                         "data": "order_id",

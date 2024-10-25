@@ -93,14 +93,14 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理员名称</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="admin_name" placeholder="管理员名称" value="{{ $data->admin_name or '' }}">
+                        <input type="text" class="form-control" name="client_admin_name" placeholder="管理员名称" value="{{ $data->client_admin_name or '' }}">
                     </div>
                 </div>
                 {{--管理员手机--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理员登录手机</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="admin_mobile" placeholder="管理员登录手机" value="{{ $data->admin_mobile or '' }}">
+                        <input type="text" class="form-control" name="client_admin_mobile" placeholder="管理员登录手机" value="{{ $data->client_admin_mobile or '' }}">
                     </div>
                 </div>
 
