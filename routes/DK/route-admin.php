@@ -51,9 +51,20 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     /*
      * 客户管理
      */
+    // 列表
+    Route::match(['get','post'], '/user/client-list', $controller.'@view_user_client_list');
+    Route::match(['get','post'], '/user/client-list-for-all', $controller.'@view_user_client_list_for_all');
+    // 修改列表
+    Route::match(['get','post'], '/user/client-modify-record', $controller.'@view_user_client_modify_record');
     // 创建 & 修改
     Route::match(['get','post'], '/user/client-create', $controller.'@operate_user_client_create');
     Route::match(['get','post'], '/user/client-edit', $controller.'@operate_user_client_edit');
+    // 编辑-信息
+    Route::post('/user/client-info-text-set', $controller.'@operate_client_info_text_set');
+    Route::post('/user/client-info-time-set', $controller.'@operate_client_info_time_set');
+    Route::post('/user/client-info-radio-set', $controller.'@operate_client_info_option_set');
+    Route::post('/user/client-info-select-set', $controller.'@operate_client_info_option_set');
+    Route::post('/user/client-info-select2-set', $controller.'@operate_client_info_option_set');
     // 【用户-员工管理】修改密码
     Route::match(['get','post'], '/user/client-password-admin-change', $controller.'@operate_user_client_password_admin_change');
     Route::match(['get','post'], '/user/client-password-admin-reset', $controller.'@operate_user_client_password_admin_reset');
@@ -66,9 +77,6 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/user/client-admin-enable', $controller.'@operate_user_client_admin_enable');
     Route::post('/user/client-admin-disable', $controller.'@operate_user_client_admin_disable');
 
-    // 列表
-    Route::match(['get','post'], '/user/client-list', $controller.'@view_user_client_list');
-    Route::match(['get','post'], '/user/client-list-for-all', $controller.'@view_user_client_list_for_all');
 
 
 
@@ -80,19 +88,23 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     /*
      * 部门管理
      */
+    // select2
     Route::match(['get','post'], '/department/department_select2_leader', $controller.'@operate_department_select2_leader');
     Route::match(['get','post'], '/department/department_select2_superior_department', $controller.'@operate_department_select2_superior_department');
+    // 列表
+    Route::match(['get','post'], '/department/department-list', $controller.'@view_department_list');
+    Route::match(['get','post'], '/department/department-list-for-all', $controller.'@view_department_list_for_all');
+    // 修改列表
+    Route::match(['get','post'], '/department/department-modify-record', $controller.'@view_department_modify_record');
     // 创建 & 修改
     Route::match(['get','post'], '/department/department-create', $controller.'@operate_department_create');
     Route::match(['get','post'], '/department/department-edit', $controller.'@operate_department_edit');
-
     // 编辑-信息
     Route::post('/department/department-info-text-set', $controller.'@operate_department_info_text_set');
     Route::post('/department/department-info-time-set', $controller.'@operate_department_info_time_set');
     Route::post('/department/department-info-radio-set', $controller.'@operate_department_info_option_set');
     Route::post('/department/department-info-select-set', $controller.'@operate_department_info_option_set');
     Route::post('/department/department-info-select2-set', $controller.'@operate_department_info_option_set');
-
     // 删除 & 恢复
     Route::post('/department/department-admin-delete', $controller.'@operate_department_admin_delete');
     Route::post('/department/department-admin-restore', $controller.'@operate_department_admin_restore');
@@ -101,12 +113,9 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/department/department-admin-enable', $controller.'@operate_department_admin_enable');
     Route::post('/department/department-admin-disable', $controller.'@operate_department_admin_disable');
 
-    // 列表
-    Route::match(['get','post'], '/department/department-list', $controller.'@view_department_list');
-    Route::match(['get','post'], '/department/department-list-for-all', $controller.'@view_department_list_for_all');
 
-    // 部门-修改信息
-    Route::match(['get','post'], '/department/department-modify-record', $controller.'@view_department_modify_record');
+
+
 
 
 
@@ -119,27 +128,35 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::match(['get','post'], '/user/user_select2_superior', $controller.'@operate_user_select2_superior');
     Route::match(['get','post'], '/user/user_select2_department', $controller.'@operate_user_select2_department');
 
-    // 【用户-员工管理】创建 & 修改
+    // 列表
+    Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
+    Route::match(['get','post'], '/user/staff-list-for-all', $controller.'@view_user_staff_list_for_all');
+    // 修改列表
+    Route::match(['get','post'], '/user/staff-modify-record', $controller.'@view_user_staff_modify_record');
+    // 创建 & 修改
     Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
     Route::match(['get','post'], '/user/staff-edit', $controller.'@operate_user_staff_edit');
-    // 【用户-员工管理】修改密码
+    // 编辑-信息
+    Route::post('/user/staff-info-text-set', $controller.'@operate_staff_info_text_set');
+    Route::post('/user/staff-info-time-set', $controller.'@operate_staff_info_time_set');
+    Route::post('/user/staff-info-radio-set', $controller.'@operate_staff_info_option_set');
+    Route::post('/user/staff-info-select-set', $controller.'@operate_staff_info_option_set');
+    Route::post('/user/staff-info-select2-set', $controller.'@operate_staff_info_option_set');
+    // 修改密码
     Route::match(['get','post'], '/user/staff-password-admin-change', $controller.'@operate_user_staff_password_admin_change');
     Route::match(['get','post'], '/user/staff-password-admin-reset', $controller.'@operate_user_staff_password_admin_reset');
     Route::match(['get','post'], '/user/user-login', $controller.'@operate_user_user_login');
-    // 【用户-员工管理】删除 & 恢复 & 永久删除
+    // 删除 & 恢复 & 永久删除
     Route::post('/user/staff-admin-delete', $controller.'@operate_user_staff_admin_delete');
     Route::post('/user/staff-admin-restore', $controller.'@operate_user_staff_admin_restore');
     Route::post('/user/staff-admin-delete-permanently', $controller.'@operate_user_staff_admin_delete_permanently');
-    // 【用户-员工管理】启用 & 禁用
+    // 启用 & 禁用
     Route::post('/user/staff-admin-enable', $controller.'@operate_user_staff_admin_enable');
     Route::post('/user/staff-admin-disable', $controller.'@operate_user_staff_admin_disable');
-    // 【用户-员工管理】晋升
+    // 晋升
     Route::post('/user/staff-admin-promote', $controller.'@operate_user_staff_admin_promote');
     Route::post('/user/staff-admin-demote', $controller.'@operate_user_staff_admin_demote');
 
-    // 列表
-    Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
-    Route::match(['get','post'], '/user/staff-list-for-all', $controller.'@view_staff_list_for_all');
 
 
 

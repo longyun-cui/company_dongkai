@@ -645,7 +645,120 @@ class DKAdminRepository {
     /*
      * 客户管理
      */
-    // 【客户管理】返回-添加-视图
+    // 【客户】返回-列表-视图
+    public function view_user_client_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
+
+        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【客户】返回-列表-数据
+    public function get_user_client_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Client::select('*')
+            ->with(['creator'])
+            ->whereIn('user_category',[11])
+            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【客户】【修改记录】返回-列表-视图
+    public function view_user_client_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_client_modify_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-modify-list';
+        return view($view_blade)->with($return);
+    }
+    // 【客户】【修改记录】返回-列表-数据
+    public function get_user_client_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Record::select('*')
+            ->with(['creator'])
+            ->where(['record_object'=>21, 'operate_object'=>21,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【客户】返回-添加-视图
     public function view_user_client_create()
     {
         $this->get_me();
@@ -670,7 +783,7 @@ class DKAdminRepository {
             'list_link'=>$list_link,
         ]);
     }
-    // 【客户管理】返回-编辑-视图
+    // 【客户】返回-编辑-视图
     public function view_user_client_edit()
     {
         $this->get_me();
@@ -724,7 +837,7 @@ class DKAdminRepository {
             else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
         }
     }
-    // 【客户管理】保存数据
+    // 【客户】保存数据
     public function operate_user_client_save($post_data)
     {
 //        dd($post_data);
@@ -881,7 +994,550 @@ class DKAdminRepository {
     }
 
 
-    // 【用户-员工管理】管理员-修改密码
+    // 【客户】【文本-信息】设置-文本-类型
+    public function operate_client_info_text_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-client-info-text-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 21;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【客户】【时间-信息】修改-时间-类型
+    public function operate_client_info_time_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-client-info-time-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+        $time_type = $post_data["time_type"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = strtotime($column_value);
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 21;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_type"] = $time_type;
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = strtotime($column_value);
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【客户】【选项-信息】修改-radio-select-[option]-类型
+    public function operate_client_info_option_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-client-info-option-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 21;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    if(in_array($column_key,['leader_id']))
+                    {
+                        $record_data["before_id"] = $before;
+                        $record_data["after_id"] = $column_value;
+                    }
+
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【客户】【附件】添加
+    public function operate_client_info_attachment_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-client-attachment-set') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+//        $operate_type = $post_data["operate_type"];
+//        $column_key = $post_data["column_key"];
+//        $column_value = $post_data["column_value"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            // 多图
+            $multiple_images = [];
+            if(!empty($post_data["multiple_images"][0]))
+            {
+                // 添加图片
+                foreach ($post_data["multiple_images"] as $n => $f)
+                {
+                    if(!empty($f))
+                    {
+                        $result = upload_img_storage($f,'','dk/attachment','');
+                        if($result["result"])
+                        {
+                            $attachment = new YH_Attachment;
+
+                            $attachment_data["operate_object"] = 41;
+                            $attachment_data['item_id'] = $item_id;
+                            $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                            $attachment_data['attachment_src'] = $result["local"];
+                            $bool = $attachment->fill($attachment_data)->save();
+                            if($bool)
+                            {
+                                $record = new DK_Record;
+
+                                $record_data["ip"] = Get_IP();
+                                $record_data["record_object"] = 21;
+                                $record_data["record_category"] = 11;
+                                $record_data["record_type"] = 1;
+                                $record_data["creator_id"] = $me->id;
+                                $record_data["item_id"] = $item_id;
+                                $record_data["operate_object"] = 21;
+                                $record_data["operate_category"] = 71;
+                                $record_data["operate_type"] = 1;
+
+                                $record_data["column_name"] = 'attachment';
+                                $record_data["after"] = $attachment_data['attachment_src'];
+
+                                $bool_1 = $record->fill($record_data)->save();
+                                if($bool_1)
+                                {
+                                }
+                                else throw new Exception("insert--record--fail");
+                            }
+                            else throw new Exception("insert--attachment--fail");
+                        }
+                        else throw new Exception("upload--attachment--file--fail");
+                    }
+                }
+            }
+
+
+            // 单图
+            if(!empty($post_data["attachment_file"]))
+            {
+                $attachment = new YH_Attachment;
+
+//                $result = upload_storage($post_data["portrait"]);
+//                $result = upload_storage($post_data["portrait"], null, null, 'assign');
+                $result = upload_img_storage($post_data["attachment_file"],'','dk/attachment','');
+                if($result["result"])
+                {
+                    $attachment_data["operate_object"] = 41;
+                    $attachment_data['item_id'] = $item_id;
+                    $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                    $attachment_data['attachment_src'] = $result["local"];
+                    $bool = $attachment->fill($attachment_data)->save();
+                    if($bool)
+                    {
+                        $record = new DK_Record;
+
+                        $record_data["ip"] = Get_IP();
+                        $record_data["record_object"] = 21;
+                        $record_data["record_category"] = 11;
+                        $record_data["record_type"] = 1;
+                        $record_data["creator_id"] = $me->id;
+                        $record_data["item_id"] = $item_id;
+                        $record_data["operate_object"] = 41;
+                        $record_data["operate_category"] = 71;
+                        $record_data["operate_type"] = 1;
+
+                        $record_data["column_name"] = 'attachment';
+                        $record_data["after"] = $attachment_data['attachment_src'];
+
+                        $bool_1 = $record->fill($record_data)->save();
+                        if($bool_1)
+                        {
+                        }
+                        else throw new Exception("insert--record--fail");
+                    }
+                    else throw new Exception("insert--attachment--fail");
+                }
+                else throw new Exception("upload--attachment--file--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【客户】【附件】删除
+    public function operate_client_info_attachment_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-client-attachment-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Attachment::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【附件】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if($bool)
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $item->item_id;
+                $record_data["operate_object"] = 21;
+                $record_data["operate_category"] = 71;
+                $record_data["operate_type"] = 91;
+
+                $record_data["column_name"] = 'attachment';
+                $record_data["before"] = $item->attachment_src;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if($bool_1)
+                {
+                }
+                else throw new Exception("insert--record--fail");
+            }
+            else throw new Exception("attachment--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【客户】【附件】获取
+    public function operate_client_get_attachment_html($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client::with([
+            'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
+        ])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
+
+        return response_success(['html'=>$html],"");
+    }
+
+
+    // 【客户】管理员-修改密码
     public function operate_user_client_password_admin_change($post_data)
     {
         $messages = [
@@ -949,7 +1605,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【用户-员工管理】管理员-重置密码
+    // 【客户】管理员-重置密码
     public function operate_user_client_password_admin_reset($post_data)
     {
         $messages = [
@@ -1009,7 +1665,7 @@ class DKAdminRepository {
     }
 
 
-    // 【客户管理】管理员-启用
+    // 【客户】管理员-启用
     public function operate_user_client_admin_enable($post_data)
     {
         $messages = [
@@ -1060,7 +1716,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【客户管理】管理员-禁用
+    // 【客户】管理员-禁用
     public function operate_user_client_admin_disable($post_data)
     {
         $messages = [
@@ -1113,119 +1769,6 @@ class DKAdminRepository {
     }
 
 
-    // 【客户管理】返回-列表-视图
-    public function view_user_client_list_for_all($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
-
-        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【客户管理】返回-列表-数据
-    public function get_user_client_list_for_all_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $query = DK_Client::select('*')
-            ->with(['creator'])
-            ->whereIn('user_category',[11])
-            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【客户管理】【修改记录】返回-列表-视图
-    public function view_user_client_modify_record($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
-
-        $return['staff_list'] = $staff_list;
-        $return['menu_active_of_client_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【客户管理】【修改记录】返回-列表-数据
-    public function get_user_client_modify_record_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $id  = $post_data["id"];
-        $query = DK_Record::select('*')
-            ->with(['creator'])
-            ->where(['record_object'=>21, 'operate_object'=>41,'item_id'=>$id]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-
-            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-            else $list[$k]->is_me = 0;
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
 
 
 
@@ -1235,7 +1778,7 @@ class DKAdminRepository {
     /*
      * 部门管理
      */
-    //
+    // select2
     public function operate_department_select2_leader($post_data)
     {
         $this->get_me();
@@ -1311,7 +1854,155 @@ class DKAdminRepository {
     }
 
 
-    // 【部门管理】返回-添加-视图
+    // 【部门】返回-列表-视图
+    public function view_department_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $return['menu_active_of_department_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【部门】返回-列表-数据
+    public function get_department_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_Department::select(['id','item_status','name','department_type','leader_id','superior_department_id','remark','creator_id','created_at','updated_at','deleted_at'])
+            ->withTrashed()
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'leader'=>function($query) { $query->select(['id','username','true_name']); },
+                'superior_department_er'=>function($query) { $query->select(['id','name']); }
+            ]);
+
+        if(in_array($me->user_type,[41,81]))
+        {
+            $query->where('superior_department_id',$me->department_district_id);
+        }
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        // 部门类型 [大区|组]
+        if(!empty($post_data['department_type']))
+        {
+            if(!in_array($post_data['department_type'],[-1,0]))
+            {
+                $query->where('item_type', $post_data['department_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+            if($v->department_type == 11)
+            {
+                $v->district_id = $v->id;
+            }
+            else if($v->department_type == 21)
+            {
+                $v->district_id = $v->superior_department_id;
+            }
+
+            $v->district_group_id = $v->district_id.'.'.$v->id;
+        }
+//        $list = $list->sortBy(['district_id'=>'asc'])->values();
+        $list = $list->sortBy(function ($item, $key) {
+            return $item['district_group_id'];
+        })->values();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【部门】【修改记录】返回-列表-视图
+    public function view_department_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_car_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.department-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【部门】【修改记录】返回-列表-数据
+    public function get_department_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Record::select('*')
+            ->with(['creator'])
+            ->where(['record_object'=>21, 'operate_object'=>31,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【部门】返回-添加-视图
     public function view_department_create()
     {
         $this->get_me();
@@ -1336,7 +2027,7 @@ class DKAdminRepository {
             'list_link'=>$list_link,
         ]);
     }
-    // 【部门管理】返回-编辑-视图
+    // 【部门】返回-编辑-视图
     public function view_department_edit()
     {
         $this->get_me();
@@ -1390,7 +2081,7 @@ class DKAdminRepository {
             else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
         }
     }
-    // 【部门管理】保存数据
+    // 【部门】保存数据
     public function operate_department_save($post_data)
     {
         $messages = [
@@ -1478,7 +2169,7 @@ class DKAdminRepository {
     }
 
 
-    // 【部门管理】【文本-信息】设置-文本-类型
+    // 【部门】【文本-信息】设置-文本-类型
     public function operate_department_info_text_set($post_data)
     {
         $messages = [
@@ -1496,7 +2187,7 @@ class DKAdminRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'v-info-text-set') return response_error([],"参数[operate]有误！");
+        if($operate != 'department-info-text-set') return response_error([],"参数[operate]有误！");
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
@@ -1538,7 +2229,7 @@ class DKAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 31;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -1569,7 +2260,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】【时间-信息】修改-时间-类型
+    // 【部门】【时间-信息】修改-时间-类型
     public function operate_department_info_time_set($post_data)
     {
         $messages = [
@@ -1629,7 +2320,7 @@ class DKAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 31;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -1661,7 +2352,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】【选项-信息】修改-radio-select-[option]-类型
+    // 【部门】【选项-信息】修改-radio-select-[option]-类型
     public function operate_department_info_option_set($post_data)
     {
         $messages = [
@@ -1721,7 +2412,7 @@ class DKAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 31;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -1759,7 +2450,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】【附件】添加
+    // 【部门】【附件】添加
     public function operate_department_info_attachment_set($post_data)
     {
         $messages = [
@@ -1828,7 +2519,7 @@ class DKAdminRepository {
                                 $record_data["record_type"] = 1;
                                 $record_data["creator_id"] = $me->id;
                                 $record_data["item_id"] = $item_id;
-                                $record_data["operate_object"] = 41;
+                                $record_data["operate_object"] = 31;
                                 $record_data["operate_category"] = 71;
                                 $record_data["operate_type"] = 1;
 
@@ -1905,7 +2596,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】【附件】删除
+    // 【部门】【附件】删除
     public function operate_department_info_attachment_delete($post_data)
     {
         $messages = [
@@ -1954,7 +2645,7 @@ class DKAdminRepository {
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["item_id"] = $item->item_id;
-                $record_data["operate_object"] = 41;
+                $record_data["operate_object"] = 31;
                 $record_data["operate_category"] = 71;
                 $record_data["operate_type"] = 91;
 
@@ -1982,7 +2673,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】【附件】获取
+    // 【部门】【附件】获取
     public function operate_department_get_attachment_html($post_data)
     {
         $messages = [
@@ -2021,7 +2712,7 @@ class DKAdminRepository {
     }
 
 
-    // 【部门管理】管理员-删除
+    // 【部门】管理员-删除
     public function operate_department_admin_delete($post_data)
     {
         $messages = [
@@ -2076,7 +2767,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】管理员-恢复
+    // 【部门】管理员-恢复
     public function operate_department_admin_restore($post_data)
     {
         $messages = [
@@ -2129,7 +2820,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】管理员-彻底删除
+    // 【部门】管理员-彻底删除
     public function operate_department_admin_delete_permanently($post_data)
     {
         $messages = [
@@ -2184,7 +2875,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】管理员-启用
+    // 【部门】管理员-启用
     public function operate_department_admin_enable($post_data)
     {
         $messages = [
@@ -2235,7 +2926,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门管理】管理员-禁用
+    // 【部门】管理员-禁用
     public function operate_department_admin_disable($post_data)
     {
         $messages = [
@@ -2288,152 +2979,6 @@ class DKAdminRepository {
     }
 
 
-    // 【部门管理】返回-列表-视图
-    public function view_department_list_for_all($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
-
-        $return['menu_active_of_department_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【部门管理】返回-列表-数据
-    public function get_department_list_for_all_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-
-        $query = DK_Department::select(['id','item_status','name','department_type','leader_id','superior_department_id','remark','creator_id','created_at','updated_at','deleted_at'])
-            ->withTrashed()
-            ->with([
-                    'creator'=>function($query) { $query->select(['id','username','true_name']); },
-                    'leader'=>function($query) { $query->select(['id','username','true_name']); },
-                    'superior_department_er'=>function($query) { $query->select(['id','name']); }
-                ]);
-
-        if(in_array($me->user_type,[41,81]))
-        {
-            $query->where('superior_department_id',$me->department_district_id);
-        }
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-
-        // 部门类型 [大区|组]
-        if(!empty($post_data['department_type']))
-        {
-            if(!in_array($post_data['department_type'],[-1,0]))
-            {
-                $query->where('item_type', $post_data['department_type']);
-            }
-        }
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "asc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-//        dd($list->toArray());
-
-        foreach($list as $k => $v)
-        {
-            if($v->department_type == 11)
-            {
-                $v->district_id = $v->id;
-            }
-            else if($v->department_type == 21)
-            {
-                $v->district_id = $v->superior_department_id;
-            }
-
-            $v->district_group_id = $v->district_id.'.'.$v->id;
-        }
-//        $list = $list->sortBy(['district_id'=>'asc'])->values();
-        $list = $list->sortBy(function ($item, $key) {
-            return $item['district_group_id'];
-        })->values();
-//        dd($list->toArray());
-
-        return datatable_response($list, $draw, $total);
-    }
-
-
-    // 【部门管理】【修改记录】返回-列表-视图
-    public function view_department_modify_record($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
-
-        $return['staff_list'] = $staff_list;
-        $return['menu_active_of_car_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.department-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【部门管理】【修改记录】返回-列表-数据
-    public function get_department_modify_record_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $id  = $post_data["id"];
-        $query = DK_Record::select('*')
-            ->with(['creator'])
-            ->where(['record_object'=>21, 'operate_object'=>41,'item_id'=>$id]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-
-            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-            else $list[$k]->is_me = 0;
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
 
 
 
@@ -2487,7 +3032,7 @@ class DKAdminRepository {
 
 
     /*
-     * USER 用户管理
+     * STAFF 员工管理
      */
     //
     public function operate_user_select2_sales($post_data)
@@ -2584,8 +3129,178 @@ class DKAdminRepository {
 
 
 
+    // 【员工】返回-列表-视图
+    public function view_user_staff_list_for_all($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,21,31,41,61,71,81])) return view($this->view_blade_403);
 
-    // 【用户-员工管理】返回-添加-视图
+        if(in_array($me->user_type,[0,1,9,11]))
+        {
+            $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+            $return['department_district_list'] = $department_district_list;
+        }
+
+        $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【员工】返回-列表-数据
+    public function get_user_staff_list_for_all_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_User::withTrashed()->select('*')
+            ->with(['creator','superior','department_district_er','department_group_er'])
+            ->whereIn('user_category',[11]);
+
+        if($me->user_type == 11)
+        {
+            $query->whereIn('user_type',[41,61,66,71,77,81,84,88]);
+        }
+        else if($me->user_type == 61)
+        {
+            $query->whereIn('user_type',[66]);
+        }
+        else if($me->user_type == 41)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[71,77,81,84,88]);
+        }
+        else if($me->user_type == 71)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[77]);
+        }
+        else if($me->user_type == 81)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[84,88]);
+        }
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->with('ep','parent','fund')
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0]))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
+
+        // 员工类型
+        if(!empty($post_data['user_type']))
+        {
+            if(!in_array($post_data['user_type'],[-1,0]))
+            {
+                $query->where('user_type', $post_data['user_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($total);
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【客户管理】【修改记录】返回-列表-视图
+    public function view_user_staff_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_staff_modify_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-modify-list';
+        return view($view_blade)->with($return);
+    }
+    // 【客户管理】【修改记录】返回-列表-数据
+    public function get_user_staff_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Record::select('*')
+            ->with(['creator'])
+            ->where(['record_object'=>21, 'operate_object'=>41,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【员工】返回-添加-视图
     public function view_user_staff_create()
     {
         $this->get_me();
@@ -2610,7 +3325,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-edit';
         return view($view_blade)->with($return_data);
     }
-    // 【用户-员工管理】返回-编辑-视图
+    // 【员工】返回-编辑-视图
     public function view_user_staff_edit()
     {
         $this->get_me();
@@ -2663,7 +3378,7 @@ class DKAdminRepository {
             else return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
         }
     }
-    // 【用户-员工管理】保存数据
+    // 【员工】保存数据
     public function operate_user_staff_save($post_data)
     {
 //        dd($post_data);
@@ -2821,7 +3536,550 @@ class DKAdminRepository {
     }
 
 
-    // 【用户-员工管理】管理员-修改密码
+    // 【员工】【文本-信息】设置-文本-类型
+    public function operate_staff_info_text_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-staff-info-text-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_User::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 41;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【员工】【时间-信息】修改-时间-类型
+    public function operate_staff_info_time_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-staff-info-time-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_User::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+        $time_type = $post_data["time_type"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = strtotime($column_value);
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 41;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_type"] = $time_type;
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = strtotime($column_value);
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【员工】【选项-信息】修改-radio-select-[option]-类型
+    public function operate_staff_info_option_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-staff-info-option-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_User::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 41;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    if(in_array($column_key,['leader_id']))
+                    {
+                        $record_data["before_id"] = $before;
+                        $record_data["after_id"] = $column_value;
+                    }
+
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【员工】【附件】添加
+    public function operate_staff_info_attachment_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-staff-attachment-set') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_User::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+//        $operate_type = $post_data["operate_type"];
+//        $column_key = $post_data["column_key"];
+//        $column_value = $post_data["column_value"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            // 多图
+            $multiple_images = [];
+            if(!empty($post_data["multiple_images"][0]))
+            {
+                // 添加图片
+                foreach ($post_data["multiple_images"] as $n => $f)
+                {
+                    if(!empty($f))
+                    {
+                        $result = upload_img_storage($f,'','dk/attachment','');
+                        if($result["result"])
+                        {
+                            $attachment = new YH_Attachment;
+
+                            $attachment_data["operate_object"] = 41;
+                            $attachment_data['item_id'] = $item_id;
+                            $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                            $attachment_data['attachment_src'] = $result["local"];
+                            $bool = $attachment->fill($attachment_data)->save();
+                            if($bool)
+                            {
+                                $record = new DK_Record;
+
+                                $record_data["ip"] = Get_IP();
+                                $record_data["record_object"] = 21;
+                                $record_data["record_category"] = 11;
+                                $record_data["record_type"] = 1;
+                                $record_data["creator_id"] = $me->id;
+                                $record_data["item_id"] = $item_id;
+                                $record_data["operate_object"] = 41;
+                                $record_data["operate_category"] = 71;
+                                $record_data["operate_type"] = 1;
+
+                                $record_data["column_name"] = 'attachment';
+                                $record_data["after"] = $attachment_data['attachment_src'];
+
+                                $bool_1 = $record->fill($record_data)->save();
+                                if($bool_1)
+                                {
+                                }
+                                else throw new Exception("insert--record--fail");
+                            }
+                            else throw new Exception("insert--attachment--fail");
+                        }
+                        else throw new Exception("upload--attachment--file--fail");
+                    }
+                }
+            }
+
+
+            // 单图
+            if(!empty($post_data["attachment_file"]))
+            {
+                $attachment = new YH_Attachment;
+
+//                $result = upload_storage($post_data["portrait"]);
+//                $result = upload_storage($post_data["portrait"], null, null, 'assign');
+                $result = upload_img_storage($post_data["attachment_file"],'','dk/attachment','');
+                if($result["result"])
+                {
+                    $attachment_data["operate_object"] = 41;
+                    $attachment_data['item_id'] = $item_id;
+                    $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                    $attachment_data['attachment_src'] = $result["local"];
+                    $bool = $attachment->fill($attachment_data)->save();
+                    if($bool)
+                    {
+                        $record = new DK_Record;
+
+                        $record_data["ip"] = Get_IP();
+                        $record_data["record_object"] = 21;
+                        $record_data["record_category"] = 11;
+                        $record_data["record_type"] = 1;
+                        $record_data["creator_id"] = $me->id;
+                        $record_data["item_id"] = $item_id;
+                        $record_data["operate_object"] = 41;
+                        $record_data["operate_category"] = 71;
+                        $record_data["operate_type"] = 1;
+
+                        $record_data["column_name"] = 'attachment';
+                        $record_data["after"] = $attachment_data['attachment_src'];
+
+                        $bool_1 = $record->fill($record_data)->save();
+                        if($bool_1)
+                        {
+                        }
+                        else throw new Exception("insert--record--fail");
+                    }
+                    else throw new Exception("insert--attachment--fail");
+                }
+                else throw new Exception("upload--attachment--file--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【员工】【附件】删除
+    public function operate_staff_info_attachment_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'user-client-attachment-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Attachment::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【附件】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if($bool)
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["item_id"] = $item->item_id;
+                $record_data["operate_object"] = 41;
+                $record_data["operate_category"] = 71;
+                $record_data["operate_type"] = 91;
+
+                $record_data["column_name"] = 'attachment';
+                $record_data["before"] = $item->attachment_src;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if($bool_1)
+                {
+                }
+                else throw new Exception("insert--record--fail");
+            }
+            else throw new Exception("attachment--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【员工】【附件】获取
+    public function operate_staff_get_attachment_html($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_User::with([
+            'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
+        ])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
+
+        return response_success(['html'=>$html],"");
+    }
+
+
+    // 【员工】管理员-修改密码
     public function operate_user_staff_password_admin_change($post_data)
     {
         $messages = [
@@ -2889,7 +4147,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【用户-员工管理】管理员-重置密码
+    // 【员工】管理员-重置密码
     public function operate_user_staff_password_admin_reset($post_data)
     {
         $messages = [
@@ -2946,9 +4204,7 @@ class DKAdminRepository {
     }
 
 
-
-
-    // 【用户-员工管理】管理员-删除
+    // 【员工】管理员-删除
     public function operate_user_staff_admin_delete($post_data)
     {
         $messages = [
@@ -3007,7 +4263,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【用户-员工管理】管理员-恢复
+    // 【员工】管理员-恢复
     public function operate_user_staff_admin_restore($post_data)
     {
         $messages = [
@@ -3065,7 +4321,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【用户-员工管理】管理员-永久删除
+    // 【员工】管理员-永久删除
     public function operate_user_staff_admin_delete_permanently($post_data)
     {
         $messages = [
@@ -3126,7 +4382,7 @@ class DKAdminRepository {
     }
 
 
-    // 【用户-员工管理】管理员-启用
+    // 【员工】管理员-启用
     public function operate_user_staff_admin_enable($post_data)
     {
         $messages = [
@@ -3177,7 +4433,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【用户-员工管理】管理员-禁用
+    // 【员工】管理员-禁用
     public function operate_user_staff_admin_disable($post_data)
     {
         $messages = [
@@ -3229,7 +4485,7 @@ class DKAdminRepository {
 
     }
 
-    // 【用户-员工管理】管理员-晋升
+    // 【员工】管理员-晋升
     public function operate_user_staff_admin_promote($post_data)
     {
         $messages = [
@@ -3281,7 +4537,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【用户-员工管理】管理员-降职
+    // 【员工】管理员-降职
     public function operate_user_staff_admin_demote($post_data)
     {
         $messages = [
@@ -3337,116 +4593,6 @@ class DKAdminRepository {
 
 
 
-    // 【用户-员工管理】返回-列表-视图
-    public function view_staff_list_for_all($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,21,31,41,61,71,81])) return view($this->view_blade_403);
-
-        if(in_array($me->user_type,[0,1,9,11]))
-        {
-            $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
-            $return['department_district_list'] = $department_district_list;
-        }
-
-        $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-list-for-all';
-        return view($view_blade)->with($return);
-    }
-    // 【用户-员工管理】返回-列表-数据
-    public function get_staff_list_for_all_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $query = DK_User::withTrashed()->select('*')
-            ->with(['creator','superior','department_district_er','department_group_er'])
-            ->whereIn('user_category',[11]);
-
-        if($me->user_type == 11)
-        {
-            $query->whereIn('user_type',[41,61,66,71,77,81,84,88]);
-        }
-        else if($me->user_type == 61)
-        {
-            $query->whereIn('user_type',[66]);
-        }
-        else if($me->user_type == 41)
-        {
-            $query->where('department_district_id',$me->department_district_id)
-                ->whereIn('user_type',[71,77,81,84,88]);
-        }
-        else if($me->user_type == 71)
-        {
-            $query->where('department_district_id',$me->department_district_id)
-                ->whereIn('user_type',[77]);
-        }
-        else if($me->user_type == 81)
-        {
-            $query->where('department_district_id',$me->department_district_id)
-                ->whereIn('user_type',[84,88]);
-        }
-//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
-//            ->with('ep','parent','fund')
-//            ->withCount([
-//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
-//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
-//            ]);
-//            ->where(['userstatus'=>'正常','status'=>1])
-//            ->whereIn('usergroup',['Agent','Agent2']);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
-
-
-        // 部门-大区
-        if(!empty($post_data['department_district']))
-        {
-            if(!in_array($post_data['department_district'],[-1,0]))
-            {
-                $query->where('department_district_id', $post_data['department_district']);
-            }
-        }
-
-        // 员工类型
-        if(!empty($post_data['user_type']))
-        {
-            if(!in_array($post_data['user_type'],[-1,0]))
-            {
-                $query->where('user_type', $post_data['user_type']);
-            }
-        }
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-        }
-//        dd($total);
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
 
 
 
@@ -4505,7 +5651,7 @@ class DKAdminRepository {
      * 地域管理
      */
 
-    //
+    // 【地域】select2
     public function operate_district_select2_district($post_data)
     {
         if(empty($post_data['keyword']))
@@ -4545,7 +5691,8 @@ class DKAdminRepository {
         return $district_district_array;
     }
 
-    // 【项目】返回-列表-视图
+
+    // 【地域】返回-列表-视图
     public function view_item_district_list($post_data)
     {
         $this->get_me();
@@ -4556,7 +5703,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.district-list';
         return view($view_blade)->with($return);
     }
-    // 【项目】返回-列表-数据
+    // 【地域】返回-列表-数据
     public function get_item_district_list_datatable($post_data)
     {
         $this->get_me();
@@ -4607,8 +5754,7 @@ class DKAdminRepository {
     }
 
 
-
-    // 【项目】返回-添加-视图
+    // 【地域】返回-添加-视图
     public function view_item_district_create()
     {
         $this->get_me();
@@ -4633,7 +5779,7 @@ class DKAdminRepository {
             'list_link'=>$list_link,
         ]);
     }
-    // 【项目】返回-编辑-视图
+    // 【地域】返回-编辑-视图
     public function view_item_district_edit()
     {
         $this->get_me();
@@ -4687,7 +5833,7 @@ class DKAdminRepository {
             else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
         }
     }
-    // 【项目】保存数据
+    // 【地域】保存数据
     public function operate_item_district_save($post_data)
     {
         $messages = [
@@ -4774,7 +5920,7 @@ class DKAdminRepository {
     }
 
 
-    // 【项目】管理员-删除
+    // 【地域】管理员-删除
     public function operate_item_district_admin_delete($post_data)
     {
         $messages = [
@@ -4828,7 +5974,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【项目】管理员-恢复
+    // 【地域】管理员-恢复
     public function operate_item_district_admin_restore($post_data)
     {
         $messages = [
@@ -4881,7 +6027,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【项目】管理员-彻底删除
+    // 【地域】管理员-彻底删除
     public function operate_item_district_admin_delete_permanently($post_data)
     {
         $messages = [
@@ -4936,7 +6082,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【项目】管理员-启用
+    // 【地域】管理员-启用
     public function operate_item_district_admin_enable($post_data)
     {
         $messages = [
@@ -4987,7 +6133,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【项目】管理员-禁用
+    // 【地域】管理员-禁用
     public function operate_item_district_admin_disable($post_data)
     {
         $messages = [
@@ -5155,7 +6301,7 @@ class DKAdminRepository {
         $id  = $post_data["id"];
         $query = DK_Record::select('*')
             ->with(['creator'])
-            ->where(['record_object'=>21,'operate_object'=>41,'item_id'=>$id]);
+            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -5448,7 +6594,7 @@ class DKAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -5539,7 +6685,7 @@ class DKAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -5656,7 +6802,7 @@ class DKAdminRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["item_id"] = $id;
-                    $record_data["operate_object"] = 41;
+                    $record_data["operate_object"] = 61;
                     $record_data["operate_category"] = 1;
 
                     if($operate_type == "add") $record_data["operate_type"] = 1;
@@ -5768,7 +6914,7 @@ class DKAdminRepository {
                                 $record_data["record_type"] = 1;
                                 $record_data["creator_id"] = $me->id;
                                 $record_data["item_id"] = $item_id;
-                                $record_data["operate_object"] = 41;
+                                $record_data["operate_object"] = 61;
                                 $record_data["operate_category"] = 71;
                                 $record_data["operate_type"] = 1;
 
@@ -5894,7 +7040,7 @@ class DKAdminRepository {
                 $record_data["record_type"] = 1;
                 $record_data["creator_id"] = $me->id;
                 $record_data["item_id"] = $item->item_id;
-                $record_data["operate_object"] = 41;
+                $record_data["operate_object"] = 61;
                 $record_data["operate_category"] = 71;
                 $record_data["operate_type"] = 91;
 
@@ -5945,7 +7091,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Project::with([
-                'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
+                'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>61]); }
             ])->withTrashed()->find($id);
         if(!$item) return response_error([],"该【项目】不存在，刷新页面重试！");
 
@@ -6240,7 +7386,7 @@ class DKAdminRepository {
     /*
      * 工单管理
      */
-    //
+    // 【工单】select2
     public function operate_item_select2_user($post_data)
     {
         $this->get_me();
@@ -6376,2356 +7522,7 @@ class DKAdminRepository {
     }
 
 
-
-
-    // 【工单管理】返回-导入-视图
-    public function view_item_order_import()
-    {
-        $this->get_me();
-        $me = $this->me;
-//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
-
-        $operate_category = 'item';
-        $operate_type = 'item';
-        $operate_type_text = '工单';
-        $title_text = '导入'.$operate_type_text;
-        $list_text = $operate_type_text.'列表';
-        $list_link = '/item/order-list-for-all';
-
-        $return['operate'] = 'create';
-        $return['operate_id'] = 0;
-        $return['operate_category'] = $operate_category;
-        $return['operate_type'] = $operate_type;
-        $return['operate_type_text'] = $operate_type_text;
-        $return['title_text'] = $title_text;
-        $return['list_text'] = $list_text;
-        $return['list_link'] = $list_link;
-
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit-for-import';
-        return view($view_blade)->with($return);
-    }
-    // 【工单管理】保存-导入-数据
-    public function operate_item_order_import_save($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required',
-            'project_id.required' => '请填选择项目！',
-            'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'project_id' => 'required|numeric|min:1',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
-
-        $project_id = $post_data['project_id'];
-
-        // 单文件
-        if(!empty($post_data["excel-file"]))
-        {
-
-//            $result = upload_storage($post_data["attachment"]);
-//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
-            $result = upload_file_storage($post_data["excel-file"],null,'dk/unique/attachment','');
-            if($result["result"])
-            {
-//                $mine->attachment_name = $result["name"];
-//                $mine->attachment_src = $result["local"];
-//                $mine->save();
-                $attachment_file = storage_resource_path($result["local"]);
-
-                $data = Excel::load($attachment_file, function($reader) {
-
-//                  $reader->takeColumns(3);
-                    $reader->limitColumns(1);
-
-//                  $reader->takeRows(1000);
-                    $reader->limitRows(2001);
-
-//                  $reader->ignoreEmpty();
-
-//                  $data = $reader->all();
-//                  $data = $reader->toArray();
-
-                })->get()->toArray();
-
-                $order_data = [];
-                foreach($data as $key => $value)
-                {
-                    if($value['client_phone'])
-                    {
-                        $temp_date['client_phone'] = intval($value['client_phone']);
-                        $order_data[] = $temp_date;
-                    }
-                }
-
-                // 启动数据库事务
-                DB::beginTransaction();
-                try
-                {
-
-                    foreach($order_data as $key => $value)
-                    {
-                        $order = new DK_Order;
-
-                        $order->project_id = $project_id;
-                        $order->creator_id = $me->id;
-                        $order->created_type = 9;
-                        $order->is_published = 1;
-                        $order->inspected_status = 1;
-                        $order->inspected_result = '通过';
-                        $order->client_phone = $value['client_phone'];
-
-                        $bool = $order->save();
-                        if(!$bool) throw new Exception("insert--order--fail");
-                    }
-
-                    DB::commit();
-                    return response_success(['count'=>count($order_data)]);
-                }
-                catch (Exception $e)
-                {
-                    DB::rollback();
-                    $msg = '操作失败，请重试！';
-                    $msg = $e->getMessage();
-//                    exit($e->getMessage());
-                    return response_fail([],$msg);
-                }
-            }
-            else return response_error([],"upload--attachment--fail");
-        }
-        else return response_error([],"清选择Excel文件！");
-
-
-
-
-        // 多文件
-//        dd($post_data["multiple-excel-file"]);
-        $count = 0;
-        $multiple_files = [];
-        if(!empty($post_data["multiple-excel-file"]))
-        {
-            // 添加图片
-            foreach ($post_data["multiple-excel-file"] as $n => $f)
-            {
-                if(!empty($f))
-                {
-                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
-                    if($result["result"])
-                    {
-                        $attachment_file = storage_resource_path($result["local"]);
-                        $data = Excel::load($attachment_file, function($reader) {
-
-                            $reader->limitColumns(1);
-                            $reader->limitRows(1000);
-
-                        })->get()->toArray();
-
-                        $order_data = [];
-                        foreach($data as $key => $value)
-                        {
-                            if($value['client_phone'])
-                            {
-                                $temp_date['client_phone'] = intval($value['client_phone']);
-                                $order_data[] = $temp_date;
-                            }
-                        }
-
-                        // 启动数据库事务
-                        DB::beginTransaction();
-                        try
-                        {
-
-                            foreach($order_data as $key => $value)
-                            {
-                                $order = new DK_Order;
-
-                                $order->project_id = $project_id;
-                                $order->creator_id = $me->id;
-                                $order->created_type = 9;
-                                $order->is_published = 1;
-                                $order->inspected_status = 1;
-                                $order->inspected_result = '通过';
-                                $order->client_phone = $value['client_phone'];
-
-                                $bool = $order->save();
-                                if(!$bool) throw new Exception("insert--order--fail");
-                            }
-
-                            DB::commit();
-                            $count += count($order_data);
-                        }
-                        catch (Exception $e)
-                        {
-                            DB::rollback();
-                            $msg = '操作失败，请重试！';
-                            $msg = $e->getMessage();
-                            return response_fail([],$msg);
-                        }
-
-                    }
-                    else return response_error([],"upload--attachment--fail");
-                }
-
-            }
-
-            return response_success(['count'=>$count]);
-        }
-
-    }
-
-
-
-
-    // 【工单管理】返回-添加-视图
-    public function view_item_order_create()
-    {
-        $this->get_me();
-
-        $item_type = 'item';
-        $item_type_text = '工单';
-        $title_text = '添加'.$item_type_text;
-        $list_text = $item_type_text.'列表';
-        $list_link = '/item/order-list-for-all';
-
-        $return['operate'] = 'create';
-        $return['operate_id'] = 0;
-        $return['category'] = 'item';
-        $return['type'] = $item_type;
-        $return['item_type_text'] = $item_type_text;
-        $return['title_text'] = $title_text;
-        $return['list_text'] = $list_text;
-        $return['list_link'] = $list_link;
-
-
-        $district_city_list = DK_District::select('id','district_city')->whereIn('district_status',[1])->get();
-        $return['district_city_list'] = $district_city_list;
-
-//        $district_district_list = DK_District::select('district_district')->where('district_city',$post_data['district_city'])->whereIn('district_status',[1])->get();
-//        if(count($district_district_list) > 0)
-//        {
-//            $district_district_array = explode("-",$district_district_list[0]->district_district);
-//            $return['district_district_list'] = $district_district_array;
-//        }
-//        else
-//        {
-//            $return['district_district_list'] = [];
-//        }
-
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
-        return view($view_blade)->with($return);
-    }
-    // 【工单管理】返回-编辑-视图
-    public function view_item_order_edit()
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
-
-        $item_type = 'item';
-        $item_type_text = '工单';
-        $title_text = '编辑'.$item_type_text;
-        $list_text = $item_type_text.'列表';
-        $list_link = '/item/order-list-for-all';
-
-        $return['operate'] = 'edit';
-        $return['operate_id'] = $id;
-        $return['category'] = 'item';
-        $return['type'] = $item_type;
-        $return['item_type_text'] = $item_type_text;
-        $return['title_text'] = $title_text;
-        $return['list_text'] = $list_text;
-        $return['list_link'] = $list_link;
-
-
-        $district_city_list = DK_District::select('id','district_city')->whereIn('district_status',[1])->get();
-        $return['district_city_list'] = $district_city_list;
-
-
-        if($id == 0)
-        {
-            $return['operate'] = 'create';
-            $return['operate_id'] = 0;
-
-            return view($view_blade)->with($return);
-        }
-        else
-        {
-            $mine = DK_Order::find($id);
-            if($mine)
-            {
-//                if($mine->deleted_at) return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
-//                else
-                {
-//                    $mine->custom = json_decode($mine->custom);
-//                    $mine->custom2 = json_decode($mine->custom2);
-//                    $mine->custom3 = json_decode($mine->custom3);
-
-                    $district_district_list = DK_District::select('district_district')->where('district_city',$mine->location_city)->whereIn('district_status',[1])->get();
-                    if(count($district_district_list) > 0)
-                    {
-                        $district_district_array = explode("-",$district_district_list[0]->district_district);
-                        $return['district_district_list'] = $district_district_array;
-                    }
-                    else
-                    {
-                        $return['district_district_list'] = [];
-                    }
-
-                    $return['data'] = $mine;
-
-                    return view($view_blade)->with($return);
-                }
-            }
-            else return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
-        }
-    }
-    // 【工单管理】保存数据
-    public function operate_item_order_save($post_data)
-    {
-//        dd($post_data);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'project_id.required' => '请填选择项目！',
-            'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
-            'client_name.required' => '请填写客户信息！',
-            'client_phone.required' => '请填写客户电话！',
-            'client_phone.numeric' => '客户电话格式有误！',
-            'client_intention.required' => '请选择客户意向！',
-//            'location_city.required' => '请选择城市！',
-//            'location_district.required' => '请选择行政区！',
-            'description.required' => '请输入通话小结！',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'project_id' => 'required|numeric|min:1',
-            'client_name' => 'required',
-            'client_phone' => 'required|numeric',
-            'client_intention' => 'required',
-//            'location_city' => 'required',
-//            'location_district' => 'required',
-            'description' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $location_city = $post_data["location_city"];
-        $location_district = $post_data["location_district"];
-        $custom_location_city = $post_data["custom_location_city"];
-        $custom_location_district = $post_data["custom_location_district"];
-
-        if(!empty($location_city) && !empty($location_district))
-        {
-        }
-        else
-        {
-            if(!empty($custom_location_city) && !empty($custom_location_district))
-            {
-            }
-            else return response_error([],"请选择城市和区域！");
-        }
-//        dd($custom_location_city.$custom_location_district);
-
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
-
-        $me->load(['department_district_er','department_group_er']);
-
-        $operate = $post_data["operate"];
-        $operate_id = $post_data["operate_id"];
-
-        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
-        {
-            $mine = new DK_Order;
-            $post_data["item_category"] = 1;
-            $post_data["active"] = 1;
-            $post_data["creator_id"] = $me->id;
-
-//            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->count("*");
-        }
-        else if($operate == 'edit') // 编辑
-        {
-            $mine = DK_Order::find($operate_id);
-            if(!$mine) return response_error([],"该工单不存在，刷新页面重试！");
-
-            if(in_array($me->user_type,[84,88]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
-
-//            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->where('id','<>',$operate_id)->count("*");
-        }
-        else return response_error([],"参数有误！");
-
-//        $post_data['is_repeat'] = $is_repeat;
-
-        if(!empty($post_data['project_id']))
-        {
-            $project = DK_Project::find($post_data['project_id']);
-            if(!$project) return response_error([],"选择【项目】不存在，刷新页面重试！");
-        }
-
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            if(!empty($post_data['custom']))
-            {
-                $post_data['custom'] = json_encode($post_data['custom']);
-            }
-
-            // 指派日期
-            if(!empty($post_data['assign_date']))
-            {
-                $post_data['assign_time'] = strtotime($post_data['assign_date']);
-            }
-//            else $post_data['assign_time'] = 0;
-
-
-
-            $mine_data = $post_data;
-            $mine_data['department_district_id'] = $me->department_district_id;
-            $mine_data['department_group_id'] = $me->department_group_id;
-            if($me->department_district_er) $mine_data['department_manager_id'] = $me->department_district_er->leader_id;
-            if($me->department_group_er) $mine_data['department_supervisor_id'] = $me->department_group_er->leader_id;
-
-            if(!empty($custom_location_city) && !empty($custom_location_district))
-            {
-                $mine_data['location_city'] = $custom_location_city;
-                $mine_data['location_district'] = $custom_location_district;
-            }
-
-            unset($mine_data['operate']);
-            unset($mine_data['operate_id']);
-            unset($mine_data['operate_category']);
-            unset($mine_data['operate_type']);
-
-            $bool = $mine->fill($mine_data)->save();
-            if($bool)
-            {
-//                if(!empty($post_data['circle_id']))
-//                {
-//                    $circle_data['order_id'] = $mine->id;
-//                    $circle_data['creator_id'] = $me->id;
-//                    $circle->pivot_order_list()->attach($circle_data);  //
-////                    $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
-//                }
-            }
-            else throw new Exception("insert--order--fail");
-
-            DB::commit();
-            return response_success(['id'=>$mine->id]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-    // 【工单管理】获取-详情-数据
-    public function operate_item_order_get($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
-        $id = $post_data["order_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $item->should_departure_time_html = date("Y-m-d H:i", $item->should_departure_time);
-        $item->should_arrival_time_html = date("Y-m-d H:i", $item->should_arrival_time);
-
-        $item->is_actual_departure = $item->actual_departure_time ? 1 : 0;
-        if($item->is_actual_departure) $item->actual_departure_time_html = date("Y-m-d H:i", $item->actual_departure_time);
-
-        $item->is_actual_arrival = $item->actual_arrival_time ? 1 : 0;
-        if($item->is_actual_arrival) $item->actual_arrival_time_html = date("Y-m-d H:i", $item->actual_arrival_time);
-
-        $item->is_stopover = $item->stopover_place ? 1 : 0;
-        if($item->is_stopover)
-        {
-            $item->is_stopover_arrival = $item->stopover_arrival_time ? 1 : 0;
-            if($item->is_stopover_arrival) $item->stopover_arrival_time_html = date("Y-m-d H:i", $item->stopover_arrival_time);
-
-            $item->is_stopover_departure = $item->stopover_departure_time ? 1 : 0;
-            if($item->is_stopover_departure) $item->stopover_departure_time_html = date("Y-m-d H:i", $item->stopover_departure_time);
-        }
-
-        return response_success($item,"");
-
-    }
-    // 【工单管理】获取-详情-视图
-    public function operate_item_order_get_html($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
-        $id = $post_data["order_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        if($item->car_owner_type == 1)
-        {
-            $item->car_owner_type_name = "自有";
-            $item->car = $item->car_er ? $item->car_er->name : '';
-            $item->trailer = $item->trailer_er ? $item->trailer_er->name : '';
-        }
-        else if($item->car_owner_type == 21)
-        {
-            $item->car_owner_type_name = "外请·调车";
-            $item->car = $item->outside_car;
-            $item->trailer = $item->outside_trailer;
-        }
-        else if($item->car_owner_type == 41)
-        {
-            $item->car_owner_type_name = "外配·配货";
-            $item->car = $item->car_er ? $item->car_er->name : '';
-            $item->trailer = $item->trailer_er ? $item->trailer_er->name : '';
-//            $item->car = $item->outside_car;
-//            $item->trailer = $item->outside_trailer;
-        }
-
-        $item->should_departure_time_html = date("Y-m-d H:i", $item->should_departure_time);
-        $item->should_arrival_time_html = date("Y-m-d H:i", $item->should_arrival_time);
-
-        $item->is_actual_departure = $item->actual_departure_time ? 1 : 0;
-        if($item->is_actual_departure) $item->actual_departure_time_html = date("Y-m-d H:i", $item->actual_departure_time);
-
-        $item->is_actual_arrival = $item->actual_arrival_time ? 1 : 0;
-        if($item->is_actual_arrival) $item->actual_arrival_time_html = date("Y-m-d H:i", $item->actual_arrival_time);
-
-        $item->is_stopover = $item->stopover_place ? 1 : 0;
-        if($item->is_stopover)
-        {
-            $item->is_stopover_arrival = $item->stopover_arrival_time ? 1 : 0;
-            if($item->is_stopover_arrival) $item->stopover_arrival_time_html = date("Y-m-d H:i", $item->stopover_arrival_time);
-
-            $item->is_stopover_departure = $item->stopover_departure_time ? 1 : 0;
-            if($item->is_stopover_departure) $item->stopover_departure_time_html = date("Y-m-d H:i", $item->stopover_departure_time);
-        }
-
-
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-info-html';
-        $html = view($view_blade)->with(['data'=>$item])->__toString();
-
-        return response_success(['html'=>$html],"");
-
-    }
-    // 【工单管理】获取-附件-视图
-    public function operate_item_order_get_attachment_html($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
-        $id = $post_data["order_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::with(['attachment_list'])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-assign-html-for-attachment';
-        $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
-
-        return response_success(['html'=>$html],"");
-    }
-
-
-    // 【工单管理】删除
-    public function operate_item_order_delete($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-delete') return response_error([],"参数[operate]有误！");
-        $item_id = $post_data["item_id"];
-        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 判断操作权限
-        if(!in_array($me->user_type,[0,1,9,11,19,81,84,88])) return response_error([],"用户类型错误！");
-//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
-        if(in_array($me->user_type,[81,84,88]))
-        {
-            if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
-        }
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->timestamps = false;
-            if($item->is_published == 0 && $item->creator_id == $me->id)
-            {
-                $item_copy = $item;
-
-                $item->timestamps = false;
-//                $bool = $item->forceDelete();  // 永久删除
-                $bool = $item->delete();  // 普通删除
-                if(!$bool) throw new Exception("item--delete--fail");
-                else
-                {
-                    $record = new DK_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 71;
-                    $record_data["operate_category"] = 101;
-                    $record_data["operate_type"] = 1;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("insert--record--fail");
-                }
-
-                DB::commit();
-                $this->delete_the_item_files($item_copy);
-            }
-            else
-            {
-                $item->timestamps = false;
-                $bool = $item->delete();  // 普通删除
-//                $bool = $item->forceDelete();  // 永久删除
-                if(!$bool) throw new Exception("item--delete--fail");
-                else
-                {
-                    $record = new DK_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $item_id;
-                    $record_data["operate_object"] = 71;
-                    $record_data["operate_category"] = 101;
-                    $record_data["operate_type"] = 1;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("insert--record--fail");
-                }
-
-                DB::commit();
-            }
-
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】发布
-    public function operate_item_order_publish($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-publish') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
-        if(in_array($me->user_type,[88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-
-        $project_id = $item->project_id;
-        $client_phone = $item->client_phone;
-
-        $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$client_phone])
-            ->where('id','<>',$id)->where('is_published','>',0)->count("*");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            if($item->inspected_status == 1)
-            {
-                $item->inspected_status = 9;
-            }
-
-            $item->is_repeat = $is_repeat;
-            $item->is_published = 1;
-            $item->published_at = time();
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 11;
-                $record_data["operate_type"] = 1;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】完成
-    public function operate_item_order_complete($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-complete') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 权限
-        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
-//        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->is_completed = 1;
-            $item->completer_id = $me->id;
-            $item->completed_at = time();
-            $item->timestamps = false;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 100;
-                $record_data["operate_type"] = 1;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-            }
-            
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】弃用
-    public function operate_item_order_abandon($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-abandon') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 权限
-        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
-//        if($item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->item_status = 97;
-            $item->timestamps = false;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 97;
-                $record_data["operate_type"] = 1;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】复用
-    public function operate_item_order_reuse($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-reuse') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 权限
-        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
-//        if($item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->item_status = 1;
-            $item->timestamps = false;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 98;
-                $record_data["operate_type"] = 1;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】验证
-    public function operate_item_order_verify($post_data)
-    {
-//        dd($post_data);
-        return response_success([]);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-verify') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,61,71,81])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->verifier_id = $me->id;
-            $item->verified_at = time();
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 91;
-                $record_data["operate_type"] = 1;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】审核
-    public function operate_item_order_inspect($post_data)
-    {
-//        dd($post_data);
-//        return response_success([]);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-inspect') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,61,66,71,77])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $inspected_result = $post_data["inspected_result"];
-        if(!in_array($inspected_result,config('info.inspected_result'))) return response_error([],"审核结果非法！");
-        $inspected_description = $post_data["inspected_description"];
-
-
-        $before = $item->inspected_result;
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->inspector_id = $me->id;
-            $item->inspected_status = 1;
-            $item->inspected_result = $inspected_result;
-            if($inspected_description) $item->inspected_description = $inspected_description;
-            $item->inspected_at = time();
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 92;
-                $record_data["operate_type"] = 1;
-                $record_data["description"] = $inspected_description;
-
-                $record_data["before"] = $before;
-                $record_data["after"] = $inspected_result;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】交付
-    public function operate_item_order_deliver($post_data)
-    {
-//        dd($post_data);
-//        return response_success([]);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-deliver') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $client_id = $post_data["client_id"];
-        if($client_id == "-1")
-        {
-            $project = DK_Project::find($item->project_id);
-            if($project->client_id != 0) $client_id = $project->client_id;
-        }
-//        $client = DK_Client::find($client_id);
-//        if(!$client) return response_error([],"客户不存在！");
-
-        $delivered_result = $post_data["delivered_result"];
-        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
-
-        $before = $item->delivered_result;
-
-        $delivered_description = $post_data["delivered_description"];
-        $recording_address = $post_data["recording_address"];
-
-        $is_distributive_condition = $post_data["is_distributive_condition"];
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            if($client_id != "-1" && $delivered_result == "已交付")
-            {
-                $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
-                if($pivot_delivery)
-                {
-                    $pivot_delivery->client_id = $client_id;
-                    $pivot_delivery->delivered_result = $delivered_result;
-                    $bool_0 = $pivot_delivery->save();
-                    if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
-                }
-                else
-                {
-                    $pivot_delivery = new DK_Pivot_Client_Delivery;
-                    $pivot_delivery_data["pivot_type"] = 95;
-                    $pivot_delivery_data["client_id"] = $client_id;
-                    $pivot_delivery_data["order_id"] = $item->id;
-                    $pivot_delivery_data["project_id"] = $item->project_id;
-                    $pivot_delivery_data["client_phone"] = $item->client_phone;
-                    $pivot_delivery_data["delivered_result"] = $delivered_result;
-                    $pivot_delivery_data["creator_id"] = $me->id;
-
-                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
-                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
-                }
-            }
-
-            $item->is_distributive_condition = $is_distributive_condition;
-            $item->client_id = $client_id;
-            $item->deliverer_id = $me->id;
-            $item->delivered_status = 1;
-            $item->delivered_result = $delivered_result;
-            $item->delivered_description = $delivered_description;
-            $item->recording_address = $recording_address;
-            $item->delivered_at = time();
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 95;
-                $record_data["operate_type"] = 1;
-                $record_data["column_name"] = "delivered_result";
-
-                $record_data["before"] = $before;
-                $record_data["after"] = $delivered_result;
-
-//                $record_data["before_client_id"] = $before;
-//                $record_data["after_client_id"] = $client_id;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】批量-交付
-    public function operate_item_order_bulk_deliver($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'ids.required' => 'ids.required.',
-//            'client_id.required' => 'client_id.required.',
-            'delivered_result.required' => 'delivered_result.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'ids' => 'required',
-//            'client_id' => 'required',
-            'delivered_result' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-delivered-bulk') return response_error([],"参数[operate]有误！");
-        $ids = $post_data['ids'];
-        $ids_array = explode("-", $ids);
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $delivered_result = $post_data["delivered_result"];
-        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
-
-        $client_id = $post_data["client_id"];
-//        $client = DK_Client::find($client_id);
-//        if(!$client) return response_error([],"客户不存在！");
-
-        $delivered_description = $post_data["delivered_description"];
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $delivered_para['client_id'] = $client_id;
-            $delivered_para['deliverer_id'] = $me->id;
-            $delivered_para['delivered_status'] = 1;
-            $delivered_para['delivered_result'] = $delivered_result;
-            $delivered_para['delivered_at'] = time();
-
-//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
-//            if(!$bool) throw new Exception("item--update--fail");
-//            else
-//            {
-//            }
-
-            foreach($ids_array as $key => $id)
-            {
-                $this_client_id = $client_id;
-
-                $item = DK_Order::withTrashed()->find($id);
-                if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-                if($this_client_id == "-1")
-                {
-                    $project = DK_Project::find($item->project_id);
-                    if($project->client_id != 0) $this_client_id = $project->client_id;
-                }
-
-
-                if($this_client_id != "-1" && $delivered_result == "已交付")
-                {
-                    $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
-                    if($pivot_delivery)
-                    {
-                        $pivot_delivery->client_id = $this_client_id;
-                        $pivot_delivery->delivered_result = $delivered_result;
-                        $bool_0 = $pivot_delivery->save();
-                        if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
-                    }
-                    else
-                    {
-                        $pivot_delivery = new DK_Pivot_Client_Delivery;
-                        $pivot_delivery_data["pivot_type"] = 95;
-                        $pivot_delivery_data["client_id"] = $this_client_id;
-                        $pivot_delivery_data["order_id"] = $item->id;
-                        $pivot_delivery_data["project_id"] = $item->project_id;
-                        $pivot_delivery_data["client_phone"] = $item->client_phone;
-                        $pivot_delivery_data["delivered_result"] = $delivered_result;
-                        $pivot_delivery_data["creator_id"] = $me->id;
-
-                        $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
-                        if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
-                    }
-                }
-
-
-                $before = $item->delivered_result;
-
-                $item->client_id = $this_client_id;
-                $item->deliverer_id = $me->id;
-                $item->delivered_status = 1;
-                $item->delivered_result = $delivered_result;
-                $item->delivered_description = $delivered_description;
-                $item->delivered_at = time();
-                $bool = $item->save();
-                if(!$bool) throw new Exception("item--update--fail");
-                else
-                {
-                    $record = new DK_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 71;
-                    $record_data["operate_category"] = 95;
-                    $record_data["operate_type"] = 1;
-                    $record_data["column_name"] = "delivered_result";
-
-                    $record_data["before"] = $before;
-                    $record_data["after"] = $delivered_result;
-
-//                $record_data["before_client_id"] = $before;
-//                $record_data["after_client_id"] = $client_id;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if(!$bool_1) throw new Exception("insert--record--fail");
-                }
-
-            }
-
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】【获取】已交付记录
-    public function operate_item_order_deliver_get_delivered($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-deliver-get-delivered') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $client_phone = $item->client_phone;
-
-
-        $order_repeat = DK_Order::select('id','client_id','project_id','client_phone','creator_id')
-            ->with([
-                'creator'=>function($query) { $query->select('id','username'); },
-                'client_er'=>function($query) { $query->select('id','username'); },
-                'project_er'=>function($query) { $query->select('id','name'); }
-            ])->where(['client_phone'=>$client_phone])
-//            ->where('id','<>',$id)
-//            ->where('delivered_status',1)
-            ->where(function ($query) use($id) {
-                $query->where('id','<>',$id)
-                    ->orWhere(function($query) use($id) { $query->where('id',$id)->where('delivered_status',1); } );
-            })
-            ->where('is_published','>',0)
-            ->get();
-        $return['order_repeat'] = $order_repeat;
-
-        $deliver_repeat = DK_Pivot_Client_Delivery::select('id','client_id','order_id','project_id','client_phone','creator_id')
-            ->with([
-                'creator'=>function($query) { $query->select('id','username'); },
-                'client_er'=>function($query) { $query->select('id','username'); },
-                'project_er'=>function($query) { $query->select('id','name'); }
-            ])->where(['client_phone'=>$client_phone])->get();
-        $return['deliver_repeat'] = $deliver_repeat;
-
-
-        return response_success($return,"");
-
-    }
-    // 【工单管理】分发
-    public function operate_item_order_distribute($post_data)
-    {
-//        dd($post_data);
-//        return response_success([]);
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-            'client_id.required' => '请选择客户',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-            'client_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-distribute') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-        $client_phone = $item->client_phone;
-
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $client_id = $post_data["client_id"];
-        if($client_id == "-1")
-        {
-            return response_error([],"请选择客户！");
-//            $project = DK_Project::find($item->project_id);
-//            if($project->client_id != 0) $client_id = $project->client_id;
-        }
-        $client = DK_Client::find($client_id);
-        if(!$client) return response_error([],"客户不存在！");
-
-        $delivered_result = $post_data["delivered_result"];
-        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
-
-        // 是否已经分发
-        $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])->get();
-        if(count($is_distributed_list) > 0)
-        {
-            return response_error([],"该客户已经交付过该号码，不可以重复分发！");
-        }
-
-        $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'已交付'])->get();
-        if(count($is_order_list) > 0)
-        {
-            foreach($is_order_list as $o)
-            {
-                if($o->client_id == $client_id)
-                {
-                    return response_error([],"该号码已在其他工单交付过该客户，不可以重复分发！");
-                }
-
-                if($o->project_er->client_id == $client_id)
-                {
-                    return response_error([],"该号码已在其他工单交付过默认客户，不可以重复分发！");
-                }
-            }
-        }
-
-
-        $before = $item->delivered_result;
-
-//        $delivered_description = $post_data["delivered_description"];
-//        $recording_address = $post_data["recording_address"];
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-//            if($client_id != "-1")
-//            {
-            $pivot_delivery = new DK_Pivot_Client_Delivery;
-            $pivot_delivery_data["pivot_type"] = 96;
-            $pivot_delivery_data["client_id"] = $client_id;
-            $pivot_delivery_data["order_id"] = $item->id;
-            $pivot_delivery_data["project_id"] = $item->project_id;
-            $pivot_delivery_data["client_phone"] = $item->client_phone;
-            $pivot_delivery_data["delivered_result"] = $delivered_result;
-            $pivot_delivery_data["creator_id"] = $me->id;
-
-            $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
-            if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
-//            }
-
-//            $item->client_id = $client_id;
-//            $item->deliverer_id = $me->id;
-//            $item->delivered_status = 1;
-//            $item->delivered_result = $delivered_result;
-//            $item->delivered_description = $delivered_description;
-//            $item->recording_address = $recording_address;
-//            $item->delivered_at = time();
-//            $bool = $item->save();
-//            if(!$bool) throw new Exception("item--update--fail");
-//            else
-//            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 96;
-                $record_data["operate_type"] = 1;
-                $record_data["column_name"] = "client_id";
-
-                $record_data["before"] = $before;
-                $record_data["after"] = $client_id;
-
-//                $record_data["before_client_id"] = $before;
-//                $record_data["after_client_id"] = $client_id;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if(!$bool_1) throw new Exception("insert--record--fail");
-//            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-    // 【工单管理】【文本】修改-文本-类型
-    public function operate_item_order_info_text_set($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-order-info-text-set') return response_error([],"参数[operate]有误！");
-        $id = $post_data["order_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $operate_type = $post_data["operate_type"];
-        $column_key = $post_data["column_key"];
-        $column_value = $post_data["column_value"];
-
-        $before = $item->$column_key;
-
-        if($column_key == "client_phone")
-        {
-            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
-        }
-        else if($column_key == "inspected_description")
-        {
-            if(!in_array($me->user_type,[0,1,11,61,66,71,77])) return response_error([],"你没有操作权限！");
-        }
-        else if($column_key == "description")
-        {
-            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
-        }
-        else
-        {
-            if(!in_array($me->user_type,[0,1,11,61,66,81,84,88])) return response_error([],"你没有操作权限！");
-        }
-
-        if(in_array($me->user_type,[84,88]) && $item->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $is_repeat = 0;
-            if($column_key == "client_phone")
-            {
-                $project_id = $item->project_id;
-                $client_phone = $item->client_phone;
-
-                $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$column_value])
-                    ->where('id','<>',$id)->where('is_published','>',0)->count("*");
-//
-
-                $item->is_repeat = $is_repeat;
-//                dd($item->is_repeat);
-            }
-
-            $item->$column_key = $column_value;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                // 需要记录(本人修改已发布 || 他人修改)
-                if($me->id == $item->creator_id && $item->is_published == 0 && false)
-                {
-                }
-                else
-                {
-                    $record = new DK_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 71;
-                    $record_data["operate_category"] = 1;
-
-                    if($operate_type == "add") $record_data["operate_type"] = 1;
-                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
-
-                    $record_data["column_name"] = $column_key;
-                    $record_data["before"] = $before;
-                    $record_data["after"] = $column_value;
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if($bool_1)
-                    {
-                    }
-                    else throw new Exception("insert--record--fail");
-                }
-            }
-
-            DB::commit();
-            return response_success(['is_repeat'=>$is_repeat]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】【时间】修改-时间-类型
-    public function operate_item_order_info_time_set($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-order-info-time-set') return response_error([],"参数[operate]有误！");
-        $id = $post_data["order_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $operate_type = $post_data["operate_type"];
-        $column_key = $post_data["column_key"];
-        $column_value = $post_data["column_value"];
-        $time_type = $post_data["time_type"];
-
-        $before = $item->$column_key;
-
-
-        // 应出发时间
-        if($column_key == "should_departure_time" && $item->should_arrival_time)
-        {
-            if(strtotime($column_value) >= $item->should_arrival_time)
-            {
-                return response_error([],"应出发时间不能超过应到达时间！");
-            }
-        }
-        // 应到达时间
-        if($column_key == "should_arrival_time" && $item->should_departure_time)
-        {
-            if(strtotime($column_value) <= $item->should_departure_time)
-            {
-                return response_error([],"应到达时间不能在应出发时间之前！");
-            }
-        }
-
-        // 实际出发时间
-        if($column_key == "actual_departure_time")
-        {
-            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
-            if($item->actual_arrival_time)
-            {
-                if(strtotime($column_value) >= $item->actual_arrival_time)
-                {
-                    return response_error([],"出发时间不能超过到达时间！");
-                }
-            }
-        }
-        // 实际到达时间
-        if($column_key == "actual_arrival_time")
-        {
-            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
-            if($item->actual_departure_time)
-            {
-                if(strtotime($column_value) <= $item->actual_departure_time)
-                {
-                    return response_error([],"到达时间不能在出发时间之前！");
-                }
-            }
-            else return response_error([],"请先填写出发时间！");
-        }
-
-        // 经停到达时间
-        if($column_key == "stopover_arrival_time")
-        {
-            if(!$item->stopover_place) return response_error([],"没有经停点！");
-            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
-            if($item->actual_departure_time)
-            {
-                if(strtotime($column_value) <= $item->actual_departure_time)
-                {
-                    return response_error([],"经停点-到达时间不能在（实际）出发时间之前！");
-                }
-            }
-            else return response_error([],"请先填写（实际）出发时间！");
-        }
-        // 经停出发时间
-        if($column_key == "stopover_departure_time")
-        {
-            if(!$item->stopover_place) return response_error([],"没有经停点！");
-            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
-            if($item->stopover_arrival_time)
-            {
-                if(strtotime($column_value) <= $item->stopover_arrival_time)
-                {
-                    return response_error([],"（经停点）出发时间不能在（经停点）到达时间之前！");
-                }
-            }
-            else return response_error([],"请先填写（经停点）到达时间！");
-        }
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->$column_key = strtotime($column_value);
-            $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
-            else
-            {
-                // 需要记录(已发布 || 他人修改)
-                if($me->id == $item->creator_id && $item->is_published == 0 && false)
-                {
-                }
-                else
-                {
-                    $record = new DK_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 71;
-                    $record_data["operate_category"] = 1;
-
-                    if($operate_type == "add") $record_data["operate_type"] = 1;
-                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
-
-                    $record_data["column_type"] = $time_type;
-                    $record_data["column_name"] = $column_key;
-                    $record_data["before"] = $before;
-                    $record_data["after"] = strtotime($column_value);
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if($bool_1)
-                    {
-                    }
-                    else throw new Exception("insert--record--fail");
-                }
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】【选项】修改-radio-select-[option]-类型
-    public function operate_item_order_info_option_set($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-order-info-option-set') return response_error([],"参数[operate]有误！");
-        $id = $post_data["order_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        $operate_type = $post_data["operate_type"];
-        $column_key = $post_data["column_key"];
-        $column_value = $post_data["column_value"];
-
-        $before = $item->$column_key;
-        $after = $column_value;
-
-        if($column_key == "location_city")
-        {
-            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
-        }
-        else
-        {
-            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
-        }
-
-        if(in_array($me->user_type,['client_id','project_id']))
-        {
-            if(in_array($column_value,["-1",-1])) return response_error([],"选择有误！");
-        }
-
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            if($column_key == "project_id")
-            {
-                if($column_value == 0)
-                {
-                }
-                else
-                {
-                    $project = DK_Project::withTrashed()->find($column_value);
-                    if(!$project) throw new Exception("该【项目】不存在，刷新页面重试！");
-
-                    $project_id = $item->project_id;
-                    $client_phone = $item->client_phone;
-
-                    $is_repeat = DK_Order::where(['project_id'=>$column_value,'client_phone'=>$client_phone])
-                        ->where('id','<>',$id)->where('is_published','>',0)->count("*");
-                    $item->is_repeat = $is_repeat;
-                }
-            }
-            else if($column_key == "location_city")
-            {
-                $column_key2 = $post_data["column_key2"];
-                $column_value2 = $post_data["column_value2"];
-
-                $before = $item->location_city.' - '.$item->location_district;
-                $after = $column_value.' - '.$column_value2;
-
-                $item->$column_key2 = $column_value2;
-            }
-
-            $item->$column_key = $column_value;
-            $bool = $item->save();
-            if(!$bool) throw new Exception("order--update--fail");
-            else
-            {
-
-
-                    // 需要记录(已发布 || 他人修改)
-                if($me->id == $item->creator_id && $item->is_published == 0 && false)
-                {
-                }
-                else
-                {
-                    $record = new DK_Record;
-
-                    $record_data["ip"] = Get_IP();
-                    $record_data["record_object"] = 21;
-                    $record_data["record_category"] = 11;
-                    $record_data["record_type"] = 1;
-                    $record_data["creator_id"] = $me->id;
-                    $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 71;
-                    $record_data["operate_category"] = 1;
-
-                    if($operate_type == "add") $record_data["operate_type"] = 1;
-                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
-
-                    $record_data["column_name"] = $column_key;
-                    $record_data["before"] = $before;
-                    $record_data["after"] = $after;
-
-                    if(in_array($column_key,['client_id','project_id']))
-                    {
-                        $record_data["before_id"] = $before;
-                        $record_data["after_id"] = $column_value;
-                    }
-
-
-
-                    if($column_key == 'client_id')
-                    {
-                        $record_data["before_client_id"] = $before;
-                        $record_data["after_client_id"] = $column_value;
-                    }
-                    else if($column_key == 'project_id')
-                    {
-                        $record_data["before_project_id"] = $before;
-                        $record_data["after_project_id"] = $column_value;
-                    }
-
-                    $bool_1 = $record->fill($record_data)->save();
-                    if($bool_1)
-                    {
-                    }
-                    else throw new Exception("insert--record--fail");
-                }
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】【附件】添加
-    public function operate_item_order_info_attachment_set($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'order_id.required' => 'order_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'order_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-order-attachment-set') return response_error([],"参数[operate]有误！");
-        $order_id = $post_data["order_id"];
-        if(intval($order_id) !== 0 && !$order_id) return response_error([],"参数[ID]有误！");
-
-        $item = DK_Order::withTrashed()->find($order_id);
-        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-        if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
-
-//        $operate_type = $post_data["operate_type"];
-//        $column_key = $post_data["column_key"];
-//        $column_value = $post_data["column_value"];
-
-
-//        dd($post_data);
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-
-            // 多图
-            $multiple_images = [];
-            if(!empty($post_data["multiple_images"][0]))
-            {
-                // 添加图片
-                foreach ($post_data["multiple_images"] as $n => $f)
-                {
-                    if(!empty($f))
-                    {
-                        $result = upload_img_storage($f,'','dk/attachment','');
-                        if($result["result"])
-                        {
-                            $attachment = new YH_Attachment;
-
-                            $attachment_data["operate_object"] = 71;
-                            $attachment_data['order_id'] = $order_id;
-                            $attachment_data['item_id'] = $order_id;
-                            $attachment_data['attachment_name'] = $post_data["attachment_name"];
-                            $attachment_data['attachment_src'] = $result["local"];
-                            $bool = $attachment->fill($attachment_data)->save();
-                            if($bool)
-                            {
-                                $record = new DK_Record;
-
-                                $record_data["ip"] = Get_IP();
-                                $record_data["record_object"] = 21;
-                                $record_data["record_category"] = 11;
-                                $record_data["record_type"] = 1;
-                                $record_data["creator_id"] = $me->id;
-                                $record_data["order_id"] = $order_id;
-                                $record_data["operate_object"] = 71;
-                                $record_data["operate_category"] = 71;
-                                $record_data["operate_type"] = 1;
-
-                                $record_data["column_name"] = 'attachment';
-                                $record_data["after"] = $attachment_data['attachment_src'];
-
-                                $bool_1 = $record->fill($record_data)->save();
-                                if($bool_1)
-                                {
-                                }
-                                else throw new Exception("insert--record--fail");
-                            }
-                            else throw new Exception("insert--attachment--fail");
-                        }
-                        else throw new Exception("upload--attachment--file--fail");
-                    }
-                }
-            }
-
-
-            // 单图
-            if(!empty($post_data["attachment_file"]))
-            {
-                $attachment = new YH_Attachment;
-
-//                $result = upload_storage($post_data["portrait"]);
-//                $result = upload_storage($post_data["portrait"], null, null, 'assign');
-                $result = upload_img_storage($post_data["attachment_file"],'','dk/attachment','');
-                if($result["result"])
-                {
-                    $attachment_data["operate_object"] = 71;
-                    $attachment_data['order_id'] = $order_id;
-                    $attachment_data['item_id'] = $order_id;
-                    $attachment_data['attachment_name'] = $post_data["attachment_name"];
-                    $attachment_data['attachment_src'] = $result["local"];
-                    $bool = $attachment->fill($attachment_data)->save();
-                    if($bool)
-                    {
-                        $record = new DK_Record;
-
-                        $record_data["ip"] = Get_IP();
-                        $record_data["record_object"] = 21;
-                        $record_data["record_category"] = 11;
-                        $record_data["record_type"] = 1;
-                        $record_data["creator_id"] = $me->id;
-                        $record_data["order_id"] = $order_id;
-                        $record_data["operate_object"] = 71;
-                        $record_data["operate_category"] = 71;
-                        $record_data["operate_type"] = 1;
-
-                        $record_data["column_name"] = 'attachment';
-                        $record_data["after"] = $attachment_data['attachment_src'];
-
-                        $bool_1 = $record->fill($record_data)->save();
-                        if($bool_1)
-                        {
-                        }
-                        else throw new Exception("insert--record--fail");
-                    }
-                    else throw new Exception("insert--attachment--fail");
-                }
-                else throw new Exception("upload--attachment--file--fail");
-            }
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-    // 【工单管理】【附件】删除
-    public function operate_item_order_info_attachment_delete($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'order-attachment-delete') return response_error([],"参数【operate】有误！");
-        $item_id = $post_data["item_id"];
-        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
-
-        $item = YH_Attachment::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【附件】不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-
-        // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"你没有操作权限！");
-//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
-//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $item->timestamps = false;
-            $bool = $item->delete();  // 普通删除
-            if($bool)
-            {
-                $record = new DK_Record;
-
-                $record_data["ip"] = Get_IP();
-                $record_data["record_object"] = 21;
-                $record_data["record_category"] = 11;
-                $record_data["record_type"] = 1;
-                $record_data["creator_id"] = $me->id;
-                $record_data["order_id"] = $item->order_id;
-                $record_data["operate_object"] = 71;
-                $record_data["operate_category"] = 71;
-                $record_data["operate_type"] = 91;
-
-                $record_data["column_name"] = 'attachment';
-                $record_data["before"] = $item->attachment_src;
-
-                $bool_1 = $record->fill($record_data)->save();
-                if($bool_1)
-                {
-                }
-                else throw new Exception("insert--record--fail");
-            }
-            else throw new Exception("attachment--delete--fail");
-
-            DB::commit();
-            return response_success([]);
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-
-
-
-    // 【工单管理】返回-列表-视图
+    // 【工单】返回-列表-视图
     public function view_item_order_list_for_all($post_data)
     {
         $this->get_me();
@@ -8972,7 +7769,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($view_data);
     }
-    // 【工单管理】返回-列表-数据
+    // 【工单】返回-列表-数据
     public function get_item_order_list_for_all_datatable($post_data)
     {
         $this->get_me();
@@ -9315,9 +8112,7 @@ class DKAdminRepository {
     }
 
 
-
-
-    // 【工单管理】【修改记录】返回-列表-视图
+    // 【工单】【修改记录】返回-列表-视图
     public function view_item_order_modify_record($post_data)
     {
         $this->get_me();
@@ -9330,7 +8125,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【工单管理】【修改记录】返回-列表-数据
+    // 【工单】【修改记录】返回-列表-数据
     public function get_item_order_modify_record_datatable($post_data)
     {
         $this->get_me();
@@ -9346,6 +8141,7 @@ class DKAdminRepository {
                 'after_project_er'=>function($query) { $query->select('id','name'); }
             ])
             ->where(['order_id'=>$id]);
+//            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -9387,6 +8183,2354 @@ class DKAdminRepository {
     }
 
 
+    // 【工单】返回-导入-视图
+    public function view_item_order_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $operate_category = 'item';
+        $operate_type = 'item';
+        $operate_type_text = '工单';
+        $title_text = '导入'.$operate_type_text;
+        $list_text = $operate_type_text.'列表';
+        $list_link = '/item/order-list-for-all';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['operate_category'] = $operate_category;
+        $return['operate_type'] = $operate_type;
+        $return['operate_type_text'] = $operate_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit-for-import';
+        return view($view_blade)->with($return);
+    }
+    // 【工单】保存-导入-数据
+    public function operate_item_order_import_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required',
+            'project_id.required' => '请填选择项目！',
+            'project_id.numeric' => '选择项目参数有误！',
+            'project_id.min' => '请填选择项目！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'project_id' => 'required|numeric|min:1',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        $project_id = $post_data['project_id'];
+
+        // 单文件
+        if(!empty($post_data["excel-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["excel-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $data = Excel::load($attachment_file, function($reader) {
+
+//                  $reader->takeColumns(3);
+                    $reader->limitColumns(1);
+
+//                  $reader->takeRows(1000);
+                    $reader->limitRows(2001);
+
+//                  $reader->ignoreEmpty();
+
+//                  $data = $reader->all();
+//                  $data = $reader->toArray();
+
+                })->get()->toArray();
+
+                $order_data = [];
+                foreach($data as $key => $value)
+                {
+                    if($value['client_phone'])
+                    {
+                        $temp_date['client_phone'] = intval($value['client_phone']);
+                        $order_data[] = $temp_date;
+                    }
+                }
+
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+
+                    foreach($order_data as $key => $value)
+                    {
+                        $order = new DK_Order;
+
+                        $order->project_id = $project_id;
+                        $order->creator_id = $me->id;
+                        $order->created_type = 9;
+                        $order->is_published = 1;
+                        $order->inspected_status = 1;
+                        $order->inspected_result = '通过';
+                        $order->client_phone = $value['client_phone'];
+
+                        $bool = $order->save();
+                        if(!$bool) throw new Exception("insert--order--fail");
+                    }
+
+                    DB::commit();
+                    return response_success(['count'=>count($order_data)]);
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"清选择Excel文件！");
+
+
+
+
+        // 多文件
+//        dd($post_data["multiple-excel-file"]);
+        $count = 0;
+        $multiple_files = [];
+        if(!empty($post_data["multiple-excel-file"]))
+        {
+            // 添加图片
+            foreach ($post_data["multiple-excel-file"] as $n => $f)
+            {
+                if(!empty($f))
+                {
+                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
+                    if($result["result"])
+                    {
+                        $attachment_file = storage_resource_path($result["local"]);
+                        $data = Excel::load($attachment_file, function($reader) {
+
+                            $reader->limitColumns(1);
+                            $reader->limitRows(1000);
+
+                        })->get()->toArray();
+
+                        $order_data = [];
+                        foreach($data as $key => $value)
+                        {
+                            if($value['client_phone'])
+                            {
+                                $temp_date['client_phone'] = intval($value['client_phone']);
+                                $order_data[] = $temp_date;
+                            }
+                        }
+
+                        // 启动数据库事务
+                        DB::beginTransaction();
+                        try
+                        {
+
+                            foreach($order_data as $key => $value)
+                            {
+                                $order = new DK_Order;
+
+                                $order->project_id = $project_id;
+                                $order->creator_id = $me->id;
+                                $order->created_type = 9;
+                                $order->is_published = 1;
+                                $order->inspected_status = 1;
+                                $order->inspected_result = '通过';
+                                $order->client_phone = $value['client_phone'];
+
+                                $bool = $order->save();
+                                if(!$bool) throw new Exception("insert--order--fail");
+                            }
+
+                            DB::commit();
+                            $count += count($order_data);
+                        }
+                        catch (Exception $e)
+                        {
+                            DB::rollback();
+                            $msg = '操作失败，请重试！';
+                            $msg = $e->getMessage();
+                            return response_fail([],$msg);
+                        }
+
+                    }
+                    else return response_error([],"upload--attachment--fail");
+                }
+
+            }
+
+            return response_success(['count'=>$count]);
+        }
+
+    }
+
+
+    // 【工单】返回-添加-视图
+    public function view_item_order_create()
+    {
+        $this->get_me();
+
+        $item_type = 'item';
+        $item_type_text = '工单';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/item/order-list-for-all';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['category'] = 'item';
+        $return['type'] = $item_type;
+        $return['item_type_text'] = $item_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+
+        $district_city_list = DK_District::select('id','district_city')->whereIn('district_status',[1])->get();
+        $return['district_city_list'] = $district_city_list;
+
+//        $district_district_list = DK_District::select('district_district')->where('district_city',$post_data['district_city'])->whereIn('district_status',[1])->get();
+//        if(count($district_district_list) > 0)
+//        {
+//            $district_district_array = explode("-",$district_district_list[0]->district_district);
+//            $return['district_district_list'] = $district_district_array;
+//        }
+//        else
+//        {
+//            $return['district_district_list'] = [];
+//        }
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
+        return view($view_blade)->with($return);
+    }
+    // 【工单】返回-编辑-视图
+    public function view_item_order_edit()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id = request("id",0);
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
+
+        $item_type = 'item';
+        $item_type_text = '工单';
+        $title_text = '编辑'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/item/order-list-for-all';
+
+        $return['operate'] = 'edit';
+        $return['operate_id'] = $id;
+        $return['category'] = 'item';
+        $return['type'] = $item_type;
+        $return['item_type_text'] = $item_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+
+        $district_city_list = DK_District::select('id','district_city')->whereIn('district_status',[1])->get();
+        $return['district_city_list'] = $district_city_list;
+
+
+        if($id == 0)
+        {
+            $return['operate'] = 'create';
+            $return['operate_id'] = 0;
+
+            return view($view_blade)->with($return);
+        }
+        else
+        {
+            $mine = DK_Order::find($id);
+            if($mine)
+            {
+//                if($mine->deleted_at) return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
+//                else
+                {
+//                    $mine->custom = json_decode($mine->custom);
+//                    $mine->custom2 = json_decode($mine->custom2);
+//                    $mine->custom3 = json_decode($mine->custom3);
+
+                    $district_district_list = DK_District::select('district_district')->where('district_city',$mine->location_city)->whereIn('district_status',[1])->get();
+                    if(count($district_district_list) > 0)
+                    {
+                        $district_district_array = explode("-",$district_district_list[0]->district_district);
+                        $return['district_district_list'] = $district_district_array;
+                    }
+                    else
+                    {
+                        $return['district_district_list'] = [];
+                    }
+
+                    $return['data'] = $mine;
+
+                    return view($view_blade)->with($return);
+                }
+            }
+            else return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
+        }
+    }
+    // 【工单】保存数据
+    public function operate_item_order_save($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'project_id.required' => '请填选择项目！',
+            'project_id.numeric' => '选择项目参数有误！',
+            'project_id.min' => '请填选择项目！',
+            'client_name.required' => '请填写客户信息！',
+            'client_phone.required' => '请填写客户电话！',
+            'client_phone.numeric' => '客户电话格式有误！',
+            'client_intention.required' => '请选择客户意向！',
+//            'location_city.required' => '请选择城市！',
+//            'location_district.required' => '请选择行政区！',
+            'description.required' => '请输入通话小结！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'project_id' => 'required|numeric|min:1',
+            'client_name' => 'required',
+            'client_phone' => 'required|numeric',
+            'client_intention' => 'required',
+//            'location_city' => 'required',
+//            'location_district' => 'required',
+            'description' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $location_city = $post_data["location_city"];
+        $location_district = $post_data["location_district"];
+        $custom_location_city = $post_data["custom_location_city"];
+        $custom_location_district = $post_data["custom_location_district"];
+
+        if(!empty($location_city) && !empty($location_district))
+        {
+        }
+        else
+        {
+            if(!empty($custom_location_city) && !empty($custom_location_district))
+            {
+            }
+            else return response_error([],"请选择城市和区域！");
+        }
+//        dd($custom_location_city.$custom_location_district);
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+
+        $me->load(['department_district_er','department_group_er']);
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $mine = new DK_Order;
+            $post_data["item_category"] = 1;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+
+//            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->count("*");
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = DK_Order::find($operate_id);
+            if(!$mine) return response_error([],"该工单不存在，刷新页面重试！");
+
+            if(in_array($me->user_type,[84,88]) && $mine->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
+
+//            $is_repeat = DK_Order::where('client_phone',$post_data['client_phone'])->where('project_id',$post_data['project_id'])->where('id','<>',$operate_id)->count("*");
+        }
+        else return response_error([],"参数有误！");
+
+//        $post_data['is_repeat'] = $is_repeat;
+
+        if(!empty($post_data['project_id']))
+        {
+            $project = DK_Project::find($post_data['project_id']);
+            if(!$project) return response_error([],"选择【项目】不存在，刷新页面重试！");
+        }
+
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            // 指派日期
+            if(!empty($post_data['assign_date']))
+            {
+                $post_data['assign_time'] = strtotime($post_data['assign_date']);
+            }
+//            else $post_data['assign_time'] = 0;
+
+
+
+            $mine_data = $post_data;
+            $mine_data['department_district_id'] = $me->department_district_id;
+            $mine_data['department_group_id'] = $me->department_group_id;
+            if($me->department_district_er) $mine_data['department_manager_id'] = $me->department_district_er->leader_id;
+            if($me->department_group_er) $mine_data['department_supervisor_id'] = $me->department_group_er->leader_id;
+
+            if(!empty($custom_location_city) && !empty($custom_location_district))
+            {
+                $mine_data['location_city'] = $custom_location_city;
+                $mine_data['location_district'] = $custom_location_district;
+            }
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['operate_category']);
+            unset($mine_data['operate_type']);
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+//                if(!empty($post_data['circle_id']))
+//                {
+//                    $circle_data['order_id'] = $mine->id;
+//                    $circle_data['creator_id'] = $me->id;
+//                    $circle->pivot_order_list()->attach($circle_data);  //
+////                    $circle->pivot_order_list()->syncWithoutDetaching($circle_data);  //
+//                }
+            }
+            else throw new Exception("insert--order--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【工单】【文本】修改-文本-类型
+    public function operate_item_order_info_text_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-info-text-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+        if($column_key == "client_phone")
+        {
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+        }
+        else if($column_key == "inspected_description")
+        {
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77])) return response_error([],"你没有操作权限！");
+        }
+        else if($column_key == "description")
+        {
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+        }
+        else
+        {
+            if(!in_array($me->user_type,[0,1,11,61,66,81,84,88])) return response_error([],"你没有操作权限！");
+        }
+
+        if(in_array($me->user_type,[84,88]) && $item->creator_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $is_repeat = 0;
+            if($column_key == "client_phone")
+            {
+                $project_id = $item->project_id;
+                $client_phone = $item->client_phone;
+
+                $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$column_value])
+                    ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+//
+
+                $item->is_repeat = $is_repeat;
+//                dd($item->is_repeat);
+            }
+
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success(['is_repeat'=>$is_repeat]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】【时间】修改-时间-类型
+    public function operate_item_order_info_time_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-info-time-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+        $time_type = $post_data["time_type"];
+
+        $before = $item->$column_key;
+
+
+        // 应出发时间
+        if($column_key == "should_departure_time" && $item->should_arrival_time)
+        {
+            if(strtotime($column_value) >= $item->should_arrival_time)
+            {
+                return response_error([],"应出发时间不能超过应到达时间！");
+            }
+        }
+        // 应到达时间
+        if($column_key == "should_arrival_time" && $item->should_departure_time)
+        {
+            if(strtotime($column_value) <= $item->should_departure_time)
+            {
+                return response_error([],"应到达时间不能在应出发时间之前！");
+            }
+        }
+
+        // 实际出发时间
+        if($column_key == "actual_departure_time")
+        {
+            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
+            if($item->actual_arrival_time)
+            {
+                if(strtotime($column_value) >= $item->actual_arrival_time)
+                {
+                    return response_error([],"出发时间不能超过到达时间！");
+                }
+            }
+        }
+        // 实际到达时间
+        if($column_key == "actual_arrival_time")
+        {
+            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
+            if($item->actual_departure_time)
+            {
+                if(strtotime($column_value) <= $item->actual_departure_time)
+                {
+                    return response_error([],"到达时间不能在出发时间之前！");
+                }
+            }
+            else return response_error([],"请先填写出发时间！");
+        }
+
+        // 经停到达时间
+        if($column_key == "stopover_arrival_time")
+        {
+            if(!$item->stopover_place) return response_error([],"没有经停点！");
+            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
+            if($item->actual_departure_time)
+            {
+                if(strtotime($column_value) <= $item->actual_departure_time)
+                {
+                    return response_error([],"经停点-到达时间不能在（实际）出发时间之前！");
+                }
+            }
+            else return response_error([],"请先填写（实际）出发时间！");
+        }
+        // 经停出发时间
+        if($column_key == "stopover_departure_time")
+        {
+            if(!$item->stopover_place) return response_error([],"没有经停点！");
+            if(strtotime($column_value) > time()) return response_error([],"时间不能超过当前！");
+            if($item->stopover_arrival_time)
+            {
+                if(strtotime($column_value) <= $item->stopover_arrival_time)
+                {
+                    return response_error([],"（经停点）出发时间不能在（经停点）到达时间之前！");
+                }
+            }
+            else return response_error([],"请先填写（经停点）到达时间！");
+        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = strtotime($column_value);
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_type"] = $time_type;
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = strtotime($column_value);
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】【选项】修改-radio-select-[option]-类型
+    public function operate_item_order_info_option_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-info-option-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+        $after = $column_value;
+
+        if($column_key == "location_city")
+        {
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+        }
+        else
+        {
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+        }
+
+        if(in_array($me->user_type,['client_id','project_id']))
+        {
+            if(in_array($column_value,["-1",-1])) return response_error([],"选择有误！");
+        }
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if($column_key == "project_id")
+            {
+                if($column_value == 0)
+                {
+                }
+                else
+                {
+                    $project = DK_Project::withTrashed()->find($column_value);
+                    if(!$project) throw new Exception("该【项目】不存在，刷新页面重试！");
+
+                    $project_id = $item->project_id;
+                    $client_phone = $item->client_phone;
+
+                    $is_repeat = DK_Order::where(['project_id'=>$column_value,'client_phone'=>$client_phone])
+                        ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                    $item->is_repeat = $is_repeat;
+                }
+            }
+            else if($column_key == "location_city")
+            {
+                $column_key2 = $post_data["column_key2"];
+                $column_value2 = $post_data["column_value2"];
+
+                $before = $item->location_city.' - '.$item->location_district;
+                $after = $column_value.' - '.$column_value2;
+
+                $item->$column_key2 = $column_value2;
+            }
+
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("order--update--fail");
+            else
+            {
+
+
+                // 需要记录(已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $after;
+
+                    if(in_array($column_key,['client_id','project_id']))
+                    {
+                        $record_data["before_id"] = $before;
+                        $record_data["after_id"] = $column_value;
+                    }
+
+
+
+                    if($column_key == 'client_id')
+                    {
+                        $record_data["before_client_id"] = $before;
+                        $record_data["after_client_id"] = $column_value;
+                    }
+                    else if($column_key == 'project_id')
+                    {
+                        $record_data["before_project_id"] = $before;
+                        $record_data["after_project_id"] = $column_value;
+                    }
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】【附件】添加
+    public function operate_item_order_info_attachment_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-order-attachment-set') return response_error([],"参数[operate]有误！");
+        $order_id = $post_data["order_id"];
+        if(intval($order_id) !== 0 && !$order_id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($order_id);
+        if(!$item) return response_error([],"该【工单】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if(!in_array($me->user_type,[0,1,11,81,82,88])) return response_error([],"你没有操作权限！");
+
+//        $operate_type = $post_data["operate_type"];
+//        $column_key = $post_data["column_key"];
+//        $column_value = $post_data["column_value"];
+
+
+//        dd($post_data);
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            // 多图
+            $multiple_images = [];
+            if(!empty($post_data["multiple_images"][0]))
+            {
+                // 添加图片
+                foreach ($post_data["multiple_images"] as $n => $f)
+                {
+                    if(!empty($f))
+                    {
+                        $result = upload_img_storage($f,'','dk/attachment','');
+                        if($result["result"])
+                        {
+                            $attachment = new YH_Attachment;
+
+                            $attachment_data["operate_object"] = 71;
+                            $attachment_data['order_id'] = $order_id;
+                            $attachment_data['item_id'] = $order_id;
+                            $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                            $attachment_data['attachment_src'] = $result["local"];
+                            $bool = $attachment->fill($attachment_data)->save();
+                            if($bool)
+                            {
+                                $record = new DK_Record;
+
+                                $record_data["ip"] = Get_IP();
+                                $record_data["record_object"] = 21;
+                                $record_data["record_category"] = 11;
+                                $record_data["record_type"] = 1;
+                                $record_data["creator_id"] = $me->id;
+                                $record_data["order_id"] = $order_id;
+                                $record_data["operate_object"] = 71;
+                                $record_data["operate_category"] = 71;
+                                $record_data["operate_type"] = 1;
+
+                                $record_data["column_name"] = 'attachment';
+                                $record_data["after"] = $attachment_data['attachment_src'];
+
+                                $bool_1 = $record->fill($record_data)->save();
+                                if($bool_1)
+                                {
+                                }
+                                else throw new Exception("insert--record--fail");
+                            }
+                            else throw new Exception("insert--attachment--fail");
+                        }
+                        else throw new Exception("upload--attachment--file--fail");
+                    }
+                }
+            }
+
+
+            // 单图
+            if(!empty($post_data["attachment_file"]))
+            {
+                $attachment = new YH_Attachment;
+
+//                $result = upload_storage($post_data["portrait"]);
+//                $result = upload_storage($post_data["portrait"], null, null, 'assign');
+                $result = upload_img_storage($post_data["attachment_file"],'','dk/attachment','');
+                if($result["result"])
+                {
+                    $attachment_data["operate_object"] = 71;
+                    $attachment_data['order_id'] = $order_id;
+                    $attachment_data['item_id'] = $order_id;
+                    $attachment_data['attachment_name'] = $post_data["attachment_name"];
+                    $attachment_data['attachment_src'] = $result["local"];
+                    $bool = $attachment->fill($attachment_data)->save();
+                    if($bool)
+                    {
+                        $record = new DK_Record;
+
+                        $record_data["ip"] = Get_IP();
+                        $record_data["record_object"] = 21;
+                        $record_data["record_category"] = 11;
+                        $record_data["record_type"] = 1;
+                        $record_data["creator_id"] = $me->id;
+                        $record_data["order_id"] = $order_id;
+                        $record_data["operate_object"] = 71;
+                        $record_data["operate_category"] = 71;
+                        $record_data["operate_type"] = 1;
+
+                        $record_data["column_name"] = 'attachment';
+                        $record_data["after"] = $attachment_data['attachment_src'];
+
+                        $bool_1 = $record->fill($record_data)->save();
+                        if($bool_1)
+                        {
+                        }
+                        else throw new Exception("insert--record--fail");
+                    }
+                    else throw new Exception("insert--attachment--fail");
+                }
+                else throw new Exception("upload--attachment--file--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】【附件】删除
+    public function operate_item_order_info_attachment_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-attachment-delete') return response_error([],"参数【operate】有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
+
+        $item = YH_Attachment::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该【附件】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"你没有操作权限！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+//        if($item->creator_id != $me->id) return response_error([],"你没有该内容的操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            $bool = $item->delete();  // 普通删除
+            if($bool)
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $item->order_id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 71;
+                $record_data["operate_type"] = 91;
+
+                $record_data["column_name"] = 'attachment';
+                $record_data["before"] = $item->attachment_src;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if($bool_1)
+                {
+                }
+                else throw new Exception("insert--record--fail");
+            }
+            else throw new Exception("attachment--delete--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【工单】获取-详情-数据
+    public function operate_item_order_get($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $item->should_departure_time_html = date("Y-m-d H:i", $item->should_departure_time);
+        $item->should_arrival_time_html = date("Y-m-d H:i", $item->should_arrival_time);
+
+        $item->is_actual_departure = $item->actual_departure_time ? 1 : 0;
+        if($item->is_actual_departure) $item->actual_departure_time_html = date("Y-m-d H:i", $item->actual_departure_time);
+
+        $item->is_actual_arrival = $item->actual_arrival_time ? 1 : 0;
+        if($item->is_actual_arrival) $item->actual_arrival_time_html = date("Y-m-d H:i", $item->actual_arrival_time);
+
+        $item->is_stopover = $item->stopover_place ? 1 : 0;
+        if($item->is_stopover)
+        {
+            $item->is_stopover_arrival = $item->stopover_arrival_time ? 1 : 0;
+            if($item->is_stopover_arrival) $item->stopover_arrival_time_html = date("Y-m-d H:i", $item->stopover_arrival_time);
+
+            $item->is_stopover_departure = $item->stopover_departure_time ? 1 : 0;
+            if($item->is_stopover_departure) $item->stopover_departure_time_html = date("Y-m-d H:i", $item->stopover_departure_time);
+        }
+
+        return response_success($item,"");
+
+    }
+    // 【工单】获取-详情-视图
+    public function operate_item_order_get_html($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        if($item->car_owner_type == 1)
+        {
+            $item->car_owner_type_name = "自有";
+            $item->car = $item->car_er ? $item->car_er->name : '';
+            $item->trailer = $item->trailer_er ? $item->trailer_er->name : '';
+        }
+        else if($item->car_owner_type == 21)
+        {
+            $item->car_owner_type_name = "外请·调车";
+            $item->car = $item->outside_car;
+            $item->trailer = $item->outside_trailer;
+        }
+        else if($item->car_owner_type == 41)
+        {
+            $item->car_owner_type_name = "外配·配货";
+            $item->car = $item->car_er ? $item->car_er->name : '';
+            $item->trailer = $item->trailer_er ? $item->trailer_er->name : '';
+//            $item->car = $item->outside_car;
+//            $item->trailer = $item->outside_trailer;
+        }
+
+        $item->should_departure_time_html = date("Y-m-d H:i", $item->should_departure_time);
+        $item->should_arrival_time_html = date("Y-m-d H:i", $item->should_arrival_time);
+
+        $item->is_actual_departure = $item->actual_departure_time ? 1 : 0;
+        if($item->is_actual_departure) $item->actual_departure_time_html = date("Y-m-d H:i", $item->actual_departure_time);
+
+        $item->is_actual_arrival = $item->actual_arrival_time ? 1 : 0;
+        if($item->is_actual_arrival) $item->actual_arrival_time_html = date("Y-m-d H:i", $item->actual_arrival_time);
+
+        $item->is_stopover = $item->stopover_place ? 1 : 0;
+        if($item->is_stopover)
+        {
+            $item->is_stopover_arrival = $item->stopover_arrival_time ? 1 : 0;
+            if($item->is_stopover_arrival) $item->stopover_arrival_time_html = date("Y-m-d H:i", $item->stopover_arrival_time);
+
+            $item->is_stopover_departure = $item->stopover_departure_time ? 1 : 0;
+            if($item->is_stopover_departure) $item->stopover_departure_time_html = date("Y-m-d H:i", $item->stopover_departure_time);
+        }
+
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-info-html';
+        $html = view($view_blade)->with(['data'=>$item])->__toString();
+
+        return response_success(['html'=>$html],"");
+
+    }
+    // 【工单】获取-附件-视图
+    public function operate_item_order_get_attachment_html($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'order_id.required' => 'order_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'order_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["order_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::with(['attachment_list'])->withTrashed()->find($id);
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-assign-html-for-attachment';
+        $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
+
+        return response_success(['html'=>$html],"");
+    }
+
+
+    // 【工单】删除
+    public function operate_item_order_delete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-delete') return response_error([],"参数[operate]有误！");
+        $item_id = $post_data["item_id"];
+        if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,84,88])) return response_error([],"用户类型错误！");
+//        if($me->user_type == 19 && ($item->item_active != 0 || $item->creator_id != $me->id)) return response_error([],"你没有操作权限！");
+        if(in_array($me->user_type,[81,84,88]))
+        {
+            if($item->creator_id != $me->id) return response_error([],"你没有操作权限！");
+        }
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->timestamps = false;
+            if($item->is_published == 0 && $item->creator_id == $me->id)
+            {
+                $item_copy = $item;
+
+                $item->timestamps = false;
+//                $bool = $item->forceDelete();  // 永久删除
+                $bool = $item->delete();  // 普通删除
+                if(!$bool) throw new Exception("item--delete--fail");
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $item_id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 101;
+                    $record_data["operate_type"] = 1;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("insert--record--fail");
+                }
+
+                DB::commit();
+                $this->delete_the_item_files($item_copy);
+            }
+            else
+            {
+                $item->timestamps = false;
+                $bool = $item->delete();  // 普通删除
+//                $bool = $item->forceDelete();  // 永久删除
+                if(!$bool) throw new Exception("item--delete--fail");
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $item_id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 101;
+                    $record_data["operate_type"] = 1;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("insert--record--fail");
+                }
+
+                DB::commit();
+            }
+
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】发布
+    public function operate_item_order_publish($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-publish') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+        if(in_array($me->user_type,[88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $project_id = $item->project_id;
+        $client_phone = $item->client_phone;
+
+        $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$client_phone])
+            ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if($item->inspected_status == 1)
+            {
+                $item->inspected_status = 9;
+            }
+
+            $item->is_repeat = $is_repeat;
+            $item->is_published = 1;
+            $item->published_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 11;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】完成
+    public function operate_item_order_complete($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-complete') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
+//        if(me->user_type ==88 && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->is_completed = 1;
+            $item->completer_id = $me->id;
+            $item->completed_at = time();
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 100;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+            
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】弃用
+    public function operate_item_order_abandon($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-abandon') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
+//        if($item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 97;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 97;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】复用
+    public function operate_item_order_reuse($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-reuse') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,82,88])) return response_error([],"用户类型错误！");
+//        if($item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->item_status = 1;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 98;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】验证
+    public function operate_item_order_verify($post_data)
+    {
+//        dd($post_data);
+        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-verify') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,71,81])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->verifier_id = $me->id;
+            $item->verified_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 91;
+                $record_data["operate_type"] = 1;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】审核
+    public function operate_item_order_inspect($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-inspect') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66,71,77])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $inspected_result = $post_data["inspected_result"];
+        if(!in_array($inspected_result,config('info.inspected_result'))) return response_error([],"审核结果非法！");
+        $inspected_description = $post_data["inspected_description"];
+
+
+        $before = $item->inspected_result;
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->inspector_id = $me->id;
+            $item->inspected_status = 1;
+            $item->inspected_result = $inspected_result;
+            if($inspected_description) $item->inspected_description = $inspected_description;
+            $item->inspected_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 92;
+                $record_data["operate_type"] = 1;
+                $record_data["description"] = $inspected_description;
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $inspected_result;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】交付
+    public function operate_item_order_deliver($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-deliver') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $client_id = $post_data["client_id"];
+        if($client_id == "-1")
+        {
+            $project = DK_Project::find($item->project_id);
+            if($project->client_id != 0) $client_id = $project->client_id;
+        }
+//        $client = DK_Client::find($client_id);
+//        if(!$client) return response_error([],"客户不存在！");
+
+        $delivered_result = $post_data["delivered_result"];
+        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        $before = $item->delivered_result;
+
+        $delivered_description = $post_data["delivered_description"];
+        $recording_address = $post_data["recording_address"];
+
+        $is_distributive_condition = $post_data["is_distributive_condition"];
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if($client_id != "-1" && $delivered_result == "已交付")
+            {
+                $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
+                if($pivot_delivery)
+                {
+                    $pivot_delivery->client_id = $client_id;
+                    $pivot_delivery->delivered_result = $delivered_result;
+                    $bool_0 = $pivot_delivery->save();
+                    if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
+                }
+                else
+                {
+                    $pivot_delivery = new DK_Pivot_Client_Delivery;
+                    $pivot_delivery_data["pivot_type"] = 95;
+                    $pivot_delivery_data["client_id"] = $client_id;
+                    $pivot_delivery_data["order_id"] = $item->id;
+                    $pivot_delivery_data["project_id"] = $item->project_id;
+                    $pivot_delivery_data["client_phone"] = $item->client_phone;
+                    $pivot_delivery_data["delivered_result"] = $delivered_result;
+                    $pivot_delivery_data["creator_id"] = $me->id;
+
+                    $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                    if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+                }
+            }
+
+            $item->is_distributive_condition = $is_distributive_condition;
+            $item->client_id = $client_id;
+            $item->deliverer_id = $me->id;
+            $item->delivered_status = 1;
+            $item->delivered_result = $delivered_result;
+            $item->delivered_description = $delivered_description;
+            $item->recording_address = $recording_address;
+            $item->delivered_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 95;
+                $record_data["operate_type"] = 1;
+                $record_data["column_name"] = "delivered_result";
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $delivered_result;
+
+//                $record_data["before_client_id"] = $before;
+//                $record_data["after_client_id"] = $client_id;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】批量-交付
+    public function operate_item_order_bulk_deliver($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+//            'client_id.required' => 'client_id.required.',
+            'delivered_result.required' => 'delivered_result.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+//            'client_id' => 'required',
+            'delivered_result' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-delivered-bulk') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $delivered_result = $post_data["delivered_result"];
+        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        $client_id = $post_data["client_id"];
+//        $client = DK_Client::find($client_id);
+//        if(!$client) return response_error([],"客户不存在！");
+
+        $delivered_description = $post_data["delivered_description"];
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $delivered_para['client_id'] = $client_id;
+            $delivered_para['deliverer_id'] = $me->id;
+            $delivered_para['delivered_status'] = 1;
+            $delivered_para['delivered_result'] = $delivered_result;
+            $delivered_para['delivered_at'] = time();
+
+//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
+//            if(!$bool) throw new Exception("item--update--fail");
+//            else
+//            {
+//            }
+
+            foreach($ids_array as $key => $id)
+            {
+                $this_client_id = $client_id;
+
+                $item = DK_Order::withTrashed()->find($id);
+                if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+                if($this_client_id == "-1")
+                {
+                    $project = DK_Project::find($item->project_id);
+                    if($project->client_id != 0) $this_client_id = $project->client_id;
+                }
+
+
+                if($this_client_id != "-1" && $delivered_result == "已交付")
+                {
+                    $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
+                    if($pivot_delivery)
+                    {
+                        $pivot_delivery->client_id = $this_client_id;
+                        $pivot_delivery->delivered_result = $delivered_result;
+                        $bool_0 = $pivot_delivery->save();
+                        if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
+                    }
+                    else
+                    {
+                        $pivot_delivery = new DK_Pivot_Client_Delivery;
+                        $pivot_delivery_data["pivot_type"] = 95;
+                        $pivot_delivery_data["client_id"] = $this_client_id;
+                        $pivot_delivery_data["order_id"] = $item->id;
+                        $pivot_delivery_data["project_id"] = $item->project_id;
+                        $pivot_delivery_data["client_phone"] = $item->client_phone;
+                        $pivot_delivery_data["delivered_result"] = $delivered_result;
+                        $pivot_delivery_data["creator_id"] = $me->id;
+
+                        $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                        if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+                    }
+                }
+
+
+                $before = $item->delivered_result;
+
+                $item->client_id = $this_client_id;
+                $item->deliverer_id = $me->id;
+                $item->delivered_status = 1;
+                $item->delivered_result = $delivered_result;
+                $item->delivered_description = $delivered_description;
+                $item->delivered_at = time();
+                $bool = $item->save();
+                if(!$bool) throw new Exception("item--update--fail");
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 71;
+                    $record_data["operate_category"] = 95;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "delivered_result";
+
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $delivered_result;
+
+//                $record_data["before_client_id"] = $before;
+//                $record_data["after_client_id"] = $client_id;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("insert--record--fail");
+                }
+
+            }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】【获取】已交付记录
+    public function operate_item_order_deliver_get_delivered($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-deliver-get-delivered') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $client_phone = $item->client_phone;
+
+
+        $order_repeat = DK_Order::select('id','client_id','project_id','client_phone','creator_id')
+            ->with([
+                'creator'=>function($query) { $query->select('id','username'); },
+                'client_er'=>function($query) { $query->select('id','username'); },
+                'project_er'=>function($query) { $query->select('id','name'); }
+            ])->where(['client_phone'=>$client_phone])
+//            ->where('id','<>',$id)
+//            ->where('delivered_status',1)
+            ->where(function ($query) use($id) {
+                $query->where('id','<>',$id)
+                    ->orWhere(function($query) use($id) { $query->where('id',$id)->where('delivered_status',1); } );
+            })
+            ->where('is_published','>',0)
+            ->get();
+        $return['order_repeat'] = $order_repeat;
+
+        $deliver_repeat = DK_Pivot_Client_Delivery::select('id','client_id','order_id','project_id','client_phone','creator_id')
+            ->with([
+                'creator'=>function($query) { $query->select('id','username'); },
+                'client_er'=>function($query) { $query->select('id','username'); },
+                'project_er'=>function($query) { $query->select('id','name'); }
+            ])->where(['client_phone'=>$client_phone])->get();
+        $return['deliver_repeat'] = $deliver_repeat;
+
+
+        return response_success($return,"");
+
+    }
+    // 【工单】分发
+    public function operate_item_order_distribute($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+            'client_id.required' => '请选择客户',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+            'client_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-distribute') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        $client_phone = $item->client_phone;
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $client_id = $post_data["client_id"];
+        if($client_id == "-1")
+        {
+            return response_error([],"请选择客户！");
+//            $project = DK_Project::find($item->project_id);
+//            if($project->client_id != 0) $client_id = $project->client_id;
+        }
+        $client = DK_Client::find($client_id);
+        if(!$client) return response_error([],"客户不存在！");
+
+        $delivered_result = $post_data["delivered_result"];
+        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        // 是否已经分发
+        $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])->get();
+        if(count($is_distributed_list) > 0)
+        {
+            return response_error([],"该客户已经交付过该号码，不可以重复分发！");
+        }
+
+        $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'已交付'])->get();
+        if(count($is_order_list) > 0)
+        {
+            foreach($is_order_list as $o)
+            {
+                if($o->client_id == $client_id)
+                {
+                    return response_error([],"该号码已在其他工单交付过该客户，不可以重复分发！");
+                }
+
+                if($o->project_er->client_id == $client_id)
+                {
+                    return response_error([],"该号码已在其他工单交付过默认客户，不可以重复分发！");
+                }
+            }
+        }
+
+
+        $before = $item->delivered_result;
+
+//        $delivered_description = $post_data["delivered_description"];
+//        $recording_address = $post_data["recording_address"];
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            if($client_id != "-1")
+//            {
+            $pivot_delivery = new DK_Pivot_Client_Delivery;
+            $pivot_delivery_data["pivot_type"] = 96;
+            $pivot_delivery_data["client_id"] = $client_id;
+            $pivot_delivery_data["order_id"] = $item->id;
+            $pivot_delivery_data["project_id"] = $item->project_id;
+            $pivot_delivery_data["client_phone"] = $item->client_phone;
+            $pivot_delivery_data["delivered_result"] = $delivered_result;
+            $pivot_delivery_data["creator_id"] = $me->id;
+
+            $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+            if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
+//            }
+
+//            $item->client_id = $client_id;
+//            $item->deliverer_id = $me->id;
+//            $item->delivered_status = 1;
+//            $item->delivered_result = $delivered_result;
+//            $item->delivered_description = $delivered_description;
+//            $item->recording_address = $recording_address;
+//            $item->delivered_at = time();
+//            $bool = $item->save();
+//            if(!$bool) throw new Exception("item--update--fail");
+//            else
+//            {
+                $record = new DK_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 21;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 96;
+                $record_data["operate_type"] = 1;
+                $record_data["column_name"] = "client_id";
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $client_id;
+
+//                $record_data["before_client_id"] = $before;
+//                $record_data["after_client_id"] = $client_id;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("insert--record--fail");
+//            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+
+
 
 
 
@@ -9396,7 +10540,7 @@ class DKAdminRepository {
     /*
      * 交付管理
      */
-    // 【交付管理】返回-列表-视图
+    // 【交付】返回-列表-视图
     public function view_item_delivery_list($post_data)
     {
         $this->get_me();
@@ -9530,7 +10674,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.delivery-list';
         return view($view_blade)->with($view_data);
     }
-    // 【交付管理】返回-列表-数据
+    // 【交付】返回-列表-数据
     public function get_item_delivery_list_datatable($post_data)
     {
         $this->get_me();
@@ -9652,7 +10796,7 @@ class DKAdminRepository {
     }
 
 
-    // 【交付管理】删除
+    // 【交付】删除
     public function operate_item_delivery_delete($post_data)
     {
         $messages = [
@@ -9761,7 +10905,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【交付管理】导出状态
+    // 【交付】导出状态
     public function operate_item_delivery_exported($post_data)
     {
         $messages = [
@@ -9830,7 +10974,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【交付管理】批量-导出状态
+    // 【交付】批量-导出状态
     public function operate_item_delivery_bulk_exported($post_data)
     {
         $messages = [
@@ -16404,7 +17548,7 @@ class DKAdminRepository {
 
 
 
-    // 【内容】【全部】返回-列表-数据
+    // 【修改记录】返回-列表-数据
     public function get_record_list_for_all_datatable($post_data)
     {
         $this->get_me();
@@ -16493,7 +17637,7 @@ class DKAdminRepository {
      */
 
 
-    // 【访问记录】
+    // 【记录】
     public function record($post_data)
     {
         $record = new K_Record();
@@ -16515,7 +17659,7 @@ class DKAdminRepository {
     }
 
 
-    // 【访问记录】
+    // 【用户操作记录】
     public function record_for_user_operate($record_object,$record_category,$record_type,$creator_id,$item_id,$operate_object,$operate_category,$operate_type = 0,$column_key = '',$before = '',$after = '')
     {
         $record = new DK_Record;

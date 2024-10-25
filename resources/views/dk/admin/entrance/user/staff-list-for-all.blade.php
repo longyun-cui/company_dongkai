@@ -526,5 +526,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.user.staff-script')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.user.staff-list-script')
 @endsection

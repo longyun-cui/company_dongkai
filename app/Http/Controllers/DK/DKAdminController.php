@@ -185,53 +185,86 @@ class DKAdminController extends Controller
     /*
      * 客户管理
      */
-    // 【客户管理】添加
+    // 【客户】返回-列表-视图
+    public function view_user_client_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
+    }
+    // 【客户】【修改记录】返回-列表-视图（全部任务）
+    public function view_user_client_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_client_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_client_modify_record_datatable(request()->all());
+    }
+
+    // 【客户】添加
     public function operate_user_client_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_user_client_create();
         else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
     }
-    // 【客户管理】编辑
+    // 【客户】编辑
     public function operate_user_client_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_user_client_edit();
         else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
     }
 
+    // 【客户】修改-文本-text-信息
+    public function operate_client_info_text_set()
+    {
+        return $this->repo->operate_client_info_text_set(request()->all());
+    }
+    // 【客户】修改-时间-time-信息
+    public function operate_client_info_time_set()
+    {
+        return $this->repo->operate_client_info_time_set(request()->all());
+    }
+    // 【客户】修改-选项-option-信息
+    public function operate_client_info_option_set()
+    {
+        return $this->repo->operate_client_info_option_set(request()->all());
+    }
+    // 【客户】添加-附件-attachment-信息
+    public function operate_client_info_attachment_set()
+    {
+        return $this->repo->operate_client_info_attachment_set(request()->all());
+    }
+    // 【客户】删除-附件-attachment-信息
+    public function operate_client_info_attachment_delete()
+    {
+        return $this->repo->operate_client_info_attachment_delete(request()->all());
+    }
+    // 【客户】获取-附件-attachment-信息
+    public function operate_client_get_attachment_html()
+    {
+        return $this->repo->operate_client_get_attachment_html(request()->all());
+    }
 
-    // 【客户管理】修改-密码
+    // 【客户】修改-密码
     public function operate_user_client_password_admin_change()
     {
         return $this->repo->operate_user_client_password_admin_change(request()->all());
     }
-    // 【客户管理】修改-密码
+    // 【客户】修改-密码
     public function operate_user_client_password_admin_reset()
     {
         return $this->repo->operate_user_client_password_admin_reset(request()->all());
     }
 
-
-    // 【客户管理】启用
+    // 【客户】启用
     public function operate_user_client_admin_enable()
     {
         return $this->repo->operate_user_client_admin_enable(request()->all());
     }
-    // 【客户管理】禁用
+    // 【客户】禁用
     public function operate_user_client_admin_disable()
     {
         return $this->repo->operate_user_client_admin_disable(request()->all());
     }
 
-
-    // 【客户管理】返回-列表-视图
-    public function view_user_client_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
-    }
-
-
-    // 【客户管理】客户-登录
+    // 【客户】客户-登录
     public function operate_user_client_login()
     {
         $user_id = request()->get('user_id');
@@ -259,104 +292,104 @@ class DKAdminController extends Controller
     /*
      * 部门管理
      */
-    // 【用户】SELECT2 Leader 负责人
+    // 【部门】SELECT2 Leader 负责人
     public function operate_department_select2_leader()
     {
         return $this->repo->operate_department_select2_leader(request()->all());
     }
-    // 【用户】SELECT2 Superior 上级部门
+    // 【部门】SELECT2 Superior 上级部门
     public function operate_department_select2_superior_department()
     {
         return $this->repo->operate_department_select2_superior_department(request()->all());
     }
 
+    // 【部门】返回-列表-视图（全部任务）
+    public function view_department_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_department_list_for_all_datatable(request()->all());
+    }
+    // 【部门】【修改记录】返回-列表-视图（全部任务）
+    public function view_department_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_department_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_department_modify_record_datatable(request()->all());
+    }
 
-    // 【部门管理】添加
+    // 【部门】添加
     public function operate_department_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_department_create();
         else if (request()->isMethod('post')) return $this->repo->operate_department_save(request()->all());
     }
-    // 【部门管理】编辑
+    // 【部门】编辑
     public function operate_department_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_department_edit();
         else if (request()->isMethod('post')) return $this->repo->operate_department_save(request()->all());
     }
 
-
-    // 【部门管理】修改-文本-text-信息
+    // 【部门】修改-文本-text-信息
     public function operate_department_info_text_set()
     {
         return $this->repo->operate_department_info_text_set(request()->all());
     }
-    // 【部门管理】修改-时间-time-信息
+    // 【部门】修改-时间-time-信息
     public function operate_department_info_time_set()
     {
         return $this->repo->operate_department_info_time_set(request()->all());
     }
-    // 【部门管理】修改-选项-option-信息
+    // 【部门】修改-选项-option-信息
     public function operate_department_info_option_set()
     {
         return $this->repo->operate_department_info_option_set(request()->all());
     }
-    // 【部门管理】添加-附件-attachment-信息
+    // 【部门】添加-附件-attachment-信息
     public function operate_department_info_attachment_set()
     {
         return $this->repo->operate_department_info_attachment_set(request()->all());
     }
-    // 【部门管理】删除-附件-attachment-信息
+    // 【部门】删除-附件-attachment-信息
     public function operate_department_info_attachment_delete()
     {
         return $this->repo->operate_department_info_attachment_delete(request()->all());
     }
-    // 【部门管理】获取-附件-attachment-信息
+    // 【部门】获取-附件-attachment-信息
     public function operate_department_get_attachment_html()
     {
         return $this->repo->operate_department_get_attachment_html(request()->all());
     }
 
-
-    // 【部门管理】删除
+    // 【部门】删除
     public function operate_department_admin_delete()
     {
         return $this->repo->operate_department_admin_delete(request()->all());
     }
-    // 【部门管理】恢复
+    // 【部门】恢复
     public function operate_department_admin_restore()
     {
         return $this->repo->operate_department_admin_restore(request()->all());
     }
-    // 【部门管理】永久删除
+    // 【部门】永久删除
     public function operate_department_admin_delete_permanently()
     {
         return $this->repo->operate_department_admin_delete_permanently(request()->all());
     }
 
-    // 【部门管理】启用
+    // 【部门】启用
     public function operate_department_admin_enable()
     {
         return $this->repo->operate_department_admin_enable(request()->all());
     }
-    // 【部门管理】禁用
+    // 【部门】禁用
     public function operate_department_admin_disable()
     {
         return $this->repo->operate_department_admin_disable(request()->all());
     }
 
 
-    // 【部门管理】返回-列表-视图（全部任务）
-    public function view_department_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_department_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_department_list_for_all_datatable(request()->all());
-    }
-    // 【部门管理】【修改记录】返回-列表-视图（全部任务）
-    public function view_department_modify_record()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_department_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_department_modify_record_datatable(request()->all());
-    }
+
+
 
 
 
@@ -386,21 +419,68 @@ class DKAdminController extends Controller
 
 
 
-    // 【用户-员工管理】添加
+
+
+
+
+    // 【用户-员工】返回-列表-视图
+    public function view_user_staff_list_for_all()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_list_for_all(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_for_all_datatable(request()->all());
+    }
+    // 【用户-员工】【修改记录】返回-列表-视图（全部任务）
+    public function view_user_staff_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_staff_modify_record_datatable(request()->all());
+    }
+
+    // 【用户-员工】添加
     public function operate_user_staff_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_user_staff_create();
         else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
     }
-    // 【用户-员工管理】编辑
+    // 【用户-员工】编辑
     public function operate_user_staff_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_user_staff_edit();
         else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
     }
 
+    // 【客户】修改-文本-text-信息
+    public function operate_staff_info_text_set()
+    {
+        return $this->repo->operate_staff_info_text_set(request()->all());
+    }
+    // 【客户】修改-时间-time-信息
+    public function operate_staff_info_time_set()
+    {
+        return $this->repo->operate_staff_info_time_set(request()->all());
+    }
+    // 【客户】修改-选项-option-信息
+    public function operate_staff_info_option_set()
+    {
+        return $this->repo->operate_staff_info_option_set(request()->all());
+    }
+    // 【客户】添加-附件-attachment-信息
+    public function operate_staff_info_attachment_set()
+    {
+        return $this->repo->operate_staff_info_attachment_set(request()->all());
+    }
+    // 【客户】删除-附件-attachment-信息
+    public function operate_staff_info_attachment_delete()
+    {
+        return $this->repo->operate_staff_info_attachment_delete(request()->all());
+    }
+    // 【客户】获取-附件-attachment-信息
+    public function operate_staff_get_attachment_html()
+    {
+        return $this->repo->operate_staff_get_attachment_html(request()->all());
+    }
 
-    // 【用户】登录
+    // 【用户-员工】登录
     public function operate_user_staff_login()
     {
         $user_id = request()->get('user_id');
@@ -417,53 +497,50 @@ class DKAdminController extends Controller
         else return response_error([]);
 
     }
-    // 【用户】修改-密码
+    // 【用户-员工】修改-密码
     public function operate_user_staff_password_admin_change()
     {
         return $this->repo->operate_user_staff_password_admin_change(request()->all());
     }
-    // 【用户】修改-密码
+    // 【用户-员工】修改-密码
     public function operate_user_staff_password_admin_reset()
     {
         return $this->repo->operate_user_staff_password_admin_reset(request()->all());
     }
 
-
-    // 【用户-员工管理】管理员-删除
+    // 【用户-员工】管理员-删除
     public function operate_user_staff_admin_delete()
     {
         return $this->repo->operate_user_staff_admin_delete(request()->all());
     }
-    // 【用户-员工管理】管理员-恢复
+    // 【用户-员工】管理员-恢复
     public function operate_user_staff_admin_restore()
     {
         return $this->repo->operate_user_staff_admin_restore(request()->all());
     }
-    // 【用户-员工管理】管理员-永久删除
+    // 【用户-员工】管理员-永久删除
     public function operate_user_staff_admin_delete_permanently()
     {
         return $this->repo->operate_user_staff_admin_delete_permanently(request()->all());
     }
 
-
-    // 【用户-员工管理】启用
+    // 【用户-员工】启用
     public function operate_user_staff_admin_enable()
     {
         return $this->repo->operate_user_staff_admin_enable(request()->all());
     }
-    // 【用户-员工管理】禁用
+    // 【用户-员工】禁用
     public function operate_user_staff_admin_disable()
     {
         return $this->repo->operate_user_staff_admin_disable(request()->all());
     }
 
-
-    // 【用户-员工管理】晋升
+    // 【用户-员工】晋升
     public function operate_user_staff_admin_promote()
     {
         return $this->repo->operate_user_staff_admin_promote(request()->all());
     }
-    // 【用户-员工管理】降职
+    // 【用户-员工】降职
     public function operate_user_staff_admin_demote()
     {
         return $this->repo->operate_user_staff_admin_demote(request()->all());
@@ -472,24 +549,6 @@ class DKAdminController extends Controller
 
 
 
-    // 【员工管理】【全部用户】返回-列表-视图
-    public function view_staff_list_for_all()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_staff_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_staff_list_for_all_datatable(request()->all());
-    }
-    // 【用户】【个人用户】返回-列表-视图
-    public function view_user_list_for_individual()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_list_for_individual(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_list_for_individual_datatable(request()->all());
-    }
-    // 【用户】【组织】返回-列表-视图
-    public function view_user_list_for_org()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_user_list_for_org(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_list_for_org_datatable(request()->all());
-    }
 
 
 
@@ -527,8 +586,7 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_item_item_get(request()->all());
     }
-
-
+    
     // 【内容】删除
     public function operate_item_item_delete()
     {
@@ -544,8 +602,7 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_item_item_delete_permanently(request()->all());
     }
-
-
+    
     // 【内容】批量-删除
     public function operate_item_item_delete_bulk()
     {
@@ -566,8 +623,7 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_item_item_operate_bulk(request()->all());
     }
-
-
+    
     // 【内容】发布
     public function operate_item_item_publish()
     {
@@ -652,18 +708,18 @@ class DKAdminController extends Controller
      * 地域管理
      */
 
-    // 【地域管理】SELECT2 Superior 上级
+    // 【地域】SELECT2 Superior 上级
     public function operate_district_select2_city()
     {
         return $this->repo->operate_district_select2_city(request()->all());
     }
-    // 【地域管理】SELECT2 Superior 上级
+    // 【地域】SELECT2 Superior 上级
     public function operate_district_select2_district()
     {
         return $this->repo->operate_district_select2_district(request()->all());
     }
 
-    // 【地域管理】返回-列表-视图（全部任务）
+    // 【地域】返回-列表-视图（全部任务）
     public function view_item_district_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_district_list(request()->all());
@@ -671,13 +727,13 @@ class DKAdminController extends Controller
     }
 
 
-    // 【地域管理】添加
+    // 【地域】添加
     public function operate_item_district_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_district_create();
         else if (request()->isMethod('post')) return $this->repo->operate_item_district_save(request()->all());
     }
-    // 【地域管理】编辑
+    // 【地域】编辑
     public function operate_item_district_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_district_edit();
@@ -685,28 +741,28 @@ class DKAdminController extends Controller
     }
 
 
-    // 【地域管理】删除
+    // 【地域】删除
     public function operate_item_district_admin_delete()
     {
         return $this->repo->operate_item_district_admin_delete(request()->all());
     }
-    // 【地域管理】恢复
+    // 【地域】恢复
     public function operate_item_district_admin_restore()
     {
         return $this->repo->operate_item_district_admin_restore(request()->all());
     }
-    // 【地域管理】永久删除
+    // 【地域】永久删除
     public function operate_item_district_admin_delete_permanently()
     {
         return $this->repo->operate_item_district_admin_delete_permanently(request()->all());
     }
 
-    // 【地域管理】启用
+    // 【地域】启用
     public function operate_item_district_admin_enable()
     {
         return $this->repo->operate_item_district_admin_enable(request()->all());
     }
-    // 【地域管理】禁用
+    // 【地域】禁用
     public function operate_item_district_admin_disable()
     {
         return $this->repo->operate_item_district_admin_disable(request()->all());
@@ -722,88 +778,85 @@ class DKAdminController extends Controller
     /*
      * 项目管理
      */
-    // 【项目管理】返回-列表-视图（全部任务）
+    // 【项目】返回-列表-视图（全部任务）
     public function view_item_project_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_project_list(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_project_list_datatable(request()->all());
     }
-    // 【项目管理】【修改记录】返回-列表-视图（全部任务）
+    // 【项目】【修改记录】返回-列表-视图（全部任务）
     public function view_item_project_modify_record()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_project_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_project_modify_record_datatable(request()->all());
     }
-
-
-    // 【项目管理】添加
+    
+    // 【项目】添加
     public function operate_item_project_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_project_create();
         else if (request()->isMethod('post')) return $this->repo->operate_item_project_save(request()->all());
     }
-    // 【项目管理】编辑
+    // 【项目】编辑
     public function operate_item_project_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_project_edit();
         else if (request()->isMethod('post')) return $this->repo->operate_item_project_save(request()->all());
     }
-
-
-    // 【车辆管理】修改-文本-text-信息
+    
+    // 【项目】修改-文本-text-信息
     public function operate_item_project_info_text_set()
     {
         return $this->repo->operate_item_project_info_text_set(request()->all());
     }
-    // 【车辆管理】修改-时间-time-信息
+    // 【项目】修改-时间-time-信息
     public function operate_item_project_info_time_set()
     {
         return $this->repo->operate_item_project_info_time_set(request()->all());
     }
-    // 【车辆管理】修改-选项-option-信息
+    // 【项目】修改-选项-option-信息
     public function operate_item_project_info_option_set()
     {
         return $this->repo->operate_item_project_info_option_set(request()->all());
     }
-    // 【车辆管理】添加-附件-attachment-信息
+    // 【项目】添加-附件-attachment-信息
     public function operate_item_project_info_attachment_set()
     {
         return $this->repo->operate_item_project_info_attachment_set(request()->all());
     }
-    // 【车辆管理】删除-附件-attachment-信息
+    // 【项目】删除-附件-attachment-信息
     public function operate_item_project_info_attachment_delete()
     {
         return $this->repo->operate_item_project_info_attachment_delete(request()->all());
     }
-    // 【车辆管理】获取-附件-attachment-信息
+    // 【项目】获取-附件-attachment-信息
     public function operate_item_project_get_attachment_html()
     {
         return $this->repo->operate_item_project_get_attachment_html(request()->all());
     }
 
-
-    // 【项目管理】删除
+    // 【项目】删除
     public function operate_item_project_admin_delete()
     {
         return $this->repo->operate_item_project_admin_delete(request()->all());
     }
-    // 【项目管理】恢复
+    // 【项目】恢复
     public function operate_item_project_admin_restore()
     {
         return $this->repo->operate_item_project_admin_restore(request()->all());
     }
-    // 【项目管理】永久删除
+    // 【项目】永久删除
     public function operate_item_project_admin_delete_permanently()
     {
         return $this->repo->operate_item_project_admin_delete_permanently(request()->all());
     }
 
-    // 【项目管理】启用
+    // 【项目】启用
     public function operate_item_project_admin_enable()
     {
         return $this->repo->operate_item_project_admin_enable(request()->all());
     }
-    // 【项目管理】禁用
+    // 【项目】禁用
     public function operate_item_project_admin_disable()
     {
         return $this->repo->operate_item_project_admin_disable(request()->all());
