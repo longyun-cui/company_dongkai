@@ -9146,7 +9146,8 @@ class DKClientRepository {
             if($v['assign_status'] == 1) $cellData[$k]['assign_status'] = "已分配";
             else $cellData[$k]['assign_status'] = "未分配";
 
-            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+//            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+
             $cellData[$k]['client_name'] = $v['order_er']['client_name'];
             $cellData[$k]['client_phone'] = $v['order_er']['client_phone'];
 
@@ -9180,7 +9181,7 @@ class DKClientRepository {
 //            'creator_name'=>'创建人',
             'created_time'=>'交付时间',
             'assign_status'=>'是否分配',
-            'project_er_name'=>'项目',
+//            'project_er_name'=>'项目',
 //            'channel_source'=>'渠道来源',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
