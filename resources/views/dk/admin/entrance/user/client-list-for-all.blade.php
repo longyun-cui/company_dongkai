@@ -650,6 +650,7 @@
                             return '<a href="javascript:void(0);">'+data+'</a>';
                         }
                     },
+                    @if(in_array($me->user_type,[0,1,11,19]))
                     {
                         "title": "合作单价",
                         "data": "cooperative_unit_price",
@@ -672,6 +673,7 @@
                             return parseFloat(data);
                         }
                     },
+                    @endif
                     {
                         "title": "管理员名称",
                         "data": "client_admin_name",
