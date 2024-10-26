@@ -350,6 +350,14 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
     Route::post('/statistic/statistic-get-data-for-inspector', $controller.'@get_statistic_data_for_inspector');
 
 
+    // 月报
+    Route::match(['get','post'], '/statistic/statistic-delivery-by-daily', $controller.'@view_statistic_delivery_by_daily');
+    Route::post('/statistic/statistic-get-data-for-delivery', $controller.'@get_statistic_data_for_delivery');
+    Route::post('/statistic/statistic-get-data-for-delivery-of-project-list', $controller.'@get_statistic_data_for_delivery_of_project_list_datatable');
+    Route::post('/statistic/statistic-get-data-for-delivery-of-daily-list', $controller.'@get_statistic_data_for_delivery_of_daily_list_datatable');
+    Route::post('/statistic/statistic-get-data-for-delivery-of-daily-chart', $controller.'@get_statistic_data_for_delivery_of_daily_chart');
+
+
 
 
     /*

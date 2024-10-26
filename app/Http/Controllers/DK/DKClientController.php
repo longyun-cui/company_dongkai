@@ -690,6 +690,30 @@ class DKClientController extends Controller
 
 
 
+    // 【统计】业务报表
+    public function view_statistic_delivery_by_daily()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_delivery_by_daily(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery_by_daily(request()->all());
+    }
+    //
+    public function get_statistic_data_for_delivery_of_project_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_service_of_project_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_delivery_of_daily_list_datatable()
+    {
+        return $this->repo->get_statistic_data_for_delivery_of_daily_list_datatable(request()->all());
+    }
+    //
+    public function get_statistic_data_for_delivery_of_daily_chart()
+    {
+        return $this->repo->get_statistic_data_for_delivery_of_daily_chart(request()->all());
+    }
+
+
+
 
 
     /*
