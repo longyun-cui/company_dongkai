@@ -604,7 +604,9 @@
                                 $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
                             }
 
+                            @if(in_array($me->user_type,[0,1,11,19]))
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+                            @endif
 
                             var html =
                                 $html_edit+
