@@ -1134,6 +1134,65 @@ class DKAdminController extends Controller
 
 
 
+    /*
+     * Finance 财务
+     */
+    // 【订单管理】返回-列表-视图（全部任务）
+    public function view_finance_daily_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_daily_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_daily_list_datatable(request()->all());
+    }
+
+    // 【客户】【修改记录】返回-列表-视图（全部任务）
+    public function view_finance_daily_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_daily_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_daily_modify_record_datatable(request()->all());
+    }
+
+
+    // 【财务】添加
+    public function operate_finance_daily_list_build()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_daily_list_build();
+        else if (request()->isMethod('post')) return $this->repo->operate_finance_daily_list_build(request()->all());
+    }
+
+
+    // 【订单管理】修改-文本-信息
+    public function operate_finance_daily_info_text_set()
+    {
+        return $this->repo->operate_finance_daily_info_text_set(request()->all());
+    }
+    // 【订单管理】修改-时间-信息
+    public function operate_finance_daily_info_time_set()
+    {
+        return $this->repo->operate_finance_daily_info_time_set(request()->all());
+    }
+    // 【订单管理】修改-option-信息
+    public function operate_finance_daily_info_option_set()
+    {
+        return $this->repo->operate_finance_daily_info_option_set(request()->all());
+    }
+    // 【订单管理】修改-radio-信息
+    public function operate_finance_daily_info_radio_set()
+    {
+        return $this->repo->operate_finance_daily_info_option_set(request()->all());
+    }
+    // 【订单管理】修改-select-信息
+    public function operate_finance_daily_info_select_set()
+    {
+        return $this->repo->operate_finance_daily_info_option_set(request()->all());
+    }
+
+
+
+
+
+
+
+
 
 
 

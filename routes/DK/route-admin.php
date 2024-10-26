@@ -429,6 +429,29 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
 
+    /*
+     * finance 财务
+     */
+    // 列表
+    Route::match(['get','post'], '/finance/daily-list', $controller.'@view_finance_daily_list');
+    // 修改列表
+    Route::match(['get','post'], '/finance/daily-modify-record', $controller.'@view_finance_daily_modify_record');
+    // 创建 & 修改
+    Route::match(['get','post'], '/finance/daily-list-build', $controller.'@operate_finance_daily_list_build');
+    // 编辑-信息
+    Route::post('/finance/daily-info-text-set', $controller.'@operate_finance_daily_info_text_set');
+    Route::post('/finance/daily-info-time-set', $controller.'@operate_finance_daily_info_time_set');
+    Route::post('/finance/daily-info-radio-set', $controller.'@operate_finance_daily_info_option_set');
+    Route::post('/finance/daily-info-select-set', $controller.'@operate_finance_daily_info_option_set');
+    Route::post('/finance/daily-info-select2-set', $controller.'@operate_finance_daily_info_option_set');
+
+
+
+
+
+
+
+
 
 
 

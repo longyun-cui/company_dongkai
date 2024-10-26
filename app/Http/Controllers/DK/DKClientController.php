@@ -480,7 +480,12 @@ class DKClientController extends Controller
     }
 
 
-
+    // 【订单管理-修改记录】返回-列表-视图（全部任务）
+    public function view_item_order_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_order_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_order_modify_record_datatable(request()->all());
+    }
 
 
     // 【订单管理】添加
@@ -624,14 +629,19 @@ class DKClientController extends Controller
 
 
 
-    // 【订单管理-修改记录】返回-列表-视图（全部任务）
-    public function view_item_order_modify_record()
+
+
+
+
+    /*
+     * Finance 财务
+     */
+    // 【财务】返回-列表-视图（全部任务）
+    public function view_finance_daily_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_order_modify_record_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_finance_daily_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_daily_list_datatable(request()->all());
     }
-
-
 
 
 

@@ -90,7 +90,7 @@
 
             <li class="treeview {{ $menu_active_of_statistic_delivery_by_daily or '' }}">
                 <a href="{{ url('/statistic/statistic-delivery-by-daily') }}">
-                    <i class="fa fa-pie-chart text-green"></i> <span>交付日报</span>
+                    <i class="fa fa-bar-chart text-green"></i> <span>交付日报</span>
                 </a>
             </li>
 
@@ -107,6 +107,18 @@
                 </a>
             </li>
             @endif
+
+
+
+
+            {{--财务统计--}}
+            <li class="header">财务统计</li>
+
+            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
+                <a href="{{ url('/finance/daily-list') }}">
+                    <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
+                </a>
+            </li>
 
 
 

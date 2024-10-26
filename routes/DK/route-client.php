@@ -325,6 +325,17 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
 
 
 
+    /*
+     * finance 财务
+     */
+    // 列表
+    Route::match(['get','post'], '/finance/daily-list', $controller.'@view_finance_daily_list');
+
+
+
+
+
+
 
 
     /*

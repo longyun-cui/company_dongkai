@@ -14,13 +14,14 @@ use App\Models\DK\DK_Record;
 use App\Models\DK\DK_Client;
 
 use App\Models\DK_Client\DK_Client_User;
+use App\Models\DK_Client\DK_Client_Finance_Daily;
 
 use App\Models\DK\YH_Attachment;
 use App\Models\DK\YH_Item;
 
 use App\Repositories\Common\CommonRepository;
 
-use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon;
+use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
 use QrCode, Excel;
 
 class DKAdminRepository {
@@ -11325,6 +11326,708 @@ class DKAdminRepository {
         return datatable_response($list, $draw, $total);
     }
 
+
+
+
+
+
+
+
+    /*
+     * Finance 财务
+     */
+    // 【财务】返回-列表-视图
+    public function view_finance_daily_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        // 显示数量
+        if(!empty($post_data['record']))
+        {
+            if($post_data['record'] == 'record')
+            {
+                $this->record_for_user_operate(21,11,1,$me->id,0,71,0);
+            }
+        }
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 20;
+        }
+        else $view_data['length'] = 20;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+        // 日报ID
+        if(!empty($post_data['daily_id']))
+        {
+            if(is_numeric($post_data['daily_id']) && $post_data['daily_id'] > 0) $view_data['daily_id'] = $post_data['daily_id'];
+            else $view_data['daily_id'] = '';
+        }
+        else $view_data['daily_id'] = '';
+
+        // 提交日期
+        if(!empty($post_data['assign']))
+        {
+            if($post_data['assign']) $view_data['assign'] = $post_data['assign'];
+            else $view_data['assign'] = '';
+        }
+        else $view_data['assign'] = '';
+
+        // 起始时间
+        if(!empty($post_data['assign_start']))
+        {
+            if($post_data['assign_start']) $view_data['start'] = $post_data['assign_start'];
+            else $view_data['start'] = '';
+        }
+        else $view_data['start'] = '';
+
+        // 截止时间
+        if(!empty($post_data['assign_ended']))
+        {
+            if($post_data['assign_ended']) $view_data['ended'] = $post_data['assign_ended'];
+            else $view_data['ended'] = '';
+        }
+        else $view_data['ended'] = '';
+
+
+        // 类型
+        if(!empty($post_data['order_type']))
+        {
+            if(is_numeric($post_data['order_type']) && $post_data['order_type'] > 0) $view_data['order_type'] = $post_data['order_type'];
+            else $view_data['order_type'] = -1;
+        }
+        else $view_data['order_type'] = -1;
+
+
+        $client_list = DK_Client::select('id','username')->get();
+        $view_data['client_list'] = $client_list;
+
+
+//        dd($view_data);
+
+
+        $view_data['menu_active_of_finance_daily_list'] = 'active menu-open';
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.finance.daily-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【财务】返回-列表-数据
+    public function get_finance_daily_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Client_Finance_Daily::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
+            ->with(['creator','client_er']);
+
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+
+//        if(!empty($post_data['assign'])) $query->whereDate("assign_date", $post_data['assign']);
+//        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
+//        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+
+
+        // 客户
+        if(isset($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1]))
+            {
+                $query->where('client_id', $post_data['client']);
+            }
+        }
+
+
+        if(!empty($post_data['time_type']))
+        {
+            if($post_data['time_type'] == "month")
+            {
+                // 指定月份
+                if(!empty($post_data['month']))
+                {
+                    $month_arr = explode('-', $post_data['month']);
+                    $month_year = $month_arr[0];
+                    $month_month = $month_arr[1];
+                    $query->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+                }
+            }
+            else if($post_data['time_type'] == "date")
+            {
+                // 指定日期
+                if(!empty($post_data['date']))
+                {
+                    $query->whereDate("assign_date", $post_data['date']);
+                }
+            }
+            else if($post_data['time_type'] == "period")
+            {
+                if(!empty($post_data['assign_start']))
+                {
+                    $query->whereDate("assign_date", ">=", $post_data['assign_start']);
+                }
+                if(!empty($post_data['assign_ended']))
+                {
+                    $query->whereDate("assign_date", "<=", $post_data['assign_ended']);
+                }
+            }
+            else
+            {}
+        }
+
+
+        // 统计
+        $daily_total = (clone $query)->select(DB::raw("
+                    sum(delivery_quantity) as total_of_delivery_quantity,
+                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
+                    sum(total_daily_cost) as total_of_total_daily_cost
+                "))
+            ->first();
+//        dd($daily_total->toArray());
+//        $daily_total = $daily_total[0];
+
+
+        $total_data = [];
+        $total_data['id'] = '合计';
+        $total_data['name'] = '--';
+        $total_data['assign_date'] = '--';
+        $total_data['creator_id'] = 0;
+        $total_data['client_id'] = 0;
+
+        $total_data['delivery_quantity'] = $daily_total->total_of_delivery_quantity;
+        $total_data['delivery_quantity_of_invalid'] = $daily_total->total_of_delivery_quantity_of_invalid;
+        $total_data['cooperative_unit_price'] = '--';
+
+        $total_data['total_daily_cost'] = $daily_total->total_of_total_daily_cost;
+
+
+        $total_data['created_at'] = "--";
+        $total_data['updated_at'] = "--";
+        $total_data['description'] = "--";
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+            if($v->creator_id == $me->id)
+            {
+                $list[$k]->is_me = 1;
+                $v->is_me = 1;
+            }
+            else
+            {
+                $list[$k]->is_me = 0;
+                $v->is_me = 0;
+            }
+        }
+//        dd($list->toArray());
+
+        $list[] = $total_data;
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【财务】【修改记录】返回-列表-视图
+    public function view_finance_daily_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_client_modify_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-modify-list';
+        return view($view_blade)->with($return);
+    }
+    // 【财务】【修改记录】返回-列表-数据
+    public function get_finance_daily_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Record::select('*')
+            ->with(['creator'])
+            ->where(['record_object'=>21, 'operate_object'=>86,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【财务】返回-添加-视图
+    public function view_finance_daily_list_build()
+    {
+        $this->get_me();
+
+        $item_type = 'item';
+        $item_type_text = '财务日报';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/finance/daily-list';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['category'] = 'item';
+        $return['type'] = $item_type;
+        $return['item_type_text'] = $item_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.finance.daily-list-build';
+        return view($view_blade)->with($return);
+    }
+    // 【财务】保存数据
+    public function operate_finance_daily_list_build($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'assign_date.required' => '请填选择日期！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'assign_date' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        if($operate != 'daily-list-build') return response_error([],"参数[operate]有误！");
+
+        $assign_date = $post_data['assign_date'];
+        $format = 'Y-m-d';
+        $d = DateTime::createFromFormat($format, $assign_date);
+        if(!($d && $d->format($format) === $assign_date)) return response_error([],"日期不合法！");
+
+
+        $client_list = DK_Client::select('id','cooperative_unit_price')->get()->keyBy('id');
+//        dd($client_list->toArray());
+
+
+        // 交付统计
+        $delivery_statistic = DK_Pivot_Client_Delivery::select('id','client_id','created_at')
+            ->addSelect(DB::raw("
+                    FROM_UNIXTIME(created_at,'%Y-%m-%d') as formatted_date,
+                    FROM_UNIXTIME(created_at,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(created_at,'%e') as day,
+                    count(*) as total_of_count
+                "))
+            ->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign_date'])
+            ->groupBy(DB::raw("DATE(FROM_UNIXTIME(created_at))"))
+            ->groupBy('client_id')
+            ->get();
+//        dd($delivery_statistic->toArray());
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            // 指派日期
+            if(!empty($post_data['assign_date']))
+            {
+                $post_data['assign_time'] = strtotime($post_data['assign_date']);
+            }
+//            else $post_data['assign_time'] = 0;
+
+            foreach($delivery_statistic as $k => $v)
+            {
+                $mine_data['client_id'] = $v->client_id;
+                $mine_data['assign_date'] = $assign_date;
+                $mine_data['cooperative_unit_price'] = $client_list[$v->client_id]->cooperative_unit_price;
+                $mine_data['delivery_quantity'] = $v->total_of_count;
+                $mine_data['total_daily_cost'] = $mine_data['cooperative_unit_price'] * $v->total_of_count;
+
+                $mine = DK_Client_Finance_Daily::where(['client_id'=>$v->client_id,'assign_date'=>$assign_date])->first();
+                if($mine)
+                {
+                }
+                else
+                {
+                    $mine = new DK_Client_Finance_Daily;
+                    $bool = $mine->fill($mine_data)->save();
+                    if($bool)
+                    {
+                    }
+                    else throw new Exception("insert--DK_Client_Finance_Daily--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【财务】【文本-信息】设置-文本-类型
+    public function operate_finance_daily_info_text_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'finance-daily-info-text-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client_Finance_Daily::withTrashed()->lockForUpdate()->find($id);
+        if(!$item) return response_error([],"该【财务日报】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $item->total_daily_cost = ($item->delivery_quantity - $item->delivery_quantity_of_invalid) * $item->cooperative_unit_price;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 86;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【财务】【时间-信息】修改-时间-类型
+    public function operate_finance_daily_info_time_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'finance-daily-info-time-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client_Finance_Daily::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【财务日报】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+        $time_type = $post_data["time_type"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$column_key = strtotime($column_value);
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 86;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_type"] = $time_type;
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = strtotime($column_value);
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【财务】【选项-信息】修改-radio-select-[option]-类型
+    public function operate_finance_daily_info_option_set($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'finance-daily-info-option-set') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client_Finance_Daily::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【财务报告】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $operate_type = $post_data["operate_type"];
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+        $before = $item->$column_key;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $item->timestamps = false;
+            $item->$column_key = $column_value;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                // 需要记录(本人修改已发布 || 他人修改)
+                if($me->id == $item->creator_id && $item->is_published == 0 && false)
+                {
+                }
+                else
+                {
+                    $record = new DK_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["item_id"] = $id;
+                    $record_data["operate_object"] = 86;
+                    $record_data["operate_category"] = 1;
+
+                    if($operate_type == "add") $record_data["operate_type"] = 1;
+                    else if($operate_type == "edit") $record_data["operate_type"] = 11;
+
+                    $record_data["column_name"] = $column_key;
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $column_value;
+
+                    if(in_array($column_key,['leader_id']))
+                    {
+                        $record_data["before_id"] = $before;
+                        $record_data["after_id"] = $column_value;
+                    }
+
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if($bool_1)
+                    {
+                    }
+                    else throw new Exception("insert--record--fail");
+                }
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 
 

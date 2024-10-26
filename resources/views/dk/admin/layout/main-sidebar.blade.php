@@ -149,6 +149,20 @@
 
 
 
+            @if(in_array($me->user_type,[0,1,9,11]))
+            {{--财务统计--}}
+            <li class="header">财务统计</li>
+
+            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
+                <a href="{{ url('/finance/daily-list') }}">
+                    <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
+                </a>
+            </li>
+            @endif
+
+
+
+
             {{--数据统计--}}
             <li class="header">数据统计</li>
 
