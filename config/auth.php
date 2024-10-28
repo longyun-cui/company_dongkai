@@ -88,6 +88,17 @@ return [
             'provider' => 'dk_finance_users',
         ],
 
+
+        'dk_customer' => [
+            'driver' => 'session',
+            'provider' => 'dk_customers',
+        ],
+
+        'dk_customer_staff' => [
+            'driver' => 'session',
+            'provider' => 'dk_customers_staffs',
+        ],
+
     ],
 
     /*
@@ -159,6 +170,17 @@ return [
         'dk_finance_users' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK_Finance\DK_Finance_User::class,
+        ],
+
+
+        'dk_customers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK\DK_Customer::class,
+        ],
+
+        'dk_customers_staffs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK_Customer\DK_Customer_User::class,
         ],
 
     ],

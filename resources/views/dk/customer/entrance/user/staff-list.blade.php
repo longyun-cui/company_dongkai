@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_CLIENT').'layout.layout')
+@extends(env('TEMPLATE_DK_CUSTOMER').'layout.layout')
 
 
 @section('head_title')
@@ -512,5 +512,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_DK_CLIENT').'entrance.user.staff-list-script')
+@include(env('TEMPLATE_DK_CUSTOMER').'entrance.user.staff-list-script')
 @endsection

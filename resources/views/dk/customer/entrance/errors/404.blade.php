@@ -1,7 +1,7 @@
-@extends(env('TEMPLATE_DK_CLIENT').'layout.layout')
+@extends(env('TEMPLATE_DK_CUSTOMER').'layout.layout')
 
 
-@section('head_title','403 权限不足')
+@section('head_title','404 页面不存在或参数有误')
 @section('meta_title')@endsection
 @section('meta_author')@endsection
 @section('meta_description')@endsection
@@ -23,11 +23,11 @@
 
                 <h1 class="headline- text-yellow">
                     <i class="fa fa-warning" style="width:auto;margin-right:4px;font-size:24px;"></i>
-                    403.
+                    404.
                 </h1>
 
                 <p>
-                    真遗憾，您没有权限！
+                    真遗憾，您访问的页面好像被劫持了。
                 </p>
 
                 <h3 style="display:none;"><i class="fa fa-warning text-yellow"></i> Oops! Page not found.</h3>
@@ -35,10 +35,10 @@
                 <h4 style="margin-top:32px;font-size:20px;font-weight:300;">
                     {{--<i class="fa fa-warning text-yellow" style="width:24px;margin-right:8px;"></i>--}}
                     {{--抱歉--}}
-                    {{ $error["text"] or '您没有权限！' }}
+                    {{ $error["text"] or '页面不存在或者参数有误！' }}
                 </h4>
                 <p>
-{{--                    {{ $error["text"] or '您没有权限！' }}--}}
+{{--                    {{ $error["text"] or '页面不存在或者参数有误！' }}--}}
                 </p>
 
                 <div style="margin-top:32px;margin-bottom:16px;">
@@ -90,9 +90,7 @@
 @section('custom-script')
 <script>
     $(function () {
-        console.log(window.location.href);
-        console.log(document.referrer);
-        setTimeout(ChangeTime, 1000);
+        setTimeout(ChangeTime, 1200);
     });
 
     function ChangeTime()
@@ -103,11 +101,6 @@
         time--;
 
         if (time <= 0) {
-            {{--if(!document.referrer || window.location.href == document.referrer)--}}
-            {{--{--}}
-            {{--    window.location.href = "{{ url('/') }}";--}}
-            {{--}--}}
-            {{--else window.location.href = document.referrer;--}}
             window.location.href = "{{ url('/') }}";
         }
         else {

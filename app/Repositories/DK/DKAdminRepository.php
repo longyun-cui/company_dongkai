@@ -1633,7 +1633,7 @@ class DKAdminRepository {
         $client = DK_Client::withTrashed()->find($id);
         if(!$client) return response_error([],"该客户不存在，刷新页面重试！");
 
-        $client_staff = DK_Client_User::withTrashed()->where('client_id',$client->id);
+        $client_staff = DK_Client_User::withTrashed()->where('client_id',$client->id)->first();
         if(!$client_staff) return response_error([],"该客户不存在，刷新页面重试！");
 
         $this->get_me();

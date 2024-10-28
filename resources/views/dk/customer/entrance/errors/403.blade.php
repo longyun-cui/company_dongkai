@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_CLIENT').'layout.layout')
+@extends(env('TEMPLATE_DK_CUSTOMER').'layout.layout')
 
 
 @section('head_title','403 权限不足')
