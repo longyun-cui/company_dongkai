@@ -23,15 +23,31 @@ class DK_Client extends Authenticatable
         'creator_id', 'parent_id', 'p_id',
         'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
         'mobile', 'telephone', 'email', 'password',
-
         'wx_unionid',
-        'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id', 'superior_id',
-        'district_category', 'district_type', 'district_id',
-        'is_ip', 'ip_whitelist',
 
-        'client_admin_id', 'client_admin_name', 'client_admin_mobile',
+        'department_district_id',
+        'department_group_id',
+        'department_manager_id',
+        'department_supervisor_id',
+        'superior_id',
 
-        'introduction_id', 'advertising_id',
+        'district_category',
+        'district_type',
+        'district_id',
+
+        'is_ip',
+        'ip_whitelist',
+
+        'client_admin_id',
+        'client_admin_name',
+        'client_admin_mobile',
+
+        'cooperative_unit_price',
+        'funds_recharge_total',
+        'funds_consumption_total',
+
+        'introduction_id',
+        'advertising_id',
 
         'QQ_number',
         'wx_id',

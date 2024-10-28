@@ -76,6 +76,10 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     // 启用 & 禁用
     Route::post('/user/client-admin-enable', $controller.'@operate_user_client_admin_enable');
     Route::post('/user/client-admin-disable', $controller.'@operate_user_client_admin_disable');
+    // 财务
+    Route::match(['get','post'], '/user/client-company-recharge-record', $controller.'@view_user_client_recharge_record');
+    Route::post('/user/client-finance-recharge-create', $controller.'@operate_user_client_finance_recharge_create');
+    Route::post('/user/client-finance-recharge-edit', $controller.'@operate_user_client_finance_recharge_edit');
 
 
 

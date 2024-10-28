@@ -12,6 +12,8 @@ use App\Models\DK\DK_Pivot_Team_Project;
 use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Record;
 use App\Models\DK\DK_Client;
+use App\Models\DK\DK_Funds_Recharge;
+use App\Models\DK\DK_Funds_Using;
 
 use App\Models\DK_Client\DK_Client_User;
 use App\Models\DK_Client\DK_Client_Finance_Daily;
@@ -1767,6 +1769,314 @@ class DKAdminRepository {
             return response_fail([],$msg);
         }
 
+    }
+
+
+
+
+
+    // 【客户】【财务往来记录】返回-列表-视图
+    public function view_user_client_finance_recharge_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','username')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_order_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.item.order-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【客户】【财务往来记录】返回-列表-数据
+    public function get_user_client_recharge_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Finance_Funds_Recharge::select('*')
+            ->with(['creator','confirmer','company_er'])
+            ->where(['company_id'=>$id]);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        if(!empty($post_data['type']))
+        {
+            if($post_data['type'] == "income")
+            {
+                $query->where('finance_type', 1);
+            }
+            else if($post_data['type'] == "refund")
+            {
+                $query->where('finance_type', 21);
+            }
+        }
+
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,21]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【客户】添加-财务数据-保存数据（充值）
+    public function operate_user_client_finance_recharge_create($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'client_id.required' => 'client_id.required.',
+            'transaction_date.required' => '请选择交易日期！',
+            'transaction_title.required' => '请填写费用类型！',
+            'transaction_type.required' => '请填写支付方式！',
+            'transaction_amount.required' => '请填写金额！',
+//            'transaction_account.required' => '请填写交易账号！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'client_id' => 'required',
+            'transaction_date' => 'required',
+            'transaction_title' => 'required',
+            'transaction_type' => 'required',
+            'transaction_amount' => 'required',
+//            'transaction_account' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 权限
+        if(!in_array($me->user_type,[0,1,11])) return response_error([],"你没有操作权限！");
+
+
+//        $operate = $post_data["operate"];
+//        $operate_id = $post_data["operate_id"];
+
+        $transaction_date = $post_data['transaction_date'];
+        $transaction_date_timestamp = strtotime($post_data['transaction_date']);
+        if($transaction_date_timestamp > time('Y-m-d')) return response_error([],"指定日期不能大于今天！");
+
+        $client_id = $post_data["client_id"];
+        $client = DK_Client::find($client_id);
+        if(!$client) return response_error([],"该【客户】不存在，刷新页面重试！");
+
+        // 交易类型 收入 || 支出
+        $finance_type = $post_data["finance_type"];
+        if(!in_array($finance_type,[1,91,101])) return response_error([],"交易类型错误！");
+
+        $transaction_amount = $post_data["transaction_amount"];
+        if(!is_numeric($transaction_amount)) return response_error([],"交易金额必须为数字！");
+//        if($transaction_amount <= 0) return response_error([],"交易金额必须大于零！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $FinanceRecord = new DK_Funds_Recharge;
+
+//            if(in_array($me->user_type,[11,19,41,42]))
+//            {
+//                $FinanceRecord_data['is_confirmed'] = 1;
+//            }
+
+            $FinanceRecord_data['creator_id'] = $me->id;
+            $FinanceRecord_data['finance_category'] = 11;
+            $FinanceRecord_data['finance_type'] = $finance_type;
+            $FinanceRecord_data['client_id'] = $post_data["client_id"];
+            $FinanceRecord_data['title'] = $post_data["transaction_title"];
+            $FinanceRecord_data['transaction_date'] = $transaction_date;
+            $FinanceRecord_data['transaction_time'] = $transaction_date_timestamp;
+            $FinanceRecord_data['transaction_type'] = $post_data["transaction_type"];
+            $FinanceRecord_data['transaction_amount'] = $post_data["transaction_amount"];
+//            $FinanceRecord_data['transaction_account'] = $post_data["transaction_account"];
+            $FinanceRecord_data['transaction_receipt_account'] = $post_data["transaction_receipt_account"];
+            $FinanceRecord_data['transaction_payment_account'] = $post_data["transaction_payment_account"];
+            $FinanceRecord_data['transaction_order'] = $post_data["transaction_order"];
+            $FinanceRecord_data['description'] = $post_data["transaction_description"];
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['operate_category']);
+            unset($mine_data['operate_type']);
+
+            $bool = $FinanceRecord->fill($FinanceRecord_data)->save();
+            if($bool)
+            {
+                $client = DK_Client::lockForUpdate()->find($client_id);
+
+//                if(in_array($me->user_type,[11,19,41,42]))
+                if(in_array($me->user_type,[-1]))
+                {
+                    if($finance_type == 1)
+                    {
+                        $client->funds_recharge_total = $client->funds_recharge_total + $transaction_amount;
+//                        $client->funds_balance = $client->funds_balance + $transaction_amount;
+                    }
+                    else if($finance_type == 101)
+                    {
+                        $client->funds_recharge_total = $client->funds_recharge_total - $transaction_amount;
+//                        $client->funds_balance = $company->funds_balance - $transaction_amount;
+                    }
+                }
+                else
+                {
+                    if($finance_type == 1)
+                    {
+                        $client->funds_recharge_total = $client->funds_recharge_total + $transaction_amount;
+//                        $client->funds_balance = $client->funds_balance + $transaction_amount;
+                    }
+                    else if($finance_type == 101)
+                    {
+                        $client->funds_recharge_total = $client->funds_recharge_total - $transaction_amount;
+//                        $client->funds_balance = $client->funds_balance - $transaction_amount;
+                    }
+                }
+
+                $bool_1 = $client->save();
+                if($bool_1)
+                {
+                }
+                else throw new Exception("update--company--fail");
+            }
+            else throw new Exception("insert--finance--fail");
+
+            DB::commit();
+            return response_success(['id'=>$FinanceRecord->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【客户】【结算】返回-列表-视图
+    public function view_company_funds_using_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = YH_User::select('id','username')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_order_list_for_all'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_FINANCE').'entrance.item.order-list-for-all';
+        return view($view_blade)->with($return);
+    }
+    // 【客户】【结算】返回-列表-数据
+    public function get_company_funds_using_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $project_list = DK_Finance_Project::select('id')->where('channel_id',$id)->get()->toArray();
+        $query = DK_Finance_Funds_Using::select('*')
+            ->with(['creator','confirmer','project_er'])
+            ->whereIn('project_id',$project_list);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        if(!empty($post_data['type']))
+        {
+            if($post_data['type'] == "income")
+            {
+                $query->where('finance_type', 1);
+            }
+            else if($post_data['type'] == "refund")
+            {
+                $query->where('finance_type', 21);
+            }
+        }
+
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,21]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
     }
 
 

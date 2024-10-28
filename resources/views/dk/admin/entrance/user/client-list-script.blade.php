@@ -731,6 +731,197 @@
 
 
 
+
+
+
+
+        // 【财务记录】添加-显示
+        $(".main-content").on('click', ".item-modal-show-for-recharge", function() {
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+            var $row = $that.parents('tr');
+            var $name = $row.find('.client-name').html();
+
+
+            $('input[name="finance-create-client-id"]').val($id);
+            $('.finance-create-client-name').html($name);
+
+            $('#modal-body-for-finance-create').modal('show');
+
+            // $('#modal-body-for-finance-create').modal({show: true,backdrop: 'static'});
+            // $('.modal-backdrop').each(function() {
+            //     $(this).attr('id', 'id_' + Math.random());
+            // });
+
+        });
+        // 【财务记录】添加-取消
+        $(".main-content").on('click', "#item-cancel-for-finance-create", function() {
+            var that = $(this);
+            $('input[name=detect-set-id]').val(0);
+            $('.detect-set-keyword').html('');
+            $('.detect-set-id').html(0);
+            $('.detect-set-date').html('');
+            $('.detect-set-original-rank').html('');
+            $('input[name=detect-set-rank]').val('');
+
+            $('#modal-body-for-finance-create').modal('hide').on("hidden.bs.modal", function () {
+                $("body").addClass("modal-open");
+            });
+        });
+        // 【财务记录】添加-提交
+        $(".main-content").on('click', "#item-submit-for-finance-create", function() {
+            var that = $(this);
+            layer.msg('确定"提交"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    $.post(
+                        "{{ url('/user/client-finance-recharge-create') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: $('input[name="finance-create-operate"]').val(),
+                            client_id: $('input[name="finance-create-client-id"]').val(),
+                            finance_type: $("input[name='finance-create-type']:checked").val(),
+                            transaction_amount: $('input[name="finance-create-transaction-amount"]').val(),
+                            transaction_date: $('input[name="finance-create-transaction-date"]').val(),
+                            transaction_type: $('input[name="finance-create-transaction-type"]').val(),
+//                            transaction_account: $('input[name="finance-create-transaction-account"]').val(),
+                            transaction_receipt_account: $('input[name="finance-create-transaction-receipt-account"]').val(),
+                            transaction_payment_account: $('input[name="finance-create-transaction-payment-account"]').val(),
+                            transaction_order: $('input[name="finance-create-transaction-order"]').val(),
+                            transaction_title: $('input[name="finance-create-transaction-title"]').val(),
+                            transaction_description: $('textarea[name="finance-create-transaction-description"]').val(),
+                        },
+                        function(data){
+
+                            layer.close(index);
+                            layer.closeAll('loading');
+
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+                                // location.reload();
+
+                                $("#modal-form-for-finance-create").find('input[type=text], textarea').each(function () {
+                                    $(this).val($(this).attr('data-default'));
+                                });
+                                $("#modal-form-for-finance-create").find("input[name=finance-create-type][value='1']").click();
+
+                                $('#modal-body-for-finance-create').modal('hide').on("hidden.bs.modal", function () {
+                                    $("body").addClass("modal-open");
+                                });
+
+//                                TableDatatablesAjax_finance.init($('input[name="finance-create-order-id"]').val());
+
+                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                // $('#datatable_ajax_finance').DataTable().ajax.reload(null, false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+        // 【财务记录】【显示】
+        $(".main-content").on('click', ".item-modal-show-for-recharge-record", function() {
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+        // 【财务记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-finance", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+
+
+        // 【财务记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-recharge", function() {
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+
+            TableDatatablesAjax_finance.init($id);
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+        // 【财务-收入-记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-finance-income", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id,"income");
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+        // 【财务-支出-记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-finance-expenditure", function() {
+            var that = $(this);
+            var $id = that.attr("data-id");
+            var $keyword = that.attr("data-keyword");
+
+            $('input[name="finance-create-order-id"]').val($id);
+            $('.finance-create-order-id').html($id);
+            $('.finance-create-order-title').html($keyword);
+
+            TableDatatablesAjax_finance.init($id,"expenditure");
+
+            $('#modal-body-for-finance-list').modal('show');
+        });
+
+
+
+
+        // 【财务记录】【显示】
+        $(".main-content").on('dblclick', ".item-show-for-using", function() {
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+
+            TableDatatablesAjax_funds_using.init($id);
+
+            $('#modal-body-for-funds_using-list').modal('show');
+        });
+
+
+
+
         // 【修改记录】【显示】
         $(".main-content").on('click', ".item-modal-show-for-modify", function() {
             var that = $(this);

@@ -21,6 +21,24 @@
     <div class="col-md-12">
         <div class="callout callout-success- bg-white">
 
+            <h4>财务统计</h4>
+
+            <div class="callout-body">
+                <span>累计充值 <text class="text-black font-24px">{{ $funds_recharge_total }}</text> 元</span>
+                <span>累计消费 <text class="text-teal font-24px">{{ $funds_consumption_total }}</text> 元</span>
+                <span>余额 <text class="text-red font-24px">{{ $funds_balance }}</text> 元</span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{{--订单统计--}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="callout callout-success- bg-white">
+
             <h4>工单统计</h4>
 
             <div class="callout-body">

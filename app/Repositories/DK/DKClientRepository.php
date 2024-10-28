@@ -144,6 +144,24 @@ class DKClientRepository {
         $return['statistics_order_last_month_data'] = $statistics_order_last_month_data;
 
 
+        ;
+
+        // 统计
+        $daily_total = DK_Client_Finance_Daily::select('*')
+            ->select(DB::raw("
+                    sum(delivery_quantity) as total_of_delivery_quantity,
+                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
+                    sum(total_daily_cost) as total_of_total_daily_cost
+                "))
+            ->where('client_id',$me->client_id)
+            ->first();
+        $funds_recharge_total = floatval($me->client_er->funds_recharge_total);
+        $funds_consumption_total = floatval($daily_total->total_of_total_daily_cost);
+        $funds_balance = floatval($funds_recharge_total - $funds_consumption_total);
+
+        $return['funds_recharge_total'] = format_number($funds_recharge_total);
+        $return['funds_consumption_total'] = format_number($funds_consumption_total);
+        $return['funds_balance'] = format_number($funds_balance);
 
         $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.index';
         return view($view_blade)->with($return);

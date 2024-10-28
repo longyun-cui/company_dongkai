@@ -405,6 +405,340 @@
 </div>
 
 
+{{--充值列表--}}
+<div class="modal fade modal-main-body" id="modal-body-for-finance-list">
+    <div class="col-md-10 col-md-offset-1 margin-top-32px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">财务记录</h3>
+
+                <div class="box-tools- pull-right">
+                    <a href="javascript:void(0);">
+                        <button type="button" class="btn btn-success pull-right modal-show-for-finance-create">
+                            <i class="fa fa-plus"></i> 添加记录
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="box-body datatable-body" id="datatable-for-finance-list">
+
+                <div class="row col-md-12 datatable-search-row">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control form-filter filter-keyup" name="finance-title" placeholder="费用类型" />
+
+                        <select class="form-control form-filter" name="finance-finance_type" style="width:96px;">
+                            <option value ="-1">选择</option>
+                            <option value ="1">充值</option>
+                            <option value ="101">退款</option>
+                        </select>
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-finance">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-finance">
+                            <i class="fa fa-circle-o-notch"></i> 重置
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="tableArea">
+                    <table class='table table-striped table-bordered' id='datatable_ajax_finance'>
+                        <thead>
+                        <tr role='row' class='heading'>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-4 col-sm-8 col-xs-12">
+                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
+                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
+                        <div class="input-group">
+                            <span class="input-group-addon"><input type="checkbox" id="check-all"></span>
+                            <input type="text" class="form-control" name="bulk-detect-rank" id="bulk-detect-rank" placeholder="指定排名">
+                            <span class="input-group-addon btn btn-default" id="set-rank-bulk-submit"><i class="fa fa-check"></i>提交</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{{--添加财务记录--}}
+<div class="modal fade modal-main-body" id="modal-body-for-finance-create">
+    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px">
+                <h3 class="box-title">添加财务记录</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <form action="" method="post" class="form-horizontal form-bordered " id="modal-form-for-finance-create">
+                <div class="box-body">
+
+                    {{ csrf_field() }}
+                    <input type="hidden" name="finance-create-operate" value="finance-create-record" readonly>
+                    <input type="hidden" name="finance-create-client-id" value="0" readonly>
+
+
+
+                    {{--订单ID--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="finance-create-client-name"></span>
+                        </div>
+                    </div>
+                    {{--关键词--}}
+                    <div class="form-group _none">
+                        <label class="control-label col-md-2">关键词</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="finance-create-order-title"></span>
+                        </div>
+                    </div>
+                    {{--交易类型--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 交易类型</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <button type="button" class="btn radio">
+                                <label>
+                                    <input type="radio" name="finance-create-type" value=1 checked="checked"> 充值
+                                </label>
+                            </button>
+                            <button type="button" class="btn radio">
+                                <label>
+                                    <input type="radio" name="finance-create-type" value=101> 退款
+                                </label>
+                            </button>
+                        </div>
+                    </div>
+                    {{--日期--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 日期</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control form-filter form_date" name="finance-create-transaction-date" readonly="readonly" />
+                        </div>
+                    </div>
+                    {{--金额--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 金额</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-amount" placeholder="金额" value="">
+                        </div>
+                    </div>
+                    {{--费用名目--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 费用名目</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-title" placeholder="费用名目" value="" list="_transaction_title">
+                        </div>
+                    </div>
+                    <datalist id="_transaction_title">
+                        <option value="充值" />
+                        <option value="退款" />
+                        <option value="其他" />
+                    </datalist>
+                    {{--支付方式--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 支付方式</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-type" placeholder="支付方式" value="" list="_transaction_type">
+                        </div>
+                    </div>
+                    <datalist id="_transaction_type">
+                        <option value="银行转账" />
+                        <option value="微信" />
+                        <option value="支付宝" />
+                        <option value="现金" />
+                        <option value="其他" />
+                    </datalist>
+                    {{--收款账号--}}
+                    <div class="form-group income-show-">
+                        <label class="control-label col-md-2">收款账号</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control search-input" id="keyword" name="finance-create-transaction-receipt-account" placeholder="收款账号" value="" list="_transaction_receipt_account" autocomplete="on">
+                        </div>
+                    </div>
+                    <datalist id="_transaction_receipt_account">
+                        <option value="账户" class="" />
+                    </datalist>
+                    {{--支出账号--}}
+                    <div class="form-group income-show-">
+                        <label class="control-label col-md-2">支出账号</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control search-input" id="keywords" name="finance-create-transaction-payment-account" placeholder="支出账号" value="" list="_transaction_payment_account" autocomplete="on">
+                        </div>
+                    </div>
+                    <datalist id="_transaction_payment_account">
+                        <option value="账户" class="" />
+                    </datalist>
+                    {{--交易账号--}}
+                    {{--<div class="form-group income-show-">--}}
+                    {{--<label class="control-label col-md-2">交易账号</label>--}}
+                    {{--<div class="col-md-8 ">--}}
+                    {{--<input type="text" class="form-control" name="finance-create-transaction-account" placeholder="交易账号" value="">--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
+                    {{--交易单号--}}
+                    <div class="form-group income-show-">
+                        <label class="control-label col-md-2">交易单号</label>
+                        <div class="col-md-8 ">
+                            <input type="text" class="form-control" name="finance-create-transaction-order" placeholder="交易单号" value="">
+                        </div>
+                    </div>
+                    {{--备注--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">备注</label>
+                        <div class="col-md-8 ">
+                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="">--}}
+                            <textarea class="form-control" name="finance-create-transaction-description" rows="3" cols="100%"></textarea>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <button type="button" class="btn btn-success" id="item-submit-for-finance-create"><i class="fa fa-check"></i> 提交</button>
+                        <button type="button" class="btn btn-default" id="item-cancel-for-finance-create">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{{--结算列表--}}
+<div class="modal fade modal-main-body" id="modal-body-for-funds_using-list">
+    <div class="col-md-10 col-md-offset-1 margin-top-32px margin-bottom-64px bg-white">
+
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px margin-bottom-16px">
+                <h3 class="box-title">结算记录</h3>
+
+                <div class="box-tools- pull-right _none">
+                    <a href="javascript:void(0);">
+                        <button type="button" class="btn btn-success pull-right modal-show-for-funds_using-create">
+                            <i class="fa fa-plus"></i> 添加记录
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="box-body datatable-body" id="datatable-for-funds_using-list">
+
+                <div class="row col-md-12 datatable-search-row">
+                    <div class="input-group">
+
+                        <input type="text" class="form-control form-filter filter-keyup" name="funds_using-title" placeholder="费用类型" />
+
+                        <select class="form-control form-filter" name="funds_using-finance_type" style="width:96px;">
+                            <option value ="-1">选择</option>
+                            <option value ="1">充值</option>
+                            <option value ="101">退款</option>
+                        </select>
+
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-funds_using">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-funds_using">
+                            <i class="fa fa-circle-o-notch"></i> 重置
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="tableArea">
+                    <table class='table table-striped table-bordered' id='datatable_ajax_funds_using'>
+                        <thead>
+                        <tr role='row' class='heading'>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="box-footer _none">
+                <div class="row" style="margin:16px 0;">
+                    <div class="col-md-offset-0 col-md-4 col-sm-8 col-xs-12">
+                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
+                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
+                        <div class="input-group">
+                            <span class="input-group-addon"><input type="checkbox" id="check-all"></span>
+                            <input type="text" class="form-control" name="bulk-detect-rank" id="bulk-detect-rank" placeholder="指定排名">
+                            <span class="input-group-addon btn btn-default" id="set-rank-bulk-submit"><i class="fa fa-check"></i>提交</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
 {{--修改列表--}}
 <div class="modal fade modal-main-body" id="modal-body-for-modify-list">
     <div class="col-md-8 col-md-offset-2 margin-top-32px margin-bottom-64px bg-white">
@@ -575,6 +909,7 @@
                             var $html_push = '';
                             var $html_deliver = '';
                             var $html_distribute = '';
+                            var $html_recharge = '';
 
 
                             if(row.user_status == 1)
@@ -606,12 +941,14 @@
 
                             @if(in_array($me->user_type,[0,1,11,19]))
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+                            $html_recharge = '<a class="btn btn-xs bg-orange item-modal-show-for-recharge" data-id="'+data+'">充值</a>';
                             @endif
 
                             var html =
                                 $html_edit+
                                 '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
                                 $html_able+
+                                $html_recharge+
                                 $html_record+
 //                                $html_delete+
 //                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
@@ -645,7 +982,7 @@
                     {
                         "title": "客户名称",
                         "data": "username",
-                        "className": "",
+                        "className": "client-name",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -669,6 +1006,24 @@
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "累计充值",
+                        "data": "funds_recharge_total",
+                        "className": "item-show-for-recharge",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','累充金额');
+                                $(nTd).attr('data-key','funds_recharge_total').attr('data-value',data);
+                                $(nTd).attr('data-column-name','累充金额');
                             }
                         },
                         render: function(data, type, row, meta) {

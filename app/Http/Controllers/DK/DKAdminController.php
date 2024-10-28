@@ -242,6 +242,24 @@ class DKAdminController extends Controller
         return $this->repo->operate_client_get_attachment_html(request()->all());
     }
 
+    // 【客户】登录
+    public function operate_user_client_login()
+    {
+        $user_id = request()->get('user_id');
+        $user = DK_Client::select('*')->find($user_id);
+        if($user)
+        {
+            Auth::guard('dk_client')->login($user,true);
+
+            $return['user'] = $user;
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_CLIENT'));
+            else if(request()->isMethod('post')) return response_success($return);
+        }
+        else return response_error([]);
+
+    }
+
     // 【客户】修改-密码
     public function operate_user_client_password_admin_change()
     {
@@ -264,23 +282,34 @@ class DKAdminController extends Controller
         return $this->repo->operate_user_client_admin_disable(request()->all());
     }
 
-    // 【客户】客户-登录
-    public function operate_user_client_login()
+
+
+    // 【客户】【财务往来记录-充值】返回-列表-视图（全部任务）
+    public function view_user_client_finance_recharge_record()
     {
-        $user_id = request()->get('user_id');
-        $user = DK_Client::select('*')->find($user_id);
-        if($user)
-        {
-            Auth::guard('dk_client')->login($user,true);
-
-            $return['user'] = $user;
-
-            if(request()->isMethod('get')) return redirect(env('DOMAIN_CLIENT'));
-            else if(request()->isMethod('post')) return response_success($return);
-        }
-        else return response_error([]);
-
+        if(request()->isMethod('get')) return $this->repo->view_user_client_finance_recharge_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_client_recharge_record_datatable(request()->all());
     }
+
+    // 【客户】【财务往来记录-充值】添加-财务数据-保存数据（充值）
+    public function operate_user_client_finance_recharge_create()
+    {
+        return $this->repo->operate_user_client_finance_recharge_create(request()->all());
+    }
+    // 【客户】【财务往来记录-充值】修改-财务数据-保存数据（充值）
+    public function operate_user_client_finance_recharge_edit()
+    {
+        return $this->repo->operate_user_client_finance_recharge_edit(request()->all());
+    }
+
+
+    // 【客户】【财务往来记录-使用】返回-列表-视图（全部任务）
+    public function view_user_client_funds_using_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_company_funds_using_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_company_funds_using_record_datatable(request()->all());
+    }
+
 
 
 
