@@ -30,6 +30,7 @@ class DK_Customer_User extends Authenticatable
         'introduction_id', 'advertising_id',
 
         'client_id',
+        'customer_id',
         'department_id',
 
         'QQ_number',
@@ -84,6 +85,12 @@ class DK_Customer_User extends Authenticatable
     function client_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
+    }
+
+    // 所属客户
+    function customer_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Customer','customer_id','id');
     }
 
 

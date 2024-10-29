@@ -64,16 +64,6 @@
                 <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
-                            <th>ID</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -352,24 +342,6 @@
 //                            else return '--';
 //                        }
 //                    },
-                    {
-                        "title": "浏览",
-                        "width": "40px",
-                        "data": "visit_num",
-                        "orderable": true,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "分享",
-                        "width": "40px",
-                        "data": "share_num",
-                        "orderable": true,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
 //                    {
 //                        "data": 'menu_id',
 //                        "orderable": false,

@@ -208,7 +208,8 @@
                             @endif
 
                             <p>
-                                {{ $me->username or '' }} - Web Developer
+                                {{ $me->username or '' }}
+                                {{ $me->username or '' }}
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>

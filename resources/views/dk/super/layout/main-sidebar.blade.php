@@ -65,17 +65,27 @@
             </li>
             <li class="treeview {{ $menu_active_of_client_list_for_all or '' }}">
                 <a href="{{ url('/user/client-list-for-all') }}">
-                    <i class="fa fa-user"></i><span>客户列表</span>
+                    <i class="fa fa-user"></i><span>分发客户列表</span>
                 </a>
             </li>
             <li class="treeview {{ $menu_active_of_client_staff_list or '' }}">
                 <a href="{{ url('/user/client-staff-list') }}">
-                    <i class="fa fa-user"></i><span>客户员工列表</span>
+                    <i class="fa fa-user"></i><span>分发客户-员工列表</span>
                 </a>
             </li>
             <li class="treeview {{ $menu_active_of_finance_user_list_for_all or '' }}">
                 <a href="{{ url('/user/finance-user-list-for-all') }}">
                     <i class="fa fa-user"></i><span>财务用户列表</span>
+                </a>
+            </li>
+            <li class="treeview {{ $menu_active_of_customer_list_for_all or '' }}">
+                <a href="{{ url('/user/customer-list-for-all') }}">
+                    <i class="fa fa-user"></i><span>自选客户列表</span>
+                </a>
+            </li>
+            <li class="treeview {{ $menu_active_of_customer_staff_list or '' }}">
+                <a href="{{ url('/user/customer-staff-list') }}">
+                    <i class="fa fa-user"></i><span>自选客户-员工列表</span>
                 </a>
             </li>
 

@@ -35,9 +35,9 @@ class DKCustomerStaffLoginMiddleware
                 Auth::guard('dk_customer_staff')->logout();
                 return redirect('/login');
             }
-            $me_staff->load('client_er');
+            $me_staff->load('customer_er');
             // 判断所属客户是否被封禁
-            if($me_staff->client_er->user_status != 1)
+            if($me_staff->customer_er->user_status != 1)
             {
                 Auth::guard('dk_customer_staff')->logout();
                 return redirect('/login');
@@ -48,7 +48,7 @@ class DKCustomerStaffLoginMiddleware
                 Auth::guard('dk_customer_staff')->logout();
                 return redirect('/login');
             }
-            view()->share('me_client', $me_staff);
+            view()->share('me_customer', $me_staff);
         }
         return $next($request);
     }

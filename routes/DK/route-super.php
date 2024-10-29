@@ -53,6 +53,7 @@ Route::group(['middleware' => ['yh.super.login']], function () {
     Route::match(['get','post'], '/user/user-client-login', $controller.'@operate_user_client_login');
     Route::match(['get','post'], '/user/user-client-staff-login', $controller.'@operate_user_client_staff_login');
     Route::match(['get','post'], '/user/user-finance-login', $controller.'@operate_user_finance_login');
+    Route::match(['get','post'], '/user/user-customer-staff-login', $controller.'@operate_user_customer_staff_login');
 
 
     Route::match(['get','post'], '/user/user-list-for-all', $controller.'@view_user_list_for_all');
@@ -60,6 +61,8 @@ Route::group(['middleware' => ['yh.super.login']], function () {
     Route::match(['get','post'], '/user/client-list-for-all', $controller.'@view_user_client_list_for_all');
     Route::match(['get','post'], '/user/client-staff-list', $controller.'@view_user_client_staff_list');
     Route::match(['get','post'], '/user/finance-user-list-for-all', $controller.'@view_user_finance_user_list_for_all');
+    Route::match(['get','post'], '/user/customer-list-for-all', $controller.'@view_user_customer_list_for_all');
+    Route::match(['get','post'], '/user/customer-staff-list', $controller.'@view_user_customer_staff_list');
 
     Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
     Route::match(['get','post'], '/user/staff-edit', $controller.'@operate_user_staff_edit');

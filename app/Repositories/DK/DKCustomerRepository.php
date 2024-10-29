@@ -48,10 +48,10 @@ class DKCustomerRepository {
     // 登录情况
     public function get_me()
     {
-        if(Auth::guard("dk_client_staff")->check())
+        if(Auth::guard("dk_customer_staff")->check())
         {
             $this->auth_check = 1;
-            $this->me = Auth::guard("dk_client_staff")->user();
+            $this->me = Auth::guard("dk_customer_staff")->user();
             view()->share('me',$this->me);
         }
         else $this->auth_check = 0;
@@ -490,7 +490,7 @@ class DKCustomerRepository {
                 'leader'=>function($query) { $query->select(['id','username','true_name']); },
                 'superior_department_er'=>function($query) { $query->select(['id','name']); }
             ])
-            ->where('client_id',$me->client_id);
+            ->where('customer_id',$me->customer_id);
 
         if(in_array($me->user_type,[41,81]))
         {
@@ -728,7 +728,7 @@ class DKCustomerRepository {
 
             $mine = new DK_Customer_Department;
             $post_data["active"] = 1;
-            $post_data["client_id"] = $me->client_id;
+            $post_data["customer_id"] = $me->customer_id;
             $post_data["creator_id"] = $me->id;
         }
         else if($operate == 'edit') // 编辑
@@ -1763,7 +1763,7 @@ class DKCustomerRepository {
         $query = DK_Customer_User::withTrashed()->select('*')
             ->with(['creator','department_er'])
             ->whereIn('user_category',[11])
-            ->where('client_id',$me->client_id)
+            ->where('customer_id',$me->customer_id)
             ->where('id','!=',$me->id);
 
         if($me->user_type == 11)
@@ -1874,7 +1874,7 @@ class DKCustomerRepository {
         $view_data['list_link'] = $list_link;
 
 
-        $department_list = DK_Customer_Department::select('id','name')->where('client_id',$me->client_id)->get();
+        $department_list = DK_Customer_Department::select('id','name')->where('customer_id',$me->customer_id)->get();
         $view_data['department_list'] = $department_list;
 
         $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.user.staff-edit';
@@ -1905,7 +1905,7 @@ class DKCustomerRepository {
         $view_data['list_text'] = $list_text;
         $view_data['list_link'] = $list_link;
 
-        $department_list = DK_Customer_Department::select('id','name')->where('client_id',$me->client_id)->get();
+        $department_list = DK_Customer_Department::select('id','name')->where('customer_id',$me->customer_id)->get();
         $view_data['department_list'] = $department_list;
 
         if($id == 0)
@@ -1980,7 +1980,7 @@ class DKCustomerRepository {
             $post_data["user_category"] = 11;
             $post_data["active"] = 1;
             $post_data["password"] = password_encode("12345678");
-            $post_data["client_id"] = $me->client_id;
+            $post_data["customer_id"] = $me->customer_id;
             $post_data["creator_id"] = $me->id;
         }
         else if($operate == 'edit') // 编辑
@@ -2753,7 +2753,7 @@ class DKCustomerRepository {
         else $view_data['exported_status'] = -1;
 
 
-        $staff_list = DK_Customer_User::select('id','username')->where('client_id',$me->client_id)->whereIn('user_type',[81,84,88])->get();
+        $staff_list = DK_Customer_User::select('id','username')->where('customer_id',$me->customer_id)->whereIn('user_type',[81,84,88])->get();
         $view_data['staff_list'] = $staff_list;
 
         $view_data['menu_active_of_delivery_list'] = 'active menu-open';
@@ -2769,7 +2769,7 @@ class DKCustomerRepository {
 
         $query = DK_Pivot_Client_Delivery::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->where('client_id',$me->client_id)
+            ->where('customer_id',$me->customer_id)
             ->with([
                 'inspector_er',
                 'project_er',
@@ -2938,7 +2938,7 @@ class DKCustomerRepository {
 
 //        if(!in_array($me->user_type,[0,1,9,11,71,77])) return response_error([],"你没有操作权限！");
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-        if($item->client_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if($item->customer_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $order_quality = $post_data["order_quality"];
         if(!in_array($order_quality,config('info.order_quality'))) return response_error([],"质量结果非法！");
@@ -3361,12 +3361,12 @@ class DKCustomerRepository {
 
 
         // 客户
-        if(!empty($post_data['client_id']))
+        if(!empty($post_data['customer_id']))
         {
             if(is_numeric($post_data['client_id']) && $post_data['client_id'] > 0) $view_data['client_id'] = $post_data['client_id'];
             else $view_data['client_id'] = -1;
         }
-        else $view_data['client_id'] = -1;
+        else $view_data['customer_id'] = -1;
 
 
 
@@ -3482,7 +3482,7 @@ class DKCustomerRepository {
 
         $query = DK_Order::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->where('client_id',$me->id)
+            ->where('customer_id',$me->id)
             ->with(['creator','owner','inspector',
                 'project_er',
                 'department_district_er','department_group_er',
@@ -4717,7 +4717,7 @@ class DKCustomerRepository {
         $me = $this->me;
 //        if(!in_array($me->user_type,[0,1,9,11,71,77])) return response_error([],"你没有操作权限！");
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-        if($item->client_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if($item->customer_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $follow_description = trim($post_data["follow_description"]);
         if(!$follow_description)  return response_error([],"输入不能为空！");
@@ -4813,7 +4813,7 @@ class DKCustomerRepository {
 
 //        if(!in_array($me->user_type,[0,1,9,11,71,77])) return response_error([],"你没有操作权限！");
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-        if($item->client_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+        if($item->customer_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         $order_quality = $post_data["order_quality"];
         if(!in_array($order_quality,config('info.order_quality'))) return response_error([],"质量结果非法！");

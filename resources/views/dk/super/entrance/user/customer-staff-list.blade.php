@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '客户列表' }} - SUPER - {{ config('info.info.short_name') }}
+    {{ $title_text or '自选-客户列表' }} - SUPER - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -160,7 +160,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/user/client-staff-list') }}",
+                    'url': "{{ url('/user/customer-staff-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -223,7 +223,7 @@
                                 // '<a class="btn btn-xs btn-primary item-recharge-show" data-id="'+data+'">充值/退款</a>'+
                                 // '<a class="btn btn-xs bg-maroon item-password-super-change-show" data-id="'+data+'">修改密码</a>'+
                                 '<a class="btn btn-xs bg-maroon item-password-super-reset-submit" data-id="'+data+'">重置密码</a>'+
-                                '<a class="btn btn-xs bg-olive item-client-login-submit" data-id="'+data+'">登录</a>'+
+                                '<a class="btn btn-xs bg-olive item-customer-login-submit" data-id="'+data+'">登录</a>'+
                                 // '<a class="btn btn-xs bg-olive item-staff-login-submit" data-id="'+data+'">员工登录</a>'+
                                 '<a class="btn btn-xs bg-navy item-super-delete-submit" data-id="'+data+'" >删除</a>'+
                                 '<a class="btn btn-xs bg-purple item-statistic-submit" data-id="'+data+'">流量统计</a>'+
@@ -298,6 +298,26 @@
                         "className": "text-left",
                         "width": "120px",
                         "data": "mobile",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "customer_id",
+                        "data": "customer_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "client_id",
+                        "data": "client_id",
+                        "className": "",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -463,5 +483,5 @@
         TableDatatablesAjax.init();
     });
 </script>
-@include(env('TEMPLATE_DK_SUPER').'entrance.user.client-staff-list-script')
+@include(env('TEMPLATE_DK_SUPER').'entrance.user.customer-staff-list-script')
 @endsection

@@ -19,7 +19,9 @@ class DK_Customer_Department extends Model
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',
         'item_id', 'menu_id',
+
         'client_id',
+        'customer_id',
         'leader_id',
         'superior_department_id',
 
