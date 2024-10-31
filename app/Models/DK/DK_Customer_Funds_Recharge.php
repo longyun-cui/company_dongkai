@@ -3,11 +3,11 @@ namespace App\Models\DK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Funds_Recharge extends Model
+class DK_Customer_Funds_Recharge extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_admin_funds_recharge";
+    protected $table = "dk_admin_customer_funds_recharge";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort',
         'item_active', 'item_status', 'item_category', 'item_type',
@@ -21,6 +21,7 @@ class DK_Funds_Recharge extends Model
         'item_id',
         'order_id',
         'client_id',
+        'customer_id',
         'company_id',
         'channel_id',
         'project_id',

@@ -270,20 +270,55 @@ if(!function_exists('getBrowserInfo'))
 //        dd($Agent);
 
         $info = [];
+        $info['browser_info'] = $Agent;
         $info['referer'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
         $info['type'] = 'PC';
         if(stripos($Agent, 'Mobile')) $info['type'] = 'Mobile';
+        if(isMobileEquipment()) $info['type'] = 'Mobile';
+
+
+        $info['device_name'] = 'Unknown';
+        if(stripos($Agent, 'iPhone')) $info['device_name'] = 'iPhone';
+        if(stripos($Agent, 'iPad')) $info['system'] = 'iPad';
+        if(stripos($Agent, 'Macintosh')) $info['device_name'] = 'Macintosh';
+        if(stripos($Agent, 'HUAWEI')) $info['device_name'] = 'HUAWEI';
+        if(stripos($Agent, 'HONOR')) $info['device_name'] = 'HONOR';
+        if(stripos($Agent, 'MIPhone')) $info['device_name'] = 'MIPhone';
+        if(stripos($Agent, 'vivo')) $info['device_name'] = 'VIVO';
+        if(stripos($Agent, 'oppo')) $info['device_name'] = 'OPPO';
+
 
         $info['system'] = 'Unknown';
+        if(stripos($Agent, 'PowerPC')) $info['system'] = 'PowerPC';
+        else if(stripos($Agent, 'AIX')) $info['system'] = 'AIX';
+        else if(stripos($Agent, 'HPUX')) $info['system'] = 'HPUX';
+        else if(stripos($Agent, 'NetBSD')) $info['system'] = 'NetBSD';
+        else if(stripos($Agent, 'BSD')) $info['system'] = 'BSD';
+        else if(stripos($Agent, 'OSF1')) $info['system'] = 'OSF1';
+        else if(stripos($Agent, 'IRIX')) $info['system'] = 'IRIX';
+        else if(stripos($Agent, 'FreeBSD')) $info['system'] = 'FreeBSD';
+        else if(stripos($Agent, 'teleport')) $info['system'] = 'teleport';
+        else if(stripos($Agent, 'flashget')) $info['system'] = 'flashget';
+        else if(stripos($Agent, 'webzip')) $info['system'] = 'webzip';
+        else if(stripos($Agent, 'offline')) $info['offline'] = 'offline';
+
         if(stripos($Agent, 'Windows')) $info['system'] = 'Windows';
         if(stripos($Agent, 'Windows Phone')) $info['system'] = 'WinPhone';
+        if(stripos($Agent, 'Sun')) $info['system'] = 'SunOS';
+        if(stripos($Agent, 'IBM')) $info['system'] = 'IBM';
+        if(stripos($Agent, 'Unix')) $info['system'] = 'Unix';
+        if(stripos($Agent, 'Linux')) $info['system'] = 'Linux';
+        if(stripos($Agent, 'Ubuntu')) $info['system'] = 'Ubuntu';
+        if(stripos($Agent, 'CentOS')) $info['system'] = 'CentOS';
+        if(stripos($Agent, 'Mac OS')) $info['system'] = 'Mac';
+        if(stripos($Agent, 'iPad OS')) $info['system'] = 'iPad';
+        if(stripos($Agent, 'iPhone OS')) $info['system'] = 'iPhone';
         if(stripos($Agent, 'Android')) $info['system'] = 'Android';
-        if(stripos($Agent, 'Mac')) $info['system'] = 'Mac';
-        if(stripos($Agent, 'iPad')) $info['system'] = 'iPad';
-        if(stripos($Agent, 'iPhone')) $info['system'] = 'iPhone';
+        if(stripos($Agent, 'HarmonyOS')) $info['system'] = 'HarmonyOS';
 
-        $info['browser'] = 'Ohters';
+
+        $info['browser'] = 'Unknown';
         if(stripos($Agent, 'Mozilla') && !stripos($Agent, 'MSIE')) $info['browser'] = 'Netscape';
         if(stripos($Agent, 'Mozilla') && stripos($Agent, 'MSIE')) $info['browser'] = 'IExplorer';
         if(stripos($Agent, 'Safari')) $info['browser'] = 'Safari';
@@ -291,12 +326,36 @@ if(!function_exists('getBrowserInfo'))
         if(stripos($Agent, 'Firefox')) $info['browser'] = 'Firefox';
         if(stripos($Agent, 'FxiOS')) $info['browser'] = 'Firefox';
         if(stripos($Agent, 'Opera')) $info['browser'] = 'Opera';
+        if(stripos($Agent, 'Edge')) $info['browser'] = "Edge";
         if(stripos($Agent, 'QQBroser')) $info['browser'] = 'QQBroser';
+        if(stripos($Agent, 'SamsungBrowser')) $info['browser'] = 'Samsung';
+        if(stripos($Agent, 'VivoBrowser')) $info['browser'] = 'Vivo';
+        if(stripos($Agent, 'OppoBrowser')) $info['browser'] = 'Oppo';
+        if(stripos($Agent, 'MiuiBrowser')) $info['browser'] = 'Miui';
+        if(stripos($Agent, 'MiBrowser')) $info['browser'] = 'Mi';
+        if(stripos($Agent, 'honorbrowser')) $info['browser'] = 'honor';
 
-        $info['app'] = 'default';
+        $info['app'] = 'Unknown';
         if(stripos($Agent, 'MicroMessenger')) $info['app'] = 'WeChat';
         if(stripos($Agent, 'QQ') && !stripos($Agent, 'MQQBrowser')) $info['app'] = 'QQ';
         if(stripos($Agent, 'QQ/')) $info['app'] = 'QQ';
+        if(stripos($Agent, 'Alipay')) $info['app'] = 'Alipay';
+        if(stripos($Agent, 'BytedanceWebview')) $info['app'] = 'Douyin';
+        if(stripos($Agent, 'baiduboxapp')) $info['app'] = 'Baiduboxapp';
+
+        $info['open_NetType'] = 'Unknown';
+        if(stripos($Agent, '4G')) $info['open_NetType'] = '4G';
+        if(stripos($Agent, '5G')) $info['open_NetType'] = '5G';
+        if(stripos($Agent, 'WiFi')) $info['open_NetType'] = 'WiFi';
+
+        $info['is_spider'] = 'Unknown';
+        if(stripos($Agent, 'spider')) $info['is_spider'] = 'spider';
+        if(stripos($Agent, 'Bot')) $info['is_spider'] = 'Bot';
+        if(stripos($Agent, 'Baiduspider')) $info['is_spider'] = 'BaiduSpider';
+        if(stripos($Agent, 'Sogou web spider')) $info['is_spider'] = 'SogouSpider';
+        if(stripos($Agent, 'YisouSpider')) $info['is_spider'] = 'YisouSpider';
+        if(stripos($Agent, 'bingbot')) $info['is_spider'] = 'bingbot';
+        if(stripos($Agent, 'AhrefsBot')) $info['is_spider'] = 'AhrefsBot';
 
         return $info;
     }

@@ -254,25 +254,6 @@
 
 
 
-
-            @if(in_array($me->user_type,[0,1,9,11]))
-            {{--数据统计--}}
-            <li class="header">记录</li>
-
-            <li class="treeview {{ $menu_active_of_record_visit_list or '' }}">
-                <a href="{{ url('/record/visit-list') }}">
-                    <i class="fa fa-download text-default"></i> <span>访问记录</span>
-                </a>
-            </li>
-            <li class="treeview {{ $menu_active_of_record_operation_list or '' }} _none">
-                <a href="{{ url('/record/operation-list') }}">
-                    <i class="fa fa-download text-default"></i> <span>操作记录</span>
-                </a>
-            </li>
-            @endif
-
-
-
         </ul>
         <!-- /.sidebar-menu -->
     </section>

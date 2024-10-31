@@ -11,11 +11,9 @@ use App\Models\DK\DK_Pivot_User_Project;
 use App\Models\DK\DK_Pivot_Team_Project;
 use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Record;
-use App\Models\DK\DK_Record_Visit;
-
 use App\Models\DK\DK_Client;
-use App\Models\DK\DK_Client_Funds_Recharge;
-use App\Models\DK\DK_Client_Funds_Using;
+use App\Models\DK\DK_Funds_Recharge;
+use App\Models\DK\DK_Funds_Using;
 
 use App\Models\DK_Client\DK_Client_User;
 use App\Models\DK_Client\DK_Client_Finance_Daily;
@@ -28,7 +26,7 @@ use App\Repositories\Common\CommonRepository;
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
 use QrCode, Excel;
 
-class DKAdminRepository {
+class DKAdmin_2Repository {
 
     private $env;
     private $auth_check;
@@ -56,10 +54,10 @@ class DKAdminRepository {
     // 登录情况
     public function get_me()
     {
-        if(Auth::guard("yh_admin")->check())
+        if(Auth::guard("yh_admin_2")->check())
         {
             $this->auth_check = 1;
-            $this->me = Auth::guard("yh_admin")->user();
+            $this->me = Auth::guard("yh_admin_2")->user();
             view()->share('me',$this->me);
         }
         else $this->auth_check = 0;
@@ -80,18 +78,6 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        if($me->id > 10000)
-        {
-            $record["creator_id"] = $me->id;
-            $record["record_category"] = 1; // record_category=1 browse/share
-            $record["record_type"] = 1; // record_type=1 browse
-            $record["page_type"] = 1; // page_type=1 default platform
-            $record["page_module"] = 1; // page_module=1 index
-            $record["page_num"] = 0;
-            $record["open"] = "root";
-            $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
-        }
 
 //        $condition = request()->all();
 //        $return['condition'] = $condition;
@@ -1928,7 +1914,7 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-            $FinanceRecord = new DK_Client_Funds_Recharge;
+            $FinanceRecord = new DK_Funds_Recharge;
 
 //            if(in_array($me->user_type,[11,19,41,42]))
 //            {
@@ -8433,22 +8419,6 @@ class DKAdminRepository {
 
         }
 //        dd($list->toArray());
-
-
-        if($me->id > 10000)
-        {
-            $record["creator_id"] = $me->id;
-            $record["record_category"] = 1; // record_category=1 browse/share
-            $record["record_type"] = 1; // record_type=1 browse
-            $record["page_type"] = 1; // page_type=1 default platform
-            $record["page_module"] = 2; // page_module=2 other
-            $record["page_num"] = ($skip / $limit) + 1;
-            $record["open"] = "order-list";
-            $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
-        }
-
-
         return datatable_response($list, $draw, $total);
     }
 
@@ -11133,22 +11103,6 @@ class DKAdminRepository {
             $list[$k]->content_decode = json_decode($v->content);
         }
 //        dd($list->toArray());
-
-
-        if($me->id > 10000)
-        {
-            $record["creator_id"] = $me->id;
-            $record["record_category"] = 1; // record_category=1 browse/share
-            $record["record_type"] = 1; // record_type=1 browse
-            $record["page_type"] = 1; // page_type=1 default platform
-            $record["page_module"] = 2; // page_module=2 other
-            $record["page_num"] = ($skip / $limit) + 1;
-            $record["open"] = "delivery-list";
-            $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
-        }
-
-
         return datatable_response($list, $draw, $total);
     }
 
@@ -17986,22 +17940,6 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
 
-
-
-        if($me->id > 10000)
-        {
-            $record["creator_id"] = $me->id;
-            $record["record_category"] = 1; // record_category=1 browse/share
-            $record["record_type"] = 1; // record_type=1 browse
-            $record["page_type"] = 1; // page_type=1 default platform
-            $record["page_module"] = 3; // page_module=2 other
-            $record["page_num"] = 0;
-            $record["open"] = "export";
-            $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
-        }
-
-
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $staff_list = DK_User::select('id','username','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = DK_Client::select('id','username','true_name')->where('user_category',11)->get();
@@ -18713,22 +18651,19 @@ class DKAdminRepository {
 
 
     // 【记录】
-    public function record_for_user_visit($post_data)
+    public function record($post_data)
     {
-        $record = new DK_Record_Visit();
+        $record = new K_Record();
 
         $browseInfo = getBrowserInfo();
-        $post_data["browser_info"] = $browseInfo['browser_info'];
-        $post_data["referer"] = $browseInfo['referer'];
         $type = $browseInfo['type'];
         if($type == "Mobile") $post_data["open_device_type"] = 1;
         else if($type == "PC") $post_data["open_device_type"] = 2;
-        $post_data["open_device_name"] = $browseInfo['device_name'];
+
+        $post_data["referer"] = $browseInfo['referer'];
         $post_data["open_system"] = $browseInfo['system'];
         $post_data["open_browser"] = $browseInfo['browser'];
         $post_data["open_app"] = $browseInfo['app'];
-        $post_data["open_NetType"] = $browseInfo['open_NetType'];
-        $post_data["open_is_spider"] = $browseInfo['is_spider'];
 
         $post_data["ip"] = Get_IP();
         $bool = $record->fill($post_data)->save();
@@ -18761,259 +18696,6 @@ class DKAdminRepository {
     }
 
 
-
-
-    // 【K】【内容】【全部】返回-列表-视图
-    public function view_record_visit_list($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-
-        // 操作
-        if(!empty($post_data['record_type']))
-        {
-            if($post_data['record_type'] != '-1') $view_data['record_type'] = $post_data['record_type'];
-            else $view_data['record_type'] = '-1';
-        }
-        else $view_data['record_type'] = -1;
-
-        //设备
-        if(!empty($post_data['open_device_type']))
-        {
-            if($post_data['open_device_type'] != '-1') $view_data['open_device_type'] = $post_data['open_device_type'];
-            else $view_data['open_device_type'] = -1;
-        }
-        else $view_data['open_device_type'] = -1;
-
-        // 系统
-        if(!empty($post_data['open_system']))
-        {
-            if($post_data['open_system'] != '-1') $view_data['open_system'] = $post_data['open_system'];
-            else $view_data['open_system'] = -1;
-        }
-        else $view_data['open_system'] = -1;
-
-        // 浏览器
-        if(!empty($post_data['open_browser']))
-        {
-            if($post_data['open_browser'] != '-1') $view_data['open_browser'] = $post_data['open_browser'];
-            else $view_data['open_browser'] = -1;
-        }
-        else $view_data['open_browser'] = -1;
-
-        // APP
-        if(!empty($post_data['open_app']))
-        {
-            if($post_data['open_app'] != '-1') $view_data['open_app'] = $post_data['open_app'];
-            else $view_data['open_app'] = -1;
-        }
-        else $view_data['open_app'] = -1;
-
-
-        $view_data['menu_active_of_record_visit_list'] = 'active';
-
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.record.visit-list';
-        return view($view_blade)
-            ->with($view_data);
-    }
-    // 【K】【内容】【全部】返回-列表-数据
-    public function get_record_visit_list_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-        $query = DK_Record_Visit::select('*')
-            ->with(['creator','object']);
-
-        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-
-        if(!empty($post_data['record_type']))
-        {
-            if($post_data['record_type'] == "-1")
-            {
-            }
-            else if(in_array($post_data['record_type'],[1,2,3]))
-            {
-                $query->where('record_type',$post_data['record_type']);
-            }
-            else if($post_data['record_type'] == "Unknown")
-            {
-                $query->where('record_type',"Unknown");
-            }
-            else if($post_data['record_type'] == "Others")
-            {
-                $query->whereNotIn('open_device_type',[1,2,3]);
-            }
-            else
-            {
-                $query->where('record_type',$post_data['record_type']);
-            }
-        }
-        else
-        {
-//            $query->whereIn('record_type',[1,2,3]);
-        }
-
-        if(!empty($post_data['open_device_type']))
-        {
-            if($post_data['open_device_type'] == "-1")
-            {
-            }
-            else if(in_array($post_data['open_system'],[1,2]))
-            {
-                $query->where('open_device_type',$post_data['open_device_type']);
-            }
-            else if($post_data['open_device_type'] == "Unknown")
-            {
-                $query->where('open_device_type',"Unknown");
-            }
-            else if($post_data['open_device_type'] == "Others")
-            {
-                $query->whereNotIn('open_device_type',[1,2]);
-            }
-            else
-            {
-                $query->where('open_device_type',$post_data['open_device_type']);
-            }
-        }
-        else
-        {
-//            $query->whereIn('open_device_type',[1,2]);
-        }
-
-        if(!empty($post_data['open_system']))
-        {
-            if($post_data['open_system'] == "-1")
-            {
-            }
-            else if($post_data['open_system'] == "1")
-            {
-                $query->whereIn('open_system',['Android','iPhone','iPad','Mac','Windows']);
-            }
-            else if(in_array($post_data['open_system'],['Android','iPhone','iPad','Mac','Windows']))
-            {
-                $query->where('open_system',$post_data['open_system']);
-            }
-            else if($post_data['open_system'] == "Unknown")
-            {
-                $query->where('open_system',"Unknown");
-            }
-            else if($post_data['open_system'] == "Others")
-            {
-                $query->whereNotIn('open_system',['Android','iPhone','iPad','Mac','Windows']);
-            }
-            else
-            {
-                $query->where('open_system',$post_data['open_system']);
-            }
-        }
-        else
-        {
-//            $query->whereIn('open_system',['Android','iPhone','iPad','Mac','Windows']);
-        }
-
-        if(!empty($post_data['open_browser']))
-        {
-            if($post_data['open_browser'] == "-1")
-            {
-            }
-            else if($post_data['open_browser'] == "1")
-            {
-                $query->whereIn('open_browser',['Chrome','Firefox','Safari']);
-            }
-            else if(in_array($post_data['open_browser'],['Chrome','Firefox','Safari']))
-            {
-                $query->where('open_browser',$post_data['open_browser']);
-            }
-            else if($post_data['open_browser'] == "Unknown")
-            {
-                $query->where('open_browser',"Unknown");
-            }
-            else if($post_data['open_browser'] == "Others")
-            {
-                $query->whereNotIn('open_browser',['Chrome','Firefox','Safari']);
-            }
-            else
-            {
-                $query->where('open_browser',$post_data['open_browser']);
-            }
-        }
-        else
-        {
-//            $query->whereIn('open_browser',['Chrome','Firefox','Safari']);
-        }
-
-        if(!empty($post_data['open_app']))
-        {
-            if($post_data['open_app'] == "-1")
-            {
-            }
-            else if($post_data['open_app'] == "1")
-            {
-                $query->whereIn('open_app',['WeChat','QQ','Alipay']);
-            }
-            else if(in_array($post_data['open_app'],['WeChat','QQ','Alipay','Douyin']))
-            {
-                $query->where('open_app',$post_data['open_app']);
-            }
-            else if($post_data['open_app'] == "Unknown")
-            {
-                $query->where('open_app',"Unknown");
-            }
-            else if($post_data['open_app'] == "Others")
-            {
-                $query->whereNotIn('open_app',['WeChat','QQ','Alipay','Douyin']);
-            }
-            else
-            {
-                $query->where('open_app',$post_data['open_app']);
-            }
-        }
-        else
-        {
-//            $query->whereIn('open_app',['WeChat','QQ']);
-        }
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
-
-        foreach ($list as $k => $v)
-        {
-//            if(!empty($v->ip) && empty($v->ip_info))
-//            {
-//                $ip = $v->ip;
-//                $ip_info = get_ip_info($ip);
-//                $record = K_Record::find($v->id);
-//                $record->ip_info = $ip_info['adcode']['o'];
-//                $record->save();
-//                $list[$k]->ip_info = $ip_info['adcode']['o'];
-//            }
-
-//            $list[$k]->encode_id = encode($v->id);
-//            $list[$k]->description = replace_blank($v->description);
-
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
 
 
 }

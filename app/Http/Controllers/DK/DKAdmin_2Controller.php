@@ -8,18 +8,18 @@ use App\Http\Controllers\Controller;
 
 use App\Models\DK\DK_User;
 
-use App\Repositories\DK\DKAdminRepository;
+use App\Repositories\DK\DKAdmin_2Repository;
 
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
 
-class DKAdminController extends Controller
+class DKAdmin_2Controller extends Controller
 {
     //
     private $repo;
     public function __construct()
     {
-        $this->repo = new DKAdminRepository;
+        $this->repo = new DKAdmin_2Repository;
     }
 
 
@@ -78,12 +78,6 @@ class DKAdminController extends Controller
                         else Auth::guard('yh_admin')->login($admin);
                         Auth::guard('yh_admin')->user()->admin_token = $token;
                         Auth::guard('yh_admin')->user()->save();
-
-
-
-
-
-
                         return response_success();
                     }
                     else return response_error([],'账户or密码不正确！');
@@ -1399,16 +1393,6 @@ class DKAdminController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_record_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_record_list_for_all_datatable(request()->all());
-    }
-
-    /*
-     * Record 记录
-     */
-    // 【统计】导出
-    public function view_record_visit_list()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_record_visit_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_record_visit_list_datatable(request()->all());
     }
 
 
