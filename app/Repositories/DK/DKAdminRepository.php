@@ -4741,6 +4741,7 @@ class DKAdminRepository {
         try
         {
             $user->user_status = 1;
+            $user->login_error_num = 0;
             $user->timestamps = false;
             $bool = $user->save();
             if(!$bool) throw new Exception("update--user--fail");
@@ -4809,6 +4810,61 @@ class DKAdminRepository {
         }
 
     }
+
+
+    // 【员工】管理员-解锁
+    public function operate_user_staff_admin_unlock($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'user_id.required' => 'user_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'user_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'staff-admin-unlock') return response_error([],"参数【operate】有误！");
+        $id = $post_data["user_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $user = DK_User::find($id);
+        if(!$user) return response_error([],"该【员工】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+//        if($me->user_category != 0) return response_error([],"你没有操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $user->user_status = 1;
+            $user->login_error_num = 0;
+            $user->timestamps = false;
+            $bool = $user->save();
+            if(!$bool) throw new Exception("update--user--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
 
     // 【员工】管理员-晋升
     public function operate_user_staff_admin_promote($post_data)
@@ -18823,7 +18879,11 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
         $query = DK_Record_Visit::select('*')
-            ->with(['creator','object']);
+            ->with([
+                'creator'=>function($query) { $query->select('id','username'); },
+                'user'=>function($query) { $query->select('id','username'); },
+                'object'
+            ]);
 
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 

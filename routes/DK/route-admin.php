@@ -157,6 +157,8 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     // 启用 & 禁用
     Route::post('/user/staff-admin-enable', $controller.'@operate_user_staff_admin_enable');
     Route::post('/user/staff-admin-disable', $controller.'@operate_user_staff_admin_disable');
+    // 解锁
+    Route::post('/user/staff-admin-unlock', $controller.'@operate_user_staff_admin_unlock');
     // 晋升
     Route::post('/user/staff-admin-promote', $controller.'@operate_user_staff_admin_promote');
     Route::post('/user/staff-admin-demote', $controller.'@operate_user_staff_admin_demote');

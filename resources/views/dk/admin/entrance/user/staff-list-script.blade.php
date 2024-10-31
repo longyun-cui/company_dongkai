@@ -344,6 +344,33 @@
             });
         });
 
+        // 【解锁】
+        $("#item-main-body").on('click', ".item-admin-unlock-submit", function() {
+            var $that = $(this);
+            layer.msg('确定"解锁"？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/user/staff-admin-unlock') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "staff-admin-unlock",
+                            user_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
 
     });
 </script>

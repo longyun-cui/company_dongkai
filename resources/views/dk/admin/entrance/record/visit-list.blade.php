@@ -320,58 +320,73 @@
                         render: function(data, type, row, meta) {
                             return row.creator == null
                                 ? '<small class="btn-xs bg-black">游客</small>'
-                                : '<a target="_blank" href="{{ env('DOMAIN_WWW') }}/user/'+row.creator.id+'">'+row.creator.username+'</a>';
+                                : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                         }
                     },
                     {
-                        "width": "50px",
-                        "title": "操作",
-                        "data": "id",
+                        "title": "操作类型",
+                        "data": "record_category",
+                        "width": "80px",
                         'orderable': false,
                         render: function(data, type, row, meta) {
-                            if(row.record_type == 1)
+                            if(data == 1)
                             {
                                 return '<small class="btn-xs bg-primary">访问</small>';
                             }
-                            else if(row.record_type == 2)
-                            {
-                                return '<small class="btn-xs bg-olive">分享</small>';
-                            }
-                            else if(row.record_type == 3)
+                            else if(data == 11)
                             {
                                 return '<small class="btn-xs bg-purple">查询</small>';
                             }
+                            else if(data == 66)
+                            {
+                                return '<small class="btn-xs bg-olive">分享</small>';
+                            }
+                            else if(data == 99)
+                            {
+                                return '<small class="btn-xs bg-purple">登录</small>';
+                            }
                             else
                             {
                                 return '<small class="btn-xs bg-black">Error</small>';
                             }
-
                         }
                     },
                     {
-                        "width": "72px",
-                        "title": "类型",
-                        "data": "id",
+                        "title": "操作结果",
+                        "data": "page_type",
+                        "width": "80px",
                         'orderable': false,
                         render: function(data, type, row, meta) {
-                            if(row.page_type == 1)
+                            if(row.record_category == 1)
                             {
-                                return '<small class="btn-xs bg-primary">平台</small>';
+                                return '<small class="btn-xs bg-primary">访问</small>';
                             }
-                            else if(row.page_type == 2)
+                            else if(row.record_category == 33)
                             {
-                                if(row.page_module == 0) return 'user';
-                                else if(row.page_module == 1) return '<small class="btn-xs bg-olive">U•首页</small>';
-                                else if(row.page_module == 2) return '<small class="btn-xs bg-olive">U•介绍</small>';
-                                else if(row.page_module == 9) return '<small class="btn-xs bg-olive">U•文章</small>';
-                                else if(row.page_module == 11) return '<small class="btn-xs bg-olive">U•活动</small>';
-                                else return '<small class="btn-xs bg-black">user page Error</small>';
+                                return '<small class="btn-xs bg-purple">查询</small>';
                             }
-                            else if(row.page_type == 3)
+                            else if(row.record_category == 66)
                             {
-                                if(row.page_module == 0) return 'item';
-                                else if(row.page_module == 1) return '<small class="btn-xs bg-purple">ITEM</small>';
-                                else return '<small class="btn-xs bg-black">item page Error</small>';
+                                return '<small class="btn-xs bg-olive">分享</small>';
+                            }
+                            else if(row.record_category == 99)
+                            {
+                                if(row.record_type == 0)
+                                {
+                                    return '<small class="btn-xs bg-primary">访问</small>';
+                                }
+                                else if(row.record_type == 1)
+                                {
+                                    return '<small class="btn-xs bg-olive">登录成功</small>';
+                                }
+                                else if(row.record_type == 99)
+                                {
+                                    return '<small class="btn-xs bg-orange">密码错误</small>';
+                                }
+                                else
+                                {
+                                    return '<small class="btn-xs bg-black">Error</small>';
+                                }
                             }
                             else
                             {
@@ -381,7 +396,7 @@
                         }
                     },
                     {
-                        "title": "页面",
+                        "title": "访问",
                         "data": "open",
                         "className": "",
                         "width": "80px",
@@ -389,18 +404,22 @@
                         render: function(data, type, row, meta) {
                             if(row.page_module == 1)
                             {
-                                return '<small class="btn-xs bg-olive">首页</small>';
+                                return '<small class="btn-xs bg-default">首页</small>';
                             }
                             else if(row.page_module == 2)
                             {
                                 if(data == "order-list") return '<small class="btn-xs bg-blue">工单页</small>';
                                 else if(data == "order-list") return '<small class="btn-xs bg-orange">工单页</small>';
-                                else if(data == "delivery-list") return '<small class="btn-xs bg-red">交付页</small>';
+                                else if(data == "delivery-list") return '<small class="btn-xs bg-olive">交付页</small>';
                                 else return '<small class="btn-xs black">Error</small>';
                             }
                             else if(row.page_module == 3)
                             {
-                                return '<small class="btn-xs bg-olive">导出页</small>';
+                                return '<small class="btn-xs bg-red">导出页</small>';
+                            }
+                            else if(row.page_module == 99)
+                            {
+                                return '<small class="btn-xs bg-olive">登录页</small>';
                             }
                             else
                             {
@@ -409,14 +428,21 @@
                         }
                     },
                     {
-                        "title": "页面",
+                        "title": "页数",
                         "data": "page_num",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data == 0) return '--';
-                            else return data;
+                            if(row.record_category == 99 && row.record_type == 99)
+                            {
+                                return row.user == null ? '--' : '<a href="javascript:void(0);">'+row.user.username+'</a>';
+                            }
+                            else
+                            {
+                                if(data == 0) return '--';
+                                else return data;
+                            }
                         }
                     },
                     {

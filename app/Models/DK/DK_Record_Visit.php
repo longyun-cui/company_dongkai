@@ -8,19 +8,36 @@ class DK_Record_Visit extends Model
     protected $table = "dk_admin_record_for_visit";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'form', 'sort',
-        'record_active', 'record_status', 'record_object', 'record_category', 'record_type', 'record_module',
-        'operate_object', 'operate_category', 'operate_type',
+
+        'record_active',
+        'record_status',
+        'record_object',
+        'record_category',
+        'record_type',
+        'record_module',
+
+        'operate_object',
+        'operate_category',
+        'operate_type',
+
         'owner_active',
-        'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'visitor_id',
-        'p_id', 'parent_id',
-        'org_id', 'admin_id',
-        'item_id', 'order_id',
+        'owner_id',
+        'creator_id',
+        'user_id',
+        'belong_id',
+        'source_id',
+        'object_id',
+        'visitor_id',
+
+        'p_id',
+        'parent_id',
+        'org_id',
+        'admin_id',
+        'item_id',
+        'order_id',
 
 
         'column', 'column_type', 'column_name',
-
-        'before', 'after',
-        'before_id', 'after_id',
 
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',

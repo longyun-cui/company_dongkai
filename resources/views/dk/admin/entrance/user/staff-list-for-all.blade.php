@@ -292,6 +292,10 @@
                             {
                                 return '<small class="btn-xs btn-success">正常</small>';
                             }
+                            else if(row.user_status == 99)
+                            {
+                                return '<small class="btn-xs btn-warning">锁定('+row.login_error_num+')</small>';
+                            }
                             else
                             {
                                 return '<small class="btn-xs btn-danger">禁用</small>';

@@ -1,12 +1,13 @@
 <?php
 namespace App\Http\Controllers\DK;
 
-use App\Models\DK\DK_Client;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\DK\DK_User;
+use App\Models\DK\DK_Client;
+use App\Models\DK\DK_Record_Visit;
 
 use App\Repositories\DK\DKAdminRepository;
 
@@ -50,6 +51,15 @@ class DKAdminController extends Controller
     {
         if(request()->isMethod('get'))
         {
+            $record["record_category"] = 99; // record_category=1 browse/search/share/login
+            $record["record_type"] = 0; // record_type=1 browse
+            $record["page_type"] = 1; // page_type=1 login
+            $record["page_module"] = 1; // page_module=1 login page
+            $record["page_num"] = 0;
+            $record["open"] = "login";
+            $record["from"] = request('from',NULL);
+            $this->record_for_user_visit($record);
+
             $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.login';
             return view($view_blade);
         }
@@ -69,6 +79,12 @@ class DKAdminController extends Controller
             {
                 if($admin->user_status == 1)
                 {
+
+                    if($admin->login_error_num >= 3)
+                    {
+                        return response_error([],'账户or密码不正确啊！');
+                    }
+
                     $token = request()->get('_token');
                     $password = request()->get('password');
                     if(password_check($password,$admin->password))
@@ -76,21 +92,66 @@ class DKAdminController extends Controller
                         $remember = request()->get('remember');
                         if($remember) Auth::guard('yh_admin')->login($admin,true);
                         else Auth::guard('yh_admin')->login($admin);
+                        Auth::guard('yh_admin')->user()->login_error_num = 0;
                         Auth::guard('yh_admin')->user()->admin_token = $token;
                         Auth::guard('yh_admin')->user()->save();
 
-
-
-
+                        if(Auth::guard('yh_admin')->user()->id > 10000)
+                        {
+                            $record["creator_id"] = Auth::guard('yh_admin')->user()->id;
+                            $record["record_category"] = 99; // record_category=99 browse/search/share/login
+                            $record["record_type"] = 1; // record_type=1 browse
+                            $record["page_type"] = 1; // page_type=9 login
+                            $record["page_module"] = 1; // page_module=9 login success
+                            $record["page_num"] = 0;
+                            $record["open"] = "login";
+                            $record["from"] = request('from',NULL);
+                            $this->record_for_user_visit($record);
+                        }
 
 
                         return response_success();
                     }
-                    else return response_error([],'账户or密码不正确！');
+                    else
+                    {
+                        $record["user_id"] = $admin->id;
+                        $record["record_category"] = 99; // record_category=1 browse/search/share/login
+                        $record["record_type"] = 99; // record_type=1 browse
+                        $record["page_type"] = 1; // page_type=9 login
+                        $record["page_module"] = 1; // page_module=1 login page
+                        $record["page_num"] = 0;
+                        $record["open"] = "login";
+                        $record["from"] = request('from',NULL);
+                        $this->record_for_user_visit($record);
+
+                        $admin->increment('login_error_num');
+                        if($admin->login_error_num >= 3)
+                        {
+                            $admin->user_status = 99;
+                            $admin->admin_token = '';
+                            $admin->save();
+                        }
+                        return response_error([],'账户or密码不正确！');
+                    }
+                }
+                else if($admin->user_status == 99)
+                {
+                    $record["user_id"] = $admin->id;
+                    $record["record_category"] = 99; // record_category=1 browse/search/share/login
+                    $record["record_type"] = 99; // record_type=1 browse
+                    $record["page_type"] = 1; // page_type=9 login
+                    $record["page_module"] = 1; // page_module=1 login page
+                    $record["page_num"] = 0;
+                    $record["open"] = "login";
+                    $record["from"] = request('from',NULL);
+                    $this->record_for_user_visit($record);
+
+                    $admin->increment('login_error_num');
+                    return response_error([],'账户or密码不正确啊！');
                 }
                 else return response_error([],'账户已禁用！');
             }
-            else return response_error([],'账户不存在！');
+            else return response_error([],'账户or密码不正确.');
         }
     }
 
@@ -568,6 +629,12 @@ class DKAdminController extends Controller
     public function operate_user_staff_admin_disable()
     {
         return $this->repo->operate_user_staff_admin_disable(request()->all());
+    }
+
+    // 【用户-员工】解锁
+    public function operate_user_staff_admin_unlock()
+    {
+        return $this->repo->operate_user_staff_admin_unlock(request()->all());
     }
 
     // 【用户-员工】晋升
@@ -1411,6 +1478,31 @@ class DKAdminController extends Controller
         else if(request()->isMethod('post')) return $this->repo->get_record_visit_list_datatable(request()->all());
     }
 
+
+
+    // 【记录】
+    public function record_for_user_visit($post_data)
+    {
+        $record = new DK_Record_Visit();
+
+        $browseInfo = getBrowserInfo();
+        $post_data["browser_info"] = $browseInfo['browser_info'];
+        $post_data["referer"] = $browseInfo['referer'];
+        $type = $browseInfo['type'];
+        if($type == "Mobile") $post_data["open_device_type"] = 1;
+        else if($type == "PC") $post_data["open_device_type"] = 2;
+        $post_data["open_device_name"] = $browseInfo['device_name'];
+        $post_data["open_system"] = $browseInfo['system'];
+        $post_data["open_browser"] = $browseInfo['browser'];
+        $post_data["open_app"] = $browseInfo['app'];
+        $post_data["open_NetType"] = $browseInfo['open_NetType'];
+        $post_data["open_is_spider"] = $browseInfo['is_spider'];
+
+        $post_data["ip"] = Get_IP();
+        $bool = $record->fill($post_data)->save();
+        if($bool) return true;
+        else return false;
+    }
 
 
 
