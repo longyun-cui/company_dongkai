@@ -94,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     @yield('custom-style')
 
     {{--layout-style--}}
-    @include(env('TEMPLATE_DK_ADMIN').'layout.layout-style')
+    @include(env('TEMPLATE_DK_ADMIN_2').'layout.layout-style')
 
 </head>
 <!--
@@ -122,19 +122,19 @@ desired effect
 
 
     {{--main-header--}}
-    @include(env('TEMPLATE_DK_ADMIN').'layout.main-header')
+    @include(env('TEMPLATE_DK_ADMIN_2').'layout.main-header')
 
     {{--main-sidebar--}}
-    @include(env('TEMPLATE_DK_ADMIN').'layout.main-sidebar')
+    @include(env('TEMPLATE_DK_ADMIN_2').'layout.main-sidebar')
 
     {{--main-content--}}
-    @include(env('TEMPLATE_DK_ADMIN').'layout.main-content')
+    @include(env('TEMPLATE_DK_ADMIN_2').'layout.main-content')
 
     {{--main-footer--}}
-{{--    @include(env('TEMPLATE_DK_ADMIN').'layout.main-footer')--}}
+{{--    @include(env('TEMPLATE_DK_ADMIN_2').'layout.main-footer')--}}
 
     {{--control-sidebar--}}
-    @include(env('TEMPLATE_DK_ADMIN').'layout.control-sidebar')
+    @include(env('TEMPLATE_DK_ADMIN_2').'layout.control-sidebar')
 
 
 </div>
@@ -209,7 +209,7 @@ desired effect
 
 
 {{--layout-script--}}
-@include(env('TEMPLATE_DK_ADMIN').'layout.layout-script')
+@include(env('TEMPLATE_DK_ADMIN_2').'layout.layout-script')
 
 
 @yield('js')

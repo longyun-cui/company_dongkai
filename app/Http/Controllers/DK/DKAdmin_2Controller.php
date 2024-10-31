@@ -1,12 +1,13 @@
 <?php
 namespace App\Http\Controllers\DK;
 
-use App\Models\DK\DK_Client;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\DK\DK_User;
+use App\Models\DK\DK_User_2;
+use App\Models\DK\DK_Client;
+use App\Models\DK\DK_Record_Visit;
 
 use App\Repositories\DK\DKAdmin_2Repository;
 
@@ -32,10 +33,10 @@ class DKAdmin_2Controller extends Controller
         $result['message'] = 'failed';
         $result['result'] = 'denied';
 
-        if(Auth::guard('yh_admin')->check())
+        if(Auth::guard('dk_admin_2')->check())
         {
             $token = request('_token');
-            if(Auth::guard('yh_admin')->user()->admin_token == $token)
+            if(Auth::guard('dk_admin_2')->user()->admin_token == $token)
             {
                 $result['message'] = 'success';
                 $result['result'] = 'access';
@@ -50,6 +51,15 @@ class DKAdmin_2Controller extends Controller
     {
         if(request()->isMethod('get'))
         {
+            $record["record_category"] = 99; // record_category=1 browse/search/share/login
+            $record["record_type"] = 0; // record_type=1 browse
+            $record["page_type"] = 1; // page_type=1 login
+            $record["page_module"] = 1; // page_module=1 login page
+            $record["page_num"] = 0;
+            $record["open"] = "login";
+            $record["from"] = request('from',NULL);
+            $this->record_for_user_visit($record);
+
             $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.login';
             return view($view_blade);
         }
@@ -63,44 +73,101 @@ class DKAdmin_2Controller extends Controller
 //            $admin = SuperAdministrator::whereEmail($email)->first();
 
             $mobile = request()->get('mobile');
-            $admin = DK_User::whereMobile($mobile)->first();
+            $admin = DK_User_2::whereMobile($mobile)->first();
 
             if($admin)
             {
                 if($admin->user_status == 1)
                 {
+
+                    if($admin->login_error_num >= 3)
+                    {
+                        return response_error([],'账户or密码不正确啊！');
+                    }
+
                     $token = request()->get('_token');
                     $password = request()->get('password');
                     if(password_check($password,$admin->password))
                     {
                         $remember = request()->get('remember');
-                        if($remember) Auth::guard('yh_admin')->login($admin,true);
-                        else Auth::guard('yh_admin')->login($admin);
-                        Auth::guard('yh_admin')->user()->admin_token = $token;
-                        Auth::guard('yh_admin')->user()->save();
+                        if($remember) Auth::guard('dk_admin_2')->login($admin,true);
+                        else Auth::guard('dk_admin_2')->login($admin);
+                        Auth::guard('dk_admin_2')->user()->login_error_num = 0;
+                        Auth::guard('dk_admin_2')->user()->admin_token = $token;
+                        Auth::guard('dk_admin_2')->user()->save();
+
+                        if(Auth::guard('dk_admin_2')->user()->id > 10000)
+                        {
+                            $record["creator_id"] = Auth::guard('dk_admin_2')->user()->id;
+                            $record["record_category"] = 99; // record_category=99 browse/search/share/login
+                            $record["record_type"] = 1; // record_type=1 browse
+                            $record["page_type"] = 1; // page_type=9 login
+                            $record["page_module"] = 1; // page_module=9 login success
+                            $record["page_num"] = 0;
+                            $record["open"] = "login";
+                            $record["from"] = request('from',NULL);
+                            $this->record_for_user_visit($record);
+                        }
+
+
                         return response_success();
                     }
-                    else return response_error([],'账户or密码不正确！');
+                    else
+                    {
+                        $record["user_id"] = $admin->id;
+                        $record["record_category"] = 99; // record_category=1 browse/search/share/login
+                        $record["record_type"] = 99; // record_type=1 browse
+                        $record["page_type"] = 1; // page_type=9 login
+                        $record["page_module"] = 1; // page_module=1 login page
+                        $record["page_num"] = 0;
+                        $record["open"] = "login";
+                        $record["from"] = request('from',NULL);
+                        $this->record_for_user_visit($record);
+
+                        $admin->increment('login_error_num');
+                        if($admin->login_error_num >= 3)
+                        {
+                            $admin->user_status = 99;
+                            $admin->admin_token = '';
+                            $admin->save();
+                        }
+                        return response_error([],'账户or密码不正确！');
+                    }
+                }
+                else if($admin->user_status == 99)
+                {
+                    $record["user_id"] = $admin->id;
+                    $record["record_category"] = 99; // record_category=1 browse/search/share/login
+                    $record["record_type"] = 99; // record_type=1 browse
+                    $record["page_type"] = 1; // page_type=9 login
+                    $record["page_module"] = 1; // page_module=1 login page
+                    $record["page_num"] = 0;
+                    $record["open"] = "login";
+                    $record["from"] = request('from',NULL);
+                    $this->record_for_user_visit($record);
+
+                    $admin->increment('login_error_num');
+                    return response_error([],'账户or密码不正确啊！');
                 }
                 else return response_error([],'账户已禁用！');
             }
-            else return response_error([],'账户不存在！');
+            else return response_error([],'账户or密码不正确.');
         }
     }
 
     // 退出
     public function logout()
     {
-        Auth::guard('yh_admin')->user()->admin_token = '';
-        Auth::guard('yh_admin')->user()->save();
-        Auth::guard('yh_admin')->logout();
+        Auth::guard('dk_admin_2')->user()->admin_token = '';
+        Auth::guard('dk_admin_2')->user()->save();
+        Auth::guard('dk_admin_2')->logout();
         return redirect('/login');
     }
 
     // 退出
     public function logout_without_token()
     {
-        Auth::guard('yh_admin')->logout();
+        Auth::guard('dk_admin_2')->logout();
         return redirect('/login');
     }
 
@@ -149,7 +216,7 @@ class DKAdmin_2Controller extends Controller
     public function operate_user_user_login()
     {
         $user_id = request()->get('user_id');
-        $user = DK_User::select('*')->find($user_id);
+        $user = DK_User_2::select('*')->find($user_id);
         if($user)
         {
 //            $type = request()->get('type','');
@@ -516,7 +583,7 @@ class DKAdmin_2Controller extends Controller
         $user = User::where('id',$user_id)->first();
         if($user)
         {
-            Auth::guard('yh_admin')->login($user,true);
+            Auth::guard('dk_admin_2')->login($user,true);
 
             $return['user'] = $user;
 
@@ -562,6 +629,12 @@ class DKAdmin_2Controller extends Controller
     public function operate_user_staff_admin_disable()
     {
         return $this->repo->operate_user_staff_admin_disable(request()->all());
+    }
+
+    // 【用户-员工】解锁
+    public function operate_user_staff_admin_unlock()
+    {
+        return $this->repo->operate_user_staff_admin_unlock(request()->all());
     }
 
     // 【用户-员工】晋升
@@ -615,7 +688,7 @@ class DKAdmin_2Controller extends Controller
     {
         return $this->repo->operate_item_item_get(request()->all());
     }
-    
+
     // 【内容】删除
     public function operate_item_item_delete()
     {
@@ -631,7 +704,7 @@ class DKAdmin_2Controller extends Controller
     {
         return $this->repo->operate_item_item_delete_permanently(request()->all());
     }
-    
+
     // 【内容】批量-删除
     public function operate_item_item_delete_bulk()
     {
@@ -652,7 +725,7 @@ class DKAdmin_2Controller extends Controller
     {
         return $this->repo->operate_item_item_operate_bulk(request()->all());
     }
-    
+
     // 【内容】发布
     public function operate_item_item_publish()
     {
@@ -819,7 +892,7 @@ class DKAdmin_2Controller extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_project_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_project_modify_record_datatable(request()->all());
     }
-    
+
     // 【项目】添加
     public function operate_item_project_create()
     {
@@ -832,7 +905,7 @@ class DKAdmin_2Controller extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_project_edit();
         else if (request()->isMethod('post')) return $this->repo->operate_item_project_save(request()->all());
     }
-    
+
     // 【项目】修改-文本-text-信息
     public function operate_item_project_info_text_set()
     {
@@ -1395,6 +1468,41 @@ class DKAdmin_2Controller extends Controller
         else if(request()->isMethod('post')) return $this->repo->get_record_list_for_all_datatable(request()->all());
     }
 
+    /*
+     * Record 记录
+     */
+    // 【统计】导出
+    public function view_record_visit_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_record_visit_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_record_visit_list_datatable(request()->all());
+    }
+
+
+
+    // 【记录】
+    public function record_for_user_visit($post_data)
+    {
+        $record = new DK_Record_Visit();
+
+        $browseInfo = getBrowserInfo();
+        $post_data["browser_info"] = $browseInfo['browser_info'];
+        $post_data["referer"] = $browseInfo['referer'];
+        $type = $browseInfo['type'];
+        if($type == "Mobile") $post_data["open_device_type"] = 1;
+        else if($type == "PC") $post_data["open_device_type"] = 2;
+        $post_data["open_device_name"] = $browseInfo['device_name'];
+        $post_data["open_system"] = $browseInfo['system'];
+        $post_data["open_browser"] = $browseInfo['browser'];
+        $post_data["open_app"] = $browseInfo['app'];
+        $post_data["open_NetType"] = $browseInfo['open_NetType'];
+        $post_data["open_is_spider"] = $browseInfo['is_spider'];
+
+        $post_data["ip"] = Get_IP();
+        $bool = $record->fill($post_data)->save();
+        if($bool) return true;
+        else return false;
+    }
 
 
 

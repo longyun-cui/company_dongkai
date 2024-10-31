@@ -2,11 +2,11 @@
 
 
 Route::get('/', function () {
-    dd('route-admin');
+    dd('route-admin-2');
 });
 
 
-$controller = "DKAdminController";
+$controller = "DKAdmin_2Controller";
 
 Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
@@ -17,9 +17,9 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
  * 超级管理员系统（后台）
  * 需要登录
  */
-Route::group(['middleware' => ['yh.admin.login']], function () {
+Route::group(['middleware' => ['dk.admin_2.login']], function () {
 
-    $controller = 'DKAdminController';
+    $controller = 'DKAdmin_2Controller';
 
     Route::post('/is_only_me', $controller.'@check_is_only_me');
 
@@ -30,7 +30,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], function () {
 
-    $controller = 'DKAdminController';
+    $controller = 'DKAdmin_2Controller';
 
 
 //    Route::post('/is_only_me', $controller.'@check_is_only_me');
@@ -157,6 +157,8 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     // 启用 & 禁用
     Route::post('/user/staff-admin-enable', $controller.'@operate_user_staff_admin_enable');
     Route::post('/user/staff-admin-disable', $controller.'@operate_user_staff_admin_disable');
+    // 解锁
+    Route::post('/user/staff-admin-unlock', $controller.'@operate_user_staff_admin_unlock');
     // 晋升
     Route::post('/user/staff-admin-promote', $controller.'@operate_user_staff_admin_promote');
     Route::post('/user/staff-admin-demote', $controller.'@operate_user_staff_admin_demote');

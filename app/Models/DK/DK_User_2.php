@@ -5,7 +5,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_User extends Authenticatable
+class DK_User_2 extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
@@ -13,7 +13,7 @@ class DK_User extends Authenticatable
 //    protected $connection = 'mysql0';
 //    protected $connection = 'mysql_def';
 
-    protected $table = "dk_admin_user";
+    protected $table = "dk_admin_user_2";
 
     protected $fillable = [
         'active', 'status', 'user_active', 'user_status',
@@ -58,7 +58,7 @@ class DK_User extends Authenticatable
     // 所属代理商
     function ext()
     {
-        return $this->hasOne('App\Models\DK\DK_UserExt','user_id','id');
+        return $this->hasOne('App\Models\DK\DK_UserExt_2','user_id','id');
     }
 
 

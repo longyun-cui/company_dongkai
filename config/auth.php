@@ -89,6 +89,12 @@ return [
         ],
 
 
+        'dk_admin_2' => [
+            'driver' => 'session',
+            'provider' => 'dk_admins_2',
+        ],
+
+
         'dk_customer' => [
             'driver' => 'session',
             'provider' => 'dk_customers',
@@ -170,6 +176,13 @@ return [
         'dk_finance_users' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK_Finance\DK_Finance_User::class,
+        ],
+
+
+
+        'dk_admins_2' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK\DK_User_2::class,
         ],
 
 

@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_YH_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
 
 
 @section('head_title','404 页面不存在或参数有误')
