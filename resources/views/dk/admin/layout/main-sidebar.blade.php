@@ -209,7 +209,7 @@
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
+            @if(in_array($me->user_type,[0,1,9,11,61,41,81,84]))
                 <li class="treeview {{ $menu_active_of_statistic_recent or '' }}">
                     <a href="{{ url('/statistic/statistic-recent') }}">
                         <i class="fa fa-area-chart text-maroon"></i> <span>近期成果</span>
