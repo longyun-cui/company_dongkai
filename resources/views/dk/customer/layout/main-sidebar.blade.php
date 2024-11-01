@@ -32,28 +32,22 @@
 
 
             {{--部门管理--}}
-            @if(in_array($me->user_type,[0,1,9,11,41]))
-                <li class="header">部门管理</li>
+            @if(in_array($me->user_type,[0,1,9,11]))
+            <li class="header">人事管理</li>
 
-                <li class="treeview {{ $menu_active_of_department_list_for_all or '' }}">
-                    <a href="{{ url('/department/department-list') }}">
-                        <i class="fa fa-columns text-blue"></i>
-                        <span>部门列表</span>
-                    </a>
-                </li>
-            @endif
+            <li class="treeview {{ $menu_active_of_department_list_for_all or '' }}">
+                <a href="{{ url('/department/department-list') }}">
+                    <i class="fa fa-columns text-red"></i>
+                    <span>部门列表</span>
+                </a>
+            </li>
 
-
-            {{--员工管理--}}
-            @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
-                <li class="header">员工管理</li>
-
-                <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
-                    <a href="{{ url('/user/staff-list') }}">
-                        <i class="fa fa-user text-red"></i>
-                        <span>员工列表</span>
-                    </a>
-                </li>
+            <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
+                <a href="{{ url('/user/staff-list') }}">
+                    <i class="fa fa-user text-red"></i>
+                    <span>员工列表</span>
+                </a>
+            </li>
             @endif
 
 
@@ -64,11 +58,11 @@
             <li class="header">业务管理</li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
-            <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
-                <a href="{{ url('/item/order-list')}}">
+            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
+            <li class="treeview {{ $menu_active_of_clue_list_for_all or '' }}">
+                <a href="{{ url('/item/clue-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
-                    <span>工单列表</span>
+                    <span>线索列表</span>
                 </a>
             </li>
             @endif

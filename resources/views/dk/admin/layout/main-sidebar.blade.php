@@ -70,7 +70,7 @@
 
             {{--部门管理--}}
             @if(in_array($me->user_type,[0,1,9,11,41]))
-            <li class="header">部门管理</li>
+            <li class="header">公司管理</li>
 
             <li class="treeview {{ $menu_active_of_department_list_for_all or '' }}">
                 <a href="{{ url('/department/department-list-for-all') }}">
@@ -80,11 +80,7 @@
             </li>
             @endif
 
-
-            {{--员工管理--}}
             @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
-            <li class="header">员工管理</li>
-
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
                 <a href="{{ url('/user/staff-list-for-all') }}">
                     <i class="fa fa-user text-red"></i>

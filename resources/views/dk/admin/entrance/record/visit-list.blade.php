@@ -670,7 +670,7 @@
                     }
                     else
                     {
-                        $url = "{{ url('/admin/statistic/statistic-list') }}";
+                        $url = "{{ url('/record/visit-list') }}";
                         if(window.location.search) history.replaceState({page: 1}, "", $url);
                     }
 
