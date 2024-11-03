@@ -4501,7 +4501,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断操作权限
-        if(!in_array($me->user_type,[0,1,9,11,19,21,81])) return response_error([],"你没有该操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,19,21,41,81])) return response_error([],"你没有该操作权限！");
 //        if(in_array($me->user_type,[0,1,9,11,19,21,81])) return response_error([],"你没有该员工的操作权限！");
         if($user->id == $me->id) return response_error([],"你不能删除你自己！");
         if($user->user_type <= $me->user_type) return response_error([],"你不能操作比你职级更高或同级的员工！");
