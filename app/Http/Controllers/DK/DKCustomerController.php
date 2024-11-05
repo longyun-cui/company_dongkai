@@ -423,6 +423,15 @@ class DKCustomerController extends Controller
 
 
 
+    /*
+     * 订单管理
+     */
+    // 【订单管理】返回-列表-视图（全部任务）
+    public function view_item_clue_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_clue_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_clue_list_datatable(request()->all());
+    }
 
 
 

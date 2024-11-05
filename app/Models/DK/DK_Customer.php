@@ -38,9 +38,9 @@ class DK_Customer extends Authenticatable
         'is_ip',
         'ip_whitelist',
 
-        'client_admin_id',
-        'client_admin_name',
-        'client_admin_mobile',
+        'customer_admin_id',
+        'customer_admin_name',
+        'customer_admin_mobile',
 
         'cooperative_unit_price',
         'funds_recharge_total',
@@ -202,7 +202,7 @@ class DK_Customer extends Authenticatable
     }
 
     // 名下客户
-    function clients()
+    function client_list()
     {
         return $this->hasMany('App\Models\DK\DK_User','parent_id','id');
     }

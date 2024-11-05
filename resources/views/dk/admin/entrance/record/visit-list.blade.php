@@ -40,13 +40,13 @@
 
                         <input type="text" class="form-control form-filter item-search-keyup" name="title" placeholder="标题" />
 
-                        <select class="form-control form-filter" name="record_type" style="width:100px;">
-                            <option value="-1">全部操作</option>
-                            <option value="1" @if($record_type == '1') selected="selected" @endif>访问</option>
-                            <option value="2" @if($record_type == '2') selected="selected" @endif>分享</option>
-                            <option value="3" @if($record_type == '3') selected="selected" @endif>查询</option>
-                            <option value="Others" @if($record_type == 'Others') selected="selected" @endif>其他</option>
-                        </select>
+{{--                        <select class="form-control form-filter" name="record_type" style="width:100px;">--}}
+{{--                            <option value="-1">全部操作</option>--}}
+{{--                            <option value="1" @if($record_type == '1') selected="selected" @endif>访问</option>--}}
+{{--                            <option value="2" @if($record_type == '2') selected="selected" @endif>分享</option>--}}
+{{--                            <option value="3" @if($record_type == '3') selected="selected" @endif>查询</option>--}}
+{{--                            <option value="Others" @if($record_type == 'Others') selected="selected" @endif>其他</option>--}}
+{{--                        </select>--}}
 
                         <select class="form-control form-filter" name="open_device_type" style="width:100px;">
                             <option value="-1">全部设备</option>
@@ -83,6 +83,21 @@
                             <option value="Alipay" @if($open_app == 'Alipay') selected="selected" @endif>支付宝</option>
                             <option value="Douyin" @if($open_app == 'Douyin') selected="selected" @endif>抖音</option>
                             <option value="Others" @if($open_app == 'Others') selected="selected" @endif>其他</option>
+                        </select>
+
+                        <select class="form-control form-filter" name="record_category" style="width:80px;">
+                            <option value="-1">操作类型</option>
+                            <option value="1">访问</option>
+                            <option value="11">查询</option>
+                            <option value="66">分享</option>
+                            <option value="99">登录</option>
+                        </select>
+
+                        <select class="form-control form-filter" name="record_type" style="width:80px;">
+                            <option value="-1">登录结果</option>
+                            <option value="0">访问</option>
+                            <option value="1">登录成功</option>
+                            <option value="99">密码错误</option>
                         </select>
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
@@ -264,21 +279,13 @@
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
                         d.title = $('input[name="title"]').val();
-                        d.record_type = $('select[name="record_type"]').val();
+                        // d.record_type = $('select[name="record_type"]').val();
                         d.open_device_type = $('select[name="open_device_type"]').val();
                         d.open_system = $('select[name="open_system"]').val();
                         d.open_browser = $('select[name="open_browser"]').val();
                         d.open_app = $('select[name="open_app"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
-//
-//                        d.created_at_from = $('input[name="created_at_from"]').val();
-//                        d.created_at_to = $('input[name="created_at_to"]').val();
-//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
-//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
-
+                        d.record_category = $('select[name="record_category"]').val();
+                        d.record_type = $('select[name="record_type"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",

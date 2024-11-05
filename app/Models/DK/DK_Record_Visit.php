@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class DK_Record_Visit extends Model
 {
     //
-    protected $table = "dk_admin_record_for_visit";
+    protected $table = "dk_admin_record_by_visit";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'form', 'sort',
 

@@ -190,7 +190,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/user/staff-list-for-all') }}",
+                    'url': "{{ url('/user/staff-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {

@@ -183,6 +183,9 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
 
 
 
+    // 列表
+    Route::match(['get','post'], '/item/clue-list', $controller.'@view_item_clue_list');
+
 
 
     // 列表

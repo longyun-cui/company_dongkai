@@ -61,101 +61,6 @@
                             @endif
                             @endif
 
-                            @if(in_array($me->user_type, [0,1,11]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 41))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 41)
-                                            <input type="radio" name="user_type" value="41" checked="checked"> 团队·总经理
-                                        @else
-                                            <input type="radio" name="user_type" value="41"> 团队·总经理
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 81))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 81)
-                                            <input type="radio" name="user_type" value="81" checked="checked"> 客服经理
-                                        @else
-                                            <input type="radio" name="user_type" value="81"> 客服经理
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,41,81]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 84))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 84)
-                                            <input type="radio" name="user_type" value="84" checked="checked"> 客服主管
-                                        @else
-                                            <input type="radio" name="user_type" value="84"> 客服主管
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,41,81]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 88))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 88)
-                                            <input type="radio" name="user_type" value="88" checked="checked"> 客服
-                                        @else
-                                            <input type="radio" name="user_type" value="88" checked="checked"> 客服
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 71))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 71)
-                                            <input type="radio" name="user_type" value="71" checked="checked"> 质检经理
-                                        @else
-                                            <input type="radio" name="user_type" value="71"> 质检经理
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
-
-                            @if(in_array($me->user_type, [0,1,11,41]))
-                            @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 77))
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->user_type == 77)
-                                            <input type="radio" name="user_type" value="77" checked="checked"> 质检员
-                                        @else
-                                            <input type="radio" name="user_type" value="77"> 质检员
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-                            @endif
-                            @endif
 
                             @if(in_array($me->user_type, [0,1,11]))
                             @if($operate == 'create' || ($operate == 'edit' && $data->user_type == 61))
@@ -181,7 +86,7 @@
                                             @if(($operate == 'edit' && $data->user_type == 66) || $me->user_type == 61)
                                                 <input type="radio" name="user_type" value="66" checked="checked"> 运营人员
                                             @else
-                                                <input type="radio" name="user_type" value="66"> 运营人员
+                                                <input type="radio" name="user_type" value="66" checked="checked"> 运营人员
                                             @endif
                                         </label>
                                     </span>
@@ -246,7 +151,7 @@
                     </div>
                 </div>
                 {{--真实姓名--}}
-                <div class="form-group">
+                <div class="form-group _none">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 真实姓名</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="true_name" placeholder="真实姓名" value="{{ $data->true_name or '' }}">

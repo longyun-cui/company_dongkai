@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\DK;
 
+use App\Models\DK\DK_Pivot_Customer_Choice;
 use App\Models\DK_Customer\DK_Customer_Department;
 use App\Models\DK_Customer\DK_Customer_User;
 use App\Models\DK_Customer\DK_Customer_Project;
@@ -13,6 +14,11 @@ use App\Models\DK\DK_Pivot_Client_Delivery;
 use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Client;
 use App\Models\DK\DK_District;
+
+
+use App\Models\DK\DK_Clue;
+use App\Models\DK\DK_Customer;
+use App\Models\DK\DK_District_For_Customer;
 
 use App\Models\DK\YH_Attachment;
 
@@ -155,7 +161,7 @@ class DKCustomerRepository {
                 "))
             ->where('client_id',$me->client_id)
             ->first();
-        $funds_recharge_total = floatval($me->client_er->funds_recharge_total);
+        $funds_recharge_total = floatval($me->customer_er->funds_recharge_total);
         $funds_consumption_total = floatval($daily_total->total_of_total_daily_cost);
         $funds_balance = floatval($funds_recharge_total - $funds_consumption_total);
 
@@ -2615,6 +2621,347 @@ class DKCustomerRepository {
 
 
 
+    /*
+     * ORDER 工单管理
+     */
+    // 【工单管理】返回-列表-视图
+    public function view_item_clue_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        // 显示数量
+        if(!empty($post_data['record']))
+        {
+            if($post_data['record'] == 'record')
+            {
+                $this->record_for_user_operate(21,11,1,$me->id,0,71,0);
+            }
+        }
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 20;
+        }
+        else $view_data['length'] = 20;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+
+
+        // 工单ID
+        if(!empty($post_data['order_id']))
+        {
+            if(is_numeric($post_data['order_id']) && $post_data['order_id'] > 0) $view_data['order_id'] = $post_data['order_id'];
+            else $view_data['order_id'] = '';
+        }
+        else $view_data['order_id'] = '';
+
+        // 提交日期
+        if(!empty($post_data['assign']))
+        {
+            if($post_data['assign']) $view_data['assign'] = $post_data['assign'];
+            else $view_data['assign'] = '';
+        }
+        else $view_data['assign'] = '';
+
+        // 起始时间
+        if(!empty($post_data['assign_start']))
+        {
+            if($post_data['assign_start']) $view_data['start'] = $post_data['assign_start'];
+            else $view_data['start'] = '';
+        }
+        else $view_data['start'] = '';
+
+        // 截止时间
+        if(!empty($post_data['assign_ended']))
+        {
+            if($post_data['assign_ended']) $view_data['ended'] = $post_data['assign_ended'];
+            else $view_data['ended'] = '';
+        }
+        else $view_data['ended'] = '';
+
+        // 员工
+        if(!empty($post_data['staff_id']))
+        {
+            if(is_numeric($post_data['staff_id']) && $post_data['staff_id'] > 0) $view_data['staff_id'] = $post_data['staff_id'];
+            else $view_data['staff_id'] = -1;
+        }
+        else $view_data['staff_id'] = -1;
+
+        // 部门-大区
+        if(!empty($post_data['department_district_id']))
+        {
+            if(is_numeric($post_data['department_district_id']) && $post_data['department_district_id'] > 0) $view_data['department_district_id'] = $post_data['department_district_id'];
+            else $view_data['department_district_id'] = -1;
+        }
+        else $view_data['department_district_id'] = -1;
+
+
+
+        // 客户
+        if(!empty($post_data['customer_id']))
+        {
+            if(is_numeric($post_data['client_id']) && $post_data['client_id'] > 0) $view_data['client_id'] = $post_data['client_id'];
+            else $view_data['client_id'] = -1;
+        }
+        else $view_data['customer_id'] = -1;
+
+
+
+
+        // 项目
+        if(!empty($post_data['project_id']))
+        {
+            if(is_numeric($post_data['project_id']) && $post_data['project_id'] > 0)
+            {
+                $project = DK_Client_Project::select(['id','name'])->find($post_data['project_id']);
+                if($project)
+                {
+                    $view_data['project_id'] = $post_data['project_id'];
+                    $view_data['project_name'] = $project->name;
+                }
+                else $view_data['project_id'] = -1;
+            }
+            else $view_data['project_id'] = -1;
+        }
+        else $view_data['project_id'] = -1;
+
+        // 客户姓名
+        if(!empty($post_data['client_name']))
+        {
+            if($post_data['client_name']) $view_data['client_name'] = $post_data['client_name'];
+            else $view_data['client_name'] = '';
+        }
+        else $view_data['client_'] = '';
+        // 客户电话
+        if(!empty($post_data['client_phone']))
+        {
+            if($post_data['client_phone']) $view_data['client_phone'] = $post_data['client_phone'];
+            else $view_data['client_phone'] = '';
+        }
+        else $view_data['client_phone'] = '';
+
+        // 是否+V
+        if(!empty($post_data['is_wx']))
+        {
+            if(is_numeric($post_data['is_wx']) && $post_data['is_wx'] > 0) $view_data['is_wx'] = $post_data['is_wx'];
+            else $view_data['is_wx'] = -1;
+        }
+        else $view_data['is_wx'] = -1;
+
+        // 是否重复
+        if(!empty($post_data['is_repeat']))
+        {
+            if(is_numeric($post_data['is_repeat']) && $post_data['is_repeat'] > 0) $view_data['is_repeat'] = $post_data['is_repeat'];
+            else $view_data['is_repeat'] = -1;
+        }
+        else $view_data['is_repeat'] = -1;
+
+        // 类型
+        if(!empty($post_data['order_type']))
+        {
+            if(is_numeric($post_data['order_type']) && $post_data['order_type'] > 0) $view_data['order_type'] = $post_data['order_type'];
+            else $view_data['order_type'] = -1;
+        }
+        else $view_data['order_type'] = -1;
+
+
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $view_data['inspected_status'] = $post_data['inspected_status'];
+        }
+        else $view_data['inspected_status'] = -1;
+
+//        dd($view_data);
+
+
+        $department_district_list = DK_Customer_Department::select('id','name')->where('department_type',11)->get();
+        if($me->user_type == 81)
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        else if($me->user_type == 84)
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->where('department_group_id',$me->department_group_id)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        else
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        $customer_list = DK_Customer::select('id','username')->where('user_category',11)->get();
+        $project_list = DK_Customer_Project::select('id','name')->whereIn('item_type',[1,21])->get();
+
+        $view_data['department_district_list'] = $department_district_list;
+        $view_data['staff_list'] = $staff_list;
+        $view_data['customer_list'] = $customer_list;
+        $view_data['project_list'] = $project_list;
+        $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
+
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.clue-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【工单管理】返回-列表-数据
+    public function get_item_clue_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Pivot_Customer_Choice::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
+//            ->where('customer_id',$me->id)
+            ->with(['project_er']);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+//        $me->load(['subordinate_er' => function ($query) {
+//            $query->select('id');
+//        }]);
+
+
+
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
+        if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
+
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(published_at)"), $post_data['assign']);
+        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
+        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+
+
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1]))
+            {
+                $query->where('project_id', $post_data['project']);
+            }
+        }
+
+
+        // 工单类型 [自有|空单|配货|调车]
+        if(isset($post_data['order_type']))
+        {
+            if(!in_array($post_data['order_type'],[-1]))
+            {
+                $query->where('car_owner_type', $post_data['order_type']);
+            }
+        }
+
+        // 是否+V
+        if(!empty($post_data['is_wx']))
+        {
+            if(!in_array($post_data['is_wx'],[-1]))
+            {
+                $query->where('is_wx', $post_data['is_wx']);
+            }
+        }
+
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $inspected_status = $post_data['inspected_status'];
+            if(in_array($inspected_status,['待发布','待审核','已审核']))
+            {
+                if($inspected_status == '待发布')
+                {
+                    $query->where('is_published', 0);
+                }
+                else if($inspected_status == '待审核')
+                {
+                    $query->where('is_published', 1)->whereIn('inspected_status', [0,9]);
+                }
+                else if($inspected_status == '已审核') $query->where('inspected_status', 1);
+            }
+        }
+        // 审核结果
+        if(!empty($post_data['inspected_result']))
+        {
+//            $inspected_result = $post_data['inspected_result'];
+//            if(in_array($inspected_result,config('info.inspected_result')))
+//            {
+//                $query->where('inspected_result', $inspected_result);
+//            }
+            if(count($post_data['inspected_result']))
+            {
+                $query->whereIn('inspected_result', $post_data['inspected_result']);
+            }
+        }
+
+
+
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
+
+            $list[$k]->content_decode = json_decode($v->content);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
+
 
 
     // 【交付管理】返回-列表-视图
@@ -3983,7 +4330,7 @@ class DKCustomerRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
+        $item = DK_Order::with(['customer_er','car_er','trailer_er'])->withTrashed()->find($id);
         if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();
@@ -4034,7 +4381,7 @@ class DKCustomerRepository {
         $id = $post_data["order_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Order::with(['client_er','car_er','trailer_er'])->withTrashed()->find($id);
+        $item = DK_Order::with(['customer_er','car_er','trailer_er'])->withTrashed()->find($id);
         if(!$item) return response_error([],"该工单不存在，刷新页面重试！");
 
         $this->get_me();

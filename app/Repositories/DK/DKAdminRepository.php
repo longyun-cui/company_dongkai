@@ -18887,31 +18887,20 @@ class DKAdminRepository {
 
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 
-        if(!empty($post_data['record_type']))
+        if(!empty($post_data['record_category']))
         {
-            if($post_data['record_type'] == "-1")
+            if(!in_array($post_data['record_category'],["-1",-1,0]))
             {
-            }
-            else if(in_array($post_data['record_type'],[1,2,3]))
-            {
-                $query->where('record_type',$post_data['record_type']);
-            }
-            else if($post_data['record_type'] == "Unknown")
-            {
-                $query->where('record_type',"Unknown");
-            }
-            else if($post_data['record_type'] == "Others")
-            {
-                $query->whereNotIn('open_device_type',[1,2,3]);
-            }
-            else
-            {
-                $query->where('record_type',$post_data['record_type']);
+                $query->where('record_category', $post_data['record_category']);
             }
         }
-        else
+
+        if(!empty($post_data['record_type']))
         {
-//            $query->whereIn('record_type',[1,2,3]);
+            if(!in_array($post_data['record_type'],["-1",-1]))
+            {
+                $query->where('record_type', $post_data['record_type']);
+            }
         }
 
         if(!empty($post_data['open_device_type']))

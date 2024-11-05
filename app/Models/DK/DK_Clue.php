@@ -5,11 +5,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class DK_Optional_Item extends Model
+class DK_Clue extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_admin_optional_item";
+    protected $table = "dk_admin_clue";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'form', 'sort',
         'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
@@ -17,10 +17,14 @@ class DK_Optional_Item extends Model
         'owner_id', 'creator_id', 'verifier_id', 'inspector_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'created_type',
         'order_category', 'order_type', 'order_quality',
+        'clue_category', 'clue_type', 'clue_quality',
         'org_id', 'admin_id',
         'client_id',
+        'customer_id',
         'item_id', 'menu_id',
-        '',
+
+        'sale_category', 'sale_type', 'sale_status', 'sale_result',
+
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'tag', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
@@ -29,7 +33,10 @@ class DK_Optional_Item extends Model
         'assign_time',
         'is_distributive_condition',
         'client_name', 'client_phone', 'client_intention',
-        'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id',
+        'customer_name', 'customer_phone', 'customer_intention',
+        'team_district', 'channel_source',
+        'location_city', 'location_district',
+        'is_wx', 'wx_id',
         'recording_address',
         'is_repeat',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'is_delay',
@@ -38,6 +45,7 @@ class DK_Optional_Item extends Model
 
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description', 'inspected_at',
         'pusher_id', 'pushed_at',
+        'issuer_id', 'issued_at',
         'deliverer_id', 'delivered_status', 'delivered_result', 'delivered_description', 'delivered_at',
         'published_at', 'completed_at', 'verified_at'
     ];
@@ -132,6 +140,10 @@ class DK_Optional_Item extends Model
     function client_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
+    }
+    function customer_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Customer','customer_id','id');
     }
 
 

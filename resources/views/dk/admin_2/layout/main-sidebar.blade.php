@@ -59,8 +59,8 @@
             @if(in_array($me->user_type,[0,1,9,11,61]))
             <li class="header">客户管理</li>
 
-            <li class="treeview {{ $menu_active_of_client_list_for_all or '' }}">
-                <a href="{{ url('/user/client-list-for-all') }}">
+            <li class="treeview {{ $menu_active_of_customer_list_for_all or '' }}">
+                <a href="{{ url('/user/customer-list-for-all') }}">
                     <i class="fa fa-user-secret text-red"></i>
                     <span>客户列表</span>
                 </a>
@@ -70,11 +70,11 @@
 
             {{--部门管理--}}
             @if(in_array($me->user_type,[0,1,9,11,41]))
-            <li class="header">部门管理</li>
+            <li class="header">公司管理</li>
 
-            <li class="treeview {{ $menu_active_of_department_list_for_all or '' }}">
+            <li class="treeview {{ $menu_active_of_department_list_for_all or '' }} _none">
                 <a href="{{ url('/department/department-list-for-all') }}">
-                    <i class="fa fa-columns text-blue"></i>
+                    <i class="fa fa-columns text-green"></i>
                     <span>部门列表</span>
                 </a>
             </li>
@@ -83,11 +83,9 @@
 
             {{--员工管理--}}
             @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
-            <li class="header">员工管理</li>
-
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
                 <a href="{{ url('/user/staff-list-for-all') }}">
-                    <i class="fa fa-user text-red"></i>
+                    <i class="fa fa-user text-green"></i>
                     <span>员工列表</span>
                 </a>
             </li>
@@ -104,26 +102,35 @@
             @if(in_array($me->user_type,[0,1,9,11,61]))
                 <li class="treeview {{ $menu_active_of_district_list or '' }} _none-">
                     <a href="{{ url('/district/district-list')}}">
-                        <i class="fa fa-location-arrow text-blue"></i>
+                        <i class="fa fa-location-arrow text-yellow"></i>
                         <span>地域列表</span>
                     </a>
                 </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,61,71,81]))
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <li class="treeview {{ $menu_active_of_project_list or '' }} _none-">
                 <a href="{{ url('/item/project-list')}}">
-                    <i class="fa fa-cube text-green"></i>
+                    <i class="fa fa-cube text-yellow"></i>
                     <span>项目列表</span>
                 </a>
             </li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
-            <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
-                <a href="{{ url('/item/order-list-for-all')}}">
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            <li class="treeview {{ $menu_active_of_clue_list or '' }}">
+                <a href="{{ url('/item/clue-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
-                    <span>工单列表</span>
+                    <span>线索列表</span>
+                </a>
+            </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+            <li class="treeview {{ $menu_active_of_sales_list or '' }}">
+                <a href="{{ url('/item/sales-list')}}">
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>上架列表</span>
                 </a>
             </li>
             @endif
@@ -150,8 +157,8 @@
             <li class="header">数据统计</li>
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <li class="treeview {{ $menu_active_of_statistic_delivery_by_client or '' }}">
-                    <a href="{{ url('/statistic/statistic-delivery-by-client') }}">
+                <li class="treeview {{ $menu_active_of_statistic_delivery_by_customer or '' }}">
+                    <a href="{{ url('/statistic/statistic-delivery-by-customer') }}">
                         <i class="fa fa-area-chart text-teal"></i> <span>交付看板(客户)</span>
                     </a>
                 </li>

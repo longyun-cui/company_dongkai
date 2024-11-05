@@ -29,7 +29,7 @@
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/user/client-create') }}">
+                    <a href="{{ url('/user/customer-create') }}">
                         <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加客户</button>
                     </a>
                 </div>
@@ -100,7 +100,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="user-client-info-text-set" readonly>
+                    <input type="hidden" name="info-text-set-operate" value="user-customer-info-text-set" readonly>
                     <input type="hidden" name="info-text-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-text-set-column-key" value="" readonly>
@@ -144,8 +144,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="user-client-info-text-set" readonly>
-                    {{--<input type="hidden" name="info-time-set-operate" value="item-client-info-time-set" readonly>--}}
+                    <input type="hidden" name="info-time-set-operate" value="user-customer-info-text-set" readonly>
+                    {{--<input type="hidden" name="info-time-set-operate" value="item-customer-info-time-set" readonly>--}}
                     <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
@@ -192,7 +192,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="user-client-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-operate" value="user-customer-info-option-set" readonly>
                     <input type="hidden" name="info-radio-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
@@ -232,7 +232,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="user-client-info-option-set" readonly>
+                    <input type="hidden" name="info-select-set-operate" value="user-customer-info-option-set" readonly>
                     <input type="hidden" name="info-select-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
@@ -241,7 +241,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2 info-select-set-column-name"></label>
                         <div class="col-md-8 ">
-                            <select class="form-control select2-client" name="info-select-set-column-value" style="width:240px;" id="">
+                            <select class="form-control select2-customer" name="info-select-set-column-value" style="width:240px;" id="">
                                 <option data-id="0" value="0">未指定</option>
                             </select>
                         </div>
@@ -296,12 +296,12 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="attachment-set-operate" value="item-client-attachment-set" readonly>
-                    <input type="hidden" name="attachment-set-client-id" value="0" readonly>
+                    <input type="hidden" name="attachment-set-operate" value="item-customer-attachment-set" readonly>
+                    <input type="hidden" name="attachment-set-customer-id" value="0" readonly>
                     <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
                     <input type="hidden" name="attachment-set-column-key" value="" readonly>
 
-                    <input type="hidden" name="operate" value="item-client-attachment-set" readonly>
+                    <input type="hidden" name="operate" value="item-customer-attachment-set" readonly>
                     <input type="hidden" name="item_id" value="0" readonly>
                     <input type="hidden" name="operate_type" value="add" readonly>
                     <input type="hidden" name="column_key" value="attachment" readonly>
@@ -512,7 +512,7 @@
 
                     {{ csrf_field() }}
                     <input type="hidden" name="finance-create-operate" value="finance-create-record" readonly>
-                    <input type="hidden" name="finance-create-client-id" value="0" readonly>
+                    <input type="hidden" name="finance-create-customer-id" value="0" readonly>
 
 
 
@@ -520,7 +520,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户</label>
                         <div class="col-md-8 control-label" style="text-align:left;">
-                            <span class="finance-create-client-name"></span>
+                            <span class="finance-create-customer-name"></span>
                         </div>
                     </div>
                     {{--关键词--}}
@@ -841,7 +841,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/user/client-list-for-all') }}",
+                    'url': "{{ url('/user/customer-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -982,7 +982,7 @@
                     {
                         "title": "客户名称",
                         "data": "username",
-                        "className": "client-name",
+                        "className": "customer-name",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -1033,7 +1033,7 @@
                     @endif
                     {
                         "title": "管理员名称",
-                        "data": "client_admin_name",
+                        "data": "customer_admin_name",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
@@ -1043,7 +1043,7 @@
                     },
                     {
                         "title": "管理员登录手机",
-                        "data": "client_admin_mobile",
+                        "data": "customer_admin_mobile",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
@@ -1236,7 +1236,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "/user/client-modify-record?id="+$id,
+                    'url': "/user/customer-modify-record?id="+$id,
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -1582,5 +1582,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN_2').'entrance.user.client-list-script')
+@include(env('TEMPLATE_DK_ADMIN_2').'entrance.user.customer-list-script')
 @endsection

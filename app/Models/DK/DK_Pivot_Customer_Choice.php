@@ -7,7 +7,7 @@ class DK_Pivot_Customer_Choice extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_pivot_customer_delivery";
+    protected $table = "dk_pivot_customer_choice";
     protected $fillable = [
         'pivot_active', 'pivot_category', 'pivot_type',
         'relation_active', 'relation_category', 'relation_type',
@@ -19,15 +19,25 @@ class DK_Pivot_Customer_Choice extends Model
         'project_id',
         'item_id',
         'order_id',
+        'clue_id',
         'client_staff_id',
         'customer_staff_id',
 
+        'client_name',
         'client_phone',
 
         'is_exported',
         'exported_status',
 
         'assign_status',
+
+        'sale_category',
+        'sale_type',
+        'sale_status',
+        'sale_result',
+
+        'location_city',
+        'location_district',
 
         'delivered_status',
         'delivered_result',

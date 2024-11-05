@@ -13,7 +13,7 @@ class DK_User_2 extends Authenticatable
 //    protected $connection = 'mysql0';
 //    protected $connection = 'mysql_def';
 
-    protected $table = "dk_admin_user_2";
+    protected $table = "dk_admin_user_for_customer";
 
     protected $fillable = [
         'active', 'status', 'user_active', 'user_status',

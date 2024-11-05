@@ -42,7 +42,7 @@
         // 【编辑】
         $("#item-main-body").on('click', ".item-admin-edit-submit", function() {
             var $that = $(this);
-            window.location.href = "/user/client-edit?id="+$that.attr('data-id');
+            window.location.href = "/user/customer-edit?id="+$that.attr('data-id');
         });
 
 
@@ -56,10 +56,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/client-password-admin-reset') }}",
+                        "{{ url('/user/customer-password-admin-reset') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "client-password-admin-reset",
+                            operate: "customer-password-admin-reset",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -86,10 +86,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/client-admin-delete') }}",
+                        "{{ url('/user/customer-admin-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "client-admin-delete",
+                            operate: "customer-admin-delete",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -113,10 +113,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/client-admin-restore') }}",
+                        "{{ url('/user/customer-admin-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "client-admin-restore",
+                            operate: "customer-admin-restore",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -140,10 +140,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/client-admin-delete-permanently') }}",
+                        "{{ url('/user/customer-admin-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "client-admin-delete-permanently",
+                            operate: "customer-admin-delete-permanently",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -171,10 +171,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/client-admin-enable') }}",
+                        "{{ url('/user/customer-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "client-admin-enable",
+                            operate: "customer-admin-enable",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -198,10 +198,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/client-admin-disable') }}",
+                        "{{ url('/user/customer-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "client-admin-disable",
+                            operate: "customer-admin-disable",
                             user_id: $that.attr('data-id')
                         },
                         function(data){
@@ -274,7 +274,7 @@
             // });
 
             $.post(
-                "{{ url('/user/client-info-text-set') }}",
+                "{{ url('/user/customer-info-text-set') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: $('input[name="info-text-set-operate"]').val(),
@@ -363,8 +363,8 @@
             // });
 
             $.post(
-                "{{ url('/user/client-info-text-set') }}",
-                        {{--"{{ url('/user/client-info-time-set') }}",--}}
+                "{{ url('/user/customer-info-text-set') }}",
+                        {{--"{{ url('/user/customer-info-time-set') }}",--}}
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: $('input[name="info-time-set-operate"]').val(),
@@ -416,7 +416,7 @@
             $('input[name=info-select-set-operate-type]').val($that.attr('data-operate-type'));
 
 
-            $('select[name=info-select-set-column-value]').removeClass('select2-department').removeClass('select2-client');
+            $('select[name=info-select-set-column-value]').removeClass('select2-department').removeClass('select2-customer');
             if($that.attr("data-key") == "receipt_status")
             {
                 var $option_html = $('#receipt_status-option-list').html();
@@ -462,7 +462,7 @@
             $('.info-select-set-column-name').html($that.attr("data-name"));
             $('input[name=info-select-set-item-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
-            $('input[name=info-select-set-column-key]').prop('data-client-type',$that.attr("data-client-type"));
+            $('input[name=info-select-set-column-key]').prop('data-customer-type',$that.attr("data-customer-type"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
             $('select[name=info-select-set-column-value]').find('option').eq(0).val($that.attr("data-value"));
@@ -478,14 +478,14 @@
                 $('select[name=info-select-set-column-value]').addClass('select2-leader');
                 $('.select2-leader').select2({
                     ajax: {
-                        url: "{{ url('/user/client_select2_leader') }}",
+                        url: "{{ url('/user/customer_select2_leader') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
                             return {
                                 keyword: params.term, // search term
                                 page: params.page,
-                                type: $('input[name=info-select-set-column-key]').prop('data-client-type')
+                                type: $('input[name=info-select-set-column-key]').prop('data-customer-type')
                             };
                         },
                         processResults: function (data, params) {
@@ -528,7 +528,7 @@
             // });
 
             $.post(
-                "{{ url('/user/client-info-select-set') }}",
+                "{{ url('/user/customer-info-select-set') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: $('input[name="info-select-set-operate"]').val(),
@@ -585,7 +585,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/user/client-get-attachment-html') }}",
+                url: "{{ url('/user/customer-get-attachment-html') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -640,7 +640,7 @@
             });
 
             var options = {
-                url: "{{ url('/user/client-info-attachment-set') }}",
+                url: "{{ url('/user/customer-info-attachment-set') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -667,7 +667,7 @@
                             type:"post",
                             dataType:'json',
                             async:false,
-                            url: "{{ url('/user/client-get-attachment-html') }}",
+                            url: "{{ url('/user/customer-get-attachment-html') }}",
                             data: {
                                 _token: $('meta[name="_token"]').attr('content'),
                                 operate:"item-get",
@@ -707,10 +707,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/user/client-info-attachment-delete') }}",
+                        "{{ url('/user/customer-info-attachment-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "client-attachment-delete",
+                            operate: "customer-attachment-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -740,11 +740,11 @@
             var $that = $(this);
             var $id = $that.attr("data-id");
             var $row = $that.parents('tr');
-            var $name = $row.find('.client-name').html();
+            var $name = $row.find('.customer-name').html();
 
 
-            $('input[name="finance-create-client-id"]').val($id);
-            $('.finance-create-client-name').html($name);
+            $('input[name="finance-create-customer-id"]').val($id);
+            $('.finance-create-customer-name').html($name);
 
             $('#modal-body-for-finance-create').modal('show');
 
@@ -792,11 +792,11 @@
                     });
 
                     $.post(
-                        "{{ url('/user/client-finance-recharge-create') }}",
+                        "{{ url('/user/customer-finance-recharge-create') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="finance-create-operate"]').val(),
-                            client_id: $('input[name="finance-create-client-id"]').val(),
+                            customer_id: $('input[name="finance-create-customer-id"]').val(),
                             finance_type: $("input[name='finance-create-type']:checked").val(),
                             transaction_amount: $('input[name="finance-create-transaction-amount"]').val(),
                             transaction_date: $('input[name="finance-create-transaction-date"]').val(),

@@ -253,70 +253,70 @@ class DKAdmin_2Controller extends Controller
      * 客户管理
      */
     // 【客户】返回-列表-视图
-    public function view_user_client_list_for_all()
+    public function view_user_customer_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_client_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_customer_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_customer_list_datatable(request()->all());
     }
     // 【客户】【修改记录】返回-列表-视图（全部任务）
-    public function view_user_client_modify_record()
+    public function view_user_customer_modify_record()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_client_modify_record_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_customer_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_customer_modify_record_datatable(request()->all());
     }
 
     // 【客户】添加
-    public function operate_user_client_create()
+    public function operate_user_customer_create()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_customer_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_customer_save(request()->all());
     }
     // 【客户】编辑
-    public function operate_user_client_edit()
+    public function operate_user_customer_edit()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_client_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_customer_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_user_customer_save(request()->all());
     }
 
     // 【客户】修改-文本-text-信息
-    public function operate_client_info_text_set()
+    public function operate_customer_info_text_set()
     {
-        return $this->repo->operate_client_info_text_set(request()->all());
+        return $this->repo->operate_customer_info_text_set(request()->all());
     }
     // 【客户】修改-时间-time-信息
-    public function operate_client_info_time_set()
+    public function operate_customer_info_time_set()
     {
-        return $this->repo->operate_client_info_time_set(request()->all());
+        return $this->repo->operate_customer_info_time_set(request()->all());
     }
     // 【客户】修改-选项-option-信息
-    public function operate_client_info_option_set()
+    public function operate_customer_info_option_set()
     {
-        return $this->repo->operate_client_info_option_set(request()->all());
+        return $this->repo->operate_customer_info_option_set(request()->all());
     }
     // 【客户】添加-附件-attachment-信息
-    public function operate_client_info_attachment_set()
+    public function operate_customer_info_attachment_set()
     {
-        return $this->repo->operate_client_info_attachment_set(request()->all());
+        return $this->repo->operate_customer_info_attachment_set(request()->all());
     }
     // 【客户】删除-附件-attachment-信息
-    public function operate_client_info_attachment_delete()
+    public function operate_customer_info_attachment_delete()
     {
-        return $this->repo->operate_client_info_attachment_delete(request()->all());
+        return $this->repo->operate_customer_info_attachment_delete(request()->all());
     }
     // 【客户】获取-附件-attachment-信息
-    public function operate_client_get_attachment_html()
+    public function operate_customer_get_attachment_html()
     {
-        return $this->repo->operate_client_get_attachment_html(request()->all());
+        return $this->repo->operate_customer_get_attachment_html(request()->all());
     }
 
     // 【客户】登录
-    public function operate_user_client_login()
+    public function operate_user_customer_login()
     {
         $user_id = request()->get('user_id');
         $user = DK_Client::select('*')->find($user_id);
         if($user)
         {
-            Auth::guard('dk_client')->login($user,true);
+            Auth::guard('dk_customer')->login($user,true);
 
             $return['user'] = $user;
 
@@ -328,50 +328,50 @@ class DKAdmin_2Controller extends Controller
     }
 
     // 【客户】修改-密码
-    public function operate_user_client_password_admin_change()
+    public function operate_user_customer_password_admin_change()
     {
-        return $this->repo->operate_user_client_password_admin_change(request()->all());
+        return $this->repo->operate_user_customer_password_admin_change(request()->all());
     }
     // 【客户】修改-密码
-    public function operate_user_client_password_admin_reset()
+    public function operate_user_customer_password_admin_reset()
     {
-        return $this->repo->operate_user_client_password_admin_reset(request()->all());
+        return $this->repo->operate_user_customer_password_admin_reset(request()->all());
     }
 
     // 【客户】启用
-    public function operate_user_client_admin_enable()
+    public function operate_user_customer_admin_enable()
     {
-        return $this->repo->operate_user_client_admin_enable(request()->all());
+        return $this->repo->operate_user_customer_admin_enable(request()->all());
     }
     // 【客户】禁用
-    public function operate_user_client_admin_disable()
+    public function operate_user_customer_admin_disable()
     {
-        return $this->repo->operate_user_client_admin_disable(request()->all());
+        return $this->repo->operate_user_customer_admin_disable(request()->all());
     }
 
 
 
     // 【客户】【财务往来记录-充值】返回-列表-视图（全部任务）
-    public function view_user_client_finance_recharge_record()
+    public function view_user_customer_finance_recharge_record()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_client_finance_recharge_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_client_recharge_record_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_customer_finance_recharge_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_customer_recharge_record_datatable(request()->all());
     }
 
     // 【客户】【财务往来记录-充值】添加-财务数据-保存数据（充值）
-    public function operate_user_client_finance_recharge_create()
+    public function operate_user_customer_finance_recharge_create()
     {
-        return $this->repo->operate_user_client_finance_recharge_create(request()->all());
+        return $this->repo->operate_user_customer_finance_recharge_create(request()->all());
     }
     // 【客户】【财务往来记录-充值】修改-财务数据-保存数据（充值）
-    public function operate_user_client_finance_recharge_edit()
+    public function operate_user_customer_finance_recharge_edit()
     {
-        return $this->repo->operate_user_client_finance_recharge_edit(request()->all());
+        return $this->repo->operate_user_customer_finance_recharge_edit(request()->all());
     }
 
 
     // 【客户】【财务往来记录-使用】返回-列表-视图（全部任务）
-    public function view_user_client_funds_using_record()
+    public function view_user_customer_funds_using_record()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_funds_using_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_company_funds_using_record_datatable(request()->all());
@@ -520,10 +520,10 @@ class DKAdmin_2Controller extends Controller
 
 
     // 【用户-员工】返回-列表-视图
-    public function view_user_staff_list_for_all()
+    public function view_user_staff_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_datatable(request()->all());
     }
     // 【用户-员工】【修改记录】返回-列表-视图（全部任务）
     public function view_user_staff_modify_record()
@@ -980,10 +980,10 @@ class DKAdmin_2Controller extends Controller
      * 订单管理
      */
     // 【订单管理】返回-列表-视图（全部任务）
-    public function view_item_order_list_for_all()
+    public function view_item_clue_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_order_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_clue_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_clue_list_datatable(request()->all());
     }
 
 
@@ -1003,9 +1003,9 @@ class DKAdmin_2Controller extends Controller
         return $this->repo->operate_item_select2_project(request()->all());
     }
     // 【订单管理】SELECT2 Client 客户
-    public function operate_item_select2_client()
+    public function operate_item_select2_customer()
     {
-        return $this->repo->operate_item_select2_client(request()->all());
+        return $this->repo->operate_item_select2_customer(request()->all());
     }
 
 
@@ -1104,6 +1104,13 @@ class DKAdmin_2Controller extends Controller
     }
 
 
+    // 【订单管理】批量-交付
+    public function operate_item_clue_bulk_put_on_shelf()
+    {
+        return $this->repo->operate_item_clue_bulk_put_on_shelf(request()->all());
+    }
+
+
 
     // 【订单管理】修改-文本-信息
     public function operate_item_order_info_text_set()
@@ -1141,7 +1148,7 @@ class DKAdmin_2Controller extends Controller
         return $this->repo->operate_item_order_info_attachment_delete(request()->all());
     }
     // 【订单管理】修改-客户信息
-    public function operate_item_order_info_client_set()
+    public function operate_item_order_info_customer_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
@@ -1159,6 +1166,23 @@ class DKAdmin_2Controller extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_order_modify_record_datatable(request()->all());
+    }
+
+
+
+
+
+
+
+
+    /*
+     * 交付管理
+     */
+    // 【交付管理】返回-列表-视图（全部任务）
+    public function view_item_sales_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_sales_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_sales_list_datatable(request()->all());
     }
 
 
@@ -1377,10 +1401,10 @@ class DKAdmin_2Controller extends Controller
         else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery(request()->all());
     }
     // 【统计】交付看板
-    public function view_statistic_delivery_by_client()
+    public function view_statistic_delivery_by_customer()
     {
-        if(request()->isMethod('get')) return $this->repo->view_statistic_delivery_by_client(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery_by_client(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_statistic_delivery_by_customer(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_delivery_by_customer(request()->all());
     }
     // 【统计】交付看板
     public function view_statistic_delivery_by_project()
