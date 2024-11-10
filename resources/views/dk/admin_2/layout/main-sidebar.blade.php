@@ -141,9 +141,9 @@
 
             @if(in_array($me->user_type,[0,1,9,11]))
             {{--财务统计--}}
-            <li class="header">财务统计</li>
+            <li class="header _none">财务统计</li>
 
-            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
+            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }} _none">
                 <a href="{{ url('/finance/daily-list') }}">
                     <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
                 </a>
@@ -154,7 +154,7 @@
 
 
             {{--数据统计--}}
-            <li class="header">数据统计</li>
+            <li class="header _none">数据统计</li>
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <li class="treeview {{ $menu_active_of_statistic_project or '' }} _none">
@@ -165,7 +165,7 @@
             @endif
 
 
-            <li class="treeview {{ $menu_active_of_statistic_index or '' }}">
+            <li class="treeview {{ $menu_active_of_statistic_index or '' }} _none">
                 <a href="{{ url('/statistic/statistic-index') }}">
                     <i class="fa fa-pie-chart text-green"></i> <span>数据统计</span>
                 </a>
@@ -173,7 +173,7 @@
 
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
 {{--            @if($me->department_district_id == 0)--}}
-            <li class="treeview {{ $menu_active_of_statistic_export or '' }}">
+            <li class="treeview {{ $menu_active_of_statistic_export or '' }} _none">
                 <a href="{{ url('/statistic/statistic-export') }}">
                     <i class="fa fa-download text-default"></i> <span>数据导出</span>
                 </a>
