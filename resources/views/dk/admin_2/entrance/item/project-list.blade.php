@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_ADMIN_2').'layout.layout')
 
 
 @section('head_title')
@@ -539,8 +539,8 @@
 @endsection
 @section('custom-style')
 <style>
-    /*.tableArea table { width:100% !important; min-width:100%; }*/
     .tableArea table { min-width:1360px; }
+    .tableArea table { width:100% !important; min-width:100%; }
     .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
 </style>
 @endsection
@@ -704,27 +704,27 @@
                             }
                         }
                     },
-                    {
-                        "title": "分发",
-                        "data": "is_distributive",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-radio-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','分发');
-                                $(nTd).attr('data-key','is_distributive').attr('data-value',data);
-                                $(nTd).attr('data-column-name','分发');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
-                            else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
-                            else return '--';
-                        }
-                    },
+                    // {
+                    //     "title": "分发",
+                    //     "data": "is_distributive",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-radio-set');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','分发');
+                    //             $(nTd).attr('data-key','is_distributive').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','分发');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                    //         else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                    //         else return '--';
+                    //     }
+                    // },
                     {
                         "title": "项目名称",
                         "data": "name",
@@ -775,45 +775,6 @@
                     //     }
                     // },
                     {
-                        "title": "团队",
-                        "data": "pivot_project_team",
-                        "className": "text-center",
-                        "width": "160px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        },
-                        render: function(data, type, row, meta) {
-                            var html = '';
-                            $.each(data,function( key, val ) {
-//                                console.log( key, val, this );
-                                html += '<a href="javascript:void(0);">'+this.name+'</a> &nbsp;';
-                            });
-                            return html;
-                        }
-                    },
-                    {
-                        "title": "每日目标",
-                        "data": "daily_goal",
-                        "className": "text-center",
-                        "width": "",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','每日目标');
-                                $(nTd).attr('data-key','daily_goal').attr('data-value',data);
-                                $(nTd).attr('data-column-name','每日目标');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
                         "title": "备注",
                         "data": "remark",
                         "className": "text-center",
@@ -835,23 +796,6 @@
                             return data;
                             // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
                             // else return '';
-                        }
-                    },
-                    {
-                        "title": "质检员",
-                        "data": "pivot_project_user",
-                        "className": "text-left",
-                        "width": "240px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        },
-                        render: function(data, type, row, meta) {
-                            var html = '';
-                            $.each(data,function( key, val ) {
-//                                console.log( key, val, this );
-                                html += '<a href="javascript:void(0);">'+this.username+'</a> &nbsp;';
-                            });
-                            return html;
                         }
                     },
                     {
@@ -1337,5 +1281,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-script')
+@include(env('TEMPLATE_DK_ADMIN_2').'entrance.item.project-list-script')
 @endsection

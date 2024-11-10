@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_ADMIN_2').'layout.layout')
 
 
 @section('head_title')
@@ -370,7 +370,7 @@
         // 添加or编辑
         $("#edit-item-submit").on('click', function() {
             var options = {
-                url: "{{ url('/item/order-edit') }}",
+                url: "{{ url('/item/clue-edit') }}",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -380,7 +380,7 @@
                     {
                         layer.msg(data.msg);
 
-                        location.href = "{{ url('/item/order-list-for-all') }}";
+                        location.href = "{{ url('/item/clue-list') }}";
 
                         {{--if($.getUrlParam('referrer')) location.href = decodeURIComponent($.getUrlParam('referrer'));--}}
                         {{--else if(document.referrer) location.href = document.referrer;--}}

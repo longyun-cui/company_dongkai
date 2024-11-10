@@ -1023,7 +1023,40 @@
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','累充金额');
                                 $(nTd).attr('data-key','funds_recharge_total').attr('data-value',data);
-                                $(nTd).attr('data-column-name','累充金额');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "累计消费",
+                        "data": "funds_consumption_total",
+                        "className": "item-show-for-consumption",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','累计消费');
+                                $(nTd).attr('data-key','funds_consumption_total').attr('data-value',data)
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "冻结金额",
+                        "data": "funds_obligation_total",
+                        "className": "item-show-for-obligation",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(true)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','冻结金额');
+                                $(nTd).attr('data-key','funds_obligation_total').attr('data-value',data);
                             }
                         },
                         render: function(data, type, row, meta) {
@@ -1044,6 +1077,26 @@
                     {
                         "title": "管理员登录手机",
                         "data": "customer_admin_mobile",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "城市",
+                        "data": "district_city",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "地区",
+                        "data": "district_district",
                         "className": "",
                         "width": "120px",
                         "orderable": false,

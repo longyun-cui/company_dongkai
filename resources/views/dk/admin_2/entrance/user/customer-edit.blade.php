@@ -103,6 +103,26 @@
                         <input type="text" class="form-control" name="customer_admin_mobile" placeholder="管理员登录手机" value="{{ $data->customer_admin_mobile or '' }}">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
+                    <div class="col-md-8 ">
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <select class="form-control select-select2 select2-district-city" name="district_city" id="select-city-1" data-target="#select-district-1" style="width:100%;">
+                                <option value="">选择城市</option>
+                                @if(!empty($district_city_list) && count($district_city_list) > 0)
+                                    @foreach($district_city_list as $v)
+                                        <option value="{{ $v->district_city }}" @if(!empty($data->district_city) && $data->district_city == $v->district_city) selected="selected" @endif>{{ $v->district_city }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-md-6 padding-0">
+                            <select class="form-control select-select2 select2-district-district" name="district_district[]" id="select-district-1" data-target="#select-city-1" multiple="multiple" style="width:100%;">
+{{--                                <option value="">选择区域</option>--}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
 
                 {{--描述--}}

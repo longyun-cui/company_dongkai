@@ -5,22 +5,22 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\DK\DK_User_2;
-use App\Models\DK\DK_Client;
-use App\Models\DK\DK_Record_Visit;
+use App\Models\DK_Choice\DK_Choice_User;
+use App\Models\DK_Choice\DK_Customer;
+use App\Models\DK_Choice\DK_Record_Visit;
 
-use App\Repositories\DK\DKAdmin_2Repository;
+use App\Repositories\DK\DKAdmin2_Repository;
 
 use Response, Auth, Validator, DB, Exception;
 use QrCode, Excel;
 
-class DKAdmin_2Controller extends Controller
+class DKAdmin2_Controller extends Controller
 {
     //
     private $repo;
     public function __construct()
     {
-        $this->repo = new DKAdmin_2Repository;
+        $this->repo = new DKAdmin2_Repository;
     }
 
 
@@ -241,6 +241,30 @@ class DKAdmin_2Controller extends Controller
         }
         else return response_error([]);
 
+    }
+
+
+
+
+    // 【线索】SELECT2 User 员工
+    public function operate_item_select2_user()
+    {
+        return $this->repo->operate_item_select2_user(request()->all());
+    }
+    // 【线索】SELECT2 Team 团队
+    public function operate_item_select2_team()
+    {
+        return $this->repo->operate_item_select2_team(request()->all());
+    }
+    // 【线索】SELECT2 Client 项目
+    public function operate_select2_project()
+    {
+        return $this->repo->operate_select2_project(request()->all());
+    }
+    // 【线索】SELECT2 Client 客户
+    public function operate_item_select2_customer()
+    {
+        return $this->repo->operate_item_select2_customer(request()->all());
     }
 
 
@@ -495,9 +519,9 @@ class DKAdmin_2Controller extends Controller
      *
      */
     // 【用户】SELECT2 District
-    public function operate_user_select2_sales()
+    public function operate_user_select2_choice()
     {
-        return $this->repo->operate_user_select2_sales(request()->all());
+        return $this->repo->operate_user_select2_choice(request()->all());
     }
 
     // 【用户】SELECT2 Superior 上级
@@ -977,182 +1001,171 @@ class DKAdmin_2Controller extends Controller
 
 
     /*
-     * 订单管理
+     * 线索
      */
-    // 【订单管理】返回-列表-视图（全部任务）
+    // 【线索】返回-列表-视图（全部任务）
     public function view_item_clue_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_clue_list(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_clue_list_datatable(request()->all());
     }
-
-
-    // 【订单管理】SELECT2 User 员工
-    public function operate_item_select2_user()
+    // 【线索-修改记录】返回-列表-视图（全部任务）
+    public function view_item_clue_modify_record()
     {
-        return $this->repo->operate_item_select2_user(request()->all());
-    }
-    // 【订单管理】SELECT2 Team 团队
-    public function operate_item_select2_team()
-    {
-        return $this->repo->operate_item_select2_team(request()->all());
-    }
-    // 【订单管理】SELECT2 Client 项目
-    public function operate_item_select2_project()
-    {
-        return $this->repo->operate_item_select2_project(request()->all());
-    }
-    // 【订单管理】SELECT2 Client 客户
-    public function operate_item_select2_customer()
-    {
-        return $this->repo->operate_item_select2_customer(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_clue_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_clue_modify_record_datatable(request()->all());
     }
 
 
-    // 【订单管理】添加
-    public function operate_item_order_create()
+    // 【线索】添加
+    public function operate_item_clue_create()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_order_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_clue_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_clue_save(request()->all());
     }
-    // 【订单管理】编辑
-    public function operate_item_order_edit()
+    // 【线索】编辑
+    public function operate_item_clue_edit()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_order_save(request()->all());
-    }
-
-    // 【订单管理】导入
-    public function operate_item_order_import()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_import();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_order_import_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_clue_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_clue_save(request()->all());
     }
 
+    // 【线索】导入
+    public function operate_item_clue_import()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_clue_import();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_clue_import_save(request()->all());
+    }
 
-    // 【订单管理】获取-详情
+
+    // 【线索】获取-详情
     public function operate_item_order_get()
     {
         return $this->repo->operate_item_order_get(request()->all());
     }
-    // 【订单管理】获取-详情
+    // 【线索】获取-详情
     public function operate_item_order_get_html()
     {
         return $this->repo->operate_item_order_get_html(request()->all());
     }
-    // 【订单管理】获取-附件
+    // 【线索】获取-附件
     public function operate_item_order_get_attachment_html()
     {
         return $this->repo->operate_item_order_get_attachment_html(request()->all());
     }
 
 
-    // 【订单管理】删除
+    // 【线索】删除
     public function operate_item_order_delete()
     {
         return $this->repo->operate_item_order_delete(request()->all());
     }
-    // 【订单管理】发布
+    // 【线索】发布
     public function operate_item_order_publish()
     {
         return $this->repo->operate_item_order_publish(request()->all());
     }
-    // 【订单管理】完成
+    // 【线索】完成
     public function operate_item_order_complete()
     {
         return $this->repo->operate_item_order_complete(request()->all());
     }
-    // 【订单管理】弃用
+    // 【线索】弃用
     public function operate_item_order_abandon()
     {
         return $this->repo->operate_item_order_abandon(request()->all());
     }
-    // 【订单管理】复用
+    // 【线索】复用
     public function operate_item_order_reuse()
     {
         return $this->repo->operate_item_order_reuse(request()->all());
     }
-    // 【订单管理】验证
+    // 【线索】验证
     public function operate_item_order_verify()
     {
         return $this->repo->operate_item_order_verify(request()->all());
     }
-    // 【订单管理】审核
+    // 【线索】审核
     public function operate_item_order_inspect()
     {
         return $this->repo->operate_item_order_inspect(request()->all());
     }
-    // 【订单管理】交付
+    // 【线索】交付
     public function operate_item_order_deliver_get_delivered()
     {
         return $this->repo->operate_item_order_deliver_get_delivered(request()->all());
     }
-    // 【订单管理】交付
+    // 【线索】交付
     public function operate_item_order_deliver()
     {
         return $this->repo->operate_item_order_deliver(request()->all());
     }
-    // 【订单管理】批量-交付
+    // 【线索】批量-交付
     public function operate_item_order_bulk_deliver()
     {
         return $this->repo->operate_item_order_bulk_deliver(request()->all());
     }
-    // 【订单管理】分发
+    // 【线索】分发
     public function operate_item_order_distribute()
     {
         return $this->repo->operate_item_order_distribute(request()->all());
     }
 
 
-    // 【订单管理】批量-交付
-    public function operate_item_clue_bulk_put_on_shelf()
+    // 【线索】上架
+    public function operate_item_clue_put_on_shelf()
     {
-        return $this->repo->operate_item_clue_bulk_put_on_shelf(request()->all());
+        return $this->repo->operate_item_clue_put_on_shelf(request()->all());
+    }
+    // 【线索】批量-上架
+    public function operate_item_clue_put_on_shelf_by_bulk()
+    {
+        return $this->repo->operate_item_clue_put_on_shelf_by_bulk(request()->all());
     }
 
 
 
-    // 【订单管理】修改-文本-信息
+    // 【线索】修改-文本-信息
     public function operate_item_order_info_text_set()
     {
         return $this->repo->operate_item_order_info_text_set(request()->all());
     }
-    // 【订单管理】修改-时间-信息
+    // 【线索】修改-时间-信息
     public function operate_item_order_info_time_set()
     {
         return $this->repo->operate_item_order_info_time_set(request()->all());
     }
-    // 【订单管理】修改-option-信息
+    // 【线索】修改-option-信息
     public function operate_item_order_info_option_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
-    // 【订单管理】修改-radio-信息
+    // 【线索】修改-radio-信息
     public function operate_item_order_info_radio_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
-    // 【订单管理】修改-select-信息
+    // 【线索】修改-select-信息
     public function operate_item_order_info_select_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
-    // 【订单管理】添加-attachment-信息
+    // 【线索】添加-attachment-信息
     public function operate_item_order_info_attachment_set()
     {
         return $this->repo->operate_item_order_info_attachment_set(request()->all());
     }
-    // 【订单管理】删除-attachment-信息
+    // 【线索】删除-attachment-信息
     public function operate_item_order_info_attachment_delete()
     {
         return $this->repo->operate_item_order_info_attachment_delete(request()->all());
     }
-    // 【订单管理】修改-客户信息
+    // 【线索】修改-客户信息
     public function operate_item_order_info_customer_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
-    // 【订单管理】修改-车辆信息
+    // 【线索】修改-车辆信息
     public function operate_item_order_info_project_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
@@ -1161,12 +1174,6 @@ class DKAdmin_2Controller extends Controller
 
 
 
-    // 【订单管理-修改记录】返回-列表-视图（全部任务）
-    public function view_item_order_modify_record()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_order_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_order_modify_record_datatable(request()->all());
-    }
 
 
 
@@ -1176,45 +1183,34 @@ class DKAdmin_2Controller extends Controller
 
 
     /*
-     * 交付管理
+     * 上架管理
      */
-    // 【交付管理】返回-列表-视图（全部任务）
-    public function view_item_sales_list()
+    // 【上架管理】返回-列表-视图（全部任务）
+    public function view_item_choice_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_sales_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_sales_list_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_choice_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_choice_list_datatable(request()->all());
+    }
+    // 【线索-修改记录】返回-列表-视图（全部任务）
+    public function view_item_choice_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_choice_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_choice_modify_record_datatable(request()->all());
     }
 
 
-
-
-
-
-
-
-    /*
-     * 交付管理
-     */
-    // 【交付管理】返回-列表-视图（全部任务）
-    public function view_item_delivery_list()
+    // 【上架管理】删除
+    public function operate_item_choice_delete()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_delivery_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_delivery_list_datatable(request()->all());
+        return $this->repo->operate_item_choice_delete(request()->all());
     }
-
-
-    // 【交付管理】删除
-    public function operate_item_delivery_delete()
-    {
-        return $this->repo->operate_item_delivery_delete(request()->all());
-    }
-    // 【交付管理】导出
-    public function operate_item_delivery_exported()
+    // 【上架管理】导出
+    public function operate_item_choice_exported()
     {
         return $this->repo->operate_item_delivery_exported(request()->all());
     }
-    // 【订单管理】批量-更改导出状态
-    public function operate_item_delivery_bulk_exported()
+    // 【上架管理】批量-更改导出状态
+    public function operate_item_choice_bulk_exported()
     {
         return $this->repo->operate_item_delivery_bulk_exported(request()->all());
     }
@@ -1247,7 +1243,7 @@ class DKAdmin_2Controller extends Controller
     {
         return $this->repo->operate_item_distribution_exported(request()->all());
     }
-    // 【订单管理】批量-交付
+    // 【线索】批量-交付
     public function operate_item_distribution_bulk_exported()
     {
         return $this->repo->operate_item_distribution_bulk_exported(request()->all());
@@ -1263,7 +1259,7 @@ class DKAdmin_2Controller extends Controller
     /*
      * Finance 财务
      */
-    // 【订单管理】返回-列表-视图（全部任务）
+    // 【线索】返回-列表-视图（全部任务）
     public function view_finance_daily_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_finance_daily_list(request()->all());
@@ -1286,27 +1282,27 @@ class DKAdmin_2Controller extends Controller
     }
 
 
-    // 【订单管理】修改-文本-信息
+    // 【线索】修改-文本-信息
     public function operate_finance_daily_info_text_set()
     {
         return $this->repo->operate_finance_daily_info_text_set(request()->all());
     }
-    // 【订单管理】修改-时间-信息
+    // 【线索】修改-时间-信息
     public function operate_finance_daily_info_time_set()
     {
         return $this->repo->operate_finance_daily_info_time_set(request()->all());
     }
-    // 【订单管理】修改-option-信息
+    // 【线索】修改-option-信息
     public function operate_finance_daily_info_option_set()
     {
         return $this->repo->operate_finance_daily_info_option_set(request()->all());
     }
-    // 【订单管理】修改-radio-信息
+    // 【线索】修改-radio-信息
     public function operate_finance_daily_info_radio_set()
     {
         return $this->repo->operate_finance_daily_info_option_set(request()->all());
     }
-    // 【订单管理】修改-select-信息
+    // 【线索】修改-select-信息
     public function operate_finance_daily_info_select_set()
     {
         return $this->repo->operate_finance_daily_info_option_set(request()->all());

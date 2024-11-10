@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Auth, Response;
 
-class DKAdmin_2LoginMiddleware
+class DKAdminLoginMiddleware
 {
     protected $auth;
 
@@ -17,7 +17,7 @@ class DKAdmin_2LoginMiddleware
 
     public function handle($request, Closure $next)
     {
-        if(!Auth::guard('dk_admin_2')->check()) // 未登录
+        if(!Auth::guard('dk_admin')->check()) // 未登录
         {
             return redirect('/login');
 
@@ -28,17 +28,17 @@ class DKAdmin_2LoginMiddleware
         }
         else
         {
-            $me_admin = Auth::guard('dk_admin_2')->user();
+            $me_admin = Auth::guard('dk_admin')->user();
             // 判断用户是否重新登录
             if($me_admin->admin_token == 'logout')
             {
-                Auth::guard('dk_admin_2')->logout();
+                Auth::guard('dk_admin')->logout();
                 return redirect('/login');
             }
             // 判断用户是否被封禁
             if($me_admin->user_status != 1)
             {
-                Auth::guard('dk_admin_2')->logout();
+                Auth::guard('dk_admin')->logout();
                 return redirect('/login');
             }
             view()->share('me_admin', $me_admin);
@@ -48,7 +48,7 @@ class DKAdmin_2LoginMiddleware
 
     public function terminate($request, $response)
     {
-        $me_admin = Auth::guard('dk_admin_2')->user();
+        $me_admin = Auth::guard('dk_admin')->user();
         view()->share('me', $me_admin);
     }
 }

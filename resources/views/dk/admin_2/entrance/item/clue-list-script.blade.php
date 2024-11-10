@@ -3,50 +3,50 @@
 
 
         // 【搜索】
-        $("#datatable-for-order-list").on('click', ".filter-submit", function() {
+        $("#datatable-for-clue-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【刷新】
-        $("#datatable-for-order-list").on('click', ".filter-refresh", function() {
+        $("#datatable-for-clue-list").on('click', ".filter-refresh", function() {
             $('#datatable_ajax').DataTable().ajax.reload(null,false);
         });
         // 【重置】
-        $("#datatable-for-order-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-clue-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-clue-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-clue-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-clue-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $("#datatable-for-order-list").on('click', ".filter-empty", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-clue-list").on('click', ".filter-empty", function() {
+            $("#datatable-for-clue-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-clue-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-clue-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $("#datatable-for-order-list").on('keyup', ".filter-keyup", function(event) {
+        $("#datatable-for-clue-list").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-order-list").find(".filter-submit").click();
+                $("#datatable-for-clue-list").find(".filter-submit").click();
             }
         });
 
 
         // 【完整显示】
-        $(".main-content").on('click', "#order-show-for-full", function() {
+        $(".main-content").on('click', "#clue-show-for-full", function() {
             // $('#datatable_ajax').dataTable().fnSetColumnVis(11, true);
             // $('#datatable_ajax').dataTable().fnSetColumnVis(12, true);
             // $('#datatable_ajax').dataTable().fnSetColumnVis(16, true);
@@ -55,7 +55,7 @@
             // $('#datatable_ajax').dataTable().fnSetColumnVis(19, true);
         });
         // 【简要显示】
-        $(".main-content").on('click', "#order-show-for-brief", function() {
+        $(".main-content").on('click', "#clue-show-for-brief", function() {
             // $('#datatable_ajax').dataTable().fnSetColumnVis(11, false);
             // $('#datatable_ajax').dataTable().fnSetColumnVis(12, false);
             // $('#datatable_ajax').dataTable().fnSetColumnVis(16, false);
@@ -64,7 +64,7 @@
             // $('#datatable_ajax').dataTable().fnSetColumnVis(19, false);
         });
         // 【财务显示】
-        $(".main-content").on('click', "#order-show-for-finance", function() {
+        $(".main-content").on('click', "#clue-show-for-finance", function() {
             // $('#datatable_ajax').dataTable().fnSetColumnVis(s19, false);
         });
 
@@ -74,7 +74,7 @@
         // 【综合概览】【前一天】
         $(".main-content").on('click', ".date-pick-pre-for-order", function() {
 
-            var $assign_dom = $('input[name="order-assign"]');
+            var $assign_dom = $('input[name="clue-assign"]');
             var $the_date = $assign_dom.val();
 
             if($the_date)
@@ -95,13 +95,13 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-order-list").find(".filter-submit").click();
+            $("#datatable-for-clue-list").find(".filter-submit").click();
 
         });
         // 【综合概览】【后一添】
         $(".main-content").on('click', ".date-pick-next-for-order", function() {
 
-            var $assign_dom = $('input[name="order-assign"]');
+            var $assign_dom = $('input[name="clue-assign"]');
             var $the_date = $assign_dom.val();
 
             if($the_date)
@@ -122,7 +122,7 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-order-list").find(".filter-submit").click();
+            $("#datatable-for-clue-list").find(".filter-submit").click();
 
         });
 
@@ -140,21 +140,26 @@
         // 【编辑】
         $(".main-content").on('click', ".item-create-show", function() {
             var $that = $(this);
-            $('#modal-body-for-order-create').modal('show');
+            $('#modal-body-for-clue-create').modal('show');
         });
-
         // 【编辑】
         $(".main-content").on('click', ".item-create-link", function() {
             var $that = $(this);
-            var $url = "/item/order-create?&referrer="+encodeURIComponent(window.location.href);
+            var $url = "/item/clue-create?&referrer="+encodeURIComponent(window.location.href);
             // window.location.href = $url;
             window.open($url);
         });
-
         // 【编辑】
         $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);
-            var $url = "/item/order-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
+            var $url = "/item/clue-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
+            window.location.href = $url;
+            // window.open($url);
+        });
+        // 【编辑】
+        $(".main-content").on('click', ".item-import-link", function() {
+            var $that = $(this);
+            var $url = "/item/clue-import?&referrer="+encodeURIComponent(window.location.href);
             window.location.href = $url;
             // window.open($url);
         });
@@ -172,7 +177,7 @@
             {{--    type:"post",--}}
             {{--    dataType:'json',--}}
             {{--    async:false,--}}
-            {{--    url: "{{ url('/item/order-get-html') }}",--}}
+            {{--    url: "{{ url('/item/clue-get-html') }}",--}}
             {{--    data: {--}}
             {{--        _token: $('meta[name="_token"]').attr('content'),--}}
             {{--        operate:"item-get",--}}
@@ -188,7 +193,7 @@
             {{--});--}}
 
 //            $('input[name=id]').val($that.attr('data-id'));
-            $('input[name=info-set-order-id]').val($that.attr('data-id'));
+            $('input[name=info-set-clue-id]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));
 
@@ -223,7 +228,7 @@
             $('#datatable_ajax').find('tr').removeClass('inspecting');
             $row.addClass('inspecting');
 
-            $('input[name="detail-inspected-order-id"]').val($that.attr('data-id'));
+            $('input[name="detail-inspected-clue-id"]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));
 
@@ -267,16 +272,16 @@
         $(".main-content").on('click', ".item-summit-for-detail-inspected", function() {
             var $that = $(this);
 
-            var $id = $('input[name="detail-inspected-order-id"]').val();
+            var $id = $('input[name="detail-inspected-clue-id"]').val();
             var $inspected_result = $('select[name="detail-inspected-result"]').val();
             var $inspected_description = $('textarea[name="detail-inspected-description"]').val();
 
             $.post(
-                "{{ url('/item/order-inspect') }}",
+                "{{ url('/item/clue-inspect') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "order-inspect",
-                    item_id: $('input[name="detail-inspected-order-id"]').val(),
+                    operate: "clue-inspect",
+                    item_id: $('input[name="detail-inspected-clue-id"]').val(),
                     inspected_result: $('select[name="detail-inspected-result"]').val(),
                     inspected_description: $('textarea[name="detail-inspected-description"]').val()
                 },
@@ -328,7 +333,7 @@
 
 
 
-        // 【交付】【显示】
+        // 【上架】【显示】
         $(".main-content").on('click', ".item-modal-show-for-push", function() {
 
             $('select[name=info-select-set-column-value]').attr("selected","");
@@ -338,7 +343,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-clue-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
@@ -371,10 +376,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-delete') }}",
+                        "{{ url('/item/clue-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-delete",
+                            operate: "clue-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -401,10 +406,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-abandon') }}",
+                        "{{ url('/item/clue-abandon') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-abandon",
+                            operate: "clue-abandon",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -431,10 +436,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-reuse') }}",
+                        "{{ url('/item/clue-reuse') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-reuse",
+                            operate: "clue-reuse",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -477,10 +482,10 @@
                     });
 
                     $.post(
-                        "{{ url('/item/order-publish') }}",
+                        "{{ url('/item/clue-publish') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-publish",
+                            operate: "clue-publish",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -512,10 +517,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-complete') }}",
+                        "{{ url('/item/clue-complete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-complete",
+                            operate: "clue-complete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -542,10 +547,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-verify') }}",
+                        "{{ url('/item/clue-verify') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-verify",
+                            operate: "clue-verify",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -584,10 +589,10 @@
                     '<textarea class="form-control" name="inspected-description" placeholder="审核说明" rows="3"></textarea>'
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-inspect') }}",
+                        "{{ url('/item/clue-inspect') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-inspect",
+                            operate: "clue-inspect",
                             item_id: $that.attr('data-id'),
                             inspected_result: $('select[name="inspected-result"]').val(),
                             inspected_description: $('textarea[name="inspected-description"]').val(),
@@ -611,8 +616,11 @@
             });
         });
 
-        // 【交付】
-        $(".main-content").on('click', ".item-deliver-submit", function() {
+
+
+
+        // 【上架】
+        $(".main-content").on('click', ".item-put-on-submit", function() {
 
             var $that = $(this);
             var $row = $that.parents('tr');
@@ -637,10 +645,10 @@
             var $html = '';
 
             $.post(
-                "{{ url('/item/order-deliver-get-delivered') }}",
+                "{{ url('/item/clue-put-on-get-delivered') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "order-deliver-get-delivered",
+                    operate: "clue-put-on-get-delivered",
                     item_id: $that.attr('data-id')
                 },
                 function(data){
@@ -655,7 +663,7 @@
                     {
                         if(data.data.order_repeat.length)
                         {
-                            $html += '<div>【已交付订单】</div>';
+                            $html += '<div>【已上架订单】</div>';
                             var $order_list = data.data.order_repeat;
                             $.each($order_list, function(index,$order) {
 
@@ -711,7 +719,7 @@
             layer.open({
                 time: 0
                 ,btn: ['确定', '取消']
-                ,title: '工单【交付】！'
+                ,title: '工单【上架】！'
                 ,area:['480px;']
                 ,content:
                     $html+
@@ -722,14 +730,14 @@
                     $option_html_for_delivered_result+
                     '</select>'+
                     '<input type="text" class="form-control" name="input-recording-address" rows="2" placeholder="录音地址"></textarea>'+
-                    '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="交付说明"></textarea>'+
+                    '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="上架说明"></textarea>'+
                     $option_html_for_is_distributive_condition
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-deliver') }}",
+                        "{{ url('/item/clue-deliver') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-deliver",
+                            operate: "clue-deliver",
                             item_id: $that.attr('data-id'),
                             client_id: $('select[name="select-client-id"]').val(),
                             delivered_result: $('select[name="select-delivered-result"]').val(),
@@ -754,7 +762,7 @@
                                 var $is_distributive_condition = $('input[name="option_is_distributive_condition"]:checked').val();
 
                                 $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
-                                $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
+                                $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已上架</small>');
                                 $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');
                                 // 是否符合分发条件
                                 if($is_distributive_condition == 0)
@@ -771,8 +779,8 @@
                                 {
                                     $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
                                 }
-                                $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
-                                // $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
+                                $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已上架</small>');
+                                // $row.find('.item-put-on-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
 
 
                                 var $date = new Date();
@@ -799,140 +807,58 @@
             );
 
         });
-        // 【交付】显示
-        $(".main-content").on('click', ".item-deliver-show", function() {
-
+        // 【上架】显示
+        $(".main-content").on('click', ".item-put-on-show", function() {
 
             var $that = $(this);
             var $row = $that.parents('tr');
             $('#datatable_ajax').find('tr').removeClass('operating');
             $row.addClass('operating');
 
-            $('.deliver-set-title').html($that.attr("data-id"));
-            $('.deliver-set-column-name').html($that.attr("data-name"));
-            $('input[name=deliver-set-order-id]').val($that.attr("data-id"));
-            $('input[name=deliver-set-column-key]').val($that.attr("data-key"));
-            $('#deliver-set-distributed-list').html('');
-            $('#deliver-set-distributed-order-list').html('');
-            $('#deliver-set-distributed-client-list').html('');
+            $('.put-on-set-title').html($that.attr("data-id"));
+            $('.put-on-set-column-name').html($that.attr("data-name"));
+            $('input[name=put-on-set-clue-id]').val($that.attr("data-id"));
+            $('input[name=put-on-set-column-key]').val($that.attr("data-key"));
+            $('#put-on-set-distributed-list').html('');
+            $('#put-on-set-distributed-clue-list').html('');
+            $('#put-on-set-distributed-client-list').html('');
 
-            $('#modal-body-for-deliver-set').modal('show');
+            $('#modal-body-for-put-on-set').modal('show');
 
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">耐心等待中</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
-                    });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
-                }
-            });
-
-            var $html = '';
-            var $html_for_order = '';
-            var $html_for_distributed = '';
-
-            $.post(
-                "{{ url('/item/order-deliver-get-delivered') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "order-deliver-get-delivered",
-                    item_id: $that.attr('data-id')
-                },
-                function(data){
-
-                    layer.closeAll('loading');
-
-                    if(!data.success)
-                    {
-                        layer.msg(data.msg);
-                    }
-                    else
-                    {
-                        if(data.data.order_repeat.length)
-                        {
-                            $html += '<div>【已交付订单】</div>';
-                            var $order_list = data.data.order_repeat;
-                            $.each($order_list, function(index,$order) {
-
-                                var $client_username = '';
-                                if($order.client_er) $client_username = $order.client_er.username;
-
-                                var $project_name = '';
-                                if($order.project_er) $project_name = $order.project_er.name;
-
-                                var $html_order =
-                                    '<div>'+
-                                    '<span style="width:120px;float:left;">[工单ID]' + $order.id + '</span>' +
-                                    '<span style="width:240px;float:left;">[客户]' + $client_username + '</span>' +
-                                    '[项目]' + $project_name +
-                                    '</div>';
-                                $html += $html_order;
-                                $html_for_order += $html_order;
-                            });
-                            $html += '<br>';
-                        }
-                        if(data.data.deliver_repeat.length)
-                        {
-                            $html += '<div>【已分发客户】</div>';
-                            var $deliver_list = data.data.deliver_repeat;
-                            $.each($deliver_list, function(index,$deliver) {
-
-                                var $client_username = '';
-                                if($deliver.client_er) $client_username = $deliver.client_er.username;
-
-                                var $project_name = '';
-                                if($deliver.project_er) $project_name = $deliver.project_er.name;
-
-                                var $html_deliver =
-                                    '<div>' +
-                                    '<span style="width:120px;float:left;">[交付ID] ' + $deliver.id + '</span>' +
-                                    '<span style="width:240px;float:left;">[客户] ' + $client_username + '</span>' +
-                                    '[项目] '+ $project_name +
-                                    '</div>';
-                                $html += $html_deliver;
-                                $html_for_distributed += $html_deliver;
-                            })
-                            $html += '<br>';
-                        }
-                        $html += '<br>';
-                        $('#deliver-set-distributed-list').html($html);
-                        $('#deliver-set-distributed-order-list').html($html_for_order);
-                        $('#deliver-set-distributed-client-list').html($html_for_distributed);
-
-
-                        var $option_html_for_client = $('#option-list-for-client').html();
-                        var $option_html_for_delivered_result = $('#option-list-for-delivered-result').html();
-
-                    }
-                },
-                'json'
-            );
+            // var $index = layer.load(1, {
+            //     shade: [0.3, '#fff'],
+            //     content: '<span class="loadtip">耐心等待中</span>',
+            //     success: function (layer) {
+            //         layer.find('.layui-layer-content').css({
+            //             'padding-top': '40px',
+            //             'width': '100px',
+            //         });
+            //         layer.find('.loadtip').css({
+            //             'font-size':'20px',
+            //             'margin-left':'-18px'
+            //         });
+            //     }
+            // });
 
         });
-        // 【交付】【取消】
-        $(".main-content").on('click', "#item-cancel-for-deliver-set", function() {
+        // 【上架】【取消】
+        $(".main-content").on('click', "#item-cancel-for-put-on-set", function() {
             var that = $(this);
-            $('#modal-body-for-deliver-set').modal('hide').on("hidden.bs.modal", function () {
+            $('#modal-body-for-put-on-set').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
             });
         });
-        // 【交付】确认
-        $(".main-content").on('click', "#item-submit-for-deliver-set", function() {
+        // 【上架】确认
+        $(".main-content").on('click', "#item-submit-for-put-on-set", function() {
             var $that = $(this);
-            layer.msg('确定"交付"么？', {
+            layer.msg('确定"上架"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
 
                     var $index = layer.load(1, {
                         shade: [0.3, '#fff'],
-                        content: '<span class="loadtip">正在发布</span>',
+                        content: '<span class="loadtip">正在上架</span>',
                         success: function (layer) {
                             layer.find('.layui-layer-content').css({
                                 'padding-top': '40px',
@@ -946,16 +872,13 @@
                     });
 
                     $.post(
-                        "{{ url('/item/order-deliver') }}",
+                        "{{ url('/item/clue-put-on-shelf') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-deliver",
-                            item_id: $('input[name="deliver-set-order-id"]').val(),
-                            client_id: $('select[name="deliver-set-client-id"]').val(),
-                            delivered_result: $('select[name="deliver-set-delivered-result"]').val(),
-                            recording_address: $('input[name="deliver-set-recording-address"]').val(),
-                            delivered_description: $('textarea[name="deliver-set-delivered-description"]').val(),
-                            is_distributive_condition: $('input[name="deliver-set-is_distributive_condition"]:checked').val()
+                            operate: "clue-put-on",
+                            item_id: $('input[name="put-on-set-clue-id"]').val(),
+                            customer_id: $('select[name="put-on-set-customer-id"]').val(),
+                            sale_type: $('select[name="put-on-set-sale-type"]').val()
                         },
                         function(data){
 
@@ -969,8 +892,8 @@
                             }
                             else
                             {
-                                layer.msg("已交付");
-                                $('#modal-body-for-deliver-set').modal('hide').on("hidden.bs.modal", function () {
+                                layer.msg("已上架");
+                                $('#modal-body-for-put-on-set').modal('hide').on("hidden.bs.modal", function () {
                                     $("body").addClass("modal-open");
                                 });
                             }
@@ -980,6 +903,89 @@
                 }
             });
         });
+
+        // 【批量操作】批量-上架
+        $(".main-content").on('click', '#bulk-submit-for-put-on-shelf', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-clue-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量上架"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/clue-put-on-shelf-by-bulk') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "clue-put-on-bulk",
+                            ids: $ids,
+                            customer_id: $('select[name="bulk-operate-assign-customer"]').val(),
+                            sale_type: $('select[name="bulk-operate-sale-type"]').val()
+                            // assign_description:$('input[name="bulk-operate-delivered-description"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $sale_type = $('select[name="bulk-operate-sale-type"]').val();
+                                    var $customer_id = $('select[name="bulk-operate-assign-customer"]').val();
+                                    var $customer_name = $('select[name="bulk-operate-assign-customer"]').find('option:selected').html();
+
+                                    $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
+                                    $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已上架</small>');
+                                    $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$sale_type+'</small>');
+                                    $row.find('td[data-key=client_id]').attr('data-value',$client_id);
+                                    if($customer_id != "-1")
+                                    {
+                                        $row.find('td[data-key=customer_id]').html('<a href="javascript:void(0);">'+$customer_name+'</a>');
+                                    }
+                                    $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已上架</small>');
+                                    // $row.find('.item-put-on-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
+
+
+                                    var $date = new Date();
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    var $hour = ('00'+$date.getHours()).slice(-2);
+                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                    var $second = ('00'+$date.getSeconds()).slice(-2);
+                                    var $time_html = $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                                    $row.find('td[data-key=delivered_at]').html($time_html);
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+
 
         // 【分发】
         $(".main-content").on('click', ".item-distribute-submit", function() {
@@ -1007,10 +1013,10 @@
             var $html = '';
 
             $.post(
-                "{{ url('/item/order-deliver-get-delivered') }}",
+                "{{ url('/item/clue-put-on-get-delivered') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "order-deliver-get-delivered",
+                    operate: "clue-put-on-get-delivered",
                     item_id: $that.attr('data-id')
                 },
                 function(data){
@@ -1025,7 +1031,7 @@
                     {
                         if(data.data.order_repeat.length)
                         {
-                            $html += '<div>【已交付订单】</div>';
+                            $html += '<div>【已上架订单】</div>';
                             var $order_list = data.data.order_repeat;
                             $.each($order_list, function(index,$order) {
 
@@ -1091,13 +1097,13 @@
                                 $option_html_for_delivered_result+
                                 '</select>'+
                                 '<input type="text" class="form-control" name="input-recording-address" rows="2" placeholder="录音地址"></textarea>'+
-                                '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="交付说明"></textarea>'
+                                '<textarea class="form-control" name="textarea-delivered-description" rows="2" placeholder="上架说明"></textarea>'
                             ,yes: function(index){
                                 $.post(
-                                    "{{ url('/item/order-distribute') }}",
+                                    "{{ url('/item/clue-distribute') }}",
                                     {
                                         _token: $('meta[name="_token"]').attr('content'),
-                                        operate: "order-distribute",
+                                        operate: "clue-distribute",
                                         item_id: $that.attr('data-id'),
                                         client_id: $('select[name="select-client-id"]').val(),
                                         delivered_result: $('select[name="select-delivered-result"]').val(),
@@ -1140,10 +1146,10 @@
 
             $('.distribute-set-title').html($that.attr("data-id"));
             $('.distribute-set-column-name').html($that.attr("data-name"));
-            $('input[name=distribute-set-order-id]').val($that.attr("data-id"));
+            $('input[name=distribute-set-clue-id]').val($that.attr("data-id"));
             $('input[name=distribute-set-column-key]').val($that.attr("data-key"));
             $('#distribute-set-distributed-list').html('');
-            $('#distribute-set-distributed-order-list').html('');
+            $('#distribute-set-distributed-clue-list').html('');
             $('#distribute-set-distributed-client-list').html('');
 
             $('#modal-body-for-distribute-set').modal('show');
@@ -1168,10 +1174,10 @@
             var $html_for_distributed = '';
 
             $.post(
-                "{{ url('/item/order-deliver-get-delivered') }}",
+                "{{ url('/item/clue-put-on-get-delivered') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "order-deliver-get-delivered",
+                    operate: "clue-put-on-get-delivered",
                     item_id: $that.attr('data-id')
                 },
                 function(data){
@@ -1186,7 +1192,7 @@
                     {
                         if(data.data.order_repeat.length)
                         {
-                            $html += '<div>【已交付订单】</div>';
+                            $html += '<div>【已上架订单】</div>';
                             var $order_list = data.data.order_repeat;
                             $.each($order_list, function(index,$order) {
 
@@ -1221,7 +1227,7 @@
 
                                 var $html_deliver =
                                     '<div>' +
-                                    '<span style="width:120px;float:left;">[交付ID] ' + $deliver.id + '</span>' +
+                                    '<span style="width:120px;float:left;">[上架ID] ' + $deliver.id + '</span>' +
                                     '<span style="width:240px;float:left;">[客户] ' + $client_username + '</span>' +
                                     '[项目] '+ $project_name +
                                     '</div>';
@@ -1232,7 +1238,7 @@
                         }
                         $html += '<br>';
                         $('#distribute-set-distributed-list').html($html);
-                        $('#distribute-set-distributed-order-list').html($html_for_order);
+                        $('#distribute-set-distributed-clue-list').html($html_for_order);
                         $('#distribute-set-distributed-client-list').html($html_for_distributed);
 
 
@@ -1276,11 +1282,11 @@
                     });
 
                     $.post(
-                        "{{ url('/item/order-distribute') }}",
+                        "{{ url('/item/clue-distribute') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-distribute",
-                            item_id: $('input[name="distribute-set-order-id"]').val(),
+                            operate: "clue-distribute",
+                            item_id: $('input[name="distribute-set-clue-id"]').val(),
                             client_id: $('select[name="distribute-set-client-id"]').val(),
                             delivered_result: $('select[name="distribute-set-delivered-result"]').val()
                         },
@@ -1502,11 +1508,11 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-travel-set') }}",
+                        "{{ url('/item/clue-travel-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="travel-set-operate"]').val(),
-                            order_id: $('input[name="travel-set-order-id"]').val(),
+                            order_id: $('input[name="travel-set-clue-id"]').val(),
                             travel_type: $('input[name="travel-set-object-type"]').val(),
                             travel_time: $('input[name="travel-set-time"]').val()
                         },
@@ -1558,7 +1564,7 @@
 
             $('.info-text-set-title').html($that.attr("data-id"));
             $('.info-text-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-text-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-text-set-clue-id]').val($that.attr("data-id"));
             $('input[name=info-text-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-text-set-operate-type]').val($that.attr('data-operate-type'));
             // console.log($that.attr("data-value"));
@@ -1610,11 +1616,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/order-info-text-set') }}",
+                        "{{ url('/item/clue-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-text-set-operate"]').val(),
-                            order_id: $('input[name="info-text-set-order-id"]').val(),
+                            order_id: $('input[name="info-text-set-clue-id"]').val(),
                             operate_type: $('input[name="info-text-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1673,7 +1679,7 @@
             $('.info-time-set-title').html($that.attr("data-id"));
             $('.info-time-set-column-name').html($that.attr("data-name"));
             $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
-            $('input[name=info-time-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-time-set-clue-id]').val($that.attr("data-id"));
             $('input[name=info-time-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-time-set-time-type]').val($that.attr('data-time-type'));
             if($that.attr('data-time-type') == "datetime")
@@ -1721,11 +1727,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/order-info-time-set') }}",
+                        "{{ url('/item/clue-info-time-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),
-                            order_id: $('input[name="info-time-set-order-id"]').val(),
+                            order_id: $('input[name="info-time-set-clue-id"]').val(),
                             operate_type: $('input[name="info-time-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1765,7 +1771,7 @@
             var $that = $(this);
             $('.info-radio-set-title').html($that.attr("data-id"));
             $('.info-radio-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-radio-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-radio-set-clue-id]').val($that.attr("data-id"));
             $('input[name=info-radio-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-radio-set-operate-type]').val($that.attr('data-operate-type'));
 
@@ -1808,11 +1814,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/order-info-radio-set') }}",
+                        "{{ url('/item/clue-info-radio-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-radio-set-operate"]').val(),
-                            order_id: $('input[name="info-radio-set-order-id"]').val(),
+                            order_id: $('input[name="info-radio-set-clue-id"]').val(),
                             operate_type: $('input[name="info-radio-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1854,7 +1860,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-clue-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
@@ -1914,7 +1920,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-clue-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-select-set-column-key2]').val($that.attr("data-key2"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
@@ -2128,11 +2134,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/order-info-select-set') }}",
+                        "{{ url('/item/clue-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
-                            order_id: $('input[name="info-select-set-order-id"]').val(),
+                            order_id: $('input[name="info-select-set-clue-id"]').val(),
                             operate_type: $('input[name="info-select-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_key2: $column_key2,
@@ -2172,7 +2178,7 @@
 
             $('.attachment-set-title').html($that.attr("data-id"));
             $('.info-set-column-name').html($that.attr("data-name"));
-            $('input[name=attachment-set-order-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-clue-id]').val($that.attr("data-id"));
             $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
             $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
             $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
@@ -2189,7 +2195,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/item/order-get-attachment-html') }}",
+                url: "{{ url('/item/clue-get-attachment-html') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -2245,7 +2251,7 @@
             });
 
                     var options = {
-                        url: "{{ url('/item/order-info-attachment-set') }}",
+                        url: "{{ url('/item/clue-info-attachment-set') }}",
                         type: "post",
                         dataType: "json",
                         // target: "#div2",
@@ -2272,7 +2278,7 @@
                                     type:"post",
                                     dataType:'json',
                                     async:false,
-                                    url: "{{ url('/item/order-get-attachment-html') }}",
+                                    url: "{{ url('/item/clue-get-attachment-html') }}",
                                     data: {
                                         _token: $('meta[name="_token"]').attr('content'),
                                         operate:"item-get",
@@ -2309,17 +2315,17 @@
         });
 
         // 【附件-attachment-属性】【删除】
-        $(".main-content").on('click', ".order-attachment-delete-this", function() {
+        $(".main-content").on('click', ".clue-attachment-delete-this", function() {
             var $that = $(this);
             layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-info-attachment-delete') }}",
+                        "{{ url('/item/clue-info-attachment-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-attachment-delete",
+                            operate: "clue-attachment-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -2366,7 +2372,7 @@
             $ids = $ids.slice(0, -1);
             // console.log($ids);
 
-            var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            var $url = url_build('/statistic/statistic-export-for-clue-by-ids?ids='+$ids);
             window.open($url);
 
             {{--layer.msg('确定"批量审核"么', {--}}
@@ -2397,7 +2403,7 @@
             {{--});--}}
 
         });
-        // 【批量操作】批量-交付
+        // 【批量操作】批量-上架
         $(".main-content").on('click', '#bulk-submit-for-delivered', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
@@ -2412,19 +2418,19 @@
             $ids = $ids.slice(0, -1);
             // console.log($ids);
 
-            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // var $url = url_build('/statistic/statistic-export-for-clue-by-ids?ids='+$ids);
             // window.open($url);
 
-            layer.msg('确定"批量交付"么', {
+            layer.msg('确定"批量上架"么', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
 
                     $.post(
-                        "{{ url('/item/order-bulk-deliver') }}",
+                        "{{ url('/item/clue-bulk-deliver') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-delivered-bulk",
+                            operate: "clue-delivered-bulk",
                             ids: $ids,
                             client_id:$('select[name="bulk-operate-delivered-client"]').val(),
                             delivered_result:$('select[name="bulk-operate-delivered-result"]').val(),
@@ -2448,15 +2454,15 @@
                                     console.log($client_name);
 
                                     $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
-                                    $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
+                                    $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已上架</small>');
                                     $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');
                                     $row.find('td[data-key=client_id]').attr('data-value',$client_id);
                                     if($client_id != "-1")
                                     {
                                         $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
                                     }
-                                    $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
-                                    // $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
+                                    $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已上架</small>');
+                                    // $row.find('.item-put-on-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
 
 
                                     var $date = new Date();
@@ -2480,87 +2486,7 @@
 
         });
 
-        // 【批量操作】批量-上架
-        $(".main-content").on('click', '#bulk-submit-for-put-on-shelf', function() {
-            // var $checked = [];
-            // $('input[name="bulk-id"]:checked').each(function() {
-            //     $checked.push($(this).val());
-            // });
-            // console.log($checked);
 
-            var $ids = '';
-            $('input[name="bulk-id"]:checked').each(function() {
-                $ids += $(this).val()+'-';
-            });
-            $ids = $ids.slice(0, -1);
-            // console.log($ids);
-
-            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
-            // window.open($url);
-
-            layer.msg('确定"批量交付"么', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-
-                    $.post(
-                        "{{ url('/item/clue-bulk-put-on-shelf') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-delivered-bulk",
-                            ids: $ids,
-                            customer_id:$('select[name="bulk-operate-assign-customer"]').val(),
-                            sale_type:$('select[name="bulk-operate-sale-type"]').val()
-                            // assign_description:$('input[name="bulk-operate-delivered-description"]').val()
-                        },
-                        function(data){
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
-                            else
-                            {
-                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
-
-                                $('input[name="bulk-id"]:checked').each(function() {
-
-                                    var $that = $(this);
-                                    var $row = $that.parents('tr');
-
-                                    var $sale_type = $('select[name="bulk-operate-sale-type"]').val();
-                                    var $customer_id = $('select[name="bulk-operate-assign-customer"]').val();
-                                    var $customer_name = $('select[name="bulk-operate-assign-customer"]').find('option:selected').html();
-
-                                    $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
-                                    $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
-                                    $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$sale_type+'</small>');
-                                    $row.find('td[data-key=client_id]').attr('data-value',$client_id);
-                                    if($customer_id != "-1")
-                                    {
-                                        $row.find('td[data-key=customer_id]').html('<a href="javascript:void(0);">'+$customer_name+'</a>');
-                                    }
-                                    $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
-                                    // $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
-
-
-                                    var $date = new Date();
-                                    var $year = $date.getFullYear();
-                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                                    var $day = ('00'+($date.getDate())).slice(-2);
-                                    var $hour = ('00'+$date.getHours()).slice(-2);
-                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
-                                    var $second = ('00'+$date.getSeconds()).slice(-2);
-                                    var $time_html = $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
-                                    $row.find('td[data-key=delivered_at]').html($time_html);
-
-                                });
-                            }
-                        },
-                        'json'
-                    );
-
-                }
-            });
-
-        });
 
 
 
@@ -2605,7 +2531,7 @@
 
 
         // select2 项目
-        $('.order-select2-project').select2({
+        $('.clue-select2-project').select2({
             ajax: {
                 url: "{{ url('/item/item_select2_project') }}",
                 dataType: 'json',

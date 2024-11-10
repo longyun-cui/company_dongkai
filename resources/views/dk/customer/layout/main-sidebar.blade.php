@@ -59,10 +59,18 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
-            <li class="treeview {{ $menu_active_of_clue_list_for_all or '' }}">
+            <li class="treeview {{ $menu_active_of_item_clue_list or '' }}">
                 <a href="{{ url('/item/clue-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>线索列表</span>
+                </a>
+            </li>
+            @endif
+            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
+            <li class="treeview {{ $menu_active_of_mine_clue_list or '' }}">
+                <a href="{{ url('/mine/clue-list')}}">
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>我的线索</span>
                 </a>
             </li>
             @endif
@@ -71,9 +79,9 @@
 
 
             {{--数据统计--}}
-            <li class="header">数据统计</li>
+            <li class="header _none">数据统计</li>
 
-            <li class="treeview {{ $menu_active_of_statistic_delivery_by_daily or '' }}">
+            <li class="treeview {{ $menu_active_of_statistic_delivery_by_daily or '' }} _none">
                 <a href="{{ url('/statistic/statistic-delivery-by-daily') }}">
                     <i class="fa fa-bar-chart text-green"></i> <span>交付日报</span>
                 </a>
@@ -97,9 +105,9 @@
 
 
             {{--财务统计--}}
-            <li class="header">财务统计</li>
+            <li class="header _none">财务统计</li>
 
-            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
+            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }} _none">
                 <a href="{{ url('/finance/daily-list') }}">
                     <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
                 </a>

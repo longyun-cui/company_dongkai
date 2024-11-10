@@ -3,50 +3,50 @@
 
 
         // 【搜索】
-        $("#datatable-for-order-list").on('click', ".filter-submit", function() {
+        $("#datatable-for-choice-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【刷新】
-        $("#datatable-for-order-list").on('click', ".filter-refresh", function() {
+        $("#datatable-for-choice-list").on('click', ".filter-refresh", function() {
             $('#datatable_ajax').DataTable().ajax.reload(null,false);
         });
         // 【重置】
-        $("#datatable-for-order-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-choice-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-choice-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-choice-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-choice-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $("#datatable-for-order-list").on('click', ".filter-empty", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-choice-list").on('click', ".filter-empty", function() {
+            $("#datatable-for-choice-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-choice-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-choice-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $("#datatable-for-order-list").on('keyup', ".filter-keyup", function(event) {
+        $("#datatable-for-choice-list").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-order-list").find(".filter-submit").click();
+                $("#datatable-for-choice-list").find(".filter-submit").click();
             }
         });
 
 
         // 【完整显示】
-        $(".main-content").on('click', "#order-show-for-full", function() {
+        $(".main-content").on('click', "#choice-show-for-full", function() {
             // $('#datatable_ajax').dataTable().fnSetColumnVis(11, true);
             // $('#datatable_ajax').dataTable().fnSetColumnVis(12, true);
             // $('#datatable_ajax').dataTable().fnSetColumnVis(16, true);
@@ -55,7 +55,7 @@
             // $('#datatable_ajax').dataTable().fnSetColumnVis(19, true);
         });
         // 【简要显示】
-        $(".main-content").on('click', "#order-show-for-brief", function() {
+        $(".main-content").on('click', "#choice-show-for-brief", function() {
             // $('#datatable_ajax').dataTable().fnSetColumnVis(11, false);
             // $('#datatable_ajax').dataTable().fnSetColumnVis(12, false);
             // $('#datatable_ajax').dataTable().fnSetColumnVis(16, false);
@@ -64,7 +64,7 @@
             // $('#datatable_ajax').dataTable().fnSetColumnVis(19, false);
         });
         // 【财务显示】
-        $(".main-content").on('click', "#order-show-for-finance", function() {
+        $(".main-content").on('click', "#choice-show-for-finance", function() {
             // $('#datatable_ajax').dataTable().fnSetColumnVis(s19, false);
         });
 
@@ -74,7 +74,7 @@
         // 【综合概览】【前一天】
         $(".main-content").on('click', ".date-pick-pre-for-order", function() {
 
-            var $assign_dom = $('input[name="order-assign"]');
+            var $assign_dom = $('input[name="choice-assign"]');
             var $the_date = $assign_dom.val();
 
             if($the_date)
@@ -95,13 +95,13 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-order-list").find(".filter-submit").click();
+            $("#datatable-for-choice-list").find(".filter-submit").click();
 
         });
         // 【综合概览】【后一添】
         $(".main-content").on('click', ".date-pick-next-for-order", function() {
 
-            var $assign_dom = $('input[name="order-assign"]');
+            var $assign_dom = $('input[name="choice-assign"]');
             var $the_date = $assign_dom.val();
 
             if($the_date)
@@ -122,7 +122,7 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-order-list").find(".filter-submit").click();
+            $("#datatable-for-choice-list").find(".filter-submit").click();
 
         });
 
@@ -140,13 +140,13 @@
         // 【编辑】
         $(".main-content").on('click', ".item-create-show", function() {
             var $that = $(this);
-            $('#modal-body-for-order-create').modal('show');
+            $('#modal-body-for-choice-create').modal('show');
         });
 
         // 【编辑】
         $(".main-content").on('click', ".item-create-link", function() {
             var $that = $(this);
-            var $url = "/item/order-create?&referrer="+encodeURIComponent(window.location.href);
+            var $url = "/item/choice-create?&referrer="+encodeURIComponent(window.location.href);
             // window.location.href = $url;
             window.open($url);
         });
@@ -154,7 +154,7 @@
         // 【编辑】
         $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);
-            var $url = "/item/order-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
+            var $url = "/item/choice-edit?id="+$that.attr('data-id')+"&referrer="+encodeURIComponent(window.location.href);
             window.location.href = $url;
             // window.open($url);
         });
@@ -172,7 +172,7 @@
             {{--    type:"post",--}}
             {{--    dataType:'json',--}}
             {{--    async:false,--}}
-            {{--    url: "{{ url('/item/order-get-html') }}",--}}
+            {{--    url: "{{ url('/item/choice-get-html') }}",--}}
             {{--    data: {--}}
             {{--        _token: $('meta[name="_token"]').attr('content'),--}}
             {{--        operate:"item-get",--}}
@@ -188,7 +188,7 @@
             {{--});--}}
 
 //            $('input[name=id]').val($that.attr('data-id'));
-            $('input[name=info-set-order-id]').val($that.attr('data-id'));
+            $('input[name=info-set-choice-id]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));
 
@@ -225,7 +225,7 @@
             $('#datatable_ajax').find('tr').removeClass('inspecting');
             $row.addClass('inspecting');
 
-            $('input[name="follow-order-id"]').val($that.attr('data-id'));
+            $('input[name="follow-choice-id"]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
             $('.info-set-title').html($that.attr('data-id'));
 
@@ -286,15 +286,15 @@
         $(".main-content").on('click', ".item-summit-for-follow", function() {
             var $that = $(this);
 
-            var $id = $('input[name="follow-order-id"]').val();
+            var $id = $('input[name="follow-choice-id"]').val();
             var $inspected_description = $('textarea[name="follow-description"]').val();
 
             $.post(
-                "{{ url('/item/order-follow') }}",
+                "{{ url('/item/choice-follow') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "order-follow",
-                    item_id: $('input[name="follow-order-id"]').val(),
+                    operate: "choice-follow",
+                    item_id: $('input[name="follow-choice-id"]').val(),
                     follow_description: $('textarea[name="follow-description"]').val()
                 },
                 function(data){
@@ -326,10 +326,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-delete') }}",
+                        "{{ url('/item/choice-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-delete",
+                            operate: "choice-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -356,10 +356,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-restore') }}",
+                        "{{ url('/item/choice-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-restore",
+                            operate: "choice-restore",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -386,10 +386,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-delete-permanently') }}",
+                        "{{ url('/item/choice-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-delete-permanently",
+                            operate: "choice-delete-permanently",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -416,10 +416,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-exported') }}",
+                        "{{ url('/item/choice-exported') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-exported",
+                            operate: "choice-exported",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -446,10 +446,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-abandon') }}",
+                        "{{ url('/item/choice-abandon') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-abandon",
+                            operate: "choice-abandon",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -476,10 +476,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-reuse') }}",
+                        "{{ url('/item/choice-reuse') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-reuse",
+                            operate: "choice-reuse",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -522,10 +522,10 @@
                     });
 
                     $.post(
-                        "{{ url('/item/order-publish') }}",
+                        "{{ url('/item/choice-publish') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-publish",
+                            operate: "choice-publish",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -557,10 +557,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-complete') }}",
+                        "{{ url('/item/choice-complete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-complete",
+                            operate: "choice-complete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -587,10 +587,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-verify') }}",
+                        "{{ url('/item/choice-verify') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-verify",
+                            operate: "choice-verify",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -629,10 +629,10 @@
                     '<textarea class="form-control" name="inspected-description" placeholder="审核说明" rows="3"></textarea>'
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-inspect') }}",
+                        "{{ url('/item/choice-inspect') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-inspect",
+                            operate: "choice-inspect",
                             item_id: $that.attr('data-id'),
                             inspected_result: $('select[name="inspected-result"]').val(),
                             inspected_description: $('textarea[name="inspected-description"]').val()
@@ -661,7 +661,7 @@
                 time: 0
                 ,btn: ['确定', '取消']
                 ,title: '选择质量！'
-                ,content: '<select class="form-control form-filter" name="order-quality" style="width:160px;">'+
+                ,content: '<select class="form-control form-filter" name="choice-quality" style="width:160px;">'+
                     '<option value ="-1">选择质量</option>'+
                     '<option value ="有效">有效</option>'+
                     '<option value ="无效">无效</option>'+
@@ -670,12 +670,12 @@
                     '</select>'
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-quality-evaluate') }}",
+                        "{{ url('/item/choice-quality-evaluate') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-quality-evaluate",
+                            operate: "choice-quality-evaluate",
                             item_id: $that.attr('data-id'),
-                            order_quality: $('select[name="order-quality"]').val()
+                            order_quality: $('select[name="choice-quality"]').val()
                         },
                         function(data){
                             layer.close(index);
@@ -706,10 +706,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-admin-delete') }}",
+                        "{{ url('/item/choice-admin-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-admin-delete",
+                            operate: "choice-admin-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -736,10 +736,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-admin-restore') }}",
+                        "{{ url('/item/choice-admin-restore') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-admin-restore",
+                            operate: "choice-admin-restore",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -766,10 +766,10 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-admin-delete-permanently') }}",
+                        "{{ url('/item/choice-admin-delete-permanently') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-admin-delete-permanently",
+                            operate: "choice-admin-delete-permanently",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -800,10 +800,10 @@
             //     }
             // });
                     $.post(
-                        "{{ url('/item/delivery-admin-enable') }}",
+                        "{{ url('/item/choice-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-admin-enable",
+                            operate: "choice-admin-enable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -830,10 +830,10 @@
             //     }
             // });
                     $.post(
-                        "{{ url('/item/delivery-admin-disable') }}",
+                        "{{ url('/item/choice-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-admin-disable",
+                            operate: "choice-admin-disable",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -879,7 +879,7 @@
 
             $('.info-text-set-title').html($that.attr("data-id"));
             $('.info-text-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-text-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-text-set-choice-id]').val($that.attr("data-id"));
             $('input[name=info-text-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-text-set-operate-type]').val($that.attr('data-operate-type'));
             // console.log($that.attr("data-value"));
@@ -931,11 +931,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/order-info-text-set') }}",
+                        "{{ url('/item/choice-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-text-set-operate"]').val(),
-                            order_id: $('input[name="info-text-set-order-id"]').val(),
+                            order_id: $('input[name="info-text-set-choice-id"]').val(),
                             operate_type: $('input[name="info-text-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -982,7 +982,7 @@
             $('.info-time-set-title').html($that.attr("data-id"));
             $('.info-time-set-column-name').html($that.attr("data-name"));
             $('input[name=info-time-set-operate-type]').val($that.attr('data-operate-type'));
-            $('input[name=info-time-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-time-set-choice-id]').val($that.attr("data-id"));
             $('input[name=info-time-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-time-set-time-type]').val($that.attr('data-time-type'));
             if($that.attr('data-time-type') == "datetime")
@@ -1030,11 +1030,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/order-info-time-set') }}",
+                        "{{ url('/item/choice-info-time-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),
-                            order_id: $('input[name="info-time-set-order-id"]').val(),
+                            order_id: $('input[name="info-time-set-choice-id"]').val(),
                             operate_type: $('input[name="info-time-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1074,7 +1074,7 @@
             var $that = $(this);
             $('.info-radio-set-title').html($that.attr("data-id"));
             $('.info-radio-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-radio-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-radio-set-choice-id]').val($that.attr("data-id"));
             $('input[name=info-radio-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-radio-set-operate-type]').val($that.attr('data-operate-type'));
 
@@ -1117,11 +1117,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/order-info-radio-set') }}",
+                        "{{ url('/item/choice-info-radio-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-radio-set-operate"]').val(),
-                            order_id: $('input[name="info-radio-set-order-id"]').val(),
+                            order_id: $('input[name="info-radio-set-choice-id"]').val(),
                             operate_type: $('input[name="info-radio-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1163,7 +1163,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-choice-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).attr("selected","selected");
@@ -1217,7 +1217,7 @@
             var $that = $(this);
             $('.info-select-set-title').html($that.attr("data-id"));
             $('.info-select-set-column-name').html($that.attr("data-name"));
-            $('input[name=info-select-set-order-id]').val($that.attr("data-id"));
+            $('input[name=info-select-set-choice-id]').val($that.attr("data-id"));
             $('input[name=info-select-set-column-key]').val($that.attr("data-key"));
             $('input[name=info-select-set-column-key2]').val($that.attr("data-key2"));
 //            $('select[name=info-select-set-column-value]').find("option").eq(0).prop("selected",true);
@@ -1336,11 +1336,11 @@
             // });
 
                     $.post(
-                        "{{ url('/item/order-info-select-set') }}",
+                        "{{ url('/item/choice-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
-                            order_id: $('input[name="info-select-set-order-id"]').val(),
+                            order_id: $('input[name="info-select-set-choice-id"]').val(),
                             operate_type: $('input[name="info-select-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_key2: $column_key2,
@@ -1380,7 +1380,7 @@
 
             $('.attachment-set-title').html($that.attr("data-id"));
             $('.info-set-column-name').html($that.attr("data-name"));
-            $('input[name=attachment-set-order-id]').val($that.attr("data-id"));
+            $('input[name=attachment-set-choice-id]').val($that.attr("data-id"));
             $('input[name=attachment-set-column-key]').val($that.attr("data-key"));
             $('input[name=attachment-set-column-value]').val($that.attr("data-value"));
             $('input[name=attachment-set-operate-type]').val($that.attr('data-operate-type'));
@@ -1397,7 +1397,7 @@
                 type:"post",
                 dataType:'json',
                 async:false,
-                url: "{{ url('/item/order-get-attachment-html') }}",
+                url: "{{ url('/item/choice-get-attachment-html') }}",
                 data: {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate:"item-get",
@@ -1453,7 +1453,7 @@
             });
 
                     var options = {
-                        url: "{{ url('/item/order-info-attachment-set') }}",
+                        url: "{{ url('/item/choice-info-attachment-set') }}",
                         type: "post",
                         dataType: "json",
                         // target: "#div2",
@@ -1480,7 +1480,7 @@
                                     type:"post",
                                     dataType:'json',
                                     async:false,
-                                    url: "{{ url('/item/order-get-attachment-html') }}",
+                                    url: "{{ url('/item/choice-get-attachment-html') }}",
                                     data: {
                                         _token: $('meta[name="_token"]').attr('content'),
                                         operate:"item-get",
@@ -1517,17 +1517,17 @@
         });
 
         // 【附件-attachment-属性】【删除】
-        $(".main-content").on('click', ".order-attachment-delete-this", function() {
+        $(".main-content").on('click', ".choice-attachment-delete-this", function() {
             var $that = $(this);
             layer.msg('确定"删除"么？', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/order-info-attachment-delete') }}",
+                        "{{ url('/item/choice-info-attachment-delete') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "order-attachment-delete",
+                            operate: "choice-attachment-delete",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -1568,12 +1568,12 @@
 
             var $ids = '';
             $('input[name="bulk-id"]:checked').each(function() {
-                $ids += $(this).attr('data-order-id')+'-';
+                $ids += $(this).attr('data-choice-id')+'-';
             });
             $ids = $ids.slice(0, -1);
             // console.log($ids);
 
-            var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            var $url = url_build('/statistic/statistic-export-for-choice-by-ids?ids='+$ids);
             window.open($url);
 
             {{--layer.msg('确定"批量审核"么', {--}}
@@ -1619,7 +1619,7 @@
             $ids = $ids.slice(0, -1);
             // console.log($ids);
 
-            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // var $url = url_build('/statistic/statistic-export-for-choice-by-ids?ids='+$ids);
             // window.open($url);
 
             layer.msg('确定"批量导出"么', {
@@ -1628,10 +1628,10 @@
                 ,yes: function(index){
 
                     $.post(
-                        "{{ url('/item/delivery-bulk-exported') }}",
+                        "{{ url('/item/choice-bulk-exported') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "delivery-exported-bulk",
+                            operate: "choice-exported-bulk",
                             ids: $ids,
                             operate_result:$('select[name="bulk-operate-status"]').val()
                         },
@@ -1716,7 +1716,7 @@
 
 
         // select2 项目
-        $('.order-select2-project').select2({
+        $('.choice-select2-project').select2({
             ajax: {
                 url: "{{ url('/item/item_select2_project') }}",
                 dataType: 'json',

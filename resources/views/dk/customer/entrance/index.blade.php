@@ -19,14 +19,23 @@
 {{--订单统计--}}
 <div class="row">
     <div class="col-md-12">
-        <div class="callout callout-success- bg-white">
+        <div class="box box-info callout-success- bg-white">
 
-            <h4>财务统计</h4>
+            <div class="box-header with-border">
+                <h3 class="box-title">设置</h3>
+            </div>
 
-            <div class="callout-body">
-                <span>累计充值 <text class="text-black font-24px">{{ $funds_recharge_total }}</text> 元</span>
-                <span>累计消费 <text class="text-teal font-24px">{{ $funds_consumption_total }}</text> 元</span>
-                <span>余额 <text class="text-red font-24px">{{ $funds_balance }}</text> 元</span>
+            <div class="box-body">
+                <div style="line-height:29px;">
+                    <button id="toggle-button" class="@if($me->customer_er->is_preferential == 1) toggle-button-on @else toggle-button-off @endif pull-left">
+                        <span class="toggle-handle"></span>
+                    </button>
+                    <b style="float:left;height:29px;line-height:29px;margin-left:12px;">
+                        <span class="toggle-handle-text">@if($me->customer_er->is_preferential == 1) 开启 @else 关闭 @endif</span>优选接单
+                    </b>
+                </div>
+                <div style="line-height:29px;">
+                </div>
             </div>
 
         </div>
@@ -36,6 +45,27 @@
 
 {{--订单统计--}}
 <div class="row">
+    <div class="col-md-12">
+        <div class="box box-success callout-success- bg-white">
+
+            <div class="box-header with-border">
+                <h3 class="box-title">财务统计</h3>
+            </div>
+
+            <div class="box-body">
+                <span>累计充值 <text class="text-black font-24px">{{ $funds_recharge_total }}</text> 元</span>
+                <span>累计消费 <text class="text-teal font-24px">{{ $funds_consumption_total }}</text> 元</span>
+                <span>冻结金额 <text class="text-teal font-24px">{{ $funds_obligation_total }}</text> 元</span>
+                <span>余额 <text class="text-red font-24px">{{ $funds_balance }}</text> 元</span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{{--订单统计--}}
+<div class="row _none">
     <div class="col-md-12">
         <div class="callout callout-success- bg-white">
 
@@ -76,6 +106,31 @@
 @section('custom-style')
 <style>
     .main-content .callout .callout-body span { margin-right:12px; }
+
+    #toggle-button {
+        position: relative;
+        width: 50px;
+        height: 25px;
+        background-color: #ccc;
+        border: none;
+        border-radius: 15px;
+    }
+
+    .toggle-handle {
+        position: absolute;
+        top: 0;
+        width: 25px;
+        height: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+    }
+
+    #toggle-button.toggle-button-on { background-color: #66a3cc; transition: background-color 0.1s; }
+    #toggle-button.toggle-button-off { background-color: #dddddd; transition: background-color 0.1s; }
+
+    #toggle-button.toggle-button-on .toggle-handle { right: 0; background-color: #20e28b; transition: right 0.1s; }
+    #toggle-button.toggle-button-off .toggle-handle { left: 0; background-color: #e00000; transition: left 0.1s; }
+
 </style>
 @endsection
 
@@ -87,6 +142,57 @@
 @section('custom-script')
 <script>
     $(function() {
+
+        // 【清空只读文本框】
+        $(".main-content").on('click', "#toggle-button", function() {
+            $(this).toggleClass('toggle-button-on toggle-button-off');
+            var handle = $(this).find('.toggle-handle');
+            // handle.toggleClass('toggle-on toggle-off');
+            if($(this).hasClass('toggle-button-on'))
+            {
+                $.post(
+                    "{{ url('/setting/setting-customer') }}",
+                    {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        operate: "setting-customer-attribute",
+                        operate_column: "is_preferential",
+                        set_value: 1
+                    },
+                    function(data){
+                        if(!data.success) layer.msg(data.msg);
+                        else
+                        {
+                            layer.msg('已开启');
+                            $(this).find('.toggle-handle-text').html('开启');
+                            handle.animate({'left': '25px'}, 'fast');
+                        }
+                    },
+                    'json'
+                );
+            }
+            else
+            {
+                $.post(
+                    "{{ url('/setting/setting-customer') }}",
+                    {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        operate: "setting-customer-attribute",
+                        operate_column: "is_preferential",
+                        set_value: 0
+                    },
+                    function(data){
+                        if(!data.success) layer.msg(data.msg);
+                        else
+                        {
+                            layer.msg('已关闭');
+                            $(this).find('.toggle-handle-text').html('关闭');
+                            handle.animate({'left': '0'}, 'fast');
+                        }
+                    },
+                    'json'
+                );
+            }
+        });
 
 
         // 每日订单量

@@ -182,6 +182,11 @@ class DKCustomerController extends Controller
 
 
 
+    // 【订单】批量-更改导出状态
+    public function operate_setting_customer()
+    {
+        return $this->repo->operate_setting_customer(request()->all());
+    }
 
 
 
@@ -424,13 +429,52 @@ class DKCustomerController extends Controller
 
 
     /*
-     * 订单管理
+     * 线索列表
      */
-    // 【订单管理】返回-列表-视图（全部任务）
+    // 【线索】返回-列表-视图（全部任务）
     public function view_item_clue_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_clue_list(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_clue_list_datatable(request()->all());
+    }
+    // 【线索-修改记录】返回-列表-视图（全部任务）
+    public function view_item_clue_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_clue_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_clue_modify_record_datatable(request()->all());
+    }
+    // 【线索】质量评估
+    public function operate_item_clue_take()
+    {
+        return $this->repo->operate_item_clue_take(request()->all());
+    }
+
+
+
+    /*
+     * 线索列表
+     */
+    // 【线索】返回-列表-视图（全部任务）
+    public function view_mine_clue_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_mine_clue_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_mine_clue_list_datatable(request()->all());
+    }
+    // 【线索-修改记录】返回-列表-视图（全部任务）
+    public function view_mine_clue_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_mine_clue_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_mine_clue_modify_record_datatable(request()->all());
+    }
+    // 【线索】质量评估
+    public function operate_mine_clue_back()
+    {
+        return $this->repo->operate_mine_clue_back(request()->all());
+    }
+    // 【线索】质量评估
+    public function operate_mine_clue_purchase()
+    {
+        return $this->repo->operate_mine_clue_purchase(request()->all());
     }
 
 
@@ -440,9 +484,9 @@ class DKCustomerController extends Controller
 
 
     /*
-     * 订单管理
+     * 订单
      */
-    // 【订单管理】返回-列表-视图（全部任务）
+    // 【订单】返回-列表-视图（全部任务）
     public function view_item_delivery_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_delivery_list(request()->all());
@@ -453,17 +497,17 @@ class DKCustomerController extends Controller
     {
         return $this->repo->operate_item_delivery_quality_evaluate(request()->all());
     }
-    // 【订单管理】批量-更改导出状态
+    // 【订单】批量-更改导出状态
     public function operate_item_delivery_bulk_exported_status()
     {
         return $this->repo->operate_item_delivery_bulk_exported_status(request()->all());
     }
-    // 【订单管理】批量-更改导出状态
+    // 【订单】批量-更改导出状态
     public function operate_item_delivery_bulk_assign_status()
     {
         return $this->repo->operate_item_delivery_bulk_assign_status(request()->all());
     }
-    // 【订单管理】批量-分派
+    // 【订单】批量-分派
     public function operate_item_delivery_bulk_assign_staff()
     {
         return $this->repo->operate_item_delivery_bulk_assign_staff(request()->all());
@@ -480,9 +524,9 @@ class DKCustomerController extends Controller
 
 
     /*
-     * 订单管理
+     * 订单
      */
-    // 【订单管理】返回-列表-视图（全部任务）
+    // 【订单】返回-列表-视图（全部任务）
     public function view_item_order_list_for_all()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_list_for_all(request()->all());
@@ -490,7 +534,7 @@ class DKCustomerController extends Controller
     }
 
 
-    // 【订单管理-修改记录】返回-列表-视图（全部任务）
+    // 【订单-修改记录】返回-列表-视图（全部任务）
     public function view_item_order_modify_record()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_modify_record(request()->all());
@@ -498,20 +542,20 @@ class DKCustomerController extends Controller
     }
 
 
-    // 【订单管理】添加
+    // 【订单】添加
     public function operate_item_order_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_create();
         else if (request()->isMethod('post')) return $this->repo->operate_item_order_save(request()->all());
     }
-    // 【订单管理】编辑
+    // 【订单】编辑
     public function operate_item_order_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_edit();
         else if (request()->isMethod('post')) return $this->repo->operate_item_order_save(request()->all());
     }
 
-    // 【订单管理】导入
+    // 【订单】导入
     public function operate_item_order_import()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_order_import();
@@ -519,44 +563,44 @@ class DKCustomerController extends Controller
     }
 
 
-    // 【订单管理】获取-详情
+    // 【订单】获取-详情
     public function operate_item_order_get()
     {
         return $this->repo->operate_item_order_get(request()->all());
     }
-    // 【订单管理】获取-详情
+    // 【订单】获取-详情
     public function operate_item_order_get_html()
     {
         return $this->repo->operate_item_order_get_html(request()->all());
     }
-    // 【订单管理】获取-附件
+    // 【订单】获取-附件
     public function operate_item_order_get_attachment_html()
     {
         return $this->repo->operate_item_order_get_attachment_html(request()->all());
     }
 
 
-    // 【订单管理】删除
+    // 【订单】删除
     public function operate_item_order_delete()
     {
         return $this->repo->operate_item_order_delete(request()->all());
     }
-    // 【订单管理】发布
+    // 【订单】发布
     public function operate_item_order_publish()
     {
         return $this->repo->operate_item_order_publish(request()->all());
     }
-    // 【订单管理】完成
+    // 【订单】完成
     public function operate_item_order_complete()
     {
         return $this->repo->operate_item_order_complete(request()->all());
     }
-    // 【订单管理】弃用
+    // 【订单】弃用
     public function operate_item_order_abandon()
     {
         return $this->repo->operate_item_order_abandon(request()->all());
     }
-    // 【订单管理】复用
+    // 【订单】复用
     public function operate_item_order_reuse()
     {
         return $this->repo->operate_item_order_reuse(request()->all());
@@ -584,53 +628,53 @@ class DKCustomerController extends Controller
 
 
 
-    // 【订单管理】修改-文本-信息
+    // 【订单】修改-文本-信息
     public function operate_item_order_info_text_set()
     {
         return $this->repo->operate_item_order_info_text_set(request()->all());
     }
-    // 【订单管理】修改-时间-信息
+    // 【订单】修改-时间-信息
     public function operate_item_order_info_time_set()
     {
         return $this->repo->operate_item_order_info_time_set(request()->all());
     }
-    // 【订单管理】修改-option-信息
+    // 【订单】修改-option-信息
     public function operate_item_order_info_option_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
-    // 【订单管理】修改-radio-信息
+    // 【订单】修改-radio-信息
     public function operate_item_order_info_radio_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
-    // 【订单管理】修改-select-信息
+    // 【订单】修改-select-信息
     public function operate_item_order_info_select_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
-    // 【订单管理】添加-attachment-信息
+    // 【订单】添加-attachment-信息
     public function operate_item_order_info_attachment_set()
     {
         return $this->repo->operate_item_order_info_attachment_set(request()->all());
     }
-    // 【订单管理】删除-attachment-信息
+    // 【订单】删除-attachment-信息
     public function operate_item_order_info_attachment_delete()
     {
         return $this->repo->operate_item_order_info_attachment_delete(request()->all());
     }
-    // 【订单管理】修改-客户信息
+    // 【订单】修改-客户信息
     public function operate_item_order_info_client_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
-    // 【订单管理】修改-车辆信息
+    // 【订单】修改-车辆信息
     public function operate_item_order_info_project_set()
     {
         return $this->repo->operate_item_order_info_option_set(request()->all());
     }
 
-    // 【订单管理】添加-行程记录
+    // 【订单】添加-行程记录
     public function operate_item_order_travel_set()
     {
         return $this->repo->operate_item_order_travel_set(request()->all());
@@ -647,10 +691,10 @@ class DKCustomerController extends Controller
      * Finance 财务
      */
     // 【财务】返回-列表-视图（全部任务）
-    public function view_finance_daily_list()
+    public function view_finance_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_finance_daily_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_finance_daily_list_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_finance_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_list_datatable(request()->all());
     }
 
 

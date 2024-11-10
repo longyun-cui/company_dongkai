@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_ADMIN_2').'layout.layout')
 
 
 @section('head_title')
@@ -1262,5 +1262,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.district-list-script')
+@include(env('TEMPLATE_DK_ADMIN_2').'entrance.item.district-list-script')
 @endsection

@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_ADMIN_2').'layout.layout')
 
 
 @section('head_title')
@@ -48,18 +48,18 @@
 
 
                         {{--客户--}}
-                        <div class="form-group">
-                            <label class="control-label col-md-2">选择客户</label>
-                            <div class="col-md-8 ">
-                                <select class="form-control" name="client_id" id="select2-client">
-                                    @if($operate == 'edit' && $data->client_id)
-                                        <option data-id="{{ $data->client_id or 0 }}" value="{{ $data->client_id or 0 }}">{{ $data->client_er->username }}</option>
-                                    @else
-                                        <option data-id="0" value="0">未指定</option>
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label class="control-label col-md-2">选择客户</label>--}}
+{{--                            <div class="col-md-8 ">--}}
+{{--                                <select class="form-control" name="client_id" id="select2-client">--}}
+{{--                                    @if($operate == 'edit' && $data->client_id)--}}
+{{--                                        <option data-id="{{ $data->client_id or 0 }}" value="{{ $data->client_id or 0 }}">{{ $data->client_er->username }}</option>--}}
+{{--                                    @else--}}
+{{--                                        <option data-id="0" value="0">未指定</option>--}}
+{{--                                    @endif--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
 
                         {{--质检员--}}
@@ -75,31 +75,6 @@
 {{--                                </select>--}}
 {{--                            </div>--}}
 {{--                        </div>--}}
-                        <div class="form-group">
-                            <label class="control-label col-md-2">选择质检员</label>
-                            <div class="col-md-8 ">
-                                <select class="form-control" name="peoples[]" id="select2-inspector" multiple="multiple">
-                                    @if(!empty($data->pivot_project_user))
-                                        @foreach($data->pivot_project_user as $p)
-                                            <option value="{{ $p->id }}" selected="selected">{{ $p->username }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label col-md-2">选择团队</label>
-                            <div class="col-md-8 ">
-                                <select class="form-control" name="teams[]" id="select2-team" multiple="multiple">
-                                    @if(!empty($data->pivot_project_team))
-                                        @foreach($data->pivot_project_team as $p)
-                                            <option value="{{ $p->id }}" selected="selected">{{ $p->name }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
 
 
                         {{--描述--}}

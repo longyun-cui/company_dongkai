@@ -71,18 +71,21 @@ class Kernel extends HttpKernel
         'yh.staff.login' => \App\Http\Middleware\YHStaffLoginMiddleware::class,
 
 
+        'dk.admin.login' => \App\Http\Middleware\dk\DKAdminLoginMiddleware::class,
         'dk.admin.password_change' => \App\Http\Middleware\dk\DKAdminPasswordChangeMiddleware::class,
-        'dk.finance.password_change' => \App\Http\Middleware\dk\DKFinancePasswordChangeMiddleware::class,
 
         'dk.client.login' => \App\Http\Middleware\dk\DKClientLoginMiddleware::class,
         'dk.client.staff.login' => \App\Http\Middleware\dk\DKClientStaffLoginMiddleware::class,
 
         'dk.finance.user.login' => \App\Http\Middleware\dk\DKFinanceUserLoginMiddleware::class,
+        'dk.finance.password_change' => \App\Http\Middleware\dk\DKFinancePasswordChangeMiddleware::class,
 
 
-        'dk.admin_2.login' => \App\Http\Middleware\dk\DKAdmin_2LoginMiddleware::class,
+        'dk.admin_2.login' => \App\Http\Middleware\dk\DKAdmin2_LoginMiddleware::class,
+        'dk.admin_2.password_change' => \App\Http\Middleware\dk\DKAdmin2_PasswordChangeMiddleware::class,
 
         'dk.customer.login' => \App\Http\Middleware\dk\DKCustomerLoginMiddleware::class,
         'dk.customer.staff.login' => \App\Http\Middleware\dk\DKCustomerStaffLoginMiddleware::class,
+        'dk.customer.password_change' => \App\Http\Middleware\dk\DKCustomerPasswordChangeMiddleware::class,
     ];
 }

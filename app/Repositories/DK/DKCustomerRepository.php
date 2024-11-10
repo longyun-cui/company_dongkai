@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\DK;
 
-use App\Models\DK\DK_Pivot_Customer_Choice;
+
 use App\Models\DK_Customer\DK_Customer_Department;
 use App\Models\DK_Customer\DK_Customer_User;
 use App\Models\DK_Customer\DK_Customer_Project;
@@ -16,11 +16,13 @@ use App\Models\DK\DK_Client;
 use App\Models\DK\DK_District;
 
 
-use App\Models\DK\DK_Clue;
-use App\Models\DK\DK_Customer;
-use App\Models\DK\DK_District_For_Customer;
+use App\Models\DK_Choice\DK_Choice_Clue;
+use App\Models\DK_Choice\DK_Choice_Customer;
+use App\Models\DK_Choice\DK_Choice_District;
+use App\Models\DK_Choice\DK_Choice_Funds_Using;
+use App\Models\DK_Choice\DK_Choice_Record;
 
-use App\Models\DK\YH_Attachment;
+use App\Models\DK_Choice\DK_Choice_Pivot_Customer_Choice;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -58,6 +60,7 @@ class DKCustomerRepository {
         {
             $this->auth_check = 1;
             $this->me = Auth::guard("dk_customer_staff")->user();
+            $this->me->load('customer_er');
             view()->share('me',$this->me);
         }
         else $this->auth_check = 0;
@@ -153,20 +156,22 @@ class DKCustomerRepository {
         ;
 
         // 统计
-        $daily_total = DK_Customer_Finance_Daily::select('*')
-            ->select(DB::raw("
-                    sum(delivery_quantity) as total_of_delivery_quantity,
-                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
-                    sum(total_daily_cost) as total_of_total_daily_cost
-                "))
-            ->where('client_id',$me->client_id)
-            ->first();
+//        $daily_total = DK_Customer_Finance_Daily::select('*')
+//            ->select(DB::raw("
+//                    sum(delivery_quantity) as total_of_delivery_quantity,
+//                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
+//                    sum(total_daily_cost) as total_of_total_daily_cost
+//                "))
+//            ->where('client_id',$me->client_id)
+//            ->first();
         $funds_recharge_total = floatval($me->customer_er->funds_recharge_total);
-        $funds_consumption_total = floatval($daily_total->total_of_total_daily_cost);
+        $funds_consumption_total = floatval($me->customer_er->funds_consumption_total);
+        $funds_obligation_total = floatval($me->customer_er->funds_obligation_total);
         $funds_balance = floatval($funds_recharge_total - $funds_consumption_total);
 
         $return['funds_recharge_total'] = format_number($funds_recharge_total);
         $return['funds_consumption_total'] = format_number($funds_consumption_total);
+        $return['funds_obligation_total'] = format_number($funds_obligation_total);
         $return['funds_balance'] = format_number($funds_balance);
 
         $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.index';
@@ -323,6 +328,59 @@ class DKCustomerRepository {
 
 
 
+    // 【设置】管理员-启用
+    public function operate_setting_customer($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'operate_column.required' => 'operate_column.required.',
+            'set_value.required' => 'set_value.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'operate_column' => 'required',
+            'set_value' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+//        if($me->user_category != 0) return response_error([],"你没有操作权限！");
+
+        $operate = $post_data["operate"];
+        if($operate != 'setting-customer-attribute') return response_error([],"参数【operate】有误！");
+        $operate_column = $post_data["operate_column"];
+        $set_value = $post_data["set_value"];
+
+        $item = DK_Choice_Customer::find($me->customer_id);
+        if(!$item) return response_error([],"该【用户】不存在，刷新页面重试！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->$operate_column = $set_value;
+            $item->timestamps = false;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Choice_Customer--update--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 
 
@@ -581,7 +639,7 @@ class DKCustomerRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = DK_Customer_Record::select('*')
+        $query = DK_Choice_Record::select('*')
             ->with(['creator'])
             ->where(['record_object'=>21, 'operate_object'=>41,'item_id'=>$id]);
 
@@ -840,7 +898,7 @@ class DKCustomerRepository {
                 }
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -931,7 +989,7 @@ class DKCustomerRepository {
                 }
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -1023,7 +1081,7 @@ class DKCustomerRepository {
                 }
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -1130,7 +1188,7 @@ class DKCustomerRepository {
                             $bool = $attachment->fill($attachment_data)->save();
                             if($bool)
                             {
-                                $record = new DK_Customer_Record;
+                                $record = new DK_Choice_Record;
 
                                 $record_data["ip"] = Get_IP();
                                 $record_data["record_object"] = 21;
@@ -1176,7 +1234,7 @@ class DKCustomerRepository {
                     $bool = $attachment->fill($attachment_data)->save();
                     if($bool)
                     {
-                        $record = new DK_Customer_Record;
+                        $record = new DK_Choice_Record;
 
                         $record_data["ip"] = Get_IP();
                         $record_data["record_object"] = 21;
@@ -1256,7 +1314,7 @@ class DKCustomerRepository {
             $bool = $item->delete();  // 普通删除
             if($bool)
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 21;
@@ -2621,10 +2679,12 @@ class DKCustomerRepository {
 
 
 
+
+
     /*
-     * ORDER 工单管理
+     * CLUE 线索管理
      */
-    // 【工单管理】返回-列表-视图
+    // 【线索】返回-列表-视图
     public function view_item_clue_list($post_data)
     {
         $this->get_me();
@@ -2810,28 +2870,46 @@ class DKCustomerRepository {
                 ->whereIn('user_type',[81,84,88])
                 ->get();
         }
-        $customer_list = DK_Customer::select('id','username')->where('user_category',11)->get();
+        $customer_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->get();
         $project_list = DK_Customer_Project::select('id','name')->whereIn('item_type',[1,21])->get();
 
         $view_data['department_district_list'] = $department_district_list;
         $view_data['staff_list'] = $staff_list;
         $view_data['customer_list'] = $customer_list;
         $view_data['project_list'] = $project_list;
-        $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
+        $view_data['menu_active_of_item_clue_list'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.clue-list';
         return view($view_blade)->with($view_data);
     }
-    // 【工单管理】返回-列表-数据
+    // 【线索】返回-列表-数据
     public function get_item_clue_list_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Pivot_Customer_Choice::select('*')
+        $me->customer_er->is_preferential;
+
+        $query = DK_Choice_Pivot_Customer_Choice::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
 //            ->where('customer_id',$me->id)
-            ->with(['project_er']);
+            ->where('sale_result',0)
+            ->when(!empty($me->customer_er->district_city), function ($query) use ($me) {
+                $query->where('location_city',$me->customer_er->district_city);
+            })
+            ->when(!empty($me->customer_er->district_district), function ($query) use ($me) {
+                $query->whereIn('location_district',explode('-', $me->customer_er->district_district));
+            })
+            ->where(function ($query) use($me) {
+                $query->where('sale_type',1)
+                    ->orWhere(function($query) use($me) { $query->where('sale_type',11)->where('customer_id',$me->customer_id); } )
+                    ->orWhere(function($query) use($me) {
+                        $query->when($me->customer_er->is_preferential, function ($query) use ($me) {
+                            $query->where('sale_type',11);
+                        });
+                    });
+            })
+            ->with(['project_er','clue_er']);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -2858,7 +2936,7 @@ class DKCustomerRepository {
         if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
         if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
 
-        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(published_at)"), $post_data['assign']);
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
         if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
@@ -2955,6 +3033,734 @@ class DKCustomerRepository {
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【工单管理】【修改记录】返回-列表-视图
+    public function view_item_clue_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_clue_modify_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.clue-modify-list';
+        return view($view_blade)->with($return);
+    }
+    // 【工单管理】【修改记录】返回-列表-数据
+    public function get_item_clue_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Choice_Record::select('*')
+            ->with([
+                'creator',
+                'before_project_er'=>function($query) { $query->select('id','name'); },
+                'after_project_er'=>function($query) { $query->select('id','name'); }
+            ])
+            ->where(['order_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【线索】接单
+    public function operate_item_clue_take($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'clue-take') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+
+        $this->get_me();
+        $me = $this->me;
+        $customer = $me->customer_er;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+//        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
+        $item = DK_Choice_Pivot_Customer_Choice::find($id);
+        if(!$item) return response_error([],"该【线索】不存在，刷新页面重试！");
+
+        $clue = DK_Choice_Clue::find($item->clue_id);
+        if(!$clue) return response_error([],"该【线索源】不存在，刷新页面重试！");
+
+        if($item->sale_result != 0) return response_error([],"该【线索】已被接单！");
+        if($item->sale_type == 66 && $item->assign_customer_id != $me->customer_id) return response_error([],"该【线索】不是你的专享单！");
+        if($item->sale_type == 11 && $customer->is_preferential != 1) return response_error([],"你还没有开通优享单权限！");
+        if(($customer->funds_recharge_total - $customer->funds_consumption_total - $customer->funds_obligation_total - $customer->cooperative_unit_price) < 0)  return response_error([],"账户余额不足，请先充值！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->sale_result = 1;
+            $item->customer_id = $me->customer_id;
+            $item->taker_id = $me->id;
+            $item->taken_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
+                $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price;
+                $bool_customer = $customer_u->save();
+                if(!$bool_customer) throw new Exception("DK_Customer--update--fail");
+
+                $record = new DK_Choice_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 89;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["customer_staff_id"] = $me->id;
+                $record_data["customer_id"] = $me->customer_id;
+                $record_data["clue_id"] = $item->clue_id;
+                $record_data["choice_id"] = $id;
+                $record_data["operate_object"] = 11;
+                $record_data["operate_category"] = 85;
+                $record_data["operate_type"] = 1;
+
+                $bool_r = $record->fill($record_data)->save();
+                if(!$bool_r) throw new Exception("DK_Choice_Record--insert--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+
+    /*
+     * MINE 我的管理
+     */
+    // 【我的】返回-列表-视图
+    public function view_mine_clue_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        // 显示数量
+        if(!empty($post_data['record']))
+        {
+            if($post_data['record'] == 'record')
+            {
+                $this->record_for_user_operate(21,11,1,$me->id,0,71,0);
+            }
+        }
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 20;
+        }
+        else $view_data['length'] = 20;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+
+
+        // 工单ID
+        if(!empty($post_data['order_id']))
+        {
+            if(is_numeric($post_data['order_id']) && $post_data['order_id'] > 0) $view_data['order_id'] = $post_data['order_id'];
+            else $view_data['order_id'] = '';
+        }
+        else $view_data['order_id'] = '';
+
+        // 提交日期
+        if(!empty($post_data['assign']))
+        {
+            if($post_data['assign']) $view_data['assign'] = $post_data['assign'];
+            else $view_data['assign'] = '';
+        }
+        else $view_data['assign'] = '';
+
+        // 起始时间
+        if(!empty($post_data['assign_start']))
+        {
+            if($post_data['assign_start']) $view_data['start'] = $post_data['assign_start'];
+            else $view_data['start'] = '';
+        }
+        else $view_data['start'] = '';
+
+        // 截止时间
+        if(!empty($post_data['assign_ended']))
+        {
+            if($post_data['assign_ended']) $view_data['ended'] = $post_data['assign_ended'];
+            else $view_data['ended'] = '';
+        }
+        else $view_data['ended'] = '';
+
+        // 员工
+        if(!empty($post_data['staff_id']))
+        {
+            if(is_numeric($post_data['staff_id']) && $post_data['staff_id'] > 0) $view_data['staff_id'] = $post_data['staff_id'];
+            else $view_data['staff_id'] = -1;
+        }
+        else $view_data['staff_id'] = -1;
+
+        // 部门-大区
+        if(!empty($post_data['department_district_id']))
+        {
+            if(is_numeric($post_data['department_district_id']) && $post_data['department_district_id'] > 0) $view_data['department_district_id'] = $post_data['department_district_id'];
+            else $view_data['department_district_id'] = -1;
+        }
+        else $view_data['department_district_id'] = -1;
+
+
+
+        // 客户
+        if(!empty($post_data['customer_id']))
+        {
+            if(is_numeric($post_data['client_id']) && $post_data['client_id'] > 0) $view_data['client_id'] = $post_data['client_id'];
+            else $view_data['client_id'] = -1;
+        }
+        else $view_data['customer_id'] = -1;
+
+
+
+
+        // 项目
+        if(!empty($post_data['project_id']))
+        {
+            if(is_numeric($post_data['project_id']) && $post_data['project_id'] > 0)
+            {
+                $project = DK_Client_Project::select(['id','name'])->find($post_data['project_id']);
+                if($project)
+                {
+                    $view_data['project_id'] = $post_data['project_id'];
+                    $view_data['project_name'] = $project->name;
+                }
+                else $view_data['project_id'] = -1;
+            }
+            else $view_data['project_id'] = -1;
+        }
+        else $view_data['project_id'] = -1;
+
+        // 客户姓名
+        if(!empty($post_data['client_name']))
+        {
+            if($post_data['client_name']) $view_data['client_name'] = $post_data['client_name'];
+            else $view_data['client_name'] = '';
+        }
+        else $view_data['client_'] = '';
+        // 客户电话
+        if(!empty($post_data['client_phone']))
+        {
+            if($post_data['client_phone']) $view_data['client_phone'] = $post_data['client_phone'];
+            else $view_data['client_phone'] = '';
+        }
+        else $view_data['client_phone'] = '';
+
+        // 是否+V
+        if(!empty($post_data['is_wx']))
+        {
+            if(is_numeric($post_data['is_wx']) && $post_data['is_wx'] > 0) $view_data['is_wx'] = $post_data['is_wx'];
+            else $view_data['is_wx'] = -1;
+        }
+        else $view_data['is_wx'] = -1;
+
+        // 是否重复
+        if(!empty($post_data['is_repeat']))
+        {
+            if(is_numeric($post_data['is_repeat']) && $post_data['is_repeat'] > 0) $view_data['is_repeat'] = $post_data['is_repeat'];
+            else $view_data['is_repeat'] = -1;
+        }
+        else $view_data['is_repeat'] = -1;
+
+        // 类型
+        if(!empty($post_data['order_type']))
+        {
+            if(is_numeric($post_data['order_type']) && $post_data['order_type'] > 0) $view_data['order_type'] = $post_data['order_type'];
+            else $view_data['order_type'] = -1;
+        }
+        else $view_data['order_type'] = -1;
+
+
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $view_data['inspected_status'] = $post_data['inspected_status'];
+        }
+        else $view_data['inspected_status'] = -1;
+
+//        dd($view_data);
+
+
+        $department_district_list = DK_Customer_Department::select('id','name')->where('department_type',11)->get();
+        if($me->user_type == 81)
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        else if($me->user_type == 84)
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->where('department_group_id',$me->department_group_id)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        else
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        $customer_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->get();
+        $project_list = DK_Customer_Project::select('id','name')->whereIn('item_type',[1,21])->get();
+
+        $view_data['department_district_list'] = $department_district_list;
+        $view_data['staff_list'] = $staff_list;
+        $view_data['customer_list'] = $customer_list;
+        $view_data['project_list'] = $project_list;
+        $view_data['menu_active_of_mine_clue_list'] = 'active menu-open';
+
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.mine.clue-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【我的】返回-列表-数据
+    public function get_mine_clue_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Choice_Pivot_Customer_Choice::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
+            ->where('customer_id',$me->customer_id)
+            ->with(['project_er','clue_er','taker_er','purchaser_er']);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+//        $me->load(['subordinate_er' => function ($query) {
+//            $query->select('id');
+//        }]);
+
+
+
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
+        if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
+
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(taken_at)"), $post_data['assign']);
+        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
+        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+
+
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1]))
+            {
+                $query->where('project_id', $post_data['project']);
+            }
+        }
+
+
+        // 工单类型 [自有|空单|配货|调车]
+        if(isset($post_data['order_type']))
+        {
+            if(!in_array($post_data['order_type'],[-1]))
+            {
+                $query->where('car_owner_type', $post_data['order_type']);
+            }
+        }
+
+        // 是否+V
+        if(!empty($post_data['is_wx']))
+        {
+            if(!in_array($post_data['is_wx'],[-1]))
+            {
+                $query->where('is_wx', $post_data['is_wx']);
+            }
+        }
+
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $inspected_status = $post_data['inspected_status'];
+            if(in_array($inspected_status,['待发布','待审核','已审核']))
+            {
+                if($inspected_status == '待发布')
+                {
+                    $query->where('is_published', 0);
+                }
+                else if($inspected_status == '待审核')
+                {
+                    $query->where('is_published', 1)->whereIn('inspected_status', [0,9]);
+                }
+                else if($inspected_status == '已审核') $query->where('inspected_status', 1);
+            }
+        }
+        // 审核结果
+        if(!empty($post_data['inspected_result']))
+        {
+//            $inspected_result = $post_data['inspected_result'];
+//            if(in_array($inspected_result,config('info.inspected_result')))
+//            {
+//                $query->where('inspected_result', $inspected_result);
+//            }
+            if(count($post_data['inspected_result']))
+            {
+                $query->whereIn('inspected_result', $post_data['inspected_result']);
+            }
+        }
+
+
+
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("taken_at", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
+
+            $list[$k]->content_decode = json_decode($v->content);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【工单管理】【修改记录】返回-列表-视图
+    public function view_mine_clue_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_clue_modify_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.clue-modify-list';
+        return view($view_blade)->with($return);
+    }
+    // 【工单管理】【修改记录】返回-列表-数据
+    public function get_mine_clue_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Choice_Record::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select('id','username'); },
+                'customer_staff_er'=>function($query) { $query->select('id','username'); }
+            ])
+            ->where(['record_object'=>89,'customer_id'=>$me->customer_id,'choice_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【我的】退单
+    public function operate_mine_clue_back($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'clue-back') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+
+        $this->get_me();
+        $me = $this->me;
+        $customer = $me->customer_er;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+//        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
+        $item = DK_Choice_Pivot_Customer_Choice::find($id);
+        if(!$item) return response_error([],"该【线索】不存在，刷新页面重试！");
+
+        $clue = DK_Choice_Clue::find($item->clue_id);
+        if(!$clue) return response_error([],"该【线索源】不存在，刷新页面重试！");
+
+        if($item->sale_result != 0) return response_error([],"该【线索】已被接单！");
+        if($item->sale_type == 66 && $item->assign_customer_id != $me->customer_id) return response_error([],"该【线索】不是你的专享单！");
+        if($item->sale_type == 11 && $customer->is_preferential != 1) return response_error([],"你还没有开通优享单权限！");
+        if(($customer->funds_recharge_total - $customer->funds_consumption_total - $customer->funds_obligation_total - $customer->cooperative_unit_price) < 0)  return response_error([],"账户余额不足，请先充值！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->sale_result = 1;
+            $item->customer_id = $me->customer_id;
+            $item->taker_id = $me->d;
+            $item->taken_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
+                $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price;
+                $bool_customer = $customer_u->save();
+                if(!$bool_customer) throw new Exception("DK_Customer--update--fail");
+
+//                $record = new DK_Choice_Record;
+//
+//                $record_data["ip"] = Get_IP();
+//                $record_data["record_object"] = 31;
+//                $record_data["record_category"] = 11;
+//                $record_data["record_type"] = 1;
+//                $record_data["creator_id"] = $me->id;
+//                $record_data["order_id"] = $id;
+//                $record_data["operate_object"] = 71;
+//                $record_data["operate_category"] = 91;
+//                $record_data["operate_type"] = 1;
+//
+//                $bool_r = $record->fill($record_data)->save();
+//                if(!$bool_r) throw new Exception("DK_Choice_Record--insert--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【我的】购买
+    public function operate_mine_clue_purchase($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'clue-purchase') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+
+        $this->get_me();
+        $me = $this->me;
+        $customer = $me->customer_er;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+//        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
+        $item = DK_Choice_Pivot_Customer_Choice::find($id);
+        if(!$item) return response_error([],"该【线索】不存在，刷新页面重试！");
+
+        $clue = DK_Choice_Clue::find($item->clue_id);
+        if(!$clue) return response_error([],"该【线索源】不存在，刷新页面重试！");
+
+        if($item->sale_result != 1) return response_error([],"请先接单！");
+        if($item->customer_id != $me->customer_id) return response_error([],"该【线索】不是你的！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->sale_result = 9;
+            $item->purchaser_id = $me->id;
+            $item->purchased_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("item--update--fail");
+            else
+            {
+                $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
+                $customer_u->funds_obligation_total -= $customer_u->cooperative_unit_price;
+                $customer_u->funds_consumption_total += $customer_u->cooperative_unit_price;
+                $bool_customer = $customer_u->save();
+                if(!$bool_customer) throw new Exception("DK_Customer--update--fail");
+
+                $record = new DK_Choice_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 89;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["customer_staff_id"] = $me->id;
+                $record_data["customer_id"] = $me->customer_id;
+                $record_data["clue_id"] = $item->clue_id;
+                $record_data["choice_id"] = $id;
+                $record_data["operate_object"] = 11;
+                $record_data["operate_category"] = 88;
+                $record_data["operate_type"] = 1;
+
+                $bool_r = $record->fill($record_data)->save();
+                if(!$bool_r) throw new Exception("DK_Choice_Record--insert--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
     }
 
 
@@ -3301,7 +4107,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-//                $record = new DK_Customer_Record;
+//                $record = new DK_Choice_Record;
 //
 //                $record_data["ip"] = Get_IP();
 //                $record_data["record_object"] = 31;
@@ -3390,7 +4196,7 @@ class DKCustomerRepository {
                 if(!$bool) throw new Exception("item--update--fail");
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -3483,7 +4289,7 @@ class DKCustomerRepository {
                 if(!$bool) throw new Exception("item--update--fail");
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -3576,7 +4382,7 @@ class DKCustomerRepository {
                 if(!$bool) throw new Exception("item--update--fail");
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 21;
@@ -4064,7 +4870,7 @@ class DKCustomerRepository {
         $me = $this->me;
 
         $id  = $post_data["id"];
-        $query = DK_Customer_Record::select('*')
+        $query = DK_Choice_Record::select('*')
             ->with([
                 'creator',
                 'before_project_er'=>function($query) { $query->select('id','name'); },
@@ -4523,7 +5329,7 @@ class DKCustomerRepository {
                 if(!$bool) throw new Exception("item--delete--fail");
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 31;
@@ -4550,7 +5356,7 @@ class DKCustomerRepository {
                 if(!$bool) throw new Exception("item--delete--fail");
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 31;
@@ -4634,7 +5440,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 31;
@@ -4707,7 +5513,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 31;
@@ -4778,7 +5584,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 31;
@@ -4849,7 +5655,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 31;
@@ -4920,7 +5726,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 31;
@@ -5000,7 +5806,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 31;
@@ -5095,7 +5901,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-//                $record = new DK_Customer_Record;
+//                $record = new DK_Choice_Record;
 //
 //                $record_data["ip"] = Get_IP();
 //                $record_data["record_object"] = 31;
@@ -5176,7 +5982,7 @@ class DKCustomerRepository {
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 31;
@@ -5291,7 +6097,7 @@ class DKCustomerRepository {
                 }
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 31;
@@ -5455,7 +6261,7 @@ class DKCustomerRepository {
                 }
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 31;
@@ -5585,7 +6391,7 @@ class DKCustomerRepository {
                 }
                 else
                 {
-                    $record = new DK_Customer_Record;
+                    $record = new DK_Choice_Record;
 
                     $record_data["ip"] = Get_IP();
                     $record_data["record_object"] = 31;
@@ -5706,7 +6512,7 @@ class DKCustomerRepository {
                             $bool = $attachment->fill($attachment_data)->save();
                             if($bool)
                             {
-                                $record = new DK_Customer_Record;
+                                $record = new DK_Choice_Record;
 
                                 $record_data["ip"] = Get_IP();
                                 $record_data["record_object"] = 31;
@@ -5753,7 +6559,7 @@ class DKCustomerRepository {
                     $bool = $attachment->fill($attachment_data)->save();
                     if($bool)
                     {
-                        $record = new DK_Customer_Record;
+                        $record = new DK_Choice_Record;
 
                         $record_data["ip"] = Get_IP();
                         $record_data["record_object"] = 31;
@@ -5833,7 +6639,7 @@ class DKCustomerRepository {
             $bool = $item->delete();  // 普通删除
             if($bool)
             {
-                $record = new DK_Customer_Record;
+                $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
                 $record_data["record_object"] = 31;
@@ -10113,7 +10919,7 @@ class DKCustomerRepository {
         }
         else if($export_type == "latest")
         {
-            $record_last = DK_Customer_Record::select('*')
+            $record_last = DK_Choice_Record::select('*')
                 ->where(['creator_id'=>$me->id,'operate_category'=>109,'operate_type'=>99])
                 ->orderBy('id','desc')->first();
 
@@ -10293,7 +11099,7 @@ class DKCustomerRepository {
         array_unshift($cellData, $title_row);
 
 
-        $record = new DK_Customer_Record;
+        $record = new DK_Choice_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 31;
@@ -10471,7 +11277,7 @@ class DKCustomerRepository {
         array_unshift($cellData, $title_row);
 
 
-        $record = new DK_Customer_Record;
+        $record = new DK_Choice_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 31;
@@ -10612,7 +11418,7 @@ class DKCustomerRepository {
         array_unshift($cellData, $title_row);
 
 
-        $record = new DK_Customer_Record;
+        $record = new DK_Choice_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = 31;
@@ -10750,7 +11556,7 @@ class DKCustomerRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Customer_Record::select('*')->withTrashed()
+        $query = DK_Choice_Record::select('*')->withTrashed()
             ->with('client_creator')
             ->where('creator_id', $me->id)
 //            ->where(['owner_id'=>100,'item_category'=>100])
@@ -10859,7 +11665,7 @@ class DKCustomerRepository {
     // 【访问记录】
     public function record_for_user_operate($record_object,$record_category,$record_type,$creator_id,$item_id,$operate_object,$operate_category,$operate_type = 0,$column_key = '',$before = '',$after = '')
     {
-        $record = new DK_Customer_Record;
+        $record = new DK_Choice_Record;
 
         $record_data["ip"] = Get_IP();
         $record_data["record_object"] = $record_object;

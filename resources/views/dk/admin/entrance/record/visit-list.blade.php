@@ -100,6 +100,13 @@
                             <option value="99">密码错误</option>
                         </select>
 
+                        <select class="form-control form-filter select2-box record-select2-staff" name="record_staff" style="width:120px;">
+                            <option value="-1">选择员工</option>
+                            @foreach($staff_list as $v)
+                                <option value="{{ $v->id }}">{{ $v->username }}</option>
+                            @endforeach
+                        </select>
+
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
@@ -286,6 +293,7 @@
                         d.open_app = $('select[name="open_app"]').val();
                         d.record_category = $('select[name="record_category"]').val();
                         d.record_type = $('select[name="record_type"]').val();
+                        d.record_staff = $('select[name="record_staff"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",

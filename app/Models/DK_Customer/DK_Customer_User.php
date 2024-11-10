@@ -84,13 +84,13 @@ class DK_Customer_User extends Authenticatable
     // 所属客户
     function client_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Client','client_id','id');
     }
 
     // 所属客户
     function customer_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Customer','customer_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Customer','customer_id','id');
     }
 
 

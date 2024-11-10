@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_ADMIN_2').'layout.layout')
 
 
 @section('head_title')
@@ -148,7 +148,7 @@
 
         $("#edit-item-submit").on('click', function() {
             var options = {
-                url: "/item/order-import",
+                url: "/item/clue-import",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
@@ -161,7 +161,7 @@
 
                         $(".fileinput-remove-button").click();
 
-                        // location.href = "/item/order-list-for-all";
+                        location.href = "/item/clue-list";
                     }
                 }
             };
@@ -174,7 +174,7 @@
         //
         $('#select2-project').select2({
             ajax: {
-                url: "{{ url('/item/item_select2_project') }}",
+                url: "{{ url('/select2/select2_project') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

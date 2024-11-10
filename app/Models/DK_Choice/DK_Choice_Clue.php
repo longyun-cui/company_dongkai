@@ -1,15 +1,15 @@
 <?php
-namespace App\Models\DK;
+namespace App\Models\DK_Choice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class DK_Clue extends Model
+class DK_Choice_Clue extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_admin_clue";
+    protected $table = "dk_choice_clue";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'form', 'sort',
         'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
@@ -22,6 +22,7 @@ class DK_Clue extends Model
         'client_id',
         'customer_id',
         'item_id', 'menu_id',
+        'choice_id',
 
         'sale_category', 'sale_type', 'sale_status', 'sale_result',
 
@@ -64,73 +65,73 @@ class DK_Clue extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','creator_id','id');
     }
     // 更改者
     function updater()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','updater_id','id');
     }
     // 验证者
     function verifier()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','verifier_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','verifier_id','id');
     }
     // 审核者
     function inspector()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','inspector_id','id');
     }
     // 运营者
     function deliverer()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','deliverer_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','deliverer_id','id');
     }
     // 完成者
     function completer()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','user_id','id');
     }
 
 
     // 项目
     function project_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Project','project_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Project','project_id','id');
     }
 
     // 大区经理
     function department_manager_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','department_manager_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','department_manager_id','id');
     }
 
     // 小组主管
     function department_supervisor_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','department_supervisor_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','department_supervisor_id','id');
     }
 
     // 部门-大区
     function department_district_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Department','department_district_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Department','department_district_id','id');
     }
 
     // 部门-大区
     function department_group_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Department','department_group_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Department','department_group_id','id');
     }
 
 
@@ -139,11 +140,11 @@ class DK_Clue extends Model
     // 客户
     function client_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Client','client_id','id');
     }
     function customer_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Customer','customer_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Customer','customer_id','id');
     }
 
 

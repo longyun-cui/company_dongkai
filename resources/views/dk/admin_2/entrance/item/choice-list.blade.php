@@ -1,15 +1,15 @@
-@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_ADMIN_2').'layout.layout')
 
 
 @section('head_title')
-    {{ $title_text or '交付列表' }} - 录单系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '上架列表' }} - 录单系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')交付列表 - 录单系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')上架列表 - 录单系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -20,7 +20,7 @@
 
             <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
 
-                <h3 class="box-title">交付列表</h3>
+                <h3 class="box-title">上架列表</h3>
 
                 <div class="pull-right _none">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
@@ -34,23 +34,23 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-order-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-choice-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="delivery-id" placeholder="ID" value="{{ $id or '' }}" style="width:88px;" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="delivery-order-id" placeholder="工单ID" value="{{ $order_id or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="choice-id" placeholder="ID" value="{{ $choice_id or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="clue-id" placeholder="线索ID" value="{{ $clue_id or '' }}" style="width:88px;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
+                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="choice-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
 
 
-                        <select class="form-control form-filter select-select2 select2-box delivery-project" name="delivery-project" style="width:160px;">
+                        <select class="form-control form-filter select-select2 select2-box choice-project" name="choice-project" style="width:160px;">
                             <option value="-1">选择项目</option>
                             @if(!empty($project_list))
                                 @foreach($project_list as $v)
@@ -68,12 +68,12 @@
                         </select>
 
 
-                        <select class="form-control form-filter select-select2 select2-box delivery-client" name="delivery-client" style="width:160px;">
+                        <select class="form-control form-filter select-select2 select2-box choice-customer" name="choice-customer" style="width:160px;">
                             <option value="-1">选择客户</option>
-                            @if(!empty($client_list))
-                                @foreach($client_list as $v)
-                                    @if(!empty($client_id))
-                                        @if($v->id == $client_id)
+                            @if(!empty($customer_list))
+                                @foreach($customer_list as $v)
+                                    @if(!empty($customer_id))
+                                        @if($v->id == $customer_id)
                                             <option value="{{ $v->id }}" selected="selected">{{ $v->username }}</option>
                                         @else
                                             <option value="{{ $v->id }}">{{ $v->username }}</option>
@@ -86,35 +86,35 @@
                         </select>
 
 
-                        <select class="form-control form-filter" name="order-delivery-type" style="width:88px;">
+                        <select class="form-control form-filter" name="choice-choice-type" style="width:88px;">
                             <option value="-1">交付类型</option>
                             <option value="95">交付</option>
                             <option value="96">分发</option>
                         </select>
 
 
-{{--                        <select class="form-control form-filter" name="order-delivered-status" style="width:88px;">--}}
+{{--                        <select class="form-control form-filter" name="choice-delivered-status" style="width:88px;">--}}
 {{--                            <option value="-1">交付状态</option>--}}
 {{--                            <option value="待交付" @if("待审核" == $delivered_status) selected="selected" @endif>待交付</option>--}}
 {{--                            <option value="已交付" @if("已审核" == $delivered_status) selected="selected" @endif>已交付</option>--}}
 {{--                        </select>--}}
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="choice-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="choice-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
 
-{{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
+{{--                        <select class="form-control form-filter" name="choice-is-wx" style="width:88px;">--}}
 {{--                            <option value="-1">是否+V</option>--}}
 {{--                            <option value="1" @if($is_wx == "1") selected="selected" @endif>是</option>--}}
 {{--                            <option value="0" @if($is_wx == "0") selected="selected" @endif>否</option>--}}
 {{--                        </select>--}}
 
-{{--                        <select class="form-control form-filter" name="order-is-repeat" style="width:88px;">--}}
+{{--                        <select class="form-control form-filter" name="choice-is-repeat" style="width:88px;">--}}
 {{--                            <option value="-1">是否重复</option>--}}
 {{--                            <option value="1" @if($is_repeat >= 1) selected="selected" @endif>是</option>--}}
 {{--                            <option value="0" @if($is_repeat == 0) selected="selected" @endif>否</option>--}}
 {{--                        </select>--}}
 
-{{--                        <input type="text" class="form-control form-filter filter-keyup" name="order-description" placeholder="通话小结" value="" style="width:120px;" />--}}
+{{--                        <input type="text" class="form-control form-filter filter-keyup" name="choice-description" placeholder="通话小结" value="" style="width:120px;" />--}}
 
                         <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
                             <i class="fa fa-remove"></i> 清空重选
@@ -137,7 +137,7 @@
                 </div>
 
                 <div class="tableArea">
-                <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
+                <table class='table table-striped table-bordered table-hover choice-column' id='datatable_ajax'>
                     <thead>
                     </thead>
                     <tbody>
@@ -151,7 +151,7 @@
 
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-            <div class="box-footer" style="padding:4px 10px;">
+            <div class="box-footer _none" style="padding:4px 10px;">
                 <div class="row" style="margin:2px 0;">
                     <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
                         {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
@@ -205,8 +205,8 @@
                 <div class="box-body  info-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="operate" value="order-inspect" readonly>
-                    <input type="hidden" name="follow-order-id" value="0" readonly>
+                    <input type="hidden" name="operate" value="choice-inspect" readonly>
+                    <input type="hidden" name="follow-choice-id" value="0" readonly>
 
                     {{--项目--}}
                     <div class="form-group item-detail-project">
@@ -326,13 +326,13 @@
             <div class="box-body">
 
                 {{ csrf_field() }}
-                <input type="hidden" name="attachment-set-operate" value="item-order-attachment-set" readonly>
-                <input type="hidden" name="attachment-set-order-id" value="0" readonly>
+                <input type="hidden" name="attachment-set-operate" value="item-choice-attachment-set" readonly>
+                <input type="hidden" name="attachment-set-choice-id" value="0" readonly>
                 <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
                 <input type="hidden" name="attachment-set-column-key" value="" readonly>
 
-                <input type="hidden" name="operate" value="item-order-attachment-set" readonly>
-                <input type="hidden" name="order_id" value="0" readonly>
+                <input type="hidden" name="operate" value="item-choice-attachment-set" readonly>
+                <input type="hidden" name="clue_id" value="0" readonly>
                 <input type="hidden" name="operate_type" value="add" readonly>
                 <input type="hidden" name="column_key" value="attachment" readonly>
 
@@ -397,256 +397,6 @@
         </div>
 
     </div>
-</div>
-
-
-
-
-{{--修改-基本-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-text-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-text-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-order-info-text-set" readonly>
-                    <input type="hidden" name="info-text-set-order-id" value="0" readonly>
-                    <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-text-set-column-key" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-text-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="info-text-set-column-value" autocomplete="off" placeholder="" value="">
-                            <textarea class="form-control" name="info-textarea-set-column-value" rows="6" cols="100%"></textarea>
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-text-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-text-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-时间-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-time-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-time-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-order-info-time-set" readonly>
-                    <input type="hidden" name="info-time-set-order-id" value="0" readonly>
-                    <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-time-set-column-key" value="" readonly>
-                    <input type="hidden" name="info-time-set-time-type" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-time-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
-                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-time-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-time-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-radio-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-radio-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-radio-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-radio-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-order-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-order-id" value="0" readonly>
-                    <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
-                    <input type="hidden" name="info-radio-set-column-key" value="" readonly>
-
-
-                    <div class="form-group radio-box">
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-radio-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-radio-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-select-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-select-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-select-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-select-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-order-info-option-set" readonly>
-                    <input type="hidden" name="info-select-set-order-id" value="0" readonly>
-                    <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-select-set-column-key" value="" readonly>
-                    <input type="hidden" name="info-select-set-column-key2" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-select-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <select class="form-control select-primary" name="info-select-set-column-value" style="width:48%;" id="">
-                                <option data-id="0" value="0">未指定</option>
-                            </select>
-                            <select class="form-control select-assistant" name="info-select-set-column-value2" style="width:48%;" id="">
-                                <option data-id="0" value="0">未指定</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-select-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-{{--option--}}
-<div class="option-container _none">
-
-    {{--订单类型--}}
-    <div id="location-city-option-list">
-        <option value="">选择城市</option>
-        @foreach(config('info.location_city') as $k => $v)
-            <option value ="{{ $k }}" data-index="{{ $loop->index }}">{{ $k }}</option>
-        @endforeach
-    </div>
-
-
-    {{--是否+V--}}
-    <div id="option-list-for-is-wx">
-        <label class="control-label col-md-2">是否+V</label>
-        <div class="col-md-8">
-            <div class="btn-group">
-
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="is_wx" value="0" class="info-set-column"> 否
-                        </label>
-                    </span>
-                </button>
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="is_wx" value="1" class="info-set-column"> 是
-                        </label>
-                    </span>
-                </button>
-
-            </div>
-        </div>
-    </div>
-
-    {{--审核结果--}}
-    <div id="option-list-for-inspected-result">
-        <option value="-1">审核结果</option>
-        @foreach(config('info.inspected_result') as $v)
-            <option value="{{ $v }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
-    {{--牙齿数量--}}
-    <div id="option-list-for-teeth-count">
-        <option value="-1">选择牙齿数量</option>
-        @foreach(config('info.teeth_count') as $v)
-            <option value="{{ $v }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
-    {{--渠道来源--}}
-    <div id="option-list-for-channel-source">
-        <option value="-1">选择渠道来源</option>
-        @foreach(config('info.channel_source') as $v)
-            <option value="{{ $v }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
 </div>
 
 
@@ -740,8 +490,8 @@
     .datatable-search-row .input-group .date-picker-btn { width:30px; }
     .table-hover>tbody>tr:hover td { background-color: #bbccff; }
 
-    .select2-container { height:100%; border-radius:0; float:left; }
-    .select2-container .select2-selection--single { border-radius:0; }
+    .select2-container { height:100%; bchoice-radius:0; float:left; }
+    .select2-container .select2-selection--single { bchoice-radius:0; }
     .bg-fee-2 { background:#C3FAF7; }
     .bg-fee { background:#8FEBE5; }
     .bg-deduction { background:#C3FAF7; }
@@ -773,33 +523,33 @@
                 "iDisplayStart": {{ ($page - 1) * $length }},
                 "iDisplayLength": {{ $length or 20 }},
                 "ajax": {
-                    'url': "{{ url('/item/delivery-list') }}",
+                    'url': "{{ url('/item/choice-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="delivery-id"]').val();
-                        d.order_id = $('input[name="delivery-order-id"]').val();
-                        d.remark = $('input[name="order-remark"]').val();
-                        d.description = $('input[name="order-description"]').val();
-                        d.assign = $('input[name="order-assign"]').val();
-                        d.assign_start = $('input[name="order-start"]').val();
-                        d.assign_ended = $('input[name="order-ended"]').val();
-                        d.name = $('input[name="order-name"]').val();
-                        d.title = $('input[name="order-title"]').val();
-                        d.keyword = $('input[name="order-keyword"]').val();
-                        d.department_district = $('select[name="order-department-district[]"]').val();
-                        d.client = $('select[name="delivery-client"]').val();
-                        d.project = $('select[name="delivery-project"]').val();
-                        d.status = $('select[name="order-status"]').val();
-                        d.delivery_type = $('select[name="order-delivery-type"]').val();
-                        d.order_type = $('select[name="order-type"]').val();
-                        d.client_name = $('input[name="order-client-name"]').val();
-                        d.client_phone = $('input[name="order-client-phone"]').val();
-                        d.is_wx = $('select[name="order-is-wx"]').val();
-                        d.is_repeat = $('select[name="order-is-repeat"]').val();
-                        d.delivered_status = $('select[name="order-delivered-status"]').val();
-                        d.delivered_result = $('select[name="order-delivered-result[]"]').val();
+                        d.id = $('input[name="choice-id"]').val();
+                        d.clue_id = $('input[name="clue-id"]').val();
+                        d.remark = $('input[name="choice-remark"]').val();
+                        d.description = $('input[name="choice-description"]').val();
+                        d.assign = $('input[name="choice-assign"]').val();
+                        d.assign_start = $('input[name="choice-start"]').val();
+                        d.assign_ended = $('input[name="choice-ended"]').val();
+                        d.name = $('input[name="choice-name"]').val();
+                        d.title = $('input[name="choice-title"]').val();
+                        d.keyword = $('input[name="choice-keyword"]').val();
+                        d.department_district = $('select[name="choice-department-district[]"]').val();
+                        d.customer = $('select[name="choice-customer"]').val();
+                        d.project = $('select[name="choice-project"]').val();
+                        d.status = $('select[name="choice-status"]').val();
+                        d.sales_type = $('select[name="choice-choice-type"]').val();
+                        d.order_type = $('select[name="choice-type"]').val();
+                        d.client_name = $('input[name="choice-client-name"]').val();
+                        d.client_phone = $('input[name="choice-client-phone"]').val();
+                        d.is_wx = $('select[name="choice-is-wx"]').val();
+                        d.is_repeat = $('select[name="choice-is-repeat"]').val();
+                        d.delivered_status = $('select[name="choice-delivered-status"]').val();
+                        d.delivered_result = $('select[name="choice-delivered-result[]"]').val();
 //
 //                        d.created_at_from = $('input[name="created_at_from"]').val();
 //                        d.created_at_to = $('input[name="created_at_to"]').val();
@@ -834,7 +584,7 @@
                        "data": "id",
                        "orderable": false,
                        render: function(data, type, row, meta) {
-                           return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'" data-order-id="'+row.order_id+'"></label>';
+                           return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'" data-choice-id="'+row.clue_id+'"></label>';
                        }
                    },
 //                    {
@@ -877,6 +627,7 @@
                             var $html_exported = '<a class="btn btn-xs bg-blue item-exported-submit" data-id="'+data+'">导出</a>';
                             var $html_follow = '<a class="btn btn-xs bg-blue item-modal-show-for-follow" data-id="'+data+'">客户跟进</a>';
                             var $html_quality = '<a class="btn btn-xs bg-olive item-quality-evaluate-submit" data-id="'+data+'">质量评估</a>';
+                            var $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
 
 
@@ -886,7 +637,8 @@
                             }
                             else
                             {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-restore-submit" data-id="'+data+'">恢复</a>';
+                                // $html_delete = '<a class="btn btn-xs bg-grey item-restore-submit" data-id="'+data+'">恢复</a>';
+                                $html_delete = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">删除</a>';
                             }
 
                             var $more_html =
@@ -910,36 +662,36 @@
                                 $html_delete+
                                 // $html_follow+
                                 // $html_quality+
-                                // $html_record+
+                                $html_record+
                                 '';
                             return $html;
 
                         }
                     },
-                    {
-                        "title": "导出状态",
-                        "data": "is_exported",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set-');
-                                $(nTd).attr('data-id',row.id).attr('data-name','交付结果');
-                                $(nTd).attr('data-key','is_exported').attr('data-value',data);
-                                $(nTd).attr('data-column-name','审核结果');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            if(data == 0) return '<small class="btn-xs btn-primary">未导出</small>';
-                            else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
-                            else if(data == -1) return '<small class="btn-xs btn-warning">未选择</small>';
-                            return data;
-                        }
-                    },
+                    // {
+                    //     "title": "导出状态",
+                    //     "data": "is_exported",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).addClass('modal-show-for-info-select-set-');
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','交付结果');
+                    //             $(nTd).attr('data-key','is_exported').attr('data-value',data);
+                    //             $(nTd).attr('data-column-name','审核结果');
+                    //             if(data) $(nTd).attr('data-operate-type','edit');
+                    //             else $(nTd).attr('data-operate-type','add');
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         if(data == 0) return '<small class="btn-xs btn-primary">未导出</small>';
+                    //         else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
+                    //         else if(data == -1) return '<small class="btn-xs btn-warning">未选择</small>';
+                    //         return data;
+                    //     }
+                    // },
                     // {
                     //     "title": "工单质量",
                     //     "data": "order_quality",
@@ -955,46 +707,24 @@
                     //     }
                     // },
                     {
-                        "title": "工单ID",
-                        "data": "order_id",
+                        "title": "商品状态",
+                        "data": "id",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-
-                            if(data) return '<a target="_blank" href="http://admin.local-dongkai.com/item/order-list-for-all?order_id='+data+'">'+data+'</a>';;
-                            return "--";
+                            if(row.deleted_at == null)
+                            {
+                                return '<small class="btn-xs bg-green">正常</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
                         }
                     },
                     {
-                        "title": "交付时间",
-                        "data": 'created_at',
-                        "className": "",
-                        "width": "120px",
-                        "orderable": false,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(!data) return '';
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                        }
-                    },
-                    {
-                        "title": "交付类型",
+                        "title": "上架类型",
                         "data": "pivot_type",
                         "className": "",
                         "width": "80px",
@@ -1002,56 +732,66 @@
                         render: function(data, type, row, meta) {
                             if(!data) return "--";
                             var $result_html = '';
-                            if(data == 95) return '<small class="btn-xs bg-green">交付</small>';
-                            else if(data == 96) return '<small class="btn-xs bg-orange">分发</small>';
+                            if(data == 91) return '<small class="btn-xs bg-green">上架</small>';
+                            else if(data == 101) return '<small class="btn-xs bg-orange">分发</small>';
                             return $result_html;
                         }
                     },
                     {
-                        "title": "交付结果",
-                        "data": "delivered_result",
+                        "title": "销售类型",
+                        "data": "sale_type",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(!data) return "--";
                             var $result_html = '';
-                            if(data == "已交付")
-                            {
-                                $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
-                            }
-                            else if(data == "待交付")
-                            {
-                                $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
-                            }
-                            else if(data == "驳回")
-                            {
-                                $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
-                            }
-                            else if(data == "等待再审" || data == "隔日交付")
-                            {
-                                $result_html = '<small class="btn-xs bg-yellow">'+data+'</small>';
-                            }
-                            else
-                            {
-                                $result_html = '<small class="btn-xs bg-purple">'+data+'</small>';
-                            }
+                            if(data == 0) $result_html = '<small class="btn-xs bg-teal">未上架</small>';
+                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">一般</small>';
+                            else if(data == 11) $result_html = '<small class="btn-xs bg-green">优选</small>';
+                            else if(data == 66) $result_html = '<small class="btn-xs bg-yellow">独享</small>';
+                            else $result_html = '<small class="btn-xs bg-black">error</small>';
                             return $result_html;
                         }
                     },
                     {
+                        "title": "销售结果",
+                        "data": "sale_result",
+                        "className": "",
+                        "width": "72px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            var $result_html = '';
+                            if(data == 0) $result_html = '<small class="btn-xs bg-teal">待接单</small>';
+                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">已接单</small>';
+                            else if(data == 9) $result_html = '<small class="btn-xs bg-yellow">已成单</small>';
+                            else $result_html = '<small class="btn-xs bg-black">error</small>';
+                            return $result_html;
+                        }
+                    },
+                    {
+                        "title": "线索ID",
+                        "data": "clue_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data) return '<a target="_blank" href="/item/clue-list?clue_id='+data+'">'+data+'</a>';
+                            return "--";
+                        }
+                    },
+                    {
                         "title": "客户",
-                        "data": "client_id",
+                        "data": "customer_id",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.client_er == null)
+                            if(row.customer_er == null)
                             {
                                 return '未指定';
                             }
                             else {
-                                return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                                return '<a href="javascript:void(0);">'+row.customer_er.username+'</a>';
                             }
                         }
                     },
@@ -1073,13 +813,12 @@
                     },
                     {
                         "title": "客户姓名",
-                        "data": "order_id",
+                        "data": "client_name",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.order_er) return row.order_er.client_name;
-                            return "--";
+                            return data;
                         }
                     },
                     {
@@ -1094,7 +833,7 @@
                     },
                     {
                         "title": "微信号",
-                        "data": "order_id",
+                        "data": "clue_id",
                         "className": "",
                         "width": "100px",
                         "orderable": false,
@@ -1105,7 +844,7 @@
                     },
                     {
                         "title": "客户意向",
-                        "data": "order_id",
+                        "data": "clue_id",
                         "className": "",
                         "width": "60px",
                         "orderable": false,
@@ -1137,52 +876,22 @@
                         }
                     },
                     {
-                        "title": "牙齿数量",
-                        "data": "order_id",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.order_er) return row.order_er.teeth_count;
-                            return "--";
-                        }
-                    },
-                    {
                         "title": "所在城市",
-                        "data": "order_id",
+                        "data": "location_city",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.order_er)
-                            {
-                                if(row.order_er.location_city)
-                                {
-                                    if(row.order_er.location_district)
-                                    {
-                                        return row.order_er.location_city + ' - ' + row.order_er.location_district;
-                                    }
-                                    else return row.order_er.location_city;
-                                }
-                                else return '--';
+                            if(!data) return '--';
+                            else {
+                                if(!row.location_district) return data;
+                                else return data+' - '+row.location_district;
                             }
-                            else return '--';
-                        }
-                    },
-                    {
-                        "title": "渠道来源",
-                        "data": "order_id",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.order_er) return row.order_er.channel_source;
-                            return "--";
                         }
                     },
                     {
                         "title": "通话小结",
-                        "data": "order_id",
+                        "data": "clue_id",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
@@ -1197,7 +906,7 @@
                     },
                     {
                         "title": "录音地址",
-                        "data": "order_id",
+                        "data": "clue_id",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
@@ -1221,7 +930,7 @@
                         }
                     },
                     {
-                        "title": "创建时间",
+                        "title": "发布时间",
                         "data": 'created_at',
                         "className": "",
                         "width": "100px",
@@ -1242,8 +951,8 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     },
                 ],
@@ -1255,21 +964,22 @@
 //                    });
 
                     var $obj = new Object();
-                    if($('input[name="order-id"]').val())  $obj.order_id = $('input[name="order-id"]').val();
-                    if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
-                    if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
-                    if($('input[name="order-ended"]').val())  $obj.assign_ended = $('input[name="order-ended"]').val();
-                    if($('select[name="order-department-district"]').val() > 0)  $obj.department_district_id = $('select[name="order-department-district"]').val();
-                    if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
-                    if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
-                    if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
-                    if($('input[name="order-client-name"]').val())  $obj.client_name = $('input[name="order-client-name"]').val();
-                    if($('input[name="order-client-phone"]').val())  $obj.client_phone = $('input[name="order-client-phone"]').val();
-                    if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
-                    if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
-                    if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
-                    // if($('select[name="order-delivered-status"]').val() != -1)  $obj.delivered_status = $('select[name="order-delivered-status"]').val();
-                    if($('select[name="order-delivery-type"]').val() != -1)  $obj.delivery_type = $('select[name="order-delivery-type"]').val();
+                    if($('input[name="choice-id"]').val())  $obj.choice_id = $('input[name="choice-id"]').val();
+                    if($('input[name="clue-id"]').val())  $obj.clue_id = $('input[name="clue-id"]').val();
+                    if($('input[name="choice-assign"]').val())  $obj.assign = $('input[name="choice-assign"]').val();
+                    if($('input[name="choice-start"]').val())  $obj.assign_start = $('input[name="choice-start"]').val();
+                    if($('input[name="choice-ended"]').val())  $obj.assign_ended = $('input[name="choice-ended"]').val();
+                    if($('select[name="choice-department-district"]').val() > 0)  $obj.department_district_id = $('select[name="choice-department-district"]').val();
+                    if($('select[name="choice-staff"]').val() > 0)  $obj.staff_id = $('select[name="choice-staff"]').val();
+                    if($('select[name="choice-client"]').val() > 0)  $obj.client_id = $('select[name="choice-client"]').val();
+                    if($('select[name="choice-project"]').val() > 0)  $obj.project_id = $('select[name="choice-project"]').val();
+                    if($('input[name="choice-client-name"]').val())  $obj.client_name = $('input[name="choice-client-name"]').val();
+                    if($('input[name="choice-client-phone"]').val())  $obj.client_phone = $('input[name="choice-client-phone"]').val();
+                    if($('select[name="choice-type"]').val() > 0)  $obj.order_type = $('select[name="choice-type"]').val();
+                    if($('select[name="choice-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="choice-is-wx"]').val();
+                    if($('select[name="choice-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="choice-is-repeat"]').val();
+                    // if($('select[name="choice-delivered-status"]').val() != -1)  $obj.delivered_status = $('select[name="choice-delivered-status"]').val();
+                    if($('select[name="choice-choice-type"]').val() != -1)  $obj.sales_type = $('select[name="choice-choice-type"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
                     if($page_length != 20) $obj.length = $page_length;
@@ -1285,7 +995,7 @@
                     }
                     else
                     {
-                        $url = "{{ url('/item/order-list-for-all') }}";
+                        $url = "{{ url('/item/choice-list') }}";
                         if(window.location.search) history.replaceState({page: 1}, "", $url);
                     }
 
@@ -1317,7 +1027,7 @@
     $(function () {
 
         var $id = $.getUrlParam('id');
-        if($id) $('input[name="order-id"]').val($id);
+        if($id) $('input[name="choice-id"]').val($id);
         TableDatatablesAjax.init();
         // $('#datatable_ajax').DataTable().init().fnPageChange(3);
     });
@@ -1340,7 +1050,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "/item/order-modify-record?id="+$id,
+                    'url': "/item/choice-modify-record?id="+$id,
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -1419,6 +1129,11 @@
                                 else return '';
 
                             }
+                            else if(data == 81) return '<small class="btn-xs bg-blue">上架</small>';
+                            else if(data == 82) return '<small class="btn-xs bg-blue">下架</small>';
+                            else if(data == 85) return '<small class="btn-xs bg-green">接单</small>';
+                            else if(data == 86) return '<small class="btn-xs bg-yellow">退单</small>';
+                            else if(data == 88) return '<small class="btn-xs bg-red">购买</small>';
                             else if(data == 91) return '<small class="btn-xs bg-yellow">验证</small>';
                             else if(data == 92) return '<small class="btn-xs bg-yellow">审核</small>';
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';
@@ -1459,6 +1174,26 @@
                                 else if(row.operate_type == 91) return '删除';
 
                                 if(data == "attachment") return '附件';
+                            }
+                            else if(row.operate_category == 81)
+                            {
+                                return '上架';
+                            }
+                            else if(row.operate_category == 85)
+                            {
+                                return '接单';
+                            }
+                            else if(row.operate_category == 86)
+                            {
+                                return '退单';
+                            }
+                            else if(row.operate_category == 88)
+                            {
+                                return '购买';
+                            }
+                            else if(row.operate_category == 101)
+                            {
+                                return '删除';
                             }
                             else return '';
                         }
@@ -1591,7 +1326,15 @@
                         "data": "creator_id",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a target="_blank" href="/user/'+row.creator.id+'">'+row.creator.true_name+'</a>';
+                            if(row.record_object == 19)
+                            {
+                                return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                            }
+                            else if(row.record_object == 89)
+                            {
+                                return row.customer_staff_er == null ? '未知' : '<a href="javascript:void(0);">'+row.customer_staff_er.username+'</a>';
+                            }
+                            else return '--';
                         }
                     },
                     {
@@ -1669,5 +1412,5 @@
 //            TableDatatablesAjax_record.init();
 //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.delivery-list-script')
+@include(env('TEMPLATE_DK_ADMIN_2').'entrance.item.choice-list-script')
 @endsection

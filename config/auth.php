@@ -72,21 +72,32 @@ return [
         ],
 
 
+
+
+        'dk_admin' => [
+            'driver' => 'session',
+            'provider' => 'dk_admins',
+        ],
+
+
         'dk_client' => [
             'driver' => 'session',
             'provider' => 'dk_clients',
         ],
-
         'dk_client_staff' => [
             'driver' => 'session',
             'provider' => 'dk_clients_staffs',
         ],
 
 
+
+
         'dk_finance_user' => [
             'driver' => 'session',
             'provider' => 'dk_finance_users',
         ],
+
+
 
 
         'dk_admin_2' => [
@@ -99,7 +110,6 @@ return [
             'driver' => 'session',
             'provider' => 'dk_customers',
         ],
-
         'dk_customer_staff' => [
             'driver' => 'session',
             'provider' => 'dk_customers_staffs',
@@ -162,15 +172,24 @@ return [
         ],
 
 
+
+
+        'dk_admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK\DK_User::class,
+        ],
+
+
         'dk_clients' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK\DK_Client::class,
         ],
-
         'dk_clients_staffs' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK_Client\DK_Client_User::class,
         ],
+
+
 
 
         'dk_finance_users' => [
@@ -180,17 +199,17 @@ return [
 
 
 
+
         'dk_admins_2' => [
             'driver' => 'eloquent',
-            'model' => App\Models\DK\DK_User_2::class,
+            'model' => App\Models\DK_Choice\DK_Choice_User::class,
         ],
 
 
         'dk_customers' => [
             'driver' => 'eloquent',
-            'model' => App\Models\DK\DK_Customer::class,
+            'model' => App\Models\DK_Choice\DK_Choice_Customer::class,
         ],
-
         'dk_customers_staffs' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK_Customer\DK_Customer_User::class,

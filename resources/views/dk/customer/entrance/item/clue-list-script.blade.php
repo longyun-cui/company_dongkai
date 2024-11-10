@@ -198,17 +198,19 @@
 
             $modal.find('.item-detail-project .item-detail-text').html($row.find('td[data-key=project_id]').attr('data-value'));
             $modal.find('.item-detail-client .item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
-            $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
+            // $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
+            $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').html());
             $modal.find('.item-detail-is-wx .item-detail-text').html($row.find('td[data-key=is_wx]').html());
             $modal.find('.item-detail-wx-id .item-detail-text').html($row.find('td[data-key=wx_id]').attr('data-value'));
-            $modal.find('.item-detail-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
-            $modal.find('.item-detail-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
+            var $location_city = $row.find('td[data-key=location_city]').html();
+            var $location_district = $row.find('td[data-key=location_district]').html();
+            $modal.find('.item-detail-city-district .item-detail-text').html($location_city+' - '+$location_district);
             $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
             $modal.modal('show');
 
         });
         // 【取消】内容详情
-        $(".main-content").on('click', ".item-cancel-for-detail", function() {
+        $(".main-content").on('click', ".item-cancel-for-info-detail", function() {
             var that = $(this);
             $('#modal-body-for-info-detail').modal('hide').on("hidden.bs.modal", function () {
                 $("body").addClass("modal-open");
@@ -550,6 +552,70 @@
                         function(data){
                             layer.close(index);
                             // layer.form.render();
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+        // 【接单】
+        $(".main-content").on('click', ".item-take-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            layer.msg('确定"接单"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/clue-take') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "clue-take",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+
+                                layer.msg("已接单");
+                                $row.find('td[data-key=sale_result]').html('<small class="btn-xs bg-blue">已接单</small>');
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+        // 【退单】
+        $(".main-content").on('click', ".item-back-submit", function() {
+            var $that = $(this);
+            layer.msg('确定"完成"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/item/clue-back') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "clue-back",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            layer.close(index);
                             if(!data.success)
                             {
                                 layer.msg(data.msg);

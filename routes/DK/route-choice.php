@@ -2,11 +2,11 @@
 
 
 Route::get('/', function () {
-    dd('route-admin-2');
+    dd('route-choice');
 });
 
 
-$controller = "DKAdmin_2Controller";
+$controller = "DKAdmin2_Controller";
 
 Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
@@ -19,7 +19,7 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
  */
 Route::group(['middleware' => ['dk.admin_2.login']], function () {
 
-    $controller = 'DKAdmin_2Controller';
+    $controller = 'DKAdmin2_Controller';
 
     Route::post('/is_only_me', $controller.'@check_is_only_me');
 
@@ -28,14 +28,25 @@ Route::group(['middleware' => ['dk.admin_2.login']], function () {
     Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
 });
 
-Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], function () {
+Route::group(['middleware' => ['dk.admin_2.login','dk.admin_2.password_change']], function () {
 
-    $controller = 'DKAdmin_2Controller';
+    $controller = 'DKAdmin2_Controller';
 
 
 //    Route::post('/is_only_me', $controller.'@check_is_only_me');
     Route::get('/', $controller.'@view_admin_index');
 //    Route::get('/404', $controller.'@view_admin_404');
+
+
+
+
+    Route::match(['get','post'], '/select2/select2_project', $controller.'@operate_select2_project');
+
+
+
+
+
+
 
 
     /*
@@ -128,7 +139,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
      * 用户-员工管理
      */
     Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
-    Route::match(['get','post'], '/user/user_select2_sales', $controller.'@operate_user_select2_sales');
+    Route::match(['get','post'], '/user/user_select2_choice', $controller.'@operate_user_select2_choice');
     Route::match(['get','post'], '/user/user_select2_superior', $controller.'@operate_user_select2_superior');
     Route::match(['get','post'], '/user/user_select2_department', $controller.'@operate_user_select2_department');
 
@@ -263,13 +274,14 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
     // 列表
     Route::match(['get','post'], '/item/clue-list', $controller.'@view_item_clue_list');
-    Route::match(['get','post'], '/item/clue-list-for-all', $controller.'@view_item_clue_list_for_all');
+    // 修改信息
+    Route::match(['get','post'], '/item/clue-modify-record', $controller.'@view_item_clue_modify_record');
 
     // 创建 & 修改
-    Route::match(['get','post'], '/item/order-create', $controller.'@operate_item_order_create');
-    Route::match(['get','post'], '/item/order-edit', $controller.'@operate_item_order_edit');
+    Route::match(['get','post'], '/item/clue-create', $controller.'@operate_item_clue_create');
+    Route::match(['get','post'], '/item/clue-edit', $controller.'@operate_item_clue_edit');
     // 导入
-    Route::match(['get','post'], '/item/order-import', $controller.'@operate_item_order_import');
+    Route::match(['get','post'], '/item/clue-import', $controller.'@operate_item_clue_import');
 
     // 获取
     Route::match(['get','post'], '/item/order-get', $controller.'@operate_item_order_get');
@@ -294,7 +306,9 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/item/order-bulk-deliver', $controller.'@operate_item_order_bulk_deliver');
     Route::post('/item/order-deliver-get-delivered', $controller.'@operate_item_order_deliver_get_delivered');
     Route::post('/item/order-distribute', $controller.'@operate_item_order_distribute');
-    Route::post('/item/clue-bulk-put-on-shelf', $controller.'@operate_item_clue_bulk_put_on_shelf');
+
+    Route::post('/item/clue-put-on-shelf', $controller.'@operate_item_clue_put_on_shelf');
+    Route::post('/item/clue-put-on-shelf-by-bulk', $controller.'@operate_item_clue_put_on_shelf_by_bulk');
 
     // 订单-基本信息
     Route::post('/item/order-info-text-set', $controller.'@operate_item_order_info_text_set');
@@ -313,47 +327,41 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::match(['get','post'], '/item/order-finance-record', $controller.'@view_item_order_finance_record');
     Route::post('/item/order-finance-record-create', $controller.'@operate_item_order_finance_record_create');
     Route::post('/item/order-finance-record-edit', $controller.'@operate_item_order_finance_record_edit');
-    // 订单-修改信息
-    Route::match(['get','post'], '/item/order-modify-record', $controller.'@view_item_order_modify_record');
 
 
 
-
-    /*
-     * 交付
-     */
-    // 列表
-    Route::match(['get','post'], '/item/sales-list', $controller.'@view_item_sales_list');
 
 
 
 
 
     /*
-     * 交付
+     * 上架
      */
     // 列表
-    Route::match(['get','post'], '/item/delivery-list', $controller.'@view_item_delivery_list');
+    Route::match(['get','post'], '/item/choice-list', $controller.'@view_item_choice_list');
+    // 修改信息
+    Route::match(['get','post'], '/item/choice-modify-record', $controller.'@view_item_choice_modify_record');
     // 删除 & 恢复
-    Route::post('/item/delivery-delete', $controller.'@operate_item_delivery_delete');
-    Route::post('/item/delivery-restore', $controller.'@operate_item_delivery_restore');
-    Route::post('/item/delivery-delete-permanently', $controller.'@operate_item_delivery_delete_permanently');
+    Route::post('/item/choice-delete', $controller.'@operate_item_choice_delete');
+    Route::post('/item/choice-restore', $controller.'@operate_item_choice_restore');
+    Route::post('/item/choice-delete-permanently', $controller.'@operate_item_choice_delete_permanently');
     // 启用 & 禁用
-    Route::post('/item/delivery-enable', $controller.'@operate_item_delivery_enable');
-    Route::post('/item/delivery-disable', $controller.'@operate_item_delivery_disable');
+    Route::post('/item/choice-enable', $controller.'@operate_item_choice_enable');
+    Route::post('/item/choice-disable', $controller.'@operate_item_choice_disable');
     // 发布 & 完成 & 备注
-    Route::post('/item/delivery-exported', $controller.'@operate_item_delivery_exported');
-    Route::post('/item/delivery-bulk-exported', $controller.'@operate_item_delivery_bulk_exported');
+    Route::post('/item/choice-exported', $controller.'@operate_item_choice_exported');
+    Route::post('/item/choice-bulk-exported', $controller.'@operate_item_choice_bulk_exported');
 
-    Route::post('/item/delivery-verify', $controller.'@operate_item_delivery_verify');
-    Route::post('/item/delivery-inspect', $controller.'@operate_item_delivery_inspect');
-    Route::post('/item/delivery-publish', $controller.'@operate_item_delivery_publish');
-    Route::post('/item/delivery-complete', $controller.'@operate_item_delivery_complete');
-    Route::post('/item/delivery-abandon', $controller.'@operate_item_delivery_abandon');
-    Route::post('/item/delivery-reuse', $controller.'@operate_item_delivery_reuse');
-    Route::post('/item/delivery-remark-edit', $controller.'@operate_item_delivery_remark_edit');
-    Route::post('/item/delivery-follow', $controller.'@operate_item_delivery_follow');
-    Route::post('/item/delivery-quality-evaluate', $controller.'@operate_item_delivery_quality_evaluate');
+    Route::post('/item/choice-verify', $controller.'@operate_item_choice_verify');
+    Route::post('/item/choice-inspect', $controller.'@operate_item_choice_inspect');
+    Route::post('/item/choice-publish', $controller.'@operate_item_choice_publish');
+    Route::post('/item/choice-complete', $controller.'@operate_item_choice_complete');
+    Route::post('/item/choice-abandon', $controller.'@operate_item_choice_abandon');
+    Route::post('/item/choice-reuse', $controller.'@operate_item_choice_reuse');
+    Route::post('/item/choice-remark-edit', $controller.'@operate_item_choice_remark_edit');
+    Route::post('/item/choice-follow', $controller.'@operate_item_choice_follow');
+    Route::post('/item/choice-quality-evaluate', $controller.'@operate_item_choice_quality_evaluate');
 
 
 
@@ -487,9 +495,9 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
     Route::match(['get','post'], '/statistic/statistic-recent', $controller.'@view_statistic_recent');
 
-    Route::match(['get','post'], '/statistic/statistic-delivery', $controller.'@view_statistic_delivery');
-    Route::match(['get','post'], '/statistic/statistic-delivery-by-customer', $controller.'@view_statistic_delivery_by_customer');
-    Route::match(['get','post'], '/statistic/statistic-delivery-by-project', $controller.'@view_statistic_delivery_by_project');
+    Route::match(['get','post'], '/statistic/statistic-choice', $controller.'@view_statistic_choice');
+    Route::match(['get','post'], '/statistic/statistic-choice-by-customer', $controller.'@view_statistic_choice_by_customer');
+    Route::match(['get','post'], '/statistic/statistic-choice-by-project', $controller.'@view_statistic_choice_by_project');
     Route::match(['get','post'], '/statistic/statistic-project', $controller.'@view_statistic_project');
     Route::match(['get','post'], '/statistic/statistic-department', $controller.'@view_statistic_department');
     Route::match(['get','post'], '/statistic/statistic-customer-service', $controller.'@view_statistic_customer_service');

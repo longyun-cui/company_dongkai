@@ -36,6 +36,8 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
     Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
 
 
+    // 列表
+    Route::post('/setting/setting-customer', $controller.'@operate_setting_customer');
 
 
     /*
@@ -176,7 +178,7 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
     Route::match(['get','post'], '/item/project-list', $controller.'@view_item_project_list');
     Route::match(['get','post'], '/item/project-list-for-all', $controller.'@view_item_project_list_for_all');
 
-    // 车辆-修改信息
+    // 项目-修改信息
     Route::match(['get','post'], '/item/project-modify-record', $controller.'@view_item_project_modify_record');
 
 
@@ -185,6 +187,27 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
 
     // 列表
     Route::match(['get','post'], '/item/clue-list', $controller.'@view_item_clue_list');
+    // 订单-修改信息
+    Route::match(['get','post'], '/item/clue-modify-record', $controller.'@view_item_clue_modify_record');
+    // 操作
+    Route::post('/item/clue-take', $controller.'@operate_item_clue_take');
+    Route::post('/item/clue-back', $controller.'@operate_item_clue_back');
+
+
+
+
+    // 列表
+    Route::match(['get','post'], '/mine/clue-list', $controller.'@view_mine_clue_list');
+    // 订单-修改信息
+    Route::match(['get','post'], '/mine/clue-modify-record', $controller.'@view_mine_clue_modify_record');
+    // 操作
+    Route::post('/mine/clue-back', $controller.'@operate_mine_clue_back');
+    Route::post('/mine/clue-purchase', $controller.'@operate_mine_clue_purchase');
+
+
+
+
+
 
 
 
@@ -197,7 +220,7 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
     // 启用 & 禁用
     Route::post('/item/delivery-enable', $controller.'@operate_item_delivery_enable');
     Route::post('/item/delivery-disable', $controller.'@operate_item_delivery_disable');
-    // 发布 & 完成 & 备注
+    // 操作
     Route::post('/item/delivery-verify', $controller.'@operate_item_delivery_verify');
     Route::post('/item/delivery-inspect', $controller.'@operate_item_delivery_inspect');
     Route::post('/item/delivery-publish', $controller.'@operate_item_delivery_publish');

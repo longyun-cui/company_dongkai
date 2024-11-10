@@ -18866,12 +18866,17 @@ class DKAdminRepository {
         }
         else $view_data['open_app'] = -1;
 
+        $staff_list = DK_User::select('id','username')
+            ->where('user_category',11)
+//            ->whereIn('user_type',[81,84,88])
+            ->get();
+        $view_data['staff_list'] = $staff_list;
+
 
         $view_data['menu_active_of_record_visit_list'] = 'active';
 
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.record.visit-list';
-        return view($view_blade)
-            ->with($view_data);
+        return view($view_blade)->with($view_data);
     }
     // 【K】【内容】【全部】返回-列表-数据
     public function get_record_visit_list_datatable($post_data)
@@ -18886,6 +18891,19 @@ class DKAdminRepository {
             ]);
 
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        // 员工
+        if(!empty($post_data['record_staff']))
+        {
+            if(!in_array($post_data['record_staff'],[-1,0]))
+            {
+                $query->where(function ($query) use($post_data) {
+                    $query->where('creator_id', $post_data['record_staff'])->orWhere('page_num', $post_data['record_staff']);
+                });
+            }
+        }
+
 
         if(!empty($post_data['record_category']))
         {

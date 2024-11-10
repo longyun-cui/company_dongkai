@@ -1,13 +1,13 @@
 <?php
-namespace App\Models\DK;
+namespace App\Models\DK_Choice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Customer_Funds_Using extends Model
+class DK_Choice_Funds_Recharge extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_admin_customer_funds_using";
+    protected $table = "dk_choice_customer_funds_recharge";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort',
         'item_active', 'item_status', 'item_category', 'item_type',
@@ -25,8 +25,6 @@ class DK_Customer_Funds_Using extends Model
         'company_id',
         'channel_id',
         'project_id',
-        'settled_id',
-        'assign_time', 'assign_date',
         'transaction_time', 'transaction_date',
         'transaction_type',
         'transaction_amount', 'transaction_account', 'transaction_receipt_account', 'transaction_payment_account', 'transaction_order',
@@ -89,21 +87,10 @@ class DK_Customer_Funds_Using extends Model
     {
         return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Company','company_id','id');
     }
+    // 公司
     function channel_er()
     {
         return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Company','channel_id','id');
-    }
-
-
-    function project_er()
-    {
-        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Project','project_id','id');
-    }
-
-
-    function settled_er()
-    {
-        return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Settled','settled_id','id');
     }
 
 

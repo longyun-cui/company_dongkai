@@ -60,7 +60,7 @@
             <li class="header">客户管理</li>
 
             <li class="treeview {{ $menu_active_of_customer_list_for_all or '' }}">
-                <a href="{{ url('/user/customer-list-for-all') }}">
+                <a href="{{ url('/user/customer-list') }}">
                     <i class="fa fa-user-secret text-red"></i>
                     <span>客户列表</span>
                 </a>
@@ -73,7 +73,7 @@
             <li class="header">公司管理</li>
 
             <li class="treeview {{ $menu_active_of_department_list_for_all or '' }} _none">
-                <a href="{{ url('/department/department-list-for-all') }}">
+                <a href="{{ url('/department/department-list') }}">
                     <i class="fa fa-columns text-green"></i>
                     <span>部门列表</span>
                 </a>
@@ -84,7 +84,7 @@
             {{--员工管理--}}
             @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
             <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
-                <a href="{{ url('/user/staff-list-for-all') }}">
+                <a href="{{ url('/user/staff-list') }}">
                     <i class="fa fa-user text-green"></i>
                     <span>员工列表</span>
                 </a>
@@ -127,8 +127,8 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-            <li class="treeview {{ $menu_active_of_sales_list or '' }}">
-                <a href="{{ url('/item/sales-list')}}">
+            <li class="treeview {{ $menu_active_of_choice_list or '' }}">
+                <a href="{{ url('/item/choice-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>上架列表</span>
                 </a>
@@ -157,22 +157,7 @@
             <li class="header">数据统计</li>
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <li class="treeview {{ $menu_active_of_statistic_delivery_by_customer or '' }}">
-                    <a href="{{ url('/statistic/statistic-delivery-by-customer') }}">
-                        <i class="fa fa-area-chart text-teal"></i> <span>交付看板(客户)</span>
-                    </a>
-                </li>
-            @endif
-            @if(in_array($me->user_type,[0,1,9,11,41,61,66,81,84]))
-                <li class="treeview {{ $menu_active_of_statistic_delivery or '' }}">
-                    <a href="{{ url('/statistic/statistic-delivery') }}">
-                        <i class="fa fa-area-chart text-teal"></i> <span>交付看板</span>
-                    </a>
-                </li>
-            @endif
-
-            @if(in_array($me->user_type,[0,1,9,11,41,81,84,71,77,61,66]))
-            <li class="treeview {{ $menu_active_of_statistic_project or '' }}">
+            <li class="treeview {{ $menu_active_of_statistic_project or '' }} _none">
                 <a href="{{ url('/statistic/statistic-project') }}">
                     <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
                 </a>

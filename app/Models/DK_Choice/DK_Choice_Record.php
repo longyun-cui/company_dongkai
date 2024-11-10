@@ -1,28 +1,37 @@
 <?php
-namespace App\Models\DK_Customer;
+namespace App\Models\DK_Choice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Customer_Record extends Model
+class DK_Choice_Record extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_customer_record";
+    protected $table = "dk_choice_record";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort',
-        'record_active', 'record_status', 'record_object', 'record_category', 'record_type', 'record_module',
+        'record_active', 'record_status',
+        'record_object', 'record_category', 'record_type', 'record_module',
+
         'operate_object', 'operate_category', 'operate_type',
+
         'owner_active',
+
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
-        'org_id', 'admin_id',
+        'customer_staff_id',
+
+        'org_id',
+        'admin_id',
+        'choice_staff_id',
+        'customer_staff_id',
+
         'item_id',
-        'order_id',
         'clue_id',
         'choice_id',
+        'customer_id',
 
-        'column',
-        'column_type',
-        'column_name',
+        'column', 'column_type', 'column_name',
+
         'before',
         'after',
         'before_id',
@@ -50,54 +59,66 @@ class DK_Customer_Record extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','creator_id','id');
     }
     // 创作者（客户）
     function client_creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','creator_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Client','creator_id','id');
     }
     // 创作者
     function updater()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','updater_id','id');
     }
     // 创作者
     function completer()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','user_id','id');
+    }
+
+
+    // 运营人员
+    function choice_staff_er()
+    {
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','choice_staff_id','id');
+    }
+    // 客户员工
+    function customer_staff_er()
+    {
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','customer_staff_id','id');
     }
 
 
     // 客户
     function before_client_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','before_client_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Client','before_client_id','id');
     }
     // 客户
     function after_client_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','after_client_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Client','after_client_id','id');
     }
     // 项目
     function before_project_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Project','before_project_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Project','before_project_id','id');
     }
     // 项目
     function after_project_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Project','after_project_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Project','after_project_id','id');
     }
 
 
