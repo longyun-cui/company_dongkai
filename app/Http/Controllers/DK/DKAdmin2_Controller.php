@@ -73,7 +73,7 @@ class DKAdmin2_Controller extends Controller
 //            $admin = SuperAdministrator::whereEmail($email)->first();
 
             $mobile = request()->get('mobile');
-            $admin = DK_User_2::whereMobile($mobile)->first();
+            $admin = DK_Choice_User::whereMobile($mobile)->first();
 
             if($admin)
             {
