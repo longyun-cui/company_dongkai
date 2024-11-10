@@ -123,98 +123,36 @@ class DKAdmin2_Repository {
 
         // 工单统计
         // 员工统计
-        $query_order = DK_Order::select(DB::raw("
+        $query_order = DK_Choice_Clue::select(DB::raw("
                     count(*) as order_count_for_all,
-                    count(IF(created_type = 9, TRUE, NULL)) as order_count_for_export,
-                    count(IF(created_type = 1 AND is_published = 1, TRUE, NULL)) as order_count_for_published,
-                    count(IF(created_type = 1 AND is_published != 1, TRUE, NULL)) as order_count_for_unpublished,
-                    count(IF(created_type = 1 AND is_published = 1 AND is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
-                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
-                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    
-                    count(IF(created_type = 1 AND is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(created_type = 1 AND delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(created_type = 1 AND delivered_result = '待交付', TRUE, NULL)) as order_count_for_delivered_uncompleted,
-                    count(IF(created_type = 1 AND delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(created_type = 1 AND delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(created_type = 1 AND delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(created_type = 1 AND delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    count(IF(sale_status = 1, TRUE, NULL)) as order_count_for_put_on,
+                    count(IF(sale_result = 1, TRUE, NULL)) as order_count_for_taken,
+                    count(IF(sale_result = 9, TRUE, NULL)) as order_count_for_deal
                 "));
 
 
 
         // 本月每日工单量
-        $query_this_month = DK_Order::select('id','published_at')
-            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
+        $query_this_month = DK_Choice_Clue::select('id','created_at')
+            ->whereBetween('created_at',[$this_month_start_timestamp,$this_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(created_at,'%Y-%m-%d')"))
             ->select(DB::raw("
-                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(published_at,'%e') as day,
+                    FROM_UNIXTIME(created_at,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(created_at,'%e') as day,
                     count(*) as sum
                 "));
 
         // 上月每日工单量
-        $query_last_month = DK_Order::select('id','published_at')
-            ->whereBetween('published_at',[$last_month_start_timestamp,$last_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
+        $query_last_month = DK_Choice_Clue::select('id','created_at')
+            ->whereBetween('created_at',[$last_month_start_timestamp,$last_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(created_at,'%Y-%m-%d')"))
             ->select(DB::raw("
-                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(published_at,'%e') as day,
+                    FROM_UNIXTIME(created_at,'%Y-%m-%d') as date,
+                    FROM_UNIXTIME(created_at,'%e') as day,
                     count(*) as sum
                 "));
 
 
-        // 团队经理
-        if($me->user_type == 41)
-        {
-
-            $query_order->where('department_district_id',$me->department_district_id);
-            $query_this_month->where('department_district_id',$me->department_district_id);
-            $query_last_month->where('department_district_id',$me->department_district_id);
-        }
-        // 客服经理
-        if($me->user_type == 81)
-        {
-
-            $query_order->where('department_manager_id',$me->id);
-            $query_this_month->where('department_manager_id',$me->id);
-            $query_last_month->where('department_manager_id',$me->id);
-        }
-        // 客服主管
-        if($me->user_type == 84)
-        {
-            $query_order->where('department_supervisor_id', $me->id);
-            $query_this_month->where('department_supervisor_id', $me->id);
-            $query_last_month->where('department_supervisor_id', $me->id);
-        }
-        // 客服
-        if($me->user_type == 88)
-        {
-            $query_order->where('creator_id', $me->id);
-            $query_this_month->where('creator_id', $me->id);
-            $query_last_month->where('creator_id', $me->id);
-        }
-        // 质检经理
-        if($me->user_type == 71)
-        {
-            if($me->department_district_id)
-            {
-                $query_order->where('department_district_id',$me->department_district_id);
-                $query_this_month->where('department_district_id',$me->department_district_id);
-                $query_last_month->where('department_district_id',$me->department_district_id);
-            }
-
-        }
-        // 质检员
-        if($me->user_type == 77)
-        {
-            $query_order->where('inspector_id', $me->id);
-            $query_this_month->where('inspector_id', $me->id);
-            $query_last_month->where('inspector_id', $me->id);
-
-        }
 
 
         $query_order = $query_order->get();

@@ -3152,7 +3152,13 @@ class DKCustomerRepository {
                 $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
                 $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price;
                 $bool_customer = $customer_u->save();
-                if(!$bool_customer) throw new Exception("DK_Customer--update--fail");
+                if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
+
+
+                $clue->sale_result = 1;
+                $bool_clue = $clue->save();
+                if(!$bool_clue) throw new Exception("DK_Choice_Clue--update--fail");
+
 
                 $record = new DK_Choice_Record;
 
@@ -3728,7 +3734,13 @@ class DKCustomerRepository {
                 $customer_u->funds_obligation_total -= $customer_u->cooperative_unit_price;
                 $customer_u->funds_consumption_total += $customer_u->cooperative_unit_price;
                 $bool_customer = $customer_u->save();
-                if(!$bool_customer) throw new Exception("DK_Customer--update--fail");
+                if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
+
+
+                $clue->sale_result = 9;
+                $bool_clue = $clue->save();
+                if(!$bool_clue) throw new Exception("DK_Choice_Clue--update--fail");
+
 
                 $record = new DK_Choice_Record;
 
