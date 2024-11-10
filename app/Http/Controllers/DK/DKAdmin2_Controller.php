@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\DK_Choice\DK_Choice_User;
 use App\Models\DK_Choice\DK_Customer;
-use App\Models\DK_Choice\DK_Record_Visit;
+use App\Models\DK_Choice\DK_Choice_Record_Visit;
 
 use App\Repositories\DK\DKAdmin2_Repository;
 
@@ -1503,7 +1503,7 @@ class DKAdmin2_Controller extends Controller
     // 【记录】
     public function record_for_user_visit($post_data)
     {
-        $record = new DK_Record_Visit();
+        $record = new DK_Choice_Record_Visit();
 
         $browseInfo = getBrowserInfo();
         $post_data["browser_info"] = $browseInfo['browser_info'];
