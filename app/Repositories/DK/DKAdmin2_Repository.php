@@ -834,6 +834,15 @@ class DKAdmin2_Repository {
         $list_text = $item_type_text.'列表';
         $list_link = '/user/customer-list';
 
+        $view_data['operate'] = 'create';
+        $view_data['operate_id'] = 0;
+        $view_data['category'] = 'customer';
+        $view_data['type'] = $item_type;
+        $view_data['item_type_text'] = $item_type_text;
+        $view_data['title_text'] = $title_text;
+        $view_data['list_text'] = $list_text;
+        $view_data['list_link'] = $list_link;
+
         $district_city_list = DK_Choice_District::select('id','district_city')->whereIn('district_status',[1])->get();
         $view_data['district_city_list'] = $district_city_list;
 
@@ -858,7 +867,7 @@ class DKAdmin2_Repository {
 
         $view_data['operate'] = 'create';
         $view_data['operate_id'] = 0;
-        $view_data['category'] = 'item';
+        $view_data['category'] = 'customer';
         $view_data['type'] = $item_type;
         $view_data['item_type_text'] = $item_type_text;
         $view_data['title_text'] = $title_text;
