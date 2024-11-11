@@ -46,49 +46,6 @@
                     </div>
                 </div>
 
-
-                {{--启用ip--}}
-                <div class="form-group form-category">
-                    <label class="control-label col-md-2">启用ip</label>
-                    <div class="col-md-8">
-                        <div class="btn-group">
-
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->is_ip == 0)
-                                            <input type="radio" name="is_ip" value="0" checked="checked"> 否
-                                        @else
-                                            <input type="radio" name="is_ip" value="0" checked="checked"> 否
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-
-                            <button type="button" class="btn">
-                                <span class="radio">
-                                    <label>
-                                        @if($operate == 'edit' && $data->is_ip == 1)
-                                            <input type="radio" name="is_ip" value="1" checked="checked"> 是
-                                        @else
-                                            <input type="radio" name="is_ip" value="1"> 是
-                                        @endif
-                                    </label>
-                                </span>
-                            </button>
-
-
-                        </div>
-                    </div>
-                </div>
-                {{--ip白名单--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">ip白名单</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="ip_whitelist" placeholder="ip白名单" value="{{ $data->ip_whitelist or '' }}">
-                    </div>
-                </div>
-
                 {{--管理员名称--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理员名称</label>
@@ -131,6 +88,49 @@
                     <div class="col-md-8 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="description" rows="3" cols="100%">{{ $data->description or '' }}</textarea>
+                    </div>
+                </div>
+
+
+                {{--启用ip--}}
+                <div class="form-group form-category">
+                    <label class="control-label col-md-2">启用ip</label>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->is_ip == 0)
+                                            <input type="radio" name="is_ip" value="0" checked="checked"> 否
+                                        @else
+                                            <input type="radio" name="is_ip" value="0" checked="checked"> 否
+                                        @endif
+                                    </label>
+                                </span>
+                            </button>
+
+                            <button type="button" class="btn">
+                                <span class="radio">
+                                    <label>
+                                        @if($operate == 'edit' && $data->is_ip == 1)
+                                            <input type="radio" name="is_ip" value="1" checked="checked"> 是
+                                        @else
+                                            <input type="radio" name="is_ip" value="1"> 是
+                                        @endif
+                                    </label>
+                                </span>
+                            </button>
+
+
+                        </div>
+                    </div>
+                </div>
+                {{--ip白名单--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">ip白名单</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="ip_whitelist" placeholder="ip白名单" value="{{ $data->ip_whitelist or '' }}">
                     </div>
                 </div>
 
