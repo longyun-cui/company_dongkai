@@ -986,6 +986,69 @@
 
         });
 
+        // 【下架】
+        $(".main-content").on('click', ".item-put-off-submit", function() {
+
+            var $that = $(this);
+            var $row = $that.parents('tr');
+            $('#datatable_ajax').find('tr').removeClass('operating');
+            $row.addClass('operating');
+
+
+            layer.msg('确定"上架"么？', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index) {
+
+                    layer.close(index);
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">耐心等待中</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    var $html = '';
+
+                    $.post(
+                        "{{ url('/item/clue-put-off-shelf') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "clue-put-off",
+                            item_id: $that.attr('data-id')
+                        },
+                        function(data){
+
+                            layer.closeAll('loading');
+
+                            if(!data.success)
+                            {
+                                layer.msg(data.msg);
+                            }
+                            else
+                            {
+
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+
+
+
 
         // 【分发】
         $(".main-content").on('click', ".item-distribute-submit", function() {

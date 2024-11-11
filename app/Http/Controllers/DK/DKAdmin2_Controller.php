@@ -1122,6 +1122,11 @@ class DKAdmin2_Controller extends Controller
     {
         return $this->repo->operate_item_clue_put_on_shelf_by_bulk(request()->all());
     }
+    // 【线索】下架
+    public function operate_item_clue_put_off_shelf()
+    {
+        return $this->repo->operate_item_clue_put_off_shelf(request()->all());
+    }
 
 
 

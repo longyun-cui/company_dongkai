@@ -7971,6 +7971,9 @@ class DKAdmin2_Repository {
         $customer_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->get();
         $view_data['customer_list'] = $customer_list;
 
+        $customer_preferential_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->where('is_preferential',1)->get();
+        $view_data['customer_preferential_list'] = $customer_preferential_list;
+
         $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
         $view_data['department_district_list'] = $department_district_list;
 
@@ -10761,14 +10764,18 @@ class DKAdmin2_Repository {
         }
 
     }
+
+
+
+
     // 【工单】上架
     public function operate_item_clue_put_on_shelf($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
-            'ids.required' => 'ids.required.',
+            'item_id.required' => 'item_id.required.',
 //            'customer_id.required' => 'customer_id.required.',
-            'sale_type.required' => 'assign_type.required.',
+            'sale_type.required' => 'sale_type.required.',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
@@ -10882,8 +10889,6 @@ class DKAdmin2_Repository {
 //                    $record_data["before"] = $before;
 //                    $record_data["after"] = $sale_type;
 
-//                $record_data["before_customer_id"] = $before;
-//                $record_data["after_customer_id"] = $customer_id;
 
                     $bool_1 = $record->fill($record_data)->save();
                     if(!$bool_1) throw new Exception("insert--record--fail");
@@ -11034,14 +11039,130 @@ class DKAdmin2_Repository {
 //                    $record_data["before"] = $before;
 //                    $record_data["after"] = $sale_type;
 
-//                $record_data["before_customer_id"] = $before;
-//                $record_data["after_customer_id"] = $customer_id;
 
                     $bool_1 = $record->fill($record_data)->save();
                     if(!$bool_1) throw new Exception("record--insert--fail");
                 }
 
             }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】下架
+    public function operate_item_clue_put_off_shelf($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+//            'customer_id.required' => 'customer_id.required.',
+//            'sale_type.required' => 'sale_type.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+//            'customer_id' => 'required',
+//            'sale_type' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'clue-put-off') return response_error([],"参数[operate]有误！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $item_id = $post_data['item_id'];
+        $item = DK_Choice_Clue::withTrashed()->find($item_id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        if(!in_array($item->sale_result,[0,4])) return response_error([],"该【上架线索】不能被删除！");
+
+//        $sale_type = $post_data["sale_type"];
+//        if(!in_array($assign_type,config('info.assign_type'))) return response_error([],"交付结果参数有误！");
+
+
+        $pivot_choice = DK_Choice_Pivot_Customer_Choice::where(['pivot_type'=>91,'clue_id'=>$item->choice_id])->first();
+        if($pivot_choice)
+        {
+            dd($pivot_choice);
+            $pivot_choice_id = $pivot_choice->id;
+            if(!in_array($pivot_choice->sale_result,[0,4])) return response_error([],"该【上架线索】不能被删除！");
+        }
+        else $pivot_choice_id = 0;
+
+//        dd(8);
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $delivered_para['assign_customer_id'] = 0;
+//            $delivered_para['creator_id'] = $me->id;
+//            $delivered_para['delivered_status'] = 1;
+//            $delivered_para['sale_type'] = $sale_type;
+//            $delivered_para['delivered_at'] = time();
+
+
+            if($pivot_choice)
+            {
+                $bool_0 = $pivot_choice->delete();  // 普通删除
+                if(!$bool_0) throw new Exception("pivot_customer_choice--delete--fail");
+            }
+
+
+//            $before = $item->sale_type;
+
+//            $item->customer_id = 0;
+//            $item->issuer_id = $me->id;
+            $item->sale_status = 9;
+//            $item->choice_id = 0;
+//                $item->delivered_result = $delivered_result;
+//                $item->delivered_description = $delivered_description;
+//            $item->delivered_at = time();
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Choice_Clue--update--fail");
+            else
+            {
+                $record = new DK_Choice_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 19;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["choice_staff_id"] = $me->id;
+                $record_data["clue_id"] = $item->id;
+                $record_data["choice_id"] = $pivot_choice_id;
+                $record_data["operate_object"] = 11;
+                $record_data["operate_category"] = 82;
+                $record_data["operate_type"] = 1;
+                $record_data["column_name"] = "put_off";
+
+//                    $record_data["before"] = $before;
+//                    $record_data["after"] = $sale_type;
+
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Choice_Record--insert--fail");
+            }
+
 
 
             DB::commit();

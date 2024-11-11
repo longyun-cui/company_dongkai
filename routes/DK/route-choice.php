@@ -309,6 +309,7 @@ Route::group(['middleware' => ['dk.admin_2.login','dk.admin_2.password_change']]
 
     Route::post('/item/clue-put-on-shelf', $controller.'@operate_item_clue_put_on_shelf');
     Route::post('/item/clue-put-on-shelf-by-bulk', $controller.'@operate_item_clue_put_on_shelf_by_bulk');
+    Route::post('/item/clue-put-off-shelf', $controller.'@operate_item_clue_put_off_shelf');
 
     // 订单-基本信息
     Route::post('/item/order-info-text-set', $controller.'@operate_item_order_info_text_set');

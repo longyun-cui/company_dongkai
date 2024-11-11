@@ -183,8 +183,8 @@
                             </select>
 
                             <select name="bulk-operate-assign-customer" class="form-control form-filter select2-box" style="width:50%;height:100%;">
-                                <option value="-1">选择交付客户</option>
-                                @foreach($customer_list as $v)
+                                <option value="-1">选择指派客户</option>
+                                @foreach($customer_preferential_list as $v)
                                     <option value="{{ $v->id }}">{{ $v->username }}</option>
                                 @endforeach
                             </select>
@@ -686,7 +686,7 @@
                         <div class="col-md-8 ">
                             <select class="form-control select2-box" name="put-on-set-customer-id" style="width:48%;" id="">
                                 <option value="-1">选择客户</option>
-                                @foreach($customer_list as $v)
+                                @foreach($customer_preferential_list as $v)
                                     <option value="{{ $v->id }}">{{ $v->username }}</option>
                                 @endforeach
                             </select>
@@ -1171,7 +1171,7 @@
                         "title": "操作",
                         "data": 'id',
                         "className": "",
-                        "width": "180px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -1256,7 +1256,7 @@
                                     // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="customer_id">交付</a>';
                                     // $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
                                     $html_put_on_or_off = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">上架</a>';
-                                    $html_put_on_or_off = '<a class="btn btn-xs bg-yellow item-put-off-show" data-id="'+data+'">下架</a>';
+                                    $html_put_on_or_off = '<a class="btn btn-xs bg-yellow item-put-off-submit" data-id="'+data+'">下架</a>';
                                 }
                                 else
                                 {
@@ -1303,8 +1303,8 @@
                                 $html_push+
                                 $html_put_on_or_off+
                                 $html_deliver+
-                                $html_distribute+
-                                $html_delete+
+                                // $html_distribute+
+                                // $html_delete+
                                 $html_record+
 // $html_abandon+
 //                                '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
