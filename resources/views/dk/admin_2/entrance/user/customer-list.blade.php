@@ -980,6 +980,30 @@
                         }
                     },
                     {
+                        "title": "是否优选",
+                        "data": "is_preferential",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','合作单价');
+                                $(nTd).attr('data-key','cooperative_unit_price').attr('data-value',data);
+                                $(nTd).attr('data-column-name','合作单价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                            else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                            else return '有误';
+                        }
+                    },
+                    {
                         "title": "客户名称",
                         "data": "username",
                         "className": "customer-name",
