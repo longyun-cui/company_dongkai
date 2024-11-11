@@ -3142,6 +3142,7 @@ class DKCustomerRepository {
         try
         {
             $item->sale_result = 1;
+            $item->virtual_number = '1'.mt_rand(1000000000, 9999999999);
             $item->customer_id = $me->customer_id;
             $item->taker_id = $me->id;
             $item->taken_at = time();
