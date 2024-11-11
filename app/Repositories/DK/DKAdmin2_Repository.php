@@ -916,11 +916,13 @@ class DKAdmin2_Repository {
         $messages = [
             'operate.required' => 'operate.required.',
             'username.required' => '请输入客户名称！',
+            'cooperative_unit_price.required' => '请输入合作单价！',
 //            'username.unique' => '该客户已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'username' => 'required',
+            'cooperative_unit_price' => 'required',
 //            'username' => 'required|unique:dk_customer,username',
         ], $messages);
         if ($v->fails())
@@ -958,6 +960,7 @@ class DKAdmin2_Repository {
             $customer_data["mobile"] = $post_data["customer_admin_mobile"];
             $customer_data["customer_admin_name"] = $post_data["customer_admin_name"];
             $customer_data["customer_admin_mobile"] = $post_data["customer_admin_mobile"];
+            $customer_data["cooperative_unit_price"] = $post_data["cooperative_unit_price"];
             $customer_data["is_ip"] = $post_data["is_ip"];
             $customer_data["ip_whitelist"] = $post_data["ip_whitelist"];
             $customer_data["password"] = password_encode("12345678");
@@ -987,6 +990,7 @@ class DKAdmin2_Repository {
             $customer_data["mobile"] = $post_data["customer_admin_mobile"];
             $customer_data["customer_admin_name"] = $post_data["customer_admin_name"];
             $customer_data["customer_admin_mobile"] = $post_data["customer_admin_mobile"];
+            $customer_data["cooperative_unit_price"] = $post_data["cooperative_unit_price"];
             $customer_data["is_ip"] = $post_data["is_ip"];
             $customer_data["ip_whitelist"] = $post_data["ip_whitelist"];
             $customer_data["district_city"] = $post_data["district_city"];
