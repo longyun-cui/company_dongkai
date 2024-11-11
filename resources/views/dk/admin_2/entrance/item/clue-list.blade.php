@@ -1666,12 +1666,12 @@
                         "title": "所在城市",
                         "data": "location_city",
                         "className": "",
-                        "width": "120px",
+                        "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
-                                $(nTd).addClass('modal-show-for-info-select2-set');
+                                $(nTd).addClass('modal-show-for-info-select2-set-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
                                 $(nTd).attr('data-key','location_city').attr('data-value',data);
                                 $(nTd).attr('data-key2','location_district').attr('data-value2',row.location_district);
@@ -1682,10 +1682,34 @@
                         },
                         render: function(data, type, row, meta) {
                             if(!data) return '--';
-                            else {
-                                if(!row.location_district) return data;
-                                else return data+' - '+row.location_district;
+                            else return data;
+                            // else {
+                            //     if(!row.location_district) return data;
+                            //     else return data+' - '+row.location_district;
+                            // }
+                        }
+                    },
+                    {
+                        "title": "所在城市",
+                        "data": "location_district",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                            {
+                                $(nTd).addClass('modal-show-for-info-select2-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
+                                $(nTd).attr('data-key','location_city').attr('data-value',data);
+                                $(nTd).attr('data-key2','location_district').attr('data-value2',row.location_district);
+                                $(nTd).attr('data-column-name','所在城市');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(!data) return '--';
+                            else return data;
                         }
                     },
                     {

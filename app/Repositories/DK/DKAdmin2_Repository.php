@@ -8506,12 +8506,12 @@ class DKAdmin2_Repository {
                 {
                     if(!empty($value['client_phone']))
                     {
-                        $temp_date['client_name'] = intval($value['client_name']);
+                        $temp_date['client_name'] = $value['client_name'];
                         $temp_date['client_phone'] = intval($value['client_phone']);
-                        $temp_date['location_city'] = intval($value['location_city']);
-                        $temp_date['location_district'] = intval($value['location_district']);
-                        $temp_date['recording_address'] = intval($value['recording_address']);
-                        $temp_date['description'] = intval($value['description']);
+                        $temp_date['location_city'] = $value['location_city'];
+                        $temp_date['location_district'] = $value['location_district'];
+                        $temp_date['recording_address'] = $value['recording_address'];
+                        $temp_date['description'] = $value['description'];
                         $order_data[] = $temp_date;
                     }
                 }
