@@ -1208,7 +1208,7 @@
                         {{--@if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
                         {
-                            "targets": [0,4,8,9,10,11],
+                            "targets": [0,4,8,9,10],
                             "visible": false,
                         }
                     @endif
@@ -1480,30 +1480,6 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','交付说明');
                                 $(nTd).attr('data-key','delivered_description').attr('data-value',data);
                                 $(nTd).attr('data-column-name','交付说明');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            // return data;
-                            if(data) return '<small class="btn-xs bg-yellow">双击查看</small>';
-                            else return '';
-                        }
-                    },
-                    {
-                        "title": "录音地址",
-                        "data": "recording_address",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','录音地址');
-                                $(nTd).attr('data-key','recording_address').attr('data-value',data);
-                                $(nTd).attr('data-column-name','录音地址');
                                 $(nTd).attr('data-text-type','textarea');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1998,6 +1974,55 @@
                             // return data;
                            if(data) return '<small class="btn-xs bg-yellow">双击查看</small>';
                            else return '';
+                        }
+                    },
+                    {
+                        "title": "录音地址",
+                        "data": "recording_address",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','录音地址');
+                                $(nTd).attr('data-key','recording_address').attr('data-value',data);
+                                $(nTd).attr('data-column-name','录音地址');
+                                $(nTd).attr('data-text-type','textarea');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            if(data)
+                            {
+                                return '<small class="btn-xs bg-yellow">双击查看</small>';
+                            }
+                            else return '';
+                        }
+                    },
+                    {
+                        "title": "录音播放",
+                        "data": "recording_address",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','录音播放');
+                                $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            if(data)
+                            {
+                                return '<audio controls style="width:100px;height:20px;"><source src="'+data+'" type="audio/mpeg"></audio>';
+                            }
+                            else return '';
                         }
                     },
                     {

@@ -2873,13 +2873,214 @@ class DKCustomerRepository {
         $customer_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->get();
         $project_list = DK_Customer_Project::select('id','name')->whereIn('item_type',[1,21])->get();
 
+        $view_data['clue_type'] = "ordinary";
         $view_data['department_district_list'] = $department_district_list;
         $view_data['staff_list'] = $staff_list;
         $view_data['customer_list'] = $customer_list;
         $view_data['project_list'] = $project_list;
-        $view_data['menu_active_of_item_clue_list'] = 'active menu-open';
+        $view_data['menu_active_of_item_clue_list_for_'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.clue-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【线索】返回-列表-视图
+    public function view_item_clue_list_for_preferential($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if($me->customer_er->is_preferential != 1) return view($this->view_blade_403);
+
+
+        // 显示数量
+        if(!empty($post_data['record']))
+        {
+            if($post_data['record'] == 'record')
+            {
+                $this->record_for_user_operate(21,11,1,$me->id,0,71,0);
+            }
+        }
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 20;
+        }
+        else $view_data['length'] = 20;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+
+
+        // 工单ID
+        if(!empty($post_data['order_id']))
+        {
+            if(is_numeric($post_data['order_id']) && $post_data['order_id'] > 0) $view_data['order_id'] = $post_data['order_id'];
+            else $view_data['order_id'] = '';
+        }
+        else $view_data['order_id'] = '';
+
+        // 提交日期
+        if(!empty($post_data['assign']))
+        {
+            if($post_data['assign']) $view_data['assign'] = $post_data['assign'];
+            else $view_data['assign'] = '';
+        }
+        else $view_data['assign'] = '';
+
+        // 起始时间
+        if(!empty($post_data['assign_start']))
+        {
+            if($post_data['assign_start']) $view_data['start'] = $post_data['assign_start'];
+            else $view_data['start'] = '';
+        }
+        else $view_data['start'] = '';
+
+        // 截止时间
+        if(!empty($post_data['assign_ended']))
+        {
+            if($post_data['assign_ended']) $view_data['ended'] = $post_data['assign_ended'];
+            else $view_data['ended'] = '';
+        }
+        else $view_data['ended'] = '';
+
+        // 员工
+        if(!empty($post_data['staff_id']))
+        {
+            if(is_numeric($post_data['staff_id']) && $post_data['staff_id'] > 0) $view_data['staff_id'] = $post_data['staff_id'];
+            else $view_data['staff_id'] = -1;
+        }
+        else $view_data['staff_id'] = -1;
+
+        // 部门-大区
+        if(!empty($post_data['department_district_id']))
+        {
+            if(is_numeric($post_data['department_district_id']) && $post_data['department_district_id'] > 0) $view_data['department_district_id'] = $post_data['department_district_id'];
+            else $view_data['department_district_id'] = -1;
+        }
+        else $view_data['department_district_id'] = -1;
+
+
+
+        // 客户
+        if(!empty($post_data['customer_id']))
+        {
+            if(is_numeric($post_data['client_id']) && $post_data['client_id'] > 0) $view_data['client_id'] = $post_data['client_id'];
+            else $view_data['client_id'] = -1;
+        }
+        else $view_data['customer_id'] = -1;
+
+
+
+
+        // 项目
+        if(!empty($post_data['project_id']))
+        {
+            if(is_numeric($post_data['project_id']) && $post_data['project_id'] > 0)
+            {
+                $project = DK_Client_Project::select(['id','name'])->find($post_data['project_id']);
+                if($project)
+                {
+                    $view_data['project_id'] = $post_data['project_id'];
+                    $view_data['project_name'] = $project->name;
+                }
+                else $view_data['project_id'] = -1;
+            }
+            else $view_data['project_id'] = -1;
+        }
+        else $view_data['project_id'] = -1;
+
+        // 客户姓名
+        if(!empty($post_data['client_name']))
+        {
+            if($post_data['client_name']) $view_data['client_name'] = $post_data['client_name'];
+            else $view_data['client_name'] = '';
+        }
+        else $view_data['client_'] = '';
+        // 客户电话
+        if(!empty($post_data['client_phone']))
+        {
+            if($post_data['client_phone']) $view_data['client_phone'] = $post_data['client_phone'];
+            else $view_data['client_phone'] = '';
+        }
+        else $view_data['client_phone'] = '';
+
+        // 是否+V
+        if(!empty($post_data['is_wx']))
+        {
+            if(is_numeric($post_data['is_wx']) && $post_data['is_wx'] > 0) $view_data['is_wx'] = $post_data['is_wx'];
+            else $view_data['is_wx'] = -1;
+        }
+        else $view_data['is_wx'] = -1;
+
+        // 是否重复
+        if(!empty($post_data['is_repeat']))
+        {
+            if(is_numeric($post_data['is_repeat']) && $post_data['is_repeat'] > 0) $view_data['is_repeat'] = $post_data['is_repeat'];
+            else $view_data['is_repeat'] = -1;
+        }
+        else $view_data['is_repeat'] = -1;
+
+        // 类型
+        if(!empty($post_data['order_type']))
+        {
+            if(is_numeric($post_data['order_type']) && $post_data['order_type'] > 0) $view_data['order_type'] = $post_data['order_type'];
+            else $view_data['order_type'] = -1;
+        }
+        else $view_data['order_type'] = -1;
+
+
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $view_data['inspected_status'] = $post_data['inspected_status'];
+        }
+        else $view_data['inspected_status'] = -1;
+
+//        dd($view_data);
+
+
+        $department_district_list = DK_Customer_Department::select('id','name')->where('department_type',11)->get();
+        if($me->user_type == 81)
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        else if($me->user_type == 84)
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->where('department_group_id',$me->department_group_id)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        else
+        {
+            $staff_list = DK_Customer_User::select('id','username')
+                ->where('user_category',11)
+                ->whereIn('user_type',[81,84,88])
+                ->get();
+        }
+        $customer_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->get();
+        $project_list = DK_Customer_Project::select('id','name')->whereIn('item_type',[1,21])->get();
+
+        $view_data['clue_type'] = "preferential";
+        $view_data['department_district_list'] = $department_district_list;
+        $view_data['staff_list'] = $staff_list;
+        $view_data['customer_list'] = $customer_list;
+        $view_data['project_list'] = $project_list;
+        $view_data['menu_active_of_item_clue_list_for_preferential'] = 'active menu-open';
+
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.clue-list-for-preferential';
         return view($view_blade)->with($view_data);
     }
     // 【线索】返回-列表-数据
@@ -2902,7 +3103,7 @@ class DKCustomerRepository {
             })
             ->where(function ($query) use($me) {
                 $query->where('sale_type',1)
-                    ->orWhere(function($query) use($me) { $query->where('sale_type',11)->where('customer_id',$me->customer_id); } )
+                    ->orWhere(function($query) use($me) { $query->where('sale_type',66)->where('customer_id',$me->customer_id); } )
                     ->orWhere(function($query) use($me) {
                         $query->when($me->customer_er->is_preferential, function ($query) use ($me) {
                             $query->where('sale_type',11);
@@ -2910,22 +3111,26 @@ class DKCustomerRepository {
                     });
             })
             ->with(['project_er','clue_er']);
-//            ->whereIn('user_category',[11])
-//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
-//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
-//            ->withCount([
-//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
-//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
-//            ]);
-//            ->where(['userstatus'=>'正常','status'=>1])
-//            ->whereIn('usergroup',['Agent','Agent2']);
-
-//        $me->load(['subordinate_er' => function ($query) {
-//            $query->select('id');
-//        }]);
 
 
 
+        $clue_type = $post_data["clue_type"];
+        if($clue_type == "all")
+        {
+
+        }
+        else if($clue_type == "ordinary")
+        {
+            $query->where('sale_type',1);
+        }
+        else if($clue_type == "preferential")
+        {
+            $query->where('sale_type',11);
+        }
+        else
+        {
+
+        }
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");

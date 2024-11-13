@@ -18295,6 +18295,7 @@ class DKAdminRepository {
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             $cellData[$k]['description'] = $v['description'];
+            $cellData[$k]['recording_address'] = $v['recording_address'];
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -18324,6 +18325,7 @@ class DKAdminRepository {
             'location_district'=>'行政区',
             'teeth_count'=>'牙齿数量',
             'description'=>'通话小结',
+            'recording_address'=>'录音地址',
             'is_repeat'=>'是否重复',
             'inspector_name'=>'审核人',
             'inspected_time'=>'审核时间',
@@ -18405,12 +18407,13 @@ class DKAdminRepository {
                     'L'=>10,
                     'M'=>10,
                     'N'=>10,
-                    'O'=>10,
+                    'O'=>60,
                     'P'=>60,
                     'Q'=>10,
                     'R'=>10,
-                    'S'=>20,
-                    'T'=>10
+                    'S'=>10,
+                    'T'=>30,
+                    'U'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -18502,6 +18505,7 @@ class DKAdminRepository {
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             $cellData[$k]['description'] = $v['description'];
+            $cellData[$k]['recording_address'] = $v['recording_address'];
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -18531,6 +18535,7 @@ class DKAdminRepository {
             'location_district'=>'行政区',
             'teeth_count'=>'牙齿数量',
             'description'=>'通话小结',
+            'recording_address'=>'录音地址',
             'is_repeat'=>'是否重复',
             'inspector_name'=>'审核人',
             'inspected_time'=>'审核时间',
@@ -18579,12 +18584,13 @@ class DKAdminRepository {
                     'L'=>10,
                     'M'=>10,
                     'N'=>10,
-                    'O'=>10,
+                    'O'=>60,
                     'P'=>60,
                     'Q'=>10,
                     'R'=>10,
-                    'S'=>20,
-                    'T'=>10
+                    'S'=>10,
+                    'T'=>30,
+                    'U'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();

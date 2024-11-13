@@ -187,6 +187,7 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
 
     // 列表
     Route::match(['get','post'], '/item/clue-list', $controller.'@view_item_clue_list');
+    Route::match(['get','post'], '/item/clue-list-for-preferential', $controller.'@view_item_clue_list_for_preferential');
     // 订单-修改信息
     Route::match(['get','post'], '/item/clue-modify-record', $controller.'@view_item_clue_modify_record');
     // 操作

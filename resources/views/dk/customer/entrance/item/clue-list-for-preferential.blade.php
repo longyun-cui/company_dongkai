@@ -9,7 +9,7 @@
 
 
 @section('header','')
-@section('description')线索公海 - 客户系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')优选线索 - 客户系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -20,7 +20,7 @@
 
             <div class="box-header with-border _none" style="padding:6px 10px;margin:4px;">
 
-                <h3 class="box-title">线索公海</h3>
+                <h3 class="box-title">优选线索</h3>
 
                 <div class="pull-right _none">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">

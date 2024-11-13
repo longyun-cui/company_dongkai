@@ -437,6 +437,12 @@ class DKCustomerController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_clue_list(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_clue_list_datatable(request()->all());
     }
+    // 【线索】返回-列表-视图（全部任务）
+    public function view_item_clue_list_for_preferential()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_clue_list_for_preferential(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_clue_list_datatable(request()->all());
+    }
     // 【线索-修改记录】返回-列表-视图（全部任务）
     public function view_item_clue_modify_record()
     {

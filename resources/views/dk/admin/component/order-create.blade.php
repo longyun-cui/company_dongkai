@@ -161,7 +161,7 @@
     <div class="form-group wx_box">
         <label class="control-label col-md-2">微信号</label>
         <div class="col-md-8 ">
-            <input type="text" class="form-control" name=wx_id placeholder="微信号" value="" data-default="">
+            <input type="text" class="form-control" name="wx_id" placeholder="微信号" value="" data-default="">
         </div>
     </div>
     {{--渠道来源--}}
@@ -177,6 +177,13 @@
 {{--        </div>--}}
 {{--    </div>--}}
 
+    {{--录音地址--}}
+    <div class="form-group">
+        <label class="control-label col-md-2">录音地址</label>
+        <div class="col-md-8 ">
+            <input type="text" class="form-control" name="recording_address" placeholder="录音地址" value="" data-default="">
+        </div>
+    </div>
     {{--通话小结--}}
     <div class="form-group">
         <label class="control-label col-md-2">通话小结</label>

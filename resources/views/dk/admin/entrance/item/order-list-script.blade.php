@@ -1636,6 +1636,11 @@
 
                                 // $('#datatable_ajax').DataTable().ajax.reload(null, false);
 
+                                if($column_key == "recording_address")
+                                {
+                                    $row.find('td[data-key=recording_address_play]').html('<audio controls style="width:100px;height:20px;"><source src="'+$column_value+'" type="audio/mpeg"></audio>');
+                                }
+
                                 if($that.attr('data-text-type') == "textarea")
                                 {
                                     $row.find('td[data-key='+$column_key+']').html('<small class="btn-xs bg-yellow">双击查看</small>');
