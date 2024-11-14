@@ -1811,7 +1811,7 @@
                             }
                             else
                             {
-                                $result_html = '--';
+                                $result_html = data;
                             }
                             return $result_html;
                         }
