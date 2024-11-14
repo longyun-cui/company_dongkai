@@ -164,7 +164,7 @@
             });
 
             var options = {
-                url: "/item/order-import",
+                url: "/item/order-import-for-admin",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
