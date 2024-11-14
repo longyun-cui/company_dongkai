@@ -1809,6 +1809,18 @@
                             {
                                 $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
                             }
+                            else if(data == "A")
+                            {
+                                $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
+                            }
+                            else if(data == "B")
+                            {
+                                $result_html = '<small class="btn-xs bg-blue">'+data+'</small>';
+                            }
+                            else if(data == "C")
+                            {
+                                $result_html = '<small class="btn-xs bg-green">'+data+'</small>';
+                            }
                             else
                             {
                                 $result_html = data;
