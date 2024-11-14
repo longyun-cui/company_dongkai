@@ -961,6 +961,8 @@ class DKAdmin2_Repository {
             $customer_data["customer_admin_name"] = $post_data["customer_admin_name"];
             $customer_data["customer_admin_mobile"] = $post_data["customer_admin_mobile"];
             $customer_data["cooperative_unit_price"] = $post_data["cooperative_unit_price"];
+            $customer_data["cooperative_unit_price_2"] = $post_data["cooperative_unit_price_2"];
+            $customer_data["cooperative_unit_price_3"] = $post_data["cooperative_unit_price_3"];
             $customer_data["is_ip"] = $post_data["is_ip"];
             $customer_data["ip_whitelist"] = $post_data["ip_whitelist"];
             $customer_data["password"] = password_encode("12345678");
@@ -991,6 +993,8 @@ class DKAdmin2_Repository {
             $customer_data["customer_admin_name"] = $post_data["customer_admin_name"];
             $customer_data["customer_admin_mobile"] = $post_data["customer_admin_mobile"];
             $customer_data["cooperative_unit_price"] = $post_data["cooperative_unit_price"];
+            $customer_data["cooperative_unit_price_2"] = $post_data["cooperative_unit_price_2"];
+            $customer_data["cooperative_unit_price_3"] = $post_data["cooperative_unit_price_3"];
             $customer_data["is_ip"] = $post_data["is_ip"];
             $customer_data["ip_whitelist"] = $post_data["ip_whitelist"];
             $customer_data["district_city"] = $post_data["district_city"];
@@ -10864,9 +10868,19 @@ class DKAdmin2_Repository {
                     $pivot_choice_data["location_city"] = $item->location_city;
                     $pivot_choice_data["location_district"] = $item->location_district;
                     $pivot_choice_data["creator_id"] = $me->id;
+                    $pivot_choice_data["sale_result"] = 1;
+                    $pivot_choice_data["taken_at"] = time();
 
                     $bool_0 = $pivot_choice->fill($pivot_choice_data)->save();
                     if(!$bool_0) throw new Exception("insert--pivot_customer_choice--fail");
+
+                    if($sale_type == 66)
+                    {
+                        $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($customer_id);
+                        $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price_3;
+                        $bool_customer = $customer_u->save();
+                        if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
+                    }
                 }
 
 
@@ -10876,6 +10890,7 @@ class DKAdmin2_Repository {
                 $item->issuer_id = $me->id;
                 $item->sale_type = $sale_type;
                 $item->sale_status = 1;
+                $item->sale_result = 1;
                 $item->choice_id = $pivot_choice->id;
 //                $item->delivered_result = $delivered_result;
 //                $item->delivered_description = $delivered_description;
@@ -11014,9 +11029,19 @@ class DKAdmin2_Repository {
                     $pivot_choice_data["location_city"] = $item->location_city;
                     $pivot_choice_data["location_district"] = $item->location_district;
                     $pivot_choice_data["creator_id"] = $me->id;
+                    $pivot_choice_data["sale_result"] = 1;
+                    $pivot_choice_data["taken_at"] = time();
 
                     $bool_0 = $pivot_choice->fill($pivot_choice_data)->save();
                     if(!$bool_0) throw new Exception("pivot_customer_choice--insert--fail");
+
+                    if($sale_type == 66)
+                    {
+                        $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($customer_id);
+                        $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price_3;
+                        $bool_customer = $customer_u->save();
+                        if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
+                    }
                 }
 
 
@@ -11026,6 +11051,7 @@ class DKAdmin2_Repository {
                 $item->issuer_id = $me->id;
                 $item->sale_type = $sale_type;
                 $item->sale_status = 1;
+                $item->sale_result = 1;
                 $item->choice_id = $pivot_choice->id;
 //                $item->delivered_result = $delivered_result;
 //                $item->delivered_description = $delivered_description;

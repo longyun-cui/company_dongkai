@@ -3356,7 +3356,14 @@ class DKCustomerRepository {
             else
             {
                 $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
-                $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price;
+                if($item->sale_type == 1)
+                {
+                    $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price;
+                }
+                else if($item->sale_type == 11)
+                {
+                    $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price_2;
+                }
                 $bool_customer = $customer_u->save();
                 if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
 

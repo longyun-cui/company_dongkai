@@ -46,6 +46,7 @@
                     </div>
                 </div>
 
+
                 {{--合作单价--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 合作单价</label>
@@ -53,6 +54,21 @@
                         <input type="text" class="form-control" name="cooperative_unit_price" placeholder="合作单价" value="{{ $data->cooperative_unit_price or 0 }}">
                     </div>
                 </div>
+                {{--合作单价--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 合作单价（优选）</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="cooperative_unit_price_2" placeholder="合作单价" value="{{ $data->cooperative_unit_price_2 or 0 }}">
+                    </div>
+                </div>
+                {{--合作单价--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 合作单价（指派）</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="cooperative_unit_price_3" placeholder="合作单价" value="{{ $data->cooperative_unit_price_3 or 0 }}">
+                    </div>
+                </div>
+
 
                 {{--管理员名称--}}
                 <div class="form-group">

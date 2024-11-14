@@ -45,6 +45,8 @@ class DK_Choice_Customer extends Authenticatable
         'customer_admin_mobile',
 
         'cooperative_unit_price',
+        'cooperative_unit_price_2',
+        'cooperative_unit_price_3',
         'funds_recharge_total',
         'funds_consumption_total',
         'funds_obligation_total',

@@ -1037,6 +1037,50 @@
                         }
                     },
                     {
+                        "title": "优选单价",
+                        "data": "cooperative_unit_price_2",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','优选单价');
+                                $(nTd).attr('data-key','cooperative_unit_price_2').attr('data-value',data);
+                                $(nTd).attr('data-column-name','优选单价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "指派单价",
+                        "data": "cooperative_unit_price_3",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','指派单价');
+                                $(nTd).attr('data-key','cooperative_unit_price_3').attr('data-value',data);
+                                $(nTd).attr('data-column-name','指派单价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
                         "title": "累计充值",
                         "data": "funds_recharge_total",
                         "className": "item-show-for-recharge",

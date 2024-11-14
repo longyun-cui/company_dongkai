@@ -1031,23 +1031,31 @@
                     //     }
                     // },
                     {
-                        "title": "接单人",
+                        "title": "接/派单人",
                         "data": "taker_id",
                         "className": "",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.taker_er == null)
+                            if(row.sale_type == 66)
                             {
-                                return '--';
+
+                                return '<a href="javascript:void(0);">系统派单</a>';
                             }
-                            else {
-                                return '<a href="javascript:void(0);">'+row.taker_er.username+'</a>';
+                            else
+                            {
+                                if(row.taker_er == null)
+                                {
+                                    return '--';
+                                }
+                                else {
+                                    return '<a href="javascript:void(0);">'+row.taker_er.username+'</a>';
+                                }
                             }
                         }
                     },
                     {
-                        "title": "接单时间",
+                        "title": "接/派单时间",
                         "data": 'taken_at',
                         "className": "",
                         "width": "120px",
