@@ -8629,6 +8629,14 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 
+        $me->load(['department_district_er','department_group_er']);
+        $department_district_id = $me->department_district_id;
+        $department_group_id = $me->department_group_id;
+        if($me->department_district_er) $department_manager_id = $me->department_district_er->leader_id;
+        else $department_manager_id = 0;
+        if($me->department_group_er) $department_supervisor_id = $me->department_group_er->leader_id;
+        else $department_supervisor_id = 0;
+
         $project_id = $post_data['project_id'];
 
         // 单文件
@@ -8688,8 +8696,6 @@ class DKAdminRepository {
 
                     foreach($order_data as $key => $value)
                     {
-
-
                         $order = new DK_Order;
 
                         $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$value['client_phone']])
@@ -8714,6 +8720,12 @@ class DKAdminRepository {
                         $order->teeth_count = $value['teeth_count'];
                         $order->recording_address = $value['recording_address'];
                         $order->description = $value['description'];
+
+                        $order->department_district_id = $department_district_id;
+                        $order->department_group_id = $department_group_id;
+                        $order->department_manager_id = $department_manager_id;
+                        $order->department_supervisor_id = $department_supervisor_id;
+
 
                         $order->is_published = 1;
                         $order->published_at = time();
@@ -8815,6 +8827,11 @@ class DKAdminRepository {
                                 $order->teeth_count = $value['teeth_count'];
                                 $order->recording_address = $value['recording_address'];
                                 $order->description = $value['description'];
+
+                                $order->department_district_id = $department_district_id;
+                                $order->department_group_id = $department_group_id;
+                                $order->department_manager_id = $department_manager_id;
+                                $order->department_supervisor_id = $department_supervisor_id;
 
                                 $order->is_published = 1;
                                 $order->published_at = time();
