@@ -147,12 +147,31 @@
 
 
         $("#edit-item-submit").on('click', function() {
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在上传</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
             var options = {
                 url: "/item/order-import",
                 type: "post",
                 dataType: "json",
                 // target: "#div2",
                 success: function (data) {
+
+                    layer.closeAll('loading');
+
                     if(!data.success) layer.msg(data.msg);
                     else
                     {
