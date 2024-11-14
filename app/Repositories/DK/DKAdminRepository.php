@@ -8659,7 +8659,7 @@ class DKAdminRepository {
                     $reader->limitColumns(10);
 
 //                  $reader->takeRows(1000);
-                    $reader->limitRows(2001);
+                    $reader->limitRows(5000);
 
 //                  $reader->ignoreEmpty();
 
@@ -8771,7 +8771,7 @@ class DKAdminRepository {
                         $data = Excel::load($attachment_file, function($reader) {
 
                             $reader->limitColumns(10);
-                            $reader->limitRows(1000);
+                            $reader->limitRows(5000);
 
                         })->get()->toArray();
 
@@ -8934,7 +8934,7 @@ class DKAdminRepository {
                     $reader->limitColumns(1);
 
 //                  $reader->takeRows(1000);
-                    $reader->limitRows(2001);
+                    $reader->limitRows(5001);
 
 //                  $reader->ignoreEmpty();
 
@@ -9011,7 +9011,7 @@ class DKAdminRepository {
                         $data = Excel::load($attachment_file, function($reader) {
 
                             $reader->limitColumns(1);
-                            $reader->limitRows(1000);
+                            $reader->limitRows(5001);
 
                         })->get()->toArray();
 
