@@ -8603,11 +8603,277 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit-for-import';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-import';
         return view($view_blade)->with($return);
     }
     // 【工单】保存-导入-数据
     public function operate_item_order_import_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required',
+            'project_id.required' => '请填选择项目！',
+            'project_id.numeric' => '选择项目参数有误！',
+            'project_id.min' => '请填选择项目！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'project_id' => 'required|numeric|min:1',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+
+        $project_id = $post_data['project_id'];
+
+        // 单文件
+        if(!empty($post_data["excel-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["excel-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $data = Excel::load($attachment_file, function($reader) {
+
+//                  $reader->takeColumns(3);
+                    $reader->limitColumns(10);
+
+//                  $reader->takeRows(1000);
+                    $reader->limitRows(2001);
+
+//                  $reader->ignoreEmpty();
+
+//                  $data = $reader->all();
+//                  $data = $reader->toArray();
+
+                })->get()->toArray();
+
+                $order_data = [];
+                foreach($data as $key => $value)
+                {
+                    if(is_numeric($value['client_phone']))
+                    {
+                        $temp_date['client_name'] = $value['client_name'];
+                        $temp_date['client_phone'] = intval($value['client_phone']);
+                        $temp_date['wx_id'] = $value['wx_id'];
+                        if(!empty($value['wx_id'])) $temp_date['is_wx'] = 1;
+                        else $temp_date['is_wx'] = 0;
+                        $temp_date['client_intention'] = $value['client_intention'];
+                        $temp_date['location_city'] = $value['location_city'];
+                        $temp_date['location_district'] = $value['location_district'];
+                        $temp_date['teeth_count'] = $value['teeth_count'];
+                        $temp_date['recording_address'] = $value['recording_address'];
+                        $temp_date['description'] = $value['description'];
+
+                        $order_data[] = $temp_date;
+                    }
+                }
+
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+
+                    foreach($order_data as $key => $value)
+                    {
+
+
+                        $order = new DK_Order;
+
+                        $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$value['client_phone']])
+                            ->where('is_published','>',0)->count("*");
+                        $order->is_repeat = $is_repeat;
+
+                        $order->project_id = $project_id;
+                        $order->creator_id = $me->id;
+                        $order->created_type = 9;
+//                        $order->inspected_status = 1;
+//                        $order->inspected_result = '通过';
+                        $order->client_name = $value['client_name'];
+                        $order->client_phone = $value['client_phone'];
+                        $order->wx_id = $value['wx_id'];
+                        $order->is_wx = $value['is_wx'];
+
+                        $order->client_intention = $value['client_intention'];
+
+                        $order->location_city = $value['location_city'];
+                        $order->location_district = $value['location_district'];
+
+                        $order->teeth_count = $value['teeth_count'];
+                        $order->recording_address = $value['recording_address'];
+                        $order->description = $value['description'];
+
+                        $order->is_published = 1;
+                        $order->published_at = time();
+
+                        $bool = $order->save();
+                        if(!$bool) throw new Exception("insert--order--fail");
+                    }
+
+                    DB::commit();
+                    return response_success(['count'=>count($order_data)]);
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"清选择Excel文件！");
+
+
+
+
+        // 多文件
+//        dd($post_data["multiple-excel-file"]);
+        $count = 0;
+        $multiple_files = [];
+        if(!empty($post_data["multiple-excel-file"]))
+        {
+            // 添加图片
+            foreach ($post_data["multiple-excel-file"] as $n => $f)
+            {
+                if(!empty($f))
+                {
+                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
+                    if($result["result"])
+                    {
+                        $attachment_file = storage_resource_path($result["local"]);
+                        $data = Excel::load($attachment_file, function($reader) {
+
+                            $reader->limitColumns(10);
+                            $reader->limitRows(1000);
+
+                        })->get()->toArray();
+
+                        $order_data = [];
+                        foreach($data as $key => $value)
+                        {
+                            if(is_numeric($value['client_phone']))
+                            {
+                                $temp_date['client_name'] = $value['client_name'];
+                                $temp_date['client_phone'] = intval($value['client_phone']);
+                                $temp_date['wx_id'] = $value['wx_id'];
+                                if(!empty($value['wx_id'])) $temp_date['is_wx'] = 1;
+                                else $temp_date['is_wx'] = 0;
+                                $temp_date['client_intention'] = $value['client_intention'];
+                                $temp_date['location_city'] = $value['location_city'];
+                                $temp_date['location_district'] = $value['location_district'];
+                                $temp_date['teeth_count'] = $value['teeth_count'];
+                                $temp_date['recording_address'] = $value['recording_address'];
+                                $temp_date['description'] = $value['description'];
+
+                                $order_data[] = $temp_date;
+                            }
+                        }
+
+                        // 启动数据库事务
+                        DB::beginTransaction();
+                        try
+                        {
+
+                            foreach($order_data as $key => $value)
+                            {
+                                $order = new DK_Order;
+
+                                $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$value['client_phone']])
+                                    ->where('is_published','>',0)->count("*");
+                                $order->is_repeat = $is_repeat;
+
+                                $order->project_id = $project_id;
+                                $order->creator_id = $me->id;
+                                $order->created_type = 9;
+//                                $order->inspected_status = 1;
+//                                $order->inspected_result = '通过';
+                                $order->client_name = $value['client_name'];
+                                $order->client_phone = $value['client_phone'];
+                                $order->wx_id = $value['wx_id'];
+                                $order->is_wx = $value['is_wx'];
+
+                                $order->client_intention = $value['client_intention'];
+
+                                $order->location_city = $value['location_city'];
+                                $order->location_district = $value['location_district'];
+
+                                $order->teeth_count = $value['teeth_count'];
+                                $order->recording_address = $value['recording_address'];
+                                $order->description = $value['description'];
+
+                                $order->is_published = 1;
+                                $order->published_at = time();
+
+                                $bool = $order->save();
+                                if(!$bool) throw new Exception("insert--order--fail");
+                            }
+
+                            DB::commit();
+                            $count += count($order_data);
+                        }
+                        catch (Exception $e)
+                        {
+                            DB::rollback();
+                            $msg = '操作失败，请重试！';
+                            $msg = $e->getMessage();
+                            return response_fail([],$msg);
+                        }
+
+                    }
+                    else return response_error([],"upload--attachment--fail");
+                }
+
+            }
+
+            return response_success(['count'=>$count]);
+        }
+
+    }
+
+
+    // 【工单】返回-导入-视图
+    public function view_item_order_import_for_admin()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $operate_category = 'item';
+        $operate_type = 'item';
+        $operate_type_text = '工单';
+        $title_text = '管理员导入'.$operate_type_text;
+        $list_text = $operate_type_text.'列表';
+        $list_link = '/item/order-list-for-all';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['operate_category'] = $operate_category;
+        $return['operate_type'] = $operate_type;
+        $return['operate_type_text'] = $operate_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-import-for-admin';
+        return view($view_blade)->with($return);
+    }
+    // 【工单】保存-导入-数据
+    public function operate_item_order_import_for_admin_save($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required',

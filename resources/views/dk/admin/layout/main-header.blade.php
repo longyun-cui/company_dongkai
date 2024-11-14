@@ -100,13 +100,13 @@
                         </li>
                         @endif
 
-                        @if(env('APP_ENV') == 'local' && in_array($me->user_type,[0,1,9]))
+{{--                        @if(env('APP_ENV') == 'local' && in_array($me->user_type,[0,1,9]))--}}
                         <li class="header">
                             <a href="{{ url('/item/order-import') }}">
                                 <i class="fa fa-file-excel-o text-yellow"></i> 导入工单
                             </a>
                         </li>
-                        @endif
+{{--                        @endif--}}
 
                         <li class="footer"><a href="#">See All Messages</a></li>
                     </ul>

@@ -1029,6 +1029,13 @@ class DKAdminController extends Controller
         else if (request()->isMethod('post')) return $this->repo->operate_item_order_import_save(request()->all());
     }
 
+    // 【订单管理】导入
+    public function operate_item_order_import_for_admin()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_order_import_for_admin();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_order_import_for_admin_save(request()->all());
+    }
+
 
     // 【订单管理】获取-详情
     public function operate_item_order_get()
