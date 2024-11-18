@@ -2425,6 +2425,21 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
 
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在发布</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
                     $.post(
                         "{{ url('/item/order-bulk-deliver') }}",
                         {
@@ -2437,9 +2452,11 @@
                         },
                         function(data){
                             layer.close(index);
+                            layer.close(index);
                             if(!data.success) layer.msg(data.msg);
                             else
                             {
+                                layer.closeAll('loading');
                                 // $('#datatable_ajax').DataTable().ajax.reload(null,false);
 
                                 $('input[name="bulk-id"]:checked').each(function() {
