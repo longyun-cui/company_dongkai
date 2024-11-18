@@ -1224,7 +1224,7 @@
                         "title": "创建时间",
                         "data": 'created_at',
                         "className": "",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
@@ -1242,8 +1242,8 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
+                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                            else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
                         }
                     },
                 ],
