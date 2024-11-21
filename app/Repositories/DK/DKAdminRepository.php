@@ -8948,7 +8948,8 @@ class DKAdminRepository {
                 {
                     if($value['client_phone'])
                     {
-                        $temp_date['client_phone'] = intval($value['client_phone']);
+//                        $temp_date['client_phone'] = intval($value['client_phone']);
+                        $temp_date['client_phone'] = $value['client_phone'];
                         $order_data[] = $temp_date;
                     }
                 }
