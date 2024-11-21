@@ -49,23 +49,45 @@
 
                 {{--合作单价--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 合作单价</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 线索单价（普通单）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="cooperative_unit_price" placeholder="合作单价" value="{{ $data->cooperative_unit_price or 0 }}">
+                        <input type="text" class="form-control" name="cooperative_unit_price_1" placeholder="线索单价（普通单）" value="{{ $data->cooperative_unit_price_1 or 0 }}">
                     </div>
                 </div>
                 {{--合作单价--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 合作单价（优选）</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 线索单价（优选单）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="cooperative_unit_price_2" placeholder="合作单价" value="{{ $data->cooperative_unit_price_2 or 0 }}">
+                        <input type="text" class="form-control" name="cooperative_unit_price_2" placeholder="线索单价（优选单）" value="{{ $data->cooperative_unit_price_2 or 0 }}">
                     </div>
                 </div>
                 {{--合作单价--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 合作单价（指派）</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 线索单价（指派单）</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="cooperative_unit_price_3" placeholder="合作单价" value="{{ $data->cooperative_unit_price_3 or 0 }}">
+                        <input type="text" class="form-control" name="cooperative_unit_price_3" placeholder="线索单价（指派单）" value="{{ $data->cooperative_unit_price_3 or 0 }}">
+                    </div>
+                </div>
+                {{--合作单价--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 电话单价（电话单）</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="cooperative_unit_price_of_telephone" placeholder="电话单价（电话单）" value="{{ $data->cooperative_unit_price_of_telephone or 0 }}">
+                    </div>
+                </div>
+
+
+                {{--api--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_ID</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="api_id" placeholder="API_ID" value="{{ $data->api_id or '' }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> API_Password</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="api_password" placeholder="API_Password" value="{{ $data->api_password or '' }}">
                     </div>
                 </div>
 
@@ -255,6 +277,22 @@
 
         // 添加or编辑
         $("#edit-item-submit").on('click', function() {
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
             var options = {
                 url: "{{ url('/user/customer-edit') }}",
                 type: "post",
@@ -267,10 +305,24 @@
                         layer.msg(data.msg);
                         location.href = "{{ url('/user/customer-list') }}";
                     }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('fail');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    layer.msg('服务器错误');
+                },
+                complete: function (jqXHR, textStatus) {
+                    layer.closeAll('loading');
                 }
             };
             $("#form-edit-item").ajaxSubmit(options);
+
         });
+
+
+
 
     });
 </script>

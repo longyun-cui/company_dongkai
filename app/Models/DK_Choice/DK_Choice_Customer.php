@@ -45,14 +45,17 @@ class DK_Choice_Customer extends Authenticatable
         'customer_admin_mobile',
 
         'cooperative_unit_price',
+        'cooperative_unit_price_1',
         'cooperative_unit_price_2',
         'cooperative_unit_price_3',
+        'cooperative_unit_price_of_telephone',
+
         'funds_recharge_total',
         'funds_consumption_total',
         'funds_obligation_total',
 
-        'introduction_id',
-        'advertising_id',
+        'api_id',
+        'api_password',
 
         'QQ_number',
         'wx_id',

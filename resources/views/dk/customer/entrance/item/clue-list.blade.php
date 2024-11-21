@@ -703,21 +703,6 @@
 
 
 
-                            var $more_html =
-                                '<div class="btn-group">'+
-                                '<button type="button" class="btn btn-xs btn-success" style="padding:2px 8px; margin-right:0;">操作</button>'+
-                                '<button type="button" class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="padding:2px 6px; margin-left:-1px;">'+
-                                '<span class="caret"></span>'+
-                                '<span class="sr-only">Toggle Dropdown</span>'+
-                                '</button>'+
-                                '<ul class="dropdown-menu" role="menu">'+
-                                '<li><a href="#">Action</a></li>'+
-                                '<li><a href="#">删除</a></li>'+
-                                '<li><a href="#">弃用</a></li>'+
-                                '<li class="divider"></li>'+
-                                '<li><a href="#">Separate</a></li>'+
-                                '</ul>'+
-                                '</div>';
 
                             var $html =
                                 // $html_follow+

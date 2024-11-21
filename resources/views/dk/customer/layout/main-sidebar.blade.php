@@ -55,7 +55,30 @@
 
 
             @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
-            <li class="header">业务管理</li>
+                <li class="header">话单管理</li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
+            <li class="treeview {{ $menu_active_of_item_telephone_list or '' }}">
+                <a href="{{ url('/item/telephone-list')}}">
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>话单列表</span>
+                </a>
+            </li>
+            <li class="treeview {{ $menu_active_of_mine_telephone_list or '' }}">
+                <a href="{{ url('/mine/telephone-list')}}">
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>我的话单</span>
+                </a>
+            </li>
+            @endif
+
+
+
+
+
+            @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
+            <li class="header">线索管理</li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,81,84,88]))

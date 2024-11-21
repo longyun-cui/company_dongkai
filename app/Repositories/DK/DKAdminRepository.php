@@ -10750,6 +10750,7 @@ class DKAdminRepository {
 
         $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        $client_phone = $item->client_phone;
 
         $this->get_me();
         $me = $this->me;
@@ -10767,6 +10768,31 @@ class DKAdminRepository {
 
         $delivered_result = $post_data["delivered_result"];
         if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        // 是否已经分发
+        $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])->get();
+        if(count($is_distributed_list) > 0)
+        {
+            return response_error([],"该客户已经交付过该号码，不可以重复分发！");
+        }
+
+        // 是否已经交付
+        $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'已交付'])->get();
+        if(count($is_order_list) > 0)
+        {
+            foreach($is_order_list as $o)
+            {
+                if($o->client_id == $client_id)
+                {
+                    return response_error([],"该号码已在其他工单交付过该客户，不可以重复分发！");
+                }
+
+                if($o->project_er->client_id == $client_id)
+                {
+                    return response_error([],"该号码已在其他工单交付过默认客户，不可以重复分发！");
+                }
+            }
+        }
 
         $before = $item->delivered_result;
 
@@ -11116,6 +11142,7 @@ class DKAdminRepository {
             return response_error([],"该客户已经交付过该号码，不可以重复分发！");
         }
 
+        // 是否已经交付
         $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'已交付'])->get();
         if(count($is_order_list) > 0)
         {

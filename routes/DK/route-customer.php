@@ -186,6 +186,27 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
 
 
     // 列表
+    Route::match(['get','post'], '/item/telephone-list', $controller.'@view_item_telephone_list');
+    Route::match(['get','post'], '/item/telephone-list-for-preferential', $controller.'@view_item_telephone_list_for_preferential');
+    // 订单-修改信息
+    Route::match(['get','post'], '/item/telephone-modify-record', $controller.'@view_item_telephone_modify_record');
+    // 操作
+    Route::post('/item/telephone-call', $controller.'@operate_item_telephone_call');
+    Route::post('/item/telephone-purchase', $controller.'@operate_item_telephone_purchase');
+
+
+
+
+    // 列表
+    Route::match(['get','post'], '/mine/telephone-list', $controller.'@view_mine_telephone_list');
+    // 订单-修改信息
+    Route::match(['get','post'], '/mine/telephone-modify-record', $controller.'@view_mine_telephone_modify_record');
+
+
+
+
+
+    // 列表
     Route::match(['get','post'], '/item/clue-list', $controller.'@view_item_clue_list');
     Route::match(['get','post'], '/item/clue-list-for-preferential', $controller.'@view_item_clue_list_for_preferential');
     // 订单-修改信息
@@ -410,6 +431,8 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
 
 
     Route::match(['get','post'], '/item/record-list-for-all', $controller.'@view_record_list_for_all');
+
+
 
 
 });

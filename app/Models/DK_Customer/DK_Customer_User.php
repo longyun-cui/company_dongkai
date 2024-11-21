@@ -33,6 +33,8 @@ class DK_Customer_User extends Authenticatable
         'customer_id',
         'department_id',
 
+        'api_agent_id',
+
         'QQ_number',
         'wx_id',
         'wx_qr_code_img',

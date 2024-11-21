@@ -13,6 +13,8 @@ Route::match(['get','post'], 'logout', $controller.'@logout');
 Route::match(['get','post'], 'logout_without_token', $controller.'@logout_without_token');
 
 
+Route::match(['post'], '/api/okcc/receivingResult', $controller.'@operate_api_okcc_receivingResult');
+
 /*
  * 超级管理员系统（后台）
  * 需要登录
@@ -41,6 +43,7 @@ Route::group(['middleware' => ['dk.admin_2.login','dk.admin_2.password_change']]
 
 
     Route::match(['get','post'], '/select2/select2_project', $controller.'@operate_select2_project');
+    Route::match(['get','post'], '/select2/select2_customer', $controller.'@operate_select2_customer');
 
 
 
@@ -250,6 +253,17 @@ Route::group(['middleware' => ['dk.admin_2.login','dk.admin_2.password_change']]
 
 
 
+
+    // 列表
+    Route::match(['get','post'], '/item/telephone-list', $controller.'@view_item_telephone_list');
+    // 修改信息
+    Route::match(['get','post'], '/item/telephone-modify-record', $controller.'@view_item_telephone_modify_record');
+
+    // 创建 & 修改
+    Route::match(['get','post'], '/item/telephone-create', $controller.'@operate_item_telephone_create');
+    Route::match(['get','post'], '/item/telephone-edit', $controller.'@operate_item_telephone_edit');
+    // 导入
+    Route::match(['get','post'], '/item/telephone-import', $controller.'@operate_item_telephone_import');
 
 
 
@@ -533,6 +547,14 @@ Route::group(['middleware' => ['dk.admin_2.login','dk.admin_2.password_change']]
     Route::match(['get','post'], '/item/record-list-for-all', $controller.'@view_record_list_for_all');
 
     Route::match(['get','post'], '/record/visit-list', $controller.'@view_record_visit_list');
+
+
+
+
+
+
+
+
 
 
 });

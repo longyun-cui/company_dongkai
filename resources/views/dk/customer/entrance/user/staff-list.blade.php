@@ -341,6 +341,16 @@
                             return '<a href="javascript:void(0);">'+data+'</a>';
                         }
                     },
+                    {
+                        "title": "API坐席ID",
+                        "data": "api_agent_id",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
                     // {
                     //     "title": "大区",
                     //     "data": "department_district_id",

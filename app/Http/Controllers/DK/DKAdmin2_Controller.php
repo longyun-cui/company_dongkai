@@ -262,9 +262,9 @@ class DKAdmin2_Controller extends Controller
         return $this->repo->operate_select2_project(request()->all());
     }
     // 【线索】SELECT2 Client 客户
-    public function operate_item_select2_customer()
+    public function operate_select2_customer()
     {
-        return $this->repo->operate_item_select2_customer(request()->all());
+        return $this->repo->operate_select2_customer(request()->all());
     }
 
 
@@ -1004,6 +1004,54 @@ class DKAdmin2_Controller extends Controller
      * 线索
      */
     // 【线索】返回-列表-视图（全部任务）
+    public function view_item_telephone_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_telephone_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_telephone_list_datatable(request()->all());
+    }
+    // 【线索-修改记录】返回-列表-视图（全部任务）
+    public function view_item_telephone_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_telephone_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_telephone_modify_record_datatable(request()->all());
+    }
+
+
+    // 【线索】添加
+    public function operate_item_telephone_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_telephone_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_telephone_save(request()->all());
+    }
+    // 【线索】编辑
+    public function operate_item_telephone_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_telephone_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_telephone_save(request()->all());
+    }
+
+    // 【线索】导入
+    public function operate_item_telephone_import()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_telephone_import();
+        else if (request()->isMethod('post')) return $this->repo->operate_item_telephone_import_save(request()->all());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+     * 线索
+     */
+    // 【线索】返回-列表-视图（全部任务）
     public function view_item_clue_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_clue_list(request()->all());
@@ -1529,6 +1577,18 @@ class DKAdmin2_Controller extends Controller
         else return false;
     }
 
+
+
+
+
+
+
+
+    // 【API】okcc
+    public function operate_api_okcc_receivingResult()
+    {
+        $this->repo->operate_api_okcc_receivingResult(request()->all());
+    }
 
 
 }

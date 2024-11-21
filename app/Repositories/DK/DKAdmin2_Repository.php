@@ -28,6 +28,11 @@ use App\Models\DK_Choice\DK_Choice_District;
 use App\Models\DK_Choice\DK_Choice_Clue;
 use App\Models\DK_Choice\DK_Choice_Record;
 use App\Models\DK_Choice\DK_Choice_Record_Visit;
+use App\Models\DK_Choice\DK_Choice_Call_Record;
+
+use App\Models\DK_Choice\DK_Choice_Telephone_Bill;
+
+
 
 use App\Models\DK_Choice\DK_Choice_Pivot_Customer_Choice;
 
@@ -916,13 +921,19 @@ class DKAdmin2_Repository {
         $messages = [
             'operate.required' => 'operate.required.',
             'username.required' => '请输入客户名称！',
-            'cooperative_unit_price.required' => '请输入合作单价！',
+            'cooperative_unit_price_1.required' => '请输入合作单价！',
+            'cooperative_unit_price_2.required' => '请输入合作单价！',
+            'cooperative_unit_price_3.required' => '请输入合作单价！',
+            'cooperative_unit_price_of_telephone.required' => '请输入合作单价！',
 //            'username.unique' => '该客户已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'username' => 'required',
-            'cooperative_unit_price' => 'required',
+            'cooperative_unit_price_1' => 'required',
+            'cooperative_unit_price_2' => 'required',
+            'cooperative_unit_price_3' => 'required',
+            'cooperative_unit_price_of_telephone' => 'required',
 //            'username' => 'required|unique:dk_customer,username',
         ], $messages);
         if ($v->fails())
@@ -960,9 +971,12 @@ class DKAdmin2_Repository {
             $customer_data["mobile"] = $post_data["customer_admin_mobile"];
             $customer_data["customer_admin_name"] = $post_data["customer_admin_name"];
             $customer_data["customer_admin_mobile"] = $post_data["customer_admin_mobile"];
-            $customer_data["cooperative_unit_price"] = $post_data["cooperative_unit_price"];
+            $customer_data["cooperative_unit_price_1"] = $post_data["cooperative_unit_price_1"];
             $customer_data["cooperative_unit_price_2"] = $post_data["cooperative_unit_price_2"];
             $customer_data["cooperative_unit_price_3"] = $post_data["cooperative_unit_price_3"];
+            $customer_data["cooperative_unit_price_of_telephone"] = $post_data["cooperative_unit_price_of_telephone"];
+            $customer_data["api_id"] = $post_data["api_id"];
+            $customer_data["api_password"] = $post_data["api_password"];
             $customer_data["is_ip"] = $post_data["is_ip"];
             $customer_data["ip_whitelist"] = $post_data["ip_whitelist"];
             $customer_data["password"] = password_encode("12345678");
@@ -992,9 +1006,12 @@ class DKAdmin2_Repository {
             $customer_data["mobile"] = $post_data["customer_admin_mobile"];
             $customer_data["customer_admin_name"] = $post_data["customer_admin_name"];
             $customer_data["customer_admin_mobile"] = $post_data["customer_admin_mobile"];
-            $customer_data["cooperative_unit_price"] = $post_data["cooperative_unit_price"];
+            $customer_data["cooperative_unit_price_1"] = $post_data["cooperative_unit_price_1"];
             $customer_data["cooperative_unit_price_2"] = $post_data["cooperative_unit_price_2"];
             $customer_data["cooperative_unit_price_3"] = $post_data["cooperative_unit_price_3"];
+            $customer_data["cooperative_unit_price_of_telephone"] = $post_data["cooperative_unit_price_of_telephone"];
+            $customer_data["api_id"] = $post_data["api_id"];
+            $customer_data["api_password"] = $post_data["api_password"];
             $customer_data["is_ip"] = $post_data["is_ip"];
             $customer_data["ip_whitelist"] = $post_data["ip_whitelist"];
             $customer_data["district_city"] = $post_data["district_city"];
@@ -7737,6 +7754,701 @@ class DKAdmin2_Repository {
 
 
 
+
+
+
+
+    // 【线索】返回-列表-视图
+    public function view_item_telephone_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        // 显示数量
+        if(!empty($post_data['record']))
+        {
+            if($post_data['record'] == 'record')
+            {
+                $this->record_for_user_operate(21,11,1,$me->id,0,71,0);
+            }
+        }
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 20;
+        }
+        else $view_data['length'] = 20;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+
+
+        // 工单ID
+        if(!empty($post_data['clue_id']))
+        {
+            if(is_numeric($post_data['clue_id']) && $post_data['clue_id'] > 0) $view_data['clue_id'] = $post_data['clue_id'];
+            else $view_data['clue_id'] = '';
+        }
+        else $view_data['clue_id'] = '';
+
+        // 提交日期
+        if(!empty($post_data['assign']))
+        {
+            if($post_data['assign']) $view_data['assign'] = $post_data['assign'];
+            else $view_data['assign'] = '';
+        }
+        else $view_data['assign'] = '';
+
+        // 起始时间
+        if(!empty($post_data['assign_start']))
+        {
+            if($post_data['assign_start']) $view_data['start'] = $post_data['assign_start'];
+            else $view_data['start'] = '';
+        }
+        else $view_data['start'] = '';
+
+        // 截止时间
+        if(!empty($post_data['assign_ended']))
+        {
+            if($post_data['assign_ended']) $view_data['ended'] = $post_data['assign_ended'];
+            else $view_data['ended'] = '';
+        }
+        else $view_data['ended'] = '';
+
+        // 员工
+        if(!empty($post_data['staff_id']))
+        {
+            if(is_numeric($post_data['staff_id']) && $post_data['staff_id'] > 0) $view_data['staff_id'] = $post_data['staff_id'];
+            else $view_data['staff_id'] = -1;
+        }
+        else $view_data['staff_id'] = -1;
+
+
+
+
+        // 客户
+        if(!empty($post_data['customer_id']))
+        {
+            if(is_numeric($post_data['customer_id']) && $post_data['customer_id'] > 0) $view_data['customer_id'] = $post_data['customer_id'];
+            else $view_data['customer_id'] = -1;
+        }
+        else $view_data['customer_id'] = -1;
+
+
+
+
+        // 项目
+        if(!empty($post_data['project_id']))
+        {
+            if(is_numeric($post_data['project_id']) && $post_data['project_id'] > 0)
+            {
+                $project = DK_Choice_Project::select(['id','name'])->find($post_data['project_id']);
+                if($project)
+                {
+                    $view_data['project_id'] = $post_data['project_id'];
+                    $view_data['project_name'] = $project->name;
+                }
+                else $view_data['project_id'] = -1;
+            }
+            else $view_data['project_id'] = -1;
+        }
+        else $view_data['project_id'] = -1;
+
+        // 客户姓名
+        if(!empty($post_data['customer_name']))
+        {
+            if($post_data['customer_name']) $view_data['customer_name'] = $post_data['customer_name'];
+            else $view_data['customer_name'] = '';
+        }
+        else $view_data['customer_'] = '';
+        // 客户电话
+        if(!empty($post_data['customer_phone']))
+        {
+            if($post_data['customer_phone']) $view_data['customer_phone'] = $post_data['customer_phone'];
+            else $view_data['customer_phone'] = '';
+        }
+        else $view_data['customer_phone'] = '';
+
+        // 是否重复
+        if(!empty($post_data['is_repeat']))
+        {
+            if(is_numeric($post_data['is_repeat']) && $post_data['is_repeat'] > 0) $view_data['is_repeat'] = $post_data['is_repeat'];
+            else $view_data['is_repeat'] = -1;
+        }
+        else $view_data['is_repeat'] = -1;
+
+        // 类型
+        if(!empty($post_data['order_type']))
+        {
+            if(is_numeric($post_data['order_type']) && $post_data['order_type'] > 0) $view_data['order_type'] = $post_data['order_type'];
+            else $view_data['order_type'] = -1;
+        }
+        else $view_data['order_type'] = -1;
+
+
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $view_data['inspected_status'] = $post_data['inspected_status'];
+        }
+        else $view_data['inspected_status'] = -1;
+
+        // 交付状态
+        if(!empty($post_data['delivered_status']))
+        {
+            $view_data['delivered_status'] = $post_data['delivered_status'];
+        }
+        else $view_data['delivered_status'] = -1;
+
+        // 城市
+        if(!empty($post_data['district_city']))
+        {
+            $view_data['district_city'] = $post_data['district_city'];
+        }
+        else $view_data['district_city'] = -1;
+
+        // 区域
+        if(!empty($post_data['district_district']))
+        {
+            $view_data['district_district'] = $post_data['district_district'];
+        }
+        else $view_data['district_district'] = -1;
+
+//        dd($view_data);
+
+
+        $customer_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->get();
+        $view_data['customer_list'] = $customer_list;
+
+        $customer_preferential_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->where('is_preferential',1)->get();
+        $view_data['customer_preferential_list'] = $customer_preferential_list;
+
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $view_data['department_district_list'] = $department_district_list;
+
+
+        $project_list = DK_Choice_Project::select('id','name')->whereIn('item_type',[1,21])->get();
+        $view_data['project_list'] = $project_list;
+
+        $district_city_list = DK_Choice_District::select('id','district_city')->whereIn('district_status',[1])->get();
+        $view_data['district_city_list'] = $district_city_list;
+
+        if(!empty($post_data['district_city']))
+        {
+            $district_district_list = DK_Choice_District::select('district_district')->where('district_city',$post_data['district_city'])->whereIn('district_status',[1])->get();
+            if(count($district_district_list) > 0)
+            {
+                $district_district_array = explode("-",$district_district_list[0]->district_district);
+                $view_data['district_district_list'] = $district_district_array;
+            }
+            else
+            {
+                $view_data['district_district_list'] = [];
+            }
+        }
+
+        $view_data['menu_active_of_telephone_list'] = 'active menu-open';
+
+        $view_blade = env('TEMPLATE_DK_ADMIN_2').'entrance.item.telephone-list';
+        return view($view_blade)->with($view_data);
+    }
+    // 【线索】返回-列表-数据
+    public function get_item_telephone_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Choice_Telephone_Bill::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
+            ->with([
+                'creator',
+                'owner'=>function($query) { $query->select('id','username'); },
+                'customer_er'=>function($query) { $query->select('id','username'); }
+            ]);
+//            ->whereIn('user_category',[11])
+//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+//        $me->load(['subordinate_er' => function ($query) {
+//            $query->select('id');
+//        }]);
+
+
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['customer_name'])) $query->where('customer_name', $post_data['customer_name']);
+        if(!empty($post_data['customer_phone'])) $query->where('customer_phone', 'like', "%{$post_data['customer_phone']}");
+
+        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
+        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
+        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
+
+
+
+        // 客户
+        if(isset($post_data['customer']))
+        {
+            if(!in_array($post_data['customer'],[-1]))
+            {
+                $query->where('customer_id', $post_data['customer']);
+            }
+        }
+
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1]))
+            {
+                $query->where('project_id', $post_data['project']);
+            }
+        }
+
+
+        // 工单类型 [自有|空单|配货|调车]
+        if(isset($post_data['order_type']))
+        {
+            if(!in_array($post_data['order_type'],[-1]))
+            {
+                $query->where('car_owner_type', $post_data['order_type']);
+            }
+        }
+
+        // 是否+V
+        if(!empty($post_data['is_wx']))
+        {
+            if(!in_array($post_data['is_wx'],[-1]))
+            {
+                $query->where('is_wx', $post_data['is_wx']);
+            }
+        }
+
+        // 审核状态
+        if(!empty($post_data['inspected_status']))
+        {
+            $inspected_status = $post_data['inspected_status'];
+            if(in_array($inspected_status,['待发布','待审核','已审核']))
+            {
+                if($inspected_status == '待发布')
+                {
+                    $query->where('is_published', 0);
+                }
+                else if($inspected_status == '待审核')
+                {
+                    $query->where('is_published', 1)->whereIn('inspected_status', [0,9]);
+                }
+                else if($inspected_status == '已审核')
+                {
+                    $query->where('inspected_status', 1);
+                }
+            }
+        }
+        // 审核结果
+        if(!empty($post_data['inspected_result']))
+        {
+//            $inspected_result = $post_data['inspected_result'];
+//            if(in_array($inspected_result,config('info.inspected_result')))
+//            {
+//                $query->where('inspected_result', $inspected_result);
+//            }
+            if(count($post_data['inspected_result']))
+            {
+                $query->whereIn('inspected_result', $post_data['inspected_result']);
+            }
+        }
+
+        // 交付状态
+        if(!empty($post_data['delivered_status']))
+        {
+            $delivered_status = $post_data['delivered_status'];
+            if(in_array($delivered_status,['待交付','已交付','已操作','已处理']))
+            {
+                if($delivered_status == '待交付')
+                {
+                    $query->where('delivered_status', 0);
+                }
+                else if($delivered_status == '已交付')
+                {
+                    $query->where('delivered_status', 1);
+                }
+                else if($delivered_status == '已操作')
+                {
+                    $query->where('delivered_status', 1);
+                }
+                else if($delivered_status == '已处理')
+                {
+                    $query->where('delivered_status', 1);
+                }
+            }
+        }
+        // 交付结果
+        if(!empty($post_data['delivered_result']))
+        {
+            if(count($post_data['delivered_result']))
+            {
+                $query->whereIn('delivered_result', $post_data['delivered_result']);
+            }
+        }
+
+
+
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
+
+            if($v->creator_id == $me->id)
+            {
+                $list[$k]->is_me = 1;
+                $v->is_me = 1;
+            }
+            else
+            {
+                $list[$k]->is_me = 0;
+                $v->is_me = 0;
+            }
+
+            if(in_array($me->user_type,[0,1,9,11]))
+            {
+            }
+            else if(in_array($me->user_type,[71,77]))
+            {
+                $time = time();
+                if(($v->published_at > 0) && (($time - $v->published_at) > 86400))
+                {
+                    $customer_phone = $v->customer_phone;
+                    $v->customer_phone = substr($customer_phone, 0, 3).'****'.substr($customer_phone, -4);
+                }
+            }
+            else if(in_array($me->user_type,[41,81,84,88]))
+            {
+                $time = time();
+                if(!$v->is_me || (($v->published_at > 0) && (($time - $v->published_at) > 86400)))
+                {
+//                    $len = strlen($customer_phone);  // 字符串长度
+                    $customer_phone = $v->customer_phone;
+                    if(is_numeric($customer_phone))
+                    {
+                        $v->customer_phone = substr($customer_phone, 0, 3).'****'.substr($customer_phone, -4);
+                    }
+                }
+            }
+
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【线索】【修改记录】返回-列表-视图
+    public function view_item_telephone_modify_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_clue_modify_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN_2').'entrance.item.clue-modify-list';
+        return view($view_blade)->with($return);
+    }
+    // 【线索】【修改记录】返回-列表-数据
+    public function get_item_telephone_modify_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Choice_Record::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select('id','username'); },
+                'choice_staff_er'=>function($query) { $query->select('id','username'); },
+                'customer_staff_er'=>function($query) { $query->select('id','username'); }
+            ])
+            ->where(['clue_id'=>$id]);
+//            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!in_array($me->user_type,[0,1,9,11,61,66]))
+        {
+            $query->whereNotIn('operate_category',[96]);
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【线索】返回-导入-视图
+    public function view_item_telephone_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $operate_category = 'item';
+        $operate_type = 'item';
+        $operate_type_text = '话单';
+        $title_text = '导入'.$operate_type_text;
+        $list_text = $operate_type_text.'列表';
+        $list_link = '/item/clue-list';
+
+        $return['operate'] = 'create';
+        $return['operate_id'] = 0;
+        $return['operate_category'] = $operate_category;
+        $return['operate_type'] = $operate_type;
+        $return['operate_type_text'] = $operate_type_text;
+        $return['title_text'] = $title_text;
+        $return['list_text'] = $list_text;
+        $return['list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_ADMIN_2').'entrance.item.telephone-edit-for-import';
+        return view($view_blade)->with($return);
+    }
+    // 【线索】保存-导入-数据
+    public function operate_item_telephone_import_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required',
+            'customer_id.required' => '请填选择客户！',
+            'customer_id.numeric' => '选择客户参数有误！',
+            'customer_id.min' => '请填客户ID有误！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'customer_id' => 'required|numeric|min:1',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        $customer_id = $post_data['customer_id'];
+
+        // 单文件
+        if(!empty($post_data["excel-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["excel-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $data = Excel::load($attachment_file, function($reader) {
+
+//                  $reader->takeColumns(3);
+                    $reader->limitColumns(6);
+
+//                  $reader->takeRows(1000);
+                    $reader->limitRows(10001);
+
+//                  $reader->ignoreEmpty();
+
+//                  $data = $reader->all();
+//                  $data = $reader->toArray();
+
+                })->get()->toArray();
+
+                $import_data = [];
+                foreach($data as $key => $value)
+                {
+                    if(!empty($value['telephone']))
+                    {
+                        $temp_date['telephone'] = intval($value['telephone']);
+                        $import_data[] = $temp_date;
+                    }
+                }
+
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+
+                    foreach($import_data as $key => $value)
+                    {
+                        $item = new DK_Choice_Telephone_Bill;
+
+                        $item->customer_id = $customer_id;
+                        $item->creator_id = $me->id;
+                        $item->created_type = 9;
+                        $item->telephone = $value['telephone'];
+
+
+                        $bool = $item->save();
+                        if(!$bool) throw new Exception("DK_Choice_Clue--insert--fail");
+                    }
+
+                    DB::commit();
+                    return response_success(['count'=>count($import_data)]);
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"清选择Excel文件！");
+
+
+
+
+        // 多文件
+//        dd($post_data["multiple-excel-file"]);
+        $count = 0;
+        $multiple_files = [];
+        if(!empty($post_data["multiple-excel-file"]))
+        {
+            // 添加图片
+            foreach ($post_data["multiple-excel-file"] as $n => $f)
+            {
+                if(!empty($f))
+                {
+                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
+                    if($result["result"])
+                    {
+                        $attachment_file = storage_resource_path($result["local"]);
+                        $data = Excel::load($attachment_file, function($reader) {
+
+                            $reader->limitColumns(1);
+                            $reader->limitRows(1000);
+
+                        })->get()->toArray();
+
+                        $order_data = [];
+                        foreach($data as $key => $value)
+                        {
+                            if($value['customer_phone'])
+                            {
+                                $temp_date['customer_phone'] = intval($value['customer_phone']);
+                                $order_data[] = $temp_date;
+                            }
+                        }
+
+                        // 启动数据库事务
+                        DB::beginTransaction();
+                        try
+                        {
+
+                            foreach($order_data as $key => $value)
+                            {
+                                $order = new DK_Order;
+
+                                $order->project_id = $project_id;
+                                $order->creator_id = $me->id;
+                                $order->created_type = 9;
+                                $order->is_published = 1;
+                                $order->inspected_status = 1;
+                                $order->inspected_result = '通过';
+                                $order->customer_phone = $value['customer_phone'];
+
+                                $bool = $order->save();
+                                if(!$bool) throw new Exception("insert--order--fail");
+                            }
+
+                            DB::commit();
+                            $count += count($order_data);
+                        }
+                        catch (Exception $e)
+                        {
+                            DB::rollback();
+                            $msg = '操作失败，请重试！';
+                            $msg = $e->getMessage();
+                            return response_fail([],$msg);
+                        }
+
+                    }
+                    else return response_error([],"upload--attachment--fail");
+                }
+
+            }
+
+            return response_success(['count'=>$count]);
+        }
+
+    }
 
 
 
@@ -19134,6 +19846,79 @@ class DKAdmin2_Repository {
     }
 
 
+
+
+
+    // 【API】接单
+    public function operate_api_okcc_receivingResult($post_data)
+    {
+        $messages = [
+            'authentication.required' => 'authentication.required.',
+            'notify.required' => 'notify.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'authentication' => 'required',
+            'notify' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $userData = $post_data['notify']['userData'];
+        $seq = $post_data['notify']['seq'];
+        if($userData == 'calling')
+        {
+            $call_data = $post_data['notify'];
+
+            $call = DK_Choice_Call_Record::find($seq);
+            if($call)
+            {
+                $telephone = DK_Choice_Telephone_Bill::find($call->telephone_id);
+                if($telephone)
+                {
+                }
+            }
+            else
+            {
+//                return response_error([],"该【通话】不存在！");
+                $call = new DK_Choice_Call_Record;
+
+                $call_data["ip"] = Get_IP();
+                $call_data["telephone"] = $post_data['notify']['callee'];
+            }
+
+
+            // 启动数据库事务
+            DB::beginTransaction();
+            try
+            {
+                $bool_c = $call->fill($post_data['notify'])->save();
+                if(!$bool_c) throw new Exception("DK_Choice_Call_Record--insert--fail");
+
+                DB::commit();
+                $return['result']['error'] = 0;
+                $return['result']['msg'] = '';
+                return response_fail(json_encode($return));
+            }
+            catch (Exception $e)
+            {
+                DB::rollback();
+//            $msg = '操作失败，请重试！';
+                $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+                $return['result']['error'] = 1;
+                $return['result']['msg'] = $msg;
+                return response_fail(json_encode($return));
+            }
+        }
+
+
+
+    }
 
 
 }

@@ -1016,7 +1016,7 @@
                     @if(in_array($me->user_type,[0,1,11,19]))
                     {
                         "title": "合作单价",
-                        "data": "cooperative_unit_price",
+                        "data": "cooperative_unit_price_1",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
@@ -1025,7 +1025,7 @@
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','合作单价');
-                                $(nTd).attr('data-key','cooperative_unit_price').attr('data-value',data);
+                                $(nTd).attr('data-key','cooperative_unit_price_1').attr('data-value',data);
                                 $(nTd).attr('data-column-name','合作单价');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
@@ -1071,6 +1071,28 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','指派单价');
                                 $(nTd).attr('data-key','cooperative_unit_price_3').attr('data-value',data);
                                 $(nTd).attr('data-column-name','指派单价');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "电话单价",
+                        "data": "cooperative_unit_price_of_telephone",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','电话单价');
+                                $(nTd).attr('data-key','cooperative_unit_price_of_telephone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','电话单价');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');

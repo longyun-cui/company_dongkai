@@ -429,6 +429,49 @@ class DKCustomerController extends Controller
 
 
     /*
+     * 话单列表
+     */
+    // 【话单】返回-列表-视图（全部任务）
+    public function view_item_telephone_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_telephone_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_telephone_list_datatable(request()->all());
+    }
+    // 【话单】返回-列表-视图（全部任务）
+    public function view_item_telephone_list_for_preferential()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_telephone_list_for_preferential(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_telephone_list_datatable(request()->all());
+    }
+    // 【话单-修改记录】返回-列表-视图（全部任务）
+    public function view_item_telephone_modify_record()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_item_telephone_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_telephone_modify_record_datatable(request()->all());
+    }
+    // 【话单】拨号
+    public function operate_item_telephone_call()
+    {
+        return $this->repo->operate_item_telephone_call(request()->all());
+    }
+    // 【线索】购买
+    public function operate_item_telephone_purchase()
+    {
+        return $this->repo->operate_item_telephone_purchase(request()->all());
+    }
+
+
+    // 【线索】返回-列表-视图（全部任务）
+    public function view_mine_telephone_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_mine_telephone_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_mine_telephone_list_datatable(request()->all());
+    }
+
+
+
+
+    /*
      * 线索列表
      */
     // 【线索】返回-列表-视图（全部任务）
@@ -449,7 +492,7 @@ class DKCustomerController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_clue_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_clue_modify_record_datatable(request()->all());
     }
-    // 【线索】质量评估
+    // 【线索】接单
     public function operate_item_clue_take()
     {
         return $this->repo->operate_item_clue_take(request()->all());
@@ -472,12 +515,12 @@ class DKCustomerController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_mine_clue_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_mine_clue_modify_record_datatable(request()->all());
     }
-    // 【线索】质量评估
+    // 【线索】退单
     public function operate_mine_clue_back()
     {
         return $this->repo->operate_mine_clue_back(request()->all());
     }
-    // 【线索】质量评估
+    // 【线索】购买
     public function operate_mine_clue_purchase()
     {
         return $this->repo->operate_mine_clue_purchase(request()->all());
@@ -816,6 +859,10 @@ class DKCustomerController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_record_list_for_all(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_record_list_for_all_datatable(request()->all());
     }
+
+
+
+
 
 
 

@@ -697,7 +697,7 @@
                             var $html_follow = '<a class="btn btn-xs bg-blue item-modal-show-for-follow" data-id="'+data+'">客户跟进</a>';
                             var $html_quality = '<a class="btn btn-xs bg-olive item-quality-evaluate-submit" data-id="'+data+'">质量评估</a>';
                             var $html_purchase = '';
-                            var $html_back = '<a class="btn btn-xs bg-olive- item-back-submit" data-id="'+data+'">购买</a>';
+                            var $html_back = '<a class="btn btn-xs bg-olive- item-back-submit" data-id="'+data+'">退单</a>';
                             var $html_detail = '<a class="btn btn-xs bg-olive- item-modal-show-for-detail" data-id="'+data+'">查看详情</a>';
                             var $html_record = '<a class="btn btn-xs bg-purple- item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
