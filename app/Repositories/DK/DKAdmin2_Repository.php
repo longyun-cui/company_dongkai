@@ -1026,7 +1026,7 @@ class DKAdmin2_Repository {
             if($is_username_exist) return response_error([],"该客户名已存在，不能修改成此客户名！");
 
             // 客户管理员是否存在
-            $customer_staff = DK_Customer_User::where('id', $customer->admin_id)->first();
+            $customer_staff = DK_Customer_User::where('id', $customer->customer_admin_id)->first();
             if($customer_staff)
             {
                 // 客户管理员存在
