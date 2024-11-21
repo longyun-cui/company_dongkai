@@ -8934,7 +8934,7 @@ class DKAdminRepository {
                     $reader->limitColumns(1);
 
 //                  $reader->takeRows(1000);
-                    $reader->limitRows(5001);
+                    $reader->limitRows(20001);
 
 //                  $reader->ignoreEmpty();
 
