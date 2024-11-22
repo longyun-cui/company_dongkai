@@ -449,6 +449,11 @@ class DKCustomerController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_telephone_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_telephone_modify_record_datatable(request()->all());
     }
+    // 【订单】批量-分派
+    public function operate_item_telephone_bulk_assign_staff()
+    {
+        return $this->repo->operate_item_telephone_bulk_assign_staff(request()->all());
+    }
     // 【话单】拨号
     public function operate_item_telephone_call()
     {
@@ -739,11 +744,23 @@ class DKCustomerController extends Controller
     /*
      * Finance 财务
      */
-    // 【财务】返回-列表-视图（全部任务）
-    public function view_finance_list()
+    // 【财务】返回-列表-视图（充值）
+    public function view_finance_funds_recharge_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_finance_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_finance_list_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_finance_funds_recharge_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_funds_recharge_list_datatable(request()->all());
+    }
+    // 【财务】返回-列表-视图（消费）
+    public function view_finance_funds_using_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_funds_using_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_funds_using_list_datatable(request()->all());
+    }
+    // 【财务】返回-列表-视图（日报）
+    public function view_finance_daily_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_daily_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_daily_list_datatable(request()->all());
     }
 
 

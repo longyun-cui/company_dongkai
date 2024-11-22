@@ -9,7 +9,13 @@
 
 
 @section('header','')
-@section('description')财务日报列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')
+    <b class="box-title">
+        <span class="statistic-title">财务日报</span>
+        <span class="statistic-time-type-title">【全部】</span>
+        <span class="statistic-time-title"></span>
+    </b>
+@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -17,26 +23,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
-
-            <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
-
-                <h3 class="box-title">
-                    <span class="statistic-title">财务日报列表</span>
-                    <span class="statistic-time-type-title">【全部】</span>
-                    <span class="statistic-time-title"></span>
-                </h3>
-
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
-            </div>
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-daily-list">
@@ -760,7 +746,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[-1, 50, 100, 200])) {{ $length.',' }} @endif -1, 50, 100, 200], [ @if(!in_array($length,[-1, 50, 100, 200])) {{ $length.',' }} @endif "全部", "50", "100", "200"]],
+                "aLengthMenu": [[ @if(!in_array($length,[-1])) {{ $length.',' }} @endif -1], [ @if(!in_array($length,[-1, 50, 100, 200])) {{ $length.',' }} @endif "全部"]],
                 // "deferRender": false, // 启用缓存
                 "processing": true, // 显示处理状态
                 "serverSide": true, // 服务器模式
@@ -768,7 +754,7 @@
                 "iDisplayStart": {{ ($page - 1) * $length }},
                 "iDisplayLength": {{ $length or 20 }},
                 "ajax": {
-                    'url': "{{ url('/finance/daily-list') }}",
+                    'url': "{{ url('/finance/finance-daily-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -843,20 +829,9 @@
 //                        "orderable": false
 //                    },
                     {
-                        "title": "ID",
-                        "data": "id",
-                        "className": "",
-                        "width": "50px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
                         "title": "日期",
-                        "data": 'assign_date',
-                        "className": "text-center",
+                        "data": 'formatted_date',
+                        "className": "",
                         "width": "80px",
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
@@ -865,8 +840,8 @@
                         }
                     },
                     {
-                        "title": "交付量",
-                        "data": "delivery_quantity",
+                        "title": "消费量",
+                        "data": "total_of_daily_count",
                         "className": "",
                         "width": "60px",
                         "orderable": false,
@@ -876,30 +851,8 @@
                         }
                     },
                     {
-                        "title": "无效交付量",
-                        "data": "delivery_quantity_of_invalid",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(data != 0) return '<b class="text-red">' + parseFloat(data) + '</b>';
-                            return parseFloat(data);
-                        }
-                    },
-                    {
-                        "title": "合作单价",
-                        "data": "cooperative_unit_price",
-                        "className": "",
-                        "width": "60px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(!isNaN(parseFloat(data)) && isFinite(data)) return parseFloat(data);
-                            return data;
-                        }
-                    },
-                    {
                         "title": "每日花费",
-                        "data": "total_daily_cost",
+                        "data": "total_of_daily_cost",
                         "className": "",
                         "width": "60px",
                         "orderable": false,

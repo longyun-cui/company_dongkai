@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '我的话单' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '我的话单' }} - 客户系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description'){{ $title_text or '我的话单' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '我的话单' }} - 客户系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -152,16 +152,16 @@
                                 <option value="删除">删除</option>
                                 <option value="彻底删除">彻底删除</option>
                             </select>
-                            {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
-                            {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
 
-                            {{--                            <select name="bulk-operate-exported-status" class="form-control form-filter">--}}
-                            {{--                                <option value="-1">请选导出状态</option>--}}
-                            {{--                                <option value="1">已导出</option>--}}
-                            {{--                                <option value="0">待导出</option>--}}
-                            {{--                            </select>--}}
-                            {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>--}}
+{{--                            <select name="bulk-operate-exported-status" class="form-control form-filter">--}}
+{{--                                <option value="-1">请选导出状态</option>--}}
+{{--                                <option value="1">已导出</option>--}}
+{{--                                <option value="0">待导出</option>--}}
+{{--                            </select>--}}
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>--}}
 
                             <select name="bulk-operate-assign-status" class="form-control form-filter">
                                 <option value="-1">请选分配状态</option>

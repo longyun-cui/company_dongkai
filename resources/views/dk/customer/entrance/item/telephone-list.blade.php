@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '话单列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '话单列表' }} - 客户系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description'){{ $title_text or '话单列表' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '话单列表' }} - 客户系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -18,7 +18,7 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
 
-            <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
+            <div class="box-header with-border _none" style="padding:6px 10px;margin:4px;">
 
                 <h3 class="box-title">{{ $title_text or '话单列表' }}</h3>
 
@@ -29,6 +29,7 @@
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
+
 
                         <input type="text" class="form-control form-filter filter-keyup" name="telephone-id" placeholder="ID" value="{{ $telephone_id or '' }}" style="width:88px;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
@@ -51,14 +52,14 @@
 {{--                            @endif--}}
 {{--                        </select>--}}
 
-{{--                        @if(in_array($me->user_type,[0,1,9,11,61,66]))--}}
-{{--                            <select class="form-control form-filter select2-box telephone-select2-customer" name="telephone-customer" style="width:160px;">--}}
-{{--                                <option value="-1">选择客户</option>--}}
-{{--                                @foreach($customer_list as $v)--}}
-{{--                                    <option value="{{ $v->id }}" @if($v->id == $customer_id) selected="selected" @endif>{{ $v->username }}</option>--}}
-{{--                                @endforeach--}}
-{{--                            </select>--}}
-{{--                        @endif--}}
+
+                        <select class="form-control form-filter select2-box telephone-select2-staff" name="telephone-staff" style="width:160px;">
+                            <option value="-1">选择员工</option>
+                            <option value="0">*未分配员工*</option>
+                            @foreach($staff_list as $v)
+                                <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
+                            @endforeach
+                        </select>
 
 
 {{--                        <select class="form-control form-filter select2-box" name="telephone-delivered-result[]" multiple="multiple" style="width:100px;">--}}
@@ -117,6 +118,18 @@
                         </button>
 
 
+                        <span class="input-group-addon" style="width:40px;"><input type="checkbox" id="check-review-all" style="width:40px;"></span>
+                        <select name="bulk-operate-staff-id" class="form-control form-filter select2-box">
+                            <option value="-1">选择员工</option>
+                            @foreach($staff_list as $v)
+                                <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
+                            @endforeach
+                        </select>
+                        <button type="button" class="form-control btn btn-flat btn-default" id="bulk-submit-for-assign-staff" style="width:100px;">
+                            <i class="fa fa-check"></i> 批量分配
+                        </button>
+
+
                         <div class="pull-left clear-both">
                         </div>
 
@@ -138,13 +151,15 @@
 
 
             @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-            <div class="box-footer" style="padding:4px 10px;">
+            <div class="box-footer _none" style="padding:4px 10px;">
                 <div class="row" style="margin:2px 0;">
                     <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
                         {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
                         {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
                         <div class="input-group">
+
                             <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
+
                             <select name="bulk-operate-status" class="form-control form-filter _none">
                                 <option value="-1">请选择操作类型</option>
                                 <option value="启用">启用</option>
@@ -152,31 +167,33 @@
                                 <option value="删除">删除</option>
                                 <option value="彻底删除">彻底删除</option>
                             </select>
-                            {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
-                            {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
+
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
 
-                            {{--                            <select name="bulk-operate-exported-status" class="form-control form-filter">--}}
-                            {{--                                <option value="-1">请选导出状态</option>--}}
-                            {{--                                <option value="1">已导出</option>--}}
-                            {{--                                <option value="0">待导出</option>--}}
-                            {{--                            </select>--}}
-                            {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>--}}
+{{--                            <select name="bulk-operate-exported-status" class="form-control form-filter">--}}
+{{--                                <option value="-1">请选导出状态</option>--}}
+{{--                                <option value="1">已导出</option>--}}
+{{--                                <option value="0">待导出</option>--}}
+{{--                            </select>--}}
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>--}}
 
-                            <select name="bulk-operate-assign-status" class="form-control form-filter">
-                                <option value="-1">请选分配状态</option>
-                                <option value="1">已分配</option>
-                                <option value="0">待分配</option>
-                            </select>
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-status"><i class="fa fa-check"></i> 批量更改导出状态</span>
+{{--                            <select name="bulk-operate-assign-status" class="form-control form-filter">--}}
+{{--                                <option value="-1">请选分配状态</option>--}}
+{{--                                <option value="1">已分配</option>--}}
+{{--                                <option value="0">待分配</option>--}}
+{{--                            </select>--}}
 
-                            <select name="bulk-operate-staff-id" class="form-control form-filter">
-                                <option value="-1">选择员工</option>
-                                @foreach($staff_list as $v)
-                                    <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
-                                @endforeach
-                            </select>
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-staff"><i class="fa fa-check"></i> 批量分配</span>
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-status"><i class="fa fa-check"></i> 批量更改导出状态</span>--}}
+
+{{--                            <select name="bulk-operate-staff-id-123" class="form-control form-filter">--}}
+{{--                                <option value="-1">选择员工</option>--}}
+{{--                                @foreach($staff_list as $v)--}}
+{{--                                    <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-staff"><i class="fa fa-check"></i> 批量分配</span>--}}
                         </div>
                     </div>
                 </div>
@@ -900,7 +917,7 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": ($(document).height() - 448)+"px",
+                "scrollY": ($(document).height() - 300)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
 
@@ -1079,6 +1096,32 @@
                             else if(data == 9) $result_html = '<small class="btn-xs bg-yellow">已购买</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';
                             return $result_html;
+                        }
+                    },
+                    {
+                        "title": "分派员工",
+                        "data": "customer_staff_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('customer_staff');
+                                $(nTd).attr('data-id',row.id).attr('data-name','分派员工');
+                                $(nTd).attr('data-key','customer_staff_id').attr('data-value',row.id);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.customer_staff_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.customer_staff_er.username+'</a>';
+                            }
                         }
                     },
                     {

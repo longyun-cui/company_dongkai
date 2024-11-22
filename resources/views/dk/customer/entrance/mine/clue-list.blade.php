@@ -9,7 +9,7 @@
 
 
 @section('header','')
-@section('description')我的线索 - 客户系统 - {{ config('info.info.short_name') }}@endsection
+@section('description'){{ $title_text or '我的线索' }} - 客户系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -20,7 +20,7 @@
 
             <div class="box-header with-border _none" style="padding:6px 10px;margin:4px;">
 
-                <h3 class="box-title">我的线索</h3>
+                <h3 class="box-title">{{ $title_text or '我的线索' }}</h3>
 
                 <div class="pull-right _none">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
@@ -804,7 +804,7 @@
                         render: function(data, type, row, meta) {
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">未上架</small>';
-                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">一般</small>';
+                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">普通</small>';
                             else if(data == 11) $result_html = '<small class="btn-xs bg-green">优选</small>';
                             else if(data == 66) $result_html = '<small class="btn-xs bg-yellow">独享</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';

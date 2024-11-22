@@ -2355,7 +2355,6 @@
 
         // 【批量操作】全选or反选
         $(".main-content").on('click', '#check-review-all', function () {
-            console.log(1);
             $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
         // 【批量操作】批量-导出
@@ -2475,6 +2474,199 @@
                                     var $second = ('00'+$date.getSeconds()).slice(-2);
                                     var $time_html = $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
                                     $row.find('td[data-key=delivered_at]').html($time_html);
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+        // 【批量操作】批量-导出状态
+        $(".main-content").on('click', '#bulk-submit-for-exported-status', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量导出"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/delivery-bulk-exported-status') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "delivery-exported-bulk",
+                            ids: $ids,
+                            operate_exported_status:$('select[name="bulk-operate-exported-status"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $operate_status = $('select[name="bulk-operate-exported-status"]').val();
+
+                                    if($operate_status == "1")
+                                    {
+                                        $row.find('td[data-key=exported_status]').html('<small class="btn-xs btn-success">已导出</small>');
+                                    }
+                                    else if($operate_status == "0")
+                                    {
+                                        $row.find('td[data-key=exported_status]').html('<small class="btn-xs btn-warning">未导出</small>');
+                                    }
+                                    else
+                                    {
+                                    }
+
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+        // 【批量操作】批量-分配状态
+        $(".main-content").on('click', '#bulk-submit-for-assign-status', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量导出"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/delivery-bulk-assign-status') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "delivery-assign-status-bulk",
+                            ids: $ids,
+                            operate_assign_status:$('select[name="bulk-operate-assign-status"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $operate_status = $('select[name="bulk-operate-assign-status"]').val();
+
+                                    if($operate_status == "1")
+                                    {
+                                        $row.find('td[data-key=assign_status]').html('<small class="btn-xs btn-success">已分配</small>');
+                                    }
+                                    else if($operate_status == "0")
+                                    {
+                                        $row.find('td[data-key=assign_status]').html('<small class="btn-xs btn-warning">待分配</small>');
+                                    }
+                                    else
+                                    {
+                                    }
+
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+        // 【批量操作】批量-导出
+        $(".main-content").on('click', '#bulk-submit-for-assign-staff', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量导出"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/telephone-bulk-assign-staff') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "telephone-assign-staff-bulk",
+                            ids: $ids,
+                            operate_staff_id:$('select[name="bulk-operate-staff-id"]').find('option:selected').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $username = $('select[name="bulk-operate-staff-id"]').find('option:selected').html();
+
+                                    $row.find('td[data-key=customer_staff_id]').html('<a href="javascript:void(0);">'+$username+'</a>');
 
                                 });
                             }

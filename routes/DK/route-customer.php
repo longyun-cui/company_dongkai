@@ -191,6 +191,7 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
     // 订单-修改信息
     Route::match(['get','post'], '/item/telephone-modify-record', $controller.'@view_item_telephone_modify_record');
     // 操作
+    Route::post('/item/telephone-bulk-assign-staff', $controller.'@operate_item_telephone_bulk_assign_staff');
     Route::post('/item/telephone-call', $controller.'@operate_item_telephone_call');
     Route::post('/item/telephone-purchase', $controller.'@operate_item_telephone_purchase');
 
@@ -377,7 +378,9 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
      * finance 财务
      */
     // 列表
-    Route::match(['get','post'], '/finance/daily-list', $controller.'@view_finance_daily_list');
+    Route::match(['get','post'], '/finance/finance-daily-list', $controller.'@view_finance_daily_list');
+    Route::match(['get','post'], '/finance/funds-recharge-list', $controller.'@view_finance_funds_recharge_list');
+    Route::match(['get','post'], '/finance/funds-using-list', $controller.'@view_finance_funds_using_list');
 
 
 

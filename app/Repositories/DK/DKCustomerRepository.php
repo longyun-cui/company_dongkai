@@ -19,6 +19,7 @@ use App\Models\DK\DK_District;
 use App\Models\DK_Choice\DK_Choice_Clue;
 use App\Models\DK_Choice\DK_Choice_Customer;
 use App\Models\DK_Choice\DK_Choice_District;
+use App\Models\DK_Choice\DK_Choice_Funds_Recharge;
 use App\Models\DK_Choice\DK_Choice_Funds_Using;
 use App\Models\DK_Choice\DK_Choice_Record;
 use App\Models\DK_Choice\DK_Choice_Call_Record;
@@ -2898,9 +2899,7 @@ class DKCustomerRepository {
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->where('customer_id',$me->customer_id)
 //            ->where('sale_result',0)
-            ->with([]);
-
-
+            ->with(['customer_staff_er']);
 
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -2918,21 +2917,11 @@ class DKCustomerRepository {
 
 
         // 项目
-        if(isset($post_data['project']))
+        if(isset($post_data['staff']))
         {
-            if(!in_array($post_data['project'],[-1]))
+            if(!in_array($post_data['staff'],[-1]))
             {
-                $query->where('project_id', $post_data['project']);
-            }
-        }
-
-
-        // 工单类型 [自有|空单|配货|调车]
-        if(isset($post_data['order_type']))
-        {
-            if(!in_array($post_data['order_type'],[-1]))
-            {
-                $query->where('car_owner_type', $post_data['order_type']);
+                $query->where('customer_staff_id', $post_data['staff']);
             }
         }
 
@@ -2975,9 +2964,6 @@ class DKCustomerRepository {
                 $query->whereIn('inspected_result', $post_data['inspected_result']);
             }
         }
-
-
-
 
 
         $total = $query->count();
@@ -3069,6 +3055,101 @@ class DKCustomerRepository {
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【话单】批量-分配
+    public function operate_item_telephone_bulk_assign_staff($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+            'operate_staff_id.required' => 'operate_staff_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+            'operate_staff_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'telephone-assign-staff-bulk') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $customer_staff_id = $post_data["operate_staff_id"];
+//        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $delivered_para['customer_staff_id'] = $customer_staff_id;
+
+//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
+//            if(!$bool) throw new Exception("item--update--fail");
+//            else
+//            {
+//            }
+
+            foreach($ids_array as $key => $id)
+            {
+                $item = DK_Choice_Telephone_Bill::withTrashed()->find($id);
+                if(!$item) return response_error([],"该【话单】不存在，刷新页面重试！");
+
+
+                $before = $item->customer_staff_id;
+
+                $item->customer_staff_id = $customer_staff_id;
+                $bool = $item->save();
+                if(!$bool) throw new Exception("DK_Choice_Telephone_Bill--update--fail");
+                else
+                {
+                    $record = new DK_Choice_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 91;
+                    $record_data["operate_category"] = 99;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "customer_staff_id";
+
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $customer_staff_id;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("DK_Choice_Record--insert--fail");
+                }
+
+            }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
     }
 
 
@@ -3251,6 +3332,8 @@ class DKCustomerRepository {
 //        if($item->sale_result != 1) return response_error([],"请先接单！");
         if($item->customer_id != $me->customer_id) return response_error([],"该【话单】不是你的！");
 
+
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -3263,10 +3346,26 @@ class DKCustomerRepository {
             else
             {
                 $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
-//                $customer_u->funds_obligation_total -= $customer_u->cooperative_unit_price_of_telephone;  // 冻结金额
-                $customer_u->funds_consumption_total += $customer_u->cooperative_unit_price_of_telephone;  // 消费金额
+                $cooperative_unit_price = $customer_u->cooperative_unit_price_of_telephone;  // 单价
+//                $customer_u->funds_obligation_total -= $cooperative_unit_price;  // 冻结金额
+                $customer_u->funds_consumption_total += $cooperative_unit_price;  // 消费金额
                 $bool_customer = $customer_u->save();
                 if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
+
+
+                $using = new DK_Choice_Funds_Using;
+
+                $using_data["finance_object"] = 77;
+                $using_data["finance_category"] = 1;
+                $using_data["finance_type"] = 1;
+                $using_data["creator_id"] = $me->id;
+                $using_data["customer_staff_id"] = $me->id;
+                $using_data["customer_id"] = $me->customer_id;
+                $using_data["telephone_id"] = $id;
+                $using_data["transaction_amount"] = $cooperative_unit_price;
+
+                $bool_u = $using->fill($using_data)->save();
+                if(!$bool_u) throw new Exception("DK_Choice_Funds_Using--insert--fail");
 
 
                 $record = new DK_Choice_Record;
@@ -3280,7 +3379,7 @@ class DKCustomerRepository {
                 $record_data["customer_id"] = $me->customer_id;
                 $record_data["telephone_id"] = $id;
                 $record_data["operate_object"] = 21;
-                $record_data["operate_category"] = 88;
+                $record_data["operate_category"] = 77;
                 $record_data["operate_type"] = 1;
 
                 $bool_r = $record->fill($record_data)->save();
@@ -3532,11 +3631,11 @@ class DKCustomerRepository {
 
 
         // 项目
-        if(isset($post_data['project']))
+        if(isset($post_data['staff']))
         {
-            if(!in_array($post_data['project'],[-1]))
+            if(!in_array($post_data['staff'],[-1]))
             {
-                $query->where('project_id', $post_data['project']);
+                $query->where('customer_staff_id', $post_data['staff']);
             }
         }
 
@@ -4604,8 +4703,6 @@ class DKCustomerRepository {
 //        }]);
 
 
-
-
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
         if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
@@ -4893,6 +4990,7 @@ class DKCustomerRepository {
 //        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
         $item = DK_Choice_Pivot_Customer_Choice::find($id);
         if(!$item) return response_error([],"该【线索】不存在，刷新页面重试！");
+        if(!in_array($item->sale_type,[1,11,66])) return response_error([],"【线索】类型错误！");
 
         $clue = DK_Choice_Clue::find($item->clue_id);
         if(!$clue) return response_error([],"该【线索源】不存在，刷新页面重试！");
@@ -4914,20 +5012,22 @@ class DKCustomerRepository {
                 $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
                 if($item->sale_type == 1)
                 {
-
-                    $customer_u->funds_obligation_total -= $customer_u->cooperative_unit_price_1;
-                    $customer_u->funds_consumption_total += $customer_u->cooperative_unit_price_1;
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_1;
                 }
                 else if($item->sale_type == 11)
                 {
-                    $customer_u->funds_obligation_total -= $customer_u->cooperative_unit_price_2;
-                    $customer_u->funds_consumption_total += $customer_u->cooperative_unit_price_2;
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_2;
                 }
                 else if($item->sale_type == 66)
                 {
-                    $customer_u->funds_obligation_total -= $customer_u->cooperative_unit_price_3;
-                    $customer_u->funds_consumption_total += $customer_u->cooperative_unit_price_3;
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_3;
                 }
+                else
+                {
+                    $cooperative_unit_price = 0;
+                }
+                $customer_u->funds_obligation_total -= $cooperative_unit_price;
+                $customer_u->funds_consumption_total += $cooperative_unit_price;
                 $bool_customer = $customer_u->save();
                 if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
 
@@ -4935,6 +5035,21 @@ class DKCustomerRepository {
                 $clue->sale_result = 9;
                 $bool_clue = $clue->save();
                 if(!$bool_clue) throw new Exception("DK_Choice_Clue--update--fail");
+
+
+                $using = new DK_Choice_Funds_Using;
+
+                $using_data["finance_object"] = 71;
+                $using_data["finance_category"] = 1;
+                $using_data["finance_type"] = 1;
+                $using_data["creator_id"] = $me->id;
+                $using_data["customer_staff_id"] = $me->id;
+                $using_data["customer_id"] = $me->customer_id;
+                $using_data["clue_id"] = $id;
+                $using_data["transaction_amount"] = $cooperative_unit_price;
+
+                $bool_u = $using->fill($using_data)->save();
+                if(!$bool_u) throw new Exception("DK_Choice_Funds_Using--insert--fail");
 
 
                 $record = new DK_Choice_Record;
@@ -8372,7 +8487,161 @@ class DKCustomerRepository {
     /*
      * Finance 财务
      */
-    // 【财务】返回-列表-视图
+
+
+    // 【财务】【充值】返回-列表-视图
+    public function view_finance_funds_recharge_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_finance_funds_recharge_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.finance.funds-recharge-list';
+        return view($view_blade)->with($return);
+    }
+    // 【财务】【充值】返回-列表-数据
+    public function get_finance_funds_recharge_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Choice_Funds_Recharge::select('*')
+            ->with(['creator'])
+            ->where(['customer_id'=>$me->customer_id]);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        if(!empty($post_data['type']))
+        {
+            if($post_data['type'] == "income")
+            {
+                $query->where('finance_type', 1);
+            }
+            else if($post_data['type'] == "refund")
+            {
+                $query->where('finance_type', 21);
+            }
+        }
+
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,21]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【财务】【结算】返回-列表-视图
+    public function view_finance_funds_using_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff_list = DK_Customer_User::select('id','username')->where('user_category',11)->whereIn('user_type',[11,81,84,88])->get();
+
+        $return['staff_list'] = $staff_list;
+        $return['menu_active_of_finance_funds_using_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.finance.funds-using-list';
+        return view($view_blade)->with($return);
+    }
+    // 【财务】【结算】返回-列表-数据
+    public function get_finance_funds_using_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Choice_Funds_Using::select('*')
+            ->with(['creator','clue_er'])
+            ->where('customer_id',$me->customer_id);
+
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        if(!empty($post_data['type']))
+        {
+            if($post_data['type'] == "income")
+            {
+                $query->where('finance_type', 1);
+            }
+            else if($post_data['type'] == "refund")
+            {
+                $query->where('finance_type', 21);
+            }
+        }
+
+        if(!empty($post_data['finance_type']))
+        {
+            if(in_array($post_data['finance_type'],[1,21]))
+            {
+                $query->where('finance_type', $post_data['finance_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【财务】【日报】返回-列表-视图
     public function view_finance_daily_list($post_data)
     {
         $this->get_me();
@@ -8448,7 +8717,7 @@ class DKCustomerRepository {
 
 //        dd($view_data);
 
-        
+
         $view_data['menu_active_of_finance_daily_list'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.finance.daily-list';
@@ -8460,36 +8729,21 @@ class DKCustomerRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_Customer_Finance_Daily::select('*')
-//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
-            ->with(['creator'])
-            ->where('client_id',$me->client_id);
-//            ->whereIn('user_category',[11])
-//            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
-//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
-//            ->withCount([
-//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
-//                'fans'=>function ($query) { $query->rderwhere('usergroup','Service'); }
-//            ]);
-//            ->where(['userstatus'=>'正常','status'=>1])
-//            ->whereIn('usergroup',['Agent','Agent2']);
-
-//        $me->load(['subordinate_er' => function ($query) {
-//            $query->select('id');
-//        }]);
+        $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
 
-        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
-        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
-        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
-        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-
-//        if(!empty($post_data['assign'])) $query->whereDate("assign_date", $post_data['assign']);
-//        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
-//        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
-
+        // 团队统计
+        $query_for_using = DK_Choice_Funds_Using::select('created_at')
+            ->addSelect(DB::raw("
+                    DATE(FROM_UNIXTIME(created_at)) as formatted_date,
+                    count(*) as total_of_daily_count,
+                    sum(transaction_amount) as total_of_daily_cost
+                "))
+            ->where('customer_id',$me->customer_id)
+            ->groupBy(DB::raw("DATE(FROM_UNIXTIME(created_at))"));
+//            ->get()
+//            ->keyBy(DB::raw("DATE(FROM_UNIXTIME(created_at))"))
+//            ->toArray();
 
         if(!empty($post_data['time_type']))
         {
@@ -8501,7 +8755,8 @@ class DKCustomerRepository {
                     $month_arr = explode('-', $post_data['month']);
                     $month_year = $month_arr[0];
                     $month_month = $month_arr[1];
-                    $query->whereYear("assign_date", $month_year)->whereMonth("assign_date", $month_month);
+                    $query_for_using->whereYear(DB::raw("DATE(FROM_UNIXTIME(created_at))"), $month_year)
+                        ->whereMonth(DB::raw("DATE(FROM_UNIXTIME(created_at))"), $month_month);
                 }
             }
             else if($post_data['time_type'] == "date")
@@ -8509,55 +8764,20 @@ class DKCustomerRepository {
                 // 指定日期
                 if(!empty($post_data['date']))
                 {
-                    $query->whereDate("assign_date", $post_data['date']);
+                    $query_for_using->whereDate(DB::raw("DATE(FROM_UNIXTIME(created_at))"), $post_data['date']);
                 }
             }
             else if($post_data['time_type'] == "period")
             {
-                if(!empty($post_data['assign_start']))
-                {
-                    $query->whereDate("assign_date", ">=", $post_data['assign_start']);
-                }
-                if(!empty($post_data['assign_ended']))
-                {
-                    $query->whereDate("assign_date", "<=", $post_data['assign_ended']);
-                }
+                $query_for_using->where(function ($query1) use($post_data) {
+                    $query1->whereDate(DB::raw("DATE(FROM_UNIXTIME(created_at))"), '>=', $post_data['assign_start'])
+                        ->whereDate(DB::raw("DATE(FROM_UNIXTIME(created_at))"), '<=', $post_data['assign_ended']);
+
+                });
             }
             else
             {}
         }
-
-
-        // 统计
-        $daily_total = (clone $query)->select(DB::raw("
-                    sum(delivery_quantity) as total_of_delivery_quantity,
-                    sum(delivery_quantity_of_invalid) as total_of_delivery_quantity_of_invalid,
-                    sum(total_daily_cost) as total_of_total_daily_cost
-                "))
-            ->first();
-//        dd($daily_total->toArray());
-//        $daily_total = $daily_total[0];
-
-
-        $total_data = [];
-        $total_data['id'] = '合计';
-        $total_data['name'] = '--';
-        $total_data['assign_date'] = '--';
-        $total_data['creator_id'] = 0;
-        $total_data['channel_id'] = 0;
-
-        $total_data['delivery_quantity'] = $daily_total->total_of_delivery_quantity;
-        $total_data['delivery_quantity_of_invalid'] = $daily_total->total_of_delivery_quantity_of_invalid;
-        $total_data['cooperative_unit_price'] = '--';
-
-        $total_data['total_daily_cost'] = $daily_total->total_of_total_daily_cost;
-
-
-        $total_data['created_at'] = "--";
-        $total_data['description'] = "--";
-
-
-        $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
@@ -8571,34 +8791,34 @@ class DKCustomerRepository {
             $order_dir = $order['dir'];
 
             $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
+            $query_for_using->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "desc");
+        else $query_for_using->orderBy("formatted_date", "desc");
 
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->get();
+        if($limit == -1) $list = $query_for_using->get();
+        else $list = $query_for_using->skip($skip)->take($limit)->get();
+        $total = count($list);
+
+
+
+        $total_data = [];
+        $total_data['formatted_date'] = '统计';
+
+        $total_data['total_of_daily_count'] = 0;
+        $total_data['total_of_daily_cost'] = 0;
 
         foreach ($list as $k => $v)
         {
-            if($v->creator_id == $me->id)
-            {
-                $list[$k]->is_me = 1;
-                $v->is_me = 1;
-            }
-            else
-            {
-                $list[$k]->is_me = 0;
-                $v->is_me = 0;
-            }
-        }
-//        dd($list->toArray());
 
+            $total_data['total_of_daily_count'] += $v->total_of_daily_count;
+            $total_data['total_of_daily_cost'] += $v->total_of_daily_cost;
+        }
         $list[] = $total_data;
 
+
         return datatable_response($list, $draw, $total);
+
     }
-
-
 
 
 

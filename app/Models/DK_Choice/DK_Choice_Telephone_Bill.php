@@ -148,6 +148,12 @@ class DK_Choice_Telephone_Bill extends Model
         return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Customer','customer_id','id');
     }
 
+    // 客户员工
+    function customer_staff_er()
+    {
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','customer_staff_id','id');
+    }
+
 
 
 

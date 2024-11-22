@@ -790,7 +790,7 @@
                         render: function(data, type, row, meta) {
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">未上架</small>';
-                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">一般</small>';
+                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">普通</small>';
                             else if(data == 11) $result_html = '<small class="btn-xs bg-green">优选</small>';
                             else if(data == 66) $result_html = '<small class="btn-xs bg-yellow">独享</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';
