@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '员工列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '员工列表' }} - 自选系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')员工列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')<b>{{ $title_text or '员工列表' }}</b>@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -19,27 +19,6 @@
     <div class="col-md-12">
         <!-- BEGIN PORTLET-->
         <div class="box box-info">
-
-            <div class="box-header with-border" style="margin:4px 0;">
-                <h3 class="box-title">员工列表</h3>
-
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/user/staff-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加员工</button>
-                    </a>
-                </div>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-            </div>
 
             <div class="box-body datatable-body item-main-body" id="item-main-body">
 
@@ -79,6 +58,9 @@
                         <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
+                        <a href="{{ url('/user/staff-create') }}">
+                            <button type="button" onclick="" class="btn btn-success pull-right" style="width:120px;"><i class="fa fa-plus"></i> 添加员工</button>
+                        </a>
 
                     </div>
                 </div>
@@ -98,7 +80,7 @@
 
             </div>
 
-            <div class="box-footer">
+            <div class="box-footer _none">
                 <div class="row" style="margin:16px 0;">
                     <div class="col-md-offset-0 col-md-9">
                         <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
@@ -202,6 +184,7 @@
 
                     },
                 },
+                "sDom": '<i><l><p><t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,

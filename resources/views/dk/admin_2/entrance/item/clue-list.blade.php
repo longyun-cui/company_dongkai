@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '线索列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '线索列表' }} - 自选系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')线索列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')<b>{{ $title_text or '线索列表' }}</b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -1121,11 +1121,12 @@
 
                     },
                 },
+                "sDom": '<i><l><p><t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": ($(document).height() - 448)+"px",
+                "scrollY": ($(document).height() - 360)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
 

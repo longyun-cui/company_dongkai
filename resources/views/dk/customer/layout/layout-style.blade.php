@@ -23,4 +23,14 @@
             margin-left: 120px;
         }
     }
+
+    .dataTables_wrapper {
+        /*display: flex;*/
+        /*flex-direction: column;*/
+    }
+    .dataTables_scroll { width:100%; }
+    .dataTables_info { margin-right:16px; float:left; }
+    .dataTables_length { float:left; }
+    .dataTables_paginate { float:right; }
+
 </style>

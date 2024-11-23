@@ -62,14 +62,14 @@
 {{--                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="telephone-delivered_date" placeholder="交付日期" value="" readonly="readonly" style="width:100px;text-align:center;" />--}}
 
 
-                        <select class="form-control form-filter select2-box telephone-select2-project" name="telephone-project" style="width:120px;">
-                            @if($project_id > 0)
-                                <option value="-1">选择项目</option>
-                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
-                            @else
-                                <option value="-1">选择项目</option>
-                            @endif
-                        </select>
+{{--                        <select class="form-control form-filter select2-box telephone-select2-project" name="telephone-project" style="width:120px;">--}}
+{{--                            @if($project_id > 0)--}}
+{{--                                <option value="-1">选择项目</option>--}}
+{{--                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>--}}
+{{--                            @else--}}
+{{--                                <option value="-1">选择项目</option>--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
 
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
                             <select class="form-control form-filter select2-box telephone-select2-customer" name="telephone-customer" style="width:160px;">
@@ -80,40 +80,39 @@
                             </select>
                         @endif
 
-                        <select class="form-control form-filter" name="telephone-delivered-status" style="width:100px;">
-                            <option value="-1">交付状态</option>
-                            <option value="待交付" @if("待交付" == $delivered_status) selected="selected" @endif>待交付</option>
+{{--                        <select class="form-control form-filter select2-box _none" name="telephone-sale-status" data-placeholder="选择销售状态" style="width:100px;">--}}
+{{--                            <option value="-1">销售状态</option>--}}
+{{--                            <option value="待交付" @if("待交付" == $delivered_status) selected="selected" @endif>待交付</option>--}}
 {{--                            <option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
-                            <option value="已操作" @if("已操作" == $delivered_status) selected="selected" @endif>已操作</option>
+{{--                            <option value="已操作" @if("已操作" == $delivered_status) selected="selected" @endif>已操作</option>--}}
+{{--                        </select>--}}
+
+                        <select class="form-control form-filter select2-box" name="telephone-sale-result" data-placeholder="选择销售结果" style="width:100px;">
+                            <option value="-1">销售结果</option>
+                            <option value="0">待销售</option>
+                            <option value="9">已销售</option>
                         </select>
 
-                        <select class="form-control form-filter select2-box" name="telephone-delivered-result[]" multiple="multiple" style="width:100px;">
-                            <option value="-1">交付结果</option>
-                            @foreach(config('info.delivered_result') as $v)
-                                <option value="{{ $v }}">{{ $v }}</option>
-                            @endforeach
-                        </select>
-
-                        <input type="text" class="form-control form-filter filter-keyup" name="telephone-customer-name" placeholder="客户姓名" value="{{ $customer_name or '' }}" style="width:88px;" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="telephone-customer-phone" placeholder="客户电话" value="{{ $customer_phone or '' }}" style="width:88px;" />
+{{--                        <input type="text" class="form-control form-filter filter-keyup" name="telephone-customer-name" placeholder="客户姓名" value="{{ $customer_name or '' }}" style="width:88px;" />--}}
+{{--                        <input type="text" class="form-control form-filter filter-keyup" name="telephone-customer-phone" placeholder="客户电话" value="{{ $customer_phone or '' }}" style="width:88px;" />--}}
 
 
-                        <select class="form-control form-filter select2-box select2-district-city" name="telephone-city" id="telephone-city" data-target="#telephone-district" style="width:120px;height:100%;">
-                            <option value="-1">选择城市</option>
-                            @if(!empty($district_city_list) && count($district_city_list) > 0)
-                            @foreach($district_city_list as $v)
-                                <option value="{{ $v->district_city }}" @if($district_city == $v->district_city) selected="selected" @endif>{{ $v->district_city }}</option>
-                            @endforeach
-                            @endif
-                        </select>
-                        <select class="form-control form-filter select2-box select2-district-district" name="telephone-district[]" id="telephone-district" data-target="telephone-city" multiple="multiple" placeholder="选择区域" style="width:160px;">
-                            <option value="-1">选择区域</option>
-                            @if(!empty($district_district_list) && count($district_district_list) > 0)
-                            @foreach($district_district_list as $v)
-                                <option value="{{ $v }}" @if($district_district == $v) selected="selected" @endif>{{ $v }}</option>
-                            @endforeach
-                            @endif
-                        </select>
+{{--                        <select class="form-control form-filter select2-box select2-district-city" name="telephone-city" id="telephone-city" data-target="#telephone-district" style="width:120px;height:100%;">--}}
+{{--                            <option value="-1">选择城市</option>--}}
+{{--                            @if(!empty($district_city_list) && count($district_city_list) > 0)--}}
+{{--                            @foreach($district_city_list as $v)--}}
+{{--                                <option value="{{ $v->district_city }}" @if($district_city == $v->district_city) selected="selected" @endif>{{ $v->district_city }}</option>--}}
+{{--                            @endforeach--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
+{{--                        <select class="form-control form-filter select2-box select2-district-district" name="telephone-district[]" id="telephone-district" data-target="telephone-city" multiple="multiple" placeholder="选择区域" style="width:160px;">--}}
+{{--                            <option value="-1">选择区域</option>--}}
+{{--                            @if(!empty($district_district_list) && count($district_district_list) > 0)--}}
+{{--                            @foreach($district_district_list as $v)--}}
+{{--                                <option value="{{ $v }}" @if($district_district == $v) selected="selected" @endif>{{ $v }}</option>--}}
+{{--                            @endforeach--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
 
 {{--                        <select class="form-control form-filter" name="telephone-is-wx" style="width:88px;">--}}
 {{--                            <option value="-1">是否+V</option>--}}
@@ -143,34 +142,8 @@
                         </button>
 
 
-                        <div class="pull-left clear-both">
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="tableArea">
-                <table class='table table-striped table-bordered table-hover telephone-column' id='datatable_ajax'>
-                    <thead>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
-                </div>
-
-            </div>
-
-
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-            <div class="box-footer" style="padding:4px 10px;">
-                <div class="row" style="margin:2px 0;">
-                    <div class="col-md-offset-0 col-md-6 col-sm-6 col-xs-12">
-                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
-                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
                         <div class="input-group">
-                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
+                            <span class="input-group-addon" style="width:40px;"><input type="checkbox" id="check-review-all" style="width:40px;"></span>
 
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
 
@@ -195,19 +168,24 @@
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-put-on-shelf"><i class="fa fa-share"></i> 批量上架</span>
                         </div>
+
+                        <div class="pull-left clear-both">
+                        </div>
+
                     </div>
                 </div>
-            </div>
-            @endif
 
-
-            <div class="box-footer _none">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-9">
-                        <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>
-                    </div>
+                <div class="tableArea">
+                <table class='table table-striped table-bordered table-hover telephone-column' id='datatable_ajax'>
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
                 </div>
+
             </div>
 
         </div>
@@ -1101,11 +1079,12 @@
 
                     },
                 },
+                "sDom": '<i><l><p><t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": ($(document).height() - 448)+"px",
+                "scrollY": ($(document).height() - 380)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
 
@@ -1151,7 +1130,7 @@
                         "title": "操作",
                         "data": 'id',
                         "className": "",
-                        "width": "120px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -1256,21 +1235,6 @@
                                 $html_publish = '';
                             }
 
-                            var $more_html =
-                                '<div class="btn-group">'+
-                                '<button type="button" class="btn btn-xs btn-success" style="padding:2px 8px; margin-right:0;">操作</button>'+
-                                '<button type="button" class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="padding:2px 6px; margin-left:-1px;">'+
-                                '<span class="caret"></span>'+
-                                '<span class="sr-only">Toggle Dropdown</span>'+
-                                '</button>'+
-                                '<ul class="dropdown-menu" role="menu">'+
-                                '<li><a href="#">Action</a></li>'+
-                                '<li><a href="#">删除</a></li>'+
-                                '<li><a href="#">弃用</a></li>'+
-                                '<li class="divider"></li>'+
-                                '<li><a href="#">Separate</a></li>'+
-                                '</ul>'+
-                                '</div>';
 
                             var $html =
 //                                    $html_able+
@@ -1281,7 +1245,7 @@
                                 // $html_detail+
                                 $html_detail_inspected+
                                 $html_push+
-                                $html_put_on_or_off+
+                                // $html_put_on_or_off+
                                 $html_deliver+
                                 // $html_distribute+
                                 // $html_delete+
@@ -1295,48 +1259,48 @@
 
                         }
                     },
-                    {
-                        "title": "销售状态",
-                        "data": "item_status",
-                        "className": "",
-                        "width": "72px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            var $result_html = '';
-                            if(data == 0) $result_html = '<small class="btn-xs bg-teal">待上架</small>';
-                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">已上架</small>';
-                            else if(data == 9) $result_html = '<small class="btn-xs bg-black">已下架</small>';
-                            else $result_html = '<small class="btn-xs bg-black">error</small>';
-                            return $result_html;
-                        }
-                    },
-                    {
-                        "title": "销售类型",
-                        "data": "item_type",
-                        "className": "",
-                        "width": "72px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            var $result_html = '';
-                            if(data == 0) $result_html = '<small class="btn-xs bg-teal">未上架</small>';
-                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">一般</small>';
-                            else if(data == 11) $result_html = '<small class="btn-xs bg-green">优选</small>';
-                            else if(data == 66) $result_html = '<small class="btn-xs bg-yellow">独享</small>';
-                            else $result_html = '<small class="btn-xs bg-black">error</small>';
-                            return $result_html;
-                        }
-                    },
+                    // {
+                    //     "title": "销售状态",
+                    //     "data": "sale_status",
+                    //     "className": "",
+                    //     "width": "72px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         var $result_html = '';
+                    //         if(data == 0) $result_html = '<small class="btn-xs bg-teal">待上架</small>';
+                    //         else if(data == 1) $result_html = '<small class="btn-xs bg-blue">已上架</small>';
+                    //         else if(data == 9) $result_html = '<small class="btn-xs bg-black">已下架</small>';
+                    //         else $result_html = '<small class="btn-xs bg-black">error</small>';
+                    //         return $result_html;
+                    //     }
+                    // },
+                    // {
+                    //     "title": "销售类型",
+                    //     "data": "sale_type",
+                    //     "className": "",
+                    //     "width": "72px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         var $result_html = '';
+                    //         if(data == 0) $result_html = '<small class="btn-xs bg-teal">未上架</small>';
+                    //         else if(data == 1) $result_html = '<small class="btn-xs bg-blue">一般</small>';
+                    //         else if(data == 11) $result_html = '<small class="btn-xs bg-green">优选</small>';
+                    //         else if(data == 66) $result_html = '<small class="btn-xs bg-yellow">独享</small>';
+                    //         else $result_html = '<small class="btn-xs bg-black">error</small>';
+                    //         return $result_html;
+                    //     }
+                    // },
                     {
                         "title": "销售结果",
-                        "data": "item_result",
+                        "data": "sale_result",
                         "className": "",
                         "width": "72px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             var $result_html = '';
-                            if(data == 0) $result_html = '<small class="btn-xs bg-teal">待接单</small>';
+                            if(data == 0) $result_html = '<small class="btn-xs bg-teal">待购买</small>';
                             else if(data == 1) $result_html = '<small class="btn-xs bg-blue">已接单</small>';
-                            else if(data == 9) $result_html = '<small class="btn-xs bg-yellow">已成单</small>';
+                            else if(data == 9) $result_html = '<small class="btn-xs bg-yellow">已购买</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';
                             return $result_html;
                         }
@@ -1371,6 +1335,26 @@
                             else {
                                 return '<a href="javascript:void(0);">'+row.customer_er.username+'</a>';
                             }
+                        }
+                    },
+                    {
+                        "title": "拨号次数",
+                        "data": "call_num",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "最近拨打时间",
+                        "data": "last_call_time",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
                         }
                     },
                     {

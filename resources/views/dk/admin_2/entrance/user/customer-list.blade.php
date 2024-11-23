@@ -68,7 +68,7 @@
 
             </div>
 
-            <div class="box-footer">
+            <div class="box-footer _none">
                 <div class="row" style="margin:16px 0;">
                     <div class="col-md-offset-0 col-md-9">
                         <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
@@ -859,6 +859,7 @@
 
                     },
                 },
+                "sDom": '<i><l><p><t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,

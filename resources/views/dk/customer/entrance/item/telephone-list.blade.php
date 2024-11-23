@@ -843,6 +843,7 @@
 
     .select2-container--classic .select2-selection--multiple  { height:34px; btelephone-radius:0; }
 
+
     .bg-fee-2 { background:#C3FAF7; }
     .bg-fee { background:#8FEBE5; }
     .bg-deduction { background:#C3FAF7; }
@@ -913,6 +914,7 @@
 
                     },
                 },
+                "sDom": '<i><l><p><t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,

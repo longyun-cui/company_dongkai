@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '上架列表' }} - 录单系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '上架列表' }} - 自选系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')上架列表 - 录单系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')<b>{{ $title_text or '上架列表' }}</b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -17,21 +17,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
-
-            <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
-
-                <h3 class="box-title">上架列表</h3>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
-            </div>
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-choice-list">
@@ -558,11 +543,12 @@
 
                     },
                 },
+                "sDom": '<i><l><p><t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": ($(document).height() - 448)+"px",
+                "scrollY": ($(document).height() - 360)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",

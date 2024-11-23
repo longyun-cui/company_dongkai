@@ -26,9 +26,6 @@
                 <div class="caption pull-right">
                     <i class="icon-pin font-blue"></i>
                     <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/district/district-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加城市</button>
-                    </a>
                 </div>
                 @endif
 
@@ -70,6 +67,24 @@
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
 
+
+                        <a href="{{ url('/district/district-create') }}">
+                            <button type="button" onclick="" class="btn btn-default pull-right" style="width:120px;"><i class="fa fa-plus"></i> 添加城市</button>
+                        </a>
+
+                        <div class="input-group _none">
+                            <span class="input-group-addon"><input type="checkbox" id="check-review-all" style="width:40px;"></span>
+                            <select name="bulk-operate-status" class="form-control form-filter">
+                                <option value ="-1">请选择操作类型</option>
+                                <option value ="启用">启用</option>
+                                <option value ="禁用">禁用</option>
+                                <option value ="删除">删除</option>
+                                <option value ="彻底删除">彻底删除</option>
+                            </select>
+                            <span class="input-group-addon btn btn-default" id="operate-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
+                            <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
+                        </div>
+
                     </div>
                 </div>
 
@@ -84,38 +99,6 @@
                 </table>
                 </div>
 
-            </div>
-
-
-            <div class="box-footer">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
-                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
-                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
-                        <div class="input-group">
-                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
-                            <select name="bulk-operate-status" class="form-control form-filter">
-                                <option value ="-1">请选择操作类型</option>
-                                <option value ="启用">启用</option>
-                                <option value ="禁用">禁用</option>
-                                <option value ="删除">删除</option>
-                                <option value ="彻底删除">彻底删除</option>
-                            </select>
-                            <span class="input-group-addon btn btn-default" id="operate-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
-                            <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="box-footer _none">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-9">
-                        <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>
-                    </div>
-                </div>
             </div>
 
         </div>
@@ -606,6 +589,7 @@
                         d.item_status = $('select[name="district-status"]').val();
                     },
                 },
+                "sDom": '<i><l><p><t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,

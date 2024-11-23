@@ -2557,7 +2557,8 @@
 
 
         $('.select2-box').select2({
-            theme: 'classic'
+            theme: 'classic',
+            placeholder: $(this).attr('data-placeholder')
         });
 
 

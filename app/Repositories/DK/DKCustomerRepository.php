@@ -3611,7 +3611,7 @@ class DKCustomerRepository {
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->where('customer_id',$me->customer_id)
             ->where('sale_result',9)
-            ->with([]);
+            ->with(['customer_staff_er']);
 
 
 

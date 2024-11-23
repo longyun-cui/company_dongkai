@@ -775,6 +775,7 @@
 
                     },
                 },
+                "sDom": '<i><l><p><t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
@@ -945,6 +946,32 @@
                             else if(data == 9) $result_html = '<small class="btn-xs bg-yellow">已购买</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';
                             return $result_html;
+                        }
+                    },
+                    {
+                        "title": "分派员工",
+                        "data": "customer_staff_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('customer_staff');
+                                $(nTd).attr('data-id',row.id).attr('data-name','分派员工');
+                                $(nTd).attr('data-key','customer_staff_id').attr('data-value',row.id);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.customer_staff_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.customer_staff_er.username+'</a>';
+                            }
                         }
                     },
                     {
