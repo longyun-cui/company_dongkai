@@ -138,17 +138,17 @@
 
             <li class="treeview {{ $menu_active_of_finance_funds_recharge_list or '' }}">
                 <a href="{{ url('/finance/funds-recharge-list') }}">
-                    <i class="fa fa-pie-chart text-orange"></i> <span>充值记录</span>
+                    <i class="fa fa-pie-chart text-green"></i> <span>充值记录</span>
                 </a>
             </li>
             <li class="treeview {{ $menu_active_of_finance_funds_using_list or '' }}">
                 <a href="{{ url('/finance/funds-using-list') }}">
-                    <i class="fa fa-pie-chart text-orange"></i> <span>消费记录</span>
+                    <i class="fa fa-pie-chart text-green"></i> <span>消费记录</span>
                 </a>
             </li>
             <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
                 <a href="{{ url('/finance/finance-daily-list') }}">
-                    <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
+                    <i class="fa fa-pie-chart text-green"></i> <span>财务日报</span>
                 </a>
             </li>
 

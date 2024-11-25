@@ -786,7 +786,7 @@
 
                     },
                 },
-                "sDom": '<i><l><p><t>',
+                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,

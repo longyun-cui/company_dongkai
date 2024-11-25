@@ -5,6 +5,15 @@
     padding-left:0; padding-right:0; margin-left:0; margin-right:0;
 }
 
+.dataTables_wrapper {
+    /*display: flex;*/
+    /*flex-direction: column;*/
+}
+.dataTables_scroll { width:100%; }
+.dataTables_info_box { margin-right:16px; float:left; }
+.dataTables_length_box { margin-right:16px; float:left; }
+.dataTables_paginate_box { margin-right:16px; float:right; }
+
 .datatable-body * { font-size:12px; }
 .datatable-body .btn-xs { padding:1px 2px; }
 
