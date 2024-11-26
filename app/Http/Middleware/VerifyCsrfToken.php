@@ -16,6 +16,6 @@ class VerifyCsrfToken extends Middleware
         'email/*',
         'testing/*',
         'api/receive/*',
-        'api/okcc/*'
+        'choice_api/okcc/*'
     ];
 }
