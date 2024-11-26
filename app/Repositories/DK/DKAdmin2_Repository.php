@@ -1044,7 +1044,7 @@ class DKAdmin2_Repository {
                 // 客户管理员存在
 
                 // 判断电话是否重复
-                $is_mobile_exist = DK_Customer_User::select('id')->where('id','<>',$customer->admin_id)->where('mobile',$post_data["customer_admin_mobile"])->count();
+                $is_mobile_exist = DK_Customer_User::select('id')->where('id','<>',$customer->customer_admin_id)->where('mobile',$post_data["customer_admin_mobile"])->count();
                 if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
 
                 $customer_staff_data["username"] = $post_data["customer_admin_name"];
