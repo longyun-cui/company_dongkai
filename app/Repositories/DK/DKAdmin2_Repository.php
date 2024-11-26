@@ -1057,7 +1057,7 @@ class DKAdmin2_Repository {
 
                 // 判断电话是否重复
                 $is_mobile_exist = DK_Customer_User::select('id')->where('mobile',$post_data["customer_admin_mobile"])->count();
-                if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
+                if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话啊！");
 
                 $customer_staff = new DK_Customer_User;
                 $customer_staff_data["user_category"] = 11;
