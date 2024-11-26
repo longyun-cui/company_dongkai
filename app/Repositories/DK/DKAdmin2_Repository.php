@@ -19868,7 +19868,8 @@ class DKAdmin2_Repository {
 
         $userData = $post_data['notify']['userData'];
         $seq = $post_data['notify']['seq'];
-        if($userData == 'calling')
+//        if($userData == 'calling')
+        if(true)
         {
             $call_data = $post_data['notify'];
 
@@ -19895,12 +19896,15 @@ class DKAdmin2_Repository {
             try
             {
                 $bool_c = $call->fill($post_data['notify'])->save();
-                if(!$bool_c) throw new Exception("DK_Choice_Call_Record--insert--fail");
+                if(!$bool_c) throw new Exception("DK_Choice_Call_Record--fail--fail");
 
                 DB::commit();
                 $return['result']['error'] = 0;
                 $return['result']['msg'] = '';
-                return response_fail(json_encode($return));
+                return json_decode(json_encode($return));
+//                return response()->json($return);
+//                return response_success(json_encode($return));
+
             }
             catch (Exception $e)
             {
@@ -19912,7 +19916,7 @@ class DKAdmin2_Repository {
 
                 $return['result']['error'] = 1;
                 $return['result']['msg'] = $msg;
-                return response_fail(json_encode($return));
+                return json_decode(json_encode($return));
             }
         }
 
