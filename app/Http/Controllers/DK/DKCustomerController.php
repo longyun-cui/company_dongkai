@@ -449,7 +449,7 @@ class DKCustomerController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_item_telephone_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_item_telephone_modify_record_datatable(request()->all());
     }
-    // 【订单】批量-分派
+    // 【话单】批量-分派
     public function operate_item_telephone_bulk_assign_staff()
     {
         return $this->repo->operate_item_telephone_bulk_assign_staff(request()->all());
@@ -519,6 +519,11 @@ class DKCustomerController extends Controller
     {
         if(request()->isMethod('get')) return $this->repo->view_mine_clue_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_mine_clue_modify_record_datatable(request()->all());
+    }
+    // 【线索】批量-分派
+    public function operate_item_clue_bulk_assign_staff()
+    {
+        return $this->repo->operate_item_clue_bulk_assign_staff(request()->all());
     }
     // 【线索】退单
     public function operate_mine_clue_back()

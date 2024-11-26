@@ -2916,7 +2916,7 @@ class DKCustomerRepository {
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
 
-        // 项目
+        // 员工
         if(isset($post_data['staff']))
         {
             if(!in_array($post_data['staff'],[-1]))
@@ -3150,151 +3150,6 @@ class DKCustomerRepository {
             return response_fail([],$msg);
         }
 
-    }
-
-
-    // 【话单】拨号
-    public function operate_item_telephone_call($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => 'item_id.required.',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'telephone-call') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-
-        $this->get_me();
-        $me = $this->me;
-        $customer = $me->customer_er;
-        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
-//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-//        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
-        $item = DK_Choice_Telephone_Bill::find($id);
-        if(!$item) return response_error([],"该【话单】不存在，刷新页面重试！");
-
-        // 启动数据库事务
-        DB::beginTransaction();
-        try
-        {
-            $call = new DK_Choice_Call_Record;
-
-            $call_data["ip"] = Get_IP();
-            $call_data["creator_id"] = $me->id;
-            $call_data["customer_staff_id"] = $me->id;
-            $call_data["customer_id"] = $me->customer_id;
-            $call_data["telephone_id"] = $id;
-            $call_data["telephone"] = $item->telephone;
-
-            $bool_c = $call->fill($call_data)->save();
-            if(!$bool_c) throw new Exception("DK_Choice_Call_Record--insert--fail");
-
-            $item->increment('call_num');
-            $item->last_call_time = date("Y-m-d H:i:s");
-            $bool_i = $item->fill($call_data)->save();
-            if(!$bool_i) throw new Exception("DK_Choice_Telephone_Bill--update--fail");
-
-            DB::commit();
-
-            $request_result = $this->request_okcc($call->id, $item->telephone, 'calling');
-            if($request_result['success'])
-            {
-                $result = json_decode($request_result['result']);
-
-                if($result->result->error == "0")
-                {
-                    $call->call_result = 1;
-                    $call->save();
-
-                    return response_success([],"拨号成功，请接电话！");
-                }
-                else
-                {
-                    $call->call_result_msg = $result->result->msg;
-                    $call->save();
-
-                    return response_error([],$result->result->msg);
-                }
-            }
-            else
-            {
-                return response_error([],"拨号失败！");
-            }
-        }
-        catch (Exception $e)
-        {
-            DB::rollback();
-            $msg = '操作失败，请重试！';
-            $msg = $e->getMessage();
-//            exit($e->getMessage());
-            return response_fail([],$msg);
-        }
-
-    }
-
-    public function request_okcc($id,$telephone,$type='')
-    {
-        $this->get_me();
-        $me = $this->me;
-        $customer = $me->customer_er;
-
-
-        $url = "https://feiniji.cn/openapi/V2.0.6/callNumber";
-
-        $API_ID = $customer->api_id;
-        $API_Password = $customer->api_password;
-        $timestamp = time();
-        $seq = $id;
-        $digest = md5($API_ID.'@'.$timestamp.'@'.$seq.'@'.$API_Password);
-
-        $post_data['authentication']['customer'] = 'C2';
-        $post_data['authentication']['timestamp'] = $timestamp;
-        $post_data['authentication']['seq'] = $id;
-        $post_data['authentication']['digest'] = $digest;
-
-        $post_data['request']['seq'] = $id;
-        $post_data['request']['userData'] = $type;
-        $post_data['request']['caller'] = '';
-        $post_data['request']['callee'] = $telephone;
-        $post_data['request']['agent'] = $me->api_agent_id;
-        $post_data['request']['noUseBlApi'] = 0;
-        $post_data['request']['lineMode'] = '0';
-
-        $post_data = json_encode($post_data);
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true); // post数据
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data); // post的变量
-        $result = curl_exec($ch);
-        if(curl_errno($ch))
-        {
-            $return['success'] = false;
-            $return['msg'] =  "cURL Error: " . curl_error($ch);
-        }
-        else
-        {
-            $return['success'] = true;
-            $return['result'] =  $result;
-        }
-        curl_close($ch);
-        return $return;
     }
     // 【话单】购买
     public function operate_item_telephone_purchase($post_data)
@@ -3726,6 +3581,246 @@ class DKCustomerRepository {
 
 
 
+    // 【话单】拨号
+    public function operate_item_telephone_call($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'telephone-call') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+
+        $this->get_me();
+        $me = $this->me;
+        $customer = $me->customer_er;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+//        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
+        $item = DK_Choice_Telephone_Bill::find($id);
+        if(!$item) return response_error([],"该【话单】不存在，刷新页面重试！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $call = new DK_Choice_Call_Record;
+
+            $call_data["ip"] = Get_IP();
+            $call_data["creator_id"] = $me->id;
+            $call_data["customer_staff_id"] = $me->id;
+            $call_data["customer_id"] = $me->customer_id;
+            $call_data["telephone_id"] = $id;
+            $call_data["telephone"] = $item->telephone;
+
+            $bool_c = $call->fill($call_data)->save();
+            if(!$bool_c) throw new Exception("DK_Choice_Call_Record--insert--fail");
+
+            $item->increment('call_num');
+            $item->last_call_time = date("Y-m-d H:i:s");
+            $bool_i = $item->fill($call_data)->save();
+            if(!$bool_i) throw new Exception("DK_Choice_Telephone_Bill--update--fail");
+
+            DB::commit();
+
+            $request_result = $this->request_okcc($call->id, $item->telephone, 'calling');
+            if($request_result['success'])
+            {
+                $result = json_decode($request_result['result']);
+
+                if($result->result->error == "0")
+                {
+                    $call->call_result = 1;
+                    $call->save();
+
+                    return response_success([],"拨号成功，请接电话！");
+                }
+                else
+                {
+                    $call->call_result_msg = $result->result->msg;
+                    $call->save();
+
+                    return response_error([],$result->result->msg);
+                }
+            }
+            else
+            {
+                return response_error([],"拨号失败！");
+            }
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【api】拨号
+    public function request_okcc($id,$telephone,$type='')
+    {
+        $this->get_me();
+        $me = $this->me;
+        $customer = $me->customer_er;
+
+
+        $url = "https://feiniji.cn/openapi/V2.0.6/callNumber";
+
+        $API_ID = $customer->api_id;
+        $API_Password = $customer->api_password;
+        $timestamp = time();
+        $seq = $id;
+        $digest = md5($API_ID.'@'.$timestamp.'@'.$seq.'@'.$API_Password);
+
+        $post_data['authentication']['customer'] = 'C2';
+        $post_data['authentication']['timestamp'] = $timestamp;
+        $post_data['authentication']['seq'] = $id;
+        $post_data['authentication']['digest'] = $digest;
+
+        $post_data['request']['seq'] = $id;
+        $post_data['request']['userData'] = $type;
+        $post_data['request']['caller'] = '';
+        $post_data['request']['callee'] = $telephone;
+        $post_data['request']['agent'] = $me->api_agent_id;
+        $post_data['request']['noUseBlApi'] = 0;
+        $post_data['request']['lineMode'] = '0';
+
+        $post_data = json_encode($post_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data); // post的变量
+        $result = curl_exec($ch);
+        if(curl_errno($ch))
+        {
+            $return['success'] = false;
+            $return['msg'] =  "cURL Error: " . curl_error($ch);
+        }
+        else
+        {
+            $return['success'] = true;
+            $return['result'] =  $result;
+        }
+        curl_close($ch);
+        return $return;
+    }
+
+    // 【话单】拨号
+    public function operate_item_clue_call($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'telephone-call') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+
+        $this->get_me();
+        $me = $this->me;
+        $customer = $me->customer_er;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+//        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
+        $item = DK_Choice_Clue::find($id);
+        if(!$item) return response_error([],"该【线索】不存在，刷新页面重试！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $call = new DK_Choice_Call_Record;
+
+            $call_data["ip"] = Get_IP();
+            $call_data["creator_id"] = $me->id;
+            $call_data["customer_staff_id"] = $me->id;
+            $call_data["customer_id"] = $me->customer_id;
+            $call_data["clue_id"] = $id;
+            $call_data["telephone"] = $item->telephone;
+
+            $bool_c = $call->fill($call_data)->save();
+            if(!$bool_c) throw new Exception("DK_Choice_Call_Record--insert--fail");
+
+            $item->increment('call_num');
+            $item->last_call_time = date("Y-m-d H:i:s");
+            $bool_i = $item->fill($call_data)->save();
+            if(!$bool_i) throw new Exception("DK_Choice_Telephone_Bill--update--fail");
+
+            DB::commit();
+
+            $request_result = $this->request_okcc($call->id, $item->telephone, 'calling');
+            if($request_result['success'])
+            {
+                $result = json_decode($request_result['result']);
+
+                if($result->result->error == "0")
+                {
+                    $call->call_result = 1;
+                    $call->save();
+
+                    return response_success([],"拨号成功，请接电话！");
+                }
+                else
+                {
+                    $call->call_result_msg = $result->result->msg;
+                    $call->save();
+
+                    return response_error([],$result->result->msg);
+                }
+            }
+            else
+            {
+                return response_error([],"拨号失败！");
+            }
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
 
 
 
@@ -3926,7 +4021,7 @@ class DKCustomerRepository {
         $view_data['staff_list'] = $staff_list;
         $view_data['customer_list'] = $customer_list;
         $view_data['project_list'] = $project_list;
-        $view_data['menu_active_of_item_clue_list_for_'] = 'active menu-open';
+        $view_data['menu_active_of_item_clue_list'] = 'active menu-open';
 
         $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.clue-list';
         return view($view_blade)->with($view_data);
@@ -4687,7 +4782,7 @@ class DKCustomerRepository {
         $query = DK_Choice_Pivot_Customer_Choice::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
             ->where('customer_id',$me->customer_id)
-            ->with(['project_er','clue_er','taker_er','purchaser_er']);
+            ->with(['customer_staff_er','clue_er','taker_er','purchaser_er']);
 //            ->whereIn('user_category',[11])
 //            ->whereIn('user_type',[0,1,9,11,19,21,22,41,61,88]);
 //            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
@@ -4717,12 +4812,12 @@ class DKCustomerRepository {
         if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
 
-        // 项目
-        if(isset($post_data['project']))
+        // 员工
+        if(isset($post_data['staff']))
         {
-            if(!in_array($post_data['project'],[-1]))
+            if(!in_array($post_data['staff'],[-1]))
             {
-                $query->where('project_id', $post_data['project']);
+                $query->where('customer_staff_id', $post_data['staff']);
             }
         }
 
@@ -4868,6 +4963,101 @@ class DKCustomerRepository {
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【话单】批量-分配
+    public function operate_item_clue_bulk_assign_staff($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+            'operate_staff_id.required' => 'operate_staff_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+            'operate_staff_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'clue-assign-staff-bulk') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        $customer_staff_id = $post_data["operate_staff_id"];
+//        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $delivered_para['customer_staff_id'] = $customer_staff_id;
+
+//            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
+//            if(!$bool) throw new Exception("item--update--fail");
+//            else
+//            {
+//            }
+
+            foreach($ids_array as $key => $id)
+            {
+                $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
+                if(!$item) return response_error([],"该【线索】不存在，刷新页面重试！");
+
+
+                $before = $item->customer_staff_id;
+
+                $item->customer_staff_id = $customer_staff_id;
+                $bool = $item->save();
+                if(!$bool) throw new Exception("DK_Choice_Clue--update--fail");
+                else
+                {
+                    $record = new DK_Choice_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["order_id"] = $id;
+                    $record_data["operate_object"] = 91;
+                    $record_data["operate_category"] = 99;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "customer_staff_id";
+
+                    $record_data["before"] = $before;
+                    $record_data["after"] = $customer_staff_id;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("DK_Choice_Record--insert--fail");
+                }
+
+            }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
     }
 
 

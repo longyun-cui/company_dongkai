@@ -43,12 +43,16 @@ class DK_Choice_Customer extends Authenticatable
         'customer_admin_id',
         'customer_admin_name',
         'customer_admin_mobile',
+        'customer_admin_api_agent_id',
 
         'cooperative_unit_price',
         'cooperative_unit_price_1',
         'cooperative_unit_price_2',
         'cooperative_unit_price_3',
         'cooperative_unit_price_of_telephone',
+
+        'call_time_limit_for_clue',
+        'call_time_limit_for_telephone',
 
         'funds_recharge_total',
         'funds_consumption_total',
@@ -103,6 +107,13 @@ class DK_Choice_Customer extends Authenticatable
     function user()
     {
         return $this->belongsTo('App\Models\DK_Choice\DK_Choice_User','user_id','id');
+    }
+
+
+    // 用户
+    function customer_admin_er()
+    {
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','customer_admin_id','id');
     }
 
 

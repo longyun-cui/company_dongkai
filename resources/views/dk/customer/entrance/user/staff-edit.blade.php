@@ -165,9 +165,9 @@
                 </div>
                 {{--坐席ID--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 坐席ID</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 分机号ID</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_agent_id" placeholder="坐席ID" value="{{ $data->api_agent_id or '' }}">
+                        <input type="text" class="form-control" name="api_agent_id" placeholder="分机号ID" value="{{ $data->api_agent_id or '' }}">
                     </div>
                 </div>
                 {{--描述--}}

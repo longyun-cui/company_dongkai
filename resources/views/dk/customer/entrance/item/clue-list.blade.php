@@ -2,14 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '线索列表' }} - 客户系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '线索公海' }} - 客户系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
 @section('header','')
-@section('description')线索公海 - 客户系统 - {{ config('info.info.short_name') }}@endsection
+@section('description')<b>{{ $title_text or '线索公海' }}</b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -699,10 +699,8 @@
                             var $html_edit = '';
                             var $html_follow = '<a class="btn btn-xs bg-blue item-modal-show-for-follow" data-id="'+data+'">客户跟进</a>';
                             var $html_quality = '<a class="btn btn-xs bg-olive item-quality-evaluate-submit" data-id="'+data+'">质量评估</a>';
-                            var $html_take = '<a class="btn btn-xs bg-olive- item-take-submit" data-id="'+data+'">接单</a>';
-                            var $html_detail = '<a class="btn btn-xs bg-olive- item-modal-show-for-detail" data-id="'+data+'">详情</a>';
-
-
+                            var $html_take = '<a class="btn btn-xs bg-olive item-take-submit" data-id="'+data+'">接单</a>';
+                            var $html_detail = '<a class="btn btn-xs bg-blue item-modal-show-for-detail" data-id="'+data+'">详情</a>';
 
 
                             var $html =
@@ -716,28 +714,6 @@
 
                         }
                     },
-                    // {
-                    //     "title": "导出状态",
-                    //     "data": "exported_status",
-                    //     "className": "",
-                    //     "width": "80px",
-                    //     "orderable": false,
-                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                    //         if(row.is_completed != 1 && row.item_status != 97)
-                    //         {
-                    //             $(nTd).addClass('exported_status');
-                    //             $(nTd).attr('data-id',row.id).attr('data-name','导出状态');
-                    //             $(nTd).attr('data-key','exported_status').attr('data-value',row.id);
-                    //             if(data) $(nTd).attr('data-operate-type','edit');
-                    //             else $(nTd).attr('data-operate-type','add');
-                    //         }
-                    //     },
-                    //     render: function(data, type, row, meta) {
-                    //         if(data == 0) return '<small class="btn-xs btn-warning">未导出</small>';
-                    //         else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
-                    //         return data;
-                    //     }
-                    // },
                     // {
                     //     "title": "工单质量",
                     //     "data": "clue_quality",
@@ -777,7 +753,7 @@
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">待接单</small>';
                             else if(data == 1) $result_html = '<small class="btn-xs bg-blue">已接单</small>';
-                            else if(data == 9) $result_html = '<small class="btn-xs bg-yellow">已成单</small>';
+                            else if(data == 9) $result_html = '<small class="btn-xs bg-green">已购买</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';
                             return $result_html;
                         }
@@ -791,9 +767,9 @@
                         render: function(data, type, row, meta) {
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">未上架</small>';
-                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">普通</small>';
-                            else if(data == 11) $result_html = '<small class="btn-xs bg-green">优选</small>';
-                            else if(data == 66) $result_html = '<small class="btn-xs bg-yellow">独享</small>';
+                            else if(data == 1) $result_html = '<small class="btn-xs bg-purple">普通</small>';
+                            else if(data == 11) $result_html = '<small class="btn-xs bg-orange">优选</small>';
+                            else if(data == 66) $result_html = '<small class="btn-xs bg-maroon">独享</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';
                             return $result_html;
                         }
@@ -984,11 +960,11 @@
                         "title": "线索描述",
                         "data": "id",
                         "className": "",
-                        "width": "80px",
+                        "width": "200px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             $(nTd).addClass('description');
-                            $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
+                            $(nTd).attr('data-id',row.id).attr('data-name','线索描述');
                             $(nTd).attr('data-key','description').attr('data-value',row.clue_er.description);
                         },
                         render: function(data, type, row, meta) {

@@ -982,8 +982,9 @@
                             var $html_call = '';
                             var $html_deliver = '';
                             var $html_distribute = '';
+                            var $html_purchase ='';
 
-                            var $html_purchase = '<a class="btn btn-xs bg-blue item-purchase-submit" data-id="'+data+'">购买</a>';
+
 
                             if(row.item_status == 1)
                             {
@@ -992,6 +993,15 @@
                             else
                             {
                                 $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                            }
+
+                            if(row.sale_result == 9)
+                            {
+                                $html_purchase = '<a class="btn btn-xs bg-default disabled" data-id="'+data+'">已买</a>';
+                            }
+                            else
+                            {
+                                $html_purchase = '<a class="btn btn-xs bg-blue item-purchase-submit" data-id="'+data+'">购买</a>';
                             }
 
 
@@ -1026,7 +1036,6 @@
                                 $html_publish = '';
                             }
 
-                            $html_call = '<a class="btn btn-xs bg-green item-call-submit" data-id="'+data+'">拨号</a>';
                             $html_call = '<a class="btn btn-xs bg-green item-call-submit" data-id="'+data+'">拨号</a>';
 
 

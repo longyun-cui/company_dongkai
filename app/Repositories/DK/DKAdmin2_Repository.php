@@ -731,7 +731,7 @@ class DKAdmin2_Repository {
         $me = $this->me;
 
         $query = DK_Choice_Customer::select('*')
-            ->with(['creator'])
+            ->with(['creator','customer_admin_er'])
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,61]);
 
@@ -905,9 +905,15 @@ class DKAdmin2_Repository {
             $view_data['operate'] = 'edit';
             $view_data['operate_id'] = $id;
 
-            $mine = DK_Choice_Customer::with(['parent'])->find($id);
+            $mine = DK_Choice_Customer::with(['customer_admin_er'])->find($id);
             if($mine)
             {
+                if($mine->customer_admin_er)
+                {
+                    $mine->customer_admin_name = $mine->customer_admin_er->username;
+                    $mine->customer_admin_mobile = $mine->customer_admin_er->mobile;
+                    $mine->customer_admin_api_agent_id = $mine->customer_admin_er->api_agent_id;
+                }
                 $view_data['data'] = $mine;
                 return view($view_blade)->with($view_data);
             }
@@ -975,6 +981,8 @@ class DKAdmin2_Repository {
             $customer_data["cooperative_unit_price_2"] = $post_data["cooperative_unit_price_2"];
             $customer_data["cooperative_unit_price_3"] = $post_data["cooperative_unit_price_3"];
             $customer_data["cooperative_unit_price_of_telephone"] = $post_data["cooperative_unit_price_of_telephone"];
+            $customer_data["call_time_limit_for_clue"] = $post_data["call_time_limit_for_clue"];
+            $customer_data["call_time_limit_for_telephone"] = $post_data["call_time_limit_for_telephone"];
             $customer_data["api_id"] = $post_data["api_id"];
             $customer_data["api_password"] = $post_data["api_password"];
             $customer_data["is_ip"] = $post_data["is_ip"];
@@ -993,6 +1001,7 @@ class DKAdmin2_Repository {
             $customer_staff_data["active"] = 1;
             $customer_staff_data["username"] = $post_data["customer_admin_name"];
             $customer_staff_data["mobile"] = $post_data["customer_admin_mobile"];
+            $customer_staff_data["api_agent_id"] = $post_data["customer_admin_api_agent_id"];
             $customer_staff_data["creator_id"] = 0;
             $customer_staff_data["password"] = password_encode("12345678");
         }
@@ -1004,12 +1013,15 @@ class DKAdmin2_Repository {
 
             $customer_data["username"] = $post_data["username"];
             $customer_data["mobile"] = $post_data["customer_admin_mobile"];
-            $customer_data["customer_admin_name"] = $post_data["customer_admin_name"];
-            $customer_data["customer_admin_mobile"] = $post_data["customer_admin_mobile"];
+//            $customer_data["customer_admin_name"] = $post_data["customer_admin_name"];
+//            $customer_data["customer_admin_mobile"] = $post_data["customer_admin_mobile"];
+//            $customer_data["customer_admin_api_agent_id"] = $post_data["customer_admin_api_agent_id"];
             $customer_data["cooperative_unit_price_1"] = $post_data["cooperative_unit_price_1"];
             $customer_data["cooperative_unit_price_2"] = $post_data["cooperative_unit_price_2"];
             $customer_data["cooperative_unit_price_3"] = $post_data["cooperative_unit_price_3"];
             $customer_data["cooperative_unit_price_of_telephone"] = $post_data["cooperative_unit_price_of_telephone"];
+            $customer_data["call_time_limit_for_clue"] = $post_data["call_time_limit_for_clue"];
+            $customer_data["call_time_limit_for_telephone"] = $post_data["call_time_limit_for_telephone"];
             $customer_data["api_id"] = $post_data["api_id"];
             $customer_data["api_password"] = $post_data["api_password"];
             $customer_data["is_ip"] = $post_data["is_ip"];
@@ -1021,7 +1033,7 @@ class DKAdmin2_Repository {
             }
             else $customer_data["district_district"] = '';
 
-                // 客户名是否存在
+            // 名称是否存在
             $is_username_exist = DK_Choice_Customer::select('id')->where('id','<>',$operate_id)->where('username',$post_data["username"])->count();
             if($is_username_exist) return response_error([],"该客户名已存在，不能修改成此客户名！");
 
@@ -1037,10 +1049,15 @@ class DKAdmin2_Repository {
 
                 $customer_staff_data["username"] = $post_data["customer_admin_name"];
                 $customer_staff_data["mobile"] = $post_data["customer_admin_mobile"];
+                $customer_staff_data["api_agent_id"] = $post_data["customer_admin_api_agent_id"];
             }
             else
             {
                 // 客户管理员不存在
+
+                // 判断电话是否重复
+                $is_mobile_exist = DK_Customer_User::select('id')->where('mobile',$post_data["customer_admin_mobile"])->count();
+                if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
 
                 $customer_staff = new DK_Customer_User;
                 $customer_staff_data["user_category"] = 11;
@@ -1049,6 +1066,7 @@ class DKAdmin2_Repository {
                 $customer_staff_data["customer_id"] = $customer->id;
                 $customer_staff_data["username"] = $post_data["customer_admin_name"];
                 $customer_staff_data["mobile"] = $post_data["customer_admin_mobile"];
+                $customer_staff_data["api_agent_id"] = $post_data["customer_admin_api_agent_id"];
                 $customer_staff_data["creator_id"] = 0;
                 $customer_staff_data["password"] = password_encode("12345678");
             }

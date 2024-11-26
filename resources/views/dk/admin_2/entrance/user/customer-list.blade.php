@@ -1104,6 +1104,50 @@
                         }
                     },
                     {
+                        "title": "线索限时",
+                        "data": "call_time_limit_for_clue",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','线索限时');
+                                $(nTd).attr('data-key','call_time_limit_for_clue').attr('data-value',data);
+                                $(nTd).attr('data-column-name','线索限时');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
+                        "title": "话单限时",
+                        "data": "call_time_limit_for_telephone",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','话单限时');
+                                $(nTd).attr('data-key','call_time_limit_for_telephone').attr('data-value',data);
+                                $(nTd).attr('data-column-name','话单时长');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
                         "title": "累计充值",
                         "data": "funds_recharge_total",
                         "className": "item-show-for-recharge",
@@ -1157,22 +1201,32 @@
                     @endif
                     {
                         "title": "管理员名称",
-                        "data": "customer_admin_name",
+                        "data": "id",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return row.customer_admin_er == null ? '--' : '<a href="javascript:void(0);">'+row.customer_admin_er.username+'</a>';
                         }
                     },
                     {
                         "title": "管理员登录手机",
-                        "data": "customer_admin_mobile",
+                        "data": "id",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            return row.customer_admin_er == null ? '--' : '<a href="javascript:void(0);">'+row.customer_admin_er.mobile+'</a>';
+                        }
+                    },
+                    {
+                        "title": "管理员分机号",
+                        "data": "id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.customer_admin_er == null ? '--' : '<a href="javascript:void(0);">'+row.customer_admin_er.api_agent_id+'</a>';
                         }
                     },
                     {

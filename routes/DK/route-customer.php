@@ -224,6 +224,7 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
     // 订单-修改信息
     Route::match(['get','post'], '/mine/clue-modify-record', $controller.'@view_mine_clue_modify_record');
     // 操作
+    Route::post('/item/clue-bulk-assign-staff', $controller.'@operate_item_clue_bulk_assign_staff');
     Route::post('/mine/clue-back', $controller.'@operate_mine_clue_back');
     Route::post('/mine/clue-purchase', $controller.'@operate_mine_clue_purchase');
 

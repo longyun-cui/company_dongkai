@@ -77,6 +77,22 @@
                 </div>
 
 
+                {{--拨号时长--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 拨号时长（线索）</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="call_time_limit_for_clue" placeholder="电话单价（线索）" value="{{ $data->call_time_limit_for_clue or 0 }}">
+                    </div>
+                </div>
+                {{--拨号时长--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 拨号时长（电话单）</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="call_time_limit_for_telephone" placeholder="电话单价（电话单）" value="{{ $data->call_time_limit_for_telephone or 0 }}">
+                    </div>
+                </div>
+
+
                 {{--api--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> API_ID</label>
@@ -104,6 +120,13 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理员登录手机</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="customer_admin_mobile" placeholder="管理员登录手机" value="{{ $data->customer_admin_mobile or '' }}">
+                    </div>
+                </div>
+                {{--管理员手机--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 管理员分机号</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="customer_admin_api_agent_id" placeholder="管理员分机号" value="{{ $data->customer_admin_api_agent_id or '' }}">
                     </div>
                 </div>
                 <div class="form-group">

@@ -55,6 +55,15 @@
 {{--                            <option value="-1">选择区域</option>--}}
 {{--                        </select>--}}
 
+
+                        <select class="form-control form-filter select2-box telephone-select2-staff" name="order-staff" style="width:160px;">
+                            <option value="-1">选择员工</option>
+                            <option value="0">*未分配员工*</option>
+                            @foreach($staff_list as $v)
+                                <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
+                            @endforeach
+                        </select>
+
 {{--                        <select class="form-control form-filter" name="order-exported-status" style="width:100px;">--}}
 {{--                            <option value="-1">导出状态</option>--}}
 {{--                            <option value="0" @if($exported_status == 0) selected="selected" @endif>待导出</option>--}}
@@ -92,6 +101,18 @@
                         </button>
                         <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-order">
                             <i class="fa fa-undo"></i> 重置
+                        </button>
+
+
+                        <span class="input-group-addon" style="width:40px;"><input type="checkbox" id="check-review-all" style="width:40px;"></span>
+                        <select name="bulk-operate-staff-id" class="form-control form-filter select2-box">
+                            <option value="-1">选择员工</option>
+                            @foreach($staff_list as $v)
+                                <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
+                            @endforeach
+                        </select>
+                        <button type="button" class="form-control btn btn-flat btn-default" id="bulk-submit-for-assign-staff" style="width:100px;">
+                            <i class="fa fa-check"></i> 批量分配
                         </button>
 
 
@@ -697,32 +718,20 @@
                             var $html_edit = '';
                             var $html_follow = '<a class="btn btn-xs bg-blue item-modal-show-for-follow" data-id="'+data+'">客户跟进</a>';
                             var $html_quality = '<a class="btn btn-xs bg-olive item-quality-evaluate-submit" data-id="'+data+'">质量评估</a>';
-                            var $html_purchase = '';
+                            var $html_purchase = '<a class="btn btn-xs bg-olive item-purchase-submit" data-id="'+data+'">购买</a>';
                             var $html_back = '<a class="btn btn-xs bg-olive- item-back-submit" data-id="'+data+'">退单</a>';
-                            var $html_detail = '<a class="btn btn-xs bg-olive- item-modal-show-for-detail" data-id="'+data+'">查看详情</a>';
-                            var $html_record = '<a class="btn btn-xs bg-purple- item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+                            var $html_detail = '<a class="btn btn-xs bg-blue item-modal-show-for-detail" data-id="'+data+'">详情</a>';
+                            var $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
 
                             if(row.sale_result == 1)
                             {
-                                var $html_purchase = '<a class="btn btn-xs bg-olive- item-purchase-submit" data-id="'+data+'">购买</a>';
+                            }
+                            else
+                            {
+                                $html_purchase = '<a class="btn btn-xs bg-white disabled">已购</a>';
                             }
 
-                            var $more_html =
-                                '<div class="btn-group">'+
-                                '<button type="button" class="btn btn-xs btn-success" style="padding:2px 8px; margin-right:0;">操作</button>'+
-                                '<button type="button" class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="true" style="padding:2px 6px; margin-left:-1px;">'+
-                                '<span class="caret"></span>'+
-                                '<span class="sr-only">Toggle Dropdown</span>'+
-                                '</button>'+
-                                '<ul class="dropdown-menu" role="menu">'+
-                                '<li><a href="#">Action</a></li>'+
-                                '<li><a href="#">删除</a></li>'+
-                                '<li><a href="#">弃用</a></li>'+
-                                '<li class="divider"></li>'+
-                                '<li><a href="#">Separate</a></li>'+
-                                '</ul>'+
-                                '</div>';
 
                             var $html =
                                 // $html_follow+
@@ -735,28 +744,6 @@
 
                         }
                     },
-                    // {
-                    //     "title": "导出状态",
-                    //     "data": "exported_status",
-                    //     "className": "",
-                    //     "width": "80px",
-                    //     "orderable": false,
-                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                    //         if(row.is_completed != 1 && row.item_status != 97)
-                    //         {
-                    //             $(nTd).addClass('exported_status');
-                    //             $(nTd).attr('data-id',row.id).attr('data-name','导出状态');
-                    //             $(nTd).attr('data-key','exported_status').attr('data-value',row.id);
-                    //             if(data) $(nTd).attr('data-operate-type','edit');
-                    //             else $(nTd).attr('data-operate-type','add');
-                    //         }
-                    //     },
-                    //     render: function(data, type, row, meta) {
-                    //         if(data == 0) return '<small class="btn-xs btn-warning">未导出</small>';
-                    //         else if(data == 1) return '<small class="btn-xs btn-success">已导出</small>';
-                    //         return data;
-                    //     }
-                    // },
                     // {
                     //     "title": "工单质量",
                     //     "data": "clue_quality",
@@ -791,7 +778,7 @@
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">待接单</small>';
                             else if(data == 1) $result_html = '<small class="btn-xs bg-blue">已接单</small>';
-                            else if(data == 9) $result_html = '<small class="btn-xs bg-yellow">已成单</small>';
+                            else if(data == 9) $result_html = '<small class="btn-xs bg-green">已购买</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';
                             return $result_html;
                         }
@@ -805,9 +792,9 @@
                         render: function(data, type, row, meta) {
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">未上架</small>';
-                            else if(data == 1) $result_html = '<small class="btn-xs bg-blue">普通</small>';
-                            else if(data == 11) $result_html = '<small class="btn-xs bg-green">优选</small>';
-                            else if(data == 66) $result_html = '<small class="btn-xs bg-yellow">独享</small>';
+                            else if(data == 1) $result_html = '<small class="btn-xs bg-purple">普通</small>';
+                            else if(data == 11) $result_html = '<small class="btn-xs bg-orange">优选</small>';
+                            else if(data == 66) $result_html = '<small class="btn-xs bg-maroon">独享</small>';
                             else $result_html = '<small class="btn-xs bg-black">error</small>';
                             return $result_html;
                         }
@@ -834,59 +821,32 @@
                     //         return data;
                     //     }
                     // },
-                    // {
-                    //     "title": "分派员工",
-                    //     "data": "client_staff_id",
-                    //     "className": "",
-                    //     "width": "120px",
-                    //     "orderable": false,
-                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                    //         if(row.is_completed != 1 && row.item_status != 97)
-                    //         {
-                    //             $(nTd).addClass('client_staff');
-                    //             $(nTd).attr('data-id',row.id).attr('data-name','分派员工');
-                    //             $(nTd).attr('data-key','client_staff_id').attr('data-value',row.id);
-                    //             if(data) $(nTd).attr('data-operate-type','edit');
-                    //             else $(nTd).attr('data-operate-type','add');
-                    //         }
-                    //     },
-                    //     render: function(data, type, row, meta) {
-                    //         if(row.client_staff_er == null)
-                    //         {
-                    //             return '未指定';
-                    //         }
-                    //         else {
-                    //             return '<a href="javascript:void(0);">'+row.client_staff_er.username+'</a>';
-                    //         }
-                    //     }
-                    // },
-                    // {
-                    //     "title": "工单ID",
-                    //     "data": "order_id",
-                    //     "className": "",
-                    //     "width": "80px",
-                    //     "orderable": false,
-                    //     render: function(data, type, row, meta) {
-                    //         if(data) return data;
-                    //         return "--";
-                    //     }
-                    // },
-                    // {
-                    //     "title": "项目",
-                    //     "data": "project_id",
-                    //     "className": "",
-                    //     "width": "120px",
-                    //     "orderable": false,
-                    //     render: function(data, type, row, meta) {
-                    //         if(row.project_er == null)
-                    //         {
-                    //             return '未指定';
-                    //         }
-                    //         else {
-                    //             return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
-                    //         }
-                    //     }
-                    // },
+                    {
+                        "title": "分派员工",
+                        "data": "customer_staff_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('customer_staff');
+                                $(nTd).attr('data-id',row.id).attr('data-name','分派员工');
+                                $(nTd).attr('data-key','customer_staff_id').attr('data-value',row.id);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.customer_staff_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.customer_staff_er.username+'</a>';
+                            }
+                        }
+                    },
                     {
                         "title": "客户姓名",
                         "data": "client_name",
@@ -914,7 +874,8 @@
                             $(nTd).attr('data-key','client_phone').attr('data-value',data);
                         },
                         render: function(data, type, row, meta) {
-                            if(row.sale_result == 1) return row.virtual_number;
+                            // if(row.sale_result == 1) return row.virtual_number;
+                            if(row.sale_result == 1) return "****";
                             else if(row.sale_result == 9) return row.client_phone;
                             else return "****";
                         }
@@ -996,10 +957,10 @@
                     //     }
                     // },
                     {
-                        "title": "通话小结",
+                        "title": "线索描述",
                         "data": "id",
                         "className": "",
-                        "width": "80px",
+                        "width": "200px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             $(nTd).addClass('description');
@@ -1124,34 +1085,7 @@
                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                             else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         }
-                    },
-//                     {
-//                         "title": "更改时间",
-//                         "data": 'updated_at',
-//                         "className": "",
-//                         "width": "100px",
-//                         "orderable": false,
-//                         "orderSequence": ["desc", "asc"],
-//                         render: function(data, type, row, meta) {
-// //                            return data;
-//                             if(!data) return '';
-//                             var $date = new Date(data*1000);
-//                             var $year = $date.getFullYear();
-//                             var $month = ('00'+($date.getMonth()+1)).slice(-2);
-//                             var $day = ('00'+($date.getDate())).slice(-2);
-//                             var $hour = ('00'+$date.getHours()).slice(-2);
-//                             var $minute = ('00'+$date.getMinutes()).slice(-2);
-//                             var $second = ('00'+$date.getSeconds()).slice(-2);
-//
-// //                            return $year+'-'+$month+'-'+$day;
-// //                            return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-// //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-//
-//                             var $currentYear = new Date().getFullYear();
-//                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-//                             else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-//                         }
-//                     }
+                    }
                 ],
                 "drawCallback": function (settings) {
 
