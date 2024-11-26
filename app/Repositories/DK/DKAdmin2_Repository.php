@@ -19852,6 +19852,15 @@ class DKAdmin2_Repository {
     // 【API】接单
     public function operate_api_okcc_receivingResult($post_data)
     {
+
+        $call = new DK_Choice_Call_Record;
+        $call_data['call_result_msg'] = 1;
+        $bool_c = $call->fill($call_data)->save();
+
+        $return['result']['error'] = 0;
+        $return['result']['msg'] = '';
+        return json_decode(json_encode($return));
+
         $messages = [
             'authentication.required' => 'authentication.required.',
             'notify.required' => 'notify.required.',
