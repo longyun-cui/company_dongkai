@@ -19852,6 +19852,7 @@ class DKAdmin2_Repository {
     // 【API】接单
     public function operate_api_okcc_receivingResult($post_data)
     {
+        header("Content-Type:application/json;charset=UTF-8");
 
         $call = new DK_Choice_Call_Record;
         $call_data['call_result_msg'] = 1;
