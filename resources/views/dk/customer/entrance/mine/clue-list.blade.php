@@ -566,6 +566,14 @@
 
     </div>
 </div>
+
+
+
+
+    {{--通话记录--}}
+    @include(env('TEMPLATE_DK_CUSTOMER').'component.call-record')
+
+
 @endsection
 
 
@@ -723,6 +731,9 @@
                             var $html_detail = '<a class="btn btn-xs bg-blue item-modal-show-for-detail" data-id="'+data+'">详情</a>';
                             var $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
+                            var $html_call = '<a class="btn btn-xs bg-green item-call-submit" data-id="'+data+'">拨号</a>';
+                            var $html_call_record = '<a class="btn btn-xs bg-purple item-modal-show-for-call-record" data-id="'+data+'">记录</a>';
+
 
                             if(row.sale_result == 1)
                             {
@@ -736,6 +747,8 @@
                             var $html =
                                 // $html_follow+
                                 // $html_quality+
+                                $html_call+
+                                $html_call_record+
                                 $html_purchase+
                                 $html_detail+
                                 $html_record+
@@ -965,7 +978,11 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             $(nTd).addClass('description');
                             $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
-                            $(nTd).attr('data-key','description').attr('data-value',row.clue_er.description);
+                            $(nTd).attr('data-key','description');
+                            if(row.clue_er)
+                            {
+                                $(nTd).attr('data-value',row.clue_er.description);
+                            }
                         },
                         render: function(data, type, row, meta) {
                             if(row.clue_er)
@@ -1512,5 +1529,9 @@
 //            TableDatatablesAjax_record.init();
 //        });
 </script>
+
+@include(env('TEMPLATE_DK_CUSTOMER').'component.call-record-script')
+
+@include(env('TEMPLATE_DK_CUSTOMER').'component.clue-list-script')
 @include(env('TEMPLATE_DK_CUSTOMER').'entrance.mine.clue-list-script')
 @endsection

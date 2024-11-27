@@ -444,10 +444,10 @@ class DKCustomerController extends Controller
         else if(request()->isMethod('post')) return $this->repo->get_item_telephone_list_datatable(request()->all());
     }
     // 【话单-修改记录】返回-列表-视图（全部任务）
-    public function view_item_telephone_call_record()
+    public function view_item_call_record()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_telephone_call_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_telephone_call_record_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_item_call_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_item_call_record_datatable(request()->all());
     }
     // 【话单】批量-分派
     public function operate_item_telephone_bulk_assign_staff()
@@ -501,6 +501,11 @@ class DKCustomerController extends Controller
     public function operate_item_clue_take()
     {
         return $this->repo->operate_item_clue_take(request()->all());
+    }
+    // 【话单】拨号
+    public function operate_item_clue_call()
+    {
+        return $this->repo->operate_item_clue_call(request()->all());
     }
 
 

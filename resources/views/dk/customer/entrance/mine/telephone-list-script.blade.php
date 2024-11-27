@@ -1542,14 +1542,14 @@
 
 
 
-        // 【修改记录】【显示】
+        // 【拨号记录】【显示】
         $(".main-content").on('click', ".item-modal-show-for-call-record", function() {
             var that = $(this);
             var $id = that.attr("data-id");
 
             $('#modal-body-for-call-record-list').modal('show');
 
-            TableDatatablesAjax_call_record.init($id);
+            TableDatatablesAjax_call_record.init('telephone',$id);
         });
 
 

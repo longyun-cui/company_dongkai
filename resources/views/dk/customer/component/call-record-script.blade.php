@@ -1,6 +1,6 @@
 <script>
-    var TableDatatablesAjax_call_record = function ($id) {
-        var datatableAjax_call_record = function ($id) {
+    var TableDatatablesAjax_call_record = function ($type,$id) {
+        var datatableAjax_call_record = function ($type,$id) {
 
             var dt_call_record = $('#datatable_ajax_call_record');
             dt_call_record.DataTable().destroy();
@@ -14,7 +14,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "/item/telephone-call-record?id="+$id,
+                    'url': "/item/item-call-record?type="+$type+"&id="+$id,
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -88,7 +88,8 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data = '0000-00-00 00:00:00') return '';
+                            else return data;
                         }
                     },
                     {
@@ -98,7 +99,8 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data = '0000-00-00 00:00:00') return '';
+                            else return data;
                         }
                     },
                     {
@@ -108,7 +110,8 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data = '0000-00-00 00:00:00') return '';
+                            else return data;
                         }
                     },
                     {
@@ -118,9 +121,44 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(data = '0000-00-00 00:00:00') return '';
+                            else return data;
                         }
                     },
+                    {
+                        "title": "通话时长",
+                        "data": "timeLength",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data = 0) return '--';
+                            else return data;
+                        }
+                    },
+                    // {
+                    //     "title": "录音播放",
+                    //     "data": "recordFile",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                    //         if(row.is_completed != 1 && row.item_status != 97)
+                    //         {
+                    //             $(nTd).attr('data-id',row.id).attr('data-name','录音播放');
+                    //             $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
+                    //         }
+                    //     },
+                    //     render: function(data, type, row, meta) {
+                    //         // return data;
+                    //         if(true)
+                    //         {
+                    //             var $url =  "https://www.feiniji.cn/recordFile/listen?file="+data;
+                    //             return '<audio controls style="width:100px;height:20px;"><source src="'+$url+'" type="audio/mpeg"></audio>';
+                    //         }
+                    //         else return '';
+                    //     }
+                    // },
                     {
                         "title": "拨号说明",
                         "data": "call_result_msg",

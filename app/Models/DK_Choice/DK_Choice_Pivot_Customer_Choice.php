@@ -42,6 +42,10 @@ class DK_Choice_Pivot_Customer_Choice extends Model
         'location_city',
         'location_district',
 
+        'call_num',
+        'last_call_id',
+        'last_call_time',
+
         'taker_id',
         'taken_at',
 

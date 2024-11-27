@@ -205,6 +205,7 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
 
 
 
+    Route::match(['get','post'], '/item/item-call-record', $controller.'@view_item_call_record');
 
 
     // 列表
@@ -215,6 +216,8 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
     // 操作
     Route::post('/item/clue-take', $controller.'@operate_item_clue_take');
     Route::post('/item/clue-back', $controller.'@operate_item_clue_back');
+    Route::post('/item/clue-bulk-assign-staff', $controller.'@operate_item_clue_bulk_assign_staff');
+    Route::post('/item/clue-call', $controller.'@operate_item_clue_call');
 
 
 
@@ -224,7 +227,7 @@ Route::group(['middleware' => ['dk.customer.staff.login']], function () {
     // 订单-修改信息
     Route::match(['get','post'], '/mine/clue-modify-record', $controller.'@view_mine_clue_modify_record');
     // 操作
-    Route::post('/item/clue-bulk-assign-staff', $controller.'@operate_item_clue_bulk_assign_staff');
+
     Route::post('/mine/clue-back', $controller.'@operate_mine_clue_back');
     Route::post('/mine/clue-purchase', $controller.'@operate_mine_clue_purchase');
 

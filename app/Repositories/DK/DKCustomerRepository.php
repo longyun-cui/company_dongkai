@@ -582,7 +582,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -653,7 +653,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -2998,66 +2998,6 @@ class DKCustomerRepository {
     }
 
 
-    // 【话单】【修改记录】返回-列表-视图
-    public function view_item_telephone_call_record($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $return['menu_active_of_telephone_call_record_list'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.telephone-call-record-list';
-        return view($view_blade)->with($return);
-    }
-    // 【话单】【修改记录】返回-列表-数据
-    public function get_item_telephone_call_record_datatable($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-
-        $id  = $post_data["id"];
-        $query = DK_Choice_Call_Record::select('*')
-            ->with([
-                'creator'
-            ])
-            ->where(['telephone_id'=>$id]);
-
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
-
-        $total = $query->count();
-
-        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
-        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
-
-        if(isset($post_data['order']))
-        {
-            $columns = $post_data['columns'];
-            $order = $post_data['order'][0];
-            $order_column = $order['column'];
-            $order_dir = $order['dir'];
-
-            $field = $columns[$order_column]["data"];
-            $query->orderBy($field, $order_dir);
-        }
-        else $query->orderBy("id", "desc");
-
-        if($limit == -1) $list = $query->get();
-        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-            $list[$k]->encode_id = encode($v->id);
-            if($v->sale_result != 9) $list[$k]->telephone = "****";
-
-
-            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
-            else $list[$k]->is_me = 0;
-        }
-//        dd($list->toArray());
-        return datatable_response($list, $draw, $total);
-    }
-
-
     // 【话单】批量-分配
     public function operate_item_telephone_bulk_assign_staff($post_data)
     {
@@ -3581,6 +3521,8 @@ class DKCustomerRepository {
 
 
 
+
+
     // 【话单】拨号
     public function operate_item_telephone_call($post_data)
     {
@@ -3727,6 +3669,7 @@ class DKCustomerRepository {
         return $return;
     }
 
+
     // 【话单】拨号
     public function operate_item_clue_call($post_data)
     {
@@ -3756,8 +3699,8 @@ class DKCustomerRepository {
         if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
-//        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
-        $item = DK_Choice_Clue::find($id);
+//        $item = DK_Choice_Pivot_Customer_Choice::find($id);
+        $item = DK_Choice_Pivot_Customer_Choice::withTrashed()->find($id);
         if(!$item) return response_error([],"该【线索】不存在，刷新页面重试！");
 
         // 启动数据库事务
@@ -3771,19 +3714,19 @@ class DKCustomerRepository {
             $call_data["customer_staff_id"] = $me->id;
             $call_data["customer_id"] = $me->customer_id;
             $call_data["clue_id"] = $id;
-            $call_data["telephone"] = $item->telephone;
+            $call_data["telephone"] = $item->client_phone;
 
             $bool_c = $call->fill($call_data)->save();
             if(!$bool_c) throw new Exception("DK_Choice_Call_Record--insert--fail");
 
             $item->increment('call_num');
             $item->last_call_time = date("Y-m-d H:i:s");
-            $bool_i = $item->fill($call_data)->save();
+            $bool_i = $item->save();
             if(!$bool_i) throw new Exception("DK_Choice_Telephone_Bill--update--fail");
 
             DB::commit();
 
-            $request_result = $this->request_okcc($call->id, $item->telephone, $call->id);
+            $request_result = $this->request_okcc($call->id, $item->client_phone, $call->id);
             if($request_result['success'])
             {
                 $result = json_decode($request_result['result']);
@@ -3819,6 +3762,75 @@ class DKCustomerRepository {
 
     }
 
+
+
+
+
+    // 【话单】【修改记录】返回-列表-视图
+    public function view_item_call_record($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $return['menu_active_of_item_call_record_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.item-call-record-list';
+        return view($view_blade)->with($return);
+    }
+    // 【话单】【修改记录】返回-列表-数据
+    public function get_item_call_record_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Choice_Call_Record::select('*')
+            ->with([
+                'creator'
+            ])
+            ->where(['customer_id'=>$me->customer_id]);
+
+        if(!empty($post_data['type']))
+        {
+            if($post_data['type'] == 'telephone') $query->where(['telephone_id'=>$id]);
+            else if($post_data['type'] == 'clue') $query->where(['clue_id'=>$id]);
+            else $query->where(['item_id'=>$id]);
+
+        }
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+            if($v->sale_result != 9) $list[$k]->telephone = "****";
+
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
 
 
 
@@ -4415,7 +4427,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -4937,7 +4949,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -6396,7 +6408,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -8726,7 +8738,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -8805,7 +8817,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -10569,7 +10581,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -10823,7 +10835,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -11340,7 +11352,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -11557,7 +11569,7 @@ class DKCustomerRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
