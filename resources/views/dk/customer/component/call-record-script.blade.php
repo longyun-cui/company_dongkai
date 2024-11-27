@@ -70,7 +70,14 @@
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data) return '<small class="btn-xs bg-green">拨号成功</small>';
+                            if(data == 1)
+                            {
+                                if(row.typeResult == "success")
+                                {
+                                    return '<small class="btn-xs bg-green">拨号成功</small>';
+                                }
+                                else return '<small class="btn-xs bg-red">通话失败</small>';
+                            }
                             else return '<small class="btn-xs bg-orange">拨号失败</small>';
                         }
                     },
@@ -81,8 +88,22 @@
                         "width": "240px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data == 0) return '';
-                            return data;
+                            if(row.call_result == 1)
+                            {
+                                if(row.typeResult == "success")
+                                {
+                                    return '通话时长：' + row.timeLength + ' 秒';
+                                }
+                                else
+                                {
+                                    return '失败原因：' + row.callResult;
+                                }
+                            }
+                            else
+                            {
+                                if(data == 0) return '';
+                                return data;
+                            }
                         }
                     },
                     {

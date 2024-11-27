@@ -3632,7 +3632,7 @@ class DKCustomerRepository {
 
             $item->increment('call_num');
             $item->last_call_time = date("Y-m-d H:i:s");
-            $bool_i = $item->fill($call_data)->save();
+            $bool_i = $item->save();
             if(!$bool_i) throw new Exception("DK_Choice_Telephone_Bill--update--fail");
 
             DB::commit();
