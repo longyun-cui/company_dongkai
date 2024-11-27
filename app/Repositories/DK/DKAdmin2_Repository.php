@@ -19872,13 +19872,13 @@ class DKAdmin2_Repository {
     {
         header("Content-Type:application/json;charset=UTF-8");
 
-        $call = new DK_Choice_Call_Record;
-        $call_data['call_result_msg'] = 1;
-        $bool_c = $call->fill($call_data)->save();
-
-        $return['result']['error'] = 0;
-        $return['result']['msg'] = '';
-        return json_decode(json_encode($return));
+//        $call = new DK_Choice_Call_Record;
+//        $call_data['call_result_msg'] = 1;
+//        $bool_c = $call->fill($call_data)->save();
+//
+//        $return['result']['error'] = 0;
+//        $return['result']['msg'] = '';
+//        return json_decode(json_encode($return));
 
         $messages = [
             'authentication.required' => 'authentication.required.',
