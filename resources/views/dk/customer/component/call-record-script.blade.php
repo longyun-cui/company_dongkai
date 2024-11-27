@@ -82,6 +82,46 @@
                         }
                     },
                     {
+                        "title": "拨号时间",
+                        "data": "startTime",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "响铃时间",
+                        "data": "ringTime",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "接通时间",
+                        "data": "answerTime",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "结束时间",
+                        "data": "byeTime",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "拨号说明",
                         "data": "call_result_msg",
                         "className": "",
@@ -96,7 +136,7 @@
                                 }
                                 else
                                 {
-                                    return '失败原因：' + row.callResult;
+                                    return '失败原因：' + row.callResultMsg;
                                 }
                             }
                             else

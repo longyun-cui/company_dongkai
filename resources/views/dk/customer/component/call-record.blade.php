@@ -1,6 +1,6 @@
 {{--拨号记录--}}
 <div class="modal fade modal-main-body" id="modal-body-for-call-record-list">
-    <div class="col-md-8 col-md-offset-2 margin-top-32px margin-bottom-64px bg-white">
+    <div class="col-md-10 col-md-offset-1 margin-top-32px margin-bottom-64px bg-white">
 
         <div class="box- box-info- form-container">
 
@@ -37,6 +37,10 @@
                 <table class='table table-striped table-bordered' id='datatable_ajax_call_record'>
                     <thead>
                     <tr role='row' class='heading'>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
