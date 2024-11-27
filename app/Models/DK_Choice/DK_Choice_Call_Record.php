@@ -23,6 +23,8 @@ class DK_Choice_Call_Record extends Model
 
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
 
+        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+
         'org_id',
         'admin_id',
         'choice_staff_id',

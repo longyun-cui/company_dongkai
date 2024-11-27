@@ -19894,6 +19894,8 @@ class DKAdmin2_Repository {
             return response_error([],$messages->first());
         }
 
+
+        $post_data['notify']['content'] = json_encode($post_data);
         $userData = $post_data['notify']['userData'];
         $seq = $post_data['notify']['seq'];
 //        if($userData == 'calling')
