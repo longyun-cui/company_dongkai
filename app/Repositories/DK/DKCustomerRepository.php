@@ -3637,7 +3637,7 @@ class DKCustomerRepository {
 
             DB::commit();
 
-            $request_result = $this->request_okcc($call->id, $item->telephone, 'calling');
+            $request_result = $this->request_okcc($call->id, $item->telephone, $call->id);
             if($request_result['success'])
             {
                 $result = json_decode($request_result['result']);
@@ -3675,7 +3675,7 @@ class DKCustomerRepository {
 
 
     // 【api】拨号
-    public function request_okcc($id,$telephone,$type='')
+    public function request_okcc($id,$telephone,$userData='')
     {
         $this->get_me();
         $me = $this->me;
@@ -3696,7 +3696,7 @@ class DKCustomerRepository {
         $post_data['authentication']['digest'] = $digest;
 
         $post_data['request']['seq'] = $id;
-        $post_data['request']['userData'] = $type;
+        $post_data['request']['userData'] = $userData;
         $post_data['request']['caller'] = '';
         $post_data['request']['callee'] = $telephone;
         $post_data['request']['agent'] = $me->api_agent_id;
@@ -3783,7 +3783,7 @@ class DKCustomerRepository {
 
             DB::commit();
 
-            $request_result = $this->request_okcc($call->id, $item->telephone, 'calling');
+            $request_result = $this->request_okcc($call->id, $item->telephone, $call->id);
             if($request_result['success'])
             {
                 $result = json_decode($request_result['result']);

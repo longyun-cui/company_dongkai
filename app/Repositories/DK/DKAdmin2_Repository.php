@@ -19903,7 +19903,7 @@ class DKAdmin2_Repository {
         {
             $call_data = $post_data['notify'];
 
-            $call = DK_Choice_Call_Record::find($seq);
+            $call = DK_Choice_Call_Record::find($userData);
             if($call)
             {
                 $telephone = DK_Choice_Telephone_Bill::find($call->telephone_id);
