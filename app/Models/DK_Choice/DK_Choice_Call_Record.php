@@ -38,7 +38,15 @@ class DK_Choice_Call_Record extends Model
 
         'telephone',
 
+        'staffNo',
+        'callee',
+        'caller',
+        'session',
+        'seq',
+
         'service',
+        'usageMode',
+
         'startTime',
         'ringTime',
         'answerTime',
@@ -46,9 +54,18 @@ class DK_Choice_Call_Record extends Model
         'timeLength',
 
         'releaseCause',
+        'releasePart',
         'typeResult',
-        'usageMode',
+        'callResult',
         'callResultMsg',
+        'errMsg',
+        'errMsgCN',
+
+        'trunkIndex',
+        'trunkType',
+        'trunkName',
+        'trunkPeerIP',
+        'trunkUsername',
 
         'recording_address', 'recordFile',
 

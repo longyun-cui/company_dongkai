@@ -2999,17 +2999,17 @@ class DKCustomerRepository {
 
 
     // 【话单】【修改记录】返回-列表-视图
-    public function view_item_telephone_modify_record($post_data)
+    public function view_item_telephone_call_record($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
-        $return['menu_active_of_clue_modify_list'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.clue-modify-list';
+        $return['menu_active_of_telephone_call_record_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CUSTOMER').'entrance.item.telephone-call-record-list';
         return view($view_blade)->with($return);
     }
     // 【话单】【修改记录】返回-列表-数据
-    public function get_item_telephone_modify_record_datatable($post_data)
+    public function get_item_telephone_call_record_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
