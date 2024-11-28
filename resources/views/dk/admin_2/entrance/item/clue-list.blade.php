@@ -18,39 +18,13 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
 
-            <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
-
-                <h3 class="box-title">线索列表</h3>
-
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a class="item-import-link">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 导入线索</button>
-                    </a>
-{{--                    <a class="item-create-show">--}}
-{{--                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加工单</button>--}}
-{{--                    </a>--}}
-                </div>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
-            </div>
-
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-clue-list">
 
                 <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="clue-id" placeholder="ID" value="{{ $clue_id or '' }}" style="width:88px;" />
+                        <input type="text" class="form-control form-filter filter-keyup" name="clue-id" placeholder="ID" value="{{ $clue_id or '' }}" style="width:80px;" />
                         <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
@@ -94,8 +68,8 @@
 {{--                            @endforeach--}}
 {{--                        </select>--}}
 
-                        <select class="form-control form-filter select2-box" name="clue-sale-status" data-placeholder="选择上架状态" style="width:100px;">
-                            <option value="-1">选择上架状态</option>
+                        <select class="form-control form-filter select2-box" name="clue-sale-status" data-placeholder="上架状态" style="width:100px;">
+                            <option value="-1">上架状态</option>
                             <option value="0">待上架</option>
                             <option value="9">已上架</option>
                         </select>
@@ -174,6 +148,12 @@
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-put-on-shelf"><i class="fa fa-share"></i> 批量上架</span>
                         </div>
+
+                        <a class="item-import-link">
+                            <button type="button" onclick="" class="btn btn-success" style="width:100px;">
+                                <i class="fa fa-plus"></i> 导入线索
+                            </button>
+                        </a>
 
                         <div class="pull-left clear-both">
                         </div>

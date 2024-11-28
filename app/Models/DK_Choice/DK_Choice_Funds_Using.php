@@ -11,7 +11,10 @@ class DK_Choice_Funds_Using extends Model
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort',
         'item_active', 'item_status', 'item_category', 'item_type',
+
         'finance_active', 'finance_status', 'finance_object', 'finance_category', 'finance_type',
+        'purchased_category', 'purchased_type',
+
         'is_confirmed', 'confirmer_id',
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
@@ -22,6 +25,7 @@ class DK_Choice_Funds_Using extends Model
         'item_id',
         'order_id',
         'clue_id',
+        'choice_id',
         'telephone_id',
         'client_id',
 
@@ -95,22 +99,33 @@ class DK_Choice_Funds_Using extends Model
     {
         return $this->belongsTo('App\Models\DK_Customer\DK_Customer_Company','company_id','id');
     }
+    // 渠道
     function channel_er()
     {
         return $this->belongsTo('App\Models\DK_Customer\DK_Customer_Company','channel_id','id');
+    }
+    // 客户
+    function customer_er()
+    {
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Customer','customer_id','id');
     }
 
 
     // 线索
     function clue_er()
     {
-        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Pivot_Customer_Choice','clue_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Clue','clue_id','id');
+    }
+    // 线索
+    function choice_er()
+    {
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Pivot_Customer_Choice','choice_id','id');
     }
 
     // 话单
     function telephone_er()
     {
-        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_Telephone_Bill','telephone_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Telephone_Bill','telephone_id','id');
     }
 
     // 客户

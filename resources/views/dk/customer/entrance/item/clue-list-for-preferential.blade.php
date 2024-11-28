@@ -643,7 +643,7 @@
                 "orderCellsTop": true,
                 "scrollX": true,
                 // "scrollY": false,
-                "scrollY": ($(document).height() - 350)+"px",
+                "scrollY": ($(document).height() - 360)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 0 @else 0 @endif",
@@ -716,8 +716,8 @@
                             var $html =
                                 // $html_follow+
                                 // $html_quality+
-                                $html_call+
-                                $html_call_record+
+                                // $html_call+
+                                // $html_call_record+
                                 $html_take+
                                 $html_detail+
                                 // $html_record+

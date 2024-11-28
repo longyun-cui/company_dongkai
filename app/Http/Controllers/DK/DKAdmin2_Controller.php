@@ -60,7 +60,7 @@ class DKAdmin2_Controller extends Controller
             $record["from"] = request('from',NULL);
             $this->record_for_user_visit($record);
 
-            $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.login';
+            $view_blade = env('TEMPLATE_DK_ADMIN_2').'entrance.login';
             return view($view_blade);
         }
         else if(request()->isMethod('post'))
@@ -1306,18 +1306,33 @@ class DKAdmin2_Controller extends Controller
 
 
 
+    /*
+     * Finance 财务
+     */
+    // 【财务】返回-列表-视图（充值）
+    public function view_finance_funds_recharge_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_funds_recharge_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_funds_recharge_list_datatable(request()->all());
+    }
+    // 【财务】返回-列表-视图（消费）
+    public function view_finance_funds_using_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_funds_using_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_funds_using_list_datatable(request()->all());
+    }
+    // 【财务】返回-列表-视图（日报）
+    public function view_finance_daily_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_finance_daily_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_finance_daily_list_datatable(request()->all());
+    }
 
 
 
     /*
      * Finance 财务
      */
-    // 【线索】返回-列表-视图（全部任务）
-    public function view_finance_daily_list()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_finance_daily_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_finance_daily_list_datatable(request()->all());
-    }
 
     // 【客户】【修改记录】返回-列表-视图（全部任务）
     public function view_finance_daily_modify_record()

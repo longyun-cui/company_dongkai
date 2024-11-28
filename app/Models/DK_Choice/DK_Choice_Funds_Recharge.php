@@ -87,10 +87,15 @@ class DK_Choice_Funds_Recharge extends Model
     {
         return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Company','company_id','id');
     }
-    // 公司
+    // 渠道
     function channel_er()
     {
         return $this->belongsTo('App\Models\DK_Finance\DK_Finance_Company','channel_id','id');
+    }
+    // 客户
+    function customer_er()
+    {
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Customer','customer_id','id');
     }
 
 

@@ -548,7 +548,7 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": ($(document).height() - 360)+"px",
+                "scrollY": ($(document).height() - 300)+"px",
                 "scrollCollapse": true,
                 "fixedColumns": {
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",

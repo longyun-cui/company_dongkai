@@ -1214,9 +1214,19 @@
 
                     },
                 },
+                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
+                "scrollX": true,
+                // "scrollY": false,
+                "scrollY": ($(document).height() - 360)+"px",
+                "scrollCollapse": true,
+                "fixedColumns": {
+                    "leftColumns": "@if($is_mobile_equipment) 0 @else 0 @endif",
+                    "rightColumns": "@if($is_mobile_equipment) 0 @else 0 @endif"
+                },
+                "showRefresh": true,
                 "columns": [
 //                    {
 //                        "className": "font-12px",
@@ -1279,6 +1289,7 @@
                             else if(data == 85) return '<small class="btn-xs bg-green">接单</small>';
                             else if(data == 86) return '<small class="btn-xs bg-yellow">退单</small>';
                             else if(data == 88) return '<small class="btn-xs bg-red">购买</small>';
+                            else if(data == 89) return '<small class="btn-xs bg-green">拨号</small>';
                             else if(data == 91) return '<small class="btn-xs bg-yellow">验证</small>';
                             else if(data == 92) return '<small class="btn-xs bg-yellow">审核</small>';
                             else if(data == 97) return '<small class="btn-xs bg-navy">弃用</small>';

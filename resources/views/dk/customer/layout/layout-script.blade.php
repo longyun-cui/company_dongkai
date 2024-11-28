@@ -49,6 +49,11 @@
         );
 
 
+        $('.select2-box').select2({
+            theme: 'classic'
+        });
+
+
         // 【清空只读文本框】
         $(".main-content").on('click', ".readonly-clear-this", function() {
             var $that = $(this);

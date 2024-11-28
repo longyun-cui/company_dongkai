@@ -2,59 +2,6 @@
     $(function() {
 
 
-        // 【生成日报】
-        $(".main-content").on('click', ".daily-build-submit", function() {
-            var $that = $(this);
-            layer.msg('确定"生成"么？', {
-                time: 0
-                ,btn: ['确定', '取消']
-                ,yes: function(index){
-
-                    var $index = layer.load(1, {
-                        shade: [0.3, '#fff'],
-                        content: '<span class="loadtip">正在生成日报</span>',
-                        success: function (layer) {
-                            layer.find('.layui-layer-content').css({
-                                'padding-top': '40px',
-                                'width': '120px',
-                            });
-                            layer.find('.loadtip').css({
-                                'font-size':'20px',
-                                'margin-left':'-41px'
-                            });
-                        }
-                    });
-
-                    $.post(
-                        "{{ url('/finance/daily-list-build') }}",
-                        {
-                            _token: $('meta[name="_token"]').attr('content'),
-                            operate: "daily-list-build",
-                            assign_date: $('input[name="daily-build-date"]').val()
-                        },
-                        function(data){
-
-                            // layer.close(index);
-                            layer.closeAll('loading');
-
-                            if(!data.success)
-                            {
-                                layer.msg(data.msg);
-                            }
-                            else
-                            {
-                                layer.msg("发布成功！");
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
-                            }
-                        },
-                        'json'
-                    );
-
-                }
-            });
-        });
-
-
         // 【搜索】
         $("#datatable-for-daily-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
@@ -1283,11 +1230,11 @@
             // });
 
                     $.post(
-                        "{{ url('/finance/daily-info-text-set') }}",
+                        "{{ url('/item/daily-info-text-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-text-set-operate"]').val(),
-                            item_id: $('input[name="info-text-set-daily-id"]').val(),
+                            order_id: $('input[name="info-text-set-daily-id"]').val(),
                             operate_type: $('input[name="info-text-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1376,11 +1323,11 @@
             // });
 
                     $.post(
-                        "{{ url('/finance/daily-info-time-set') }}",
+                        "{{ url('/item/daily-info-time-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-time-set-operate"]').val(),
-                            item_id: $('input[name="info-time-set-daily-id"]').val(),
+                            order_id: $('input[name="info-time-set-daily-id"]').val(),
                             operate_type: $('input[name="info-time-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1464,11 +1411,11 @@
             // });
 
                     $.post(
-                        "{{ url('/finance/daily-info-radio-set') }}",
+                        "{{ url('/item/daily-info-radio-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-radio-set-operate"]').val(),
-                            item_id: $('input[name="info-radio-set-daily-id"]').val(),
+                            order_id: $('input[name="info-radio-set-daily-id"]').val(),
                             operate_type: $('input[name="info-radio-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_value: $column_value,
@@ -1784,11 +1731,11 @@
             // });
 
                     $.post(
-                        "{{ url('/finance/daily-info-select-set') }}",
+                        "{{ url('/item/daily-info-select-set') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: $('input[name="info-select-set-operate"]').val(),
-                            item_id: $('input[name="info-select-set-daily-id"]').val(),
+                            order_id: $('input[name="info-select-set-daily-id"]').val(),
                             operate_type: $('input[name="info-select-set-operate-type"]').val(),
                             column_key: $column_key,
                             column_key2: $column_key2,

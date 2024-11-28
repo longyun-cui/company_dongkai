@@ -49,6 +49,8 @@ class DK_Choice_Pivot_Customer_Choice extends Model
         'taker_id',
         'taken_at',
 
+        'purchased_category',
+        'purchased_type',
         'purchaser_id',
         'purchased_at',
 

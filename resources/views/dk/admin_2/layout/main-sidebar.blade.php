@@ -147,14 +147,23 @@
 
 
 
-
             @if(in_array($me->user_type,[0,1,9,11]))
             {{--财务统计--}}
-            <li class="header _none">财务统计</li>
+            <li class="header">财务统计</li>
 
-            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }} _none">
-                <a href="{{ url('/finance/daily-list') }}">
-                    <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
+            <li class="treeview {{ $menu_active_of_finance_funds_recharge_list or '' }}">
+                <a href="{{ url('/finance/funds-recharge-list') }}">
+                    <i class="fa fa-pie-chart text-green"></i> <span>充值记录</span>
+                </a>
+            </li>
+            <li class="treeview {{ $menu_active_of_finance_funds_using_list or '' }}">
+                <a href="{{ url('/finance/funds-using-list') }}">
+                    <i class="fa fa-pie-chart text-green"></i> <span>消费记录</span>
+                </a>
+            </li>
+            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
+                <a href="{{ url('/finance/finance-daily-list') }}">
+                    <i class="fa fa-pie-chart text-green"></i> <span>财务日报</span>
                 </a>
             </li>
             @endif

@@ -488,6 +488,14 @@ Route::group(['middleware' => ['dk.admin_2.login','dk.admin_2.password_change']]
 
 
 
+    /*
+     * finance 财务
+     */
+    // 列表
+    Route::match(['get','post'], '/finance/finance-daily-list', $controller.'@view_finance_daily_list');
+    Route::match(['get','post'], '/finance/funds-recharge-list', $controller.'@view_finance_funds_recharge_list');
+    Route::match(['get','post'], '/finance/funds-using-list', $controller.'@view_finance_funds_using_list');
+
 
 
 

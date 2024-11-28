@@ -44,6 +44,8 @@ class DK_Choice_Call_Record extends Model
         'customer_id',
         'telephone_id',
 
+        'record_id',
+
         'telephone',
 
         'staffNo',

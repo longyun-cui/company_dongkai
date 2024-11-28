@@ -43,10 +43,19 @@ class DK_Choice_Telephone_Bill extends Model
         'last_call_id',
         'last_call_time',
 
+        'purchased_category',
+        'purchased_type',
+        'purchaser_id',
+        'purchased_at',
+
         'telephone',
-        'telephone', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'time_type', 'time_point', 'start_time', 'ended_time', 'address',
+
+        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'tag', 'custom', 'custom2', 'custom3',
+        'cover_pic',
+        'attachment_name', 'attachment_src',
+        'link_url',
+        'time_type', 'time_point', 'start_time', 'ended_time',
+        'address',
         'ip',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
         'published_at'

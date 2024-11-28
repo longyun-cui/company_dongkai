@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '财务日报列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '财务日报' }} - 客户系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -11,7 +11,7 @@
 @section('header','')
 @section('description')
     <b class="box-title">
-        <span class="statistic-title">财务日报</span>
+        <span class="statistic-title">{{ $title_text or '财务日报' }}</span>
         <span class="statistic-time-type-title">【全部】</span>
         <span class="statistic-time-title"></span>
     </b>
@@ -31,24 +31,6 @@
                     <div class="input-group">
 
                         <input type="hidden" name="daily-time-type" value="all" readonly>
-
-                        <input type="text" class="form-control form-filter filter-keyup" name="daily-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:88px;" />
-
-
-
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit-" id="filter-submit-for-daily-by-all">
-                            <i class="fa fa-search"></i> 全部搜索
-                        </button>
-
-
-                        {{--按日查看--}}
-{{--                        <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">--}}
-{{--                            <i class="fa fa-chevron-left"></i>--}}
-{{--                        </button>--}}
-{{--                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="daily-assign" placeholder="日期" value="{{ $assign or '' }}" readonly="readonly" style="width:100px;text-align:center;" />--}}
-{{--                        <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">--}}
-{{--                            <i class="fa fa-chevron-right"></i>--}}
-{{--                        </button>--}}
 
 
                         {{--按天查看--}}
@@ -85,12 +67,9 @@
                         </button>
 
 
-                        {{--按时间段查看--}}
-{{--                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="daily-start" placeholder="起始日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />--}}
-{{--                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="daily-ended" placeholder="结束日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />--}}
-{{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-daily-by-period" style="width:100px;">--}}
-{{--                            <i class="fa fa-search"></i> 按时间段查询--}}
-{{--                        </button>--}}
+                        <button type="button" class="form-control btn btn-flat btn-success filter-submit-" id="filter-submit-for-daily-by-all">
+                            <i class="fa fa-search"></i> 全部搜索
+                        </button>
                         <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
                             <i class="fa fa-remove"></i> 清空重选
                         </button>
@@ -159,126 +138,6 @@
     </div>
 </div>
 
-
-
-{{--显示-审核信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-detail-inspected">
-    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:64px;margin-bottom:64px;background:#fff;">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border" style="margin:16px 0;">
-                <h3 class="box-title">审核-订单【<span class="info-detail-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered" id="form-inspected-modal">
-                <div class="box-body  info-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="operate" value="daily-inspect" readonly>
-                    <input type="hidden" name="detail-inspected-daily-id" value="0" readonly>
-
-                    {{--项目--}}
-                    <div class="form-group item-detail-project">
-                        <label class="control-label col-md-2">项目</label>
-                        <div class="col-md-8 ">
-                            <span class="item-detail-text"></span>
-                        </div>
-                        <div class="col-md-2 item-detail-operate" data-operate="project"></div>
-                    </div>
-                    {{--客户--}}
-                    <div class="form-group item-detail-client">
-                        <label class="control-label col-md-2">客户</label>
-                        <div class="col-md-8 ">
-                            <span class="item-detail-text"></span>
-                        </div>
-                        <label class="col-md-2"></label>
-                    </div>
-                    {{--电话--}}
-                    <div class="form-group item-detail-phone">
-                        <label class="control-label col-md-2">电话</label>
-                        <div class="col-md-8 ">
-                            <span class="item-detail-text"></span>
-                        </div>
-                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
-                    </div>
-                    {{--是否+V--}}
-                    <div class="form-group item-detail-is-wx">
-                        <label class="control-label col-md-2">是否+V</label>
-                        <div class="col-md-8 ">
-                            <span class="item-detail-text"></span>
-                        </div>
-                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
-                    </div>
-                    {{--微信号--}}
-                    <div class="form-group item-detail-wx-id">
-                        <label class="control-label col-md-2">微信号</label>
-                        <div class="col-md-8 ">
-                            <span class="item-detail-text"></span>
-                        </div>
-                        <div class="col-md-2 item-detail-operate" data-operate="driver"></div>
-                    </div>
-                    {{--所在城市--}}
-                    <div class="form-group item-detail-city-district">
-                        <label class="control-label col-md-2">所在城市</label>
-                        <div class="col-md-8 ">
-                            <span class="item-detail-text"></span>
-                        </div>
-                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
-                    </div>
-                    {{--牙齿数量--}}
-                    <div class="form-group item-detail-teeth-count">
-                        <label class="control-label col-md-2">牙齿数量</label>
-                        <div class="col-md-8 ">
-                            <span class="item-detail-text"></span>
-                        </div>
-                        <div class="col-md-2 item-detail-operate" data-operate=""></div>
-                    </div>
-                    {{--通话小结--}}
-                    <div class="form-group item-detail-description">
-                        <label class="control-label col-md-2">通话小结</label>
-                        <div class="col-md-8 control-label" style="text-align:left;">
-                            <span class="item-detail-text"></span>
-                        </div>
-                    </div>
-                    {{--审核结果--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2">审核结果</label>
-                        <div class="col-md-8 ">
-                            <select class="form-control select-select2-" name="detail-inspected-result" id="" style="width:100%;">
-                                <option value="-1">选择审核结果</option>
-                                @foreach(config('info.inspected_result') as $v)
-                                    <option value ="{{ $v }}">{{ $v }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    {{--审核说明--}}
-                    <div class="form-group">
-                        <label class="control-label col-md-2">审核说明</label>
-                        <div class="col-md-8 ">
-                            {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
-                            <textarea class="form-control" name="detail-inspected-description" rows="3" cols="100%"></textarea>
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success item-summit-for-detail-inspected" id=""><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default item-cancel-for-detail-inspected" id="">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 {{--显示-附件-信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-attachment">
@@ -383,247 +242,6 @@
 
     </div>
 </div>
-
-
-
-
-{{--修改-基本-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-text-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-text-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-daily-info-text-set" readonly>
-                    <input type="hidden" name="info-text-set-daily-id" value="0" readonly>
-                    <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-text-set-column-key" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-text-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="info-text-set-column-value" autocomplete="off" placeholder="" value="">
-                            <textarea class="form-control" name="info-textarea-set-column-value" rows="6" cols="100%"></textarea>
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-text-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-text-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-时间-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-time-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-time-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-daily-info-time-set" readonly>
-                    <input type="hidden" name="info-time-set-daily-id" value="0" readonly>
-                    <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-time-set-column-key" value="" readonly>
-                    <input type="hidden" name="info-time-set-time-type" value="" readonly>
-                    <input type="hidden" name="info-time-set-time-data-type" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-time-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
-                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-time-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-time-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-radio-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-radio-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-radio-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-radio-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-daily-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-daily-id" value="0" readonly>
-                    <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
-                    <input type="hidden" name="info-radio-set-column-key" value="" readonly>
-
-
-                    <div class="form-group radio-box">
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-radio-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-radio-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-select-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-select-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-select-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-select-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-daily-info-option-set" readonly>
-                    <input type="hidden" name="info-select-set-daily-id" value="0" readonly>
-                    <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-select-set-column-key" value="" readonly>
-                    <input type="hidden" name="info-select-set-column-key2" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-select-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <select class="form-control select-primary" name="info-select-set-column-value" style="width:48%;" id="">
-                                <option data-id="0" value="0">未指定</option>
-                            </select>
-                            <select class="form-control select-assistant" name="info-select-set-column-value2" style="width:48%;" id="">
-                                <option data-id="0" value="0">未指定</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-select-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-{{--option--}}
-<div class="option-container _none">
-
-
-    {{--是否+V--}}
-    <div id="option-list-for-is-wx">
-        <label class="control-label col-md-2">是否+V</label>
-        <div class="col-md-8">
-            <div class="btn-group">
-
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="is_wx" value="0" class="info-set-column"> 否
-                        </label>
-                    </span>
-                </button>
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="is_wx" value="1" class="info-set-column"> 是
-                        </label>
-                    </span>
-                </button>
-
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-    {{--代理来源--}}
-    <div id="option-list-for-channel-source">
-        <option value="-1">选择代理来源</option>
-        @foreach(config('info.channel_source') as $v)
-            <option value="{{ $v }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
-    {{--客户意向--}}
-    <div id="option-list-for-client-intention">
-        <option value="-1">选择客户意向</option>
-        @foreach(config('info.client_intention') as $k => $v)
-            <option value="{{ $k }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
-</div>
-
-
 
 
 {{--修改列表--}}
@@ -841,7 +459,7 @@
                         }
                     },
                     {
-                        "title": "消费量",
+                        "title": "消费次数",
                         "data": "total_of_daily_count",
                         "className": "",
                         "width": "60px",
@@ -852,7 +470,7 @@
                         }
                     },
                     {
-                        "title": "每日花费",
+                        "title": "消费金额",
                         "data": "total_of_daily_cost",
                         "className": "",
                         "width": "60px",

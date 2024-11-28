@@ -3124,8 +3124,9 @@ class DKCustomerRepository {
         $item = DK_Choice_Telephone_Bill::find($id);
         if(!$item) return response_error([],"该【话单】不存在，刷新页面重试！");
 
-//        if($item->sale_result != 1) return response_error([],"请先接单！");
         if($item->customer_id != $me->customer_id) return response_error([],"该【话单】不是你的！");
+//        if($item->sale_result != 1) return response_error([],"请先接单！");
+        if($item->sale_result == 9) return response_error([],"已购买，请不要重复购买！");
 
 
 
@@ -3133,13 +3134,16 @@ class DKCustomerRepository {
         DB::beginTransaction();
         try
         {
+            // 话单记录
             $item->sale_result = 9;
+            $item->purchased_type = 1;
             $item->purchaser_id = $me->id;
             $item->purchased_at = time();
             $bool = $item->save();
             if(!$bool) throw new Exception("item--update--fail");
             else
             {
+                // 客户总账
                 $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
                 $cooperative_unit_price = $customer_u->cooperative_unit_price_of_telephone;  // 单价
 //                $customer_u->funds_obligation_total -= $cooperative_unit_price;  // 冻结金额
@@ -3148,8 +3152,11 @@ class DKCustomerRepository {
                 if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
 
 
+                // 消费记录
                 $using = new DK_Choice_Funds_Using;
 
+                $using_data["purchased_category"] = 1;
+                $using_data["purchased_type"] = 1;
                 $using_data["finance_object"] = 77;
                 $using_data["finance_category"] = 1;
                 $using_data["finance_type"] = 1;
@@ -3163,6 +3170,7 @@ class DKCustomerRepository {
                 if(!$bool_u) throw new Exception("DK_Choice_Funds_Using--insert--fail");
 
 
+                // 操作记录
                 $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
@@ -3173,8 +3181,8 @@ class DKCustomerRepository {
                 $record_data["customer_staff_id"] = $me->id;
                 $record_data["customer_id"] = $me->customer_id;
                 $record_data["telephone_id"] = $id;
-                $record_data["operate_object"] = 21;
-                $record_data["operate_category"] = 77;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 88;
                 $record_data["operate_type"] = 1;
 
                 $bool_r = $record->fill($record_data)->save();
@@ -3560,6 +3568,26 @@ class DKCustomerRepository {
         DB::beginTransaction();
         try
         {
+            // 操作记录
+            $record = new DK_Choice_Record;
+
+            $record_data["ip"] = Get_IP();
+            $record_data["record_object"] = 89;
+            $record_data["record_category"] = 11;
+            $record_data["record_type"] = 1;
+            $record_data["creator_id"] = $me->id;
+            $record_data["customer_staff_id"] = $me->id;
+            $record_data["customer_id"] = $me->customer_id;
+            $record_data["telephone_id"] = $id;
+            $record_data["operate_object"] = 77;
+            $record_data["operate_category"] = 89;
+            $record_data["operate_type"] = 1;
+
+            $bool_r = $record->fill($record_data)->save();
+            if(!$bool_r) throw new Exception("DK_Choice_Record--insert--fail");
+
+
+            // 拨号记录
             $call = new DK_Choice_Call_Record;
 
             $call_data["ip"] = Get_IP();
@@ -3568,6 +3596,7 @@ class DKCustomerRepository {
             $call_data["customer_staff_id"] = $me->id;
             $call_data["customer_id"] = $me->customer_id;
             $call_data["telephone_id"] = $id;
+            $call_data["record_id"] = $record->id;
             $call_data["telephone"] = $item->telephone;
 
             $bool_c = $call->fill($call_data)->save();
@@ -3708,6 +3737,27 @@ class DKCustomerRepository {
         DB::beginTransaction();
         try
         {
+            // 操作记录
+            $record = new DK_Choice_Record;
+
+            $record_data["ip"] = Get_IP();
+            $record_data["record_object"] = 89;
+            $record_data["record_category"] = 11;
+            $record_data["record_type"] = 1;
+            $record_data["creator_id"] = $me->id;
+            $record_data["customer_staff_id"] = $me->id;
+            $record_data["customer_id"] = $me->customer_id;
+            $record_data["clue_id"] = $item->clue_id;
+            $record_data["choice_id"] = $id;
+            $record_data["operate_object"] = 71;
+            $record_data["operate_category"] = 89;
+            $record_data["operate_type"] = 1;
+
+            $bool_r = $record->fill($record_data)->save();
+            if(!$bool_r) throw new Exception("DK_Choice_Record--insert--fail");
+
+
+            // 拨号记录
             $call = new DK_Choice_Call_Record;
 
             $call_data["ip"] = Get_IP();
@@ -3717,6 +3767,7 @@ class DKCustomerRepository {
             $call_data["customer_id"] = $me->customer_id;
             $call_data["choice_id"] = $id;
             $call_data["clue_id"] = $item->clue_id;
+            $call_data["record_id"] = $record->id;
             $call_data["telephone"] = $item->client_phone;
 
             $bool_c = $call->fill($call_data)->save();
@@ -3726,6 +3777,9 @@ class DKCustomerRepository {
             $item->last_call_time = date("Y-m-d H:i:s");
             $bool_i = $item->save();
             if(!$bool_i) throw new Exception("DK_Choice_Telephone_Bill--update--fail");
+
+
+
 
             DB::commit();
 
@@ -4531,16 +4585,21 @@ class DKCustomerRepository {
                 $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
                 if($item->sale_type == 1)
                 {
-                    $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price_1;
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_1;
                 }
                 else if($item->sale_type == 11)
                 {
-                    $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price_2;
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_2;
                 }
                 else if($item->sale_type == 66)
                 {
-                    $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price_3;
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_3;
                 }
+                else
+                {
+                    $cooperative_unit_price = 0;
+                }
+                $customer_u->funds_obligation_total += $cooperative_unit_price;
                 $bool_customer = $customer_u->save();
                 if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
 
@@ -4550,6 +4609,7 @@ class DKCustomerRepository {
                 if(!$bool_clue) throw new Exception("DK_Choice_Clue--update--fail");
 
 
+                // 操作记录
                 $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
@@ -4561,7 +4621,7 @@ class DKCustomerRepository {
                 $record_data["customer_id"] = $me->customer_id;
                 $record_data["clue_id"] = $item->clue_id;
                 $record_data["choice_id"] = $id;
-                $record_data["operate_object"] = 11;
+                $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 85;
                 $record_data["operate_type"] = 1;
 
@@ -5046,7 +5106,7 @@ class DKCustomerRepository {
                     $record_data["record_type"] = 1;
                     $record_data["creator_id"] = $me->id;
                     $record_data["order_id"] = $id;
-                    $record_data["operate_object"] = 91;
+                    $record_data["operate_object"] = 71;
                     $record_data["operate_category"] = 99;
                     $record_data["operate_type"] = 1;
                     $record_data["column_name"] = "customer_staff_id";
@@ -5130,24 +5190,45 @@ class DKCustomerRepository {
             else
             {
                 $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
-                $customer_u->funds_obligation_total += $customer_u->cooperative_unit_price;
+                if($item->sale_type == 1)
+                {
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_1;
+                }
+                else if($item->sale_type == 11)
+                {
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_2;
+                }
+                else if($item->sale_type == 66)
+                {
+                    $cooperative_unit_price = $customer_u->cooperative_unit_price_3;
+                }
+                else
+                {
+                    $cooperative_unit_price = 0;
+                }
+                $customer_u->funds_obligation_total -= $cooperative_unit_price;
                 $bool_customer = $customer_u->save();
                 if(!$bool_customer) throw new Exception("DK_Customer--update--fail");
 
-//                $record = new DK_Choice_Record;
-//
-//                $record_data["ip"] = Get_IP();
-//                $record_data["record_object"] = 31;
-//                $record_data["record_category"] = 11;
-//                $record_data["record_type"] = 1;
-//                $record_data["creator_id"] = $me->id;
-//                $record_data["order_id"] = $id;
-//                $record_data["operate_object"] = 71;
-//                $record_data["operate_category"] = 91;
-//                $record_data["operate_type"] = 1;
-//
-//                $bool_r = $record->fill($record_data)->save();
-//                if(!$bool_r) throw new Exception("DK_Choice_Record--insert--fail");
+
+                // 操作记录
+                $record = new DK_Choice_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 89;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["customer_staff_id"] = $me->id;
+                $record_data["customer_id"] = $me->customer_id;
+                $record_data["clue_id"] = $item->clue_id;
+                $record_data["choice_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 86;
+                $record_data["operate_type"] = 1;
+
+                $bool_r = $record->fill($record_data)->save();
+                if(!$bool_r) throw new Exception("DK_Choice_Record--insert--fail");
             }
 
             DB::commit();
@@ -5200,20 +5281,33 @@ class DKCustomerRepository {
         $clue = DK_Choice_Clue::find($item->clue_id);
         if(!$clue) return response_error([],"该【线索源】不存在，刷新页面重试！");
 
-        if($item->sale_result != 1) return response_error([],"请先接单！");
         if($item->customer_id != $me->customer_id) return response_error([],"该【线索】不是你的！");
+        if($item->sale_result != 1) return response_error([],"请先接单！");
+        if($item->sale_result == 9) return response_error([],"已购买，请不要重复购买！");
 
         // 启动数据库事务
         DB::beginTransaction();
         try
         {
+            // 自选记录
             $item->sale_result = 9;
+            $item->purchased_type = 1;
             $item->purchaser_id = $me->id;
             $item->purchased_at = time();
             $bool = $item->save();
-            if(!$bool) throw new Exception("item--update--fail");
+            if(!$bool) throw new Exception("DK_Choice_Pivot_Customer_Choice--update--fail");
             else
             {
+                // 线索记录
+                if($item->pivot_type == 91)
+                {
+                    $clue->sale_result = 9;
+                    $bool_clue = $clue->save();
+                    if(!$bool_clue) throw new Exception("DK_Choice_Clue--update--fail");
+                }
+
+
+                // 客户总账
                 $customer_u = DK_Choice_Customer::withTrashed()->lockForUpdate()->find($me->customer_id);
                 if($item->sale_type == 1)
                 {
@@ -5237,26 +5331,26 @@ class DKCustomerRepository {
                 if(!$bool_customer) throw new Exception("DK_Choice_Customer--update--fail");
 
 
-                $clue->sale_result = 9;
-                $bool_clue = $clue->save();
-                if(!$bool_clue) throw new Exception("DK_Choice_Clue--update--fail");
-
-
+                // 消费记录
                 $using = new DK_Choice_Funds_Using;
 
+                $using_data["purchased_category"] = 1;
+                $using_data["purchased_type"] = 1;
                 $using_data["finance_object"] = 71;
                 $using_data["finance_category"] = 1;
                 $using_data["finance_type"] = 1;
                 $using_data["creator_id"] = $me->id;
                 $using_data["customer_staff_id"] = $me->id;
                 $using_data["customer_id"] = $me->customer_id;
-                $using_data["clue_id"] = $id;
+                $using_data["choice_id"] = $id;
+                $using_data["clue_id"] = $item->clue_id;
                 $using_data["transaction_amount"] = $cooperative_unit_price;
 
                 $bool_u = $using->fill($using_data)->save();
                 if(!$bool_u) throw new Exception("DK_Choice_Funds_Using--insert--fail");
 
 
+                // 操作记录
                 $record = new DK_Choice_Record;
 
                 $record_data["ip"] = Get_IP();
@@ -5266,9 +5360,9 @@ class DKCustomerRepository {
                 $record_data["creator_id"] = $me->id;
                 $record_data["customer_staff_id"] = $me->id;
                 $record_data["customer_id"] = $me->customer_id;
-                $record_data["clue_id"] = $item->clue_id;
                 $record_data["choice_id"] = $id;
-                $record_data["operate_object"] = 11;
+                $record_data["clue_id"] = $item->clue_id;
+                $record_data["operate_object"] = 71;
                 $record_data["operate_category"] = 88;
                 $record_data["operate_type"] = 1;
 
