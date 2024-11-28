@@ -19905,14 +19905,18 @@ class DKAdmin2_Repository {
         }
 
 
-        $post_data['notify']['content'] = json_encode($post_data);
         $seq = $post_data['notify']['seq'];
         $userData = $post_data['notify']['userData'];
         $timeLength = $post_data['notify']['timeLength'];
+
+        $customer_time_limit = 0;
+
 //        if($userData == 'calling')
         if(true)
         {
             $call_data = $post_data['notify'];
+            $call_data['apiType'] = $post_data['notify']['type'];
+            $call_data['content'] = json_encode($post_data);
 
             $call = DK_Choice_Call_Record::find($userData);
             if($call)
@@ -19931,11 +19935,11 @@ class DKAdmin2_Repository {
             }
             else
             {
-//                return response_error([],"该【通话】不存在！");
-                $call = new DK_Choice_Call_Record;
-
-                $call_data["ip"] = Get_IP();
-                $call_data["telephone"] = $post_data['notify']['callee'];
+                return response_error([],"该【通话】不存在！");
+//                $call = new DK_Choice_Call_Record;
+//
+//                $call_data["ip"] = Get_IP();
+//                $call_data["telephone"] = $post_data['notify']['callee'];
             }
 
 
@@ -19943,17 +19947,23 @@ class DKAdmin2_Repository {
             DB::beginTransaction();
             try
             {
-                $bool_c = $call->fill($post_data['notify'])->save();
+                $bool_c = $call->fill($call_data)->save();
                 if(!$bool_c) throw new Exception("DK_Choice_Call_Record--fail--fail");
 
                 if(($customer_time_limit > 0) && ($timeLength > 0) && ($timeLength >= $customer_time_limit))
                 {
-
                     if($call->call_object == 0)
                     {
 
                     }
+                    else if($call->call_object == 71)
+                    {
 
+                    }
+                    else if($call->call_object == 79)
+                    {
+
+                    }
                 }
 
                 DB::commit();

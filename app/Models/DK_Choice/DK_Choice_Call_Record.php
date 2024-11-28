@@ -44,6 +44,7 @@ class DK_Choice_Call_Record extends Model
         'session',
         'seq',
 
+        'apiType',
         'service',
         'usageMode',
 
