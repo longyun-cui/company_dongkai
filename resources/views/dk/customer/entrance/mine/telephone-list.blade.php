@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description'){{ $title_text or '我的话单' }} - 客户系统 - {{ config('info.info.short_name') }}@endsection
+@section('header')<span class="box-title">{{ $title_text or '我的话单' }}</span>@endsection
+@section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -17,12 +17,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
-
-            <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
-
-                <h3 class="box-title">{{ $title_text or '我的话单' }}</h3>
-
-            </div>
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-telephone-list">

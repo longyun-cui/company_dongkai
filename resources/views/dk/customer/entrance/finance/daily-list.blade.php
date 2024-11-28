@@ -8,10 +8,9 @@
 
 
 
-@section('header','')
+@section('header')<span class="statistic-title">{{ $title_text or '财务日报' }}</span>@endsection
 @section('description')
     <b class="box-title">
-        <span class="statistic-title">{{ $title_text or '财务日报' }}</span>
         <span class="statistic-time-type-title">【全部】</span>
         <span class="statistic-time-title"></span>
     </b>

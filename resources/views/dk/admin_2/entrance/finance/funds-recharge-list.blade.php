@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description'){{ $title_text or '充值记录' }} - 客户系统 - {{ config('info.info.short_name') }}@endsection
+@section('header')<span class="box-title">{{ $title_text or '充值记录' }}</span>@endsection
+@section('description')<b class="box-title"></b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -17,20 +17,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-info main-list-body">
-
-            <div class="box-header with-border" style="margin:16px 0;">
-
-                <h3 class="box-title">{{ $title_text or '充值记录' }}</h3>
-
-                <div class="caption pull-right _none">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/finance-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加财务记录</button>
-                    </a>
-                </div>
-
-            </div>
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-finance-list">
@@ -546,21 +532,21 @@
                             // else return '';
                         }
                     },
-                    // {
-                    //     "title": "创建者",
-                    //     "data": "creator_id",
-                    //     "className": "",
-                    //     "width": "60px",
-                    //     "orderable": false,
-                    //     render: function(data, type, row, meta) {
-                    //         return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
-                    //     }
-                    // },
+                    {
+                        "title": "创建者",
+                        "data": "creator_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                        }
+                    },
                     {
                         "title": "创建时间",
                         "data": 'created_at',
                         "className": "font-12px",
-                        "width": "108px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 //                            return data;

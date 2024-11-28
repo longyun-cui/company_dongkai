@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description')<b>{{ $title_text or '优选线索' }}</b>@endsection
+@section('header')<span class="box-title">{{ $title_text or '优选线索' }}</span>@endsection
+@section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -17,21 +17,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
-
-            <div class="box-header with-border _none" style="padding:6px 10px;margin:4px;">
-
-                <h3 class="box-title">{{ $title_text or '优选线索' }}</h3>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
-            </div>
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-delivery-list">

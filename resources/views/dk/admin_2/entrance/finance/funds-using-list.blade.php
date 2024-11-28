@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description')<b>{{ $title_text or '消费记录' }}</b>@endsection
+@section('header')<span class="box-title">{{ $title_text or '消费记录' }}</span>@endsection
+@section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -409,7 +409,7 @@
                         "title": "消费者",
                         "data": "creator_id",
                         "className": "",
-                        "width": "100px",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';

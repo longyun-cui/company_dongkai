@@ -1,3 +1,6 @@
+.content-header>h1 { font-size:20px; }
+.content-header>h1>small { font-size:16px; }
+
 .tableArea .dataTables_wrapper { position:relative; clear:both; zoom:1; overflow-x:auto; }
 .tableArea.overflow-none .dataTables_wrapper { overflow-x:hidden; }
 .tableArea .row { margin-left:0; margin-right:0; padding-left:0; padding-right:0; }

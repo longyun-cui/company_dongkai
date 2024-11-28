@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description')部门列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('header')<span class="box-title">{{ $title_text or '部门列表' }}</span>@endsection
+@section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection

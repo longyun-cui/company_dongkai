@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description')项目列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('header')<span class="box-title">{{ $title_text or '项目列表' }}</span>@endsection
+@section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -17,22 +17,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-info main-list-body">
-
-            <div class="box-header with-border" style="margin:4px 0;">
-
-                <h3 class="box-title">{{ $title_text or '项目列表' }}</h3>
-
-                @if(in_array($me->user_type,[0,1,9,11,19]))
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/item/project-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加项目</button>
-                    </a>
-                </div>
-                @endif
-
-            </div>
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-project-list">
@@ -69,6 +53,13 @@
                         <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
+
+
+                        <a href="{{ url('/item/project-create') }}">
+                            <button type="button" onclick="" class="btn btn-success pull-right" style="width:120px;">
+                                <i class="fa fa-plus"></i> 添加项目
+                            </button>
+                        </a>
 
                     </div>
                 </div>

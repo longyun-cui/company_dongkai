@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description')<b>{{ $title_text or '员工列表' }}</b>@endsection
+@section('header')<span class="box-title">{{ $title_text or '员工列表' }}</span>@endsection
+@section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>

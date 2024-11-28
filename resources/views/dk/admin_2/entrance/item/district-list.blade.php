@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description')地域列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('header')<span class="box-title">{{ $title_text or '地域列表' }}</span>@endsection
+@section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -17,19 +17,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-info main-list-body">
-
-            <div class="box-header with-border" style="margin:4px 0;">
-
-                <h3 class="box-title">{{ $title_text or '地域列表' }}</h3>
-
-                @if(in_array($me->user_type,[0,1,9,11,19,61]))
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                </div>
-                @endif
-
-            </div>
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-district-list">
@@ -69,8 +56,11 @@
 
 
                         <a href="{{ url('/district/district-create') }}">
-                            <button type="button" onclick="" class="btn btn-default pull-right" style="width:120px;"><i class="fa fa-plus"></i> 添加城市</button>
+                            <button type="button" onclick="" class="btn btn-success pull-right" style="width:120px;">
+                                <i class="fa fa-plus"></i> 添加城市
+                            </button>
                         </a>
+
 
                         <div class="input-group _none">
                             <span class="input-group-addon"><input type="checkbox" id="check-review-all" style="width:40px;"></span>

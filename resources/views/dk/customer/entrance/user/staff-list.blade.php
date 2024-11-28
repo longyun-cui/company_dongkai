@@ -8,8 +8,8 @@
 
 
 
-@section('header','')
-@section('description')员工列表 - 客户系统 - {{ config('info.info.short_name') }}@endsection
+@section('header')<span class="box-title">{{ $title_text or '客户系统' }}</span>@endsection
+@section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -20,26 +20,6 @@
         <!-- BEGIN PORTLET-->
         <div class="box box-info">
 
-            <div class="box-header with-border" style="margin:4px 0;">
-                <h3 class="box-title">员工列表</h3>
-
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/user/staff-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加员工</button>
-                    </a>
-                </div>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-            </div>
 
             <div class="box-body datatable-body item-main-body" id="item-main-body">
 
@@ -79,6 +59,15 @@
                         <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
                             <i class="fa fa-circle-o-notch"></i> 重置
                         </button>
+
+
+                        @if(in_array($me->user_type,[0,1,9,11,19]))
+                        <a href="{{ url('/user/staff-create') }}">
+                            <button type="button" onclick="" class="btn btn-success pull-right" style="width:120px;">
+                                <i class="fa fa-plus"></i> 添加员工
+                            </button>
+                        </a>
+                        @endif
 
                     </div>
                 </div>
