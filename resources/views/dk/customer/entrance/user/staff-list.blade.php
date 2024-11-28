@@ -50,28 +50,28 @@
                         <input type="text" class="form-control form-filter item-search-keyup" name="staff-mobile" placeholder="登录工号" />
                         <input type="text" class="form-control form-filter item-search-keyup" name="staff-username" placeholder="用户名" />
 
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                            <select class="form-control form-filter select2-box" name="staff-department-district" style="width:88px;">
-                                <option value="-1">选择大区</option>
-                                @foreach($department_district_list as $v)
-                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                @endforeach
-                            </select>
-                        @endif
+{{--                        @if(in_array($me->user_type,[0,1,9,11]))--}}
+{{--                            <select class="form-control form-filter select2-box" name="staff-department-district" style="width:88px;">--}}
+{{--                                <option value="-1">选择大区</option>--}}
+{{--                                @foreach($department_district_list as $v)--}}
+{{--                                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        @endif--}}
 
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                            <select class="form-control form-filter" name="staff-user-type" style="width:88px;">
-                                <option value="-1">全部人员</option>
-                                <option value="41">团队·总经理</option>
-                                <option value="88">客服</option>
-                                <option value="84">客服主管</option>
-                                <option value="81">客服经理</option>
-                                <option value="77">质检员</option>
-                                <option value="71">质检经理</option>
-                                <option value="66">运营人员</option>
-                                <option value="61">运营经理</option>
-                            </select>
-                        @endif
+{{--                        @if(in_array($me->user_type,[0,1,9,11]))--}}
+{{--                            <select class="form-control form-filter" name="staff-user-type" style="width:88px;">--}}
+{{--                                <option value="-1">全部人员</option>--}}
+{{--                                <option value="41">团队·总经理</option>--}}
+{{--                                <option value="88">客服</option>--}}
+{{--                                <option value="84">客服主管</option>--}}
+{{--                                <option value="81">客服经理</option>--}}
+{{--                                <option value="77">质检员</option>--}}
+{{--                                <option value="71">质检经理</option>--}}
+{{--                                <option value="66">运营人员</option>--}}
+{{--                                <option value="61">运营经理</option>--}}
+{{--                            </select>--}}
+{{--                        @endif--}}
 
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
