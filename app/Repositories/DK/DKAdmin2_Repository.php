@@ -8951,6 +8951,15 @@ class DKAdmin2_Repository {
             }
         }
 
+        // 销售状态
+        if(isset($post_data['sale_status']))
+        {
+            if(!in_array($post_data['sale_status'],["-1"]))
+            {
+                $query->where('sale_status', $post_data['sale_status']);
+            }
+        }
+
         // 审核状态
         if(!empty($post_data['inspected_status']))
         {

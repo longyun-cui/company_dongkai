@@ -142,7 +142,7 @@
                         </button>
 
 
-                        <div class="input-group">
+                        <div class="input-group _none">
                             <span class="input-group-addon" style="width:40px;"><input type="checkbox" id="check-review-all" style="width:40px;"></span>
 
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>

@@ -62,17 +62,17 @@
 {{--                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="clue-delivered_date" placeholder="交付日期" value="" readonly="readonly" style="width:100px;text-align:center;" />--}}
 
 
-                        <select class="form-control form-filter select2-box clue-select2-project" name="clue-project" style="width:120px;">
-                            @if($project_id > 0)
-                                <option value="-1">选择项目</option>
-                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>
-                            @else
-                                <option value="-1">选择项目</option>
-                            @endif
-                        </select>
+{{--                        <select class="form-control form-filter select2-box clue-select2-project" name="clue-project" style="width:120px;">--}}
+{{--                            @if($project_id > 0)--}}
+{{--                                <option value="-1">选择项目</option>--}}
+{{--                                <option value="{{ $project_id }}" selected="selected">{{ $project_name }}</option>--}}
+{{--                            @else--}}
+{{--                                <option value="-1">选择项目</option>--}}
+{{--                            @endif--}}
+{{--                        </select>--}}
 
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                            <select class="form-control form-filter select2-box clue-select2-customer" name="clue-customer" style="width:160px;">
+                            <select class="form-control form-filter select2-box clue-select2-customer" name="clue-customer" style="width:120px;">
                                 <option value="-1">选择客户</option>
                                 @foreach($customer_list as $v)
                                     <option value="{{ $v->id }}" @if($v->id == $customer_id) selected="selected" @endif>{{ $v->username }}</option>
@@ -80,21 +80,27 @@
                             </select>
                         @endif
 
-                        <select class="form-control form-filter" name="clue-delivered-status" style="width:100px;">
-                            <option value="-1">交付状态</option>
-                            <option value="待交付" @if("待交付" == $delivered_status) selected="selected" @endif>待交付</option>
+{{--                        <select class="form-control form-filter" name="clue-delivered-status" style="width:100px;">--}}
+{{--                            <option value="-1">交付状态</option>--}}
+{{--                            <option value="待交付" @if("待交付" == $delivered_status) selected="selected" @endif>待交付</option>--}}
 {{--                            <option value="已交付" @if("已交付" == $delivered_status) selected="selected" @endif>已交付</option>--}}
-                            <option value="已操作" @if("已操作" == $delivered_status) selected="selected" @endif>已操作</option>
+{{--                            <option value="已操作" @if("已操作" == $delivered_status) selected="selected" @endif>已操作</option>--}}
+{{--                        </select>--}}
+
+{{--                        <select class="form-control form-filter select2-box" name="clue-delivered-result[]" multiple="multiple" style="width:100px;">--}}
+{{--                            <option value="-1">交付结果</option>--}}
+{{--                            @foreach(config('info.delivered_result') as $v)--}}
+{{--                                <option value="{{ $v }}">{{ $v }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+
+                        <select class="form-control form-filter select2-box" name="clue-sale-status" data-placeholder="选择上架状态" style="width:100px;">
+                            <option value="-1">选择上架状态</option>
+                            <option value="0">待上架</option>
+                            <option value="9">已上架</option>
                         </select>
 
-                        <select class="form-control form-filter select2-box" name="clue-delivered-result[]" multiple="multiple" style="width:100px;">
-                            <option value="-1">交付结果</option>
-                            @foreach(config('info.delivered_result') as $v)
-                                <option value="{{ $v }}">{{ $v }}</option>
-                            @endforeach
-                        </select>
-
-                        <input type="text" class="form-control form-filter filter-keyup" name="clue-customer-name" placeholder="客户姓名" value="{{ $customer_name or '' }}" style="width:88px;" />
+{{--                        <input type="text" class="form-control form-filter filter-keyup" name="clue-customer-name" placeholder="客户姓名" value="{{ $customer_name or '' }}" style="width:88px;" />--}}
                         <input type="text" class="form-control form-filter filter-keyup" name="clue-customer-phone" placeholder="客户电话" value="{{ $customer_phone or '' }}" style="width:88px;" />
 
 
@@ -106,7 +112,7 @@
                             @endforeach
                             @endif
                         </select>
-                        <select class="form-control form-filter select2-box select2-district-district" name="clue-district[]" id="clue-district" data-target="clue-city" multiple="multiple" placeholder="选择区域" style="width:160px;">
+                        <select class="form-control form-filter select2-box select2-district-district" name="clue-district[]" id="clue-district" data-target="clue-city" multiple="multiple" placeholder="选择区域" style="width:120px;">
                             <option value="-1">选择区域</option>
                             @if(!empty($district_district_list) && count($district_district_list) > 0)
                             @foreach($district_district_list as $v)
@@ -142,37 +148,10 @@
                             <i class="fa fa-undo"></i> 重置
                         </button>
 
-
-                        <div class="pull-left clear-both">
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="tableArea">
-                <table class='table table-striped table-bordered table-hover clue-column' id='datatable_ajax'>
-                    <thead>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
-                </div>
-
-            </div>
-
-
-            @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-            <div class="box-footer" style="padding:4px 10px;">
-                <div class="row" style="margin:2px 0;">
-                    <div class="col-md-offset-0 col-md-6 col-sm-6 col-xs-12">
-                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
-                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
                         <div class="input-group">
-                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
+                            <span class="input-group-addon" style="width:40px;"><input type="checkbox" id="check-review-all" style="width:40px;"></span>
 
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
+{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>--}}
 
 
                             <select name="bulk-operate-sale-type" class="form-control form-filter select2-box" style="width:50%;height:100%;">
@@ -195,10 +174,25 @@
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-put-on-shelf"><i class="fa fa-share"></i> 批量上架</span>
                         </div>
+
+                        <div class="pull-left clear-both">
+                        </div>
+
                     </div>
                 </div>
+
+                <div class="tableArea">
+                <table class='table table-striped table-bordered table-hover clue-column' id='datatable_ajax'>
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+                </div>
+
             </div>
-            @endif
 
 
             <div class="box-footer _none">
@@ -1107,6 +1101,7 @@
                         d.customer_phone = $('input[name="clue-customer-phone"]').val();
                         d.is_wx = $('select[name="clue-is-wx"]').val();
                         d.is_repeat = $('select[name="clue-is-repeat"]').val();
+                        d.sale_status = $('select[name="clue-sale-status"]').val();
                         d.inspected_status = $('select[name="clue-inspected-status"]').val();
                         d.inspected_result = $('select[name="clue-inspected-result[]"]').val();
                         d.delivered_status = $('select[name="clue-delivered-status"]').val();
@@ -1322,6 +1317,11 @@
                         "className": "",
                         "width": "72px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('sale_status');
+                            $(nTd).attr('data-id',row.id).attr('data-name','销售状态');
+                            $(nTd).attr('data-key','sale_status').attr('data-value',data);
+                        },
                         render: function(data, type, row, meta) {
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">待上架</small>';
@@ -1337,6 +1337,11 @@
                         "className": "",
                         "width": "72px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('sale_type');
+                            $(nTd).attr('data-id',row.id).attr('data-name','销售类型');
+                            $(nTd).attr('data-key','sale_type').attr('data-value',data);
+                        },
                         render: function(data, type, row, meta) {
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">未上架</small>';
@@ -1353,6 +1358,11 @@
                         "className": "",
                         "width": "72px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).addClass('sale_result');
+                            $(nTd).attr('data-id',row.id).attr('data-name','销售结果');
+                            $(nTd).attr('data-key','sale_result').attr('data-value',data);
+                        },
                         render: function(data, type, row, meta) {
                             var $result_html = '';
                             if(data == 0) $result_html = '<small class="btn-xs bg-teal">待接单</small>';
@@ -1820,8 +1830,8 @@
                     if($('select[name="clue-type"]').val() > 0)  $obj.order_type = $('select[name="clue-type"]').val();
                     if($('select[name="clue-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="clue-is-wx"]').val();
                     if($('select[name="clue-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="clue-is-repeat"]').val();
-                    if($('select[name="clue-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="clue-inspected-status"]').val();
-                    if($('select[name="clue-delivered-status"]').val() != -1)  $obj.delivered_status = $('select[name="clue-delivered-status"]').val();
+                    if($('select[name="clue-sale-status"]').val() != -1)  $obj.sale_status = $('select[name="clue-sale-status"]').val();
+                    // if($('select[name="clue-sale-result"]').val() != -1)  $obj.sale_result = $('select[name="clue-sale-result"]').val();
                     // if($('select[name="clue-city"]').val() != -1)  $obj.district_city = $('select[name="clue-city"]').val();
                     // if($('select[name="clue-district"]').val() != -1)  $obj.district_district = $('select[name="clue-district"]').val();
 

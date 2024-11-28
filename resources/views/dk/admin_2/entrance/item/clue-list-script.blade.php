@@ -922,6 +922,7 @@
             // var $url = url_build('/statistic/statistic-export-for-clue-by-ids?ids='+$ids);
             // window.open($url);
 
+
             layer.msg('确定"批量上架"么', {
                 time: 0
                 ,btn: ['确定', '取消']
@@ -933,8 +934,8 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "clue-put-on-bulk",
                             ids: $ids,
-                            customer_id: $('select[name="bulk-operate-assign-customer"]').val(),
-                            sale_type: $('select[name="bulk-operate-sale-type"]').val()
+                            sale_type: $('select[name="bulk-operate-sale-type"]').val(),
+                            customer_id: $('select[name="bulk-operate-assign-customer"]').val()
                             // assign_description:$('input[name="bulk-operate-delivered-description"]').val()
                         },
                         function(data){
@@ -954,9 +955,26 @@
                                     var $customer_name = $('select[name="bulk-operate-assign-customer"]').find('option:selected').html();
 
                                     $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
-                                    $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已上架</small>');
-                                    $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$sale_type+'</small>');
-                                    $row.find('td[data-key=client_id]').attr('data-value',$client_id);
+                                    $row.find('td[data-key=sale_status]').html('<small class="btn-xs bg-blue">已上架</small>');
+
+                                    if($sale_type == 1)
+                                    {
+                                        $row.find('td[data-key=sale_type]').html('<small class="btn-xs bg-blue">一般</small>');
+                                    }
+                                    else if($sale_type == 11)
+                                    {
+                                        $row.find('td[data-key=sale_type]').html('<small class="btn-xs bg-green">优选</small>');
+                                    }
+                                    else if($sale_type == 66)
+                                    {
+                                        $row.find('td[data-key=sale_type]').html('<small class="btn-xs bg-yellow">独享</small>');
+                                    }
+                                    else
+                                    {
+                                        $row.find('td[data-key=sale_type]').html('<small class="btn-xs bg-black">error</small>');
+                                    }
+
+                                    $row.find('td[data-key=customer_id]').attr('data-value',$customer_id);
                                     if($customer_id != "-1")
                                     {
                                         $row.find('td[data-key=customer_id]').html('<a href="javascript:void(0);">'+$customer_name+'</a>');
