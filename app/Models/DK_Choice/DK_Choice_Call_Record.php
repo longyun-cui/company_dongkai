@@ -11,9 +11,17 @@ class DK_Choice_Call_Record extends Model
     //
     protected $table = "dk_choice_call_record";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'sort',
-        'call_active', 'call_status',
-        'call_category', 'call_type', 'call_group', 'call_module',
+        'active', 'status', 'category', 'type', 'sort', 'form',
+
+        'call_category',
+        'call_type',
+        'call_group',
+        'call_module',
+
+        'call_object',
+
+        'call_active',
+        'call_status',
         'call_result',
         'call_result_msg',
 
