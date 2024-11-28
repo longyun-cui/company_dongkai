@@ -3563,6 +3563,7 @@ class DKCustomerRepository {
             $call = new DK_Choice_Call_Record;
 
             $call_data["ip"] = Get_IP();
+            $call_data["call_object"] = 77;
             $call_data["creator_id"] = $me->id;
             $call_data["customer_staff_id"] = $me->id;
             $call_data["customer_id"] = $me->customer_id;
@@ -3710,10 +3711,12 @@ class DKCustomerRepository {
             $call = new DK_Choice_Call_Record;
 
             $call_data["ip"] = Get_IP();
+            $call_data["call_object"] = 71;
             $call_data["creator_id"] = $me->id;
             $call_data["customer_staff_id"] = $me->id;
             $call_data["customer_id"] = $me->customer_id;
-            $call_data["clue_id"] = $id;
+            $call_data["choice_id"] = $id;
+            $call_data["clue_id"] = $item->clue_id;
             $call_data["telephone"] = $item->client_phone;
 
             $bool_c = $call->fill($call_data)->save();

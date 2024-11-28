@@ -4850,6 +4850,7 @@ class DKAdmin2_Repository {
         DB::beginTransaction();
         try
         {
+            $user->login_error_num = 0;
             $user->user_status = 1;
             $user->timestamps = false;
             $bool = $user->save();
@@ -19896,8 +19897,9 @@ class DKAdmin2_Repository {
 
 
         $post_data['notify']['content'] = json_encode($post_data);
-        $userData = $post_data['notify']['userData'];
         $seq = $post_data['notify']['seq'];
+        $userData = $post_data['notify']['userData'];
+        $timeLength = $post_data['notify']['timeLength'];
 //        if($userData == 'calling')
         if(true)
         {
@@ -19906,10 +19908,17 @@ class DKAdmin2_Repository {
             $call = DK_Choice_Call_Record::find($userData);
             if($call)
             {
-                $telephone = DK_Choice_Telephone_Bill::find($call->telephone_id);
-                if($telephone)
+//                $telephone = DK_Choice_Telephone_Bill::find($call->telephone_id);
+//                if($telephone)
+//                {
+//                }
+
+                $customer = DK_Choice_Customer::find($call->customer_id);
+                if($customer)
                 {
+                    $customer_time_limit = $customer->call_time_limit_for_telephone;
                 }
+                else $customer_time_limit = 0;
             }
             else
             {
@@ -19927,6 +19936,16 @@ class DKAdmin2_Repository {
             {
                 $bool_c = $call->fill($post_data['notify'])->save();
                 if(!$bool_c) throw new Exception("DK_Choice_Call_Record--fail--fail");
+
+                if(($customer_time_limit > 0) && ($timeLength > 0) && ($timeLength >= $customer_time_limit))
+                {
+
+                    if($call->call_object == 0)
+                    {
+
+                    }
+
+                }
 
                 DB::commit();
                 $return['result']['error'] = 0;
