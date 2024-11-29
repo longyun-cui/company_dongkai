@@ -349,7 +349,7 @@
                         "title": "通话时长",
                         "data": "timeLength",
                         "className": "",
-                        "width": "120px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 0) return '--';
@@ -360,7 +360,7 @@
                         "title": "录音播放",
                         "data": "recordFile",
                         "className": "",
-                        "width": "160px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)

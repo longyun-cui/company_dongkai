@@ -129,7 +129,7 @@
                         "title": "通话时长",
                         "data": "timeLength",
                         "className": "",
-                        "width": "120px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 0) return '--';
