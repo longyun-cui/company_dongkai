@@ -503,6 +503,19 @@ Route::group(['middleware' => ['dk.admin_2.login','dk.admin_2.password_change']]
 
 
 
+    /*
+     * call 财务
+     */
+    // 列表
+    Route::match(['get','post'], '/call/call-list', $controller.'@view_call_call_list');
+
+
+
+
+
+
+
+
 
     /*
      * statistic 数据统计

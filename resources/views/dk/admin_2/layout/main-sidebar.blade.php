@@ -147,8 +147,8 @@
 
 
 
-            @if(in_array($me->user_type,[0,1,9,11]))
             {{--财务统计--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
             <li class="header">财务统计</li>
 
             <li class="treeview {{ $menu_active_of_finance_funds_recharge_list or '' }}">
@@ -164,6 +164,20 @@
             <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
                 <a href="{{ url('/finance/finance-daily-list') }}">
                     <i class="fa fa-pie-chart text-green"></i> <span>财务日报</span>
+                </a>
+            </li>
+            @endif
+
+
+
+
+            {{--拨号--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
+            <li class="header">拨号详情</li>
+
+            <li class="treeview {{ $menu_active_of_call_list or '' }}">
+                <a href="{{ url('/call/call-list') }}">
+                    <i class="fa fa-phone-square text-yellow"></i> <span>拨号详情</span>
                 </a>
             </li>
             @endif

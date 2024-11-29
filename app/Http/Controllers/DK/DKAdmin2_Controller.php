@@ -1383,6 +1383,20 @@ class DKAdmin2_Controller extends Controller
 
 
 
+    /*
+     * Call 拨号
+     */
+    // 【财务】返回-列表-视图（充值）
+    public function view_call_call_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_call_call_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_call_call_list_datatable(request()->all());
+    }
+
+
+
+
+
 
 
 

@@ -178,7 +178,7 @@ class DK_Choice_Call_Record extends Model
     }
     function customer_er()
     {
-        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_Customer','customer_id','id');
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Customer','customer_id','id');
     }
 
 

@@ -132,7 +132,7 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data = 0) return '--';
+                            if(data == 0) return '--';
                             else return data;
                         }
                     },
