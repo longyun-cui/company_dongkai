@@ -88,7 +88,7 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data = '0000-00-00 00:00:00') return '';
+                            if(data == '0000-00-00 00:00:00') return '';
                             else return data;
                         }
                     },
@@ -99,7 +99,7 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data = '0000-00-00 00:00:00') return '';
+                            if(data == '0000-00-00 00:00:00') return '';
                             else return data;
                         }
                     },
@@ -110,7 +110,7 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data = '0000-00-00 00:00:00') return '';
+                            if(data == '0000-00-00 00:00:00') return '';
                             else return data;
                         }
                     },
@@ -121,7 +121,7 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(data = '0000-00-00 00:00:00') return '';
+                            if(data == '0000-00-00 00:00:00') return '';
                             else return data;
                         }
                     },
