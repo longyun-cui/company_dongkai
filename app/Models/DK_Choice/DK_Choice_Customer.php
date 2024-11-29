@@ -37,6 +37,9 @@ class DK_Choice_Customer extends Authenticatable
         'district_city',
         'district_district',
 
+        'is_preferential',
+        'is_staff_take',
+
         'is_ip',
         'ip_whitelist',
 

@@ -303,6 +303,26 @@
                             return data;
                         }
                     },
+                    {
+                        "title": "user_type",
+                        "data": "user_type",
+                        "className": "text-left",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "client_id",
+                        "data": "client_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
 //                    {
 //                        "className": "text-left",
 //                        "width":"128px",

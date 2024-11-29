@@ -77,25 +77,29 @@
 
 
 
-            @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
+            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
             <li class="header">线索管理</li>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
+            @if(in_array($me->user_type,[0,1,9,11]) || (in_array($me->user_type,[81,84,88]) && $me->customer_er->is_staff_take == 1))
             <li class="treeview {{ $menu_active_of_item_clue_list or '' }}">
                 <a href="{{ url('/item/clue-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>线索公海</span>
                 </a>
             </li>
-{{--            @if($me->customer_er->is_preferential == 1)--}}
-            <li class="treeview {{ $menu_active_of_item_clue_list_for_preferential or '' }}">
+            @endif
+            @if(in_array($me->user_type,[0,1,9,11]) || (in_array($me->user_type,[81,84,88]) && $me->customer_er->is_staff_take == 1))
+            @if($me->customer_er->is_preferential == 1)
+            <li class="treeview {{ $menu_active_of_item_clue_list_for_preferential or '' }} menu-of-clue-preferential">
                 <a href="{{ url('/item/clue-list-for-preferential')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>优选线索</span>
                 </a>
             </li>
-{{--            @endif--}}
+            @endif
+            @endif
+            @if(in_array($me->user_type,[0,1,9,11,81,84,88]))
             <li class="treeview {{ $menu_active_of_mine_clue_list or '' }}">
                 <a href="{{ url('/mine/clue-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
@@ -133,6 +137,7 @@
 
 
 
+            @if(in_array($me->user_type, [1,11]))
             {{--财务统计--}}
             <li class="header">财务统计</li>
 
@@ -151,6 +156,7 @@
                     <i class="fa fa-pie-chart text-green"></i> <span>财务日报</span>
                 </a>
             </li>
+            @endif
 
 
 

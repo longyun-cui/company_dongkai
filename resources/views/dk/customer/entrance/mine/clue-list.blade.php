@@ -41,6 +41,7 @@
 {{--                        </select>--}}
 
 
+                        @if(in_array($me->user_type, [1,11]))
                         <select class="form-control form-filter select2-box telephone-select2-staff" name="order-staff" style="width:160px;">
                             <option value="-1">选择员工</option>
                             <option value="0">*未分配员工*</option>
@@ -48,6 +49,7 @@
                                 <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
                             @endforeach
                         </select>
+                        @endif
 
 {{--                        <select class="form-control form-filter" name="order-exported-status" style="width:100px;">--}}
 {{--                            <option value="-1">导出状态</option>--}}
@@ -59,18 +61,6 @@
 {{--                            <option value="-1">分配状态</option>--}}
 {{--                            <option value="0" @if($assign_status == 0) selected="selected" @endif>待分配</option>--}}
 {{--                            <option value="1" @if($assign_status == 1) selected="selected" @endif>已分配</option>--}}
-{{--                        </select>--}}
-
-{{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
-{{--                            <option value="-1">是否+V</option>--}}
-{{--                            <option value="1" @if($is_wx == "1") selected="selected" @endif>是</option>--}}
-{{--                            <option value="0" @if($is_wx == "0") selected="selected" @endif>否</option>--}}
-{{--                        </select>--}}
-
-{{--                        <select class="form-control form-filter" name="order-is-repeat" style="width:88px;">--}}
-{{--                            <option value="-1">是否重复</option>--}}
-{{--                            <option value="1" @if($is_repeat >= 1) selected="selected" @endif>是</option>--}}
-{{--                            <option value="0" @if($is_repeat == 0) selected="selected" @endif>否</option>--}}
 {{--                        </select>--}}
 
 {{--                        <input type="text" class="form-control form-filter filter-keyup" name="order-description" placeholder="通话小结" value="" style="width:120px;" />--}}
@@ -89,16 +79,20 @@
                         </button>
 
 
-                        <span class="input-group-addon" style="width:40px;"><input type="checkbox" id="check-review-all" style="width:40px;"></span>
-                        <select name="bulk-operate-staff-id" class="form-control form-filter select2-box">
-                            <option value="-1">选择员工</option>
-                            @foreach($staff_list as $v)
-                                <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
-                            @endforeach
-                        </select>
-                        <button type="button" class="form-control btn btn-flat btn-default" id="bulk-submit-for-assign-staff" style="width:100px;">
-                            <i class="fa fa-check"></i> 批量分配
-                        </button>
+                        @if(in_array($me->user_type, [1,11]))
+                        <div class="input-group">
+                            <span class="input-group-addon" style="width:40px;"><input type="checkbox" id="check-review-all" style="width:40px;"></span>
+                            <select name="bulk-operate-staff-id" class="form-control form-filter select2-box">
+                                <option value="-1">选择员工</option>
+                                @foreach($staff_list as $v)
+                                    <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button" class="form-control btn btn-flat btn-default" id="bulk-submit-for-assign-staff" style="width:100px;">
+                                <i class="fa fa-check"></i> 批量分配
+                            </button>
+                        </div>
+                        @endif
 
 
                         <div class="pull-left clear-both">
@@ -119,53 +113,6 @@
                 </div>
 
             </div>
-
-
-            @if(in_array($me->user_type,[0,1,9,11]))
-            <div class="box-footer _none" style="padding:4px 10px;">
-                <div class="row" style="margin:2px 0;">
-                    <div class="col-md-offset-0 col-md-6 col-sm-9 col-xs-12">
-                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
-                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
-                        <div class="input-group">
-                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
-                            <select name="bulk-operate-status" class="form-control form-filter _none">
-                                <option value="-1">请选择操作类型</option>
-                                <option value="启用">启用</option>
-                                <option value="禁用">禁用</option>
-                                <option value="删除">删除</option>
-                                <option value="彻底删除">彻底删除</option>
-                            </select>
-{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
-{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
-
-{{--                            <select name="bulk-operate-exported-status" class="form-control form-filter">--}}
-{{--                                <option value="-1">请选导出状态</option>--}}
-{{--                                <option value="1">已导出</option>--}}
-{{--                                <option value="0">待导出</option>--}}
-{{--                            </select>--}}
-{{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>--}}
-
-                            <select name="bulk-operate-assign-status" class="form-control form-filter">
-                                <option value="-1">请选分配状态</option>
-                                <option value="1">已分配</option>
-                                <option value="0">待分配</option>
-                            </select>
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-status"><i class="fa fa-check"></i> 批量更改导出状态</span>
-
-                            <select name="bulk-operate-staff-id" class="form-control form-filter">
-                                <option value="-1">选择员工</option>
-                                @foreach($staff_list as $v)
-                                    <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>
-                                @endforeach
-                            </select>
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-staff"><i class="fa fa-check"></i> 批量分配</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
 
 
             <div class="box-footer _none">
@@ -374,110 +321,6 @@
     </div>
 </div>
 
-{{--显示-附件-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-attachment">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">订单【<span class="attachment-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-
-
-            {{--attachment--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="">
-            <div class="box-body attachment-box">
-
-            </div>
-            </form>
-
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px-">
-                <h4 class="box-title">【添加附件】</h4>
-            </div>
-
-            {{--上传附件--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-attachment-set-form">
-            <div class="box-body">
-
-                {{ csrf_field() }}
-                <input type="hidden" name="attachment-set-operate" value="item-order-attachment-set" readonly>
-                <input type="hidden" name="attachment-set-order-id" value="0" readonly>
-                <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
-                <input type="hidden" name="attachment-set-column-key" value="" readonly>
-
-                <input type="hidden" name="operate" value="item-order-attachment-set" readonly>
-                <input type="hidden" name="order_id" value="0" readonly>
-                <input type="hidden" name="operate_type" value="add" readonly>
-                <input type="hidden" name="column_key" value="attachment" readonly>
-
-
-                <div class="form-group">
-                    <label class="control-label col-md-2">附件名称</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="attachment_name" autocomplete="off" placeholder="附件名称" value="">
-                    </div>
-                </div>
-
-                {{--多图上传--}}
-                <div class="form-group">
-
-                    <label class="control-label col-md-2">图片上传</label>
-
-                    <div class="col-md-8">
-                        <input id="multiple-images" type="file" class="file-multiple-images" name="multiple_images[]" multiple >
-                    </div>
-
-                </div>
-
-                {{--多图上传--}}
-                <div class="form-group _none">
-
-                    <label class="control-label col-md-2" style="clear:left;">选择图片</label>
-                    <div class="col-md-8 fileinput-group">
-
-                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-new thumbnail">
-                            </div>
-                            <div class="fileinput-preview fileinput-exists thumbnail">
-                            </div>
-                            <div class="btn-tool-group">
-                            <span class="btn-file">
-                                <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
-                                <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
-                                <input type="file" name="attachment_file" />
-                            </span>
-                                <span class="">
-                                <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
-                            </span>
-                            </div>
-                        </div>
-                        <div id="titleImageError" style="color: #a94442"></div>
-
-                    </div>
-
-                </div>
-
-            </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 
 {{--修改列表--}}
 <div class="modal fade modal-main-body" id="modal-body-for-modify-list">
@@ -553,8 +396,6 @@
 </div>
 
 
-
-
     {{--通话记录--}}
     @include(env('TEMPLATE_DK_CUSTOMER').'component.call-record')
 
@@ -628,8 +469,6 @@
                         d.order_type = $('select[name="order-type"]').val();
                         d.client_name = $('input[name="order-client-name"]').val();
                         d.client_phone = $('input[name="order-client-phone"]').val();
-                        d.is_wx = $('select[name="order-is-wx"]').val();
-                        d.is_repeat = $('select[name="order-is-repeat"]').val();
                         d.assign_status = $('select[name="order-assign-status"]').val();
                         d.exported_status = $('select[name="order-exported-status"]').val();
                         d.city = $('select[name="order-city[]"]').val();
@@ -1101,15 +940,12 @@
                     if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
                     if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
                     if($('input[name="order-ended"]').val())  $obj.assign_ended = $('input[name="order-ended"]').val();
-                    if($('select[name="order-department-district"]').val() > 0)  $obj.department_district_id = $('select[name="order-department-district"]').val();
                     if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
                     if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
                     if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
                     if($('input[name="order-client-name"]').val())  $obj.client_name = $('input[name="order-client-name"]').val();
                     if($('input[name="order-client-phone"]').val())  $obj.client_phone = $('input[name="order-client-phone"]').val();
                     if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
-                    if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
-                    if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
                     if($('select[name="order-assign-status"]').val() != -1)  $obj.assign_status = $('select[name="order-assign-status"]').val();
                     if($('select[name="order-exported-status"]').val() != -1)  $obj.exported_status = $('select[name="order-exported-status"]').val();
 

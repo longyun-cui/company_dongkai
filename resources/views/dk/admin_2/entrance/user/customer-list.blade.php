@@ -814,7 +814,8 @@
 
 @section('custom-style')
     <style>
-        .tableArea table { width:100% !important; min-width:1380px; }
+        /*.tableArea table { width:100% !important; }*/
+        .tableArea table { min-width:1440px; }
         .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
     </style>
 @endsection
@@ -861,7 +862,7 @@
                     {
                         "title": "ID",
                         "data": "id",
-                        "className": "font-12px",
+                        "className": "",
                         "width": "60px",
                         "orderable": true,
                         render: function(data, type, row, meta) {
@@ -871,25 +872,10 @@
                     {
                         "title": "操作",
                         "data": "id",
-                        "width": "120px",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
-                        var $html =
-                            '<div class="btn-group">'+
-                                '<button type="button" class="btn btn-sm btn-warning btn-flat">Action</button>'+
-                                '<button type="button" class="btn btn-sm btn-warning btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="true">'+
-                                    '<span class="caret"></span>'+
-                                    '<span class="sr-only">Toggle Dropdown</span>'+
-                                '</button>'+
-                                '<ul class="dropdown-menu" role="menu">'+
-                                    '<li><a href="#">Action</a></li>'+
-                                    '<li><a href="#">Another action</a></li>'+
-                                    '<li><a href="#">Something else here</a></li>'+
-                                    '<li class="divider"></li>'+
-                                    '<li><a href="#">Separated link</a></li>'+
-                                '</ul>'+
-                            '</div>';
 
                             var $html_edit = '';
                             var $html_detail = '';
@@ -1010,10 +996,10 @@
                     },
                     @if(in_array($me->user_type,[0,1,11,19]))
                     {
-                        "title": "合作单价",
+                        "title": "普通单价",
                         "data": "cooperative_unit_price_1",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1035,7 +1021,7 @@
                         "title": "优选单价",
                         "data": "cooperative_unit_price_2",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1057,7 +1043,7 @@
                         "title": "指派单价",
                         "data": "cooperative_unit_price_3",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1079,7 +1065,7 @@
                         "title": "电话单价",
                         "data": "cooperative_unit_price_of_telephone",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1101,7 +1087,7 @@
                         "title": "线索限时",
                         "data": "call_time_limit_for_clue",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1123,7 +1109,7 @@
                         "title": "话单限时",
                         "data": "call_time_limit_for_telephone",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -1145,7 +1131,7 @@
                         "title": "累计充值",
                         "data": "funds_recharge_total",
                         "className": "item-show-for-recharge",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(true)
@@ -1162,7 +1148,7 @@
                         "title": "累计消费",
                         "data": "funds_consumption_total",
                         "className": "item-show-for-consumption",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(true)
@@ -1179,7 +1165,7 @@
                         "title": "冻结金额",
                         "data": "funds_obligation_total",
                         "className": "item-show-for-obligation",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(true)
@@ -1303,7 +1289,7 @@
                     },
                     {
                         "className": "font-12px",
-                        "width": "80px",
+                        "width": "120px",
                         "title": "创建人",
                         "data": "creator_id",
                         "orderable": false,

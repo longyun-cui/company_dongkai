@@ -304,6 +304,16 @@
                         }
                     },
                     {
+                        "title": "user_type",
+                        "data": "user_type",
+                        "className": "text-left",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "customer_id",
                         "data": "customer_id",
                         "className": "",
