@@ -525,6 +525,5 @@
         // $('#datatable_ajax').DataTable().init().fnPageChange(3);
     });
 </script>
-
-@include(env('TEMPLATE_DK_ADMIN_2').'component.clue-create-script')
+@include(env('TEMPLATE_DK_ADMIN_2').'entrance.call.call-list-script')
 @endsection

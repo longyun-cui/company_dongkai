@@ -13800,8 +13800,6 @@ class DKAdmin2_Repository {
         else $view_data['staff_id'] = -1;
 
 
-
-
         // 客户
         if(!empty($post_data['customer_id']))
         {
@@ -13809,8 +13807,6 @@ class DKAdmin2_Repository {
             else $view_data['customer_id'] = -1;
         }
         else $view_data['customer_id'] = -1;
-
-
 
 
         // 项目
@@ -13830,36 +13826,6 @@ class DKAdmin2_Repository {
         }
         else $view_data['project_id'] = -1;
 
-        // 客户姓名
-        if(!empty($post_data['customer_name']))
-        {
-            if($post_data['customer_name']) $view_data['customer_name'] = $post_data['customer_name'];
-            else $view_data['customer_name'] = '';
-        }
-        else $view_data['customer_'] = '';
-        // 客户电话
-        if(!empty($post_data['customer_phone']))
-        {
-            if($post_data['customer_phone']) $view_data['customer_phone'] = $post_data['customer_phone'];
-            else $view_data['customer_phone'] = '';
-        }
-        else $view_data['customer_phone'] = '';
-
-        // 是否重复
-        if(!empty($post_data['is_repeat']))
-        {
-            if(is_numeric($post_data['is_repeat']) && $post_data['is_repeat'] > 0) $view_data['is_repeat'] = $post_data['is_repeat'];
-            else $view_data['is_repeat'] = -1;
-        }
-        else $view_data['is_repeat'] = -1;
-
-        // 类型
-        if(!empty($post_data['order_type']))
-        {
-            if(is_numeric($post_data['order_type']) && $post_data['order_type'] > 0) $view_data['order_type'] = $post_data['order_type'];
-            else $view_data['order_type'] = -1;
-        }
-        else $view_data['order_type'] = -1;
 
 
         // 审核状态
@@ -13876,38 +13842,15 @@ class DKAdmin2_Repository {
         }
         else $view_data['delivered_status'] = -1;
 
-        // 城市
-        if(!empty($post_data['district_city']))
-        {
-            $view_data['district_city'] = $post_data['district_city'];
-        }
-        else $view_data['district_city'] = -1;
-
-        // 区域
-        if(!empty($post_data['district_district']))
-        {
-            $view_data['district_district'] = $post_data['district_district'];
-        }
-        else $view_data['district_district'] = -1;
-
 //        dd($view_data);
 
 
         $customer_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->get();
         $view_data['customer_list'] = $customer_list;
 
-        $customer_preferential_list = DK_Choice_Customer::select('id','username')->where('user_category',11)->where('is_preferential',1)->get();
-        $view_data['customer_preferential_list'] = $customer_preferential_list;
-
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
-        $view_data['department_district_list'] = $department_district_list;
-
-
         $project_list = DK_Choice_Project::select('id','name')->whereIn('item_type',[1,21])->get();
         $view_data['project_list'] = $project_list;
 
-        $district_city_list = DK_Choice_District::select('id','district_city')->whereIn('district_status',[1])->get();
-        $view_data['district_city_list'] = $district_city_list;
 
         if(!empty($post_data['district_city']))
         {
@@ -14108,40 +14051,6 @@ class DKAdmin2_Repository {
             }
         }
 
-        // 交付状态
-        if(!empty($post_data['delivered_status']))
-        {
-            $delivered_status = $post_data['delivered_status'];
-            if(in_array($delivered_status,['待交付','已交付','已操作','已处理']))
-            {
-                if($delivered_status == '待交付')
-                {
-                    $query->where('delivered_status', 0);
-                }
-                else if($delivered_status == '已交付')
-                {
-                    $query->where('delivered_status', 1);
-                }
-                else if($delivered_status == '已操作')
-                {
-                    $query->where('delivered_status', 1);
-                }
-                else if($delivered_status == '已处理')
-                {
-                    $query->where('delivered_status', 1);
-                }
-            }
-        }
-        // 交付结果
-        if(!empty($post_data['delivered_result']))
-        {
-            if(count($post_data['delivered_result']))
-            {
-                $query->whereIn('delivered_result', $post_data['delivered_result']);
-            }
-        }
-
-
 
 
 
@@ -14169,8 +14078,18 @@ class DKAdmin2_Repository {
         foreach ($list as $k => $v)
         {
 //            $list[$k]->encode_id = encode($v->id);
-            if($v->recordFile) $v->record_url = 'https://www.feiniji.cn/'.base64_decode($v->recordFile);
-            else $v->record_url = '';
+            $list[$k]->record_url = '';
+            if(!empty($v->recordFile))
+            {
+                $decoded = base64_decode($v->recordFile, true);
+                if($decoded !== false && json_encode($decoded) !== 'null')
+                {
+                    if(strpos($decoded, '/data/voicerecord') === 0)
+                    {
+                        $list[$k]->record_url = 'https://www.feiniji.cn'.$decoded;
+                    }
+                }
+            }
 
         }
 //        dd($list->toArray());
