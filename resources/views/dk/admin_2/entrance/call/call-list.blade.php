@@ -407,7 +407,7 @@
                         "title": "操作人",
                         "data": "creator_id",
                         "className": "",
-                        "width": "80px",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
