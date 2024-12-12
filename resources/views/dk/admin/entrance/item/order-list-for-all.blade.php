@@ -2166,6 +2166,17 @@
                         }
                     },
                     {
+                        "title": "是否推送",
+                        "data": "api_is_pushed",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 1) return '<small class="btn-xs btn-primary">是</small>';
+                            else return '--';
+                        }
+                    },
+                    {
                         "title": "创建时间",
                         "data": 'created_at',
                         "className": "",

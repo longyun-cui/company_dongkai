@@ -32,9 +32,10 @@ class DK_Order extends Model
         'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id',
         'recording_address',
         'is_repeat',
-        'receipt_status', 'receipt_need', 'receipt_address', 'GPS', 'is_delay',
+        'receipt_status', 'receipt_need', 'receipt_address', 'GPS',
         'teeth_count',
         'company', 'fund', 'mobile', 'city', 'address',
+        'api_is_pushed',
 
         'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description', 'inspected_at',
         'pusher_id', 'pushed_at',

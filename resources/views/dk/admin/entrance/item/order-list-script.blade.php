@@ -289,6 +289,8 @@
                     }
                     else
                     {
+                        layer.msg(data.msg);
+
                         $(".item-cancel-for-detail-inspected").click();
                         // $('#datatable_ajax').DataTable().ajax.reload(null,false);
 

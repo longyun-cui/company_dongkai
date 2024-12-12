@@ -10713,7 +10713,48 @@ class DKAdminRepository {
             }
 
             DB::commit();
-            return response_success([]);
+
+            if(in_array($inspected_result,['通过','重复','内部通过',]))
+            {
+                if($item->api_is_pushed == 0)
+                {
+                    $push_data["item"] = "补牙";
+                    $push_data["name"] = $item->client_name;
+                    $push_data["phone"] = $item->client_phone;
+                    $push_data["intention"] = $item->client_intention;
+                    $push_data["city"] = $item->location_city;
+                    $push_data["area"] = $item->location_district;
+                    $push_data["toothcount"] = $item->teeth_count;
+                    $push_data["addvx"] = (($item->is_wx) ? '是' : '否');
+                    $push_data["vxaccount"] = (($item->wx_id) ? $item->wx_id : '');
+                    $push_data["source"] = $item->channel_source;
+                    $push_data["description"] = $item->description;
+
+                    $request_result = $this->operate_api_push_order($push_data);
+
+                    if($request_result['success'])
+                    {
+                        $result = json_decode($request_result['result']);
+                        if($result->code == 0)
+                        {
+                            $item->api_is_pushed = 1;
+                            $item->save();
+                            return response_success([],"审核成功，推送成功!");
+                        }
+                        else
+                        {
+                            return response_error([],"审核成功，推送返回失败!");
+                        }
+                    }
+                    else
+                    {
+                        return response_error([],"审核成功，接口推送失败!");
+                    }
+                }
+            }
+
+
+            return response_success([],"审核完成!");
         }
         catch (Exception $e)
         {
@@ -11236,6 +11277,46 @@ class DKAdminRepository {
 
 
 
+    // 【api】拨号
+    public function operate_api_push_order($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        $customer = $me->customer_er;
+
+
+        $url = "http://8.142.7.121:9091/api/zl/order?token=zd1a1e02dbe547dt";
+
+//        $API_ID = $customer->api_id;
+//        $API_Password = $customer->api_password;
+//        $timestamp = time();
+//        $seq = $id;
+//        $digest = md5($API_ID.'@'.$timestamp.'@'.$seq.'@'.$API_Password);
+
+
+        $post_data = json_encode($post_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data); // post的变量
+        $result = curl_exec($ch);
+        if(curl_errno($ch))
+        {
+            $return['success'] = false;
+            $return['msg'] =  "cURL Error: " . curl_error($ch);
+        }
+        else
+        {
+            $return['success'] = true;
+            $return['result'] =  $result;
+        }
+        curl_close($ch);
+        return $return;
+    }
 
 
 
