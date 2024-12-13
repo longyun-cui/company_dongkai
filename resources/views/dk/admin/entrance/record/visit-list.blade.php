@@ -1,11 +1,14 @@
 @extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
 
 
-@section('head_title','记录列表')
+@section('head_title','访问记录')
 
 
-@section('header','')
-@section('description','SUPER - 朝鲜族社群平台 - 如未科技')
+@section('header')<span class="box-title">{{ $title_text or '访问记录' }}</span>@endsection
+@section('description')<b></b>@endsection
+@section('breadcrumb')
+    <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
+@endsection
 @section('breadcrumb')
     <li><a href="{{url('/admin')}}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -16,21 +19,6 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-info main-list-body">
-
-            <div class="box-header with-border" style="margin:16px 0;">
-
-                <h3 class="box-title">记录列表</h3>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
-            </div>
 
 
             <div class="box-body datatable-body item-main-body" id="item-main-body">
@@ -128,37 +116,6 @@
                 </table>
                 </div>
 
-            </div>
-
-            <div class="box-footer">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-4 col-sm-8 col-xs-12">
-                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
-                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
-                        <div class="input-group">
-                            <span class="input-group-addon"><input type="checkbox" id="check-review-all"></span>
-                            <select name="bulk-operat-status" class="form-control form-filter">
-                                <option value="0">请选择</option>
-                                <option value="待审核">待审核</option>
-                                <option value="优化中">优化中</option>
-                                <option value="合作停">合作停</option>
-                                <option value="">被拒绝</option>
-                            </select>
-                            <span class="input-group-addon btn btn-default" id="operat-bulk-submit"><i class="fa fa-check"></i> 批量操作</span>
-                            <span class="input-group-addon btn btn-default" id="delete-bulk-submit"><i class="fa fa-trash-o"></i> 批量删除</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="box-footer">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-9">
-                        <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>
-                    </div>
-                </div>
             </div>
 
         </div>
