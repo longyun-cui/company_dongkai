@@ -197,11 +197,16 @@
                         // location.href = "/item/order-list-for-all";
                     }
                 },
-                error: function (res) {
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest);
+                    console.log(textStatus);
+                    console.log(errorThrown);
                     layer.closeAll('loading');
                     layer.msg("服务器错误");
                 },
-                complete: function () {
+                complete: function (jqXHR, textStatus) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
                     layer.closeAll('loading');
                 }
             };
