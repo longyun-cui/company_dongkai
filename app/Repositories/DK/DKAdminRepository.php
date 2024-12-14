@@ -8897,10 +8897,14 @@ class DKAdminRepository {
             'project_id.required' => '请填选择项目！',
             'project_id.numeric' => '选择项目参数有误！',
             'project_id.min' => '请填选择项目！',
+            'client_id.required' => '请填选择客户！',
+            'client_id.numeric' => '选择客户参数有误！',
+            'client_id.min' => '请填选择客户！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'project_id' => 'required|numeric|min:1',
+            'project_id' => 'required|numeric|min:0',
+            'client_id' => 'required|numeric|min:0',
         ], $messages);
         if ($v->fails())
         {
@@ -8913,6 +8917,11 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
 
         $project_id = $post_data['project_id'];
+        $client_id = $post_data['client_id'];
+        if($project_id > 0 || $client_id > 0)
+        {
+        }
+        else return response_error([],"项目和客户必须选择一个！");
 
         // 单文件
         if(!empty($post_data["excel-file"]))
@@ -8963,6 +8972,7 @@ class DKAdminRepository {
                     {
                         $order = new DK_Order;
 
+                        $order->client_id = $client_id;
                         $order->project_id = $project_id;
                         $order->creator_id = $me->id;
                         $order->created_type = 9;

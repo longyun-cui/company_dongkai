@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                {{--选择车辆--}}
+                {{--选择项目--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">选择项目</label>
                     <div class="col-md-8 ">
@@ -61,6 +61,20 @@
                                 <option data-id="{{ $data->project_id or 0 }}" value="{{ $data->project_id or 0 }}">{{ $data->project_er->name }}</option>
                             @else
                                 <option data-id="0" value="0">选择项目</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
+
+                {{--选择客户--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">选择客户</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="client_id" id="select2-client">
+                            @if($operate == 'edit' && $data->client_id)
+                                <option data-id="{{ $data->client_id or 0 }}" value="{{ $data->client_id or 0 }}">{{ $data->client_er->name }}</option>
+                            @else
+                                <option data-id="0" value="0">选择客户</option>
                             @endif
                         </select>
                     </div>
@@ -182,6 +196,13 @@
 
                         // location.href = "/item/order-list-for-all";
                     }
+                },
+                error: function (res) {
+                    layer.closeAll('loading');
+                    layer.msg("服务器错误");
+                },
+                complete: function () {
+                    layer.closeAll('loading');
                 }
             };
             $("#form-edit-item").ajaxSubmit(options);
@@ -189,6 +210,35 @@
 
 
 
+
+        //
+        $('#select2-client').select2({
+            ajax: {
+                url: "{{ url('/item/item_select2_client') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
 
         //
         $('#select2-project').select2({
