@@ -766,7 +766,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[20,50, 100, 200])) {{ $length.',' }} @endif 20,50, 100, 200], [ @if(!in_array($length,[20,50, 100, 200])) {{ $length.',' }} @endif "20", "50", "100", "200"]],
+                "aLengthMenu": [[ @if(!in_array($length,[10, 20, 50, 100, 200])) {{ $length.',' }} @endif 10, 20, 50, 100, 200], [ @if(!in_array($length,[10, 20, 50, 100, 200])) {{ $length.',' }} @endif "10", "20", "50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -1288,7 +1288,7 @@
                     if($('select[name="order-delivery-type"]').val() != -1)  $obj.delivery_type = $('select[name="order-delivery-type"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != 20) $obj.length = $page_length;
+                    if($page_length != 10) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
                     var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($pagination > 1) $obj.page = $pagination;

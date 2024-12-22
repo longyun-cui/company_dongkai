@@ -11445,7 +11445,7 @@ class DKAdminRepository {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
             else $view_data['length'] = 20;
         }
-        else $view_data['length'] = 20;
+        else $view_data['length'] = 10;
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -11651,7 +11651,7 @@ class DKAdminRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
 
         if(isset($post_data['order']))
         {
