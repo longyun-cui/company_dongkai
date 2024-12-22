@@ -49,9 +49,9 @@ Route::group(['domain'=>env('DOMAIN_ROOT'), 'namespace'=>'DK'], function () {
 Route::group(['domain'=>env('DOMAIN_DK_SUPER'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-super.php');
 });
-Route::group(['domain'=>env('DOMAIN_DK_CC'), 'namespace'=>'DK'], function () {
-    require(__DIR__ . '/DK/route-cc.php');
-});
+//Route::group(['domain'=>env('DOMAIN_DK_CC'), 'namespace'=>'DK'], function () {
+//    require(__DIR__ . '/DK/route-cc.php');
+//});
 Route::group(['domain'=>env('DOMAIN_DK_ADMIN'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-admin.php');
 });
