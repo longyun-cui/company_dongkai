@@ -74,6 +74,12 @@ return [
 
 
 
+        'dk_cc' => [
+            'driver' => 'session',
+            'provider' => 'dk_ccs',
+        ],
+
+
         'dk_admin' => [
             'driver' => 'session',
             'provider' => 'dk_admins',
@@ -167,6 +173,14 @@ return [
         ],
 
         'yh_staffs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK\DK_User::class,
+        ],
+
+
+
+
+        'dk_ccs' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK\DK_User::class,
         ],

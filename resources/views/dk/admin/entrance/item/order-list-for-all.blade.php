@@ -208,21 +208,28 @@
 
                             <span class="input-group-addon btn btn-default" id="bulk-submit-for-export"><i class="fa fa-download"></i> 批量导出</span>
 
-                            <select name="bulk-operate-delivered-client" class="form-control form-filter select2-box" style="width:25%;height:100%;">
+                            <select name="bulk-operate-delivered-project" class="form-control form-filter select2-box order-select2-project" style="width:20%;height:100%;">
+                                <option value="-1">选择交付项目</option>
+{{--                                @foreach($project_list as $v)--}}
+{{--                                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                                @endforeach--}}
+                            </select>
+
+                            <select name="bulk-operate-delivered-client" class="form-control form-filter select2-box" style="width:20%;height:100%;">
                                 <option value="-1">选择交付客户</option>
                                 @foreach($client_list as $v)
                                     <option value="{{ $v->id }}">{{ $v->username }}</option>
                                 @endforeach
                             </select>
 
-                            <select name="bulk-operate-delivered-result" class="form-control form-filter select2-box" style="width:25%;height:100%;">
+                            <select name="bulk-operate-delivered-result" class="form-control form-filter select2-box" style="width:20%;height:100%;">
                                 <option value="-1">选择交付结果</option>
                                 @foreach(config('info.delivered_result') as $v)
                                     <option value="{{ $v }}">{{ $v }}</option>
                                 @endforeach
                             </select>
 
-                            <input type="text" name="bulk-operate-delivered-description" class="form-control form-filter pull-right" placeholder="交付说明" style="width:50%;">
+                            <input type="text" name="bulk-operate-delivered-description" class="form-control form-filter pull-right" placeholder="交付说明" style="width:40%;">
 
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-operate"><i class="fa fa-check"></i> 批量操作</span>--}}
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-delete"><i class="fa fa-trash-o"></i> 批量删除</span>--}}
@@ -696,8 +703,16 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-2">已分发客户</label>
+                        <label class="control-label col-md-2">已交付客户</label>
                         <div class="col-md-8 " id="deliver-set-distributed-client-list">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">选择项目</label>
+                        <div class="col-md-8 ">
+                            <select class="form-control select2-box order-select2-project" name="deliver-set-project-id" style="width:48%;" id="">
+                                <option value="-1">选择项目</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -734,8 +749,8 @@
                             <textarea class="form-control" name="deliver-set-delivered-description" rows="4" cols="100%"></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-2">交付说明</label>
+                    <div class="form-group _none">
+                        <label class="control-label col-md-2">是否允许分发</label>
                         <div class="col-md-8 ">
                             <div class="btn-group">
 
@@ -812,6 +827,14 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">已分发客户</label>
                         <div class="col-md-8 " id="distribute-set-distributed-client-list">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">选择项目</label>
+                        <div class="col-md-8 ">
+                            <select class="form-control select2-box order-select2-project" name="distribute-set-project-id" style="width:48%;" id="">
+                                <option value="-1">选择项目</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1141,7 +1164,7 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[20,50, 100, 200])) {{ $length.',' }} @endif 20,50, 100, 200], [ @if(!in_array($length,[20,50, 100, 200])) {{ $length.',' }} @endif "20", "50", "100", "200"]],
+                "aLengthMenu": [[ @if(!in_array($length,[10, 20, 50, 100, 200])) {{ $length.',' }} @endif 10, 20, 50, 100, 200], [ @if(!in_array($length,[10, 20, 50, 100, 200])) {{ $length.',' }} @endif "10", "20", "50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -2296,7 +2319,7 @@
                                     }
 
                                     @if($me->department_district_id == 0)
-                                    if(row.delivered_status == 1)
+                                    if(row.delivered_status == 0)
                                     {
                                         // $html_push = '<a class="btn btn-xs bg-teal item-modal-show-for-deliver" data-id="'+data+'" data-key="client_id">交付</a>';
                                         // $html_deliver = '<a class="btn btn-xs bg-yellow item-deliver-submit" data-id="'+data+'">交付</a>';
@@ -2413,7 +2436,7 @@
                     // if($('select[name="order-district"]').val() != -1)  $obj.district_district = $('select[name="order-district"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != 20) $obj.length = $page_length;
+                    if($page_length != 10) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
                     var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($pagination > 1) $obj.page = $pagination;

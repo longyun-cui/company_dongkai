@@ -1040,7 +1040,7 @@
                         }
                     },
                     {
-                        "title": "客户",
+                        "title": "交付客户",
                         "data": "client_id",
                         "className": "",
                         "width": "120px",
@@ -1056,7 +1056,7 @@
                         }
                     },
                     {
-                        "title": "项目",
+                        "title": "交付项目",
                         "data": "project_id",
                         "className": "",
                         "width": "120px",
@@ -1068,6 +1068,22 @@
                             }
                             else {
                                 return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "title": "原始项目",
+                        "data": "original_project_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.original_project_er == null)
+                            {
+                                return '未指定';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.original_project_er.name+'</a>';
                             }
                         }
                     },

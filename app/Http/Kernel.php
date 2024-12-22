@@ -71,6 +71,11 @@ class Kernel extends HttpKernel
         'yh.staff.login' => \App\Http\Middleware\YHStaffLoginMiddleware::class,
 
 
+
+        'dk.cc.login' => \App\Http\Middleware\dk\DKCCLoginMiddleware::class,
+        'dk.cc.password_change' => \App\Http\Middleware\dk\DKCCPasswordChangeMiddleware::class,
+
+
         'dk.admin.login' => \App\Http\Middleware\dk\DKAdminLoginMiddleware::class,
         'dk.admin.password_change' => \App\Http\Middleware\dk\DKAdminPasswordChangeMiddleware::class,
 

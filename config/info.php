@@ -24,6 +24,14 @@
             'wb_address' => '',
         ],
 
+        'system' => [
+            'cc' => '数据系统',
+            'admin' => '交付系统',
+            'client' => '客户后台',
+            'admin2' => '自选系统',
+            'customer' => '客户后台',
+        ],
+
 
         'inspected_status' => [
             '待审核',

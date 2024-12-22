@@ -330,7 +330,7 @@
 
 
 
-        // 【交付】【显示】
+        // 【推送】【显示】
         $(".main-content").on('click', ".item-modal-show-for-push", function() {
 
             $('select[name=info-select-set-column-value]').attr("selected","");
@@ -881,7 +881,7 @@
                         }
                         if(data.data.deliver_repeat.length)
                         {
-                            $html += '<div>【已分发客户】</div>';
+                            $html += '<div>【已交付客户】</div>';
                             var $deliver_list = data.data.deliver_repeat;
                             $.each($deliver_list, function(index,$deliver) {
 
@@ -932,6 +932,8 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
 
+                    layer.close(index);
+
                     var $index = layer.load(1, {
                         shade: [0.3, '#fff'],
                         content: '<span class="loadtip">正在发布</span>',
@@ -953,21 +955,23 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "order-deliver",
                             item_id: $('input[name="deliver-set-order-id"]').val(),
+                            project_id: $('select[name="deliver-set-project-id"]').val(),
                             client_id: $('select[name="deliver-set-client-id"]').val(),
                             delivered_result: $('select[name="deliver-set-delivered-result"]').val(),
                             recording_address: $('input[name="deliver-set-recording-address"]').val(),
                             delivered_description: $('textarea[name="deliver-set-delivered-description"]').val(),
                             is_distributive_condition: $('input[name="deliver-set-is_distributive_condition"]:checked').val()
                         },
-                        function(data){
-
+                        'json'
+                    )
+                        .done(function($response) {
+                            console.log('done');
                             layer.closeAll('loading');
-                            // layer.close(index);
-                            // layer.form.render();
 
-                            if(!data.success)
+                            $response = JSON.parse($response);
+                            if(!$response.success)
                             {
-                                layer.msg(data.msg);
+                                layer.msg($response.msg);
                             }
                             else
                             {
@@ -976,9 +980,20 @@
                                     $("body").addClass("modal-open");
                                 });
                             }
-                        },
-                        'json'
-                    );
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.log('fail');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, textStatus) {
+                            layer.closeAll('loading');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                        });
                 }
             });
         });
@@ -1049,7 +1064,7 @@
                         }
                         if(data.data.deliver_repeat.length)
                         {
-                            $html += '<div>【已分发客户】</div>';
+                            $html += '<div>【已交付客户】</div>';
                             var $deliver_list = data.data.deliver_repeat;
                             $.each($deliver_list, function(index,$deliver) {
 
@@ -1188,7 +1203,7 @@
                     {
                         if(data.data.order_repeat.length)
                         {
-                            $html += '<div>【已交付订单】</div>';
+                            $html += '<div>【订单列表】</div>';
                             var $order_list = data.data.order_repeat;
                             $.each($order_list, function(index,$order) {
 
@@ -1211,7 +1226,7 @@
                         }
                         if(data.data.deliver_repeat.length)
                         {
-                            $html += '<div>【已分发客户】</div>';
+                            $html += '<div>【交付列表】</div>';
                             var $deliver_list = data.data.deliver_repeat;
                             $.each($deliver_list, function(index,$deliver) {
 
@@ -1262,6 +1277,8 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
 
+                    layer.close(index);
+
                     var $index = layer.load(1, {
                         shade: [0.3, '#fff'],
                         content: '<span class="loadtip">正在发布</span>',
@@ -1283,18 +1300,20 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "order-distribute",
                             item_id: $('input[name="distribute-set-order-id"]').val(),
+                            project_id: $('select[name="distribute-set-project-id"]').val(),
                             client_id: $('select[name="distribute-set-client-id"]').val(),
                             delivered_result: $('select[name="distribute-set-delivered-result"]').val()
                         },
-                        function(data){
-
+                        'json'
+                    )
+                        .done(function($response) {
+                            console.log('done');
                             layer.closeAll('loading');
-                            // layer.close(index);
-                            // layer.form.render();
 
-                            if(!data.success)
+                            $response = JSON.parse($response);
+                            if(!$response.success)
                             {
-                                layer.msg(data.msg);
+                                layer.msg($response.msg);
                             }
                             else
                             {
@@ -1303,9 +1322,20 @@
                                     $("body").addClass("modal-open");
                                 });
                             }
-                        },
-                        'json'
-                    );
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.log('fail');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, textStatus) {
+                            layer.closeAll('loading');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                        });
                 }
             });
         });
@@ -2427,6 +2457,8 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
 
+                    layer.close(index);
+
                     var $index = layer.load(1, {
                         shade: [0.3, '#fff'],
                         content: '<span class="loadtip">正在发布</span>',
@@ -2448,14 +2480,18 @@
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "order-delivered-bulk",
                             ids: $ids,
+                            project_id:$('select[name="bulk-operate-delivered-project"]').val(),
                             client_id:$('select[name="bulk-operate-delivered-client"]').val(),
                             delivered_result:$('select[name="bulk-operate-delivered-result"]').val(),
                             delivered_description:$('input[name="bulk-operate-delivered-description"]').val()
                         },
-                        function(data){
-                            layer.close(index);
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                        'json'
+                    )
+                        .done(function($response) {
+                            console.log('done');
+
+                            $response = JSON.parse($response);
+                            if(!$response.success) layer.msg($response.msg);
                             else
                             {
                                 layer.closeAll('loading');
@@ -2495,9 +2531,20 @@
 
                                 });
                             }
-                        },
-                        'json'
-                    );
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.log('fail');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, textStatus) {
+                            layer.closeAll('loading');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                        });
 
                 }
             });

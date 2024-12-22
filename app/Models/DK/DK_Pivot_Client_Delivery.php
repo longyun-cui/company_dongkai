@@ -14,10 +14,11 @@ class DK_Pivot_Client_Delivery extends Model
         'delivery_type',
 
         'user_id',
-        'client_id',
         'project_id',
-        'order_id',
+        'client_id',
         'client_staff_id',
+        'original_project_id',
+        'order_id',
 
         'client_phone',
 
@@ -67,7 +68,13 @@ class DK_Pivot_Client_Delivery extends Model
         return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
     }
 
-    // 客户
+    // 交付项目
+    function project_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Project','project_id','id');
+    }
+
+    // 交付客户
     function client_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
@@ -79,13 +86,13 @@ class DK_Pivot_Client_Delivery extends Model
         return $this->belongsTo('App\Models\DK_Client\DK_Client_User','client_staff_id','id');
     }
 
-    // 项目
-    function project_er()
+    // 原始项目
+    function original_project_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Project','project_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Project','original_project_id','id');
     }
 
-    // 项目
+    // 订单
     function order_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Order','order_id','id');

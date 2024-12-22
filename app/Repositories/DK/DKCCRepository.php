@@ -1,6 +1,8 @@
 <?php
 namespace App\Repositories\DK;
 
+use App\Models\DK_CC\DK_CC_Team;
+
 use App\Models\DK\DK_Department;
 use App\Models\DK\DK_District;
 use App\Models\DK\DK_Pivot_Client_Delivery;
@@ -28,7 +30,7 @@ use App\Repositories\Common\CommonRepository;
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
 use QrCode, Excel;
 
-class DKAdminRepository {
+class DKCCRepository {
 
     private $env;
     private $auth_check;
@@ -44,22 +46,24 @@ class DKAdminRepository {
         $this->modelUser = new DK_User;
         $this->modelItem = new YH_Item;
 
-        $this->view_blade_403 = env('TEMPLATE_DK_ADMIN').'entrance.errors.403';
-        $this->view_blade_404 = env('TEMPLATE_DK_ADMIN').'entrance.errors.404';
+        $this->view_blade_403 = env('TEMPLATE_DK_CC').'entrance.errors.403';
+        $this->view_blade_404 = env('TEMPLATE_DK_CC').'entrance.errors.404';
 
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
         Blade::setEchoFormat('nl2br(e(%s))');
+
+        view()->share('system','cc');
     }
 
 
     // 登录情况
     public function get_me()
     {
-        if(Auth::guard("yh_admin")->check())
+        if(Auth::guard("dk_cc")->check())
         {
             $this->auth_check = 1;
-            $this->me = Auth::guard("yh_admin")->user();
+            $this->me = Auth::guard("dk_cc")->user();
             view()->share('me',$this->me);
         }
         else $this->auth_check = 0;
@@ -119,117 +123,12 @@ class DKAdminRepository {
 
 
 
-
-        // 工单统计
-        // 员工统计
-        $query_order = DK_Order::select(DB::raw("
-                    count(*) as order_count_for_all,
-                    count(IF(created_type = 9, TRUE, NULL)) as order_count_for_export,
-                    count(IF(created_type = 1 AND is_published = 1, TRUE, NULL)) as order_count_for_published,
-                    count(IF(created_type = 1 AND is_published != 1, TRUE, NULL)) as order_count_for_unpublished,
-                    count(IF(created_type = 1 AND is_published = 1 AND is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
-                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
-                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(created_type = 1 AND is_published = 1 AND inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    
-                    count(IF(created_type = 1 AND is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(created_type = 1 AND delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
-                    count(IF(created_type = 1 AND delivered_result = '待交付', TRUE, NULL)) as order_count_for_delivered_uncompleted,
-                    count(IF(created_type = 1 AND delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
-                    count(IF(created_type = 1 AND delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
-                    count(IF(created_type = 1 AND delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
-                    count(IF(created_type = 1 AND delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
-                "));
+        $return['order_count'] = 0;
 
 
 
-        // 本月每日工单量
-        $query_this_month = DK_Order::select('id','published_at')
-            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
-            ->select(DB::raw("
-                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(published_at,'%e') as day,
-                    count(*) as sum
-                "));
 
-        // 上月每日工单量
-        $query_last_month = DK_Order::select('id','published_at')
-            ->whereBetween('published_at',[$last_month_start_timestamp,$last_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
-            ->select(DB::raw("
-                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(published_at,'%e') as day,
-                    count(*) as sum
-                "));
-
-
-        // 团队经理
-        if($me->user_type == 41)
-        {
-
-            $query_order->where('department_district_id',$me->department_district_id);
-            $query_this_month->where('department_district_id',$me->department_district_id);
-            $query_last_month->where('department_district_id',$me->department_district_id);
-        }
-        // 客服经理
-        if($me->user_type == 81)
-        {
-
-            $query_order->where('department_manager_id',$me->id);
-            $query_this_month->where('department_manager_id',$me->id);
-            $query_last_month->where('department_manager_id',$me->id);
-        }
-        // 客服主管
-        if($me->user_type == 84)
-        {
-            $query_order->where('department_supervisor_id', $me->id);
-            $query_this_month->where('department_supervisor_id', $me->id);
-            $query_last_month->where('department_supervisor_id', $me->id);
-        }
-        // 客服
-        if($me->user_type == 88)
-        {
-            $query_order->where('creator_id', $me->id);
-            $query_this_month->where('creator_id', $me->id);
-            $query_last_month->where('creator_id', $me->id);
-        }
-        // 质检经理
-        if($me->user_type == 71)
-        {
-            if($me->department_district_id)
-            {
-                $query_order->where('department_district_id',$me->department_district_id);
-                $query_this_month->where('department_district_id',$me->department_district_id);
-                $query_last_month->where('department_district_id',$me->department_district_id);
-            }
-
-        }
-        // 质检员
-        if($me->user_type == 77)
-        {
-            $query_order->where('inspector_id', $me->id);
-            $query_this_month->where('inspector_id', $me->id);
-            $query_last_month->where('inspector_id', $me->id);
-
-        }
-
-
-        $query_order = $query_order->get();
-
-        $return['order_count'] = $query_order[0];
-
-
-        $statistics_order_this_month_data = $query_this_month->get()->keyBy('day');
-        $return['statistics_order_this_month_data'] = $statistics_order_this_month_data;
-
-        $statistics_order_last_month_data = $query_last_month->get()->keyBy('day');
-        $return['statistics_order_last_month_data'] = $statistics_order_last_month_data;
-
-
-
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.index';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.index';
         return view($view_blade)->with($return);
     }
     public function view_admin_index1()
@@ -503,7 +402,7 @@ class DKAdminRepository {
 
 
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.index';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.index';
         return view($view_blade)->with($return);
     }
 
@@ -512,7 +411,7 @@ class DKAdminRepository {
     public function view_admin_404()
     {
         $this->get_me();
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.errors.404';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.errors.404';
         return view($view_blade);
     }
 
@@ -530,7 +429,7 @@ class DKAdminRepository {
 
         $return['data'] = $me;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.my-account.my-profile-info-index';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.my-account.my-profile-info-index';
         return view($view_blade)->with($return);
     }
     // 【基本信息】返回-编辑-视图
@@ -541,7 +440,7 @@ class DKAdminRepository {
 
         $return['data'] = $me;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.my-account.my-profile-info-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.my-account.my-profile-info-edit';
         return view($view_blade)->with($return);
     }
     // 【基本信息】保存数据
@@ -608,7 +507,7 @@ class DKAdminRepository {
 
         $return['data'] = $me;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.my-account.my-account-password-change';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.my-account.my-account-password-change';
         return view($view_blade)->with($return);
     }
     // 【密码】保存数据
@@ -670,7 +569,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $return['menu_active_of_client_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-list-for-all';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.client-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【客户】返回-列表-数据
@@ -726,7 +625,7 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_client_modify_list'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-modify-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.client-modify-list';
         return view($view_blade)->with($return);
     }
     // 【客户】【修改记录】返回-列表-数据
@@ -788,7 +687,7 @@ class DKAdminRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/user/client-list-for-all';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.client-edit';
         return view($view_blade)->with([
             'operate'=>'create',
             'operate_id'=>0,
@@ -808,7 +707,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.client-edit';
 
         $item_type = 'item';
         $item_type_text = '客户';
@@ -834,7 +733,7 @@ class DKAdminRepository {
             $mine = DK_Client::with(['parent'])->find($id);
             if($mine)
             {
-                if(!in_array($mine->user_category,[0,1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+                if(!in_array($mine->user_category,[0,1,9,11,88])) return view(env('TEMPLATE_DK_CC').'errors.404');
                 $mine->custom = json_decode($mine->custom);
                 $mine->custom2 = json_decode($mine->custom2);
                 $mine->custom3 = json_decode($mine->custom3);
@@ -851,7 +750,7 @@ class DKAdminRepository {
                     'list_link'=>$list_link,
                 ]);
             }
-            else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+            else return view(env('TEMPLATE_DK_CC').'errors.404');
         }
     }
     // 【客户】保存数据
@@ -1315,7 +1214,7 @@ class DKAdminRepository {
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Client::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -1540,14 +1439,14 @@ class DKAdminRepository {
         $item = DK_Client::with([
             'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
         ])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-assign-html-for-attachment';
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -2101,10 +2000,10 @@ class DKAdminRepository {
 
 
     /*
-     * 部门管理
+     * 团队管理
      */
     // select2
-    public function operate_department_select2_leader($post_data)
+    public function operate_company_team_select2_leader($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -2141,7 +2040,7 @@ class DKAdminRepository {
         return $list;
     }
     //
-    public function operate_department_select2_superior_department($post_data)
+    public function operate_company_team_select2_superior_department($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -2179,30 +2078,28 @@ class DKAdminRepository {
     }
 
 
-    // 【部门】返回-列表-视图
-    public function view_department_list_for_all($post_data)
+    // 【团队】返回-列表-视图
+    public function view_company_team_list($post_data)
     {
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
 
         $return['menu_active_of_department_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-list-for-all';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.company.team-list';
         return view($view_blade)->with($return);
     }
-    // 【部门】返回-列表-数据
-    public function get_department_list_for_all_datatable($post_data)
+    // 【团队】返回-列表-数据
+    public function get_company_team_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
 
 
-        $query = DK_Department::select(['id','item_status','name','department_type','leader_id','superior_department_id','remark','creator_id','created_at','updated_at','deleted_at'])
+        $query = DK_CC_Team::select('*')
             ->withTrashed()
             ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
-                'leader'=>function($query) { $query->select(['id','username','true_name']); },
-                'superior_department_er'=>function($query) { $query->select(['id','name']); }
+                'creator'=>function($query) { $query->select(['id','username','true_name']); }
             ]);
 
         if(in_array($me->user_type,[41,81]))
@@ -2214,7 +2111,7 @@ class DKAdminRepository {
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
 
-        // 部门类型 [大区|组]
+        // 团队类型 [大区|组]
         if(!empty($post_data['department_type']))
         {
             if(!in_array($post_data['department_type'],[-1,0]))
@@ -2259,17 +2156,17 @@ class DKAdminRepository {
             $v->district_group_id = $v->district_id.'.'.$v->id;
         }
 //        $list = $list->sortBy(['district_id'=>'asc'])->values();
-        $list = $list->sortBy(function ($item, $key) {
-            return $item['district_group_id'];
-        })->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
 //        dd($list->toArray());
 
         return datatable_response($list, $draw, $total);
     }
 
 
-    // 【部门】【修改记录】返回-列表-视图
-    public function view_department_modify_record($post_data)
+    // 【团队】【修改记录】返回-列表-视图
+    public function view_company_team_modify_record($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -2278,11 +2175,11 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_car_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.department-list-for-all';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.department-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【部门】【修改记录】返回-列表-数据
-    public function get_department_modify_record_datatable($post_data)
+    // 【团队】【修改记录】返回-列表-数据
+    public function get_company_team_modify_record_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -2327,92 +2224,84 @@ class DKAdminRepository {
     }
 
 
-    // 【部门】返回-添加-视图
-    public function view_department_create()
+    // 【团队】返回-添加-视图
+    public function view_company_team_create()
     {
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
 
-        $item_type = 'item';
-        $item_type_text = '部门';
+        $item_type = 'team';
+        $item_type_text = '团队';
         $title_text = '添加'.$item_type_text;
         $list_text = $item_type_text.'列表';
-        $list_link = '/department/department-list-for-all';
+        $list_link = '/company/team-list';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-edit';
-        return view($view_blade)->with([
-            'operate'=>'create',
-            'operate_id'=>0,
-            'category'=>'item',
-            'type'=>$item_type,
-            'item_type_text'=>$item_type_text,
-            'title_text'=>$title_text,
-            'list_text'=>$list_text,
-            'list_link'=>$list_link,
-        ]);
+        $view_data['operate_type'] = 'create';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = 'item';
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.company.team-edit';
+        return view($view_blade)->with($view_data);
     }
-    // 【部门】返回-编辑-视图
-    public function view_department_edit()
+    // 【团队】返回-编辑-视图
+    public function view_company_team_edit()
     {
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.company.team-edit';
 
         $item_type = 'item';
-        $item_type_text = '部门';
+        $item_type_text = '团队';
         $title_text = '编辑'.$item_type_text;
         $list_text = $item_type_text.'列表';
-        $list_link = '/department/department-list-for-all';
+        $list_link = '/company/team-list';
+
+        $view_data['operate_type'] = 'create';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = 'item';
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
 
         if($id == 0)
         {
-            return view($view_blade)->with([
-                'operate'=>'create',
-                'operate_id'=>0,
-                'category'=>'item',
-                'type'=>$item_type,
-                'item_type_text'=>$item_type_text,
-                'title_text'=>$title_text,
-                'list_text'=>$list_text,
-                'list_link'=>$list_link,
-            ]);
+            return view($view_blade)->with($view_data);
         }
         else
         {
-            $mine = DK_Department::with('leader')->find($id);
+            $view_data['operate_type'] = 'edit';
+            $view_data['operate_id'] = $id;
+
+            $mine = DK_CC_Team::find($id);
             if($mine)
             {
-//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
                 $mine->custom = json_decode($mine->custom);
-                $mine->custom2 = json_decode($mine->custom2);
-                $mine->custom3 = json_decode($mine->custom3);
 
-                return view($view_blade)->with([
-                    'operate'=>'edit',
-                    'operate_id'=>$id,
-                    'data'=>$mine,
-                    'category'=>'item',
-                    'type'=>$item_type,
-                    'item_type_text'=>$item_type_text,
-                    'title_text'=>$title_text,
-                    'list_text'=>$list_text,
-                    'list_link'=>$list_link,
-                ]);
+                $view_data['data'] = $mine;
+
+                return view($view_blade)->with($view_data);
             }
-            else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+            else return view(env('TEMPLATE_DK_CC').'errors.404');
         }
     }
-    // 【部门】保存数据
-    public function operate_department_save($post_data)
+    // 【团队】保存数据
+    public function operate_company_team_save($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
-            'name.required' => '请输入部门名称！',
-//            'name.unique' => '该部门号已存在！',
+            'name.required' => '请输入团队名称！',
+//            'name.unique' => '该团队号已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
@@ -2431,22 +2320,22 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19,41])) return response_error([],"你没有操作权限！");
 
 
-        $operate = $post_data["operate"];
-        $operate_id = $post_data["operate_id"];
+        $operate = $post_data["operate"]["type"];
+        $operate_id = $post_data["operate"]["id"];
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            $is_exist = DK_Department::select('id')->where('name',$post_data["name"])->count();
-            if($is_exist) return response_error([],"该【部门】已存在，请勿重复添加！");
+            $is_exist = DK_CC_Team::select('id')->where('name',$post_data["name"])->count();
+            if($is_exist) return response_error([],"该【团队】已存在，请勿重复添加！");
 
-            $mine = new DK_Department;
+            $mine = new DK_CC_Team;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
         }
         else if($operate == 'edit') // 编辑
         {
-            $mine = DK_Department::find($operate_id);
-            if(!$mine) return response_error([],"该【部门】不存在，刷新页面重试！");
+            $mine = DK_CC_Team::find($operate_id);
+            if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
         }
         else return response_error([],"参数有误！");
 
@@ -2459,13 +2348,8 @@ class DKAdminRepository {
             {
                 $post_data['custom'] = json_encode($post_data['custom']);
             }
-
             $mine_data = $post_data;
-
-            unset($mine_data['operate']);
-            unset($mine_data['operate_id']);
-            unset($mine_data['category']);
-            unset($mine_data['type']);
+//            unset($mine_data['operate']);
 
             if(in_array($me->user_type,[41,61,71,81]))
             {
@@ -2494,8 +2378,8 @@ class DKAdminRepository {
     }
 
 
-    // 【部门】【文本-信息】设置-文本-类型
-    public function operate_department_info_text_set($post_data)
+    // 【团队】【文本-信息】设置-文本-类型
+    public function operate_company_team_info_text_set($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -2517,7 +2401,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Department::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -2585,8 +2469,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】【时间-信息】修改-时间-类型
-    public function operate_department_info_time_set($post_data)
+    // 【团队】【时间-信息】修改-时间-类型
+    public function operate_company_team_info_time_set($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -2608,7 +2492,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Department::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -2677,8 +2561,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】【选项-信息】修改-radio-select-[option]-类型
-    public function operate_department_info_option_set($post_data)
+    // 【团队】【选项-信息】修改-radio-select-[option]-类型
+    public function operate_company_team_info_option_set($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -2700,7 +2584,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Department::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -2775,8 +2659,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】【附件】添加
-    public function operate_department_info_attachment_set($post_data)
+    // 【团队】【附件】添加
+    public function operate_company_team_info_attachment_set($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -2798,7 +2682,7 @@ class DKAdminRepository {
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
         $item = DK_Department::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -2921,8 +2805,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】【附件】删除
-    public function operate_department_info_attachment_delete($post_data)
+    // 【团队】【附件】删除
+    public function operate_company_team_info_attachment_delete($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -2998,8 +2882,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】【附件】获取
-    public function operate_department_get_attachment_html($post_data)
+    // 【团队】【附件】获取
+    public function operate_company_team_get_attachment_html($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3023,22 +2907,22 @@ class DKAdminRepository {
         $item = DK_Department::with([
             'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
         ])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-assign-html-for-attachment';
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
     }
 
 
-    // 【部门】管理员-删除
-    public function operate_department_admin_delete($post_data)
+    // 【团队】管理员-删除
+    public function operate_company_team_admin_delete($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3060,7 +2944,7 @@ class DKAdminRepository {
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Department::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -3092,8 +2976,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】管理员-恢复
-    public function operate_department_admin_restore($post_data)
+    // 【团队】管理员-恢复
+    public function operate_company_team_admin_restore($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3115,7 +2999,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Project::withTrashed()->find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -3145,8 +3029,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】管理员-彻底删除
-    public function operate_department_admin_delete_permanently($post_data)
+    // 【团队】管理员-彻底删除
+    public function operate_company_team_admin_delete_permanently($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3200,8 +3084,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】管理员-启用
-    public function operate_department_admin_enable($post_data)
+    // 【团队】管理员-启用
+    public function operate_company_team_admin_enable($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3223,7 +3107,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Department::find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -3251,8 +3135,8 @@ class DKAdminRepository {
         }
 
     }
-    // 【部门】管理员-禁用
-    public function operate_department_admin_disable($post_data)
+    // 【团队】管理员-禁用
+    public function operate_company_team_admin_disable($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -3274,7 +3158,7 @@ class DKAdminRepository {
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
         $item = DK_Department::find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -3304,6 +3188,100 @@ class DKAdminRepository {
     }
 
 
+    // 【api】拨号
+    public function operate_company_team_login_okcc($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'company-team-admin-login-okcc') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        $mine = DK_CC_Team::find($id);
+        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
+
+
+//        $url = "https://feiniji.cn/openapi/V2.0.6/agentLogin";
+//        $url = "https://feiniji.cn/openapi/V2.0.6/agentLogout";
+        $url = "https://feiniji.cn/openapi/V2.1.2/login";
+//        $url = "https://feiniji.cn/openapi/V2.0.6/addCustomer";
+
+//        $API_ID = $mine->api_id;
+//        $API_Password = $mine->api_password;
+        $API_ID = 'C1';
+        $API_Password = 'F14FDD768B3612222899BF40D8D4357E';
+        $timestamp = time();
+        $seq = $timestamp;
+        $digest = md5($API_ID.'@'.$timestamp.'@'.$seq.'@'.$API_Password);
+
+        $request_data['authentication']['customer'] = $API_ID;
+        $request_data['authentication']['timestamp'] = $timestamp;
+        $request_data['authentication']['seq'] = $seq;
+        $request_data['authentication']['digest'] = $digest;
+
+        $request_data['request']['seq'] = '';
+        $request_data['request']['userData'] = '';
+        $request_data['request']['customerName'] = '美学在线';
+        $request_data['request']['userName'] = 'admin';
+//        $request_data['request']['agent'] = '0556126';
+
+//        $request_data['request']['name'] = '我很好';
+//        $request_data['request']['password'] = 'asdzxc2024';
+//        $request_data['request']['status'] = '1';
+//        $request_data['request']['lineMode'] = [1];
+//        $request_data['request']['billingPackage'] = '3';
+//        $request_data['request']['parentId'] = '';
+
+//        dd($request_data);
+        $request_data = json_encode($request_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
+        $request_result = curl_exec($ch);
+//        dd($request_result);
+
+        if(curl_errno($ch))
+        {
+            curl_close($ch);
+            return response_error([],"请求登录失败！");
+        }
+        else
+        {
+            curl_close($ch);
+
+            $result = json_decode($request_result);
+            if($result->result->error == "0")
+            {
+                $token = $result->data->response->token;
+                return response_success(['token'=>$token],"跳转中！");
+            }
+            else
+            {
+                return response_error([],$result->result->msg);
+            }
+        }
+    }
 
 
 
@@ -3372,8 +3350,8 @@ class DKAdminRepository {
 //        else if($type == 31) $district_type = 21;
 //        else if($type == 41) $district_type = 31;
 //        else $district_type = 0;
-//        if(!is_numeric($type)) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
-//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+//        if(!is_numeric($type)) return view(env('TEMPLATE_DK_CC').'errors.404');
+//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_DK_CC').'errors.404');
 
         if(empty($post_data['keyword']))
         {
@@ -3468,7 +3446,7 @@ class DKAdminRepository {
         }
 
         $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-list-for-all';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.staff-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【员工】返回-列表-数据
@@ -3517,7 +3495,7 @@ class DKAdminRepository {
         if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
 
 
-        // 部门-大区
+        // 团队-大区
         if(!empty($post_data['department_district']))
         {
             if(!in_array($post_data['department_district'],[-1,0]))
@@ -3576,7 +3554,7 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_staff_modify_list'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-modify-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.staff-modify-list';
         return view($view_blade)->with($return);
     }
     // 【客户管理】【修改记录】返回-列表-数据
@@ -3647,7 +3625,7 @@ class DKAdminRepository {
         $return_data['list_text'] = $list_text;
         $return_data['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.staff-edit';
         return view($view_blade)->with($return_data);
     }
     // 【员工】返回-编辑-视图
@@ -3658,7 +3636,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,19,21,31,41,61,71,81])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.staff-edit';
 
         $item_type = 'item';
         $item_type_text = '用户';
@@ -3700,7 +3678,7 @@ class DKAdminRepository {
 
                 return view($view_blade)->with($return_data);
             }
-            else return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
+            else return view(env('TEMPLATE_DK_CC').'entrance.errors.404');
         }
     }
     // 【员工】保存数据
@@ -4165,7 +4143,7 @@ class DKAdminRepository {
         if(intval($item_id) !== 0 && !$item_id) return response_error([],"参数[ID]有误！");
 
         $item = DK_User::withTrashed()->find($item_id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
@@ -4390,14 +4368,14 @@ class DKAdminRepository {
         $item = DK_User::with([
             'attachment_list' => function($query) { $query->where(['record_object'=>21, 'operate_object'=>41]); }
         ])->withTrashed()->find($id);
-        if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if(!$item) return response_error([],"该【团队】不存在，刷新页面重试！");
 
         $this->get_me();
         $me = $this->me;
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-assign-html-for-attachment';
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -5008,7 +4986,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-edit';
         return view($view_blade)->with($return);
     }
     // 【内容】返回-编辑-视图
@@ -5016,11 +4994,11 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,21,22])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+        if(!in_array($me->user_type,[0,1,11,21,22])) return view(env('TEMPLATE_DK_CC').'errors.404');
 
         $id = $post_data["item-id"];
         $mine = $this->modelItem->with(['owner'])->find($id);
-        if(!$mine) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+        if(!$mine) return view(env('TEMPLATE_DK_CC').'errors.404');
 
 
         $operate_category = 'item';
@@ -5080,7 +5058,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-edit';
         if($id == 0)
         {
             $return['operate'] = 'create';
@@ -6081,7 +6059,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $return['menu_active_of_district_list'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.district-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.district-list';
         return view($view_blade)->with($return);
     }
     // 【地域】返回-列表-数据
@@ -6148,7 +6126,7 @@ class DKAdminRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/item/district-list';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.district-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.district-edit';
         return view($view_blade)->with([
             'operate'=>'create',
             'operate_id'=>0,
@@ -6168,7 +6146,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.district-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.district-edit';
 
         $item_type = 'item';
         $item_type_text = '项目';
@@ -6194,7 +6172,7 @@ class DKAdminRepository {
             $mine = DK_District::find($id);
             if($mine)
             {
-//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_CC').'errors.404');
 //                $mine->custom = json_decode($mine->custom);
 //                $mine->custom2 = json_decode($mine->custom2);
 //                $mine->custom3 = json_decode($mine->custom3);
@@ -6211,7 +6189,7 @@ class DKAdminRepository {
                     'list_link'=>$list_link,
                 ]);
             }
-            else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+            else return view(env('TEMPLATE_DK_CC').'errors.404');
         }
     }
     // 【地域】保存数据
@@ -6586,9 +6564,9 @@ class DKAdminRepository {
         $return['menu_active_of_project_list'] = 'active menu-open';
         if(in_array($me->user_type, [41,71,81]))
         {
-            $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-for-department';
+            $view_blade = env('TEMPLATE_DK_CC').'entrance.item.project-list-for-department';
         }
-        else $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list';
+        else $view_blade = env('TEMPLATE_DK_CC').'entrance.item.project-list';
         return view($view_blade)->with($return);
     }
     // 【项目】返回-列表-数据
@@ -6670,7 +6648,7 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_car_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-for-all';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.project-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【项目】【修改记录】返回-列表-数据
@@ -6732,7 +6710,7 @@ class DKAdminRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/item/project-list';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.project-edit';
         return view($view_blade)->with([
             'operate'=>'create',
             'operate_id'=>0,
@@ -6752,7 +6730,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.project-edit';
 
         $item_type = 'item';
         $item_type_text = '项目';
@@ -6778,7 +6756,7 @@ class DKAdminRepository {
             $mine = DK_Project::with('inspector_er')->find($id);
             if($mine)
             {
-//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+//                if(!in_array($mine->user_category,[1,9,11,88])) return view(env('TEMPLATE_DK_CC').'errors.404');
                 $mine->custom = json_decode($mine->custom);
                 $mine->custom2 = json_decode($mine->custom2);
                 $mine->custom3 = json_decode($mine->custom3);
@@ -6795,7 +6773,7 @@ class DKAdminRepository {
                     'list_link'=>$list_link,
                 ]);
             }
-            else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+            else return view(env('TEMPLATE_DK_CC').'errors.404');
         }
     }
     // 【项目】保存数据
@@ -7481,7 +7459,7 @@ class DKAdminRepository {
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.item-assign-html-for-attachment';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-assign-html-for-attachment';
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -7879,8 +7857,8 @@ class DKAdminRepository {
 //        else if($type == 31) $district_type = 21;
 //        else if($type == 41) $district_type = 31;
 //        else $district_type = 0;
-//        if(!is_numeric($type)) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
-//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+//        if(!is_numeric($type)) return view(env('TEMPLATE_DK_CC').'errors.404');
+//        if(!in_array($type,[1,2,3,10,11,88])) return view(env('TEMPLATE_DK_CC').'errors.404');
 
         if(empty($post_data['keyword']))
         {
@@ -7925,7 +7903,7 @@ class DKAdminRepository {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
             else $view_data['length'] = 20;
         }
-        else $view_data['length'] = 10;
+        else $view_data['length'] = 20;
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -7977,7 +7955,7 @@ class DKAdminRepository {
         }
         else $view_data['staff_id'] = -1;
 
-        // 部门-大区
+        // 团队-大区
         if(!empty($post_data['department_district_id']))
         {
             if(is_numeric($post_data['department_district_id']) && $post_data['department_district_id'] > 0) $view_data['department_district_id'] = $post_data['department_district_id'];
@@ -8147,7 +8125,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_order_list_for_all'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-for-all';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.order-list-for-all';
         return view($view_blade)->with($view_data);
     }
     // 【工单】返回-列表-数据
@@ -8185,7 +8163,7 @@ class DKAdminRepository {
 //        }]);
 
 
-        // 部门经理
+        // 团队经理
         if($me->user_type == 41)
         {
 //            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
@@ -8300,7 +8278,7 @@ class DKAdminRepository {
         }
 
 
-        // 部门-大区
+        // 团队-大区
 //        if(!empty($post_data['department_district']))
 //        {
 //            if(!in_array($post_data['department_district'],[-1,0]))
@@ -8429,7 +8407,7 @@ class DKAdminRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
 
         if(isset($post_data['order']))
         {
@@ -8519,7 +8497,7 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_order_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-list-for-all';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.order-list-for-all';
         return view($view_blade)->with($return);
     }
     // 【工单】【修改记录】返回-列表-数据
@@ -8603,7 +8581,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-import';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.order-import';
         return view($view_blade)->with($return);
     }
     // 【工单】保存-导入-数据
@@ -8886,7 +8864,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-import-for-admin';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.order-import-for-admin';
         return view($view_blade)->with($return);
     }
     // 【工单】保存-导入-数据
@@ -9115,7 +9093,7 @@ class DKAdminRepository {
 //            $return['district_district_list'] = [];
 //        }
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.order-edit';
         return view($view_blade)->with($return);
     }
     // 【工单】返回-编辑-视图
@@ -9125,7 +9103,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.order-edit';
 
         $item_type = 'item';
         $item_type_text = '工单';
@@ -9159,7 +9137,7 @@ class DKAdminRepository {
             $mine = DK_Order::find($id);
             if($mine)
             {
-//                if($mine->deleted_at) return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
+//                if($mine->deleted_at) return view(env('TEMPLATE_DK_CC').'entrance.errors.404');
 //                else
                 {
 //                    $mine->custom = json_decode($mine->custom);
@@ -9182,7 +9160,7 @@ class DKAdminRepository {
                     return view($view_blade)->with($return);
                 }
             }
-            else return view(env('TEMPLATE_DK_ADMIN').'entrance.errors.404');
+            else return view(env('TEMPLATE_DK_CC').'entrance.errors.404');
         }
     }
     // 【工单】保存数据
@@ -10130,7 +10108,7 @@ class DKAdminRepository {
         }
 
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-info-html';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.order-info-html';
         $html = view($view_blade)->with(['data'=>$item])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -10166,7 +10144,7 @@ class DKAdminRepository {
 //        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-assign-html-for-attachment';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.order-assign-html-for-attachment';
         $html = view($view_blade)->with(['item_list'=>$item->attachment_list])->__toString();
 
         return response_success(['html'=>$html],"");
@@ -10318,10 +10296,6 @@ class DKAdminRepository {
 
         $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$client_phone])
             ->where('id','<>',$id)->where('is_published','>',0)->count("*");
-        if($is_repeat == 0)
-        {
-            $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>$client_phone])->count("*");
-        }
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -10784,17 +10758,14 @@ class DKAdminRepository {
     public function operate_item_order_deliver($post_data)
     {
 //        dd($post_data);
+//        return response_success([]);
         $messages = [
             'operate.required' => 'operate.required.',
             'item_id.required' => 'item_id.required.',
-            'project_id.required' => '请选择项目',
-            'client_id.required' => '请选择客户',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'item_id' => 'required',
-            'project_id' => 'required',
-            'client_id' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -10816,38 +10787,17 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
-        $delivered_result = $post_data["delivered_result"];
-        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
-
-
-        $project_id = $post_data["project_id"];
         $client_id = $post_data["client_id"];
-        if(in_array($project_id,['-1','0',-1,0]) && in_array($client_id,['-1','0',-1,0]))
+        if($client_id == "-1")
         {
             $project = DK_Project::find($item->project_id);
-            if($project->client_id != 0) $delivered_client_id = $project->client_id;
-            else $delivered_client_id = 0;
-//            dd($delivered_client_id);
-
-            $delivered_project_id = $item->project_id;
+            if($project->client_id != 0) $client_id = $project->client_id;
         }
-        else if(!in_array($project_id,['-1','0',-1,0]) && !in_array($client_id,['-1','0',-1,0]))
-        {
-            $project = DK_Project::find($project_id);
-            if(!$project) return response_error([],"项目不存在！");
+//        $client = DK_Client::find($client_id);
+//        if(!$client) return response_error([],"客户不存在！");
 
-            $client = DK_Client::find($client_id);
-            if(!$client) return response_error([],"客户不存在！");
-
-            $delivered_project_id = $project_id;
-            $delivered_client_id = $client_id;
-        }
-        else
-        {
-            return response_error([],"项目和客户必须同时选择或同时不选！");
-        }
-
-
+        $delivered_result = $post_data["delivered_result"];
+        if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
 
         // 是否已经分发
         $is_distributed_list = DK_Pivot_Client_Delivery::where(['client_id'=>$client_id,'client_phone'=>$client_phone])->get();
@@ -10858,22 +10808,19 @@ class DKAdminRepository {
 
         // 是否已经交付
         $is_order_list = DK_Order::with('project_er')->where(['client_phone'=>$client_phone,'delivered_result'=>'已交付'])->get();
-//        dd($is_order_list->toArray());
-
         if(count($is_order_list) > 0)
         {
             foreach($is_order_list as $o)
             {
-                if($o->client_id == $delivered_client_id)
+                if($o->client_id == $client_id)
                 {
-                    return response_error([],"该号码已交付过该客户，不要重复交付！");
+                    return response_error([],"该号码已在其他工单交付过该客户，不可以重复分发！");
                 }
 
-//                if($o->project_er->client_id == $delivered_client_id)
-//                {
-//                    return dd($o->project_er->client_id.'-'.$delivered_client_id);
-//                    return response_error([],"该号码已交付过【默认】客户，不要重复交付！");
-//                }
+                if($o->project_er->client_id == $client_id)
+                {
+                    return response_error([],"该号码已在其他工单交付过默认客户，不可以重复分发！");
+                }
             }
         }
 
@@ -10888,13 +10835,12 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-            if($delivered_client_id != "-1" && $delivered_result == "已交付")
+            if($client_id != "-1" && $delivered_result == "已交付")
             {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
                 {
-                    $pivot_delivery->project_id = $delivered_project_id;
-                    $pivot_delivery->client_id = $delivered_client_id;
+                    $pivot_delivery->client_id = $client_id;
                     $pivot_delivery->delivered_result = $delivered_result;
                     $bool_0 = $pivot_delivery->save();
                     if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
@@ -10903,10 +10849,9 @@ class DKAdminRepository {
                 {
                     $pivot_delivery = new DK_Pivot_Client_Delivery;
                     $pivot_delivery_data["pivot_type"] = 95;
-                    $pivot_delivery_data["project_id"] = $delivered_project_id;
-                    $pivot_delivery_data["client_id"] = $delivered_client_id;
-                    $pivot_delivery_data["original_project_id"] = $item->project_id;
+                    $pivot_delivery_data["client_id"] = $client_id;
                     $pivot_delivery_data["order_id"] = $item->id;
+                    $pivot_delivery_data["project_id"] = $item->project_id;
                     $pivot_delivery_data["client_phone"] = $item->client_phone;
                     $pivot_delivery_data["delivered_result"] = $delivered_result;
                     $pivot_delivery_data["creator_id"] = $me->id;
@@ -10917,7 +10862,7 @@ class DKAdminRepository {
             }
 
             $item->is_distributive_condition = $is_distributive_condition;
-            $item->client_id = $delivered_client_id;
+            $item->client_id = $client_id;
             $item->deliverer_id = $me->id;
             $item->delivered_status = 1;
             $item->delivered_result = $delivered_result;
@@ -10970,15 +10915,13 @@ class DKAdminRepository {
         $messages = [
             'operate.required' => 'operate.required.',
             'ids.required' => 'ids.required.',
-            'project_id.required' => 'project_id.required.',
-            'client_id.required' => 'client_id.required.',
+//            'client_id.required' => 'client_id.required.',
             'delivered_result.required' => 'delivered_result.required.',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'ids' => 'required',
-            'project_id' => 'required',
-            'client_id' => 'required',
+//            'client_id' => 'required',
             'delivered_result' => 'required',
         ], $messages);
         if ($v->fails())
@@ -11000,31 +10943,9 @@ class DKAdminRepository {
         $delivered_result = $post_data["delivered_result"];
         if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
 
-
-        $project_id = $post_data["project_id"];
         $client_id = $post_data["client_id"];
-        if(in_array($project_id,['-1','0',-1,0]) && in_array($client_id,['-1','0',-1,0]))
-        {
-//            $project = DK_Project::find($item->project_id);
-//            if($project->client_id != 0) $client_id = $project->client_id;
-//
-//            $delivered_project_id = $item->project_id;
-        }
-        else if(!in_array($project_id,['-1','0',-1,0]) && !in_array($client_id,['-1','0',-1,0]))
-        {
-            $project = DK_Project::find($project_id);
-            if(!$project) return response_error([],"项目不存在！");
-
-            $client = DK_Client::find($client_id);
-            if(!$client) return response_error([],"客户不存在！");
-
-            $delivered_project_id = $project_id;
-        }
-        else
-        {
-            return response_error([],"项目和客户必须同时选择或同时不选！");
-        }
-
+//        $client = DK_Client::find($client_id);
+//        if(!$client) return response_error([],"客户不存在！");
 
         $delivered_description = $post_data["delivered_description"];
 
@@ -11032,12 +10953,11 @@ class DKAdminRepository {
         DB::beginTransaction();
         try
         {
-//            $delivered_para['project_id'] = $project_id;
-//            $delivered_para['client_id'] = $client_id;
-//            $delivered_para['deliverer_id'] = $me->id;
-//            $delivered_para['delivered_status'] = 1;
-//            $delivered_para['delivered_result'] = $delivered_result;
-//            $delivered_para['delivered_at'] = time();
+            $delivered_para['client_id'] = $client_id;
+            $delivered_para['deliverer_id'] = $me->id;
+            $delivered_para['delivered_status'] = 1;
+            $delivered_para['delivered_result'] = $delivered_result;
+            $delivered_para['delivered_at'] = time();
 
 //            $bool = DK_Order::whereIn('id',$ids_array)->update($delivered_para);
 //            if(!$bool) throw new Exception("item--update--fail");
@@ -11047,34 +10967,24 @@ class DKAdminRepository {
 
             foreach($ids_array as $key => $id)
             {
-
+                $this_client_id = $client_id;
 
                 $item = DK_Order::withTrashed()->find($id);
                 if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
 
-
-                if(in_array($project_id,['-1','0',-1,0]) && in_array($client_id,['-1','0',-1,0]))
+                if($this_client_id == "-1")
                 {
                     $project = DK_Project::find($item->project_id);
-                    if($project->client_id != 0) $delivered_client_id = $project->client_id;
-                    else $delivered_client_id = 0;
-
-                    $delivered_project_id = $item->project_id;
-                }
-                else
-                {
-                    $delivered_project_id = $project_id;
-                    $delivered_client_id = $client_id;
+                    if($project->client_id != 0) $this_client_id = $project->client_id;
                 }
 
 
-                if(!in_array($delivered_client_id,['-1','0',-1,0]) && $delivered_result == "已交付")
+                if($this_client_id != "-1" && $delivered_result == "已交付")
                 {
                     $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
                     if($pivot_delivery)
                     {
-                        $pivot_delivery->project_id = $delivered_project_id;
-                        $pivot_delivery->client_id = $delivered_client_id;
+                        $pivot_delivery->client_id = $this_client_id;
                         $pivot_delivery->delivered_result = $delivered_result;
                         $bool_0 = $pivot_delivery->save();
                         if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
@@ -11083,10 +10993,9 @@ class DKAdminRepository {
                     {
                         $pivot_delivery = new DK_Pivot_Client_Delivery;
                         $pivot_delivery_data["pivot_type"] = 95;
-                        $pivot_delivery_data["project_id"] = $delivered_project_id;
-                        $pivot_delivery_data["client_id"] = $delivered_client_id;
-                        $pivot_delivery_data["original_project_id"] = $item->project_id;
+                        $pivot_delivery_data["client_id"] = $this_client_id;
                         $pivot_delivery_data["order_id"] = $item->id;
+                        $pivot_delivery_data["project_id"] = $item->project_id;
                         $pivot_delivery_data["client_phone"] = $item->client_phone;
                         $pivot_delivery_data["delivered_result"] = $delivered_result;
                         $pivot_delivery_data["creator_id"] = $me->id;
@@ -11099,7 +11008,7 @@ class DKAdminRepository {
 
                 $before = $item->delivered_result;
 
-                $item->client_id = $delivered_client_id;
+                $item->client_id = $this_client_id;
                 $item->deliverer_id = $me->id;
                 $item->delivered_status = 1;
                 $item->delivered_result = $delivered_result;
@@ -11216,13 +11125,11 @@ class DKAdminRepository {
         $messages = [
             'operate.required' => 'operate.required.',
             'item_id.required' => 'item_id.required.',
-            'project_id.required' => '请选择项目',
             'client_id.required' => '请选择客户',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'item_id' => 'required',
-            'project_id' => 'required',
             'client_id' => 'required',
         ], $messages);
         if ($v->fails())
@@ -11254,16 +11161,6 @@ class DKAdminRepository {
         }
         $client = DK_Client::find($client_id);
         if(!$client) return response_error([],"客户不存在！");
-
-        $project_id = $post_data["project_id"];
-        if($project_id == "-1")
-        {
-            return response_error([],"请选择项目！");
-//            $project = DK_Project::find($item->project_id);
-//            if($project->client_id != 0) $client_id = $project->client_id;
-        }
-        $project = DK_Project::find($project_id);
-        if(!$project) return response_error([],"项目不存在！");
 
         $delivered_result = $post_data["delivered_result"];
         if(!in_array($delivered_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
@@ -11307,10 +11204,9 @@ class DKAdminRepository {
 //            {
             $pivot_delivery = new DK_Pivot_Client_Delivery;
             $pivot_delivery_data["pivot_type"] = 96;
-            $pivot_delivery_data["project_id"] = $project_id;
             $pivot_delivery_data["client_id"] = $client_id;
-            $pivot_delivery_data["original_project_id"] = $item->project_id;
             $pivot_delivery_data["order_id"] = $item->id;
+            $pivot_delivery_data["project_id"] = $item->project_id;
             $pivot_delivery_data["client_phone"] = $item->client_phone;
             $pivot_delivery_data["delivered_result"] = $delivered_result;
             $pivot_delivery_data["creator_id"] = $me->id;
@@ -11369,8 +11265,7 @@ class DKAdminRepository {
 
 
 
-
-    // 【api】推送订单
+    // 【api】拨号
     public function operate_api_push_order($post_data)
     {
         $this->get_me();
@@ -11553,7 +11448,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_delivery_list'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.delivery-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.delivery-list';
         return view($view_blade)->with($view_data);
     }
     // 【交付】返回-列表-数据
@@ -11567,7 +11462,6 @@ class DKAdminRepository {
 //            ->where('client_id',$me->id)
             ->with([
                 'inspector_er',
-                'original_project_er',
                 'client_er',
                 'project_er',
                 'order_er',
@@ -12111,7 +12005,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_distribution_list'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.distribution-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.item.distribution-list';
         return view($view_blade)->with($view_data);
     }
     // 【分发管理】返回-列表-数据
@@ -12317,7 +12211,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_finance_daily_list'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.finance.daily-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.finance.daily-list';
         return view($view_blade)->with($view_data);
     }
     // 【财务】返回-列表-数据
@@ -12472,7 +12366,7 @@ class DKAdminRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_client_modify_list'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.client-modify-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.client-modify-list';
         return view($view_blade)->with($return);
     }
     // 【财务】【修改记录】返回-列表-数据
@@ -12541,7 +12435,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.finance.daily-list-build';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.finance.daily-list-build';
         return view($view_blade)->with($return);
     }
     // 【财务】保存数据
@@ -12972,7 +12866,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_statistic_index'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-index';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-index';
         return view($view_blade)->with($view_data);
     }
     // 【统计】
@@ -13067,7 +12961,7 @@ class DKAdminRepository {
         $view_data["all_rate"] = $all_rate;
         $view_data["today_rate"] = $today_rate;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-user';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-user';
         return view($view_blade)->with($view_data);
     }
     // 【统计】
@@ -13184,7 +13078,7 @@ class DKAdminRepository {
         $view_data["shared_data"] = $shared_data;
         $view_data["shared_data_scale"] = $shared_data_scale;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-item';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-item';
         return view($view_blade)->with($view_data);
     }
     // 【统计】返回（后台）主页视图
@@ -13436,7 +13330,7 @@ class DKAdminRepository {
         }
 
 
-        // 部门-大区
+        // 团队-大区
 //        if(!empty($post_data['department_district']))
 //        {
 //            if(!in_array($post_data['department_district'],[-1,0]))
@@ -14022,7 +13916,7 @@ class DKAdminRepository {
         }
 
         $view_data['menu_active_of_statistic_rank'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-rank';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-rank';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_rank($post_data)
@@ -14152,25 +14046,25 @@ class DKAdminRepository {
             ]);
 
 
-        // 部门
+        // 团队
         if($me->user_type == 41)
         {
-            // 根据部门（大区）查看
+            // 根据团队（大区）查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 81)
         {
-            // 根据部门（大区）查看
+            // 根据团队（大区）查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 84)
         {
-            // 根据部门（小组）查看
+            // 根据团队（小组）查看
             $query->where('department_group_id', $me->department_group_id);
         }
 
 
-        // 部门-大区
+        // 团队-大区
         if(!empty($post_data['department_district']))
         {
             if(!in_array($post_data['department_district'],[-1,0]))
@@ -14178,7 +14072,7 @@ class DKAdminRepository {
                 $query->where('department_district_id', $post_data['department_district']);
             }
         }
-        // 部门-小组
+        // 团队-小组
         if(!empty($post_data['department_group']))
         {
             if(!in_array($post_data['department_group'],[-1,0]))
@@ -14311,7 +14205,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $view_data['menu_active_of_statistic_rank_by_staff'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-rank-by-staff';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-rank-by-staff';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_rank_by_staff($post_data)
@@ -14351,7 +14245,7 @@ class DKAdminRepository {
 //            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 //            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 81)
@@ -14361,7 +14255,7 @@ class DKAdminRepository {
 //            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 //            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 84)
@@ -14369,7 +14263,7 @@ class DKAdminRepository {
             // 根据属下查看
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -14638,7 +14532,7 @@ class DKAdminRepository {
         dd($me->department_district_id);
 
 
-        // 部门经理
+        // 团队经理
         if($me->user_type == 41)
         {
             // 根据属下查看
@@ -14646,7 +14540,7 @@ class DKAdminRepository {
 //            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 //            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 81)
@@ -14656,7 +14550,7 @@ class DKAdminRepository {
 //            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 //            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 84)
@@ -14664,7 +14558,7 @@ class DKAdminRepository {
             // 根据属下查看
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -14732,14 +14626,14 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
-    // 【统计】部门排名
+    // 【统计】团队排名
     public function view_statistic_rank_by_department()
     {
         $this->get_me();
         $me = $this->me;
 
         $view_data['menu_active_of_statistic_rank_by_department'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-rank-by-department';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-rank-by-department';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_rank_by_department($post_data)
@@ -14779,7 +14673,7 @@ class DKAdminRepository {
 //            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 //            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 84)
@@ -14787,7 +14681,7 @@ class DKAdminRepository {
             // 根据属下查看
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -15006,7 +14900,7 @@ class DKAdminRepository {
         }
 
         $view_data['menu_active_of_statistic_recent'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-recent';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-recent';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_recent($post_data)
@@ -15151,25 +15045,25 @@ class DKAdminRepository {
             ]);
 
 
-        // 部门
+        // 团队
         if($me->user_type == 41)
         {
-            // 根据部门（大区）查看
+            // 根据团队（大区）查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 81)
         {
-            // 根据部门（大区）查看
+            // 根据团队（大区）查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 84)
         {
-            // 根据部门（小组）查看
+            // 根据团队（小组）查看
             $query->where('department_group_id', $me->department_group_id);
         }
 
 
-        // 部门-大区
+        // 团队-大区
         if(!empty($post_data['department_district']))
         {
             if(!in_array($post_data['department_district'],[-1,0]))
@@ -15177,7 +15071,7 @@ class DKAdminRepository {
                 $query->where('department_district_id', $post_data['department_district']);
             }
         }
-        // 部门-小组
+        // 团队-小组
         if(!empty($post_data['department_group']))
         {
             if(!in_array($post_data['department_group'],[-1,0]))
@@ -15272,7 +15166,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $view_data['menu_active_of_statistic_customer_service'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-customer-service';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-customer-service';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_customer_service($post_data)
@@ -15311,7 +15205,7 @@ class DKAdminRepository {
 //            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 //            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 84)
@@ -15319,7 +15213,7 @@ class DKAdminRepository {
             // 根据属下查看
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -16016,7 +15910,7 @@ class DKAdminRepository {
 
 
 
-        // 部门经理
+        // 团队经理
         if($me->user_type == 41)
         {
             // 根据属下查看
@@ -16024,7 +15918,7 @@ class DKAdminRepository {
 //            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 //            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
         // 客服经理
@@ -16035,7 +15929,7 @@ class DKAdminRepository {
 //            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
 //            $query->whereHas('superior', function($query) use($subordinates_array) { $query->whereIn('id',$subordinates_array); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
         else if($me->user_type == 84)
@@ -16043,7 +15937,7 @@ class DKAdminRepository {
             // 根据属下查看
 //            $query->whereHas('superior', function($query) use($me) { $query->where('id',$me->id); } );
 
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_group_id', $me->department_group_id);
         }
 
@@ -16302,7 +16196,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,41,71,61])) return view($this->view_blade_403);
 
         $view_data['menu_active_of_statistic_inspector'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-inspector';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-inspector';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_inspector($post_data)
@@ -16502,10 +16396,10 @@ class DKAdminRepository {
 //            });
 //        }
 
-        // 根据部门查看
+        // 根据团队查看
         if($me->department_district_id > 0)
         {
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
 
@@ -16607,7 +16501,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,41,61])) return view($this->view_blade_403);
 
         $view_data['menu_active_of_statistic_operation'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-deliverer';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-deliverer';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_deliverer($post_data)
@@ -16808,10 +16702,10 @@ class DKAdminRepository {
 //            });
 //        }
 
-        // 根据部门查看
+        // 根据团队查看
         if($me->department_district_id > 0)
         {
-            // 根据部门查看
+            // 根据团队查看
             $query->where('department_district_id', $me->department_district_id);
         }
 
@@ -16920,7 +16814,7 @@ class DKAdminRepository {
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_delivery'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-delivery';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-delivery';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_delivery($post_data)
@@ -16992,7 +16886,7 @@ class DKAdminRepository {
 
 
 
-        // 部门-大区
+        // 团队-大区
         if(!empty($post_data['department_district']))
         {
             if(!in_array($post_data['department_district'],[-1,0]))
@@ -17141,7 +17035,7 @@ class DKAdminRepository {
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_delivery_by_client'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-delivery-by-client';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-delivery-by-client';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_delivery_by_client($post_data)
@@ -17191,7 +17085,7 @@ class DKAdminRepository {
 
 
 
-        // 部门-大区
+        // 团队-大区
         if(!empty($post_data['department_district']))
         {
             if(!in_array($post_data['department_district'],[-1,0]))
@@ -17340,7 +17234,7 @@ class DKAdminRepository {
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_delivery'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-delivery';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-delivery';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_delivery_by_project($post_data)
@@ -17412,7 +17306,7 @@ class DKAdminRepository {
 
 
 
-        // 部门-大区
+        // 团队-大区
         if(!empty($post_data['department_district']))
         {
             if(!in_array($post_data['department_district'],[-1,0]))
@@ -17563,7 +17457,7 @@ class DKAdminRepository {
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_project'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-project';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-project';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_project($post_data)
@@ -17642,7 +17536,7 @@ class DKAdminRepository {
 
 
 
-        // 部门-大区
+        // 团队-大区
         if(!empty($post_data['department_district']))
         {
             if(!in_array($post_data['department_district'],[-1,0]))
@@ -17839,7 +17733,7 @@ class DKAdminRepository {
     }
 
 
-    // 【统计】部门看板
+    // 【统计】团队看板
     public function view_statistic_department()
     {
         $this->get_me();
@@ -17850,7 +17744,7 @@ class DKAdminRepository {
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_department'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-department';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-department';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_department($post_data)
@@ -17860,7 +17754,7 @@ class DKAdminRepository {
 
         $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
-        // 部门统计
+        // 团队统计
         $query_order = DK_Order::select('department_district_id')
             ->addSelect(DB::raw("
                     count(DISTINCT creator_id) as staff_count,
@@ -18145,7 +18039,7 @@ class DKAdminRepository {
 
         $view_data['title_text'] = $staff->username;
         $view_data['menu_active_of_statistic_department'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-staff-customer-service';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-staff-customer-service';
         return view($view_blade)->with($view_data);
     }
     public function get_statistic_data_for_staff_customer_service($post_data)
@@ -18346,7 +18240,7 @@ class DKAdminRepository {
     public function view_statistic_list_for_all($post_data)
     {
         $view_data["menu_active_statistic_list_for_all"] = 'active';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-list-for-all';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-list-for-all';
         return view($view_blade)->with($view_data);
     }
     // 【流量统计】返回-列表-数据
@@ -18555,7 +18449,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_statistic_export'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-export';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.statistic.statistic-export';
         return view($view_blade)->with($view_data);
     }
     // 【数据导出】工单
@@ -19367,7 +19261,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_record_visit_list'] = 'active';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.record.visit-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.record.visit-list';
         return view($view_blade)->with($view_data);
     }
     // 【K】【内容】【全部】返回-列表-数据
