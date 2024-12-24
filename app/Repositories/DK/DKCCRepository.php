@@ -5045,7 +5045,7 @@ class DKCCRepository {
                     }
 
                     DB::commit();
-                    return response_success(['count'=>count($data)]);
+                    return response_success(['count'=>count($file_data)]);
                 }
                 catch (Exception $e)
                 {
