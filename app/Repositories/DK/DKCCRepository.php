@@ -5013,7 +5013,7 @@ class DKCCRepository {
                 $file_data = file($attachment_file);
 
                 $collection = collect($file_data);
-                $chunks = $collection->chunk(2000);
+                $chunks = $collection->chunk(1000);
                 $chunks = $chunks->toArray();
 //                dd($chunks);
 
