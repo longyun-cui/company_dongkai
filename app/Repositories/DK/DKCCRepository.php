@@ -4962,6 +4962,8 @@ class DKCCRepository {
     // 【电话池】保存-导入-数据
     public function operate_service_telephone_import_save($post_data)
     {
+        set_time_limit(300);
+
         $messages = [
             'operate.required' => 'operate.required',
             'project_id.required' => '请填选择项目！',
@@ -5008,14 +5010,25 @@ class DKCCRepository {
 
                 $attachment_file = storage_resource_path($result["local"]);
 
+                $file_data = file($attachment_file);
+
+                $collection = collect($file_data);
+                $chunks = $collection->chunk(5000);
+                $chunks = $chunks->toArray();
+//                dd($chunks);
+
                 $insert_data = [];
-                $data = file($attachment_file);
-                foreach($data as $key => $value)
+                foreach($chunks as $key => $value)
                 {
-//                    if(is_numeric($value))
-//                    {
-                    $insert_data[] = ['telephone_number'=>trim($value),'item_active'=>1,'item_status'=>1];
-//                    }
+                    $data = [];
+                    foreach($value as $v)
+                    {
+                        if(is_numeric(trim($v)))
+                        {
+                            $data[] = ['telephone_number'=>trim($v),'item_active'=>1,'item_status'=>1];
+                        }
+                    }
+                    $insert_data[] = $data;
                 }
 //                dd($insert_data);
 
@@ -5024,13 +5037,15 @@ class DKCCRepository {
                 DB::beginTransaction();
                 try
                 {
-
                     $modal_telephone = new DK_CC_Telephone;
-                    $bool = $modal_telephone->insert($insert_data);
-                    if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
+                    foreach($insert_data as $insert_value)
+                    {
+                        $bool = $modal_telephone->insert($insert_value);
+                        if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
+                    }
 
                     DB::commit();
-                    return response_success(['count'=>count($insert_data)]);
+                    return response_success(['count'=>count($data)]);
                 }
                 catch (Exception $e)
                 {
