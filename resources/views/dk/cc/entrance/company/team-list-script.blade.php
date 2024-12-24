@@ -66,7 +66,9 @@
                     {
                         layer.msg("请求成功！");
                         var $token = $response.data.token;
-                        var $url = 'https://feiniji.cn//service/index.php?m=common&c=loginTransition&f=login&token='+$token;
+                        var $url = 'https://feiniji.cn/service/index.php?m=common&c=loginTransition&f=login&token='+$token;
+
+                        console.log($url);
                         window.open($url, '_blank');
                     }
                 })
@@ -79,9 +81,10 @@
 
                 })
                 .always(function(jqXHR, textStatus) {
-                    layer.closeAll('loading');
+                    console.log('always');
                     console.log(jqXHR);
                     console.log(textStatus);
+                    layer.closeAll('loading');
                 });
 
         });

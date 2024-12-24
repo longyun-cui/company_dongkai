@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\DK;
 
+use App\Models\DK_CC\DK_CC_Telephone;
 use App\Models\DK_CC\DK_CC_Team;
 
 use App\Models\DK\DK_Department;
@@ -3237,7 +3238,7 @@ class DKCCRepository {
 
         $request_data['request']['seq'] = '';
         $request_data['request']['userData'] = '';
-        $request_data['request']['customerName'] = '美学在线';
+        $request_data['request']['customerName'] = '测试客户1';
         $request_data['request']['userName'] = 'admin';
 //        $request_data['request']['agent'] = '0556126';
 
@@ -3294,38 +3295,6 @@ class DKCCRepository {
 
 
 
-    /*
-     * 用户系统
-     */
-
-
-    // 【select2】
-    public function operate_business_select2_user($post_data)
-    {
-        $me = Auth::guard('admin')->user();
-        if(empty($post_data['keyword']))
-        {
-            $list =User::select(['id','username as text'])
-                ->where(['userstatus'=>'正常','status'=>1])
-                ->whereIn('usergroup',['Agent','Agent2'])
-                ->orderBy('id','desc')
-                ->get()
-                ->toArray();
-        }
-        else
-        {
-            $keyword = "%{$post_data['keyword']}%";
-            $list =User::select(['id','username as text'])
-                ->where(['userstatus'=>'正常','status'=>1])
-                ->whereIn('usergroup',['Agent','Agent2'])
-                ->where('sitename','like',"%$keyword%")
-                ->orderBy('id','desc')
-                ->get()
-                ->toArray();
-        }
-        array_unshift($list, ['id'=>0,'text'=>'【全部代理】']);
-        return $list;
-    }
 
 
 
@@ -4963,8 +4932,197 @@ class DKCCRepository {
     /*
      * ITEM 内容管理
      */
-    // 【内容】返回-添加-视图
-    public function view_item_item_create()
+    // 【电话池】返回-导入-视图
+    public function view_service_telephone_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $item_category = 'item';
+        $item_type = 'team';
+        $item_type_text = '团队';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/service/telephone-list';
+
+        $view_data['operate_category'] = 'operate';
+        $view_data['operate_type'] = 'import';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = $item_category;
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.telephone-import';
+        return view($view_blade)->with($view_data);
+    }
+    // 【电话池】保存-导入-数据
+    public function operate_service_telephone_import_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required',
+            'project_id.required' => '请填选择项目！',
+            'project_id.numeric' => '选择项目参数有误！',
+            'project_id.min' => '请填选择项目！',
+            'client_id.required' => '请填选择客户！',
+            'client_id.numeric' => '选择客户参数有误！',
+            'client_id.min' => '请填选择客户！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'project_id' => 'required|numeric|min:0',
+            'client_id' => 'required|numeric|min:0',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+//        $project_id = $post_data['project_id'];
+//        $client_id = $post_data['client_id'];
+//        if($project_id > 0 || $client_id > 0)
+//        {
+//        }
+//        else return response_error([],"项目和客户必须选择一个！");
+
+        // 单文件
+        if(!empty($post_data["txt-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["txt-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $insert_data = [];
+                $data = file($attachment_file);
+                foreach($data as $key => $value)
+                {
+//                    if(is_numeric($value))
+//                    {
+                    $insert_data[] = ['telephone_number'=>trim($value),'item_active'=>1,'item_status'=>1];
+//                    }
+                }
+//                dd($insert_data);
+
+
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+
+                    $modal_telephone = new DK_CC_Telephone;
+                    $bool = $modal_telephone->insert($insert_data);
+                    if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
+
+                    DB::commit();
+                    return response_success(['count'=>count($insert_data)]);
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"清选择Excel文件！");
+
+
+        // 多文件
+//        dd($post_data["multiple-excel-file"]);
+        $count = 0;
+        $multiple_files = [];
+        if(!empty($post_data["multiple-excel-file"]))
+        {
+            // 添加图片
+            foreach ($post_data["multiple-excel-file"] as $n => $f)
+            {
+                if(!empty($f))
+                {
+                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
+                    if($result["result"])
+                    {
+                        $attachment_file = storage_resource_path($result["local"]);
+                        $data = Excel::load($attachment_file, function($reader) {
+
+                            $reader->limitColumns(1);
+                            $reader->limitRows(5001);
+
+                        })->get()->toArray();
+
+                        $order_data = [];
+                        foreach($data as $key => $value)
+                        {
+                            if($value['client_phone'])
+                            {
+                                $temp_date['client_phone'] = intval($value['client_phone']);
+                                $order_data[] = $temp_date;
+                            }
+                        }
+
+                        // 启动数据库事务
+                        DB::beginTransaction();
+                        try
+                        {
+
+                            foreach($order_data as $key => $value)
+                            {
+                                $order = new DK_Order;
+
+                                $order->project_id = $project_id;
+                                $order->creator_id = $me->id;
+                                $order->created_type = 9;
+                                $order->is_published = 1;
+                                $order->inspected_status = 1;
+                                $order->inspected_result = '通过';
+                                $order->client_phone = $value['client_phone'];
+
+                                $bool = $order->save();
+                                if(!$bool) throw new Exception("insert--order--fail");
+                            }
+
+                            DB::commit();
+                            $count += count($order_data);
+                        }
+                        catch (Exception $e)
+                        {
+                            DB::rollback();
+                            $msg = '操作失败，请重试！';
+                            $msg = $e->getMessage();
+                            return response_fail([],$msg);
+                        }
+
+                    }
+                    else return response_error([],"upload--attachment--fail");
+                }
+
+            }
+
+            return response_success(['count'=>$count]);
+        }
+
+    }
+
+    // 【电话池】返回-添加-视图
+    public function view_service_telephone_create()
     {
         $this->get_me();
         $me = $this->me;
@@ -4989,8 +5147,8 @@ class DKCCRepository {
         $view_blade = env('TEMPLATE_DK_CC').'entrance.item.item-edit';
         return view($view_blade)->with($return);
     }
-    // 【内容】返回-编辑-视图
-    public function view_item_item_edit($post_data)
+    // 【电话池】返回-编辑-视图
+    public function view_service_telephone_edit($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -5080,8 +5238,8 @@ class DKCCRepository {
             else return response("该内容不存在！", 404);
         }
     }
-    // 【内容】保存-数据
-    public function operate_item_item_save($post_data)
+    // 【电话池】保存-数据
+    public function operate_service_telephone_save($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required',
@@ -5222,7 +5380,7 @@ class DKCCRepository {
 
 
     // 【内容】获取详情
-    public function operate_item_item_get($post_data)
+    public function operate_service_telephone_get($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -5256,7 +5414,7 @@ class DKCCRepository {
 
 
     // 【内容】删除
-    public function operate_item_item_delete($post_data)
+    public function operate_service_telephone_delete($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -5327,7 +5485,7 @@ class DKCCRepository {
 
     }
     // 【内容】恢复
-    public function operate_item_item_restore($post_data)
+    public function operate_service_telephone_restore($post_data)
     {
         $messages = [
             'operate.required' => '参数有误！',
@@ -5379,7 +5537,7 @@ class DKCCRepository {
 
     }
     // 【内容】彻底删除
-    public function operate_item_item_delete_permanently($post_data)
+    public function operate_service_telephone_delete_permanently($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',

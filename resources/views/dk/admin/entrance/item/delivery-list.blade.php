@@ -18,21 +18,6 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body" style="margin-bottom:0;">
 
-            <div class="box-header with-border" style="padding:6px 10px;margin:4px;">
-
-                <h3 class="box-title">交付列表</h3>
-
-                <div class="pull-right _none">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse">
-                        <i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="" data-original-title="Remove">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-
-            </div>
-
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-order-list">
 

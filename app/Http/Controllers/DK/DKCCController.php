@@ -676,6 +676,12 @@ class DKCCController extends Controller
 
 
     // 【内容】添加
+    public function operate_service_telephone_import()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_service_telephone_import();
+        else if (request()->isMethod('post')) return $this->repo->operate_service_telephone_import_save(request()->all());
+    }
+    // 【内容】添加
     public function operate_item_item_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_item_item_create();

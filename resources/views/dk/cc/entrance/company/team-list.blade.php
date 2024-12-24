@@ -2,7 +2,7 @@
 
 
 @section('head_title')
-    {{ $title_text or '部门列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '部门列表' }} - {{ config('info.system.cc') }} - {{ config('info.info.short_name') }}
 @endsection
 
 
@@ -47,26 +47,38 @@
                             <option value ="21">组</option>
                         </select>
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
-                            <i class="fa fa-circle-o-notch"></i> 重置
-                        </button>
 
 
-                        @if(in_array($me->user_type,[0,1,9,11,19]))
-                            <div class="caption pull-right">
-                                <i class="icon-pin font-blue"></i>
-                                <span class="caption-subject font-blue sbold uppercase"></span>
-                                <a href="{{ url('/department/department-create') }}">
-                                    <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加部门</button>
-                                </a>
-                            </div>
-                        @endif
 
                     </div>
 
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success filter-submit" id="filter-submit">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                        <button type="button" class="btn btn-primary filter-refresh">
+                            <i class="fa fa-circle-o-notch"></i> 刷新
+                        </button>
+                        <button type="button" class="btn btn-primary filter-refresh">
+                            <i class="fa fa-circle-o-notch"></i> 刷新
+                        </button>
+                        <button type="button" class="btn btn-warning filter-cancel">
+                            <i class="fa fa-undo"></i> 重置
+                        </button>
+                    </div>
+
+
+
+
+                    @if(in_array($me->user_type,[0,1,9,11,19]))
+                        <div class="caption pull-right">
+                            <i class="icon-pin font-blue"></i>
+                            <span class="caption-subject font-blue sbold uppercase"></span>
+                            <a href="{{ url('/department/department-create') }}">
+                                <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加部门</button>
+                            </a>
+                        </div>
+                    @endif
 
 
                 </div>

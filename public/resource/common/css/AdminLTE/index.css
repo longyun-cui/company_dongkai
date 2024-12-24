@@ -81,6 +81,8 @@ table.dataTable .text-bottom { vertical-align: bottom; }
 
 
 .datatable-search-row { margin-bottom:16px; }
+.datatable-search-row .input-group { float:left; margin-right:4px; }
+.datatable-search-row .input-group.pull-right { margin-left:4px; }
 .datatable-search-row .input-group input { width:120px; }
 .datatable-search-row .input-group button { width:72px; }
 .datatable-search-row .input-group select { width:100px; }

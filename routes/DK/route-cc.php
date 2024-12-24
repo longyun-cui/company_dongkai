@@ -176,6 +176,18 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
 
 
 
+    /*
+     * 地域管理
+     */
+    // 列表
+    Route::match(['get','post'], '/service/telephone-list', $controller.'@view_item_district_list');
+    // 导入 & 创建 & 修改
+    Route::match(['get','post'], '/service/telephone-import', $controller.'@operate_service_telephone_import');
+    Route::match(['get','post'], '/service/telephone-create', $controller.'@operate_service_telephone_create');
+    Route::match(['get','post'], '/service/telephone-edit', $controller.'@operate_service_telephone_edit');
+
+
+
 
     /*
      * 地域管理
@@ -196,8 +208,6 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     // 启用 & 禁用
     Route::post('/district/district-admin-enable', $controller.'@operate_item_district_admin_enable');
     Route::post('/district/district-admin-disable', $controller.'@operate_item_district_admin_disable');
-
-
 
 
 
@@ -257,14 +267,6 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     /*
      * 订单管理
      */
-    // select2
-    Route::match(['get','post'], '/item/item_select2_user', $controller.'@operate_item_select2_user');
-    Route::match(['get','post'], '/item/item_select2_client', $controller.'@operate_item_select2_client');
-    Route::match(['get','post'], '/item/item_select2_project', $controller.'@operate_item_select2_project');
-    Route::match(['get','post'], '/item/item_select2_team', $controller.'@operate_item_select2_team');
-
-    Route::match(['get','post'], '/item/order_select2_project', $controller.'@operate_order_select2_project');
-    Route::match(['get','post'], '/item/order_select2_client', $controller.'@operate_order_select2_client');
 
     // 创建 & 修改
     Route::match(['get','post'], '/item/order-create', $controller.'@operate_item_order_create');
@@ -414,13 +416,6 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     Route::post('/item/task-admin-restore-bulk', $controller.'@operate_item_task_admin_restore_bulk');
     Route::post('/item/task-admin-delete-permanently-bulk', $controller.'@operate_item_task_admin_delete_permanently_bulk');
 
-
-
-
-
-    /*
-     * 任务管理
-     */
     Route::match(['get','post'], '/item/task-list-import', $controller.'@operate_item_task_list_import');
 
     Route::match(['get','post'], '/item/task-create', $controller.'@operate_item_task_create');
@@ -433,6 +428,9 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     Route::post('/item/task-publish', $controller.'@operate_item_task_publish');
     Route::post('/item/task-complete', $controller.'@operate_item_task_complete');
     Route::post('/item/task-remark-edit', $controller.'@operate_item_task_remark_edit');
+
+
+
 
 
 
