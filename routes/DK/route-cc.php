@@ -12,6 +12,7 @@ Route::match(['get','post'], 'login', $controller.'@login');
 Route::match(['get','post'], 'logout', $controller.'@logout');
 Route::match(['get','post'], 'logout_without_token', $controller.'@logout_without_token');
 
+Route::match(['get','post'], '/cc_api/okcc/receiving-result', $controller.'@operate_api_OKCC_receiving_result');
 
 /*
  * 超级管理员系统（后台）
@@ -403,31 +404,33 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     /*
      * 任务管理
      */
+    // 列表
+    Route::match(['get','post'], '/service/task-list', $controller.'@view_service_task_list');
+    // 导入 & 创建 & 修改
+    Route::match(['get','post'], '/service/task-import', $controller.'@operate_service_task_import');
+    Route::match(['get','post'], '/service/task-create', $controller.'@operate_service_task_create');
+    Route::match(['get','post'], '/service/task-edit', $controller.'@operate_service_task_edit');
     // 【任务管理】删除 & 恢复 & 永久删除
-    Route::post('/item/task-admin-delete', $controller.'@operate_item_task_admin_delete');
-    Route::post('/item/task-admin-restore', $controller.'@operate_item_task_admin_restore');
-    Route::post('/item/task-admin-delete-permanently', $controller.'@operate_item_task_admin_delete_permanently');
+    Route::post('/service/task-admin-delete', $controller.'@operate_service_task_admin_delete');
+    Route::post('/service/task-admin-restore', $controller.'@operate_service_task_admin_restore');
+    Route::post('/service/task-admin-delete-permanently', $controller.'@operate_service_task_admin_delete_permanently');
     // 【任务管理】启用 & 禁用
-    Route::post('/item/task-admin-enable', $controller.'@operate_item_task_admin_enable');
-    Route::post('/item/task-admin-disable', $controller.'@operate_item_task_admin_disable');
+    Route::post('/service/task-admin-enable', $controller.'@operate_service_task_admin_enable');
+    Route::post('/service/task-admin-disable', $controller.'@operate_service_task_admin_disable');
     // 【任务管理】批量操作
-    Route::post('/item/task-admin-operate-bulk', $controller.'@operate_item_task_admin_operate_bulk');
-    Route::post('/item/task-admin-delete-bulk', $controller.'@operate_item_task_admin_delete_bulk');
-    Route::post('/item/task-admin-restore-bulk', $controller.'@operate_item_task_admin_restore_bulk');
-    Route::post('/item/task-admin-delete-permanently-bulk', $controller.'@operate_item_task_admin_delete_permanently_bulk');
+    Route::post('/service/task-admin-operate-bulk', $controller.'@operate_service_task_admin_operate_bulk');
+    Route::post('/service/task-admin-delete-bulk', $controller.'@operate_service_task_admin_delete_bulk');
+    Route::post('/service/task-admin-restore-bulk', $controller.'@operate_service_task_admin_restore_bulk');
+    Route::post('/service/task-admin-delete-permanently-bulk', $controller.'@operate_service_task_admin_delete_permanently_bulk');
 
-    Route::match(['get','post'], '/item/task-list-import', $controller.'@operate_item_task_list_import');
-
-    Route::match(['get','post'], '/item/task-create', $controller.'@operate_item_task_create');
-    Route::match(['get','post'], '/item/task-edit', $controller.'@operate_item_task_edit');
-    Route::post('/item/task-enable', $controller.'@operate_item_task_enable');
-    Route::post('/item/task-disable', $controller.'@operate_item_task_disable');
-    Route::post('/item/task-delete', $controller.'@operate_item_task_delete');
-    Route::post('/item/task-restore', $controller.'@operate_item_task_restore');
-    Route::post('/item/task-delete-permanently', $controller.'@operate_item_task_delete_permanently');
-    Route::post('/item/task-publish', $controller.'@operate_item_task_publish');
-    Route::post('/item/task-complete', $controller.'@operate_item_task_complete');
-    Route::post('/item/task-remark-edit', $controller.'@operate_item_task_remark_edit');
+    Route::post('/service/task-enable', $controller.'@operate_service_task_enable');
+    Route::post('/service/task-disable', $controller.'@operate_service_task_disable');
+    Route::post('/service/task-delete', $controller.'@operate_service_task_delete');
+    Route::post('/service/task-restore', $controller.'@operate_service_task_restore');
+    Route::post('/service/task-delete-permanently', $controller.'@operate_service_task_delete_permanently');
+    Route::post('/service/task-publish', $controller.'@operate_service_task_publish');
+    Route::post('/service/task-complete', $controller.'@operate_service_task_complete');
+    Route::post('/service/task-remark-edit', $controller.'@operate_service_task_remark_edit');
 
 
 
@@ -521,6 +524,8 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     Route::match(['get','post'], '/item/record-list-for-all', $controller.'@view_record_list_for_all');
 
     Route::match(['get','post'], '/record/visit-list', $controller.'@view_record_visit_list');
+
+
 
 
 });

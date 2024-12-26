@@ -208,6 +208,11 @@ desired effect
 <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 
 
+<script src="{{ asset('/resource/common/js/area_data.js') }}"></script>
+{{--<script src="{{ asset('/resource/common/js/area_select_by_name.js') }}"></script>--}}
+<script src="{{ asset('/resource/common/js/area_select_by_code.js') }}"></script>
+
+
 {{--layout-script--}}
 @include(env('TEMPLATE_DK_CC').'layout.layout-script')
 

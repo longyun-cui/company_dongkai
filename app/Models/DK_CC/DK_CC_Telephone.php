@@ -17,24 +17,27 @@ class DK_CC_Telephone extends Model
         'owner_id',
         'creator_id',
 
-        'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
+        'username', 'nickname', 'true_name', 'short_name',
+        'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
+        'portrait_img_src',
+        'cover_pic_src',
+        'attachment_name',
+        'attachment_src',
+        'unique_path',
+        'file_path',
+        'link_url',
 
         'provinceCode',
         'cityCode',
         'areaCode',
 
         'telephone_number',
-        'tag',
 
         'task_id',
         'last_call_time',
 
-        'api_id',
-        'api_password',
-
-        'is_completed',
-
-        'published_at'
+        'is_published', 'published_at',
+        'is_completed', 'completed_at'
     ];
     protected $dateFormat = 'U';
 

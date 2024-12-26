@@ -3,19 +3,20 @@ namespace App\Models\DK_CC;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_CC_Team extends Model
+class DK_CC_API_Received_From_OKCC extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_cc_team";
+    protected $table = "dk_cc_api_received_from_okcc";
     protected $fillable = [
         'active', 'status',
         'category', 'type', 'form', 'sort',
         'item_active', 'item_status', 'item_category', 'item_type',
-        'team_active', 'team_status', 'team_category', 'team_type',
+        'api_active', 'api_status', 'api_category', 'api_type',
 
         'owner_id',
         'creator_id',
+        'team_api_id',
 
         'username', 'nickname', 'true_name', 'short_name',
         'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
@@ -26,16 +27,6 @@ class DK_CC_Team extends Model
         'unique_path',
         'file_path',
         'link_url',
-
-        'company_id',
-        'leader_id',
-
-        'api_id',
-        'api_password',
-
-        'is_completed',
-
-        'published_at'
     ];
     protected $dateFormat = 'U';
 
@@ -52,27 +43,27 @@ class DK_CC_Team extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK_CC\DK_CC_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK_CC\DK_CC_User','creator_id','id');
     }
     // 创作者
     function updater()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
+        return $this->belongsTo('App\Models\DK_CC\DK_CC_User','updater_id','id');
     }
     // 创作者
     function completer()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
+        return $this->belongsTo('App\Models\DK_CC\DK_CC_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
+        return $this->belongsTo('App\Models\DK_CC\DK_CC_User','user_id','id');
     }
 
 
@@ -81,32 +72,32 @@ class DK_CC_Team extends Model
     // 【一对多】下级部门
     function subordinate_department_list()
     {
-        return $this->hasMany('App\Models\DK\DK_Department','superior_department_id','id');
+        return $this->hasMany('App\Models\DK_CC\DK_CC_Department','superior_department_id','id');
     }
 
     // 【反向一对多】上级部门
     function superior_department_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Department','superior_department_id','id');
+        return $this->belongsTo('App\Models\DK_CC\DK_CC_Department','superior_department_id','id');
     }
 
 
     // 【一对一】负责人
     function leader()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','leader_id','id');
+        return $this->belongsTo('App\Models\DK_CC\DK_CC_User','leader_id','id');
     }
 
 
     // 【一对多】部门（大区）员工
     function department_district_staff_list()
     {
-        return $this->hasMany('App\Models\DK\DK_User','department_district_id','id');
+        return $this->hasMany('App\Models\DK_CC\DK_CC_User','department_district_id','id');
     }
     // 【一对多】部门（大区）员工
     function department_group_staff_list()
     {
-        return $this->hasMany('App\Models\DK\DK_User','department_group_id','id');
+        return $this->hasMany('App\Models\DK_CC\DK_CC_User','department_group_id','id');
     }
 
 
@@ -115,7 +106,7 @@ class DK_CC_Team extends Model
     // 【多对多】审核人关联的项目
     function pivot_department_user()
     {
-        return $this->belongsToMany('App\Models\DK\DK_User','dk_pivot_user_department','department_id','user_id');
+        return $this->belongsToMany('App\Models\DK_CC\DK_CC_User','dk_pivot_user_department','department_id','user_id');
 //            ->wherePivot('relation_type', 1);
 //            ->withTimestamps();
     }
@@ -124,7 +115,7 @@ class DK_CC_Team extends Model
     // 多对多 审核人关联的项目
     function pivot_department_project()
     {
-        return $this->belongsToMany('App\Models\DK\DK_Project','dk_pivot_team_project','team_id','project_id');
+        return $this->belongsToMany('App\Models\DK_CC\DK_CC_Project','dk_pivot_team_project','team_id','project_id');
 //            ->wherePivot('relation_type', 1);
 //            ->withTimestamps();
     }
@@ -133,12 +124,12 @@ class DK_CC_Team extends Model
     // 工单
     function order_list_for_district()
     {
-        return $this->hasMany('App\Models\DK\DK_Order','department_district_id','id');
+        return $this->hasMany('App\Models\DK_CC\DK_CC_Order','department_district_id','id');
     }
     // 工单
     function order_list_for_group()
     {
-        return $this->hasMany('App\Models\DK\DK_Order','department_group_id','id');
+        return $this->hasMany('App\Models\DK_CC\DK_CC_Order','department_group_id','id');
     }
 
 
@@ -236,7 +227,7 @@ class DK_CC_Team extends Model
     // 与我相关的话题
     function pivot_collection_item_users()
     {
-        return $this->belongsToMany('App\Models\DK\DK_User','pivot_user_item','item_id','user_id');
+        return $this->belongsToMany('App\Models\DK_CC\DK_CC_User','pivot_user_item','item_id','user_id');
     }
 
 

@@ -1,8 +1,10 @@
 <?php
 namespace App\Repositories\DK;
 
-use App\Models\DK_CC\DK_CC_Telephone;
 use App\Models\DK_CC\DK_CC_Team;
+use App\Models\DK_CC\DK_CC_Telephone;
+use App\Models\DK_CC\DK_CC_Task;
+use App\Models\DK_CC\DK_CC_API_Received_From_OKCC;
 
 use App\Models\DK\DK_Department;
 use App\Models\DK\DK_District;
@@ -53,8 +55,6 @@ class DKCCRepository {
         Blade::setEchoFormat('%s');
         Blade::setEchoFormat('e(%s)');
         Blade::setEchoFormat('nl2br(e(%s))');
-
-        view()->share('system','cc');
     }
 
 
@@ -74,6 +74,8 @@ class DKCCRepository {
         if(isMobileEquipment()) $is_mobile_equipment = 1;
         else $is_mobile_equipment = 0;
         view()->share('is_mobile_equipment',$is_mobile_equipment);
+
+        view()->share('system','cc');
     }
 
 
@@ -2086,12 +2088,12 @@ class DKCCRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
 
-        $return['menu_active_of_department_list_for_all'] = 'active menu-open';
+        $return['menu_active_of_company_team_list'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_CC').'entrance.company.team-list';
         return view($view_blade)->with($return);
     }
     // 【团队】返回-列表-数据
-    public function get_company_team_datatable($post_data)
+    public function get_company_team_list_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -3189,7 +3191,7 @@ class DKCCRepository {
     }
 
 
-    // 【api】拨号
+    // 【api】登录
     public function operate_company_team_login_okcc($post_data)
     {
         $messages = [
@@ -4930,7 +4932,7 @@ class DKCCRepository {
 
 
     /*
-     * ITEM 内容管理
+     * TELEPHONE 电话池
      */
     // 【电话池】返回-导入-视图
     public function view_service_telephone_import()
@@ -5394,7 +5396,7 @@ class DKCCRepository {
     }
 
 
-    // 【内容】获取详情
+    // 【电话池】获取详情
     public function operate_service_telephone_get($post_data)
     {
         $messages = [
@@ -5428,7 +5430,7 @@ class DKCCRepository {
     }
 
 
-    // 【内容】删除
+    // 【电话池】删除
     public function operate_service_telephone_delete($post_data)
     {
         $messages = [
@@ -5499,7 +5501,7 @@ class DKCCRepository {
         }
 
     }
-    // 【内容】恢复
+    // 【电话池】恢复
     public function operate_service_telephone_restore($post_data)
     {
         $messages = [
@@ -5551,7 +5553,7 @@ class DKCCRepository {
         }
 
     }
-    // 【内容】彻底删除
+    // 【电话池】彻底删除
     public function operate_service_telephone_delete_permanently($post_data)
     {
         $messages = [
@@ -5949,8 +5951,455 @@ class DKCCRepository {
 
 
 
-    // 【任务管理】批量-操作（全部操作）
-    public function operate_item_task_admin_operate_bulk($post_data)
+
+
+
+
+    /*
+     * TASK 任务管理
+     */
+    // 【任务】返回-列表-视图
+    public function view_service_task_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $return['menu_active_of_service_task_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.task-list';
+        return view($view_blade)->with($return);
+    }
+    // 【任务】返回-列表-数据
+    public function get_service_task_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_CC_Task::select('*')
+            ->withTrashed()
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); }
+            ]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+            if($v->department_type == 11)
+            {
+                $v->district_id = $v->id;
+            }
+            else if($v->department_type == 21)
+            {
+                $v->district_id = $v->superior_department_id;
+            }
+
+            $v->district_group_id = $v->district_id.'.'.$v->id;
+        }
+//        $list = $list->sortBy(['district_id'=>'asc'])->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+    // 【任务】返回-导入-视图
+    public function view_service_task_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $item_category = 'item';
+        $item_type = 'team';
+        $item_type_text = '团队';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/service/telephone-list';
+
+        $view_data['operate_category'] = 'operate';
+        $view_data['operate_type'] = 'import';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = $item_category;
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.telephone-import';
+        return view($view_blade)->with($view_data);
+    }
+    // 【任务】保存-导入-数据
+    public function operate_service_task_import_save($post_data)
+    {
+        set_time_limit(300);
+
+        $messages = [
+            'operate.required' => 'operate.required',
+            'project_id.required' => '请填选择项目！',
+            'project_id.numeric' => '选择项目参数有误！',
+            'project_id.min' => '请填选择项目！',
+            'client_id.required' => '请填选择客户！',
+            'client_id.numeric' => '选择客户参数有误！',
+            'client_id.min' => '请填选择客户！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'project_id' => 'required|numeric|min:0',
+            'client_id' => 'required|numeric|min:0',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+//        $project_id = $post_data['project_id'];
+//        $client_id = $post_data['client_id'];
+//        if($project_id > 0 || $client_id > 0)
+//        {
+//        }
+//        else return response_error([],"项目和客户必须选择一个！");
+
+        // 单文件
+        if(!empty($post_data["txt-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["txt-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $file_data = file($attachment_file);
+
+                $collection = collect($file_data);
+                $chunks = $collection->chunk(1000);
+                $chunks = $chunks->toArray();
+//                dd($chunks);
+
+                $insert_data = [];
+                foreach($chunks as $key => $value)
+                {
+                    $data = [];
+                    foreach($value as $v)
+                    {
+                        if(is_numeric(trim($v)))
+                        {
+                            $data[] = ['telephone_number'=>trim($v),'item_active'=>1,'item_status'=>1];
+                        }
+                    }
+                    $insert_data[] = $data;
+                }
+//                dd($insert_data);
+
+
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+                    $modal_telephone = new DK_CC_Telephone;
+                    foreach($insert_data as $insert_value)
+                    {
+                        $bool = $modal_telephone->insert($insert_value);
+                        if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
+                    }
+
+                    DB::commit();
+                    return response_success(['count'=>count($file_data)]);
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"清选择Excel文件！");
+
+
+        // 多文件
+//        dd($post_data["multiple-excel-file"]);
+        $count = 0;
+        $multiple_files = [];
+        if(!empty($post_data["multiple-excel-file"]))
+        {
+            // 添加图片
+            foreach ($post_data["multiple-excel-file"] as $n => $f)
+            {
+                if(!empty($f))
+                {
+                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
+                    if($result["result"])
+                    {
+                        $attachment_file = storage_resource_path($result["local"]);
+                        $data = Excel::load($attachment_file, function($reader) {
+
+                            $reader->limitColumns(1);
+                            $reader->limitRows(5001);
+
+                        })->get()->toArray();
+
+                        $order_data = [];
+                        foreach($data as $key => $value)
+                        {
+                            if($value['client_phone'])
+                            {
+                                $temp_date['client_phone'] = intval($value['client_phone']);
+                                $order_data[] = $temp_date;
+                            }
+                        }
+
+                        // 启动数据库事务
+                        DB::beginTransaction();
+                        try
+                        {
+
+                            foreach($order_data as $key => $value)
+                            {
+                                $order = new DK_Order;
+
+                                $order->project_id = $project_id;
+                                $order->creator_id = $me->id;
+                                $order->created_type = 9;
+                                $order->is_published = 1;
+                                $order->inspected_status = 1;
+                                $order->inspected_result = '通过';
+                                $order->client_phone = $value['client_phone'];
+
+                                $bool = $order->save();
+                                if(!$bool) throw new Exception("insert--order--fail");
+                            }
+
+                            DB::commit();
+                            $count += count($order_data);
+                        }
+                        catch (Exception $e)
+                        {
+                            DB::rollback();
+                            $msg = '操作失败，请重试！';
+                            $msg = $e->getMessage();
+                            return response_fail([],$msg);
+                        }
+
+                    }
+                    else return response_error([],"upload--attachment--fail");
+                }
+
+            }
+
+            return response_success(['count'=>$count]);
+        }
+
+    }
+
+
+    // 【任务】返回-添加-视图
+    public function view_service_task_create()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $item_category = 'service';
+        $item_type = 'team';
+        $item_type_text = '任务';
+        $title_text = '添加'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/service/task-list';
+
+        $view_data['operate_type'] = 'create';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = $item_category;
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.task-edit';
+        return view($view_blade)->with($view_data);
+    }
+    // 【任务】返回-编辑-视图
+    public function view_service_task_edit()
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $id = request("id",0);
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.company.team-edit';
+
+        $item_type = 'item';
+        $item_type_text = '团队';
+        $title_text = '编辑'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/company/team-list';
+
+        $view_data['operate_type'] = 'create';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = 'item';
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
+
+        if($id == 0)
+        {
+            return view($view_blade)->with($view_data);
+        }
+        else
+        {
+            $view_data['operate_type'] = 'edit';
+            $view_data['operate_id'] = $id;
+
+            $mine = DK_CC_Team::find($id);
+            if($mine)
+            {
+                $mine->custom = json_decode($mine->custom);
+
+                $view_data['data'] = $mine;
+
+                return view($view_blade)->with($view_data);
+            }
+            else return view(env('TEMPLATE_DK_CC').'errors.404');
+        }
+    }
+    // 【任务】保存数据
+    public function operate_service_task_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'name.required' => '请输入任务名称！',
+//            'name.unique' => '该团队号已存在！',
+            'telephone_num.required' => '请输入电话数量！',
+            'telephone_num.numeric' => '电话数量必须为大于等于0的整数！',
+            'telephone_num.min' => '电话数量必须为大于等于0的整数！',
+            'file_num.required' => '请输入文件数量！',
+            'file_num.numeric' => '文件数量必须为大于等于0的整数！',
+            'file_num.min' => '文件数量必须为大于等于0的整数！',
+            'file_size.required' => '请输入文件大小！',
+            'file_size.numeric' => '文件大小必须为大于等于0的整数！',
+            'file_size.min' => '文件大小必须为大于等于0的整数！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'name' => 'required',
+//            'name' => 'required|unique:dk_cc_task,name',
+            'telephone_num' => 'required|numeric|min:1',
+            'file_num' => 'required|numeric|min:1',
+            'file_size' => 'required|numeric|min:0',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"]["type"];
+        $operate_id = $post_data["operate"]["id"];
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_CC_Task::select('id')->where('name',$post_data["name"])->count();
+            if($is_exist) return response_error([],"该【任务】已存在，请勿重复添加！");
+
+            $mine = new DK_CC_Task;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = DK_CC_Task::find($operate_id);
+            if(!$mine) return response_error([],"该【任务】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+            dd($mine_data);
+
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("DK_CC_Task--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【任务】批量-操作（全部操作）
+    public function operate_service_task_admin_operate_bulk($post_data)
     {
         $messages = [
             'bulk_item_id.required' => 'bulk_item_id.required.',
@@ -6010,8 +6459,8 @@ class DKCCRepository {
             return response_fail([],$msg);
         }
     }
-    // 【任务管理】管理员-批量-删除
-    public function operate_item_task_admin_delete_bulk($post_data)
+    // 【任务】管理员-批量-删除
+    public function operate_service_task_admin_delete_bulk($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -6068,8 +6517,8 @@ class DKCCRepository {
             return response_fail([],$msg);
         }
     }
-    // 【任务管理】管理员-批量-删除
-    public function operate_item_task_admin_restore_bulk($post_data)
+    // 【任务】管理员-批量-删除
+    public function operate_service_task_admin_restore_bulk($post_data)
     {
         $messages = [
             'bulk_item_id.required' => 'bulk_item_id.required.',
@@ -6120,8 +6569,8 @@ class DKCCRepository {
             return response_fail([],$msg);
         }
     }
-    // 【任务管理】管理员-批量-彻底删除
-    public function operate_item_task_admin_delete_permanently_bulk($post_data)
+    // 【任务】管理员-批量-彻底删除
+    public function operate_service_task_admin_delete_permanently_bulk($post_data)
     {
         $messages = [
             'bulk_item_id.required' => 'bulk_item_id.required.',
@@ -19639,6 +20088,86 @@ class DKCCRepository {
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
+    }
+
+
+
+    // 【API】接单
+    public function operate_api_OKCC_receiving_result($post_data)
+    {
+//        dd(90);
+        header("Content-Type:application/json;charset=UTF-8");
+
+//        $call = new DK_Choice_Call_Record;
+//        $call_data['call_result_msg'] = 1;
+//        $bool_c = $call->fill($call_data)->save();
+//
+//        $return['result']['error'] = 0;
+//        $return['result']['msg'] = '';
+//        return json_decode(json_encode($return));
+
+        $messages = [
+            'authentication.required' => 'authentication.required.',
+            'notify.required' => 'notify.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'authentication' => 'required',
+            'notify' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $time = time();
+
+
+        $api_type = $post_data['notify']['type'];
+
+//        if($userData == 'calling')
+        if(true)
+        {
+            $insert_data['team_api_id'] = $post_data['user'];
+            $insert_data['api_type'] = $post_data['notify']['type'];
+            $insert_data['content'] = json_encode($post_data);
+
+
+            // 启动数据库事务
+            DB::beginTransaction();
+            try
+            {
+                $mine = new DK_CC_API_Received_From_OKCC;
+
+                $bool_c = $mine->fill($insert_data)->save();
+                if(!$bool_c) throw new Exception("DK_CC_API_Received_From_OKCC--insert--fail");
+
+
+                DB::commit();
+
+                $return['result']['error'] = 0;
+                $return['result']['msg'] = '';
+                return json_decode(json_encode($return));
+//                return response()->json($return);
+//                return response_success(json_encode($return));
+
+            }
+            catch (Exception $e)
+            {
+                DB::rollback();
+//            $msg = '操作失败，请重试！';
+                $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+                $return['result']['error'] = 1;
+                $return['result']['msg'] = $msg;
+                return json_decode(json_encode($return));
+            }
+        }
+
+
+
     }
 
 

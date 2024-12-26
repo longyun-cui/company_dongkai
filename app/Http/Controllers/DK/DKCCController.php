@@ -388,101 +388,101 @@ class DKCCController extends Controller
     /*
      * 公司管理-团队
      */
-    // 【团第】SELECT2 Leader 负责人
+    // 【团队】SELECT2 Leader 负责人
     public function operate_company_team_select2_leader()
     {
         return $this->repo->operate_company_team_select2_leader(request()->all());
     }
-    // 【团第】SELECT2 Superior 上级团第
+    // 【团队】SELECT2 Superior 上级团队
     public function operate_company_team_select2_superior_department()
     {
         return $this->repo->operate_company_team_select2_superior_department(request()->all());
     }
 
-    // 【团第】返回-列表-视图（全部任务）
+    // 【团队】返回-列表-视图（全部任务）
     public function view_company_team_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_team_list(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_company_team_datatable(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_company_team_list_datatable(request()->all());
     }
-    // 【团第】【修改记录】返回-列表-视图（全部任务）
+    // 【团队】【修改记录】返回-列表-视图（全部任务）
     public function view_company_team_modify_record()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_team_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_company_team_modify_record_datatable(request()->all());
     }
 
-    // 【团第】添加
+    // 【团队】添加
     public function operate_company_team_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_team_create();
         else if (request()->isMethod('post')) return $this->repo->operate_company_team_save(request()->all());
     }
-    // 【团第】编辑
+    // 【团队】编辑
     public function operate_company_team_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_team_edit();
         else if (request()->isMethod('post')) return $this->repo->operate_company_team_save(request()->all());
     }
 
-    // 【团第】修改-文本-text-信息
+    // 【团队】修改-文本-text-信息
     public function operate_company_team_info_text_set()
     {
         return $this->repo->operate_company_team_info_text_set(request()->all());
     }
-    // 【团第】修改-时间-time-信息
+    // 【团队】修改-时间-time-信息
     public function operate_company_team_info_time_set()
     {
         return $this->repo->operate_company_team_info_time_set(request()->all());
     }
-    // 【团第】修改-选项-option-信息
+    // 【团队】修改-选项-option-信息
     public function operate_company_team_info_option_set()
     {
         return $this->repo->operate_company_team_info_option_set(request()->all());
     }
-    // 【团第】添加-附件-attachment-信息
+    // 【团队】添加-附件-attachment-信息
     public function operate_company_team_info_attachment_set()
     {
         return $this->repo->operate_company_team_info_attachment_set(request()->all());
     }
-    // 【团第】删除-附件-attachment-信息
+    // 【团队】删除-附件-attachment-信息
     public function operate_company_team_info_attachment_delete()
     {
         return $this->repo->operate_company_team_info_attachment_delete(request()->all());
     }
-    // 【团第】获取-附件-attachment-信息
+    // 【团队】获取-附件-attachment-信息
     public function operate_company_team_get_attachment_html()
     {
         return $this->repo->operate_company_team_get_attachment_html(request()->all());
     }
 
-    // 【团第】删除
+    // 【团队】删除
     public function operate_company_team_admin_delete()
     {
         return $this->repo->operate_company_team_admin_delete(request()->all());
     }
-    // 【团第】恢复
+    // 【团队】恢复
     public function operate_company_team_admin_restore()
     {
         return $this->repo->operate_company_team_admin_restore(request()->all());
     }
-    // 【团第】永久删除
+    // 【团队】永久删除
     public function operate_company_team_admin_delete_permanently()
     {
         return $this->repo->operate_company_team_admin_delete_permanently(request()->all());
     }
 
-    // 【团第】启用
+    // 【团队】启用
     public function operate_company_team_admin_enable()
     {
         return $this->repo->operate_company_team_admin_enable(request()->all());
     }
-    // 【团第】禁用
+    // 【团队】禁用
     public function operate_company_team_admin_disable()
     {
         return $this->repo->operate_company_team_admin_disable(request()->all());
     }
-    // 【团第】登录 OKCC
+    // 【团队】登录 OKCC
     public function operate_company_team_login_okcc()
     {
         return $this->repo->operate_company_team_login_okcc(request()->all());
@@ -768,46 +768,54 @@ class DKCCController extends Controller
     /*
      * 任务管理
      */
-    // 【任务】导入
-    public function operate_item_task_list_import()
-    {
-        if(request()->isMethod('get')) return $this->repo->view_item_task_list_import();
-        else if (request()->isMethod('post')) return $this->repo->operate_item_task_list_import_save(request()->all());
-    }
 
     // 【任务】返回-列表-视图（全部任务）
-    public function view_task_list_for_all()
+    public function view_service_task_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_task_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_task_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_service_task_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_service_task_list_datatable(request()->all());
     }
 
 
-
-    /*
-     * Task 任务管理
-     */
+    // 【任务】导入
+    public function operate_service_task_list_import()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_service_task_import();
+        else if (request()->isMethod('post')) return $this->repo->operate_service_task_import_save(request()->all());
+    }
+    // 【任务】添加
+    public function operate_service_task_create()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_service_task_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_service_task_save(request()->all());
+    }
+    // 【任务】编辑
+    public function operate_service_task_edit()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_service_task_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_service_task_save(request()->all());
+    }
 
 
     // 【任务管理】管理员-批量-操作
-    public function operate_item_task_admin_operate_bulk()
+    public function operate_service_task_admin_operate_bulk()
     {
-        return $this->repo->operate_item_task_admin_operate_bulk(request()->all());
+        return $this->repo->operate_service_task_admin_operate_bulk(request()->all());
     }
     // 【任务管理】管理员-批量-删除
-    public function operate_item_task_admin_delete_bulk()
+    public function operate_service_task_admin_delete_bulk()
     {
-        return $this->repo->operate_item_task_admin_delete_bulk(request()->all());
+        return $this->repo->operate_service_task_admin_delete_bulk(request()->all());
     }
     // 【任务管理】管理员-批量-恢复
-    public function operate_item_task_admin_restore_bulk()
+    public function operate_service_task_admin_restore_bulk()
     {
-        return $this->repo->operate_item_task_admin_restore_bulk(request()->all());
+        return $this->repo->operate_service_task_admin_restore_bulk(request()->all());
     }
     // 【任务管理】管理员-批量-彻底删除
-    public function operate_item_task_admin_delete_permanently_bulk()
+    public function operate_service_task_admin_delete_permanently_bulk()
     {
-        return $this->repo->operate_item_task_admin_delete_permanently_bulk(request()->all());
+        return $this->repo->operate_service_task_admin_delete_permanently_bulk(request()->all());
     }
 
 
@@ -1412,7 +1420,7 @@ class DKCCController extends Controller
         if(request()->isMethod('get')) return $this->repo->view_statistic_project(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_project(request()->all());
     }
-    // 【统计】团第看板
+    // 【统计】团队看板
     public function view_statistic_department()
     {
         if(request()->isMethod('get')) return $this->repo->view_statistic_department(request()->all());
@@ -1441,7 +1449,7 @@ class DKCCController extends Controller
     }
 
 
-    // 【统计】团第看板
+    // 【统计】团队看板
     public function view_staff_statistic_customer_service()
     {
         if(request()->isMethod('get')) return $this->repo->view_staff_statistic_customer_service(request()->all());
@@ -1522,6 +1530,14 @@ class DKCCController extends Controller
         else return false;
     }
 
+
+
+
+    // 【API】OKCC
+    public function operate_api_OKCC_receiving_result()
+    {
+        return $this->repo->operate_api_OKCC_receiving_result(request()->all());
+    }
 
 
 }

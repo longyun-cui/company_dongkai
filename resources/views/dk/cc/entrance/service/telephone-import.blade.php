@@ -1,4 +1,4 @@
-@extends(env('TEMPLATE_DK_ADMIN').'layout.layout')
+@extends(env('TEMPLATE_DK_CC').'layout.layout')
 
 
 @section('head_title')
@@ -36,47 +36,46 @@
                 <input type="hidden" name="operate[item_type]" value="{{ $category_item_type or 'telephone' }}" readonly>
 
 
-                {{--用户名--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 用户名</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="username" placeholder="用户名" value="{{ $data->username or '' }}">
-                    </div>
-                </div>
-                {{--描述--}}
-                <div class="form-group _none">
-                    <label class="control-label col-md-2">描述</label>
-                    <div class="col-md-8 ">
-                        {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
-                        <textarea class="form-control" name="description" rows="3" cols="100%">{{ $data->description or '' }}</textarea>
+                {{--选择城市--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2">选择城市</label>
+                    <div class="col-md-8 area_select_box">
+                        {{--选择所在城市--}}
+                            <div class="col-xs-4 col-sm-4 col-md-4 " style="padding:0">
+                                <select name="area_province" class="form-control form-filter select2-box area_select_province" id="area_province">
+                                    @if(!empty($data->area_province))
+                                        <option value="{{ $data->area_province or '' }}">{{ $data->area_province or '' }}</option>
+                                    @else
+                                        <option value="">请选择省</option>
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 " style="padding:0">
+                                <select name="area_city" class="form-control form-filter select2-box area_select_city" id="area_city">
+                                    @if(!empty($data->area_city))
+                                        <option value="{{ $data->area_city or '' }}">{{ $data->area_city or '' }}</option>
+                                    @else
+                                        <option value="">请先选择省</option>
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 " style="padding:0">
+                                <select name="area_district" class="form-control form-filter select2-box area_select_district" id="area_district">
+                                    @if(!empty($data->area_district))
+                                        <option value="{{ $data->area_district or '' }}">{{ $data->area_district or '' }}</option>
+                                    @else
+                                        <option value="">请先选择市</option>
+                                    @endif
+                                </select>
+                            </div>
                     </div>
                 </div>
 
-                {{--选择项目--}}
+                {{--标签--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">选择项目</label>
+                    <label class="control-label col-md-2">标签</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="project_id" id="select2-project">
-                            @if($operate_type == 'edit' && $data->project_id)
-                                <option data-id="{{ $data->project_id or 0 }}" value="{{ $data->project_id or 0 }}">{{ $data->project_er->name }}</option>
-                            @else
-                                <option data-id="0" value="0">选择项目</option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
-
-                {{--选择客户--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2">选择客户</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control" name="client_id" id="select2-client">
-                            @if($operate_type == 'edit' && $data->client_id)
-                                <option data-id="{{ $data->client_id or 0 }}" value="{{ $data->client_id or 0 }}">{{ $data->client_er->name }}</option>
-                            @else
-                                <option data-id="0" value="0">选择客户</option>
-                            @endif
-                        </select>
+                        <input type="text" class="form-control" name="tag" placeholder="标签" value="{{ $data->tag or '' }}">
                     </div>
                 </div>
 

@@ -68,7 +68,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
-            <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
+            <li class="treeview {{ $menu_active_of_company_staff_list or '' }}">
                 <a href="{{ url('/company/staff-list') }}">
                     <i class="fa fa-user text-light-blue"></i>
                     <span>员工列表</span>
@@ -99,8 +99,8 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61]))
-            <li class="treeview {{ $menu_active_of_district_list or '' }} _none-">
-                <a href="{{ url('/service/district-list')}}">
+            <li class="treeview {{ $menu_active_of_service_location_list or '' }} _none-">
+                <a href="{{ url('/service/location-list')}}">
                     <i class="fa text-green fa-location-arrow"></i>
                     <span>地域管理</span>
                 </a>
@@ -108,7 +108,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,41,61,71,81]))
-            <li class="treeview {{ $menu_active_of_project_list or '' }} _none-">
+            <li class="treeview {{ $menu_active_of_service_project_list or '' }} _none-">
                 <a href="{{ url('/service/project-list')}}">
                     <i class="fa text-green fa-cube"></i>
                     <span>项目管理</span>
@@ -117,8 +117,8 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
-            <li class="treeview {{ $menu_active_of_order_list_ or '' }}">
-                <a href="{{ url('/service/order-list')}}">
+            <li class="treeview {{ $menu_active_of_service_task_list or '' }}">
+                <a href="{{ url('/service/task-list')}}">
                     <i class="fa text-green fa-file-text"></i>
                     <span>任务管理</span>
                 </a>
