@@ -116,6 +116,14 @@
             </li>
             @endif
 
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                <li class="treeview {{ $menu_active_of_telephone_list or '' }}">
+                    <a href="{{ url('/service/telephone-list')}}">
+                        <i class="fa fa-file-text text-yellow"></i>
+                        <span>电话数据</span>
+                    </a>
+                </li>
+            @endif
             @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
             <li class="treeview {{ $menu_active_of_service_task_list or '' }}">
                 <a href="{{ url('/service/task-list')}}">
@@ -123,14 +131,6 @@
                     <span>任务管理</span>
                 </a>
             </li>
-            @if(in_array($me->user_type,[0,1,9,11,61,66]))
-            <li class="treeview {{ $menu_active_of_distribution_list or '' }}">
-                <a href="{{ url('/item/distribution-list')}}">
-                    <i class="fa fa-file-text text-yellow"></i>
-                    <span>全部数据</span>
-                </a>
-            </li>
-            @endif
             @endif
 
 

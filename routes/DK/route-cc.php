@@ -181,7 +181,7 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
      * 地域管理
      */
     // 列表
-    Route::match(['get','post'], '/service/telephone-list', $controller.'@view_item_district_list');
+    Route::match(['get','post'], '/service/telephone-list', $controller.'@view_service_telephone_list');
     // 导入 & 创建 & 修改
     Route::match(['get','post'], '/service/telephone-import', $controller.'@operate_service_telephone_import');
     Route::match(['get','post'], '/service/telephone-create', $controller.'@operate_service_telephone_create');

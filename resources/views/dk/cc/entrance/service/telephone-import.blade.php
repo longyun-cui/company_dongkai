@@ -42,7 +42,7 @@
                     <div class="col-md-8 area_select_box">
                         {{--选择所在城市--}}
                             <div class="col-xs-4 col-sm-4 col-md-4 " style="padding:0">
-                                <select name="area_province" class="form-control form-filter select2-box area_select_province" id="area_province">
+                                <select name="location_province" class="form-control form-filter select2-box area_select_province" id="area_province">
                                     @if(!empty($data->area_province))
                                         <option value="{{ $data->area_province or '' }}">{{ $data->area_province or '' }}</option>
                                     @else
@@ -51,7 +51,7 @@
                                 </select>
                             </div>
                             <div class="col-xs-4 col-sm-4 col-md-4 " style="padding:0">
-                                <select name="area_city" class="form-control form-filter select2-box area_select_city" id="area_city">
+                                <select name="location_city" class="form-control form-filter select2-box area_select_city" id="area_city">
                                     @if(!empty($data->area_city))
                                         <option value="{{ $data->area_city or '' }}">{{ $data->area_city or '' }}</option>
                                     @else
@@ -60,7 +60,7 @@
                                 </select>
                             </div>
                             <div class="col-xs-4 col-sm-4 col-md-4 " style="padding:0">
-                                <select name="area_district" class="form-control form-filter select2-box area_select_district" id="area_district">
+                                <select name="location_district" class="form-control form-filter select2-box area_select_district" id="area_district">
                                     @if(!empty($data->area_district))
                                         <option value="{{ $data->area_district or '' }}">{{ $data->area_district or '' }}</option>
                                     @else

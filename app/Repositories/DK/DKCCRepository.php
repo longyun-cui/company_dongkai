@@ -3241,7 +3241,8 @@ class DKCCRepository {
         $request_data['request']['seq'] = '';
         $request_data['request']['userData'] = '';
         $request_data['request']['customerName'] = '测试客户1';
-        $request_data['request']['userName'] = 'admin';
+//        $request_data['request']['userName'] = 'admin';
+        $request_data['request']['userName'] = '0556126';
 //        $request_data['request']['agent'] = '0556126';
 
 //        $request_data['request']['name'] = '我很好';
@@ -4934,6 +4935,95 @@ class DKCCRepository {
     /*
      * TELEPHONE 电话池
      */
+    // 【任务】返回-列表-视图
+    public function view_service_telephone_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $return['menu_active_of_service_telephone_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.telephone-list';
+        return view($view_blade)->with($return);
+    }
+    // 【任务】返回-列表-数据
+    public function get_service_telephone_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_CC_Telephone::select('item_status','provinceCode','cityCode','areaCode','tag')
+            ->addSelect(DB::raw("
+                    count('*') as count_for_all,
+                    count(IF(item_status = 1, TRUE, NULL)) as count_for_1,
+                    count(IF(item_status = 9, TRUE, NULL)) as count_for_9,
+                    count(IF(item_status = 101, TRUE, NULL)) as count_for_101
+                "))
+            ->groupBy('provinceCode')
+            ->groupBy('cityCode')
+            ->groupBy('areaCode');
+
+        $list = $query->get();
+        $total = $list->count();
+//        dd($data);
+
+//        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+//        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+//        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+//
+//        $total = $query->count();
+//
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+//        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+//        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+//
+//        if(isset($post_data['order']))
+//        {
+//            $columns = $post_data['columns'];
+//            $order = $post_data['order'][0];
+//            $order_column = $order['column'];
+//            $order_dir = $order['dir'];
+//
+//            $field = $columns[$order_column]["data"];
+//            $query->orderBy($field, $order_dir);
+//        }
+//        else $query->orderBy("id", "asc");
+//
+//        if($limit == -1) $list = $query->get();
+//        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+            // 省
+            if($v->provinceCode)
+            {
+                $v->provinceName = config('location_city.province.'.$v->provinceCode);
+            }
+            else $v->provinceName = '--';
+            // 市
+            if($v->cityCode)
+            {
+                $v->cityName = config('location_city.city.'.$v->provinceCode.'.'.$v->cityCode);
+            }
+            else $v->cityName = '--';
+            // 区
+            if($v->areaCode)
+            {
+                $v->areaName = config('location_city.district.'.$v->cityCode.'.'.$v->areaCode);
+            }
+            else $v->areaName = '--';
+        }
+//        $list = $list->sortBy(['district_id'=>'asc'])->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
     // 【电话池】返回-导入-视图
     public function view_service_telephone_import()
     {
@@ -4964,21 +5054,16 @@ class DKCCRepository {
     // 【电话池】保存-导入-数据
     public function operate_service_telephone_import_save($post_data)
     {
-        set_time_limit(300);
 
         $messages = [
             'operate.required' => 'operate.required',
-            'project_id.required' => '请填选择项目！',
-            'project_id.numeric' => '选择项目参数有误！',
-            'project_id.min' => '请填选择项目！',
-            'client_id.required' => '请填选择客户！',
-            'client_id.numeric' => '选择客户参数有误！',
-            'client_id.min' => '请填选择客户！',
+            'area_province.required' => '请填选择省份！',
+            'area_city.required' => '请填选择城市！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'project_id' => 'required|numeric|min:0',
-            'client_id' => 'required|numeric|min:0',
+            'location_province' => 'required',
+            'location_city' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -4996,6 +5081,11 @@ class DKCCRepository {
 //        {
 //        }
 //        else return response_error([],"项目和客户必须选择一个！");
+
+        $location_province = $post_data["location_province"];
+        $location_city = $post_data["location_city"];
+        $location_district = $post_data["location_district"];
+        $tag = $post_data["tag"];
 
         // 单文件
         if(!empty($post_data["txt-file"]))
@@ -5027,13 +5117,23 @@ class DKCCRepository {
                     {
                         if(is_numeric(trim($v)))
                         {
-                            $data[] = ['telephone_number'=>trim($v),'item_active'=>1,'item_status'=>1];
+                            $data[] = [
+                                'telephone_number'=>trim($v),
+                                'item_active'=>1,
+                                'item_status'=>1,
+                                'provinceCode'=>$location_province,
+                                'cityCode'=>$location_city,
+                                'areaCode'=>$location_district,
+                                'tag'=>$tag
+                            ];
                         }
                     }
                     $insert_data[] = $data;
                 }
 //                dd($insert_data);
 
+
+                set_time_limit(300);
 
                 // 启动数据库事务
                 DB::beginTransaction();
@@ -5137,7 +5237,6 @@ class DKCCRepository {
         }
 
     }
-
     // 【电话池】返回-添加-视图
     public function view_service_telephone_create()
     {
@@ -5392,40 +5491,6 @@ class DKCCRepository {
 //            exit($e->getMessage());
             return response_fail([],$msg);
         }
-
-    }
-
-
-    // 【电话池】获取详情
-    public function operate_service_telephone_get($post_data)
-    {
-        $messages = [
-            'operate.required' => 'operate.required.',
-            'item_id.required' => '请输入ID！',
-        ];
-        $v = Validator::make($post_data, [
-            'operate' => 'required',
-            'item_id' => 'required',
-        ], $messages);
-        if ($v->fails())
-        {
-            $messages = $v->errors();
-            return response_error([],$messages->first());
-        }
-
-        $operate = $post_data["operate"];
-        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
-        $id = $post_data["item_id"];
-        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
-
-        $item = Def_Item::withTrashed()->find($id);
-        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
-
-        $this->get_me();
-        $me = $this->me;
-        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
-
-        return response_success($item,"");
 
     }
 
@@ -20095,7 +20160,6 @@ class DKCCRepository {
     // 【API】接单
     public function operate_api_OKCC_receiving_result($post_data)
     {
-//        dd(90);
         header("Content-Type:application/json;charset=UTF-8");
 
 //        $call = new DK_Choice_Call_Record;
@@ -20147,7 +20211,8 @@ class DKCCRepository {
 
                 $return['result']['error'] = 0;
                 $return['result']['msg'] = '';
-                return json_decode(json_encode($return));
+                return json_encode($return);
+
 //                return response()->json($return);
 //                return response_success(json_encode($return));
 
@@ -20162,7 +20227,7 @@ class DKCCRepository {
 
                 $return['result']['error'] = 1;
                 $return['result']['msg'] = $msg;
-                return json_decode(json_encode($return));
+                return json_encode($return);
             }
         }
 

@@ -668,10 +668,10 @@ class DKCCController extends Controller
      * ITEM 内容管理
      */
     // 【内容】返回-列表-视图（全部内容）
-    public function view_item_list_for_all()
+    public function view_service_telephone_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_item_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_item_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_service_telephone_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_service_telephone_list_datatable(request()->all());
     }
 
 
