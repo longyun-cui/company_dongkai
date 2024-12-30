@@ -4949,7 +4949,7 @@ class DKCCRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_CC_Telephone::select('item_status','provinceCode','cityCode','areaCode','tag','tag_2','tag_3')
+        $query = DK_CC_Telephone::select('item_status','provinceCode','cityCode','areaCode','tag')
             ->addSelect(DB::raw("
                     count('*') as count_for_all,
                     count(IF(item_status = 1, TRUE, NULL)) as count_for_1,
@@ -5137,9 +5137,9 @@ class DKCCRepository {
                 DB::beginTransaction();
                 try
                 {
-                    $modal_telephone = new DK_CC_Telephone;
                     foreach($insert_data as $insert_value)
                     {
+                        $modal_telephone = new DK_CC_Telephone;
                         $bool = $modal_telephone->insert($insert_value);
                         if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
                     }
@@ -5149,7 +5149,7 @@ class DKCCRepository {
                 }
                 catch (Exception $e)
                 {
-                    DB::rollback();
+//                    DB::rollback();
                     $msg = '操作失败，请重试！';
                     $msg = $e->getMessage();
 //                    exit($e->getMessage());
