@@ -20679,6 +20679,10 @@ EOF;
                 if(!$bool_cs) throw new Exception("DK_CC_Call_Statistic--insert--fail");
             }
 
+            $call->call_statistic_id = $statistic->id;
+            $bool_cr = $call->save();
+            if(!$bool_cr) throw new Exception("DK_CC_Call_Record--update--fail");
+
 
             DB::commit();
 
@@ -20832,7 +20836,31 @@ EOF;
             if($call)
             {
                 $insert_data["call_record_id"] = $call->id;
-                $insert_data["recording_address"] = 'https://feiniji.cn/'.$call->recordFile;
+
+                if(!empty($call->recordFile))
+                {
+                    $recordFile = $call->recordFile;
+                    $suffix = ".mp3";
+
+                    if (substr($recordFile, - strlen($suffix)) === $suffix)
+                    {
+                        // 以.mp3结尾
+                        $insert_data["recording_address"] = 'https://feiniji.cn/'.$call->recordFile;
+                    }
+                    else
+                    {
+                        // 以.mp3结尾
+                        $decoded = base64_decode($v->recordFile, true);
+                        if($decoded !== false && json_encode($decoded) !== 'null')
+                        {
+                            if(strpos($decoded, '/data/voicerecord') === 0)
+                            {
+                                $insert_data["recording_address"] = 'https://www.feiniji.cn'.$decoded;
+                            }
+                        }
+                    }
+
+                }
             }
 
             // 启动数据库事务
@@ -20848,6 +20876,26 @@ EOF;
                     $call_update['order_id'] = $mine->id;
                     DK_CC_Call_Record::where($call_where)->update($call_update);
                 }
+
+
+                $call_statistic_id = $call->call_statistic_id;
+                if($call_statistic_id != 0)
+                {
+                    $statistic = DK_CC_Call_Statistic::lockForUpdate()->find($call_statistic_id);
+                    if($statistic) $statistic->increment('order_count_for_total');
+                }
+                else
+                {
+                    $call_date = date('Y-m-d',strtotime($call->startTime));
+                    $statistic_where['call_date'] = $call_date;
+                    $statistic_where['provinceName'] = $call->area;
+                    $statistic_where['cityName'] = $call->city;
+                    $statistic_where['trunkIndex'] = $call->trunkIndex;
+                    $statistic = DK_CC_Call_Statistic::lockForUpdate()->where($statistic_where)->first();
+                    if($statistic) $statistic->increment('order_count_for_total');
+                }
+
+                if($call)
 
 
 

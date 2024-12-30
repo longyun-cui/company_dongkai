@@ -234,28 +234,40 @@
                         }
                     },
                     {
-                        "title": "创建时间",
-                        "data": 'created_at',
-                        "className": "font-12px",
-                        "width": "120px",
+                        "title": "录单数",
+                        "data": "order_count_for_total",
+                        "className": "",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-//                            return data;
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "有效单",
+                        "data": "order_count_for_effective",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "单均成本",
+                        "data": "order_count_for_effective",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data)
+                            {
+                                var $call_cost_total = parseFloat(row.call_cost_total);
+                                var $order_count_for_effective = parseFloat(row.order_count_for_effective);
+                                var $per_value = parseFloat(($call_cost_total) / ($order_count_for_effective)).toFixed(2);
+                                return parseFloat($per_value);
+                            }
+                            else return '--';
                         }
                     },
                 ],

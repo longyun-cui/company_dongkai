@@ -45,7 +45,7 @@ class DK_CC_Call_Record extends Model
         'customer_id',
         'telephone_id',
 
-        'record_id',
+        'call_statistic_id',
 
         'pre_unit_price',
         'call_cost',

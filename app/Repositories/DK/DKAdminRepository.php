@@ -23,6 +23,9 @@ use App\Models\DK_Client\DK_Client_Finance_Daily;
 use App\Models\DK\YH_Attachment;
 use App\Models\DK\YH_Item;
 
+use App\Models\DK_CC\DK_CC_Call_Record;
+use App\Models\DK_CC\DK_CC_Call_Statistic;
+
 use App\Repositories\Common\CommonRepository;
 
 use Response, Auth, Validator, DB, Exception, Cache, Blade, Carbon, DateTime;
@@ -10738,6 +10741,37 @@ class DKAdminRepository {
                 $bool_1 = $record->fill($record_data)->save();
                 if(!$bool_1) throw new Exception("insert--record--fail");
             }
+
+//            if($item->created_type == 99 && in_array($inspected_result,['通过','重复','内部通过']))
+            if($item->created_type == 99 && in_array($inspected_result,['通过']))
+            {
+                $call_record_id = $item->call_record_id;
+                $call_record = DK_CC_Call_Record::find($call_record_id);
+
+                if($call_record)
+                {
+                    $call_statistic_id = $call_record->call_statistic_id;
+
+                    if($call_statistic_id != 0)
+                    {
+                        $statistic = DK_CC_Call_Statistic::lockForUpdate()->find($call_statistic_id);
+                        if($statistic) $statistic->increment('order_count_for_effective');
+                    }
+                    else
+                    {
+                        $call_date = date('Y-m-d',strtotime($call_record->startTime));
+                        $statistic_where['call_date'] = $call_date;
+                        $statistic_where['provinceName'] = $call_record->area;
+                        $statistic_where['cityName'] = $call_record->city;
+                        $statistic_where['trunkIndex'] = $call_record->trunkIndex;
+                        $statistic = DK_CC_Call_Statistic::lockForUpdate()->where($statistic_where)->first();
+                        if($statistic) $statistic->increment('order_count_for_effective');
+                    }
+                }
+
+
+            }
+
 
             DB::commit();
 

@@ -40,6 +40,9 @@ class DK_CC_Call_Statistic extends Model
         'trunkPeerIP',
         'trunkUsername',
 
+        'order_count_for_total',
+        'order_count_for_effective',
+
         'ip',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
 
