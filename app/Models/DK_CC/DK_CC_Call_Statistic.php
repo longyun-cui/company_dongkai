@@ -1,49 +1,50 @@
 <?php
-namespace App\Models\DK;
+namespace App\Models\DK_CC;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class DK_Order extends Model
+class DK_CC_Call_Statistic extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_admin_order";
+    protected $table = "dk_cc_call_statistic";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'form', 'sort',
-        'item_active', 'item_status', 'item_result', 'item_category', 'item_type', 'item_form',
-        'owner_active', 'is_show', 'is_published', 'is_completed',
-        'owner_id', 'creator_id', 'verifier_id', 'inspector_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
-        'created_type',
-        'order_category', 'order_type', 'order_quality',
-        'org_id', 'admin_id',
-        'client_id',
-        'item_id', 'menu_id',
+        'active', 'status',
+        'category', 'type', 'form', 'sort',
 
-        'api_staffNo',
-        'call_record_id',
+        'item_category',
+        'item_type',
 
-        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'tag', 'custom', 'custom2', 'custom3',
-        'link_url', 'cover_pic', 'attachment_name', 'attachment_src',
+        'item_active',
+        'item_status',
+
+        'owner_active',
+
+        'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+
+        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+
+        'call_date',
+        'call_times',
+        'call_duration_total',
+        'call_cost_total',
+
+        'provinceName',
+        'cityName',
+
+        'trunkIndex',
+        'trunkType',
+        'trunkName',
+        'trunkPeerIP',
+        'trunkUsername',
+
+        'ip',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
 
-        'project_id', 'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id',
-        'assign_time',
-        'is_distributive_condition',
-        'client_name', 'client_phone', 'client_intention',
-        'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id',
-        'recording_address',
-        'is_repeat',
-        'receipt_status', 'receipt_need', 'receipt_address', 'GPS',
-        'teeth_count',
-        'company', 'fund', 'mobile', 'city', 'address',
-        'api_is_pushed',
-
-        'inspector_id', 'inspected_status', 'inspected_result', 'inspected_description', 'inspected_at',
-        'pusher_id', 'pushed_at',
-        'deliverer_id', 'delivered_status', 'delivered_result', 'delivered_description', 'delivered_at',
-        'published_at', 'completed_at', 'verified_at'
+        'published_at',
+        'completed_at'
     ];
     protected $dateFormat = 'U';
 
@@ -60,73 +61,73 @@ class DK_Order extends Model
     // 拥有者
     function owner()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','owner_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','owner_id','id');
     }
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','creator_id','id');
     }
     // 更改者
     function updater()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','updater_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','updater_id','id');
     }
     // 验证者
     function verifier()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','verifier_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','verifier_id','id');
     }
     // 审核者
     function inspector()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','inspector_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','inspector_id','id');
     }
     // 运营者
     function deliverer()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','deliverer_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','deliverer_id','id');
     }
     // 完成者
     function completer()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','completer_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','completer_id','id');
     }
     // 用户
     function user()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','user_id','id');
     }
 
 
     // 项目
     function project_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Project','project_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_Project','project_id','id');
     }
 
     // 大区经理
     function department_manager_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','department_manager_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','department_manager_id','id');
     }
 
     // 小组主管
     function department_supervisor_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_User','department_supervisor_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_User','department_supervisor_id','id');
     }
 
     // 部门-大区
     function department_district_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Department','department_district_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_Department','department_district_id','id');
     }
 
     // 部门-大区
     function department_group_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Department','department_group_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_Department','department_group_id','id');
     }
 
 
@@ -135,7 +136,11 @@ class DK_Order extends Model
     // 客户
     function client_er()
     {
-        return $this->belongsTo('App\Models\DK\DK_Client','client_id','id');
+        return $this->belongsTo('App\Models\DK_Customer\DK_Customer_Client','client_id','id');
+    }
+    function customer_er()
+    {
+        return $this->belongsTo('App\Models\DK_Choice\DK_Choice_Customer','customer_id','id');
     }
 
 

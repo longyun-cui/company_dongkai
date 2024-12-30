@@ -87,9 +87,23 @@
                             </div>
                         </div>
 
+                        {{--资费单价--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> 资费单价</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="pre_unit_price" placeholder="资费单价" value="{{ $data->pre_unit_price or '' }}">
+                            </div>
+                        </div>
+
 
 
                         {{--api--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_企业名称</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="api_name" placeholder="API_企业名称" value="{{ $data->api_name or '' }}">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label col-md-2"><sup class="text-red">*</sup> API_ID</label>
                             <div class="col-md-8 ">

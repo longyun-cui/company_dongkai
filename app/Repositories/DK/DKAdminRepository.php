@@ -2219,8 +2219,21 @@ class DKAdminRepository {
         {
             if(!in_array($post_data['department_type'],[-1,0]))
             {
-                $query->where('item_type', $post_data['department_type']);
+                $query->where('department_type', $post_data['department_type']);
             }
+        }
+
+        // 状态 [|]
+        if(!empty($post_data['item_status']))
+        {
+            if(!in_array($post_data['item_status'],[-1,0]))
+            {
+                $query->where('item_status', $post_data['item_status']);
+            }
+        }
+        else
+        {
+            $query->where('item_status', 1);
         }
 
         $total = $query->count();
@@ -3114,7 +3127,7 @@ class DKAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
 
-        $item = DK_Project::withTrashed()->find($id);
+        $item = DK_Department::withTrashed()->find($id);
         if(!$item) return response_error([],"该【部门】不存在，刷新页面重试！");
 
         $this->get_me();

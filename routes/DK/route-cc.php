@@ -78,7 +78,48 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
 
     Route::post('/company/team-login-okcc', $controller.'@operate_company_team_login_okcc');
 
-    
+
+
+
+    /*
+     * 用户-员工管理
+     */
+    Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
+    Route::match(['get','post'], '/user/user_select2_sales', $controller.'@operate_user_select2_sales');
+    Route::match(['get','post'], '/user/user_select2_superior', $controller.'@operate_user_select2_superior');
+    Route::match(['get','post'], '/user/user_select2_department', $controller.'@operate_user_select2_department');
+
+    // 列表
+    Route::match(['get','post'], '/company/staff-list', $controller.'@view_company_staff_list');
+    // 修改列表
+    Route::match(['get','post'], '/company/staff-modify-record', $controller.'@view_company_staff_modify_record');
+    // 创建 & 修改
+    Route::match(['get','post'], '/company/staff-create', $controller.'@operate_company_staff_create');
+    Route::match(['get','post'], '/company/staff-edit', $controller.'@operate_company_staff_edit');
+    // 编辑-信息
+    Route::post('/company/staff-info-text-set', $controller.'@operate_staff_info_text_set');
+    Route::post('/company/staff-info-time-set', $controller.'@operate_staff_info_time_set');
+    Route::post('/company/staff-info-radio-set', $controller.'@operate_staff_info_option_set');
+    Route::post('/company/staff-info-select-set', $controller.'@operate_staff_info_option_set');
+    Route::post('/company/staff-info-select2-set', $controller.'@operate_staff_info_option_set');
+    // 修改密码
+    Route::match(['get','post'], '/company/staff-password-admin-change', $controller.'@operate_company_staff_password_admin_change');
+    Route::match(['get','post'], '/company/staff-password-admin-reset', $controller.'@operate_company_staff_password_admin_reset');
+    Route::match(['get','post'], '/user/user-login', $controller.'@operate_user_user_login');
+    // 删除 & 恢复 & 永久删除
+    Route::post('/company/staff-admin-delete', $controller.'@operate_company_staff_admin_delete');
+    Route::post('/company/staff-admin-restore', $controller.'@operate_company_staff_admin_restore');
+    Route::post('/company/staff-admin-delete-permanently', $controller.'@operate_company_staff_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/company/staff-admin-enable', $controller.'@operate_company_staff_admin_enable');
+    Route::post('/company/staff-admin-disable', $controller.'@operate_company_staff_admin_disable');
+    // 解锁
+    Route::post('/company/staff-admin-unlock', $controller.'@operate_company_staff_admin_unlock');
+    // 晋升
+    Route::post('/company/staff-admin-promote', $controller.'@operate_company_staff_admin_promote');
+    Route::post('/company/staff-admin-demote', $controller.'@operate_company_staff_admin_demote');
+
+
 
 
     /*
@@ -124,61 +165,8 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
 
 
 
-
-
-
-
-
-
     /*
-     * 用户-员工管理
-     */
-    Route::match(['get','post'], '/user/user_select2_district', $controller.'@operate_user_select2_district');
-    Route::match(['get','post'], '/user/user_select2_sales', $controller.'@operate_user_select2_sales');
-    Route::match(['get','post'], '/user/user_select2_superior', $controller.'@operate_user_select2_superior');
-    Route::match(['get','post'], '/user/user_select2_department', $controller.'@operate_user_select2_department');
-
-    // 列表
-    Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
-    Route::match(['get','post'], '/user/staff-list-for-all', $controller.'@view_user_staff_list_for_all');
-    // 修改列表
-    Route::match(['get','post'], '/user/staff-modify-record', $controller.'@view_user_staff_modify_record');
-    // 创建 & 修改
-    Route::match(['get','post'], '/user/staff-create', $controller.'@operate_user_staff_create');
-    Route::match(['get','post'], '/user/staff-edit', $controller.'@operate_user_staff_edit');
-    // 编辑-信息
-    Route::post('/user/staff-info-text-set', $controller.'@operate_staff_info_text_set');
-    Route::post('/user/staff-info-time-set', $controller.'@operate_staff_info_time_set');
-    Route::post('/user/staff-info-radio-set', $controller.'@operate_staff_info_option_set');
-    Route::post('/user/staff-info-select-set', $controller.'@operate_staff_info_option_set');
-    Route::post('/user/staff-info-select2-set', $controller.'@operate_staff_info_option_set');
-    // 修改密码
-    Route::match(['get','post'], '/user/staff-password-admin-change', $controller.'@operate_user_staff_password_admin_change');
-    Route::match(['get','post'], '/user/staff-password-admin-reset', $controller.'@operate_user_staff_password_admin_reset');
-    Route::match(['get','post'], '/user/user-login', $controller.'@operate_user_user_login');
-    // 删除 & 恢复 & 永久删除
-    Route::post('/user/staff-admin-delete', $controller.'@operate_user_staff_admin_delete');
-    Route::post('/user/staff-admin-restore', $controller.'@operate_user_staff_admin_restore');
-    Route::post('/user/staff-admin-delete-permanently', $controller.'@operate_user_staff_admin_delete_permanently');
-    // 启用 & 禁用
-    Route::post('/user/staff-admin-enable', $controller.'@operate_user_staff_admin_enable');
-    Route::post('/user/staff-admin-disable', $controller.'@operate_user_staff_admin_disable');
-    // 解锁
-    Route::post('/user/staff-admin-unlock', $controller.'@operate_user_staff_admin_unlock');
-    // 晋升
-    Route::post('/user/staff-admin-promote', $controller.'@operate_user_staff_admin_promote');
-    Route::post('/user/staff-admin-demote', $controller.'@operate_user_staff_admin_demote');
-
-
-
-
-
-
-
-
-
-    /*
-     * 地域管理
+     * 电话管理
      */
     // 列表
     Route::match(['get','post'], '/service/telephone-list', $controller.'@view_service_telephone_list');
@@ -186,6 +174,23 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     Route::match(['get','post'], '/service/telephone-import', $controller.'@operate_service_telephone_import');
     Route::match(['get','post'], '/service/telephone-create', $controller.'@operate_service_telephone_create');
     Route::match(['get','post'], '/service/telephone-edit', $controller.'@operate_service_telephone_edit');
+
+
+
+
+
+
+
+
+    /*
+     * 通话管理
+     */
+    // 列表
+    Route::match(['get','post'], '/service/call-record-list', $controller.'@view_service_call_record_list');
+    Route::match(['get','post'], '/service/call-statistic-list', $controller.'@view_service_call_statistic_list');
+
+
+
 
 
 

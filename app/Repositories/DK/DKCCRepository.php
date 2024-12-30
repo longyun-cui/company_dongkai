@@ -4,6 +4,8 @@ namespace App\Repositories\DK;
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
 use App\Models\DK_CC\DK_CC_Task;
+use App\Models\DK_CC\DK_CC_Call_Record;
+use App\Models\DK_CC\DK_CC_Call_Statistic;
 use App\Models\DK_CC\DK_CC_API_Received_From_OKCC;
 
 use App\Models\DK\DK_Department;
@@ -2099,16 +2101,13 @@ class DKCCRepository {
         $me = $this->me;
 
 
-        $query = DK_CC_Team::select('*')
+        $query = DK_Department::select('*')
             ->withTrashed()
             ->with([
                 'creator'=>function($query) { $query->select(['id','username','true_name']); }
-            ]);
+            ])
+            ->where('department_type',11);
 
-        if(in_array($me->user_type,[41,81]))
-        {
-            $query->where('superior_department_id',$me->department_district_id);
-        }
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
@@ -2121,6 +2120,19 @@ class DKCCRepository {
             {
                 $query->where('item_type', $post_data['department_type']);
             }
+        }
+
+        // 状态 [|]
+        if(!empty($post_data['item_status']))
+        {
+            if(!in_array($post_data['item_status'],[-1,0]))
+            {
+                $query->where('item_status', $post_data['item_status']);
+            }
+        }
+        else
+        {
+            $query->where('item_status', 1);
         }
 
         $total = $query->count();
@@ -2286,7 +2298,7 @@ class DKCCRepository {
             $view_data['operate_type'] = 'edit';
             $view_data['operate_id'] = $id;
 
-            $mine = DK_CC_Team::find($id);
+            $mine = DK_Department::find($id);
             if($mine)
             {
                 $mine->custom = json_decode($mine->custom);
@@ -2328,16 +2340,16 @@ class DKCCRepository {
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
-            $is_exist = DK_CC_Team::select('id')->where('name',$post_data["name"])->count();
+            $is_exist = DK_Department::select('id')->where('name',$post_data["name"])->count();
             if($is_exist) return response_error([],"该【团队】已存在，请勿重复添加！");
 
-            $mine = new DK_CC_Team;
+            $mine = new DK_Department;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
         }
         else if($operate == 'edit') // 编辑
         {
-            $mine = DK_CC_Team::find($operate_id);
+            $mine = DK_Department::find($operate_id);
             if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
         }
         else return response_error([],"参数有误！");
@@ -3216,19 +3228,18 @@ class DKCCRepository {
         $this->get_me();
         $me = $this->me;
 
-        $mine = DK_CC_Team::find($id);
+        $mine = DK_Department::find($id);
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
-//        $url = "https://feiniji.cn/openapi/V2.0.6/agentLogin";
-//        $url = "https://feiniji.cn/openapi/V2.0.6/agentLogout";
         $url = "https://feiniji.cn/openapi/V2.1.2/login";
 //        $url = "https://feiniji.cn/openapi/V2.0.6/addCustomer";
 
+        $API_ID = 'C1';
+        $API_Password = env('API_OKCC_C1_PASSWORD');
 //        $API_ID = $mine->api_id;
 //        $API_Password = $mine->api_password;
-        $API_ID = 'C1';
-        $API_Password = 'F14FDD768B3612222899BF40D8D4357E';
+        $API_Name = $mine->api_name;
         $timestamp = time();
         $seq = $timestamp;
         $digest = md5($API_ID.'@'.$timestamp.'@'.$seq.'@'.$API_Password);
@@ -3240,9 +3251,9 @@ class DKCCRepository {
 
         $request_data['request']['seq'] = '';
         $request_data['request']['userData'] = '';
-        $request_data['request']['customerName'] = '测试客户1';
-//        $request_data['request']['userName'] = 'admin';
-        $request_data['request']['userName'] = '0556126';
+        $request_data['request']['customerName'] = $API_Name;
+        $request_data['request']['userName'] = 'admin';
+//        $request_data['request']['userName'] = '0556126';
 //        $request_data['request']['agent'] = '0556126';
 
 //        $request_data['request']['name'] = '我很好';
@@ -3286,20 +3297,6 @@ class DKCCRepository {
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -3405,7 +3402,7 @@ class DKCCRepository {
 
 
     // 【员工】返回-列表-视图
-    public function view_user_staff_list_for_all($post_data)
+    public function view_company_staff_list($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -3417,12 +3414,12 @@ class DKCCRepository {
             $return['department_district_list'] = $department_district_list;
         }
 
-        $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.staff-list-for-all';
+        $return['menu_active_of_staff_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.company.staff-list';
         return view($view_blade)->with($return);
     }
     // 【员工】返回-列表-数据
-    public function get_user_staff_list_for_all_datatable($post_data)
+    public function get_company_staff_list_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -3517,7 +3514,7 @@ class DKCCRepository {
 
 
     // 【客户管理】【修改记录】返回-列表-视图
-    public function view_user_staff_modify_record($post_data)
+    public function view_company_staff_modify_record($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -3526,11 +3523,11 @@ class DKCCRepository {
 
         $return['staff_list'] = $staff_list;
         $return['menu_active_of_staff_modify_list'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.staff-modify-list';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.company.staff-modify-list';
         return view($view_blade)->with($return);
     }
     // 【客户管理】【修改记录】返回-列表-数据
-    public function get_user_staff_modify_record_datatable($post_data)
+    public function get_company_staff_modify_record_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -3576,7 +3573,7 @@ class DKCCRepository {
 
 
     // 【员工】返回-添加-视图
-    public function view_user_staff_create()
+    public function view_company_staff_create()
     {
         $this->get_me();
         $me = $this->me;
@@ -3597,18 +3594,18 @@ class DKCCRepository {
         $return_data['list_text'] = $list_text;
         $return_data['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.staff-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.company.staff-edit';
         return view($view_blade)->with($return_data);
     }
     // 【员工】返回-编辑-视图
-    public function view_user_staff_edit()
+    public function view_company_staff_edit()
     {
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,19,21,31,41,61,71,81])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_CC').'entrance.user.staff-edit';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.company.staff-edit';
 
         $item_type = 'item';
         $item_type_text = '用户';
@@ -3654,7 +3651,7 @@ class DKCCRepository {
         }
     }
     // 【员工】保存数据
-    public function operate_user_staff_save($post_data)
+    public function operate_company_staff_save($post_data)
     {
 //        dd($post_data);
         $messages = [
@@ -4355,7 +4352,7 @@ class DKCCRepository {
 
 
     // 【员工】管理员-修改密码
-    public function operate_user_staff_password_admin_change($post_data)
+    public function operate_company_staff_password_admin_change($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4423,7 +4420,7 @@ class DKCCRepository {
 
     }
     // 【员工】管理员-重置密码
-    public function operate_user_staff_password_admin_reset($post_data)
+    public function operate_company_staff_password_admin_reset($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4480,7 +4477,7 @@ class DKCCRepository {
 
 
     // 【员工】管理员-删除
-    public function operate_user_staff_admin_delete($post_data)
+    public function operate_company_staff_admin_delete($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4539,7 +4536,7 @@ class DKCCRepository {
 
     }
     // 【员工】管理员-恢复
-    public function operate_user_staff_admin_restore($post_data)
+    public function operate_company_staff_admin_restore($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4597,7 +4594,7 @@ class DKCCRepository {
 
     }
     // 【员工】管理员-永久删除
-    public function operate_user_staff_admin_delete_permanently($post_data)
+    public function operate_company_staff_admin_delete_permanently($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4658,7 +4655,7 @@ class DKCCRepository {
 
 
     // 【员工】管理员-启用
-    public function operate_user_staff_admin_enable($post_data)
+    public function operate_company_staff_admin_enable($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4710,7 +4707,7 @@ class DKCCRepository {
 
     }
     // 【员工】管理员-禁用
-    public function operate_user_staff_admin_disable($post_data)
+    public function operate_company_staff_admin_disable($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4763,7 +4760,7 @@ class DKCCRepository {
 
 
     // 【员工】管理员-解锁
-    public function operate_user_staff_admin_unlock($post_data)
+    public function operate_company_staff_admin_unlock($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4817,7 +4814,7 @@ class DKCCRepository {
 
 
     // 【员工】管理员-晋升
-    public function operate_user_staff_admin_promote($post_data)
+    public function operate_company_staff_admin_promote($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -4869,7 +4866,7 @@ class DKCCRepository {
 
     }
     // 【员工】管理员-降职
-    public function operate_user_staff_admin_demote($post_data)
+    public function operate_company_staff_admin_demote($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -6687,6 +6684,138 @@ class DKCCRepository {
     }
 
 
+
+
+
+
+
+
+
+
+    /*
+     * CALL 外呼管理
+     */
+    // 【任务】返回-列表-视图
+    public function view_service_call_record_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $return['menu_active_of_service_call_record_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.call-record-list';
+        return view($view_blade)->with($return);
+    }
+    // 【任务】返回-列表-数据
+    public function get_service_call_record_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_CC_Call_Record::select('*')
+//            ->withTrashed()
+            ->with([
+                'staff_or'=>function($query) { $query->select(['id','username','api_staffNo']); }
+            ]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+        }
+//        $list = $list->sortBy(['district_id'=>'asc'])->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+    // 【任务】返回-列表-视图
+    public function view_service_call_statistic_list($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
+
+        $return['menu_active_of_service_call_statistic_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.call-statistic-list';
+        return view($view_blade)->with($return);
+    }
+    // 【任务】返回-列表-数据
+    public function get_service_call_statistic_list_datatable($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_CC_Call_Statistic::select('*')
+//            ->withTrashed()
+            ->with([
+//                'staff_or'=>function($query) { $query->select(['id','username','api_staffNo']); }
+            ]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+        }
+//        $list = $list->sortBy(['district_id'=>'asc'])->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
 
 
 
@@ -20157,7 +20286,7 @@ class DKCCRepository {
 
 
 
-    // 【API】接单
+    // 【API】接收 api 回调
     public function operate_api_OKCC_receiving_result($post_data)
     {
         header("Content-Type:application/json;charset=UTF-8");
@@ -20188,6 +20317,7 @@ class DKCCRepository {
 
 
         $api_type = $post_data['notify']['type'];
+
 
 //        if($userData == 'calling')
         if(true)
@@ -20234,6 +20364,308 @@ class DKCCRepository {
 
 
     }
+
+    // 【API】接收-话单
+    public function operate_api_OKCC_receiving_result_by_billing($post_data)
+    {
+
+        $notify = $post_data['notify'];
+        $call_data = $notify;
+        $session = $call_data['session'];
+        $mine = DK_CC_Call_Record::where('session',$session)->orderby('id','desc')->first();
+        if($mine)
+        {
+            $return['result']['error'] = 0;
+            $return['result']['msg'] = '已存在！';
+            return json_encode($return);
+        }
+
+
+        $timeLength = $notify['timeLength'];
+        $callCost = 0;
+        if($timeLength > 0)
+        {
+            $timeMinute = ceil($timeLength / 60);
+
+            $user = $post_data['user'];
+            $team = DK_Department::select('id','api_id','pre_unit_price')->where('api_id',$user)->first();
+            if($team)
+            {
+                $call_data['pre_unit_price'] = $team->pre_unit_price;
+                $callCost = $team->pre_unit_price * $timeMinute;
+                $call_data['call_cost'] = $callCost;
+            }
+            else
+            {
+                $return['result']['error'] = 1;
+                $return['result']['msg'] = '有误!';
+                return json_encode($return);
+            }
+        }
+        else
+        {
+            $return['result']['error'] = 0;
+            $return['result']['msg'] = '有误';
+            return json_encode($return);
+        }
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            $insert_data['team_api_id'] = $post_data['user'];
+            $insert_data['api_type'] = $post_data['notify']['type'];
+            $insert_data['content'] = json_encode($post_data);
+
+//            $mine = new DK_CC_API_Received_From_OKCC;
+//            $bool_c = $mine->fill($insert_data)->save();
+//            if(!$bool_c) throw new Exception("DK_CC_API_Received_From_OKCC--insert--fail");
+
+
+//            $unique['session'] = $call_data['session'];
+//            $call = DK_CC_Call_Record::firstOrCreate($unique,$call_data);
+//            dd($call);
+
+
+            $call = new DK_CC_Call_Record;
+            $bool_cr = $call->fill($call_data)->save();
+            if(!$bool_cr) throw new Exception("DK_CC_Call_Record--insert--fail");
+
+
+            $call_date = date('Y-m-d',strtotime($call_data['startTime']));
+            $statistic_where['call_date'] = $call_date;
+            $statistic_where['provinceName'] = $call_data['area'];
+            $statistic_where['cityName'] = $call_data['city'];
+            $statistic_where['trunkIndex'] = $call_data['trunkIndex'];
+            $statistic = DK_CC_Call_Statistic::lockForUpdate()->where($statistic_where)->first();
+            if($statistic)
+            {
+                $statistic->call_times += 1;
+                $statistic->call_duration_total += $timeMinute;
+                $statistic->call_cost_total += $callCost;
+                $bool_cs = $statistic->save();
+                if(!$bool_cs) throw new Exception("DK_CC_Call_Statistic--update--fail");
+
+            }
+            else
+            {
+                $statistic = new DK_CC_Call_Statistic;
+                $statistic_insert['call_date'] = $call_date;
+                $statistic_insert['call_times'] = 1;
+                $statistic_insert['call_duration_total'] = $timeMinute;
+                $statistic_insert['call_cost_total'] = $callCost;
+                $statistic_insert['provinceName'] = $call_data['area'];
+                $statistic_insert['cityName'] = $call_data['city'];
+                $statistic_insert['trunkIndex'] = $call_data['trunkIndex'];
+                $statistic_insert['trunkType'] = $call_data['trunkType'];
+                $statistic_insert['trunkName'] = $call_data['trunkName'];
+                $statistic_insert['trunkPeerIP'] = $call_data['trunkPeerIP'];
+                $statistic_insert['trunkUsername'] = $call_data['trunkUsername'];
+                $bool_cs = $statistic->fill($statistic_insert)->save();
+                if(!$bool_cs) throw new Exception("DK_CC_Call_Statistic--insert--fail");
+            }
+
+
+            DB::commit();
+
+            $return['result']['error'] = 0;
+            $return['result']['msg'] = '';
+            return json_encode($return);
+            
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+//            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+            $return['result']['error'] = 1;
+            $return['result']['msg'] = $msg;
+            return json_encode($return);
+        }
+
+
+    }
+
+    // 【API】接收-客户资料
+    public function operate_api_OKCC_receiving_result_by_clientMark($post_data)
+    {
+
+        $notify = $post_data['notify'];
+        $clientMark_data = $post_data['notify']['data'];
+        $clientMark_field = $post_data['notify']['field'];
+//        dd($clientMark_field);
+
+        $api_staffNo = (int)$clientMark_data['userName'];
+        $phone_number = $clientMark_data['number1'];
+
+
+        foreach($clientMark_field as $v)
+        {
+            $field_name = $v['name'];
+            $field_value = $v['value'];
+            if($field_name == "项目")
+            {
+                $project = DK_Project::where('name',$v['value'])->first();
+                if($project) $insert_data['project_id'] = $project->id;
+                else
+                {
+                    $return['result']['error'] = 1;
+                    $return['result']['msg'] = '项目错误！';
+                    return json_encode($return);
+                }
+            }
+            else if($field_name == "客户意向")
+            {
+                if($field_value == "【到店】客户上门到店") $insert_data['client_intention'] = '到店';
+                else if($field_value == "【A类】意向度强烈，好沟通，有互动交流，沟通自然舒服，沟通中没有拒绝过") $insert_data['client_intention'] = 'A类';
+                else if($field_value == "【B类】意向度一般，有明确牙齿需求，整体通话自然，通话中拒绝1次") $insert_data['client_intention'] = 'B类';
+                else if($field_value == "【C类】在意价格，沟通寡淡，年纪不大，去过多家医院对比，通过引导成单的") $insert_data['client_intention'] = 'C类';
+            }
+            else if($field_name == "城市")
+            {
+                $insert_data['location_city'] = $field_value;
+            }
+            else if($field_name == "行政区")
+            {
+                $insert_data['location_district'] = $field_value;
+            }
+            else if($field_name == "牙齿数量")
+            {
+                $insert_data['teeth_count'] = $field_value;
+            }
+            else if($field_name == "是否加微信")
+            {
+                if($field_value == "否") $insert_data['is_wx'] = 0;
+                else if($field_value == "是") $insert_data['is_wx'] = 1;
+            }
+            else if($field_name == "微信号")
+            {
+                $insert_data['wx_id'] = $field_value;
+            }
+            else if($field_name == "通话小结")
+            {
+                $insert_data['description'] = $field_value;
+            }
+        }
+
+
+        $order_where['created_type'] = 99;
+        $order_where['api_staffNo'] = $api_staffNo;
+        $order_where['client_phone'] = $phone_number;
+        $order = DK_Order::select('*')->where($order_where)->orderby('id','desc')->first();
+        if($order)
+        {
+            if($order->is_published == 0)
+            {
+                // 启动数据库事务
+                DB::beginTransaction();
+                try
+                {
+//                    DK_Order::select('*')->where($order_where)->orderby('id','desc')->first();
+                    $bool_o = $order->update($insert_data);
+                    if(!$bool_o) throw new Exception("DK_Order--update--fail");
+
+                    DB::commit();
+
+                    $return['result']['error'] = 0;
+                    $return['result']['msg'] = '更新完成！';
+                    return json_encode($return);
+
+                }
+                catch (Exception $e)
+                {
+                    DB::rollback();
+//                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    return response_fail([],$msg);
+
+                    $return['result']['error'] = 1;
+                    $return['result']['msg'] = $msg;
+                    return json_encode($return);
+                }
+            }
+            else
+            {
+                $return['result']['error'] = 0;
+                $return['result']['msg'] = '该客户资料已发布，无法更新！';
+                return json_encode($return);
+            }
+        }
+        else
+        {
+            $staff = DK_User::with(['department_district_er','department_group_er'])->where('api_staffNo',$api_staffNo)->first();
+
+            $insert_data["created_type"] = 99;
+            $insert_data["item_category"] = 1;
+            $insert_data["active"] = 1;
+            $insert_data["creator_id"] = $staff->id;
+            $insert_data["api_staffNo"] = $api_staffNo;
+            $insert_data["client_name"] = $clientMark_data['clientName'];
+            $insert_data["client_phone"] = $phone_number;
+
+            $insert_data['department_district_id'] = $staff->department_district_id;
+            $insert_data['department_group_id'] = $staff->department_group_id;
+            if($staff->department_district_er) $insert_data['department_manager_id'] = $staff->department_district_er->leader_id;
+            if($staff->department_group_er) $insert_data['department_supervisor_id'] = $staff->department_group_er->leader_id;
+
+
+            $call_where['staffNo'] = $api_staffNo;
+            $call_where['callee'] = $phone_number;
+            $call = DK_CC_Call_Record::select("*")->where($call_where)->orderby('id','desc')->first();
+            if($call)
+            {
+                $insert_data["call_record_id"] = $call->id;
+                $insert_data["recording_address"] = 'https://feiniji.cn/'.$call->recordFile;
+            }
+
+            // 启动数据库事务
+            DB::beginTransaction();
+            try
+            {
+
+                $mine = new DK_Order;
+                $bool_o = $mine->fill($insert_data)->save();
+                if(!$bool_o) throw new Exception("DK_Order--insert--fail");
+                else
+                {
+                    $call_update['order_id'] = $mine->id;
+                    DK_CC_Call_Record::where($call_where)->update($call_update);
+                }
+
+
+
+                DB::commit();
+
+                $return['result']['error'] = 0;
+                $return['result']['msg'] = '';
+                return json_encode($return);
+
+            }
+            catch (Exception $e)
+            {
+                DB::rollback();
+//            $msg = '操作失败，请重试！';
+                $msg = $e->getMessage();
+//            exit($e->getMessage());
+//            return response_fail([],$msg);
+
+                $return['result']['error'] = 1;
+                $return['result']['msg'] = $msg;
+                return json_encode($return);
+            }
+
+        }
+
+
+
+
+    }
+
+
 
 
 }

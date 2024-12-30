@@ -16,6 +16,13 @@ class DK_Department extends Model
         'org_id', 'admin_id',
         'item_id', 'menu_id',
         'leader_id', 'superior_department_id',
+
+        'api_id',
+        'api_name',
+        'api_password',
+        'pre_unit_price',
+
+
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',

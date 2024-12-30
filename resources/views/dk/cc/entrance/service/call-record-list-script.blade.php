@@ -2,26 +2,26 @@
     $(function() {
 
         // 【搜索】
-        $("#datatable-search-row-for-team").on('click', ".filter-submit", function() {
+        $("#datatable-for-team-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#datatable-search-row-for-team").on('click', ".filter-cancel", function() {
-            $("#datatable-search-row-for-team").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-team-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-team-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-search-row-for-team").find('select.form-filter option').attr("selected",false);
-            $("#datatable-search-row-for-team").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-team-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-team-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $("#datatable-search-row-for-team").on('keyup', ".item-search-keyup", function(event) {
+        $("#datatable-for-team-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-search-row-for-team").find(".filter-submit").click();
+                $("#datatable-for-team-list").find(".filter-submit").click();
             }
         });
 

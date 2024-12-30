@@ -525,29 +525,29 @@ class DKCCController extends Controller
 
 
     // 【用户-员工】返回-列表-视图
-    public function view_user_staff_list_for_all()
+    public function view_company_staff_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_company_staff_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_company_staff_list_datatable(request()->all());
     }
     // 【用户-员工】【修改记录】返回-列表-视图（全部任务）
-    public function view_user_staff_modify_record()
+    public function view_company_staff_modify_record()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_modify_record(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_staff_modify_record_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_company_staff_modify_record(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_company_staff_modify_record_datatable(request()->all());
     }
 
     // 【用户-员工】添加
-    public function operate_user_staff_create()
+    public function operate_company_staff_create()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_create();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_company_staff_create();
+        else if (request()->isMethod('post')) return $this->repo->operate_company_staff_save(request()->all());
     }
     // 【用户-员工】编辑
-    public function operate_user_staff_edit()
+    public function operate_company_staff_edit()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_edit();
-        else if (request()->isMethod('post')) return $this->repo->operate_user_staff_save(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_company_staff_edit();
+        else if (request()->isMethod('post')) return $this->repo->operate_company_staff_save(request()->all());
     }
 
     // 【客户】修改-文本-text-信息
@@ -582,7 +582,7 @@ class DKCCController extends Controller
     }
 
     // 【用户-员工】登录
-    public function operate_user_staff_login()
+    public function operate_company_staff_login()
     {
         $user_id = request()->get('user_id');
         $user = User::where('id',$user_id)->first();
@@ -599,58 +599,58 @@ class DKCCController extends Controller
 
     }
     // 【用户-员工】修改-密码
-    public function operate_user_staff_password_admin_change()
+    public function operate_company_staff_password_admin_change()
     {
-        return $this->repo->operate_user_staff_password_admin_change(request()->all());
+        return $this->repo->operate_company_staff_password_admin_change(request()->all());
     }
     // 【用户-员工】修改-密码
-    public function operate_user_staff_password_admin_reset()
+    public function operate_company_staff_password_admin_reset()
     {
-        return $this->repo->operate_user_staff_password_admin_reset(request()->all());
+        return $this->repo->operate_company_staff_password_admin_reset(request()->all());
     }
 
     // 【用户-员工】管理员-删除
-    public function operate_user_staff_admin_delete()
+    public function operate_company_staff_admin_delete()
     {
-        return $this->repo->operate_user_staff_admin_delete(request()->all());
+        return $this->repo->operate_company_staff_admin_delete(request()->all());
     }
     // 【用户-员工】管理员-恢复
-    public function operate_user_staff_admin_restore()
+    public function operate_company_staff_admin_restore()
     {
-        return $this->repo->operate_user_staff_admin_restore(request()->all());
+        return $this->repo->operate_company_staff_admin_restore(request()->all());
     }
     // 【用户-员工】管理员-永久删除
-    public function operate_user_staff_admin_delete_permanently()
+    public function operate_company_staff_admin_delete_permanently()
     {
-        return $this->repo->operate_user_staff_admin_delete_permanently(request()->all());
+        return $this->repo->operate_company_staff_admin_delete_permanently(request()->all());
     }
 
     // 【用户-员工】启用
-    public function operate_user_staff_admin_enable()
+    public function operate_company_staff_admin_enable()
     {
-        return $this->repo->operate_user_staff_admin_enable(request()->all());
+        return $this->repo->operate_company_staff_admin_enable(request()->all());
     }
     // 【用户-员工】禁用
-    public function operate_user_staff_admin_disable()
+    public function operate_company_staff_admin_disable()
     {
-        return $this->repo->operate_user_staff_admin_disable(request()->all());
+        return $this->repo->operate_company_staff_admin_disable(request()->all());
     }
 
     // 【用户-员工】解锁
-    public function operate_user_staff_admin_unlock()
+    public function operate_company_staff_admin_unlock()
     {
-        return $this->repo->operate_user_staff_admin_unlock(request()->all());
+        return $this->repo->operate_company_staff_admin_unlock(request()->all());
     }
 
     // 【用户-员工】晋升
-    public function operate_user_staff_admin_promote()
+    public function operate_company_staff_admin_promote()
     {
-        return $this->repo->operate_user_staff_admin_promote(request()->all());
+        return $this->repo->operate_company_staff_admin_promote(request()->all());
     }
     // 【用户-员工】降职
-    public function operate_user_staff_admin_demote()
+    public function operate_company_staff_admin_demote()
     {
-        return $this->repo->operate_user_staff_admin_demote(request()->all());
+        return $this->repo->operate_company_staff_admin_demote(request()->all());
     }
 
 
@@ -665,7 +665,7 @@ class DKCCController extends Controller
 
 
     /*
-     * ITEM 内容管理
+     * Telephone 电话管理
      */
     // 【内容】返回-列表-视图（全部内容）
     public function view_service_telephone_list()
@@ -817,6 +817,31 @@ class DKCCController extends Controller
     {
         return $this->repo->operate_service_task_admin_delete_permanently_bulk(request()->all());
     }
+
+
+
+
+
+
+
+
+    // 【内容】返回-列表-视图（全部内容）
+    public function view_service_call_record_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_service_call_record_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_service_call_record_list_datatable(request()->all());
+    }
+    // 【内容】返回-列表-视图（全部内容）
+    public function view_service_call_statistic_list()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_service_call_statistic_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_service_call_statistic_list_datatable(request()->all());
+    }
+
+
+
+
+
 
 
 
@@ -1536,7 +1561,17 @@ class DKCCController extends Controller
     // 【API】OKCC
     public function operate_api_OKCC_receiving_result()
     {
-        return $this->repo->operate_api_OKCC_receiving_result(request()->all());
+        $post_data = request()->all();
+        $api_type = $post_data['notify']['type'];
+        if($api_type == 'billing')
+        {
+            return $this->repo->operate_api_OKCC_receiving_result_by_billing(request()->all());
+        }
+        else if($api_type == 'clientMark')
+        {
+            return $this->repo->operate_api_OKCC_receiving_result_by_clientMark(request()->all());
+        }
+        else  return $this->repo->operate_api_OKCC_receiving_result(request()->all());
     }
 
 

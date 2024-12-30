@@ -30,7 +30,10 @@ class DK_CC_Team extends Model
         'company_id',
         'leader_id',
 
+        'pre_unit_price',
+
         'api_id',
+        'api_name',
         'api_password',
 
         'is_completed',

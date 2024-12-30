@@ -99,7 +99,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61]))
-            <li class="treeview {{ $menu_active_of_service_location_list or '' }} _none-">
+            <li class="treeview {{ $menu_active_of_service_location_list or '' }} _none">
                 <a href="{{ url('/service/location-list')}}">
                     <i class="fa text-green fa-location-arrow"></i>
                     <span>地域管理</span>
@@ -108,7 +108,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,41,61,71,81]))
-            <li class="treeview {{ $menu_active_of_service_project_list or '' }} _none-">
+            <li class="treeview {{ $menu_active_of_service_project_list or '' }} _none">
                 <a href="{{ url('/service/project-list')}}">
                     <i class="fa text-green fa-cube"></i>
                     <span>项目管理</span>
@@ -119,7 +119,7 @@
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
                 <li class="treeview {{ $menu_active_of_telephone_list or '' }}">
                     <a href="{{ url('/service/telephone-list')}}">
-                        <i class="fa fa-file-text text-yellow"></i>
+                        <i class="fa fa-file-text text-green"></i>
                         <span>电话数据</span>
                     </a>
                 </li>
@@ -127,7 +127,7 @@
             @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
             <li class="treeview {{ $menu_active_of_service_task_list or '' }}">
                 <a href="{{ url('/service/task-list')}}">
-                    <i class="fa text-green fa-file-text"></i>
+                    <i class="fa fa-file-text text-green"></i>
                     <span>任务管理</span>
                 </a>
             </li>
@@ -136,23 +136,25 @@
 
 
 
-            @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
-                <li class="header">电话管理</li>
-            @endif
-
-
-
-
 
             @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
-                <li class="header">管理</li>
+                <li class="header">外呼管理</li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <li class="treeview {{ $menu_active_of_distribution_list or '' }}">
-                    <a href="{{ url('/item/distribution-list')}}">
+                <li class="treeview {{ $menu_active_of_call_record_list or '' }}">
+                    <a href="{{ url('/service/call-record-list')}}">
                         <i class="fa fa-file-text text-yellow"></i>
-                        <span>全部数据</span>
+                        <span>通话记录</span>
+                    </a>
+                </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                <li class="treeview {{ $menu_active_of_call_statistic_list or '' }}">
+                    <a href="{{ url('/service/call-statistic-list')}}">
+                        <i class="fa fa-file-text text-yellow"></i>
+                        <span>统计列表</span>
                     </a>
                 </li>
             @endif
@@ -162,9 +164,9 @@
 
             @if(in_array($me->user_type,[0,1,9,11]))
             {{--财务统计--}}
-            <li class="header">财务统计</li>
+            <li class="header _none">财务统计</li>
 
-            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
+            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }} _none">
                 <a href="{{ url('/finance/daily-list') }}">
                     <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
                 </a>
@@ -198,9 +200,9 @@
 
             @if(in_array($me->user_type,[0,1,9,11]))
             {{--数据统计--}}
-            <li class="header">记录</li>
+            <li class="header _none">记录</li>
 
-            <li class="treeview {{ $menu_active_of_record_visit_list or '' }}">
+            <li class="treeview {{ $menu_active_of_record_visit_list or '' }} _none">
                 <a href="{{ url('/record/visit-list') }}">
                     <i class="fa fa-download text-default"></i> <span>访问记录</span>
                 </a>

@@ -63,6 +63,12 @@
                             <option value ="21">组</option>
                         </select>
 
+                        <select class="form-control form-filter" name="department-status" style="width:96px;">
+                            <option value ="1">启用</option>
+                            <option value ="-1">全部</option>
+                            <option value ="9">禁用</option>
+                        </select>
+
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
@@ -563,7 +569,7 @@
                         d.name = $('input[name="department-name"]').val();
                         d.title = $('input[name="department-title"]').val();
                         d.keyword = $('input[name="department-keyword"]').val();
-                        d.status = $('select[name="department-status"]').val();
+                        d.item_status = $('select[name="department-status"]').val();
                         d.department_type = $('select[name="department-type"]').val();
                         d.work_status = $('select[name="work_status"]').val();
                     },

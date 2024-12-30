@@ -193,7 +193,7 @@
                             <button type="button" class="btn">
                                 <span class="radio">
                                     <label>
-                                        @if($operate == 'edit' && $data->receipt_need == 1)
+                                        @if($operate == 'edit' && $data->is_wx == 1)
                                             <input type="radio" name="is_wx" value="1" checked="checked"> 是
                                         @else
                                             <input type="radio" name="is_wx" value="1"> 是

@@ -2,13 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '团队列表' }} - {{ config('info.system.cc') }} - {{ config('info.info.short_name') }}
+    {{ $title_text or '通话统计' }} - {{ config('info.system.cc') }} - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
-@section('header')<span class="box-title">{{ $title_text or '团队列表' }}</span>@endsection
+@section('title')<span class="box-title">{{ $title_text or '通话统计' }}</span>@endsection
+@section('header')<span class="box-title">{{ $title_text or '通话统计' }}</span>@endsection
 @section('description')<b></b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
@@ -21,17 +22,10 @@
             <div class="box-header with-border" style="margin:4px 0;">
 
 
-                <div class="row col-md-12 datatable-search-row" id="datatable-search-row-for-team">
+                <div class="row col-md-12 datatable-search-row">
                     <div class="input-group">
 
                         <input type="text" class="form-control form-filter item-search-keyup" name="team-title" placeholder="名称" />
-
-
-                        <select class="form-control form-filter" name="team-status" style="width:96px;">
-                            <option value ="1">启用</option>
-                            <option value ="-1">全部</option>
-                            <option value ="9">禁用</option>
-                        </select>
 
                     </div>
 
@@ -57,7 +51,7 @@
                         <div class="caption pull-right">
                             <i class="icon-pin font-blue"></i>
                             <span class="caption-subject font-blue sbold uppercase"></span>
-                            <a href="{{ url('/company/team-create') }}">
+                            <a href="{{ url('/team/team-create') }}">
                                 <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加部门</button>
                             </a>
                         </div>
@@ -99,407 +93,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-{{--修改-基本信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改车辆【<span class="info-text-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-text-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-team-info-text-set" readonly>
-                    <input type="hidden" name="info-text-set-item-id" value="0" readonly>
-                    <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-text-set-column-key" value="" readonly>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-text-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="info-text-set-column-value" autocomplete="off" placeholder="" value="">
-                            <textarea class="form-control" name="info-textarea-set-column-value" rows="6" cols="100%"></textarea>
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-text-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-text-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-时间信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改【<span class="info-time-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-time-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-team-info-text-set" readonly>
-                    {{--<input type="hidden" name="info-time-set-operate" value="item-team-info-time-set" readonly>--}}
-                    <input type="hidden" name="info-time-set-item-id" value="0" readonly>
-                    <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-time-set-column-key" value="" readonly>
-                    <input type="hidden" name="info-time-set-time-type" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-time-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
-                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
-                        </div>
-                    </div>
-
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-time-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-time-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-radio-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-radio-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改【<span class="info-radio-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-radio-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-team-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-team-id" value="0" readonly>
-                    <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
-                    <input type="hidden" name="info-radio-set-column-key" value="" readonly>
-
-
-                    <div class="form-group radio-box">
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-radio-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-radio-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-select-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-select-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改【<span class="info-select-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-select-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="team-info-option-set" readonly>
-                    <input type="hidden" name="info-select-set-item-id" value="0" readonly>
-                    <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-select-set-column-key" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-select-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <select class="form-control select2-client" name="info-select-set-column-value" style="width:240px;" id="">
-                                <option data-id="0" value="0">未指定</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-select-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-{{--显示-附件-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-attachment">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">车辆【<span class="attachment-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-
-
-            {{--attachment--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="">
-                <div class="box-body attachment-box">
-
-                </div>
-            </form>
-
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px-">
-                <h4 class="box-title">【添加附件】</h4>
-            </div>
-
-            {{--上传附件--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-attachment-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="attachment-set-operate" value="item-team-attachment-set" readonly>
-                    <input type="hidden" name="attachment-set-team-id" value="0" readonly>
-                    <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="attachment-set-column-key" value="" readonly>
-
-                    <input type="hidden" name="operate" value="item-team-attachment-set" readonly>
-                    <input type="hidden" name="item_id" value="0" readonly>
-                    <input type="hidden" name="operate_type" value="add" readonly>
-                    <input type="hidden" name="column_key" value="attachment" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2">附件名称</label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="attachment_name" autocomplete="off" placeholder="附件名称" value="">
-                        </div>
-                    </div>
-
-                    {{--多图上传--}}
-                    <div class="form-group">
-
-                        <label class="control-label col-md-2">图片上传</label>
-
-                        <div class="col-md-8">
-                            <input id="multiple-images" type="file" class="file-multiple-images" name="multiple_images[]" multiple >
-                        </div>
-
-                    </div>
-
-                    {{--多图上传--}}
-                    <div class="form-group _none">
-
-                        <label class="control-label col-md-2" style="clear:left;">选择图片</label>
-                        <div class="col-md-8 fileinput-group">
-
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                <div class="fileinput-new thumbnail">
-                                </div>
-                                <div class="fileinput-preview fileinput-exists thumbnail">
-                                </div>
-                                <div class="btn-tool-group">
-                            <span class="btn-file">
-                                <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
-                                <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
-                                <input type="file" name="attachment_file" />
-                            </span>
-                                    <span class="">
-                                <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
-                            </span>
-                                </div>
-                            </div>
-                            <div id="titleImageError" style="color: #a94442"></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-{{--option--}}
-<div class="option-container _none">
-
-
-    <div id="receipt_need-option-list">
-
-        <label class="control-label col-md-2">是否需要回单</label>
-        <div class="col-md-8">
-            <div class="btn-group">
-
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="receipt_need" value="0" class="info-set-column"> 不需要
-                        </label>
-                    </span>
-                </button>
-
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="receipt_need" value="1" class="info-set-column"> 需要
-                        </label>
-                    </span>
-                </button>
-
-            </div>
-        </div>
-
-    </div>
-
-
-</div>
-
-
-
-
-{{--修改列表--}}
-<div class="modal fade modal-main-body" id="modal-body-for-modify-list">
-    <div class="col-md-8 col-md-offset-2 margin-top-32px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改记录</h3>
-                <div class="box-tools pull-right caption _none">
-                    <a href="javascript:void(0);">
-                        <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加记录</button>
-                    </a>
-                </div>
-            </div>
-
-            <div class="box-body datatable-body" id="datatable-for-modify-list">
-
-                <div class="row col-md-12 datatable-search-row">
-                    <div class="input-group">
-
-                        <input type="text" class="form-control form-filter filter-keyup" name="modify-keyword" placeholder="关键词" />
-
-                        <select class="form-control form-filter" name="modify-attribute" style="width:96px;">
-                            <option value ="-1">选择属性</option>
-                            <option value ="amount">金额</option>
-                            <option value ="11">支出</option>
-                        </select>
-
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-modify">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel" id="filter-cancel-for-modify">
-                            <i class="fa fa-circle-o-notch"></i> 重置
-                        </button>
-
-                    </div>
-                </div>
-
-                <table class='table table-striped table-bordered' id='datatable_ajax_record'>
-                    <thead>
-                    <tr role='row' class='heading'>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <!-- datatable end -->
-            </div>
-
-            <div class="box-footer _none">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-4 col-sm-8 col-xs-12">
-                        {{--<button type="button" class="btn btn-primary"><i class="fa fa-check"></i> 提交</button>--}}
-                        {{--<button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>--}}
-                        <div class="input-group">
-                            <span class="input-group-addon"><input type="checkbox" id="check-all"></span>
-                            <input type="text" class="form-control" name="bulk-detect-rank" id="bulk-detect-rank" placeholder="指定排名">
-                            <span class="input-group-addon btn btn-default" id="set-rank-bulk-submit"><i class="fa fa-check"></i>提交</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</div>
 @endsection
 
 
@@ -526,13 +119,13 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-//                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[-1], ["全部"]],
+                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                // "aLengthMenu": [[-1], ["全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "{{ url('/company/team-list') }}",
+                    'url': "{{ url('/service/call-statistic-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -541,7 +134,7 @@
                         d.name = $('input[name="team-name"]').val();
                         d.title = $('input[name="team-title"]').val();
                         d.keyword = $('input[name="team-keyword"]').val();
-                        d.item_status = $('select[name="team-status"]').val();
+                        d.status = $('select[name="team-status"]').val();
                         d.team_type = $('select[name="team-type"]').val();
                         d.work_status = $('select[name="work_status"]').val();
                     },
@@ -596,185 +189,68 @@
                         }
                     },
                     {
-                        "title": "操作",
-                        "data": 'id',
-                        "width": "160px",
+                        "title": "线路ID",
+                        "data": "trunkIndex",
+                        "className": "",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-
-                            var $html_edit = '';
-                            var $html_detail = '';
-                            var $html_record = '';
-                            var $html_able = '';
-                            var $html_delete = '';
-
-                            if(row.item_status == 1)
-                            {
-                                $html_able = '<a class="btn btn-xs btn-danger- item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success- item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black- item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
-
-                            var html =
-                                '<a class="btn btn-xs btn-primary- item-admin-login-okcc" data-id="'+data+'">跳转</a>'+
-                                '<a class="btn btn-xs btn-primary- item-edit-link" data-id="'+data+'">编辑</a>'+
-                                $html_able+
-                                $html_delete+
-                                // $html_record+
-//                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-//                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
-                                '';
-                            return html;
-
+                            return data;
                         }
                     },
                     {
-                        "title": "状态",
-                        "data": "item_status",
-                        "width": "60px",
+                        "title": "线路名称",
+                        "data": "trunkName",
+                        "className": "",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(data == 1)
-                            {
-                                return '<small class="btn-xs btn-success">启用</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
-                            }
+                            return data;
                         }
                     },
                     {
-                        "title": "名称",
-                        "data": "name",
+                        "title": "城市",
+                        "data": "cityName",
                         "className": "",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">'+data+'</a>';
+                            return data;
                         }
                     },
                     {
-                        "title": "资费单价",
-                        "data": "pre_unit_price",
+                        "title": "通话次数",
+                        "data": "call_times",
                         "className": "",
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">'+data+'</a>';
+                            return data;
                         }
                     },
                     {
-                        "title": "API_企业名称",
-                        "data": "api_name",
+                        "title": "通话时间(分)",
+                        "data": "call_duration_total",
                         "className": "",
-                        "width": "80px",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
                         }
                     },
                     {
-                        "title": "API_ID",
-                        "data": "api_id",
+                        "title": "总费用",
+                        "data": "call_cost_total",
                         "className": "",
-                        "width": "80px",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
-                        }
-                    },
-                    {
-                        "title": "API密码",
-                        "data": "api_password",
-                        "className": "",
-                        "width": "160px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "备注",
-                        "data": "remark",
-                        "className": "",
-                        "width": "",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
-                                $(nTd).attr('data-key','remark').attr('data-value',data);
-                                $(nTd).attr('data-column-name','备注');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            // else return '';
-                        }
-                    },
-                    {
-                        "title": "创建者",
-                        "data": "creator_id",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
                         }
                     },
                     {
                         "title": "创建时间",
                         "data": 'created_at',
-                        "className": "font-12px",
-                        "width": "120px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                        }
-                    },
-                    {
-                        "title": "更新时间",
-                        "data": 'updated_at',
                         "className": "font-12px",
                         "width": "120px",
                         "orderable": false,
@@ -1211,5 +687,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_DK_CC').'entrance.company.team-list-script')
+@include(env('TEMPLATE_DK_CC').'entrance.service.call-statistic-list-script')
 @endsection
