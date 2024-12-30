@@ -81,14 +81,14 @@
 
             {{--客户管理--}}
             @if(in_array($me->user_type,[0,1,9,11,61]))
-                <li class="header">客户管理</li>
+            <li class="header _none">客户管理</li>
 
-                <li class="treeview {{ $menu_active_of_client_list_for_all or '' }}">
-                    <a href="{{ url('/client/client-list') }}">
-                        <i class="fa fa-user-secret text-red"></i>
-                        <span>客户列表</span>
-                    </a>
-                </li>
+            <li class="treeview {{ $menu_active_of_client_list_for_all or '' }} _none">
+                <a href="{{ url('/client/client-list') }}">
+                    <i class="fa fa-user-secret text-red"></i>
+                    <span>客户列表</span>
+                </a>
+            </li>
             @endif
 
 
