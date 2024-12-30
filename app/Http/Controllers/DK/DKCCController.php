@@ -85,6 +85,11 @@ class DKCCController extends Controller
                         return response_error([],'账户or密码不正确啊！');
                     }
 
+                    if(!in_array($admin->user_type,[0,1,9,11,61,66]))
+                    {
+                        return response_error([],'该账号没有权限！');
+                    }
+
                     $token = request()->get('_token');
                     $password = request()->get('password');
                     if(password_check($password,$admin->password))
