@@ -174,6 +174,8 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     Route::match(['get','post'], '/service/telephone-import', $controller.'@operate_service_telephone_import');
     Route::match(['get','post'], '/service/telephone-create', $controller.'@operate_service_telephone_create');
     Route::match(['get','post'], '/service/telephone-edit', $controller.'@operate_service_telephone_edit');
+    // 下载
+    Route::post('/service/telephone-down', $controller.'@operate_service_telephone_down');
 
 
 

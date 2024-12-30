@@ -667,7 +667,7 @@ class DKCCController extends Controller
     /*
      * Telephone 电话管理
      */
-    // 【内容】返回-列表-视图（全部内容）
+    // 【电话数据】返回-列表-视图（全部内容）
     public function view_service_telephone_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_service_telephone_list(request()->all());
@@ -675,12 +675,24 @@ class DKCCController extends Controller
     }
 
 
-    // 【内容】添加
+    // 【电话数据】添加
     public function operate_service_telephone_import()
     {
         if(request()->isMethod('get')) return $this->repo->view_service_telephone_import();
         else if (request()->isMethod('post')) return $this->repo->operate_service_telephone_import_save(request()->all());
     }
+
+    // 【电话数据】下载
+    public function operate_service_telephone_down()
+    {
+        return $this->repo->operate_service_telephone_down(request()->all());
+    }
+
+
+
+
+
+
     // 【内容】添加
     public function operate_item_item_create()
     {

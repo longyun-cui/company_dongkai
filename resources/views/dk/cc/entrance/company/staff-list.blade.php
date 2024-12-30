@@ -73,6 +73,12 @@
                             </select>
                         @endif
 
+                        <select class="form-control form-filter" name="staff-status" style="width:96px;">
+                            <option value ="1">启用</option>
+                            <option value ="-1">全部</option>
+                            <option value ="9">禁用</option>
+                        </select>
+
                         <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
                             <i class="fa fa-search"></i> 搜索
                         </button>
@@ -199,7 +205,7 @@
                         d.username = $('input[name="staff-username"]').val();
                         d.department_district = $('select[name="staff-department-district"]').val();
                         d.user_type = $('select[name="staff-user-type"]').val();
-
+                        d.user_status = $('select[name="staff-status"]').val();
                     },
                 },
                 "pagingType": "simple_numbers",

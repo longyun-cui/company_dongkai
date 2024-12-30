@@ -21,34 +21,11 @@
             <div class="box-header with-border" style="margin:4px 0;">
 
 
-                <div class="row col-md-12 datatable-search-row">
+                <div class="row col-md-12 datatable-search-row" id="search-row-for-telephone-list">
+
                     <div class="input-group">
 
                         <input type="text" class="form-control form-filter item-search-keyup" name="telephone-title" placeholder="名称" />
-
-                        {{--<select class="form-control form-filter" name="owner" style="width:96px;">--}}
-                        {{--<option value ="-1">选择员工</option>--}}
-                        {{--@foreach($sales as $v)--}}
-                        {{--<option value ="{{ $v->id }}">{{ $v->true_name }}</option>--}}
-                        {{--@endforeach--}}
-                        {{--</select>--}}
-
-                        {{--                        <select class="form-control form-filter" name="work_status" style="width:96px;">--}}
-                        {{--                            <option value ="-1">全部状态</option>--}}
-                        {{--                            <option value ="0">空闲</option>--}}
-                        {{--                            <option value ="1">工作中</option>--}}
-                        {{--                            <option value ="9">待发车</option>--}}
-                        {{--                            <option value ="19">非工作状态</option>--}}
-                        {{--                        </select>--}}
-
-                        <select class="form-control form-filter" name="telephone-type" style="width:96px;">
-                            <option value ="-1">全部</option>
-                            <option value ="11">大区</option>
-                            <option value ="21">组</option>
-                        </select>
-
-
-
 
                     </div>
 
@@ -67,19 +44,15 @@
                         </button>
                     </div>
 
-
-
-
                     @if(in_array($me->user_type,[0,1,9,11,19]))
-                        <div class="caption pull-right">
-                            <i class="icon-pin font-blue"></i>
-                            <span class="caption-subject font-blue sbold uppercase"></span>
-                            <a href="{{ url('/service/telephone-import') }}">
-                                <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 导入电话</button>
-                            </a>
-                        </div>
+                    <div class="caption pull-right">
+                        <i class="icon-pin font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase"></span>
+                        <a href="{{ url('/service/telephone-import') }}">
+                            <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 导入电话</button>
+                        </a>
+                    </div>
                     @endif
-
 
                 </div>
 
@@ -269,36 +242,83 @@
 //                        'orderable': false
 //                    },
                     {
-                        "title": "省",
+                        "title": "省份",
                         "data": "provinceCode",
-                        "className": "",
+                        "className": "provinceCode",
                         "width": "80px",
-                        "orderable": true,
-                        "orderSequence": ["desc", "asc"],
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).attr('data-id',row.id).attr('data-name','省份');
+                            $(nTd).attr('data-key','provinceCode').attr('data-value',data);
+                        },
                         render: function(data, type, row, meta) {
                             return '<a href="javascript:void(0);">'+row.provinceName+'</a>';
                         }
                     },
                     {
-                        "title": "市",
+                        "title": "城市",
                         "data": "cityCode",
-                        "className": "",
+                        "className": "cityCode",
                         "width": "80px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).attr('data-id',row.id).attr('data-name','城市');
+                            $(nTd).attr('data-key','cityCode').attr('data-value',data);
+                        },
                         render: function(data, type, row, meta) {
                             return '<a href="javascript:void(0);">'+row.cityName+'</a>';
                         }
                     },
                     {
-                        "title": "区",
+                        "title": "行政区",
                         "data": "areaCode",
-                        "className": "",
+                        "className": "areaCode",
                         "width": "80px",
                         "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).attr('data-id',row.id).attr('data-name','行政区');
+                            $(nTd).attr('data-key','areaCode').attr('data-value',data);
+                        },
                         render: function(data, type, row, meta) {
                             return '<a href="javascript:void(0);">'+row.areaName+'</a>';
                         }
                     },
+                    {
+                        "title": "标签",
+                        "data": "tag",
+                        "className": "tag",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            $(nTd).attr('data-id',row.id).attr('data-name','标签');
+                            $(nTd).attr('data-key','tag').attr('data-value',data);
+                            if(!data) $(nTd).attr('data-value','');
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
+                    // {
+                    //     "title": "标签2",
+                    //     "data": "tag_2",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return '<a href="javascript:void(0);">'+data+'</a>';
+                    //     }
+                    // },
+                    // {
+                    //     "title": "标3签",
+                    //     "data": "tag_3",
+                    //     "className": "",
+                    //     "width": "80px",
+                    //     "orderable": false,
+                    //     render: function(data, type, row, meta) {
+                    //         return '<a href="javascript:void(0);">'+data+'</a>';
+                    //     }
+                    // },
                     {
                         "title": "全部",
                         "data": "count_for_all",
@@ -340,27 +360,43 @@
                         }
                     },
                     {
-                        "title": "备注",
-                        "data": "tag",
+                        "title": "电话总数",
+                        "data": "provinceCode",
                         "className": "",
-                        "width": "",
+                        "width": "60px",
                         "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
-                                $(nTd).attr('data-key','remark').attr('data-value',data);
-                                $(nTd).attr('data-column-name','备注');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
                         render: function(data, type, row, meta) {
-                            return data;
-                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            // else return '';
+                            return '<input type="text" class="form-control telephone_num" placeholder="电话总数" value="">';
+                        }
+                    },
+                    {
+                        "title": "文件数量",
+                        "data": "provinceCode",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<input type="text" class="form-control file_num" placeholder="文件数量" value="">';
+                        }
+                    },
+                    {
+                        "title": "文件大小",
+                        "data": "provinceCode",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<input type="text" class="form-control file_size" placeholder="0为平均" value="0">';
+                        }
+                    },
+                    {
+                        "title": "文件名",
+                        "data": "provinceCode",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<input type="text" class="form-control file_name" placeholder="文件名" value="">';
                         }
                     },
                     {
@@ -397,10 +433,9 @@
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                             var html =
-                                '<a class="btn btn-xs btn-primary- item-admin-login-okcc" data-id="'+data+'">跳转</a>'+
-                                '<a class="btn btn-xs btn-primary- item-edit-link" data-id="'+data+'">编辑</a>'+
-                                $html_able+
-                                $html_delete+
+                                '<a class="btn btn-xs btn-primary- item-down-submit" data-id="'+data+'">下载数据</a>'+
+                                // $html_able+
+                                // $html_delete+
                                 // $html_record+
 //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
 //                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+

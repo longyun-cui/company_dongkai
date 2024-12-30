@@ -4949,7 +4949,7 @@ class DKCCRepository {
         $this->get_me();
         $me = $this->me;
 
-        $query = DK_CC_Telephone::select('item_status','provinceCode','cityCode','areaCode','tag')
+        $query = DK_CC_Telephone::select('item_status','provinceCode','cityCode','areaCode','tag','tag_2','tag_3')
             ->addSelect(DB::raw("
                     count('*') as count_for_all,
                     count(IF(item_status = 1, TRUE, NULL)) as count_for_1,
@@ -4958,7 +4958,8 @@ class DKCCRepository {
                 "))
             ->groupBy('provinceCode')
             ->groupBy('cityCode')
-            ->groupBy('areaCode');
+            ->groupBy('areaCode')
+            ->groupBy('tag');
 
         $list = $query->get();
         $total = $list->count();
@@ -5479,6 +5480,145 @@ class DKCCRepository {
 
             DB::commit();
             return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【工单】发布
+    public function operate_service_telephone_down($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'telephone_num.required' => 'telephone_num.required.',
+            'file_num.required' => 'file_num.required.',
+            'file_size.required' => 'file_size.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'telephone_num' => 'required',
+            'file_num' => 'required',
+            'file_size' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'service-telephone-down') return response_error([],"参数[operate]有误！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,81,84,88])) return response_error([],"你没有操作权限！");
+
+        $date = date('Y-m-d');
+
+        $telephone_num = $post_data["telephone_num"];
+        $file_num = $post_data["file_num"];
+        $file_size = $post_data["file_size"];
+
+        $provinceCode = $post_data["provinceCode"];
+        $cityCode = $post_data["cityCode"];
+        $areaCode = $post_data["areaCode"];
+
+        $provinceName = config('location_city.province.'.$provinceCode);
+        $cityName = config('location_city.city.'.$provinceCode.'.'.$cityCode);
+        $areaName = config('location_city.district.'.$cityCode.'.'.$areaCode);
+        if($areaName) $name = $cityName.'-'.$areaName.'-'.$date;
+        else $name = $cityName.'-'.$date;
+
+        $telephone_where['provinceCode'] = $provinceCode;
+        $telephone_where['cityCode'] = $cityCode;
+        $telephone_where['areaCode'] = $areaCode;
+        $telephone_where['tag'] = $post_data["tag"];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            $task = new DK_CC_Task;
+
+            $task_insert['creator_id'] = $me->id;
+            $task_insert['name'] = $name;
+
+            $bool_t = $task->fill($task_insert)->save();
+
+            $task_id = $task->id;
+
+            $telephone = DK_CC_Telephone::select('telephone_number')->withTrashed()->where($telephone_where)->limit($telephone_num);
+
+
+            $telephone_update['task_id'] = $task_id;
+            $telephone_update['last_extraction_time'] = $date;
+            $telephone->update($telephone_update);
+            $telephone_list = $telephone->get();
+
+
+            $upload_path = <<<EOF
+resource/dk/telephone/$date/
+EOF;
+
+            $path = storage_path($upload_path);
+            if (!is_dir($path))
+            {
+                mkdir($path, 0766, true);
+            }
+            $filename = $name.'-'.$task_id;
+            $extension = '.txt';
+
+
+            if($file_num > 1)
+            {
+                if($file_size == 0) $file_size = ceil($telephone_num / $file_num);
+                $chunks = $telephone_list->chunk($file_size);
+
+                $count = 1;
+                foreach($chunks as $chunk)
+                {
+                    // 打开文件准备写入
+                    $file = fopen($path.$filename.'第'.$count.'批'.$extension, 'w');
+                    $count++;
+
+                    // 遍历电话号码数组，逐行写入文件
+                    foreach ($chunk as $phoneNumber)
+                    {
+                        fwrite($file, $phoneNumber->telephone_number . PHP_EOL);
+                    }
+
+                    // 关闭文件
+                    fclose($file);
+                }
+            }
+            else
+            {
+                // 打开文件准备写入
+                $file = fopen($path.$filename.$extension, 'w');
+
+                // 遍历电话号码数组，逐行写入文件
+                foreach ($telephone_list as $phoneNumber)
+                {
+                    fwrite($file, $phoneNumber->telephone_number . PHP_EOL);
+                }
+
+                // 关闭文件
+                fclose($file);
+            }
+
+
+
+            DB::commit();
+
+            return response_success([]);
         }
         catch (Exception $e)
         {
@@ -6816,6 +6956,14 @@ class DKCCRepository {
 
         return datatable_response($list, $draw, $total);
     }
+
+
+
+
+
+
+
+
 
 
 

@@ -8,6 +8,7 @@
 
 
 
+@section('title'){{ $operate_title_text or '添加任务' }}@endsection
 @section('header'){{ $operate_title_text or '添加任务' }}@endsection
 @section('description'){{ config('info.system.'.$system) }} - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
@@ -19,6 +20,12 @@
         <div class="col-md-12">
             <!-- BEGIN PORTLET-->
             <div class="box box-info form-container">
+
+                <div class="box-header with-border" style="margin:16px 0;">
+                    <h3 class="box-title">{{ $title_text or '' }}</h3>
+                    <div class="box-tools pull-right">
+                    </div>
+                </div>
 
                 <form action="" method="post" class="form-horizontal form-bordered" id="form-edit-item">
                     <div class="box-body">

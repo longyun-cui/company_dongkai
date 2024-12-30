@@ -2,46 +2,57 @@
     $(function() {
 
         // 【搜索】
-        $(".datatable-search-row").on('click', ".filter-submit", function() {
+        $(".search-row-for-telephone-list").on('click', ".filter-submit", function() {
             layer.msg(1);
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $(".datatable-search-row").on('click', ".filter-cancel", function() {
-            $(".datatable-search-row").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $(".search-row-for-telephone-list").on('click', ".filter-cancel", function() {
+            $(".search-row-for-telephone-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $(".datatable-search-row").find('select.form-filter option').attr("selected",false);
-            $(".datatable-search-row").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $(".search-row-for-telephone-list").find('select.form-filter option').attr("selected",false);
+            $(".search-row-for-telephone-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $(".datatable-search-row").on('click', ".filter-empty", function() {
-            $(".datatable-search-row").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $(".search-row-for-telephone-list").on('click', ".filter-empty", function() {
+            $(".search-row-for-telephone-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $(".datatable-search-row").find('select.form-filter option').attr("selected",false);
-            $(".datatable-search-row").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $(".search-row-for-telephone-list").find('select.form-filter option').attr("selected",false);
+            $(".search-row-for-telephone-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $(".datatable-search-row").on('keyup', ".item-search-keyup", function(event) {
+        $(".search-row-for-telephone-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $(".datatable-search-row").find(".filter-submit").click();
+                $(".search-row-for-telephone-list").find(".filter-submit").click();
             }
         });
 
 
-        // 【编辑】
-        $(".main-content").on('click', ".item-admin-login-okcc", function() {
+        // 【下载】
+        $(".main-content").on('click', ".item-down-submit", function() {
             var $that = $(this);
+            var $row = $that.parents('tr');
+
+            var $telephone_num = $row.find('.telephone_num').val();
+            var $file_num = $row.find('.file_num').val();
+            var $file_size = $row.find('.file_size').val();
+
+            var $provinceCode = $row.find('.provinceCode').attr('data-value');
+            var $cityCode = $row.find('.cityCode').attr('data-value');
+            var $areaCode = $row.find('.areaCode').attr('data-value');
+            var $tag = $row.find('.tag').attr('data-value');
+            console.log($tag);
 
 
             var $index = layer.load(1, {
@@ -60,11 +71,17 @@
             });
 
             $.post(
-                "{{ url('/company/team-login-okcc') }}",
+                "{{ url('/service/telephone-down') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "company-team-admin-login-okcc",
-                    item_id: $that.attr('data-id')
+                    operate: "service-telephone-down",
+                    telephone_num: $telephone_num,
+                    file_num: $file_num,
+                    file_size: $file_size,
+                    provinceCode: $provinceCode,
+                    cityCode: $cityCode,
+                    areaCode: $areaCode,
+                    tag: $tag
                 },
                 'json'
             )
@@ -78,11 +95,6 @@
                     else
                     {
                         layer.msg("请求成功！");
-                        var $token = $response.data.token;
-                        var $url = 'https://feiniji.cn/service/index.php?m=common&c=loginTransition&f=login&token='+$token;
-
-                        console.log($url);
-                        window.open($url, '_blank');
                     }
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {

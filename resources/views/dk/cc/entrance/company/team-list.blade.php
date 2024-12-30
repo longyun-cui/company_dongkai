@@ -42,8 +42,8 @@
                         <button type="button" class="btn btn-primary filter-refresh">
                             <i class="fa fa-circle-o-notch"></i> 刷新
                         </button>
-                        <button type="button" class="btn btn-primary filter-refresh">
-                            <i class="fa fa-circle-o-notch"></i> 刷新
+                        <button type="button" class="btn bg-teal filter-empty">
+                            <i class="fa fa-remove"></i> 清空
                         </button>
                         <button type="button" class="btn btn-warning filter-cancel">
                             <i class="fa fa-undo"></i> 重置

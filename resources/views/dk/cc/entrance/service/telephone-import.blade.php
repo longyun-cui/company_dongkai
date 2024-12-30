@@ -8,6 +8,7 @@
 
 
 
+@section('title')<span class="box-title">{{ $title_text or '导入电话' }}</span>@endsection
 @section('header')<span class="box-title">{{ $title_text or '导入电话' }}</span>@endsection
 @section('description'){{ config('info.system.'.$system) }} - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
@@ -78,6 +79,20 @@
                         <input type="text" class="form-control" name="tag" placeholder="标签" value="{{ $data->tag or '' }}">
                     </div>
                 </div>
+{{--                --}}{{--标签--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">标签2</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <input type="text" class="form-control" name="tag_2" placeholder="标签2" value="{{ $data->tag_2 or '' }}">--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                --}}{{--标签--}}
+{{--                <div class="form-group">--}}
+{{--                    <label class="control-label col-md-2">标签3</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <input type="text" class="form-control" name="tag_3" placeholder="标签3" value="{{ $data->tag_3 or '' }}">--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
                 {{--attachment 附件--}}
                 <div class="form-group">

@@ -19,6 +19,8 @@ class DK_CC_Telephone extends Model
 
         'username', 'nickname', 'true_name', 'short_name',
         'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
+        'tag_2',
+        'tag_3',
         'portrait_img_src',
         'cover_pic_src',
         'attachment_name',
@@ -34,7 +36,7 @@ class DK_CC_Telephone extends Model
         'telephone_number',
 
         'task_id',
-        'last_call_time',
+        'last_extraction_time',
 
         'is_published', 'published_at',
         'is_completed', 'completed_at'
