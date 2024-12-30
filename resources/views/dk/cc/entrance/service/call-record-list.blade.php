@@ -21,8 +21,8 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
 
-
                 <div class="row col-md-12 datatable-search-row">
+
                     <div class="input-group">
 
                         <input type="text" class="form-control form-filter item-search-keyup" name="team-title" placeholder="名称" />
@@ -44,22 +44,7 @@
                         </button>
                     </div>
 
-
-
-
-                    @if(in_array($me->user_type,[0,1,9,11,19]))
-                        <div class="caption pull-right">
-                            <i class="icon-pin font-blue"></i>
-                            <span class="caption-subject font-blue sbold uppercase"></span>
-                            <a href="{{ url('/team/team-create') }}">
-                                <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加部门</button>
-                            </a>
-                        </div>
-                    @endif
-
-
                 </div>
-
 
             </div>
 
