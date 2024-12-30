@@ -30,6 +30,14 @@ class DK_CC_Task extends Model
         'project_id',
         'team_id',
 
+        'provinceCode',
+        'cityCode',
+        'areaCode',
+
+        'extraction_telephone_count',
+        'extraction_file_num',
+        'extraction_file_size',
+
         'is_published', 'published_at',
         'is_completed', 'completed_at'
     ];

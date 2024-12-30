@@ -366,7 +366,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<input type="text" class="form-control telephone_num" placeholder="电话总数" value="">';
+                            return '<input type="text" class="form-control telephone_count" placeholder="电话总数" value="">';
                         }
                     },
                     {
@@ -376,7 +376,7 @@
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<input type="text" class="form-control file_num" placeholder="文件数量" value="">';
+                            return '<input type="text" class="form-control file_num" placeholder="文件数量" value="1">';
                         }
                     },
                     {
@@ -396,7 +396,7 @@
                         "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<input type="text" class="form-control file_name" placeholder="文件名" value="">';
+                            return '<input type="text" class="form-control extraction_name" placeholder="文件名" value="">';
                         }
                     },
                     {

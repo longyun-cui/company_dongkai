@@ -207,6 +207,8 @@ desired effect
 {{--<script src="{{ asset('/resource/component/js/echarts-3.7.2.min.js') }}"></script>--}}
 <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 
+<script src="{{ asset('/resource/component/js/download.js') }}"></script>
+
 
 <script src="{{ asset('/resource/common/js/area_data.js') }}"></script>
 {{--<script src="{{ asset('/resource/common/js/area_select_by_name.js') }}"></script>--}}

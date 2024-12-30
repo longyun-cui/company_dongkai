@@ -5117,8 +5117,6 @@ class DKCCRepository {
                         {
                             $data[] = [
                                 'telephone_number'=>trim($v),
-                                'item_active'=>1,
-                                'item_status'=>1,
                                 'provinceCode'=>$location_province,
                                 'cityCode'=>$location_city,
                                 'areaCode'=>$location_district,
@@ -5134,17 +5132,19 @@ class DKCCRepository {
                 set_time_limit(300);
 
                 // 启动数据库事务
-                DB::beginTransaction();
+//                DB::beginTransaction();
                 try
                 {
                     foreach($insert_data as $insert_value)
                     {
                         $modal_telephone = new DK_CC_Telephone;
                         $bool = $modal_telephone->insert($insert_value);
+
+//                        dd($bool);
                         if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
                     }
 
-                    DB::commit();
+//                    DB::commit();
                     return response_success(['count'=>count($file_data)]);
                 }
                 catch (Exception $e)
@@ -5496,15 +5496,22 @@ class DKCCRepository {
     {
         $messages = [
             'operate.required' => 'operate.required.',
-            'telephone_num.required' => 'telephone_num.required.',
-            'file_num.required' => 'file_num.required.',
-            'file_size.required' => 'file_size.required.',
+            'telephone_count.required' => '请输入电话数量！',
+            'telephone_count.numeric' => '电话数量必须为大于等于0的整数！',
+            'telephone_count.min' => '电话数量必须为大于等于0的整数！',
+            'file_num.required' => '请输入文件数量！',
+            'file_num.numeric' => '文件数量必须为大于等于1的整数！',
+            'file_num.min' => '文件数量必须为大于等于1的整数！',
+            'file_size.required' => '请输入文件大小！',
+            'file_size.numeric' => '文件大小必须为大于等于0的整数！',
+            'file_size.min' => '文件大小必须为大于等于0的整数！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'telephone_num' => 'required',
-            'file_num' => 'required',
-            'file_size' => 'required',
+            'telephone_count' => 'required',
+            'telephone_count' => 'required|numeric|min:1',
+            'file_num' => 'required|numeric|min:1',
+            'file_size' => 'required|numeric|min:0',
         ], $messages);
         if ($v->fails())
         {
@@ -5521,19 +5528,30 @@ class DKCCRepository {
 
         $date = date('Y-m-d');
 
-        $telephone_num = $post_data["telephone_num"];
+        $telephone_count = $post_data["telephone_count"];
         $file_num = $post_data["file_num"];
         $file_size = $post_data["file_size"];
 
         $provinceCode = $post_data["provinceCode"];
         $cityCode = $post_data["cityCode"];
         $areaCode = $post_data["areaCode"];
+        $tag = $post_data["tag"];
+        $extraction_name = $post_data["extraction_name"];
 
         $provinceName = config('location_city.province.'.$provinceCode);
         $cityName = config('location_city.city.'.$provinceCode.'.'.$cityCode);
         $areaName = config('location_city.district.'.$cityCode.'.'.$areaCode);
-        if($areaName) $name = $cityName.'-'.$areaName.'-'.$date;
-        else $name = $cityName.'-'.$date;
+
+        if($extraction_name)
+        {
+            $name = $extraction_name;
+}
+        else
+        {
+            if($areaName) $name = $date.'-'.$cityName.'-'.$areaName;
+            else $name = $date.'-'.$cityName;
+            if($tag) $name.= "-".$tag;
+        }
 
         $telephone_where['provinceCode'] = $provinceCode;
         $telephone_where['cityCode'] = $cityCode;
@@ -5550,28 +5568,45 @@ class DKCCRepository {
 
             $task_insert['creator_id'] = $me->id;
             $task_insert['name'] = $name;
+            $task_insert['provinceCode'] = $provinceCode;
+            $task_insert['cityCode'] = $cityCode;
+            $task_insert['areaCode'] = $areaCode;
+            $task_insert['tag'] = $tag;
+            $task_insert['extraction_telephone_count'] = $telephone_count;
+            $task_insert['extraction_file_num'] = $file_num;
+            $task_insert['extraction_file_size'] = $file_size;
 
             $bool_t = $task->fill($task_insert)->save();
 
             $task_id = $task->id;
 
-            $telephone = DK_CC_Telephone::select('telephone_number')->withTrashed()->where($telephone_where)->limit($telephone_num);
+//            dd(now()->subDays(7)->startOfDay());
+
+            $telephone = DK_CC_Telephone::select('telephone_number')->withTrashed()
+//                ->where(function ($query) {
+//                    $query->whereNull('last_extraction_time')
+//                        ->orWhereDate('last_extraction_time', '<=', now()->subDays(7));
+//                })
+                ->where($telephone_where)
+                ->orderby('task_id','asc')
+                ->limit($telephone_count);
 
 
             $telephone_update['task_id'] = $task_id;
             $telephone_update['last_extraction_time'] = $date;
             $telephone->update($telephone_update);
-            $telephone_list = $telephone->get();
+            $telephone_list = DK_CC_Telephone::where('task_id',$task_id)->get();
 
 
             $upload_path = <<<EOF
 resource/dk/telephone/$date/
 EOF;
+            $url_path = env('DOMAIN_CDN').'/dk/telephone/'.$date.'/';
 
-            $path = storage_path($upload_path);
-            if (!is_dir($path))
+            $storage_path = storage_path($upload_path);
+            if (!is_dir($storage_path))
             {
-                mkdir($path, 0766, true);
+                mkdir($storage_path, 0766, true);
             }
             $filename = $name.'-'.$task_id;
             $extension = '.txt';
@@ -5579,15 +5614,24 @@ EOF;
 
             if($file_num > 1)
             {
-                if($file_size == 0) $file_size = ceil($telephone_num / $file_num);
+                if($file_size == 0) $file_size = ceil($telephone_count / $file_num);
                 $chunks = $telephone_list->chunk($file_size);
 
                 $count = 1;
+                $file_list = [];
                 foreach($chunks as $chunk)
                 {
+                    $file_name = $filename.'-第'.$count.'批'.$extension;
+                    $file_url = $url_path.$file_name;
+                    $file_path = $storage_path.$file_name;
+
                     // 打开文件准备写入
-                    $file = fopen($path.$filename.'第'.$count.'批'.$extension, 'w');
+                    $file = fopen($file_path, 'w');
                     $count++;
+
+                    $i['name'] = $file_name;
+                    $i['url'] = $file_url;
+                    $file_list[] = $i;
 
                     // 遍历电话号码数组，逐行写入文件
                     foreach ($chunk as $phoneNumber)
@@ -5598,11 +5642,18 @@ EOF;
                     // 关闭文件
                     fclose($file);
                 }
+
             }
             else
             {
+                $file_list = [];
+
+                $file_name = $filename.$extension;
+                $file_url = $url_path.$filename.$extension;
+                $file_path = $storage_path.$filename.$extension;
+
                 // 打开文件准备写入
-                $file = fopen($path.$filename.$extension, 'w');
+                $file = fopen($file_path, 'w');
 
                 // 遍历电话号码数组，逐行写入文件
                 foreach ($telephone_list as $phoneNumber)
@@ -5612,13 +5663,19 @@ EOF;
 
                 // 关闭文件
                 fclose($file);
+
+                $i['name'] = $file_name;
+                $i['url'] = $file_url;
+                $file_list[] = $i;
+
             }
-
-
 
             DB::commit();
 
-            return response_success([]);
+            $task->content = json_encode($file_list);
+            $task->save();
+
+            return response_success(json_encode($file_list));
         }
         catch (Exception $e)
         {
@@ -6203,7 +6260,7 @@ EOF;
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "asc");
+        else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
@@ -6211,16 +6268,24 @@ EOF;
 
         foreach($list as $k => $v)
         {
-            if($v->department_type == 11)
+            // 省
+            if($v->provinceCode)
             {
-                $v->district_id = $v->id;
+                $v->provinceName = config('location_city.province.'.$v->provinceCode);
             }
-            else if($v->department_type == 21)
+            else $v->provinceName = '--';
+            // 市
+            if($v->cityCode)
             {
-                $v->district_id = $v->superior_department_id;
+                $v->cityName = config('location_city.city.'.$v->provinceCode.'.'.$v->cityCode);
             }
-
-            $v->district_group_id = $v->district_id.'.'.$v->id;
+            else $v->cityName = '--';
+            // 区
+            if($v->areaCode)
+            {
+                $v->areaName = config('location_city.district.'.$v->cityCode.'.'.$v->areaCode);
+            }
+            else $v->areaName = '--';
         }
 //        $list = $list->sortBy(['district_id'=>'asc'])->values();
 //        $list = $list->sortBy(function ($item, $key) {
@@ -6516,9 +6581,9 @@ EOF;
             'operate.required' => 'operate.required.',
             'name.required' => '请输入任务名称！',
 //            'name.unique' => '该团队号已存在！',
-            'telephone_num.required' => '请输入电话数量！',
-            'telephone_num.numeric' => '电话数量必须为大于等于0的整数！',
-            'telephone_num.min' => '电话数量必须为大于等于0的整数！',
+            'telephone_count.required' => '请输入电话数量！',
+            'telephone_count.numeric' => '电话数量必须为大于等于0的整数！',
+            'telephone_count.min' => '电话数量必须为大于等于0的整数！',
             'file_num.required' => '请输入文件数量！',
             'file_num.numeric' => '文件数量必须为大于等于0的整数！',
             'file_num.min' => '文件数量必须为大于等于0的整数！',
@@ -6530,7 +6595,7 @@ EOF;
             'operate' => 'required',
             'name' => 'required',
 //            'name' => 'required|unique:dk_cc_task,name',
-            'telephone_num' => 'required|numeric|min:1',
+            'telephone_count' => 'required|numeric|min:1',
             'file_num' => 'required|numeric|min:1',
             'file_size' => 'required|numeric|min:0',
         ], $messages);

@@ -266,7 +266,7 @@
                     {
                         "title": "操作",
                         "data": 'id',
-                        "width": "160px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -297,10 +297,10 @@
                             $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                             var html =
-                                '<a class="btn btn-xs btn-primary- item-admin-login-okcc" data-id="'+data+'">跳转</a>'+
-                                '<a class="btn btn-xs btn-primary- item-edit-link" data-id="'+data+'">编辑</a>'+
-                                $html_able+
-                                $html_delete+
+                                '<a class="btn btn-xs btn-primary- item-download-submit" data-id="'+data+'">下载</a>'+
+                                // '<a class="btn btn-xs btn-primary- item-edit-link" data-id="'+data+'">编辑</a>'+
+                                // $html_able+
+                                // $html_delete+
                                 // $html_record+
 //                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
 //                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
@@ -320,27 +320,81 @@
                         }
                     },
                     {
-                        "title": "备注",
-                        "data": "remark",
-                        "className": "",
-                        "width": "",
+                        "title": "省份",
+                        "data": "provinceCode",
+                        "className": "provinceCode",
+                        "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
-                            {
-                                $(nTd).addClass('modal-show-for-info-text-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','备注');
-                                $(nTd).attr('data-key','remark').attr('data-value',data);
-                                $(nTd).attr('data-column-name','备注');
-                                $(nTd).attr('data-text-type','textarea');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
+                            $(nTd).attr('data-id',row.id).attr('data-name','省份');
+                            $(nTd).attr('data-key','provinceCode').attr('data-value',data);
                         },
                         render: function(data, type, row, meta) {
+                            return '<a href="javascript:void(0);">'+row.provinceName+'</a>';
+                        }
+                    },
+                    {
+                        "title": "城市",
+                        "data": "cityCode",
+                        "className": "cityCode",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<a href="javascript:void(0);">'+row.cityName+'</a>';
+                        }
+                    },
+                    {
+                        "title": "行政区",
+                        "data": "areaCode",
+                        "className": "areaCode",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<a href="javascript:void(0);">'+row.areaName+'</a>';
+                        }
+                    },
+                    {
+                        "title": "标签",
+                        "data": "tag",
+                        "className": "tag",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
                             return data;
-                            // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                            // else return '';
+                            // return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
+                    {
+                        "title": "提取数量",
+                        "data": "extraction_telephone_count",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
+                    {
+                        "title": "文件数量",
+                        "data": "extraction_file_num",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
+                    {
+                        "title": "文件大小",
+                        "data": "extraction_file_size",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                            // return '<a href="javascript:void(0);">'+data+'</a>';
                         }
                     },
                     {
@@ -356,31 +410,6 @@
                     {
                         "title": "创建时间",
                         "data": 'created_at',
-                        "className": "font-12px",
-                        "width": "120px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            var $date = new Date(data*1000);
-                            var $year = $date.getFullYear();
-                            var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                            var $day = ('00'+($date.getDate())).slice(-2);
-                            var $hour = ('00'+$date.getHours()).slice(-2);
-                            var $minute = ('00'+$date.getMinutes()).slice(-2);
-                            var $second = ('00'+$date.getSeconds()).slice(-2);
-
-//                            return $year+'-'+$month+'-'+$day;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-
-                            var $currentYear = new Date().getFullYear();
-                            if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                            else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                        }
-                    },
-                    {
-                        "title": "更新时间",
-                        "data": 'updated_at',
                         "className": "font-12px",
                         "width": "120px",
                         "orderable": false,

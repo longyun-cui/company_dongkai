@@ -44,15 +44,15 @@
             var $that = $(this);
             var $row = $that.parents('tr');
 
-            var $telephone_num = $row.find('.telephone_num').val();
+            var $telephone_count = $row.find('.telephone_count').val();
             var $file_num = $row.find('.file_num').val();
             var $file_size = $row.find('.file_size').val();
+            var $extraction_name = $row.find('.extraction_name').val();
 
             var $provinceCode = $row.find('.provinceCode').attr('data-value');
             var $cityCode = $row.find('.cityCode').attr('data-value');
             var $areaCode = $row.find('.areaCode').attr('data-value');
             var $tag = $row.find('.tag').attr('data-value');
-            console.log($tag);
 
 
             var $index = layer.load(1, {
@@ -75,13 +75,14 @@
                 {
                     _token: $('meta[name="_token"]').attr('content'),
                     operate: "service-telephone-down",
-                    telephone_num: $telephone_num,
+                    telephone_count: $telephone_count,
                     file_num: $file_num,
                     file_size: $file_size,
                     provinceCode: $provinceCode,
                     cityCode: $cityCode,
                     areaCode: $areaCode,
-                    tag: $tag
+                    tag: $tag,
+                    extraction_name: $extraction_name
                 },
                 'json'
             )
@@ -95,6 +96,26 @@
                     else
                     {
                         layer.msg("请求成功！");
+                        // console.log(JSON.parse($response.data));
+                        $.each(JSON.parse($response.data), function(index, value) {
+                            console.log(value);
+                            console.log(value.url);
+                            console.log(value.name);
+
+                            // download(value.url,value.name);
+
+
+                            var element = document.createElement('a');
+                            element.setAttribute('href', value.url);
+                            element.setAttribute('target', '_blank');
+                            element.setAttribute('download', value.name);
+                            element.style.display = 'none';
+                            document.body.appendChild(element);
+                            console.log(element);
+                            element.click();
+                            document.body.removeChild(element);
+
+                        });
                     }
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
@@ -107,8 +128,8 @@
                 })
                 .always(function(jqXHR, textStatus) {
                     console.log('always');
-                    console.log(jqXHR);
-                    console.log(textStatus);
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
                     layer.closeAll('loading');
                 });
 
