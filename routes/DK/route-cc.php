@@ -539,6 +539,7 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
      * download 下载
      */
     Route::get('/download/file-download', $controller.'@operate_download_file_download');
+    Route::get('/download/file-create-txt', $controller.'@operate_download_file_create_txt');
 
 
 });

@@ -1574,10 +1574,15 @@ class DKCCController extends Controller
 
 
 
-    // 【API】OKCC
+    // 【down】
     public function operate_download_file_download()
     {
         return $this->repo->operate_download_file_download(request()->all());
+    }
+    // 【down】
+    public function operate_download_file_create_txt()
+    {
+        return $this->repo->operate_download_file_create_txt(request()->all());
     }
 
 

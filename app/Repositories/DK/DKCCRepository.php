@@ -20532,11 +20532,8 @@ EOF;
     // 【电话池】返回-导入-视图
     public function operate_download_file_download($post_data)
     {
-
         $path = $post_data['path'];
         return response()->download($path);
-
-
     }
 
 
@@ -20545,6 +20542,32 @@ EOF;
 
 
 
+    // 【电话池】返回-导入-视图
+    public function operate_download_file_create_txt($post_data)
+    {
+
+        $count = $post_data['count'];
+
+        $upload_path = <<<EOF
+resource/root/unique/
+EOF;
+
+        $storage_path = storage_path($upload_path);
+        // 打开文件准备写入
+        $file = fopen($storage_path.'test.txt', 'w');
+
+        for($i=1; $i<=$count; $i++)
+        {
+            fwrite($file, $i. PHP_EOL);
+        }
+
+        // 关闭文件
+        fclose($file);
+
+        return response()->download($storage_path.'test.txt');
+
+
+    }
 
 
 
