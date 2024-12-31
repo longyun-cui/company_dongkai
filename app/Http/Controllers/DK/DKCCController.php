@@ -1574,6 +1574,14 @@ class DKCCController extends Controller
 
 
 
+    // 【API】OKCC
+    public function operate_download_file_download()
+    {
+        return $this->repo->operate_download_file_download(request()->all());
+    }
+
+
+
 
     // 【API】OKCC
     public function operate_api_OKCC_receiving_result()
@@ -1590,6 +1598,15 @@ class DKCCController extends Controller
         }
         else  return $this->repo->operate_api_OKCC_receiving_result(request()->all());
     }
+
+
+
+
+
+
+
+
+
 
 
 }

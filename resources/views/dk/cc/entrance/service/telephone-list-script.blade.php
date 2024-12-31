@@ -100,20 +100,14 @@
                         $.each(JSON.parse($response.data), function(index, value) {
                             console.log(value);
                             console.log(value.url);
+                            console.log(value.path);
                             console.log(value.name);
 
-                            // download(value.url,value.name);
+                            var $obj = new Object();
+                            $obj.path = value.path;
 
-
-                            var element = document.createElement('a');
-                            element.setAttribute('href', value.url);
-                            element.setAttribute('target', '_blank');
-                            element.setAttribute('download', value.name);
-                            element.style.display = 'none';
-                            document.body.appendChild(element);
-                            console.log(element);
-                            element.click();
-                            document.body.removeChild(element);
+                            var $url = url_build('/download/file-download',$obj);
+                            window.open($url);
 
                         });
                     }

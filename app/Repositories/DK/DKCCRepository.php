@@ -5085,6 +5085,7 @@ class DKCCRepository {
         $location_district = $post_data["location_district"];
         $tag = $post_data["tag"];
 
+
         // 单文件
         if(!empty($post_data["txt-file"]))
         {
@@ -5102,7 +5103,31 @@ class DKCCRepository {
 
                 $file_data = file($attachment_file);
 
-                $collection = collect($file_data);
+                $collection = collect($file_data)->map(function ($line) {
+                    return trim($line);
+                });
+
+
+                $exist_where['provinceCode'] = $location_province;
+                $exist_where['cityCode'] = $location_city;
+                $exist_where['areaCode'] = $location_district;
+                $exist_where['tag'] = $tag;
+                $exist_data = DK_CC_Telephone::select('telephone_number')->where($exist_where)->get();
+                if($exist_data)
+                {
+//                    dd($exist_data->toArray());
+                    $exist_plucked = $exist_data->pluck('telephone_number')->all();
+//                    dd($exist_plucked);
+                    $collection = $collection->diff($exist_plucked);
+                }
+
+
+                if ($collection->isEmpty())
+                {
+                    return response_error([],"数据全部重复！");
+                }
+
+
                 $chunks = $collection->chunk(1000);
                 $chunks = $chunks->toArray();
 //                dd($chunks);
@@ -5145,7 +5170,7 @@ class DKCCRepository {
                     }
 
 //                    DB::commit();
-                    return response_success(['count'=>count($file_data)]);
+                    return response_success(['count'=>count($collection)]);
                 }
                 catch (Exception $e)
                 {
@@ -5491,7 +5516,7 @@ class DKCCRepository {
         }
 
     }
-    // 【工单】发布
+    // 【工单】下载
     public function operate_service_telephone_down($post_data)
     {
         $messages = [
@@ -5630,6 +5655,7 @@ EOF;
                     $count++;
 
                     $i['name'] = $file_name;
+                    $i['path'] = $file_path;
                     $i['url'] = $file_url;
                     $file_list[] = $i;
 
@@ -5665,6 +5691,7 @@ EOF;
                 fclose($file);
 
                 $i['name'] = $file_name;
+                $i['path'] = $file_path;
                 $i['url'] = $file_url;
                 $file_list[] = $i;
 
@@ -5687,6 +5714,7 @@ EOF;
         }
 
     }
+
 
 
     // 【电话池】删除
@@ -20496,6 +20524,27 @@ EOF;
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
     }
+
+
+
+
+
+    // 【电话池】返回-导入-视图
+    public function operate_download_file_download($post_data)
+    {
+
+        $path = $post_data['path'];
+        return response()->download($path);
+
+
+    }
+
+
+
+
+
+
+
 
 
 
