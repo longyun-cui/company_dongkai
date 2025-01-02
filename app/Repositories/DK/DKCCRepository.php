@@ -3473,12 +3473,22 @@ class DKCCRepository {
             }
         }
 
+
         // 员工类型
         if(!empty($post_data['user_type']))
         {
-            if(!in_array($post_data['user_type'],[-1,0]))
+            if(!in_array($post_data['user_type'],['-1','0',-1,0]))
             {
                 $query->where('user_type', $post_data['user_type']);
+            }
+        }
+
+        // 员工状态
+        if(!empty($post_data['user_status']))
+        {
+            if(!in_array($post_data['user_status'],['-1','0',-1,0]))
+            {
+                $query->where('user_status', $post_data['user_status']);
             }
         }
 
