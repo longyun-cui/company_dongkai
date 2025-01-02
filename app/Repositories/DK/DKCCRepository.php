@@ -6693,6 +6693,74 @@ EOF;
     }
 
 
+    // 【任务】文件下载
+    public function operate_service_task_file_download($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'service-task-file-download') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_CC_Task::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【任务】不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,19,61])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[88]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $project_id = $item->project_id;
+        $client_phone = $item->client_phone;
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+//            $record = new DK_Record;
+//
+//            $record_data["ip"] = Get_IP();
+//            $record_data["record_object"] = 21;
+//            $record_data["record_category"] = 11;
+//            $record_data["record_type"] = 1;
+//            $record_data["creator_id"] = $me->id;
+//            $record_data["order_id"] = $id;
+//            $record_data["operate_object"] = 71;
+//            $record_data["operate_category"] = 11;
+//            $record_data["operate_type"] = 1;
+//
+//            $bool_1 = $record->fill($record_data)->save();
+//            if(!$bool_1) throw new Exception("insert--record--fail");
+
+            DB::commit();
+            return response_success($item->content);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
     // 【任务】批量-操作（全部操作）
     public function operate_service_task_admin_operate_bulk($post_data)
     {

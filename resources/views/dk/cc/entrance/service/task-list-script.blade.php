@@ -2,34 +2,48 @@
     $(function() {
 
         // 【搜索】
-        $("#datatable-for-department-list").on('click', ".filter-submit", function() {
+        $("#search-row-for-task-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#datatable-for-department-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-department-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#search-row-for-task-list").on('click', ".filter-cancel", function() {
+            $("#search-row-for-task-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-department-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-department-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#search-row-for-task-list").find('select.form-filter option').attr("selected",false);
+            $("#search-row-for-task-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
+        // 【清空重选】
+        $("#search-row-for-telephone-list").on('click', ".filter-empty", function() {
+            $("#search-row-for-task-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+            $("#select2-box").val(-1).trigger("change");
+            $("#select2-box").select2("val", "");
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#search-row-for-task-list").find('select.form-filter option').attr("selected",false);
+            $("#search-row-for-task-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+        });
         // 【查询】回车
-        $("#datatable-for-department-list").on('keyup', ".item-search-keyup", function(event) {
+        $("#search-row-for-task-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-department-list").find(".filter-submit").click();
+                $("#search-row-for-task-list").find(".filter-submit").click();
             }
         });
 
 
-        // 【编辑】
-        $(".main-content").on('click', ".item-admin-login-okcc", function() {
-            var $that = $(this);
 
+
+        // 【下载】
+        $(".main-content").on('click', ".item-download-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
 
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -47,10 +61,10 @@
             });
 
             $.post(
-                "{{ url('/company/team-login-okcc') }}",
+                "{{ url('/service/task-file-download') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "company-team-admin-login-okcc",
+                    operate: "service-task-file-download",
                     item_id: $that.attr('data-id')
                 },
                 'json'
@@ -65,11 +79,20 @@
                     else
                     {
                         layer.msg("请求成功！");
-                        var $token = $response.data.token;
-                        var $url = 'https://feiniji.cn/service/index.php?m=common&c=loginTransition&f=login&token='+$token;
+                        // console.log(JSON.parse($response.data));
+                        $.each(JSON.parse($response.data), function(index, value) {
+                            console.log(value);
+                            console.log(value.url);
+                            console.log(value.path);
+                            console.log(value.name);
 
-                        console.log($url);
-                        window.open($url, '_blank');
+                            var $obj = new Object();
+                            $obj.path = value.path;
+
+                            var $url = url_build('/download/file-download',$obj);
+                            window.open($url);
+
+                        });
                     }
                 })
                 .fail(function(jqXHR, textStatus, errorThrown) {
@@ -82,14 +105,12 @@
                 })
                 .always(function(jqXHR, textStatus) {
                     console.log('always');
-                    console.log(jqXHR);
-                    console.log(textStatus);
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
                     layer.closeAll('loading');
                 });
 
         });
-
-
 
 
 

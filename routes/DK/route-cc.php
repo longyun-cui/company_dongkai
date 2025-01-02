@@ -180,6 +180,42 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
 
 
 
+    /*
+     * 任务管理
+     */
+    // 列表
+    Route::match(['get','post'], '/service/task-list', $controller.'@view_service_task_list');
+    // 导入 & 创建 & 修改
+    Route::match(['get','post'], '/service/task-import', $controller.'@operate_service_task_import');
+    Route::match(['get','post'], '/service/task-create', $controller.'@operate_service_task_create');
+    Route::match(['get','post'], '/service/task-edit', $controller.'@operate_service_task_edit');
+    // 【任务】删除 & 恢复 & 永久删除
+    Route::post('/service/task-admin-delete', $controller.'@operate_service_task_admin_delete');
+    Route::post('/service/task-admin-restore', $controller.'@operate_service_task_admin_restore');
+    Route::post('/service/task-admin-delete-permanently', $controller.'@operate_service_task_admin_delete_permanently');
+    // 【任务】启用 & 禁用
+    Route::post('/service/task-admin-enable', $controller.'@operate_service_task_admin_enable');
+    Route::post('/service/task-admin-disable', $controller.'@operate_service_task_admin_disable');
+    // 【任务】批量操作
+    Route::post('/service/task-admin-operate-bulk', $controller.'@operate_service_task_admin_operate_bulk');
+    Route::post('/service/task-admin-delete-bulk', $controller.'@operate_service_task_admin_delete_bulk');
+    Route::post('/service/task-admin-restore-bulk', $controller.'@operate_service_task_admin_restore_bulk');
+    Route::post('/service/task-admin-delete-permanently-bulk', $controller.'@operate_service_task_admin_delete_permanently_bulk');
+    // 【任务】下载
+    Route::post('/service/task-file-download', $controller.'@operate_service_task_file_download');
+    // 【任务】操作
+    Route::post('/service/task-enable', $controller.'@operate_service_task_enable');
+    Route::post('/service/task-disable', $controller.'@operate_service_task_disable');
+    Route::post('/service/task-delete', $controller.'@operate_service_task_delete');
+    Route::post('/service/task-restore', $controller.'@operate_service_task_restore');
+    Route::post('/service/task-delete-permanently', $controller.'@operate_service_task_delete_permanently');
+    Route::post('/service/task-publish', $controller.'@operate_service_task_publish');
+    Route::post('/service/task-complete', $controller.'@operate_service_task_complete');
+    Route::post('/service/task-remark-edit', $controller.'@operate_service_task_remark_edit');
+
+
+
+
 
 
 
@@ -404,40 +440,6 @@ Route::group(['middleware' => ['dk.cc.login','dk.cc.password_change']], function
     // 【内容管理】批量操作 - 启用 & 禁用
     Route::post('/item/item-enable-bulk', $controller.'@operate_item_item_enable_bulk');
     Route::post('/item/item-disable-bulk', $controller.'@operate_item_item_disable_bulk');
-
-
-
-
-    /*
-     * 任务管理
-     */
-    // 列表
-    Route::match(['get','post'], '/service/task-list', $controller.'@view_service_task_list');
-    // 导入 & 创建 & 修改
-    Route::match(['get','post'], '/service/task-import', $controller.'@operate_service_task_import');
-    Route::match(['get','post'], '/service/task-create', $controller.'@operate_service_task_create');
-    Route::match(['get','post'], '/service/task-edit', $controller.'@operate_service_task_edit');
-    // 【任务管理】删除 & 恢复 & 永久删除
-    Route::post('/service/task-admin-delete', $controller.'@operate_service_task_admin_delete');
-    Route::post('/service/task-admin-restore', $controller.'@operate_service_task_admin_restore');
-    Route::post('/service/task-admin-delete-permanently', $controller.'@operate_service_task_admin_delete_permanently');
-    // 【任务管理】启用 & 禁用
-    Route::post('/service/task-admin-enable', $controller.'@operate_service_task_admin_enable');
-    Route::post('/service/task-admin-disable', $controller.'@operate_service_task_admin_disable');
-    // 【任务管理】批量操作
-    Route::post('/service/task-admin-operate-bulk', $controller.'@operate_service_task_admin_operate_bulk');
-    Route::post('/service/task-admin-delete-bulk', $controller.'@operate_service_task_admin_delete_bulk');
-    Route::post('/service/task-admin-restore-bulk', $controller.'@operate_service_task_admin_restore_bulk');
-    Route::post('/service/task-admin-delete-permanently-bulk', $controller.'@operate_service_task_admin_delete_permanently_bulk');
-
-    Route::post('/service/task-enable', $controller.'@operate_service_task_enable');
-    Route::post('/service/task-disable', $controller.'@operate_service_task_disable');
-    Route::post('/service/task-delete', $controller.'@operate_service_task_delete');
-    Route::post('/service/task-restore', $controller.'@operate_service_task_restore');
-    Route::post('/service/task-delete-permanently', $controller.'@operate_service_task_delete_permanently');
-    Route::post('/service/task-publish', $controller.'@operate_service_task_publish');
-    Route::post('/service/task-complete', $controller.'@operate_service_task_complete');
-    Route::post('/service/task-remark-edit', $controller.'@operate_service_task_remark_edit');
 
 
 

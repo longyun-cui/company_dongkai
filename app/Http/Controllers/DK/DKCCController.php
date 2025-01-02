@@ -814,28 +814,33 @@ class DKCCController extends Controller
     }
 
 
-    // 【任务管理】管理员-批量-操作
+    // 【任务】
+    public function operate_service_task_file_download()
+    {
+        return $this->repo->operate_service_task_file_download(request()->all());
+    }
+
+
+    // 【任务】管理员-批量-操作
     public function operate_service_task_admin_operate_bulk()
     {
         return $this->repo->operate_service_task_admin_operate_bulk(request()->all());
     }
-    // 【任务管理】管理员-批量-删除
+    // 【任务】管理员-批量-删除
     public function operate_service_task_admin_delete_bulk()
     {
         return $this->repo->operate_service_task_admin_delete_bulk(request()->all());
     }
-    // 【任务管理】管理员-批量-恢复
+    // 【任务】管理员-批量-恢复
     public function operate_service_task_admin_restore_bulk()
     {
         return $this->repo->operate_service_task_admin_restore_bulk(request()->all());
     }
-    // 【任务管理】管理员-批量-彻底删除
+    // 【任务】管理员-批量-彻底删除
     public function operate_service_task_admin_delete_permanently_bulk()
     {
         return $this->repo->operate_service_task_admin_delete_permanently_bulk(request()->all());
     }
-
-
 
 
 

@@ -21,7 +21,7 @@
             <div class="box-header with-border" style="margin:4px 0;">
 
 
-                <div class="row col-md-12 datatable-search-row">
+                <div class="row col-md-12 datatable-search-row" id="search-row-for-task-list">
                     <div class="input-group">
 
                         <input type="text" class="form-control form-filter item-search-keyup" name="task-title" placeholder="名称" />
@@ -264,52 +264,6 @@
                         }
                     },
                     {
-                        "title": "操作",
-                        "data": 'id',
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            var $html_edit = '';
-                            var $html_detail = '';
-                            var $html_record = '';
-                            var $html_able = '';
-                            var $html_delete = '';
-
-                            if(row.item_status == 1)
-                            {
-                                $html_able = '<a class="btn btn-xs btn-danger- item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success- item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black- item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
-
-                            var html =
-                                '<a class="btn btn-xs btn-primary- item-download-submit" data-id="'+data+'">下载</a>'+
-                                // '<a class="btn btn-xs btn-primary- item-edit-link" data-id="'+data+'">编辑</a>'+
-                                // $html_able+
-                                // $html_delete+
-                                // $html_record+
-//                                    '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
-//                                    '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
-                                '';
-                            return html;
-
-                        }
-                    },
-                    {
                         "title": "名称",
                         "data": "name",
                         "className": "",
@@ -430,6 +384,52 @@
                             var $currentYear = new Date().getFullYear();
                             if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                             else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                        }
+                    },
+                    {
+                        "title": "操作",
+                        "data": 'id',
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            var $html_edit = '';
+                            var $html_detail = '';
+                            var $html_record = '';
+                            var $html_able = '';
+                            var $html_delete = '';
+
+                            if(row.item_status == 1)
+                            {
+                                $html_able = '<a class="btn btn-xs btn-danger- item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                            }
+                            else
+                            {
+                                $html_able = '<a class="btn btn-xs btn-success- item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                            }
+
+                            if(row.deleted_at == null)
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-black- item-admin-delete-submit" data-id="'+data+'">删除</a>';
+                            }
+                            else
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
+                            }
+
+                            $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+
+                            var html =
+                                '<a class="btn btn-xs btn-primary- item-download-submit" data-id="'+data+'">再次下载</a>'+
+                                // '<a class="btn btn-xs btn-primary- item-edit-link" data-id="'+data+'">编辑</a>'+
+                                // $html_able+
+                                // $html_delete+
+                                // $html_record+
+                                // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
+                                // '<a class="btn btn-xs bg-primary item-detail-show" data-id="'+data+'">查看详情</a>'+
+                                '';
+                            return html;
+
                         }
                     },
                 ],

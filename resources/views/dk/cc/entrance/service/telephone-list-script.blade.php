@@ -2,36 +2,36 @@
     $(function() {
 
         // 【搜索】
-        $(".search-row-for-telephone-list").on('click', ".filter-submit", function() {
+        $("#search-row-for-telephone-list").on('click', ".filter-submit", function() {
             layer.msg(1);
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $(".search-row-for-telephone-list").on('click', ".filter-cancel", function() {
-            $(".search-row-for-telephone-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#search-row-for-telephone-list").on('click', ".filter-cancel", function() {
+            $("#search-row-for-telephone-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $(".search-row-for-telephone-list").find('select.form-filter option').attr("selected",false);
-            $(".search-row-for-telephone-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#search-row-for-telephone-list").find('select.form-filter option').attr("selected",false);
+            $("#search-row-for-telephone-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $(".search-row-for-telephone-list").on('click', ".filter-empty", function() {
-            $(".search-row-for-telephone-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#search-row-for-telephone-list").on('click', ".filter-empty", function() {
+            $("#search-row-for-telephone-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
-            $(".select2-box").val(-1).trigger("change");
-            $(".select2-box").select2("val", "");
+            $("#select2-box").val(-1).trigger("change");
+            $("#select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $(".search-row-for-telephone-list").find('select.form-filter option').attr("selected",false);
-            $(".search-row-for-telephone-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#search-row-for-telephone-list").find('select.form-filter option').attr("selected",false);
+            $("#search-row-for-telephone-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $(".search-row-for-telephone-list").on('keyup', ".item-search-keyup", function(event) {
+        $("#search-row-for-telephone-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
                 $(".search-row-for-telephone-list").find(".filter-submit").click();
