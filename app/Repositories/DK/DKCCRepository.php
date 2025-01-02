@@ -20848,7 +20848,8 @@ EOF;
         $order = DK_Order::select('*')->where($order_where)->orderby('id','desc')->first();
         if($order)
         {
-            if($order->is_published == 0)
+//            if($order->is_published == 0)
+            if($order->inspected_status == 0)
             {
                 // 启动数据库事务
                 DB::beginTransaction();
@@ -20886,11 +20887,22 @@ EOF;
         }
         else
         {
+
+            $is_repeat = DK_Order::where(['project_id'=>$insert_data['project_id'],'client_phone'=>$phone_number])
+                ->where('is_published','>',0)->count("*");
+            if($is_repeat == 0)
+            {
+                $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$insert_data['project_id'],'client_phone'=>$phone_number])->count("*");
+            }
+
             $staff = DK_User::with(['department_district_er','department_group_er'])->where('api_staffNo',$api_staffNo)->first();
 
             $insert_data["created_type"] = 99;
             $insert_data["item_category"] = 1;
             $insert_data["active"] = 1;
+            $insert_data["is_published"] = 1;
+            $insert_data["published_at"] = time();
+            $insert_data["is_repeat"] = $is_repeat;
             $insert_data["creator_id"] = $staff->id;
             $insert_data["api_staffNo"] = $api_staffNo;
             $insert_data["client_name"] = $clientMark_data['clientName'];
