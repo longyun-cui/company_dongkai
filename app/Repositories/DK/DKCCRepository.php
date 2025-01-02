@@ -20792,6 +20792,15 @@ EOF;
         $phone_number = $clientMark_data['number1'];
 
 
+        $staff = DK_User::with(['department_district_er','department_group_er'])->where('api_staffNo',$api_staffNo)->first();
+        if(!$staff)
+        {
+            $return['result']['error'] = 1;
+            $return['result']['msg'] = '该坐席未绑定员工！';
+            return json_encode($return);
+        }
+
+
         foreach($clientMark_field as $v)
         {
             $field_name = $v['name'];
