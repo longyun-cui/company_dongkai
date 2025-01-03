@@ -101,7 +101,13 @@
                         <div class="form-group">
                             <label class="control-label col-md-2"><sup class="text-red">*</sup> API_企业名称</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control" name="api_name" placeholder="API_企业名称" value="{{ $data->api_name or '' }}">
+                                <input type="text" class="form-control" name="api_client_name" placeholder="API_客户名称" value="{{ $data->api_client_name or '' }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_用户名</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="api_user_name" placeholder="API_企业名称" value="{{ $data->api_user_name or '' }}">
                             </div>
                         </div>
                         <div class="form-group">

@@ -684,8 +684,18 @@
                         }
                     },
                     {
-                        "title": "API_企业名称",
-                        "data": "api_name",
+                        "title": "API_客户名称",
+                        "data": "api_client_name",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "API_用户名",
+                        "data": "api_user_name",
                         "className": "",
                         "width": "80px",
                         "orderable": false,

@@ -1,37 +1,45 @@
 <?php
-namespace App\Models\DK;
+namespace App\Models\DK_CC;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Department extends Model
+class DK_CC_Telephone_Blacklist extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_admin_department";
+    protected $table = "dk_cc_telephone_pool_for_blacklist";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'sort', 'item_active', 'item_status', 'item_category', 'item_type',
-        'department_active', 'department_status', 'department_category', 'department_type',
-        'owner_active',
-        'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
-        'org_id', 'admin_id',
-        'item_id', 'menu_id',
-        'leader_id', 'superior_department_id',
+        'active', 'status',
+        'category', 'type', 'form', 'sort',
+        'item_active', 'item_status', 'item_category', 'item_type',
+        'team_active', 'team_status', 'team_category', 'team_type',
 
-        'api_id',
-        'api_name',
-        'api_client_name',
-        'api_user_name',
-        'api_password',
-        'pre_unit_price',
+        'owner_id',
+        'creator_id',
 
+        'username', 'nickname', 'true_name', 'short_name',
+        'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
+        'tag_2',
+        'tag_3',
+        'portrait_img_src',
+        'cover_pic_src',
+        'attachment_name',
+        'attachment_src',
+        'unique_path',
+        'file_path',
+        'link_url',
 
-        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
-        'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
-        'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
-        'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
-        'time_point', 'time_type', 'start_time', 'end_time', 'address',
-        'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at'
+        'provinceCode',
+        'cityCode',
+        'areaCode',
+
+        'telephone_number',
+
+        'task_id',
+        'last_extraction_time',
+
+        'is_published', 'published_at',
+        'is_completed', 'completed_at'
     ];
     protected $dateFormat = 'U';
 

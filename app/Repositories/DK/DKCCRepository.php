@@ -3239,7 +3239,8 @@ class DKCCRepository {
         $API_Password = env('API_OKCC_C1_PASSWORD');
 //        $API_ID = $mine->api_id;
 //        $API_Password = $mine->api_password;
-        $API_Name = $mine->api_name;
+        $API_customerName = $mine->api_client_name;
+        $API_userName = $mine->api_user_name;
         $timestamp = time();
         $seq = $timestamp;
         $digest = md5($API_ID.'@'.$timestamp.'@'.$seq.'@'.$API_Password);
@@ -3251,8 +3252,8 @@ class DKCCRepository {
 
         $request_data['request']['seq'] = '';
         $request_data['request']['userData'] = '';
-        $request_data['request']['customerName'] = $API_Name;
-        $request_data['request']['userName'] = 'admin';
+        $request_data['request']['customerName'] = $API_customerName;
+        $request_data['request']['userName'] = $API_userName;
 //        $request_data['request']['userName'] = '0556126';
 //        $request_data['request']['agent'] = '0556126';
 
