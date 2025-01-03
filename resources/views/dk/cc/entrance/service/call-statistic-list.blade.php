@@ -174,6 +174,16 @@
                         }
                     },
                     {
+                        "title": "日期",
+                        "data": "call_date",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "线路ID",
                         "data": "trunkIndex",
                         "className": "",
