@@ -20861,6 +20861,17 @@ EOF;
     public function operate_api_OKCC_receiving_result_by_clientMark($post_data)
     {
 
+
+        $insert_data['team_api_id'] = $post_data['user'];
+        $insert_data['api_type'] = $post_data['notify']['type'];
+        $insert_data['content'] = json_encode($post_data);
+
+        $mine = new DK_CC_API_Received_From_OKCC;
+
+        $bool_c = $mine->fill($insert_data)->save();
+
+
+
         $notify = $post_data['notify'];
         $clientMark_data = $post_data['notify']['data'];
         $clientMark_field = $post_data['notify']['field'];
