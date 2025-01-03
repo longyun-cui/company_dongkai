@@ -26,7 +26,7 @@
         });
 
 
-        // 【编辑】
+        // 【登录】
         $(".main-content").on('click', ".item-admin-login-okcc", function() {
             var $that = $(this);
 

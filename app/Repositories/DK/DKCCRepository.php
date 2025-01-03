@@ -99,7 +99,7 @@ class DKCCRepository {
             $record["page_num"] = 0;
             $record["open"] = "root";
             $record["from"] = request('from',NULL);
-            $this->record_for_user_visit($record);
+//            $this->record_for_user_visit($record);
         }
 
 //        $condition = request()->all();
@@ -125,16 +125,15 @@ class DKCCRepository {
         $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
         $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
 
+        $view_data['order_count'] = 0;
 
 
-
-        $return['order_count'] = 0;
-
-
+        $team_list = DK_Department::select('*')->where('department_type','11')->whereNotNull('api_id')->get();
+        $view_data['team_list'] = $team_list;
 
 
         $view_blade = env('TEMPLATE_DK_CC').'entrance.index';
-        return view($view_blade)->with($return);
+        return view($view_blade)->with($view_data);
     }
     public function view_admin_index1()
     {
