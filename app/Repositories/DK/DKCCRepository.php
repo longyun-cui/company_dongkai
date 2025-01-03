@@ -21010,27 +21010,27 @@ EOF;
 
                 if(!empty($call->recordFile))
                 {
-                    $recordFile = $call->recordFile;
-                    $suffix = ".mp3";
-
-                    if (substr($recordFile, - strlen($suffix)) === $suffix)
-                    {
-                        // 以.mp3结尾
-                        $insert_data["recording_address"] = 'https://feiniji.cn/'.$call->recordFile;
-                    }
-                    else
-                    {
-                        // 以.mp3结尾
-                        $decoded = base64_decode($v->recordFile, true);
-                        if($decoded !== false && json_encode($decoded) !== 'null')
-                        {
-                            if(strpos($decoded, '/data/voicerecord') === 0)
-                            {
-                                $insert_data["recording_address"] = 'https://www.feiniji.cn'.$decoded;
-                            }
-                        }
-                    }
-
+                    $insert_data["recording_address"] = 'https://feiniji.cn'.$call->recordFile;
+//                    $recordFile = $call->recordFile;
+//                    $suffix = ".mp3";
+//
+//                    if (substr($recordFile, - strlen($suffix)) === $suffix)
+//                    {
+//                        // 以.mp3结尾
+//                        $insert_data["recording_address"] = 'https://feiniji.cn/'.$call->recordFile;
+//                    }
+//                    else
+//                    {
+//                        // 以.mp3结尾
+//                        $decoded = base64_decode($v->recordFile, true);
+//                        if($decoded !== false && json_encode($decoded) !== 'null')
+//                        {
+//                            if(strpos($decoded, '/data/voicerecord') === 0)
+//                            {
+//                                $insert_data["recording_address"] = 'https://www.feiniji.cn'.$decoded;
+//                            }
+//                        }
+//                    }
                 }
             }
 
