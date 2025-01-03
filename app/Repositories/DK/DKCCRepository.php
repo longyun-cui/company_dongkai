@@ -7032,6 +7032,7 @@ EOF;
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['callee'])) $query->where('callee', $post_data['callee']);
 
         $total = $query->count();
 

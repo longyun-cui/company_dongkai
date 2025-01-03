@@ -2,26 +2,26 @@
     $(function() {
 
         // 【搜索】
-        $("#datatable-for-team-list").on('click', ".filter-submit", function() {
+        $("#search-row-for-call-record").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#datatable-for-team-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-team-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#search-row-for-call-record").on('click', ".filter-cancel", function() {
+            $("#search-row-for-call-record").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-team-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-team-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#search-row-for-call-record").find('select.form-filter option').attr("selected",false);
+            $("#search-row-for-call-record").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $("#datatable-for-team-list").on('keyup', ".item-search-keyup", function(event) {
+        $("#search-row-for-call-record").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-team-list").find(".filter-submit").click();
+                $("#search-row-for-call-record").find(".filter-submit").click();
             }
         });
 

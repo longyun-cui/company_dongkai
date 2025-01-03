@@ -21,11 +21,13 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
 
-                <div class="row col-md-12 datatable-search-row">
+                <div class="row col-md-12 datatable-search-row" id="search-row-for-call-record">
 
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="team-title" placeholder="名称" />
+                        <input type="text" class="form-control form-filter item-search-keyup" name="call-record-title" placeholder="名称" />
+
+                        <input type="text" class="form-control form-filter filter-keyup" name="call-record-callee" placeholder="电话" value="{{ $callee or '' }}" style="width:120px;" />
 
                     </div>
 
@@ -49,7 +51,7 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-team-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-call-record-list">
 
 
                 <div class="tableArea">
@@ -115,13 +117,13 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="team-id"]').val();
-                        d.name = $('input[name="team-name"]').val();
-                        d.title = $('input[name="team-title"]').val();
-                        d.keyword = $('input[name="team-keyword"]').val();
-                        d.status = $('select[name="team-status"]').val();
-                        d.team_type = $('select[name="team-type"]').val();
-                        d.work_status = $('select[name="work_status"]').val();
+                        d.id = $('input[name="call-record-id"]').val();
+                        d.name = $('input[name="call-record-name"]').val();
+                        d.title = $('input[name="call-record-title"]').val();
+                        d.keyword = $('input[name="call-record-keyword"]').val();
+                        d.callee = $('input[name="call-record-callee"]').val();
+                        d.status = $('select[name="call-record-status"]').val();
+                        d.call_record_type = $('select[name="call-record-type"]').val();
                     },
                 },
                 "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
@@ -211,6 +213,43 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "title": "录音地址",
+                        "data": "recordFile",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            if(data)
+                            {
+                                return '<small class="btn-xs bg-yellow">双击查看</small>';
+                            }
+                            else return '';
+                        }
+                    },
+                    {
+                        "title": "录音播放",
+                        "data": "recordFile",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','录音播放');
+                                $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            if(data)
+                            {
+                                return '<audio controls style="width:100px;height:20px;"><source src="https://www.feiniji.cn/'+data+'" type="audio/mpeg"></audio>';
+                            }
+                            else return '';
                         }
                     },
                     {
