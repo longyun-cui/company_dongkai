@@ -291,6 +291,8 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/item/order-bulk-deliver', $controller.'@operate_item_order_bulk_deliver');
     Route::post('/item/order-deliver-get-delivered', $controller.'@operate_item_order_deliver_get_delivered');
     Route::post('/item/order-distribute', $controller.'@operate_item_order_distribute');
+    //
+    Route::post('/item/order-download-recording', $controller.'@operate_item_order_download_recording');
 
     // 列表
     Route::match(['get','post'], '/item/order-list', $controller.'@view_item_order_list');
@@ -518,6 +520,18 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::match(['get','post'], '/item/record-list-for-all', $controller.'@view_record_list_for_all');
 
     Route::match(['get','post'], '/record/visit-list', $controller.'@view_record_visit_list');
+
+
+
+
+
+
+
+    /*
+     * download 下载
+     */
+    Route::get('/download/file-download', $controller.'@operate_download_file_download');
+    Route::get('/download/call-recording-download', $controller.'@operate_download_call_recording_download');
 
 
 });

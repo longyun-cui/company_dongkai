@@ -1109,6 +1109,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->operate_item_order_distribute(request()->all());
     }
+    // 【订单管理】下载录音
+    public function operate_item_order_download_recording()
+    {
+        return $this->repo->operate_item_order_download_recording(request()->all());
+    }
 
 
 
@@ -1509,6 +1514,21 @@ class DKAdminController extends Controller
         $bool = $record->fill($post_data)->save();
         if($bool) return true;
         else return false;
+    }
+
+
+
+
+
+    // 【down】
+    public function operate_download_file_download()
+    {
+        return $this->repo->operate_download_file_download(request()->all());
+    }
+    //
+    public function operate_download_call_recording_download()
+    {
+        return $this->repo->operate_download_call_recording_download(request()->all());
     }
 
 

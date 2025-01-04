@@ -8361,6 +8361,18 @@ class DKAdminRepository {
             }
         }
 
+
+        // 创建方式 [人工|导入|api]
+        if(isset($post_data['created_type']))
+        {
+            if(!in_array($post_data['created_type'],[-1,'-1']))
+            {
+                $query->where('created_type', $post_data['created_type']);
+            }
+        }
+
+
+
         // 是否+V
         if(!empty($post_data['is_wx']))
         {
@@ -11411,6 +11423,50 @@ class DKAdminRepository {
 //            exit($e->getMessage());
             return response_fail([],$msg);
         }
+
+    }
+    // 【工单】分发
+    public function operate_item_order_download_recording($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'order-download-recording') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+        $client_phone = $item->client_phone;
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11,71,77,61,66])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+//        $call_list = DK_CC_Call_Record::select('id','recordFile')->where('staffNo',$item->api_staffNo)->where('callee',$item->client_phone)->get();
+        $file_list = [];
+        $i['name'] = $item->client_phone.'-'.$item->id.'.mp3';
+        $i['path'] = $item->recording_address;
+        $i['url'] = $item->recording_address;
+        $i['call_record_id'] = $item->call_record_id;
+        $file_list[] = $i;
+
+        return response_success(json_encode($file_list));
 
     }
 
@@ -19620,6 +19676,94 @@ class DKAdminRepository {
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);
     }
+
+
+
+
+
+
+
+    // 【电话池】返回-导入-视图
+    public function operate_download_file_download($post_data)
+    {
+        $type = $post_data['type'];
+//        dd($type);
+
+        if($type == 'url')
+        {
+
+//            $date = date('Y-m-d');
+//            $upload_path = <<<EOF
+//resource/dk/admin/telephone/$date/
+//EOF;
+//            $storage_path = storage_path($upload_path);
+//            if (!is_dir($storage_path))
+//            {
+//                mkdir($storage_path, 0766, true);
+//            }
+
+            $url = $post_data['url'];
+
+            if(!empty($post_data['name']))
+            {
+                $name = $post_data['name'];
+                $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+//                $file = $storage_path.$name;
+            }
+            else
+            {
+                $url_path = parse_url($url, PHP_URL_PATH);
+                $name = substr($url_path, strrpos($url_path, '/') + 1);
+                $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+//                $file = $storage_path.$name;
+            }
+
+            $file = file_get_contents($url);
+            return Response::make($file, 200)
+                ->header('Content-Type', 'application/'.$extension)
+                ->header('Content-Disposition', "attachment; filename=$name");
+
+//            file_put_contents($file, $data);
+        }
+        else if($type == 'path')
+        {
+            $file = $post_data['path'];
+        }
+        else
+        {
+            $file = $post_data['path'];
+        }
+
+        if(!empty($post_data['name']))
+        {
+            $name = $post_data['name'];
+            return response()->download($file,$name);
+        }
+        else return response()->download($file);
+
+
+    }
+
+    public function operate_download_call_recording_download($post_data)
+    {
+        $call_record_id = $post_data['call_record_id'];
+        $call = DK_CC_Call_Record::find($call_record_id);
+        $record_url = 'https://feiniji.cn'.$call->recordFile;
+
+
+        $name = $call->callee.'-'.$call->id.'.mp3';
+        $extension = 'mp3';
+//        $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+        $file = file_get_contents($record_url);
+        return Response::make($file, 200)
+            ->header('Content-Type', 'application/'.$extension)
+            ->header('Content-Disposition', "attachment; filename=$name");
+
+    }
+
 
 
 }

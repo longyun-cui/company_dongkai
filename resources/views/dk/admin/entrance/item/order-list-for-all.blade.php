@@ -61,6 +61,13 @@
 
                         <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" style="width:100px;text-align:center;" />
 
+                        <select class="form-control form-filter" name="order-created-type" style="width:80px;">
+                            <option value="-1">创建方式</option>
+                            <option value="1">人工</option>
+                            <option value="9">导入</option>
+                            <option value="99">API</option>
+                        </select>
+
                         @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77]))
                         <select class="form-control form-filter select2-box" name="order-department-district[]" id="order-department-district" multiple="multiple"  style="width:100px;">
                             <option value="-1">选择团队</option>
@@ -1196,6 +1203,7 @@
                         d.client_phone = $('input[name="order-client-phone"]').val();
                         d.is_wx = $('select[name="order-is-wx"]').val();
                         d.is_repeat = $('select[name="order-is-repeat"]').val();
+                        d.created_type = $('select[name="order-created-type"]').val();
                         d.inspected_status = $('select[name="order-inspected-status"]').val();
                         d.inspected_result = $('select[name="order-inspected-result[]"]').val();
                         d.delivered_status = $('select[name="order-delivered-status"]').val();
@@ -1219,10 +1227,10 @@
                 "fixedColumns": {
 
                     @if($me->department_district_id == 0)
-                        "leftColumns": "@if($is_mobile_equipment) 1 @else 4 @endif",
+                        "leftColumns": "@if($is_mobile_equipment) 1 @else 5 @endif",
                         "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                     @else
-                        "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
+                        "leftColumns": "@if($is_mobile_equipment) 1 @else 7 @endif",
                         "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                     @endif
                 },
@@ -1231,7 +1239,7 @@
                         {{--@if(!in_array($me->user_type,[0,1,11]))--}}
                     @if($me->department_district_id != 0)
                         {
-                            "targets": [0,4,8,9,10],
+                            "targets": [0,5,9,10,11],
                             "visible": false,
                         }
                     @endif
@@ -1262,6 +1270,34 @@
                         "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "title": "来源",
+                        "data": "created_type",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(!data) return '--';
+                            var $result_html = '';
+                            if(data == 1)
+                            {
+                                $result_html = '<small class="btn-xs bg-green">人工</small>';
+                            }
+                            else if(data == 99)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">API</small>';
+                            }
+                            else if(data == 9)
+                            {
+                                $result_html = '<small class="btn-xs bg-yellow">导入</small>';
+                            }
+                            else
+                            {
+                                $result_html = '<small class="btn-xs bg-black">有误</small>';
+                            }
+                            return $result_html;
                         }
                     },
                     {
@@ -2011,6 +2047,7 @@
                            else return '';
                         }
                     },
+                    @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                     {
                         "title": "录音地址",
                         "data": "recording_address",
@@ -2042,7 +2079,7 @@
                         "title": "录音播放",
                         "data": "recording_address",
                         "className": "",
-                        "width": "80px",
+                        "width": "400px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
@@ -2055,11 +2092,34 @@
                             // return data;
                             if(data)
                             {
-                                return '<audio controls style="width:100px;height:20px;"><source src="'+data+'" type="audio/mpeg"></audio>';
+                                return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+data+'" type="audio/mpeg"></audio>';
                             }
                             else return '';
                         }
                     },
+                    {
+                        "title": "录音下载",
+                        "data": "recording_address",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).attr('data-id',row.id).attr('data-name','录音下载');
+                                $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // return data;
+                            if(data)
+                            {
+                                return '<a class="btn btn-xs item-download-recording-submit" data-id="'+row.id+'">下载录音</a>';
+                            }
+                            else return '';
+                        }
+                    },
+                    @endif
                     {
                         "title": "部门",
                         "data": "department_district_id",
@@ -2110,7 +2170,7 @@
                         "title": "部门主管",
                         "data": "department_supervisor_id",
                         "className": "",
-                        "width": "80px",
+                        "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)

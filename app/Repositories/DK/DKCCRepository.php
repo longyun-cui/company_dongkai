@@ -5543,7 +5543,6 @@ class DKCCRepository {
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
-            'telephone_count' => 'required',
             'telephone_count' => 'required|numeric|min:1',
             'file_num' => 'required|numeric|min:1',
             'file_size' => 'required|numeric|min:0',
@@ -5634,9 +5633,9 @@ class DKCCRepository {
 
 
             $upload_path = <<<EOF
-resource/dk/telephone/$date/
+resource/dk/cc/telephone/$date/
 EOF;
-            $url_path = env('DOMAIN_CDN').'/dk/telephone/'.$date.'/';
+            $url_path = env('DOMAIN_CDN').'/dk/cc/telephone/'.$date.'/';
 
             $storage_path = storage_path($upload_path);
             if (!is_dir($storage_path))

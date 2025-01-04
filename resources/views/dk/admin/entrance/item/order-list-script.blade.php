@@ -137,6 +137,89 @@
 
 
 
+        // 【下载】
+        $(".main-content").on('click', ".item-download-recording-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            $.post(
+                "{{ url('/item/order-download-recording') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "order-download-recording",
+                    item_id: $that.attr('data-id')
+                },
+                'json'
+            )
+                .done(function($response) {
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        layer.msg("请求成功！");
+                        // console.log(JSON.parse($response.data));
+                        $.each(JSON.parse($response.data), function(index, value) {
+                            console.log(value);
+                            console.log(value.url);
+                            console.log(value.path);
+                            console.log(value.name);
+
+                            // var $obj = new Object();
+                            // $obj.type = 'url';
+                            // $obj.url = value.url;
+                            // $obj.name = value.name;
+                            //
+                            // var $url = url_build('/download/file-download',$obj);
+                            // window.open($url);
+
+                            var $obj = new Object();
+                            $obj.call_record_id = value.call_record_id;
+
+                            var $url = url_build('/download/call-recording-download',$obj);
+                            window.open($url);
+
+
+
+                        });
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.log('fail');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, textStatus) {
+                    console.log('always');
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
+                    layer.closeAll('loading');
+                });
+
+        });
+
+
         // 【编辑】
         $(".main-content").on('click', ".item-create-show", function() {
             var $that = $(this);
