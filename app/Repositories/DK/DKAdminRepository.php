@@ -271,14 +271,14 @@ class DKAdminRepository {
         // 工单统计
         $query_order_count_for_all = DK_Order::select('id');
         $query_order_count_for_export = DK_Order::where('created_type', 9);
-        $query_order_count_for_unpublished = DK_Order::where('created_type', 1)->where('is_published', 0);
-        $query_order_count_for_published = DK_Order::where('created_type', 1)->where('is_published', 1);
-        $query_order_count_for_waiting_for_inspect = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_status', 0);
-        $query_order_count_for_inspected = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_status', '<>', 0);
-        $query_order_count_for_accepted = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_result','通过');
-        $query_order_count_for_refused = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_result','拒绝');
-        $query_order_count_for_accepted_inside = DK_Order::where('created_type', 1)->where('is_published', 1)->where('inspected_result','内部通过');
-        $query_order_count_for_repeat = DK_Order::where('created_type', 1)->where('is_published', 1)->where('is_repeat','>',0);
+        $query_order_count_for_unpublished = DK_Order::whereIn('created_type', [1,99])->where('is_published', 0);
+        $query_order_count_for_published = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1);
+        $query_order_count_for_waiting_for_inspect = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_status', 0);
+        $query_order_count_for_inspected = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_status', '<>', 0);
+        $query_order_count_for_accepted = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_result','通过');
+        $query_order_count_for_refused = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_result','拒绝');
+        $query_order_count_for_accepted_inside = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_result','内部通过');
+        $query_order_count_for_repeat = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('is_repeat','>',0);
 
 
 
@@ -13519,7 +13519,7 @@ class DKAdminRepository {
 
         // 工单统计
         // 总量统计
-        $query_order_of_all = (clone $query)->where('created_type',1)
+        $query_order_of_all = (clone $query)->whereIn('created_type',[1,99])
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -13588,7 +13588,7 @@ class DKAdminRepository {
 
 
         $query_delivered_of_all = (clone $query)
-            ->where('created_type',1)
+            ->whereIn('created_type',[1,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as delivered_count_for_completed,
@@ -13634,7 +13634,7 @@ class DKAdminRepository {
 
         // 客服报单-当天统计
         $query_order_of_today = (clone $query)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_date)
-            ->where('created_type',1)
+            ->whereIn('created_type',[1,99])
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -13702,7 +13702,7 @@ class DKAdminRepository {
 
         // 交付人员-工作统计
         $query_delivered_of_today = (clone $query)->whereDate(DB::raw("DATE(FROM_UNIXTIME(delivered_at))"),$the_date)
-            ->where('created_type',1)
+            ->whereIn('created_type',[1,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_status = 1 AND DATE(FROM_UNIXTIME(published_at)) = '{$the_date}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
@@ -13797,7 +13797,7 @@ class DKAdminRepository {
 
         // 当月统计
         $query_order_of_month = (clone $query)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->where('created_type',1)
+            ->whereIn('created_type',[1,99])
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -13867,7 +13867,7 @@ class DKAdminRepository {
 
 
         $query_delivered_of_month = (clone $query)->whereBetween('delivered_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
-            ->where('created_type',1)
+            ->whereIn('created_type',[1,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_status = 1 AND published_at > '{$the_month_start_timestamp}' AND published_at < '{$the_month_ended_timestamp}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
