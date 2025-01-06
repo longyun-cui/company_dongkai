@@ -360,6 +360,16 @@
                         }
                     },
                     {
+                        "title": "最近提取",
+                        "data": "last_task_time",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "电话总数",
                         "data": "provinceCode",
                         "className": "",

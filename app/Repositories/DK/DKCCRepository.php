@@ -5008,20 +5008,33 @@ class DKCCRepository {
             if($v->provinceCode)
             {
                 $v->provinceName = config('location_city.province.'.$v->provinceCode);
+                $task_where['provinceCode'] = $v->provinceCode;
             }
             else $v->provinceName = '--';
             // 市
             if($v->cityCode)
             {
                 $v->cityName = config('location_city.city.'.$v->provinceCode.'.'.$v->cityCode);
+                $task_where['cityCode'] = $v->cityCode;
             }
             else $v->cityName = '--';
             // 区
             if($v->areaCode)
             {
                 $v->areaName = config('location_city.district.'.$v->cityCode.'.'.$v->areaCode);
+                $task_where['areaCode'] = $v->areaCode;
             }
             else $v->areaName = '--';
+
+            // 标签
+            if($v->tag)
+            {
+                $task_where['tag'] = $v->tag;
+            }
+
+            $call_task = DK_CC_Task::where($task_where)->orderby('id','desc')->first();
+            if($call_task) $v->last_task_time = $call_task->created_at->format('Y-m-d H:i:s');
+            else $v->last_task_time = '';
         }
 //        $list = $list->sortBy(['district_id'=>'asc'])->values();
 //        $list = $list->sortBy(function ($item, $key) {
