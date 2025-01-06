@@ -29,11 +29,11 @@
 
                         <input type="text" class="form-control form-filter filter-keyup" name="call-record-callee" placeholder="电话" value="{{ $callee or '' }}" style="width:120px;" />
 
-                        <select class="form-control form-filter" name="call-record-service" style="width:80px;">
-                            <option value="-1">呼叫方式</option>
+                        <select class="form-control form-filter" name="call-record-service" style="width:132px;">
+                            <option value="-1">选择呼叫方式</option>
                             <option value="1">手拨呼叫</option>
                             <option value="2">呼入呼叫</option>
-                            <option value="3">自动外呼</option>
+                            <option value="3">内部呼叫</option>
                             <option value="4">自动外呼</option>
                             <option value="5">点拨呼叫</option>
                             <option value="19">语音验证码业务</option>
