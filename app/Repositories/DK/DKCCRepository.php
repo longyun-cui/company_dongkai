@@ -7012,9 +7012,26 @@ EOF;
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
 
-        $return['menu_active_of_service_call_record_list'] = 'active menu-open';
+
+        // 显示数量
+        if(!empty($post_data['length']))
+        {
+            if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
+            else $view_data['length'] = 10;
+        }
+        else $view_data['length'] = 10;
+        // 第几页
+        if(!empty($post_data['page']))
+        {
+            if(is_numeric($post_data['page']) && $post_data['page'] > 0) $view_data['page'] = $post_data['page'];
+            else $view_data['page'] = 1;
+        }
+        else $view_data['page'] = 1;
+
+
+        $view_data['menu_active_of_call_record_list'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_CC').'entrance.service.call-record-list';
-        return view($view_blade)->with($return);
+        return view($view_blade)->with($view_data);
     }
     // 【任务】返回-列表-数据
     public function get_service_call_record_list_datatable($post_data)
@@ -7080,6 +7097,7 @@ EOF;
         return datatable_response($list, $draw, $total);
     }
 
+
     // 【任务】返回-列表-视图
     public function view_service_call_statistic_list($post_data)
     {
@@ -7087,7 +7105,7 @@ EOF;
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
 
-        $return['menu_active_of_service_call_statistic_list'] = 'active menu-open';
+        $return['menu_active_of_call_statistic_list'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_CC').'entrance.service.call-statistic-list';
         return view($view_blade)->with($return);
     }

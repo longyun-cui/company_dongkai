@@ -399,6 +399,16 @@
                     //    }
                     // },
                     {
+                        "title": "API坐席ID",
+                        "data": "api_staffNo",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
+                    {
                         "title": "备注",
                         "data": "remark",
                         "className": "text-center",

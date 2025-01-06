@@ -1175,8 +1175,8 @@
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
-                "iDisplayStart": {{ ($page - 1) * $length }},
-                "iDisplayLength": {{ $length or 20 }},
+                "iDisplayStart": "{{ ($page - 1) * $length }}",
+                "iDisplayLength": "{{ $length or 10 }}",
                 "ajax": {
                     'url': "{{ url('/item/order-list-for-all') }}",
                     "type": 'POST',

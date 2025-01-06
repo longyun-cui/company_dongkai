@@ -120,11 +120,14 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                // "aLengthMenu": [[10, 50, 200, 500, -1], ["10", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[ @if(!in_array($length,[10, 50, 100, 200])) {{ $length.',' }} @endif 10, 50, 100, 200], [ @if(!in_array($length,[10, 50, 100, 200])) {{ $length.',' }} @endif "10", "50", "100", "200"]],
                 // "aLengthMenu": [[-1], ["全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
+                "iDisplayStart": "{{ ($page - 1) * $length }}",
+                "iDisplayLength": "{{ $length or 10 }}",
                 "ajax": {
                     'url': "{{ url('/service/call-record-list') }}",
                     "type": 'POST',
@@ -215,6 +218,26 @@
                         "data": "callee",
                         "className": "",
                         "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "省份",
+                        "data": "area",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "城市",
+                        "data": "city",
+                        "className": "",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;
@@ -356,6 +379,42 @@
 //                    this.api().column(1).nodes().each(function(cell, i) {
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
+
+                    var $obj = new Object();
+                    // if($('input[name="order-id"]').val())  $obj.order_id = $('input[name="order-id"]').val();
+                    // if($('input[name="order-assign"]').val())  $obj.assign = $('input[name="order-assign"]').val();
+                    // if($('input[name="order-start"]').val())  $obj.assign_start = $('input[name="order-start"]').val();
+                    // if($('input[name="order-ended"]').val())  $obj.assign_ended = $('input[name="order-ended"]').val();
+                    // if($('select[name="order-staff"]').val() > 0)  $obj.staff_id = $('select[name="order-staff"]').val();
+                    // if($('select[name="order-client"]').val() > 0)  $obj.client_id = $('select[name="order-client"]').val();
+                    // if($('select[name="order-project"]').val() > 0)  $obj.project_id = $('select[name="order-project"]').val();
+                    // if($('input[name="order-client-name"]').val())  $obj.client_name = $('input[name="order-client-name"]').val();
+                    // if($('input[name="order-client-phone"]').val())  $obj.client_phone = $('input[name="order-client-phone"]').val();
+                    // if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
+                    // if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
+                    // if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
+                    // if($('select[name="order-inspected-status"]').val() != -1)  $obj.inspected_status = $('select[name="order-inspected-status"]').val();
+                    // if($('select[name="order-delivered-status"]').val() != -1)  $obj.delivered_status = $('select[name="order-delivered-status"]').val();
+                    // if($('select[name="order-city"]').val() != -1)  $obj.district_city = $('select[name="order-city"]').val();
+                    // if($('select[name="order-district"]').val() != -1)  $obj.district_district = $('select[name="order-district"]').val();
+
+                    var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
+                    if($page_length != 10) $obj.length = $page_length;
+                    var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
+                    var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
+                    if($pagination > 1) $obj.page = $pagination;
+
+
+                    if(JSON.stringify($obj) != "{}")
+                    {
+                        var $url = url_build('',$obj);
+                        history.replaceState({page: 1}, "", $url);
+                    }
+                    else
+                    {
+                        $url = "{{ url('/service/call-record-list') }}";
+                        if(window.location.search) history.replaceState({page: 1}, "", $url);
+                    }
 
                 },
                 "language": { url: '/common/dataTableI18n' },

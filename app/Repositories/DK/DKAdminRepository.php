@@ -7926,7 +7926,7 @@ class DKAdminRepository {
         $me = $this->me;
 
 
-        // 显示数量
+        // 记录
         if(!empty($post_data['record']))
         {
             if($post_data['record'] == 'record')
@@ -7939,7 +7939,7 @@ class DKAdminRepository {
         if(!empty($post_data['length']))
         {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
-            else $view_data['length'] = 20;
+            else $view_data['length'] = 10;
         }
         else $view_data['length'] = 10;
         // 第几页

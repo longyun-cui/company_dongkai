@@ -258,6 +258,12 @@
                         <input type="text" class="form-control" name="username" placeholder="用户名" value="{{ $data->username or '' }}">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">API用户No（外呼系统用户ID）</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="api_staffNo" placeholder="API用户No" value="{{ $data->api_staffNo or '' }}">
+                    </div>
+                </div>
                 {{--描述--}}
                 <div class="form-group _none">
                     <label class="control-label col-md-2">描述</label>
