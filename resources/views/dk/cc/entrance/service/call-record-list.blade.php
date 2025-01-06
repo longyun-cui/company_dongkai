@@ -40,7 +40,7 @@
                             <option value="21">语音通知</option>
                             <option value="22">API回拨</option>
                             <option value="23">本地呼叫</option>
-                            <option value="-9">【非】自动外呼</option>
+                            <option value="-9">[非]自动外呼</option>
                         </select>
 
                     </div>
