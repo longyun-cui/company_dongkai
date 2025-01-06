@@ -29,6 +29,17 @@
 
                         <input type="text" class="form-control form-filter filter-keyup" name="call-record-callee" placeholder="电话" value="{{ $callee or '' }}" style="width:120px;" />
 
+                        <select class="form-control form-filter" name="call-record-service" style="width:80px;">
+                            <option value="-1">呼叫方式</option>
+                            <option value="1">手拨呼叫</option>
+                            <option value="2">呼入呼叫</option>
+                            <option value="3">自动外呼</option>
+                            <option value="4">自动外呼</option>
+                            <option value="5">点拨呼叫</option>
+                            <option value="19">语音验证码业务</option>
+                            <option value="21">语音通知</option>
+                        </select>
+
                     </div>
 
                     <div class="btn-group">
@@ -124,6 +135,7 @@
                         d.callee = $('input[name="call-record-callee"]').val();
                         d.status = $('select[name="call-record-status"]').val();
                         d.call_record_type = $('select[name="call-record-type"]').val();
+                        d.call_record_service = $('select[name="call-record-service"]').val();
                     },
                 },
                 "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
@@ -250,6 +262,23 @@
                                 return '<audio controls style="width:100px;height:20px;"><source src="https://www.feiniji.cn/'+data+'" type="audio/mpeg"></audio>';
                             }
                             else return '';
+                        }
+                    },
+                    {
+                        "title": "呼叫方式",
+                        "data": "service",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(data == 1) return '<small class="btn-xs bg-orange">手拨呼叫</small>';
+                            else if(data == 2) return '<small class="btn-xs bg-danger">呼入呼叫</small>';
+                            else if(data == 3) return '<small class="btn-xs bg-blue">内部呼叫</small>';
+                            else if(data == 4) return '<small class="btn-xs bg-green">自动外呼</small>';
+                            else if(data == 5) return '<small class="btn-xs bg-purple">点拨呼叫</small>';
+                            else if(data == 19) return '<small class="btn-xs bg-purple">语音验证码业务</small>';
+                            else if(data == 21) return '<small class="btn-xs bg-purple">语音通知</small>';
+                            else return "有误";
                         }
                     },
                     {

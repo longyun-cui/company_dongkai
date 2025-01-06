@@ -2115,7 +2115,7 @@ class DKCCRepository {
         // 团队类型 [大区|组]
         if(!empty($post_data['department_type']))
         {
-            if(!in_array($post_data['department_type'],[-1,0]))
+            if(!in_array($post_data['department_type'],[-1,0,'-1','0']))
             {
                 $query->where('item_type', $post_data['department_type']);
             }
@@ -2124,7 +2124,7 @@ class DKCCRepository {
         // 状态 [|]
         if(!empty($post_data['item_status']))
         {
-            if(!in_array($post_data['item_status'],[-1,0]))
+            if(!in_array($post_data['item_status'],[-1,0,'-1','0']))
             {
                 $query->where('item_status', $post_data['item_status']);
             }
@@ -3467,7 +3467,7 @@ class DKCCRepository {
         // 团队-大区
         if(!empty($post_data['department_district']))
         {
-            if(!in_array($post_data['department_district'],[-1,0]))
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
                 $query->where('department_district_id', $post_data['department_district']);
             }
@@ -7033,6 +7033,15 @@ EOF;
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['callee'])) $query->where('callee', $post_data['callee']);
 
+        // 项目
+        if(isset($post_data['call_record_service']))
+        {
+            if(!in_array($post_data['call_record_service'],[-1,'-1']))
+            {
+                $query->where('service', $post_data['call_record_service']);
+            }
+        }
+
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
@@ -7215,7 +7224,7 @@ EOF;
         // 状态 [|]
         if(!empty($post_data['district_status']))
         {
-            if(!in_array($post_data['district_status'],[-1,0]))
+            if(!in_array($post_data['district_status'],[-1,0,'-1','0']))
             {
                 $query->where('district_status', $post_data['district_status']);
             }
@@ -7722,7 +7731,7 @@ EOF;
         // 状态 [|]
         if(!empty($post_data['item_status']))
         {
-            if(!in_array($post_data['item_status'],[-1,0]))
+            if(!in_array($post_data['item_status'],[-1,0,'-1','0']))
             {
                 $query->where('item_status', $post_data['item_status']);
             }
@@ -9406,7 +9415,7 @@ EOF;
         // 员工
         if(!empty($post_data['staff']))
         {
-            if(!in_array($post_data['staff'],[-1,0]))
+            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
             {
                 $query->where('creator_id', $post_data['staff']);
             }
@@ -9416,7 +9425,7 @@ EOF;
         // 团队-大区
 //        if(!empty($post_data['department_district']))
 //        {
-//            if(!in_array($post_data['department_district'],[-1,0]))
+//            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
 //            {
 //                $query->where('department_district_id', $post_data['department_district']);
 //            }
@@ -14280,7 +14289,7 @@ EOF;
             // 员工
             if(!empty($post_data['staff']))
             {
-                if(!in_array($post_data['staff'],[-1,0]))
+                if(!in_array($post_data['staff'],[-1,0,'-1','0']))
                 {
                     $staff_id = $post_data['staff'];
                 }
@@ -14288,7 +14297,7 @@ EOF;
             // 客户
             if(!empty($post_data['client']))
             {
-                if(!in_array($post_data['client'],[-1,0]))
+                if(!in_array($post_data['client'],[-1,0,'-1','0']))
                 {
                     $client_id = $post_data['client'];
                 }
@@ -14296,7 +14305,7 @@ EOF;
             // 项目
             if(!empty($post_data['car']))
             {
-                if(!in_array($post_data['car'],[-1,0]))
+                if(!in_array($post_data['car'],[-1,0,'-1','0']))
                 {
                     $car_id = $post_data['car'];
                 }
@@ -14304,7 +14313,7 @@ EOF;
             // 线路
             if(!empty($post_data['route']))
             {
-                if(!in_array($post_data['route'],[-1,0]))
+                if(!in_array($post_data['route'],[-1,0,'-1','0']))
                 {
                     $route_id = $post_data['route'];
                 }
@@ -14312,7 +14321,7 @@ EOF;
             // 定价
             if(!empty($post_data['pricing']))
             {
-                if(!in_array($post_data['pricing'],[-1,0]))
+                if(!in_array($post_data['pricing'],[-1,0,'-1','0']))
                 {
                     $pricing_id = $post_data['pricing'];
                 }
@@ -14457,7 +14466,7 @@ EOF;
         // 项目
         if(isset($post_data['project']))
         {
-            if(!in_array($post_data['project'],[-1,0]))
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
             {
                 $query->where('project_id', $post_data['project']);
                 $query_distributed->where('project_id', $post_data['project']);
@@ -14468,7 +14477,7 @@ EOF;
         // 团队-大区
 //        if(!empty($post_data['department_district']))
 //        {
-//            if(!in_array($post_data['department_district'],[-1,0]))
+//            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
 //            {
 //                $query->where('department_district_id', $post_data['department_district']);
 //            }
@@ -15202,7 +15211,7 @@ EOF;
         // 团队-大区
         if(!empty($post_data['department_district']))
         {
-            if(!in_array($post_data['department_district'],[-1,0]))
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
                 $query->where('department_district_id', $post_data['department_district']);
             }
@@ -15210,7 +15219,7 @@ EOF;
         // 团队-小组
         if(!empty($post_data['department_group']))
         {
-            if(!in_array($post_data['department_group'],[-1,0]))
+            if(!in_array($post_data['department_group'],[-1,0,'-1','0']))
             {
                 $query->where('department_group_id', $post_data['department_group']);
             }
@@ -16201,7 +16210,7 @@ EOF;
         // 团队-大区
         if(!empty($post_data['department_district']))
         {
-            if(!in_array($post_data['department_district'],[-1,0]))
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
                 $query->where('department_district_id', $post_data['department_district']);
             }
@@ -16209,7 +16218,7 @@ EOF;
         // 团队-小组
         if(!empty($post_data['department_group']))
         {
-            if(!in_array($post_data['department_group'],[-1,0]))
+            if(!in_array($post_data['department_group'],[-1,0,'-1','0']))
             {
                 $query->where('department_group_id', $post_data['department_group']);
             }
@@ -18024,7 +18033,7 @@ EOF;
         // 团队-大区
         if(!empty($post_data['department_district']))
         {
-            if(!in_array($post_data['department_district'],[-1,0]))
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
                 $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
@@ -18223,7 +18232,7 @@ EOF;
         // 团队-大区
         if(!empty($post_data['department_district']))
         {
-            if(!in_array($post_data['department_district'],[-1,0]))
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
                 $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
@@ -18444,7 +18453,7 @@ EOF;
         // 团队-大区
         if(!empty($post_data['department_district']))
         {
-            if(!in_array($post_data['department_district'],[-1,0]))
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
                 $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
@@ -18674,7 +18683,7 @@ EOF;
         // 团队-大区
         if(!empty($post_data['department_district']))
         {
-            if(!in_array($post_data['department_district'],[-1,0]))
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
                 $query->whereHas('pivot_project_team',  function ($query) use($post_data) {
                     $query->where('team_id', $post_data['department_district']);
@@ -19667,7 +19676,7 @@ EOF;
         // 客户
         if(!empty($post_data['client']))
         {
-            if(!in_array($post_data['client'],[-1,0]))
+            if(!in_array($post_data['client'],[-1,0,'-1','0']))
             {
                 $client_id = $post_data['client'];
             }
@@ -19676,7 +19685,7 @@ EOF;
         // 员工
         if(!empty($post_data['staff']))
         {
-            if(!in_array($post_data['staff'],[-1,0]))
+            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
             {
                 $staff_id = $post_data['staff'];
             }
@@ -19687,7 +19696,7 @@ EOF;
         $record_data_title = '';
         if(!empty($post_data['project']))
         {
-            if(!in_array($post_data['project'],[-1,0]))
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
             {
                 $project_id = $post_data['project'];
                 $project_er = DK_Project::find($project_id);
@@ -20417,7 +20426,7 @@ EOF;
         // 员工
         if(!empty($post_data['record_staff']))
         {
-            if(!in_array($post_data['record_staff'],[-1,0]))
+            if(!in_array($post_data['record_staff'],[-1,0,'-1','0']))
             {
                 $query->where(function ($query) use($post_data) {
                     $query->where('creator_id', $post_data['record_staff'])->orWhere('page_num', $post_data['record_staff']);
