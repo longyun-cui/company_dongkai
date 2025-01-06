@@ -7036,13 +7036,13 @@ EOF;
         // 呼叫方式
         if(isset($post_data['call_record_service']))
         {
-            if(!in_array($post_data['call_record_service'],[-1,0,'-1','0']))
+            if(!in_array($post_data['call_record_service'],[-1,0,-9,'-1','0','-9']))
             {
                 $query->where('service', $post_data['call_record_service']);
             }
             if(in_array($post_data['call_record_service'],[-9,'-9']))
             {
-                $query->where('service', '<>', 4);
+                $query->where('service', '!=', 4);
             }
         }
 
