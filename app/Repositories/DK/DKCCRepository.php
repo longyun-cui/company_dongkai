@@ -3,6 +3,7 @@ namespace App\Repositories\DK;
 
 use App\Models\DK_CC\DK_CC_Team;
 use App\Models\DK_CC\DK_CC_Telephone;
+use App\Models\DK_CC\DK_CC_Telephone_Blacklist;
 use App\Models\DK_CC\DK_CC_Task;
 use App\Models\DK_CC\DK_CC_Call_Record;
 use App\Models\DK_CC\DK_CC_Call_Statistic;
@@ -5041,8 +5042,8 @@ class DKCCRepository {
 
         $item_category = 'item';
         $item_type = 'team';
-        $item_type_text = '团队';
-        $title_text = '添加'.$item_type_text;
+        $item_type_text = '电话';
+        $title_text = '导入'.$item_type_text;
         $list_text = $item_type_text.'列表';
         $list_link = '/service/telephone-list';
 
@@ -5062,6 +5063,7 @@ class DKCCRepository {
     // 【电话池】保存-导入-数据
     public function operate_service_telephone_import_save($post_data)
     {
+        set_time_limit(600);
 
         $messages = [
             'operate.required' => 'operate.required',
@@ -5164,8 +5166,6 @@ class DKCCRepository {
 //                dd($insert_data);
 
 
-                set_time_limit(300);
-
                 // 启动数据库事务
 //                DB::beginTransaction();
                 try
@@ -5193,7 +5193,220 @@ class DKCCRepository {
             }
             else return response_error([],"upload--attachment--fail");
         }
-        else return response_error([],"清选择Excel文件！");
+        else return response_error([],"请上传txt文件！");
+
+
+        // 多文件
+//        dd($post_data["multiple-excel-file"]);
+        $count = 0;
+        $multiple_files = [];
+        if(!empty($post_data["multiple-excel-file"]))
+        {
+            // 添加图片
+            foreach ($post_data["multiple-excel-file"] as $n => $f)
+            {
+                if(!empty($f))
+                {
+                    $result = upload_file_storage($f,null,'dk/unique/attachment','');
+                    if($result["result"])
+                    {
+                        $attachment_file = storage_resource_path($result["local"]);
+                        $data = Excel::load($attachment_file, function($reader) {
+
+                            $reader->limitColumns(1);
+                            $reader->limitRows(5001);
+
+                        })->get()->toArray();
+
+                        $order_data = [];
+                        foreach($data as $key => $value)
+                        {
+                            if($value['client_phone'])
+                            {
+                                $temp_date['client_phone'] = intval($value['client_phone']);
+                                $order_data[] = $temp_date;
+                            }
+                        }
+
+                        // 启动数据库事务
+                        DB::beginTransaction();
+                        try
+                        {
+
+                            foreach($order_data as $key => $value)
+                            {
+                                $order = new DK_Order;
+
+                                $order->project_id = $project_id;
+                                $order->creator_id = $me->id;
+                                $order->created_type = 9;
+                                $order->is_published = 1;
+                                $order->inspected_status = 1;
+                                $order->inspected_result = '通过';
+                                $order->client_phone = $value['client_phone'];
+
+                                $bool = $order->save();
+                                if(!$bool) throw new Exception("insert--order--fail");
+                            }
+
+                            DB::commit();
+                            $count += count($order_data);
+                        }
+                        catch (Exception $e)
+                        {
+                            DB::rollback();
+                            $msg = '操作失败，请重试！';
+                            $msg = $e->getMessage();
+                            return response_fail([],$msg);
+                        }
+
+                    }
+                    else return response_error([],"upload--attachment--fail");
+                }
+
+            }
+
+            return response_success(['count'=>$count]);
+        }
+
+    }
+    // 【电话池】返回-导入-视图
+    public function view_service_telephone_blacklist_import()
+    {
+        $this->get_me();
+        $me = $this->me;
+//        if(!in_array($me->user_type,[0,1,9])) return view(env('TEMPLATE_ROOT_FRONT').'errors.404');
+
+        $item_category = 'item';
+        $item_type = 'team';
+        $item_type_text = '电话黑名单';
+        $title_text = '导入'.$item_type_text;
+        $list_text = $item_type_text.'列表';
+        $list_link = '/service/telephone-list';
+
+        $view_data['operate_category'] = 'operate';
+        $view_data['operate_type'] = 'import';
+        $view_data['operate_id'] = 0;
+        $view_data['operate_item_category'] = $item_category;
+        $view_data['operate_item_type'] = $item_type;
+        $view_data['operate_item_type_text'] = $item_type_text;
+        $view_data['operate_title_text'] = $title_text;
+        $view_data['operate_list_text'] = $list_text;
+        $view_data['operate_list_link'] = $list_link;
+
+        $view_blade = env('TEMPLATE_DK_CC').'entrance.service.telephone-blacklist-import';
+        return view($view_blade)->with($view_data);
+    }
+    // 【电话池】保存-导入-数据
+    public function operate_service_telephone_blacklist_import_save($post_data)
+    {
+        set_time_limit(600);
+
+        $messages = [
+            'operate.required' => 'operate.required',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 单文件
+        if(!empty($post_data["txt-file"]))
+        {
+
+//            $result = upload_storage($post_data["attachment"]);
+//            $result = upload_storage($post_data["attachment"], null, null, 'assign');
+            $result = upload_file_storage($post_data["txt-file"],null,'dk/unique/attachment','');
+            if($result["result"])
+            {
+//                $mine->attachment_name = $result["name"];
+//                $mine->attachment_src = $result["local"];
+//                $mine->save();
+
+                $attachment_file = storage_resource_path($result["local"]);
+
+                $file_data = file($attachment_file);
+
+                $collection = collect($file_data)->map(function ($line) {
+                    return trim($line);
+                });
+
+
+                $exist_data = DK_CC_Telephone_Blacklist::select('telephone_number')->get();
+                if($exist_data)
+                {
+//                    dd($exist_data->toArray());
+                    $exist_plucked = $exist_data->pluck('telephone_number')->all();
+//                    dd($exist_plucked);
+                    $collection = $collection->diff($exist_plucked);
+                }
+
+
+                if ($collection->isEmpty())
+                {
+                    return response_error([],"数据全部重复！");
+                }
+
+
+                $chunks = $collection->chunk(1000);
+                $chunks = $chunks->toArray();
+//                dd($chunks);
+
+                $insert_data = [];
+                foreach($chunks as $key => $value)
+                {
+                    $data = [];
+                    foreach($value as $v)
+                    {
+                        if(is_numeric(trim($v)))
+                        {
+                            $data[] = [
+                                'telephone_number'=>trim($v)
+                            ];
+                        }
+                    }
+                    $insert_data[] = $data;
+                }
+//                dd($insert_data);
+
+
+
+                // 启动数据库事务
+//                DB::beginTransaction();
+                try
+                {
+                    foreach($insert_data as $insert_value)
+                    {
+                        $modal_telephone = new DK_CC_Telephone_Blacklist;
+                        $bool = $modal_telephone->insert($insert_value);
+
+//                        dd($bool);
+                        if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
+                    }
+
+//                    DB::commit();
+                    return response_success(['count'=>count($collection)]);
+                }
+                catch (Exception $e)
+                {
+//                    DB::rollback();
+                    $msg = '操作失败，请重试！';
+                    $msg = $e->getMessage();
+//                    exit($e->getMessage());
+                    return response_fail([],$msg);
+                }
+            }
+            else return response_error([],"upload--attachment--fail");
+        }
+        else return response_error([],"请上传txt文件！");
 
 
         // 多文件
@@ -5526,8 +5739,8 @@ class DKCCRepository {
         }
 
     }
-    // 【工单】下载
-    public function operate_service_telephone_down($post_data)
+    // 【电话池】下载
+    public function operate_service_telephone_download($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -5554,7 +5767,7 @@ class DKCCRepository {
         }
 
         $operate = $post_data["operate"];
-        if($operate != 'service-telephone-down') return response_error([],"参数[operate]有误！");
+        if($operate != 'service-telephone-download') return response_error([],"参数[operate]有误！");
 
         $this->get_me();
         $me = $this->me;
@@ -20648,9 +20861,6 @@ EOF;
 
 
 
-
-
-
     // 【电话池】返回-导入-视图
     public function operate_download_file_create_txt($post_data)
     {
@@ -20663,7 +20873,7 @@ EOF;
 
         $storage_path = storage_path($upload_path);
         // 打开文件准备写入
-        $file = fopen($storage_path.'test.txt', 'w');
+        $file = fopen($storage_path.'test-'.$count.'.txt', 'w');
 
         for($i=1; $i<=$count; $i++)
         {
@@ -20673,10 +20883,15 @@ EOF;
         // 关闭文件
         fclose($file);
 
-        return response()->download($storage_path.'test.txt');
+        return response()->download($storage_path.'test-'.$count.'.txt');
 
 
     }
+
+
+
+
+
 
 
 
@@ -20783,7 +20998,7 @@ EOF;
             return json_encode($return);
         }
 
-        if($call_data['staffNo'] == '' || empty($call_data['staffNo']))
+        if(empty($call_data['staffNo']) || $call_data['staffNo'] == '')
         {
             $call_data['staffNo'] = -1;
         }

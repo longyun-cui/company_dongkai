@@ -680,17 +680,24 @@ class DKCCController extends Controller
     }
 
 
-    // 【电话数据】添加
+    // 【电话数据】导入
     public function operate_service_telephone_import()
     {
         if(request()->isMethod('get')) return $this->repo->view_service_telephone_import();
         else if (request()->isMethod('post')) return $this->repo->operate_service_telephone_import_save(request()->all());
     }
 
-    // 【电话数据】下载
-    public function operate_service_telephone_down()
+    // 【电话数据】黑名单-导入
+    public function operate_service_telephone_blacklist_import()
     {
-        return $this->repo->operate_service_telephone_down(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_service_telephone_blacklist_import();
+        else if (request()->isMethod('post')) return $this->repo->operate_service_telephone_blacklist_import_save(request()->all());
+    }
+
+    // 【电话数据】下载
+    public function operate_service_telephone_download()
+    {
+        return $this->repo->operate_service_telephone_download(request()->all());
     }
 
 

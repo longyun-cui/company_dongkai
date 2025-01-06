@@ -71,10 +71,10 @@
             });
 
             $.post(
-                "{{ url('/service/telephone-down') }}",
+                "{{ url('/service/telephone-download') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "service-telephone-down",
+                    operate: "service-telephone-download",
                     telephone_count: $telephone_count,
                     file_num: $file_num,
                     file_size: $file_size,

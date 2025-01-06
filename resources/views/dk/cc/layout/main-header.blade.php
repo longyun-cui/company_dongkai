@@ -38,11 +38,11 @@
 
                         {{--客户管理--}}
                         @if(in_array($me->user_type,[0,1,9,11]))
-                            <li class="header">客户</li>
+                            <li class="header _none">客户</li>
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11]))
-                            <li class="header">
+                            <li class="header _none">
                                 <a href="{{ url('/user/client-create') }}">
                                     <i class="fa fa-plus text-red"></i> 添加客户
                                 </a>
@@ -52,11 +52,11 @@
 
                         {{--部门管理--}}
                         @if(in_array($me->user_type,[0,1,9,11,41]))
-                        <li class="header">部门</li>
+                        <li class="header _none">部门</li>
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,41]))
-                        <li class="header">
+                        <li class="header _none">
                             <a href="{{ url('/department/department-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加部门
                             </a>
@@ -66,11 +66,11 @@
 
                         {{--员工管理--}}
                         @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
-                            <li class="header">员工</li>
+                            <li class="header _none">员工</li>
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
-                        <li class="header">
+                        <li class="header _none">
                             <a href="{{ url('/user/staff-create') }}">
                                 <i class="fa fa-plus text-red"></i> 添加员工
                             </a>
@@ -84,7 +84,7 @@
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,61]))
-                            <li class="header">
+                            <li class="header _none">
                                 <a href="{{ url('/district/district-create') }}">
                                     <i class="fa fa-plus text-blue"></i> 添加地域
                                 </a>
@@ -92,28 +92,29 @@
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11,61]))
-                        <li class="header">
+                        <li class="header _none">
                             <a href="{{ url('/item/project-create') }}">
                                 <i class="fa fa-plus text-yellow"></i> 添加项目
                             </a>
                         </li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,84,88]))
+                        @if(in_array($me->user_type,[0,1,9,11]))
                         <li class="header">
-                            <a href="{{ url('/item/order-create') }}">
-                                <i class="fa fa-plus text-yellow"></i> 添加工单
+                            <a href="{{ url('/service/telephone-import') }}">
+                                <i class="fa fa-plus text-green"></i> 导入电话
                             </a>
                         </li>
                         @endif
 
 {{--                        @if(env('APP_ENV') == 'local' && in_array($me->user_type,[0,1,9]))--}}
+                        @if(in_array($me->user_type,[0,1,9,11]))
                         <li class="header">
-                            <a href="{{ url('/item/order-import') }}">
-                                <i class="fa fa-file-excel-o text-yellow"></i> 导入工单
+                            <a href="{{ url('/service/telephone-blacklist-import') }}">
+                                <i class="fa fa-plus text-yellow"></i> 导入电话黑名单
                             </a>
                         </li>
-{{--                        @endif--}}
+                        @endif
 
                         <li class="footer"><a href="#">See All Messages</a></li>
                     </ul>
