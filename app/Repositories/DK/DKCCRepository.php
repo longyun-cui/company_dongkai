@@ -20782,9 +20782,10 @@ EOF;
             $return['result']['msg'] = '已存在！';
             return json_encode($return);
         }
-        if(!$call_data['staffNo'])
+
+        if($call_data['staffNo'] == '' || empty($call_data['staffNo']))
         {
-            $call_data['staffNo'] = 0;
+            $call_data['staffNo'] = -1;
         }
 
 
