@@ -341,7 +341,7 @@
                     },
                     {
                         "title": "成单",
-                        "data": "count_for_9",
+                        "data": "count_for_sold",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
@@ -351,7 +351,7 @@
                     },
                     {
                         "title": "黑名单",
-                        "data": "count_for_101",
+                        "data": "count_for_blacklist",
                         "className": "",
                         "width": "80px",
                         "orderable": false,

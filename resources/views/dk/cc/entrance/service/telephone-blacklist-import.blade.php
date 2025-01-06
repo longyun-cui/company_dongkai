@@ -147,7 +147,7 @@
                     else
                     {
                         layer.msg(data.msg);
-                        layer.msg("添加" + data.data.count + "条数据！");
+                        layer.msg("更新" + data.data.count + "条数据！");
 
                         $(".fileinput-remove-button").click();
 

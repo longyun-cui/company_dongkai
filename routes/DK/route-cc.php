@@ -5,6 +5,10 @@ Route::get('/', function () {
     dd('route-admin');
 });
 
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
+
 
 $controller = "DKCCController";
 

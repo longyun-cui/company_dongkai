@@ -4963,9 +4963,9 @@ class DKCCRepository {
         $query = DK_CC_Telephone::select('item_status','provinceCode','cityCode','areaCode','tag')
             ->addSelect(DB::raw("
                     count('*') as count_for_all,
-                    count(IF(item_status = 1, TRUE, NULL)) as count_for_1,
-                    count(IF(item_status = 9, TRUE, NULL)) as count_for_9,
-                    count(IF(item_status = 101, TRUE, NULL)) as count_for_101
+                    count(IF(item_status = 1 and is_blacklisted = 0, TRUE, NULL)) as count_for_1,
+                    count(IF(item_status = 9, TRUE, NULL)) as count_for_sold,
+                    count(IF(is_blacklisted = 1, TRUE, NULL)) as count_for_blacklist
                 "))
             ->groupBy('provinceCode')
             ->groupBy('cityCode')
@@ -5343,53 +5343,61 @@ class DKCCRepository {
                 $exist_data = DK_CC_Telephone_Blacklist::select('telephone_number')->get();
                 if($exist_data)
                 {
-//                    dd($exist_data->toArray());
                     $exist_plucked = $exist_data->pluck('telephone_number')->all();
-//                    dd($exist_plucked);
-                    $collection = $collection->diff($exist_plucked);
+                    $collection_diff = $collection->diff($exist_plucked);
                 }
+                else $collection_diff = $collection;
 
 
-                if ($collection->isEmpty())
+                if(!$collection_diff->isEmpty())
                 {
-                    return response_error([],"数据全部重复！");
-                }
+                    $insert_chunks = $collection_diff->chunk(1000);
+                    $insert_chunks = $insert_chunks->toArray();
 
-
-                $chunks = $collection->chunk(1000);
-                $chunks = $chunks->toArray();
-//                dd($chunks);
-
-                $insert_data = [];
-                foreach($chunks as $key => $value)
-                {
-                    $data = [];
-                    foreach($value as $v)
+                    $insert_data = [];
+                    foreach($insert_chunks as $key => $value)
                     {
-                        if(is_numeric(trim($v)))
+                        $data = [];
+                        foreach($value as $v)
                         {
-                            $data[] = [
-                                'telephone_number'=>trim($v)
-                            ];
+                            if(is_numeric(trim($v)))
+                            {
+                                $data[] = [
+                                    'telephone_number'=>trim($v)
+                                ];
+                            }
                         }
+                        $insert_data[] = $data;
                     }
-                    $insert_data[] = $data;
                 }
-//                dd($insert_data);
+                else
+                {
+                    $insert_data = [];
+//                    return response_error([],"数据全部重复！");
+                }
 
+
+                $update_chunks = $collection->chunk(1000);
 
 
                 // 启动数据库事务
 //                DB::beginTransaction();
                 try
                 {
-                    foreach($insert_data as $insert_value)
+                    if(!$collection_diff->isEmpty())
                     {
-                        $modal_telephone = new DK_CC_Telephone_Blacklist;
-                        $bool = $modal_telephone->insert($insert_value);
+                        foreach($insert_data as $insert_value)
+                        {
+                            $modal_telephone = new DK_CC_Telephone_Blacklist;
+                            $bool = $modal_telephone->insert($insert_value);
+                            if(!$bool) throw new Exception("DK_CC_Telephone_Blacklist--insert--fail");
+                        }
+                    }
 
-//                        dd($bool);
-                        if(!$bool) throw new Exception("DK_CC_Telephone--insert--fail");
+                    foreach($update_chunks as $update_value)
+                    {
+                        $bool_t = DK_CC_Telephone::whereIn('telephone_number',$update_value)->update(['is_blacklisted'=>1]);
+//                        dd($bool_t);
                     }
 
 //                    DB::commit();
@@ -5835,6 +5843,7 @@ class DKCCRepository {
 //                        ->orWhereDate('last_extraction_time', '<=', now()->subDays(7));
 //                })
                 ->where($telephone_where)
+                ->where(['item_status'=>1,'is_blacklisted'=>0])
                 ->orderby('task_id','asc')
                 ->limit($telephone_count);
 
@@ -20866,6 +20875,7 @@ EOF;
     {
 
         $count = $post_data['count'];
+        $start = $post_data['start'];
 
         $upload_path = <<<EOF
 resource/root/unique/
@@ -20875,7 +20885,7 @@ EOF;
         // 打开文件准备写入
         $file = fopen($storage_path.'test-'.$count.'.txt', 'w');
 
-        for($i=1; $i<=$count; $i++)
+        for($i=$start; $i<=$count; $i++)
         {
             fwrite($file, $i. PHP_EOL);
         }
