@@ -5109,6 +5109,7 @@ class DKCCRepository {
         $location_city = $post_data["location_city"];
         $location_district = $post_data["location_district"];
         $tag = $post_data["tag"];
+        $time = time();
 
 
         // 单文件
@@ -5170,7 +5171,9 @@ class DKCCRepository {
                                 'provinceCode'=>$location_province,
                                 'cityCode'=>$location_city,
                                 'areaCode'=>$location_district,
-                                'tag'=>$tag
+                                'tag'=>$tag,
+                                'created_at'=>$time,
+                                'updated_at'=>$time
                             ];
                         }
                     }
