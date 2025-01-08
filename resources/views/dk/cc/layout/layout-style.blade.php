@@ -9,6 +9,14 @@
     .sidebar-menu>li>a span {
         font-size:12px;
     }
+
+
+
+    .datatable-search-row .input-group .time-picker-btn { width:30px; }
+    .datatable-search-row .input-group .month_picker, .datatable-search-row .input-group .date_picker { width:100px; text-align:center; }
+    .datatable-search-row .input-group select { width:100px; text-align:center; }
+    .datatable-search-row .input-group .select2-container { width:120px; }
+
     @media (min-width: 768px) {
         .main-sidebar, .left-side {
             width: 120px;

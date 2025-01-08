@@ -11874,8 +11874,50 @@ var region = [
                 ]
             },
             {
-                cityCode: '522200',
-                cityName: '铜仁地区',
+                cityCode: '522400',
+                cityName: '毕节市',
+                mallAreaList: [
+                    {
+                        areaCode: '0',
+                        areaName: '请选择区县'
+                    },
+                    {
+                        areaCode: '520502',
+                        areaName: '七星关区'
+                    },
+                    {
+                        areaCode: '520521',
+                        areaName: '大方县'
+                    },
+                    {
+                        areaCode: '520523',
+                        areaName: '金沙县'
+                    },
+                    {
+                        areaCode: '520524',
+                        areaName: '织金县'
+                    },
+                    {
+                        areaCode: '520525',
+                        areaName: '纳雍县'
+                    },
+                    {
+                        areaCode: '520526',
+                        areaName: '威宁彝族回族苗族自治县'
+                    },
+                    {
+                        areaCode: '520527',
+                        areaName: '赫章县'
+                    },
+                    {
+                        areaCode: '520581',
+                        areaName: '黔西县'
+                    }
+                ]
+            },
+            {
+                cityCode: '520600',
+                cityName: '铜仁市',
                 mallAreaList: [
                     {
                         areaCode: '0',
@@ -11920,13 +11962,63 @@ var region = [
                     {
                         areaCode: '520628',
                         areaName: '松桃苗族自治县'
-                    },
-                    {
-                        areaCode: '522200',
-                        areaName: '铜仁地区'
                     }
                 ]
             },
+            // {
+            //     cityCode: '522200',
+            //     cityName: '铜仁地区',
+            //     mallAreaList: [
+            //         {
+            //             areaCode: '0',
+            //             areaName: '请选择区县'
+            //         },
+            //         {
+            //             areaCode: '520602',
+            //             areaName: '碧江区'
+            //         },
+            //         {
+            //             areaCode: '520603',
+            //             areaName: '万山区'
+            //         },
+            //         {
+            //             areaCode: '520621',
+            //             areaName: '江口县'
+            //         },
+            //         {
+            //             areaCode: '520622',
+            //             areaName: '玉屏侗族自治县'
+            //         },
+            //         {
+            //             areaCode: '520623',
+            //             areaName: '石阡县'
+            //         },
+            //         {
+            //             areaCode: '520624',
+            //             areaName: '思南县'
+            //         },
+            //         {
+            //             areaCode: '520625',
+            //             areaName: '印江土家族苗族自治县'
+            //         },
+            //         {
+            //             areaCode: '520626',
+            //             areaName: '德江县'
+            //         },
+            //         {
+            //             areaCode: '520627',
+            //             areaName: '沿河土家族自治县'
+            //         },
+            //         {
+            //             areaCode: '520628',
+            //             areaName: '松桃苗族自治县'
+            //         },
+            //         {
+            //             areaCode: '522200',
+            //             areaName: '铜仁地区'
+            //         }
+            //     ]
+            // },
             {
                 cityCode: '522300',
                 cityName: '黔西南布依族苗族自治州',
@@ -11969,52 +12061,52 @@ var region = [
                     }
                 ]
             },
-            {
-                cityCode: '522400',
-                cityName: '毕节地区',
-                mallAreaList: [
-                    {
-                        areaCode: '0',
-                        areaName: '请选择区县'
-                    },
-                    {
-                        areaCode: '520502',
-                        areaName: '七星关区'
-                    },
-                    {
-                        areaCode: '520521',
-                        areaName: '大方县'
-                    },
-                    {
-                        areaCode: '520522',
-                        areaName: '黔西县'
-                    },
-                    {
-                        areaCode: '520523',
-                        areaName: '金沙县'
-                    },
-                    {
-                        areaCode: '520524',
-                        areaName: '织金县'
-                    },
-                    {
-                        areaCode: '520525',
-                        areaName: '纳雍县'
-                    },
-                    {
-                        areaCode: '520526',
-                        areaName: '威宁彝族回族苗族自治县'
-                    },
-                    {
-                        areaCode: '520527',
-                        areaName: '赫章县'
-                    },
-                    {
-                        areaCode: '522400',
-                        areaName: '毕节地区'
-                    }
-                ]
-            },
+            // {
+            //     cityCode: '522400',
+            //     cityName: '毕节地区',
+            //     mallAreaList: [
+            //         {
+            //             areaCode: '0',
+            //             areaName: '请选择区县'
+            //         },
+            //         {
+            //             areaCode: '520502',
+            //             areaName: '七星关区'
+            //         },
+            //         {
+            //             areaCode: '520521',
+            //             areaName: '大方县'
+            //         },
+            //         {
+            //             areaCode: '520522',
+            //             areaName: '黔西县'
+            //         },
+            //         {
+            //             areaCode: '520523',
+            //             areaName: '金沙县'
+            //         },
+            //         {
+            //             areaCode: '520524',
+            //             areaName: '织金县'
+            //         },
+            //         {
+            //             areaCode: '520525',
+            //             areaName: '纳雍县'
+            //         },
+            //         {
+            //             areaCode: '520526',
+            //             areaName: '威宁彝族回族苗族自治县'
+            //         },
+            //         {
+            //             areaCode: '520527',
+            //             areaName: '赫章县'
+            //         },
+            //         {
+            //             areaCode: '522400',
+            //             areaName: '毕节地区'
+            //         }
+            //     ]
+            // },
             {
                 cityCode: '522600',
                 cityName: '黔东南苗族侗族自治州',

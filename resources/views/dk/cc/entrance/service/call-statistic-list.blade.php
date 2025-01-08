@@ -21,11 +21,26 @@
 
             <div class="box-header with-border" style="margin:4px 0;">
 
-                <div class="row col-md-12 datatable-search-row">
+                <div class="row col-md-12 datatable-search-row" id="search-row-for-call-statistic">
 
                     <div class="input-group">
 
-                        <input type="text" class="form-control form-filter item-search-keyup" name="team-title" placeholder="名称" />
+                        <input type="hidden" name="call-statistic-time-type" value="" readonly>
+
+{{--                        <input type="text" class="form-control form-filter item-search-keyup" name="call-statistic-title" placeholder="名称" />--}}
+
+
+                        {{--按天查看--}}
+{{--                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-pre-for-call-statistic">--}}
+{{--                            <i class="fa fa-chevron-left"></i>--}}
+{{--                        </button>--}}
+{{--                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="call-statistic-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />--}}
+{{--                        <button type="button" class="form-control btn btn-flat btn-default time-picker-btn date-pick-next-for-call-statistic">--}}
+{{--                            <i class="fa fa-chevron-right"></i>--}}
+{{--                        </button>--}}
+{{--                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-call-statistic-by-date">--}}
+{{--                            <i class="fa fa-search"></i> 按日查询--}}
+{{--                        </button>--}}
 
                     </div>
 
@@ -49,7 +64,7 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-team-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-call-statistic-list">
 
 
                 <div class="tableArea">
@@ -115,13 +130,12 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="team-id"]').val();
-                        d.name = $('input[name="team-name"]').val();
-                        d.title = $('input[name="team-title"]').val();
-                        d.keyword = $('input[name="team-keyword"]').val();
-                        d.status = $('select[name="team-status"]').val();
-                        d.team_type = $('select[name="team-type"]').val();
-                        d.work_status = $('select[name="work_status"]').val();
+                        d.id = $('input[name="call-statistic-id"]').val();
+                        d.name = $('input[name="call-statistic-name"]').val();
+                        d.title = $('input[name="call-statistic-title"]').val();
+                        d.keyword = $('input[name="call-statistic-keyword"]').val();
+                        d.status = $('select[name="call-statistic-status"]').val();
+                        d.team_type = $('select[name="call-statistic-type"]').val();
                     },
                 },
                 "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',

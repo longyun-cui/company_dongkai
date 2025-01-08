@@ -2,92 +2,243 @@
     $(function() {
 
         // 【搜索】
-        $("#datatable-for-team-list").on('click', ".filter-submit", function() {
+        $("#datatable-for-call-statistic-list").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#datatable-for-team-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-team-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $("#datatable-for-call-statistic-list").on('click', ".filter-cancel", function() {
+            $("#datatable-for-call-statistic-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-team-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-team-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-for-call-statistic-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-for-call-statistic-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $("#datatable-for-team-list").on('keyup', ".item-search-keyup", function(event) {
+        $("#datatable-for-call-statistic-list").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-team-list").find(".filter-submit").click();
+                $("#datatable-for-call-statistic-list").find(".filter-submit").click();
             }
         });
 
 
-        // 【编辑】
-        $(".main-content").on('click', ".item-admin-login-okcc", function() {
-            var $that = $(this);
 
 
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">耐心等待中</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
-                    });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
-                }
-            });
+        // 【业务报表】按【月】搜索
+        $(".main-content").on('click', "#filter-submit-for-call-statistic-by-month", function() {
 
-            $.post(
-                "{{ url('/company/team-login-okcc') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "company-team-admin-login-okcc",
-                    item_id: $that.attr('data-id')
-                },
-                'json'
-            )
-                .done(function($response) {
-                    console.log('done');
-                    $response = JSON.parse($response);
-                    if(!$response.success)
-                    {
-                        if($response.msg) layer.msg($response.msg);
-                    }
-                    else
-                    {
-                        layer.msg("请求成功！");
-                        var $token = $response.data.token;
-                        var $url = 'https://feiniji.cn/service/index.php?m=common&c=loginTransition&f=login&token='+$token;
+            $("#statistic-for-call-statistic").find('input[name=call-statistic-time-type]').val('month');
 
-                        console.log($url);
-                        window.open($url, '_blank');
-                    }
-                })
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    console.log('fail');
-                    console.log(jqXHR);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                    layer.msg('服务器错误！');
+            var $statistic_title = '';
 
-                })
-                .always(function(jqXHR, textStatus) {
-                    console.log('always');
-                    console.log(jqXHR);
-                    console.log(textStatus);
-                    layer.closeAll('loading');
-                });
+            var $project = $('select[name=call-statistic-project]').find("option:selected");
+            if($project.val() != "-1")
+            {
+                var $project_title = $project.text();
+                $statistic_title = $project_title;
+            }
+
+            if($statistic_title)
+            {
+                $statistic_title = "【" + $statistic_title + "】";
+                $(".statistic-title").html($statistic_title);
+            }
+
+            $(".statistic-time-type-title").html('按月');
+            var $month_dom = $('input[name="call-statistic-month"]');
+            var $the_month_str = $month_dom.val();
+            $(".statistic-time-title").html('（'+$the_month_str+'月）');
+
+            $('#datatable_ajax_daily').DataTable().ajax.reload();
+            $('#datatable_ajax_project').DataTable().ajax.reload();
+
+            statistic_get_data_for_service_daily_chart("month",$the_month_str,
+                "myChart-for-delivery-quantity",
+                "myChart-for-cost-total",
+                "myChart-for-cost-per-capita",
+                "myChart-for-cost-unit-average"
+            );
+        });
+        // 【业务报表】按【天】搜索
+        $(".main-content").on('click', "#filter-submit-for-call-statistic-by-date", function() {
+
+            $("#statistic-for-call-statistic").find('input[name=call-statistic-time-type]').val('date');
+
+            var $statistic_title = '';
+
+            var $project = $('select[name=call-statistic-project]').find("option:selected");
+            if($project.val() != "-1")
+            {
+                var $project_title = $project.text();
+                $statistic_title = $project_title;
+            }
+
+            if($statistic_title)
+            {
+                $statistic_title = "【" + $statistic_title + "】";
+                $(".statistic-title").html($statistic_title);
+            }
+
+            $(".statistic-time-type-title").html('按天');
+            var $date_dom = $('input[name="call-statistic-date"]');
+            var $the_date_str = $date_dom.val();
+            $(".statistic-time-title").html('（'+$the_date_str+'）');
+
+            $('#datatable_ajax_daily').DataTable().ajax.reload();
+            $('#datatable_ajax_project').DataTable().ajax.reload();
+
+            statistic_get_data_for_service_daily_chart("date",$the_date_str,
+                "myChart-for-delivery-quantity",
+                "myChart-for-cost-total",
+                "myChart-for-cost-per-capita",
+                "myChart-for-cost-unit-average"
+            );
+        });
+        // 【业务报表】按【时间段】搜索
+        $(".main-content").on('click', "#filter-submit-for-call-statistic-by-period", function() {
+
+            $("#statistic-for-call-statistic").find('input[name=call-statistic-time-type]').val('period');
+
+            var $statistic_title = '';
+
+            var $project = $('select[name=call-statistic-project]').find("option:selected");
+            if($project.val() != "-1")
+            {
+                var $project_title = $project.text();
+                $statistic_title = $project_title;
+            }
+
+            if($statistic_title)
+            {
+                $statistic_title = "【" + $statistic_title + "】";
+                $(".statistic-title").html($statistic_title);
+            }
+
+            $(".statistic-time-type-title").html('按时间段查询');
+            var $date_start = $('input[name="call-statistic-start"]');
+            var $date_ended = $('input[name="call-statistic-ended"]');
+            var $the_date_str = $date_start.val() + " - " + $date_ended.val();
+            $(".statistic-time-title").html('（'+$the_date_str+'）');
+
+            $('#datatable_ajax_daily').DataTable().ajax.reload();
+            $('#datatable_ajax_project').DataTable().ajax.reload();
+
+            statistic_get_data_for_service_daily_chart("date",$the_date_str,
+                "myChart-for-delivery-quantity",
+                "myChart-for-cost-total",
+                "myChart-for-cost-per-capita",
+                "myChart-for-cost-unit-average"
+            );
+        });
+
+
+        // 【业务报表】【前一月】
+        $(".main-content").on('click', ".month-pick-pre-for-call-statistic", function() {
+
+            var $month_dom = $('input[name="call-statistic-month"]');
+            var $the_month = $month_dom.val();
+            var $date = new Date($the_month);
+            var $year = $date.getFullYear();
+            var $month = $date.getMonth();
+
+            var $pre_year = $year;
+            var $pre_month = $month;
+
+            if(parseInt($month) == 0)
+            {
+                $pre_year = $year - 1;
+                $pre_month = 12;
+            }
+
+            if($pre_month < 10) $pre_month = '0'+$pre_month;
+
+            var $pre_month_str = $pre_year+'-'+$pre_month;
+            $month_dom.val($pre_month_str);
+
+            $("#filter-submit-for-call-statistic-by-month").click();
+            // $('#datatable_ajax').DataTable().ajax.reload();
 
         });
+        // 【业务报表】【后一月】
+        $(".main-content").on('click', ".month-pick-next-for-call-statistic", function() {
+
+            var $month_dom = $('input[name="call-statistic-month"]');
+            var $the_month_str = $month_dom.val();
+
+            var $date = new Date($the_month_str);
+            var $year = $date.getFullYear();
+            var $month = $date.getMonth();
+
+            var $next_year = $year;
+            var $next_month = $month;
+
+            if(parseInt($month) == 11)
+            {
+                $next_year = $year + 1;
+                $next_month = 1;
+            }
+            else $next_month = $month + 2;
+
+            if($next_month < 10) $next_month = '0'+$next_month;
+
+            var $next_month_str = $next_year+'-'+$next_month;
+            $month_dom.val($next_month_str);
+
+            $("#filter-submit-for-call-statistic-by-month").click();
+            // $('#datatable_ajax').DataTable().ajax.reload();
+
+        });
+
+        // 【业务报表】【前一天】
+        $(".main-content").on('click', ".date-pick-pre-for-call-statistic", function() {
+
+            var $date_dom = $('input[name="call-statistic-date"]');
+            var $the_date_str = $date_dom.val();
+
+            var $date = new Date($the_date_str);
+            var $time = $date.getTime();
+            var $yesterday_time = $time - (24*60*60*1000);
+
+            var $yesterday = new Date($yesterday_time);
+            var $yesterday_year = $yesterday.getFullYear();
+            var $yesterday_month = ('00'+($yesterday.getMonth()+1)).slice(-2);
+            var $yesterday_day = ('00'+($yesterday.getDate())).slice(-2);
+
+            var $yesterday_date_str = $yesterday_year + '-' + $yesterday_month + '-' + $yesterday_day;
+            $date_dom.val($yesterday_date_str);
+
+
+            $("#filter-submit-for-call-statistic-by-date").click();
+            // $('#datatable_ajax').DataTable().ajax.reload();
+
+        });
+        // 【业务报表】【后一天】
+        $(".main-content").on('click', ".date-pick-next-for-call-statistic", function() {
+
+            var $date_dom = $('input[name="call-statistic-date"]');
+            var $the_date_str = $date_dom.val();
+
+            var $date = new Date($the_date_str);
+            var $time = $date.getTime();
+            var $tomorrow_time = $time + (24*60*60*1000);
+
+            var $tomorrow = new Date($tomorrow_time);
+            var $tomorrow_year = $tomorrow.getFullYear();
+            var $tomorrow_month = ('00'+($tomorrow.getMonth()+1)).slice(-2);
+            var $tomorrow_day = ('00'+($tomorrow.getDate())).slice(-2);
+
+            var $tomorrow_date_str = $tomorrow_year + '-' + $tomorrow_month + '-' + $tomorrow_day;
+            $date_dom.val($tomorrow_date_str);
+
+            $("#filter-submit-for-call-statistic-by-date").click();
+            // $('#datatable_ajax').DataTable().ajax.reload();
+
+        });
+
 
 
 
