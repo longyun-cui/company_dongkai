@@ -5082,13 +5082,15 @@ class DKCCRepository {
 
         $messages = [
             'operate.required' => 'operate.required',
-            'area_province.required' => '请填选择省份！',
-            'area_city.required' => '请填选择城市！',
+            'location_province.required' => '请填选择省份！',
+            'location_city.required' => '请填选择城市！',
+            'tag.required' => '请填选择标签！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'location_province' => 'required',
             'location_city' => 'required',
+            'tag' => 'required',
         ], $messages);
         if ($v->fails())
         {

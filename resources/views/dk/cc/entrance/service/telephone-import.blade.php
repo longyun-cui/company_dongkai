@@ -39,7 +39,7 @@
 
                 {{--选择城市--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">选择城市</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择城市</label>
                     <div class="col-md-8 area_select_box">
                         {{--选择所在城市--}}
                             <div class="col-xs-4 col-sm-4 col-md-4 " style="padding:0">
@@ -74,7 +74,7 @@
 
                 {{--标签--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">标签</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 标签</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="tag" placeholder="标签" value="{{ $data->tag or '' }}">
                     </div>
@@ -96,7 +96,7 @@
 
                 {{--attachment 附件--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">文件上传</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 文件上传</label>
                     <div class="col-md-8">
                         <input id="multiple-file" type="file" class="file-upload" name="txt-file" >
 {{--                        <input id="multiple-files" type="file" class="file-upload" name="multiple-excel-file" multiple >--}}

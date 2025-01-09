@@ -61,14 +61,16 @@
 
                         <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-delivered_date" placeholder="交付日期" value="" readonly="readonly" style="width:100px;text-align:center;" />
 
+                        @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                         <select class="form-control form-filter" name="order-created-type" style="width:80px;">
                             <option value="-1">创建方式</option>
                             <option value="1">人工</option>
                             <option value="9">导入</option>
                             <option value="99">API</option>
                         </select>
+                        @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77]))
+                        @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                         <select class="form-control form-filter select2-box" name="order-department-district[]" id="order-department-district" multiple="multiple"  style="width:100px;">
                             <option value="-1">选择团队</option>
                             @foreach($department_district_list as $v)
