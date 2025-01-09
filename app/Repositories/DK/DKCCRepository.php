@@ -2104,7 +2104,7 @@ class DKCCRepository {
 
 
         $query = DK_Department::select('*')
-            ->withTrashed()
+//            ->withTrashed()
             ->with([
                 'creator'=>function($query) { $query->select(['id','username','true_name']); }
             ])
