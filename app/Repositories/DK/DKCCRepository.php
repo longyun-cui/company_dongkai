@@ -129,7 +129,9 @@ class DKCCRepository {
         $view_data['order_count'] = 0;
 
 
-        $team_list = DK_Department::select('*')->where('department_type','11')->whereNotNull('api_id')->get();
+        $team_list = DK_Department::select('*')->where('department_type','11')->whereNotNull('api_id')
+            ->orderBy("rank", "asc")->orderBy("id", "asc")
+            ->get();
         $view_data['team_list'] = $team_list;
 
 
