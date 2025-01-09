@@ -2139,7 +2139,7 @@ class DKCCRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 40;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
 
         if(isset($post_data['order']))
         {
@@ -2151,7 +2151,7 @@ class DKCCRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "asc");
+        else $query->orderBy("rank", "asc")->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();

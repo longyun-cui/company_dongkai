@@ -9,8 +9,15 @@ class DK_Department extends Model
     //
     protected $table = "dk_admin_department";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'sort', 'item_active', 'item_status', 'item_category', 'item_type',
+        'active', 'status',
+        'category', 'type', 'form', 'sort',
+        'item_active', 'item_status',
+        'item_category', 'item_type',
         'department_active', 'department_status', 'department_category', 'department_type',
+
+        'rank',
+        'version',
+
         'owner_active',
         'owner_id', 'creator_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'org_id', 'admin_id',

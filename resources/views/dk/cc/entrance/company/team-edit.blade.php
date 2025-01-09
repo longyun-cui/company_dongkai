@@ -124,6 +124,15 @@
                         </div>
 
 
+                        {{--排序--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> 排序</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="rank" placeholder="排序" value="{{ $data->rank or '' }}">
+                            </div>
+                        </div>
+
+
                         {{--描述--}}
                         <div class="form-group">
                             <label class="control-label col-md-2">描述</label>

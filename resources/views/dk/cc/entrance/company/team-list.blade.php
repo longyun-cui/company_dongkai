@@ -664,6 +664,16 @@
                         }
                     },
                     {
+                        "title": "排序",
+                        "data": "rank",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return parseFloat(data);
+                        }
+                    },
+                    {
                         "title": "名称",
                         "data": "name",
                         "className": "",
