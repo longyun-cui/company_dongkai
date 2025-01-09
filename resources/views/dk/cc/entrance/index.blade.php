@@ -41,7 +41,7 @@
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                <a href="javascript:void(0);" class="small-box-footer login-to-okcc" data-id="{{ $team->id }}">
+                                <a href="javascript:void(0);" class="small-box-footer item-admin-login-okcc" data-id="{{ $team->id }}">
                                     登录 <i class="fa fa-arrow-circle-right"></i>
                                 </a>
                             </div>
