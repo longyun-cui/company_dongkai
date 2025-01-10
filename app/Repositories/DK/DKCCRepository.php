@@ -21156,7 +21156,6 @@ EOF;
         $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
         $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
         $insert_data['content'] = json_encode($post_data);
-        $insert_data['staffNo'] = json_encode($post_data);
 
         $mine = new DK_CC_API_Received_From_OKCC;
 

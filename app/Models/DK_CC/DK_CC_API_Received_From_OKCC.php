@@ -20,6 +20,12 @@ class DK_CC_API_Received_From_OKCC extends Model
 
         'username', 'nickname', 'true_name', 'short_name',
         'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
+
+
+        'staffNo',
+        'telephone_number',
+
+
         'portrait_img_src',
         'cover_pic_src',
         'attachment_name',
