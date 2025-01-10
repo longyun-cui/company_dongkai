@@ -3728,12 +3728,16 @@ class DKAdminRepository {
             'true_name.required' => '请输入用户名！',
             'mobile.required' => '请输入电话！',
 //            'mobile.unique' => '电话已存在！',
+            'api_staffNo.required' => '请输入坐席用户ID！',
+            'api_staffNo.numeric' => '坐席用户ID必须为数字！',
+            'api_staffNo.min' => '坐席用户ID必须为数字，并且不小于0！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'true_name' => 'required',
             'mobile' => 'required',
 //            'mobile' => 'required|unique:dk_user,mobile',
+            'api_staffNo' => 'required|numeric|min:0',
         ], $messages);
         if ($v->fails())
         {
@@ -3749,6 +3753,13 @@ class DKAdminRepository {
 
         $operate = $post_data["operate"];
         $operate_id = $post_data["operate_id"];
+
+
+        if($post_data['api_staffNo'] > 0)
+        {
+            $api_staffNo_is_exist = DK_User::where('api_staffNo',$post_data['api_staffNo'])->first();
+            if($api_staffNo_is_exist) return response_error([],"坐席用户ID重复，请更换再试一次！");
+        }
 
         if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
         {
