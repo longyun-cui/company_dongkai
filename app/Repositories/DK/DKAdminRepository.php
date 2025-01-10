@@ -2255,7 +2255,7 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "asc");
+        else $query->orderBy("rank", "asc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();
@@ -3479,7 +3479,7 @@ class DKAdminRepository {
 
         if(in_array($me->user_type,[0,1,9,11]))
         {
-            $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+            $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
             $return['department_district_list'] = $department_district_list;
         }
 
@@ -8105,7 +8105,7 @@ class DKAdminRepository {
         $client_list = DK_Client::select('id','username')->where('user_category',11)->get();
         $view_data['client_list'] = $client_list;
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
         if($me->user_type == 41)
@@ -13066,7 +13066,7 @@ class DKAdminRepository {
         $staff_list = DK_User::select('id','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
         $client_list = DK_Client::select('id','username')->where('user_category',11)->get();
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
 
         $view_data['staff_list'] = $staff_list;
         $view_data['client_list'] = $client_list;
@@ -14114,7 +14114,7 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
         if($me->user_type == 81)
@@ -15098,7 +15098,7 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,41,81,84])) return view($this->view_blade_403);
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
         if($me->user_type == 81)
@@ -17019,7 +17019,7 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,41,81,84,71,77,61,66])) return view($this->view_blade_403);
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_delivery'] = 'active menu-open';
@@ -17240,7 +17240,7 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,61,66])) return view($this->view_blade_403);
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_delivery_by_client'] = 'active menu-open';
@@ -17439,7 +17439,7 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,41,81,84,71,77,61,66])) return view($this->view_blade_403);
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_delivery'] = 'active menu-open';
@@ -17662,7 +17662,7 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,9,11,41,81,84,71,77,61,66])) return view($this->view_blade_403);
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_project'] = 'active menu-open';
@@ -17949,7 +17949,7 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
-        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->get();
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
         $view_data['menu_active_of_statistic_department'] = 'active menu-open';
