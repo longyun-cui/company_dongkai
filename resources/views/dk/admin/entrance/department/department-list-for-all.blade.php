@@ -611,7 +611,7 @@
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
-                                $(nTd).addClass('modal-show-for-attachment');
+                                $(nTd).addClass('modal-show-for-attachment-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','附件');
                                 $(nTd).attr('data-key','attachment_list').attr('data-value','');
                                 if(data) $(nTd).attr('data-operate-type','edit');
