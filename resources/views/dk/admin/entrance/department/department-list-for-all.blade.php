@@ -701,7 +701,7 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
-                            else if(data == 11) return '<small class="btn-xs bg-primary">大区</small>';
+                            else if(data == 11) return '<small class="btn-xs bg-olive">大区</small>';
                             else if(data == 21) return '<small class="btn-xs bg-purple">小组</small>';
                             else return "有误";
                         }
