@@ -8072,7 +8072,7 @@
                 ],
                 [
                     "cityCode" => '420600',
-                    "cityName" => '襄樊市',
+                    "cityName" => '‌襄阳市',
                     "mallAreaList" => [
                         [
                             "areaCode" => '0',

@@ -21019,6 +21019,7 @@ EOF;
 
         $notify = $post_data['notify'];
         $call_data = $notify;
+        $service = $call_data['service'];
         $session = $call_data['session'];
         $mine = DK_CC_Call_Record::where('session',$session)->orderby('id','desc')->first();
         if($mine)
@@ -21274,17 +21275,15 @@ EOF;
                 return json_encode($return);
             }
         }
-        else
-        {
+        else {
 
-            $is_repeat = DK_Order::where(['project_id'=>$insert_data['project_id'],'client_phone'=>$phone_number])
-                ->where('is_published','>',0)->count("*");
-            if($is_repeat == 0)
-            {
-                $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$insert_data['project_id'],'client_phone'=>$phone_number])->count("*");
+            $is_repeat = DK_Order::where(['project_id' => $insert_data['project_id'], 'client_phone' => $phone_number])
+                ->where('is_published', '>', 0)->count("*");
+            if ($is_repeat == 0) {
+                $is_repeat = DK_Pivot_Client_Delivery::where(['project_id' => $insert_data['project_id'], 'client_phone' => $phone_number])->count("*");
             }
 
-            $staff = DK_User::with(['department_district_er','department_group_er'])->where('api_staffNo',$api_staffNo)->first();
+            $staff = DK_User::with(['department_district_er', 'department_group_er'])->where('api_staffNo', $api_staffNo)->first();
 
             $insert_data["created_type"] = 99;
             $insert_data["item_category"] = 1;
@@ -21299,42 +21298,62 @@ EOF;
 
             $insert_data['department_district_id'] = $staff->department_district_id;
             $insert_data['department_group_id'] = $staff->department_group_id;
-            if($staff->department_district_er) $insert_data['department_manager_id'] = $staff->department_district_er->leader_id;
-            if($staff->department_group_er) $insert_data['department_supervisor_id'] = $staff->department_group_er->leader_id;
+            if ($staff->department_district_er) $insert_data['department_manager_id'] = $staff->department_district_er->leader_id;
+            if ($staff->department_group_er) $insert_data['department_supervisor_id'] = $staff->department_group_er->leader_id;
 
 
             $call_where['staffNo'] = $api_staffNo;
             $call_where['callee'] = $phone_number;
-            $call = DK_CC_Call_Record::select("*")->where($call_where)->orderby('id','desc')->first();
-            if($call)
-            {
-                $insert_data["call_record_id"] = $call->id;
 
-                if(!empty($call->recordFile))
-                {
-                    $insert_data["recording_address"] = 'https://feiniji.cn'.$call->recordFile;
-//                    $recordFile = $call->recordFile;
-//                    $suffix = ".mp3";
+//            $call = DK_CC_Call_Record::select("*")->where($call_where)->orderby('id','desc')->first();
+//            if($call) {
+//                $insert_data["call_record_id"] = $call->id;
 //
-//                    if (substr($recordFile, - strlen($suffix)) === $suffix)
-//                    {
-//                        // 以.mp3结尾
-//                        $insert_data["recording_address"] = 'https://feiniji.cn/'.$call->recordFile;
-//                    }
-//                    else
-//                    {
-//                        // 以.mp3结尾
-//                        $decoded = base64_decode($v->recordFile, true);
-//                        if($decoded !== false && json_encode($decoded) !== 'null')
-//                        {
-//                            if(strpos($decoded, '/data/voicerecord') === 0)
-//                            {
-//                                $insert_data["recording_address"] = 'https://www.feiniji.cn'.$decoded;
-//                            }
-//                        }
-//                    }
+//                if (!empty($call->recordFile)) {
+//                    $insert_data["recording_address"] = 'https://feiniji.cn' . $call->recordFile;
+////                    $recordFile = $call->recordFile;
+////                    $suffix = ".mp3";
+////
+////                    if (substr($recordFile, - strlen($suffix)) === $suffix)
+////                    {
+////                        // 以.mp3结尾
+////                        $insert_data["recording_address"] = 'https://feiniji.cn/'.$call->recordFile;
+////                    }
+////                    else
+////                    {
+////                        // 以.mp3结尾
+////                        $decoded = base64_decode($v->recordFile, true);
+////                        if($decoded !== false && json_encode($decoded) !== 'null')
+////                        {
+////                            if(strpos($decoded, '/data/voicerecord') === 0)
+////                            {
+////                                $insert_data["recording_address"] = 'https://www.feiniji.cn'.$decoded;
+////                            }
+////                        }
+////                    }
+//                }
+//            }
+
+
+            $call_list = DK_CC_Call_Record::select("*")->where($call_where)->orderby('id', 'desc')->get();
+            if(count($call_list) > 0)
+            {
+                if(count($call_list) == 1)
+                {
+                    $insert_data["call_record_id"] = $call_list[0]->id;
+                    $insert_data["recording_address"] = 'https://feiniji.cn' . $call_list[0]->recordFile;
                 }
+
+                $recording_address_list = [];
+                foreach($call_list as $call)
+                {
+                    $call_address = 'https://feiniji.cn' . $call->recordFile;
+                    $recording_address_list[$call->id] = $call_address;
+                }
+//                $insert_data["recording_address"] = collect($recording_address_list)->toJson();
+                $insert_data["recording_address_list"] = json_encode($recording_address_list,JSON_UNESCAPED_SLASHES);
             }
+
 
             // 启动数据库事务
             DB::beginTransaction();
@@ -21368,7 +21387,7 @@ EOF;
                     if($statistic) $statistic->increment('order_count_for_total');
                 }
 
-                if($call)
+//                if($call)
 
 
 

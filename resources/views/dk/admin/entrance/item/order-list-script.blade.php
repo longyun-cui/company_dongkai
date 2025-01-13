@@ -197,8 +197,6 @@
                             var $url = url_build('/download/call-recording-download',$obj);
                             window.open($url);
 
-
-
                         });
                     }
                 })
@@ -216,6 +214,53 @@
                     // console.log(textStatus);
                     layer.closeAll('loading');
                 });
+
+        });
+
+        // 【下载】
+        $(".main-content").on('click', ".item-download-recording-list-submit", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+
+            $recording_list_str = $row.find('td[data-key=recording_address_download]').attr('data-address-list');
+            if($recording_list_str)
+            {
+                var $recording_list = JSON.parse($recording_list_str);
+
+                $.each($recording_list, function($index, $value) {
+
+                    var $obj = new Object();
+                    $obj.call_record_id = $index;
+
+                    var $randomNumber = Math.floor(Math.random() * 100) + 1;
+                    $obj.randomNumber = $randomNumber;
+
+                    var $url = url_build('/download/call-recording-download',$obj);
+                    window.open($url);
+
+                    // setTimeout(() => {
+                    //     window.open($url, $randomNumber);
+                    //     this.printOrderDialogShow = false;
+                    // }, 0.3);
+
+
+                });
+            }
+            else
+            {
+                $call_record_id = $row.find('td[data-key=recording_address_download]').attr('data-call-record-id');
+                if($call_record_id && $call_record_id > 0)
+                {
+                    console.log($call_record_id);
+
+                    var $obj = new Object();
+                    $obj.call_record_id = $call_record_id;
+
+                    var $url = url_build('/download/call-recording-download',$obj);
+                    window.open($url);
+                }
+
+            }
 
         });
 

@@ -11470,6 +11470,7 @@ class DKAdminRepository {
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
 //        $call_list = DK_CC_Call_Record::select('id','recordFile')->where('staffNo',$item->api_staffNo)->where('callee',$item->client_phone)->get();
+
         $file_list = [];
         $i['name'] = $item->client_phone.'-'.$item->id.'.mp3';
         $i['path'] = $item->recording_address;

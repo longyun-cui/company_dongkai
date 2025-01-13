@@ -34,6 +34,7 @@ class DK_Order extends Model
         'client_name', 'client_phone', 'client_intention',
         'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id',
         'recording_address',
+        'recording_address_list',
         'is_repeat',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS',
         'teeth_count',

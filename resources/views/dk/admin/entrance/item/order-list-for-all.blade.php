@@ -2079,7 +2079,7 @@
                     },
                     {
                         "title": "录音播放",
-                        "data": "recording_address",
+                        "data": "recording_address_list",
                         "className": "",
                         "width": "400px",
                         "orderable": false,
@@ -2094,14 +2094,30 @@
                             // return data;
                             if(data)
                             {
-                                return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+data+'" type="audio/mpeg"></audio>';
+                                var $recording_list = JSON.parse(data);
+
+                                var $return_html = '';
+                                $.each($recording_list, function(index, value)
+                                {
+
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio>'
+                                    $return_html += $audio_html;
+                                });
+                                return $return_html;
                             }
-                            else return '';
+                            else
+                            {
+                                if(row.recording_address)
+                                {
+                                    return '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+row.recording_address+'" type="audio/mpeg"></audio>';
+                                }
+                                else return '';
+                            }
                         }
                     },
                     {
                         "title": "录音下载",
-                        "data": "recording_address",
+                        "data": "recording_address_list",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
@@ -2109,14 +2125,17 @@
                             if(row.is_completed != 1 && row.item_status != 97)
                             {
                                 $(nTd).attr('data-id',row.id).attr('data-name','录音下载');
-                                $(nTd).attr('data-key','recording_address_play').attr('data-value',data);
+                                $(nTd).attr('data-key','recording_address_download').attr('data-value',data);
+                                $(nTd).attr('data-address-list',data);
+                                $(nTd).attr('data-address',row.recording_address);
+                                $(nTd).attr('data-call-record-id',row.call_record_id);
                             }
                         },
                         render: function(data, type, row, meta) {
                             // return data;
-                            if(data)
+                            if(data || row.recording_address)
                             {
-                                return '<a class="btn btn-xs item-download-recording-submit" data-id="'+row.id+'">下载录音</a>';
+                                return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
                             }
                             else return '';
                         }
