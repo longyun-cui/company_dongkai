@@ -21421,8 +21421,6 @@ EOF;
                     if($statistic) $statistic->increment('order_count_for_total');
                 }
 
-//                if($call)
-
                 DB::commit();
 
                 $return['result']['error'] = 0;
@@ -21438,9 +21436,9 @@ EOF;
 //            exit($e->getMessage());
 //            return response_fail([],$msg);
 
-                $return['result']['error'] = 1;
-                $return['result']['msg'] = $msg;
-                return json_encode($return);
+//                $return['result']['error'] = 1;
+//                $return['result']['msg'] = $msg;
+//                return json_encode($return);
             }
 
         }
