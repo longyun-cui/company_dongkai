@@ -5,6 +5,21 @@ Route::get('/', function () {
     dd('route-admin');
 });
 
+Route::get('/test', function () {
+    if('')
+    {
+        dd(1);
+    }
+    else if(NULL)
+    {
+        dd(2);
+    }
+    else
+    {
+        dd(false);
+    }
+});
+
 
 $controller = "DKAdminController";
 

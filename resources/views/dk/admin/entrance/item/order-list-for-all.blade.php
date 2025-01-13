@@ -2092,18 +2092,26 @@
                         },
                         render: function(data, type, row, meta) {
                             // return data;
-                            if(data)
+                            if($.trim(data))
                             {
-                                var $recording_list = JSON.parse(data);
-
-                                var $return_html = '';
-                                $.each($recording_list, function(index, value)
+                                try
                                 {
+                                    var $recording_list = JSON.parse(data);
 
-                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio>'
-                                    $return_html += $audio_html;
-                                });
-                                return $return_html;
+                                    var $return_html = '';
+                                    $.each($recording_list, function(index, value)
+                                    {
+
+                                        var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio>'
+                                        $return_html += $audio_html;
+                                    });
+                                    return $return_html;
+                                }
+                                catch(e)
+                                {
+                                    // console.log(e);
+                                    return '';
+                                }
                             }
                             else
                             {
@@ -2133,6 +2141,29 @@
                         },
                         render: function(data, type, row, meta) {
                             // return data;
+
+                            if($.trim(data))
+                            {
+                                try
+                                {
+                                    var $recording_list = JSON.parse(data);
+                                    return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                                }
+                                catch(e)
+                                {
+                                    // console.log(e);
+                                    return '';
+                                }
+                            }
+                            else
+                            {
+                                if(row.recording_address)
+                                {
+                                    return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                                }
+                                else return '';
+                            }
+
                             if(data || row.recording_address)
                             {
                                 return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';

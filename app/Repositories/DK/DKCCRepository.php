@@ -21019,7 +21019,8 @@ EOF;
 
         $notify = $post_data['notify'];
         $call_data = $notify;
-        $service = $call_data['service'];
+
+        // 判断是否重复
         $session = $call_data['session'];
         $mine = DK_CC_Call_Record::where('session',$session)->orderby('id','desc')->first();
         if($mine)
@@ -21029,12 +21030,26 @@ EOF;
             return json_encode($return);
         }
 
+        // 是否存在工号
         if(empty($call_data['staffNo']) || $call_data['staffNo'] == '')
         {
             $call_data['staffNo'] = -1;
         }
+        else
+        {
+            // 判断通话类型
+            $service = $call_data['service'];
+            if($service != 4)
+            {
+                $order_where['api_staffNo'] = $call_data['staffNo'];
+                $order_where['client_phone'] = $call_data['callee'];
+                $order = DK_Order::where($order_where)->orderby('id','desc')->first();
+            }
+        }
 
 
+
+        // 计时计费
         $timeLength = $notify['timeLength'];
         $callCost = 0;
         if($timeLength > 0)
@@ -21062,6 +21077,7 @@ EOF;
             $return['result']['msg'] = '有误';
             return json_encode($return);
         }
+
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -21123,6 +21139,24 @@ EOF;
             $call->call_statistic_id = $statistic->id;
             $bool_cr = $call->save();
             if(!$bool_cr) throw new Exception("DK_CC_Call_Record--update--fail");
+
+            if($order)
+            {
+                $recording_address_list = $order->recording_address_list;
+                if($recording_address_list)
+                {
+                    $recording_address_list = json_decode($recording_address_list,true);
+                    $recording_address_list[$call->id] = 'https://feiniji.cn' . $call->recordFile;
+                }
+                else
+                {
+                    $recording_address_list = [];
+                    $recording_address_list[$call->id] = 'https://feiniji.cn' . $call->recordFile;
+                }
+
+                $order->recording_address_list = json_encode($recording_address_list,JSON_UNESCAPED_SLASHES);
+                $order->save();
+            }
 
 
             DB::commit();
