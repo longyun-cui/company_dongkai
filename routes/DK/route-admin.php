@@ -6,18 +6,25 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
-    if('')
-    {
-        dd(1);
-    }
-    else if(NULL)
-    {
-        dd(2);
-    }
-    else
-    {
-        dd(false);
-    }
+//    if('')
+//    {
+//        dd(1);
+//    }
+//    else if(NULL)
+//    {
+//        dd(2);
+//    }
+//    else
+//    {
+//        dd(false);
+//    }
+
+    $arr = [];
+    $arr[212582] = 'https://feiniji.cn/data/voicerecord/27/20250113/none-20250113-094839-13618152608-FNJsipKQ.mp3';
+    $arr[213981] = 'https://www.feiniji.cn//data/voicerecord/27/20250113/2015-20250113-100229-13618152608-FNJsipKQ.mp3';
+
+    dd(json_encode($arr,JSON_UNESCAPED_SLASHES));
+
 });
 
 

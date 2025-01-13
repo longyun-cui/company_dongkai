@@ -21140,7 +21140,7 @@ EOF;
             $bool_cr = $call->save();
             if(!$bool_cr) throw new Exception("DK_CC_Call_Record--update--fail");
 
-            if($order)
+            if(!empty($order))
             {
                 $recording_address_list = $order->recording_address_list;
                 if($recording_address_list)
