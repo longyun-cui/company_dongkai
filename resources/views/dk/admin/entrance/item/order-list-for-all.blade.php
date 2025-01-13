@@ -1577,7 +1577,7 @@
                         "title": "交付时间",
                         "data": 'delivered_at',
                         "className": "",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
