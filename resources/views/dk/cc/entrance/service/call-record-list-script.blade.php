@@ -17,6 +17,18 @@
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
+        // 【清空重选】
+        $("#search-row-for-call-record").on('click', ".filter-empty", function() {
+            $("#search-row-for-call-record").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+            $(".select2-box").val(-1).trigger("change");
+            $(".select2-box").select2("val", "");
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#search-row-for-call-record").find('select.form-filter option').attr("selected",false);
+            $("#search-row-for-call-record").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+        });
         // 【查询】回车
         $("#search-row-for-call-record").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
