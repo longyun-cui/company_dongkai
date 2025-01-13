@@ -348,6 +348,26 @@
                         }
                     },
                     {
+                        "title": "接通时间",
+                        "data": "answerTime",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "结束时间",
+                        "data": "byeTime",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "创建时间",
                         "data": 'created_at',
                         "className": "font-12px",

@@ -21423,8 +21423,6 @@ EOF;
 
 //                if($call)
 
-
-
                 DB::commit();
 
                 $return['result']['error'] = 0;
