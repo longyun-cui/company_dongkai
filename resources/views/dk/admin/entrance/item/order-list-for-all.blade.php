@@ -2315,7 +2315,7 @@
                         "title": "创建时间",
                         "data": 'created_at',
                         "className": "",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         "orderSequence": ["desc", "asc"],
                         render: function(data, type, row, meta) {
