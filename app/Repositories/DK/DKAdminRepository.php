@@ -18896,7 +18896,24 @@ class DKAdminRepository {
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             $cellData[$k]['description'] = $v['description'];
-            $cellData[$k]['recording_address'] = $v['recording_address'];
+
+            if($v['recording_address_list'])
+            {
+                $recording_address_list_text = "";
+                $recording_address_list = json_decode($v['recording_address_list']);
+                if(count($recording_address_list) > 0)
+                {
+                    foreach($recording_address_list as $recording)
+                    {
+                        $recording_address_list_text .= $recording."\r\n";
+                    }
+                }
+                else $recording_address_list_text = $v['recording_address'];
+                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+
+            }
+            else $cellData[$k]['recording_address'] = $v['recording_address'];
+
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -19106,7 +19123,23 @@ class DKAdminRepository {
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             $cellData[$k]['description'] = $v['description'];
-            $cellData[$k]['recording_address'] = $v['recording_address'];
+
+            if($v['recording_address_list'])
+            {
+                $recording_address_list_text = "";
+                $recording_address_list = json_decode($v['recording_address_list']);
+                if(count($recording_address_list) > 0)
+                {
+                    foreach($recording_address_list as $recording)
+                    {
+                        $recording_address_list_text .= $recording."\r\n";
+                    }
+                }
+                else $recording_address_list_text = $v['recording_address'];
+                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+
+            }
+            else $cellData[$k]['recording_address'] = $v['recording_address'];
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
