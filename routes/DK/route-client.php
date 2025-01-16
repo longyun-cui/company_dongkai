@@ -13,6 +13,10 @@ Route::match(['get','post'], 'logout', $controller.'@logout');
 Route::match(['get','post'], 'logout_without_token', $controller.'@logout_without_token');
 
 
+
+Route::match(['get','post'], '/data/voice_record', $controller.'@view_data_voice_record');
+
+
 /*
  * 超级管理员系统（后台）
  * 需要登录

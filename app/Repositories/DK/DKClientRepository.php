@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\DK;
 
+use App\Models\DK_Choice\DK_Choice_Call_Record;
 use App\Models\DK_Client\DK_Client_Department;
 use App\Models\DK_Client\DK_Client_User;
 use App\Models\DK_Client\DK_Client_Project;
@@ -14,7 +15,7 @@ use App\Models\DK\DK_Order;
 use App\Models\DK\DK_Client;
 use App\Models\DK\DK_District;
 
-use App\Models\DK\YH_Attachment;
+use App\Models\DK_CC\DK_CC_Call_Record;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -174,6 +175,19 @@ class DKClientRepository {
         $this->get_me();
         $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.errors.404';
         return view($view_blade);
+    }
+
+
+
+    public function view_data_voice_record($post_data)
+    {
+        $record_id = $post_data['record_id'];
+        $call_record = DK_CC_Call_Record::find($record_id);
+
+        $view_data['record_file_address'] = 'https://feiniji.cn' . $call_record->recordFile;
+
+        $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.data.voice-record';
+        return view($view_blade)->with($view_data);
     }
 
 

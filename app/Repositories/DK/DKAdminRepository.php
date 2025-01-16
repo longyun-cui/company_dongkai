@@ -18897,22 +18897,38 @@ class DKAdminRepository {
 
             $cellData[$k]['description'] = $v['description'];
 
+            // 录音
             if($v['recording_address_list'])
             {
                 $recording_address_list_text = "";
                 $recording_address_list = json_decode($v['recording_address_list']);
                 if(count($recording_address_list) > 0)
                 {
-                    foreach($recording_address_list as $recording)
+                    foreach($recording_address_list as $key => $recording)
                     {
-                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= $recording."\r\n";
+                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
                     }
                 }
-                else $recording_address_list_text = $v['recording_address'];
+                else
+                {
+                    if($v['call_record_id'] > 0)
+                    {
+                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+                    }
+                    else $recording_address_list_text = $v['recording_address'];
+                }
                 $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
 
             }
-            else $cellData[$k]['recording_address'] = $v['recording_address'];
+            else
+            {
+                if($v['call_record_id'] > 0)
+                {
+                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+                }
+                else $cellData[$k]['recording_address'] = $v['recording_address'];
+            }
 
 
             // 是否重复
@@ -19124,22 +19140,38 @@ class DKAdminRepository {
 
             $cellData[$k]['description'] = $v['description'];
 
+            // 录音
             if($v['recording_address_list'])
             {
                 $recording_address_list_text = "";
                 $recording_address_list = json_decode($v['recording_address_list']);
                 if(count($recording_address_list) > 0)
                 {
-                    foreach($recording_address_list as $recording)
+                    foreach($recording_address_list as $key => $recording)
                     {
-                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= $recording."\r\n";
+                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
                     }
                 }
-                else $recording_address_list_text = $v['recording_address'];
+                else
+                {
+                    if($v['call_record_id'] > 0)
+                    {
+                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+                    }
+                    else $recording_address_list_text = $v['recording_address'];
+                }
                 $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
 
             }
-            else $cellData[$k]['recording_address'] = $v['recording_address'];
+            else
+            {
+                if($v['call_record_id'] > 0)
+                {
+                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+                }
+                else $cellData[$k]['recording_address'] = $v['recording_address'];
+            }
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
