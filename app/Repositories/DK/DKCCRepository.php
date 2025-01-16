@@ -4952,9 +4952,17 @@ class DKCCRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
 
-        $return['menu_active_of_service_telephone_list'] = 'active menu-open';
+        $city_list = config('location_city.city_list');
+        $view_data['city_list'] = $city_list;
+//        $flattened = collect($city_list)->flatMap(function ($values) {
+//            return $values;
+//        })->toArray();
+//        $collapsed = collect($city_list)->collapse()->toArray();
+//        dd($city_list);
+
+        $view_data['menu_active_of_service_telephone_list'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_CC').'entrance.service.telephone-list';
-        return view($view_blade)->with($return);
+        return view($view_blade)->with($view_data);
     }
     // 【任务】返回-列表-数据
     public function get_service_telephone_list_datatable($post_data)
@@ -4973,6 +4981,16 @@ class DKCCRepository {
             ->groupBy('cityCode')
             ->groupBy('areaCode')
             ->groupBy('tag');
+
+
+        if(!empty($post_data['telephone_city']))
+        {
+            if(count($post_data['telephone_city']))
+            {
+                $query->whereIn('cityCode', $post_data['telephone_city']);
+            }
+        }
+
 
         $list = $query->get();
         $total = $list->count();

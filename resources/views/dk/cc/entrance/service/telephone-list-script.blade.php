@@ -3,7 +3,6 @@
 
         // 【搜索】
         $("#search-row-for-telephone-list").on('click', ".filter-submit", function() {
-            layer.msg(1);
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
