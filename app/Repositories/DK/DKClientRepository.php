@@ -192,6 +192,26 @@ class DKClientRepository {
 
 
 
+    // 【交付管理】返回-列表-数据
+    public function query_last_delivery()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $last_delivery = DK_Pivot_Client_Delivery::select('*')
+//            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
+            ->where('client_id',$me->client_id)
+            ->orderBy('id','desc')
+            ->first();
+        if($last_delivery) return response_success(['last_delivery'=>$last_delivery]);
+        else return response_success([]);
+    }
+
+
+
+
+
+
 
     /*
      * 用户基本信息

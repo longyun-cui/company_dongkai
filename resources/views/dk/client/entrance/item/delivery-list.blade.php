@@ -795,6 +795,7 @@
 
                     },
                 },
+                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
                 "pagingType": "simple_numbers",
                 "order": [],
                 "orderCellsTop": true,
@@ -1108,7 +1109,7 @@
                         "title": "所在城市",
                         "data": "order_id",
                         "className": "",
-                        "width": "120px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.order_er)
@@ -1126,7 +1127,7 @@
                         "title": "所在区域",
                         "data": "order_id",
                         "className": "",
-                        "width": "120px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.order_er)
@@ -1167,15 +1168,20 @@
                         }
                     },
                     {
-                        "title": "录音地址",
+                        "title": "录音播放",
                         "data": "order_id",
                         "className": "",
-                        "width": "80px",
+                        "width": "360px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.order_er)
                             {
-                                if(row.order_er.recording_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
+                                // if(row.order_er.recor;ding_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
+                                // else return "--"
+                                if(row.order_er.recording_address)
+                                {
+                                    return '<audio controls controlsList="nodownload" style="width:360px;height:20px;"><source src="'+row.order_er.recording_address+'" type="audio/mpeg"></audio>';
+                                }
                                 else return "--";
                             }
                             else return "--";
@@ -1210,6 +1216,23 @@
                     }
                 ],
                 "drawCallback": function (settings) {
+
+                    var $firstRowData = ajax_datatable.row(0).data();
+                    var $last_delivery_id = localStorage.getItem('last_delivery_id');
+                    if($last_delivery_id)
+                    {
+                        if($firstRowData.id > $last_delivery_id)
+                        {
+                            localStorage.setItem('last_delivery_id',$firstRowData.id);
+                            $('.notification-dom').hide();
+            }
+                    }
+                    else
+                    {
+                        localStorage.setItem('last_delivery_id',$firstRowData.id);
+                        $('.notification-dom').hide();
+                    }
+                    // console.log($firstRowData);
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {

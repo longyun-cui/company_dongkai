@@ -165,6 +165,18 @@ class DKClientController extends Controller
     }
 
 
+
+
+    // 返回主页视图
+    public function query_last_delivery()
+    {
+        return $this->repo->query_last_delivery();
+    }
+
+
+
+
+
     /*
      * 用户基本信息
      */

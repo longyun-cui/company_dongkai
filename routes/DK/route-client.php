@@ -32,6 +32,9 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
     Route::get('/404', $controller.'@view_admin_404');
 
 
+    Route::post('/query_last_delivery', $controller.'@query_last_delivery');
+
+
     /*
      * 个人信息管理
      */

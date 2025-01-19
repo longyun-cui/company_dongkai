@@ -185,6 +185,17 @@
                     </ul>
                 </li>
 
+
+
+                <li class="dropdown- notifications-alert">
+                    <!-- Menu toggle button -->
+                    <a href="{{ url('/item/delivery-list') }}">
+                        <i class="fa fa-bell-o"></i>
+                        <span class="label label-danger notification-dom" style="width:16px;border-radius:50%;color:#dd4b39 !important;display: none;">•</span>
+                    </a>
+                </li>
+
+
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                     <!-- Menu Toggle Button -->

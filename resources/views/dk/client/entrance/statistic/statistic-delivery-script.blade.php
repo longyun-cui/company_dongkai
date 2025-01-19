@@ -111,12 +111,12 @@
             $('#datatable_ajax_daily').DataTable().ajax.reload();
             $('#datatable_ajax_project').DataTable().ajax.reload();
 
-            statistic_get_data_for_delivery_daily_chart("month",$the_month_str,
-                "myChart-for-delivery-quantity",
-                "myChart-for-cost-total",
-                "myChart-for-cost-per-capita",
-                "myChart-for-cost-unit-average"
-            );
+            // statistic_get_data_for_delivery_daily_chart("month",$the_month_str,
+            //     "myChart-for-delivery-quantity",
+            //     "myChart-for-cost-total",
+            //     "myChart-for-cost-per-capita",
+            //     "myChart-for-cost-unit-average"
+            // );
         });
         // 【业务报表】按【天】搜索
         $(".main-content").on('click', "#filter-submit-for-delivery-by-date", function() {
@@ -167,12 +167,12 @@
             $('#datatable_ajax_daily').DataTable().ajax.reload();
             $('#datatable_ajax_project').DataTable().ajax.reload();
 
-            statistic_get_data_for_delivery_daily_chart("date",$the_date_str,
-                "myChart-for-delivery-quantity",
-                "myChart-for-cost-total",
-                "myChart-for-cost-per-capita",
-                "myChart-for-cost-unit-average"
-            );
+            // statistic_get_data_for_delivery_daily_chart("date",$the_date_str,
+            //     "myChart-for-delivery-quantity",
+            //     "myChart-for-cost-total",
+            //     "myChart-for-cost-per-capita",
+            //     "myChart-for-cost-unit-average"
+            // );
         });
         // 【业务报表】按【时间段】搜索
         $(".main-content").on('click', "#filter-submit-for-delivery-by-period", function() {
@@ -224,12 +224,12 @@
             $('#datatable_ajax_daily').DataTable().ajax.reload();
             $('#datatable_ajax_project').DataTable().ajax.reload();
 
-            statistic_get_data_for_delivery_daily_chart("date",$the_date_str,
-                "myChart-for-delivery-quantity",
-                "myChart-for-cost-total",
-                "myChart-for-cost-per-capita",
-                "myChart-for-cost-unit-average"
-            );
+            // statistic_get_data_for_delivery_daily_chart("date",$the_date_str,
+            //     "myChart-for-delivery-quantity",
+            //     "myChart-for-cost-total",
+            //     "myChart-for-cost-per-capita",
+            //     "myChart-for-cost-unit-average"
+            // );
         });
 
 

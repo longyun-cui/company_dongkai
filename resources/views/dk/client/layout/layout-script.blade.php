@@ -12,6 +12,10 @@
 
     $(function() {
 
+        // localStorage.removeItem('last_delivery_id');
+
+        setInterval(query_last_delivery, 30000);
+
 
         {{--$.post(--}}
         {{--    "/is_only_me",--}}
@@ -36,7 +40,8 @@
             {
                 _token: $('meta[name="_token"]').attr("content")
             },
-            function(result){
+            function(result)
+            {
                 if(result.result != 'access')
                 {
                     // layer.msg('该账户在其他设备登录或退出，即将跳转登录页面！');
@@ -166,6 +171,81 @@
 
     });
 
+
+
+    function query_last_delivery()
+    {
+
+        $.post(
+            "/query_last_delivery",
+            {
+                _token: $('meta[name="_token"]').attr('content')
+            },
+            'json'
+        )
+            .done(function($response) {
+                // console.log('done');
+                $response = JSON.parse($response);
+
+                if(!$response.success)
+                {
+                    if($response.msg) layer.msg($response.msg);
+                }
+                else
+                {
+                    // layer.msg("请求成功！");
+                    // console.log($response.data);
+                    if($response.data.last_delivery)
+                    {
+                        var $last_id = $response.data.last_delivery.id;
+                        console.log($last_id);
+
+                        var $last_delivery_id = localStorage.getItem('last_delivery_id');
+                        if($last_delivery_id)
+                        {
+                            if($last_id > $last_delivery_id)
+                            {
+                                localStorage.setItem('last_delivery_id',$last_id);
+                                $('.notification-dom').show();
+                                alertSound();
+                            }
+                        }
+                        else
+                        {
+                            localStorage.setItem('last_delivery_id',$last_id);
+                            $('.notification-dom').show();
+                            alertSound();
+                        }
+                    }
+                }
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.log('fail');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+                // layer.msg('服务器错误！');
+
+            })
+            .always(function(jqXHR, textStatus) {
+                // console.log('always');
+                // console.log(jqXHR);
+                // console.log(textStatus);
+            });
+
+    }
+
+    function alertSound() // 声音提示
+    {
+        // $("body").append('<embed src="/resource/common/sounds/ding.mp3" autostart="true" hidden="true" loop="false">');
+        var audio = new Audio('/resource/common/sounds/ding.mp3');
+        audio.preload = 'none';
+        audio.play();
+    }
+
+
+
+
     function filter(str)
     {
         // 特殊字符转义
@@ -180,6 +260,7 @@
         str = str.replace(/#/g, '%23');
         return str;
     }
+
 
     function formateObjToParamStr(paramObj)
     {
