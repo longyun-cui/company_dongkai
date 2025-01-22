@@ -1727,7 +1727,7 @@
             // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
             // window.open($url);
 
-            layer.msg('确定"批量导出"么', {
+            layer.msg('确定"批量API推送"么', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
