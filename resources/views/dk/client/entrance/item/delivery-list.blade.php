@@ -61,6 +61,14 @@
 {{--                            <option value="1" @if($exported_status == 1) selected="selected" @endif>已导出</option>--}}
 {{--                        </select>--}}
 
+                        @if($me->client_er->is_api_scrm == 1)
+                        <select class="form-control form-filter" name="order-is-api-pushed" style="width:100px;">
+                            <option value="-1">api推送</option>
+                            <option value="0" @if($is_api_pushed == 0) selected="selected" @endif>未推送</option>
+                            <option value="1" @if($is_api_pushed == 1) selected="selected" @endif>已推送</option>
+                        </select>
+                        @endif
+
                         <select class="form-control form-filter" name="order-assign-status" style="width:100px;">
                             <option value="-1">分配状态</option>
                             <option value="0" @if($assign_status == 0) selected="selected" @endif>待分配</option>
@@ -141,6 +149,12 @@
 {{--                            </select>--}}
 {{--                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-exported-status"><i class="fa fa-check"></i> 批量更改导出状态</span>--}}
 
+                            @if($me->client_er->is_api_scrm == 1)
+                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-api-push">
+                                <i class="fa fa-share-square"></i> 批量推送
+                            </span>
+                            @endif
+
                             <select name="bulk-operate-assign-status" class="form-control form-filter">
                                 <option value="-1">请选分配状态</option>
                                 <option value="1">已分配</option>
@@ -178,7 +192,7 @@
 
 
 {{--显示-基本信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-follow">
+<div class="modal fade modal-main-body" id="modal-body-for-info">
     <div class="col-md-8 col-md-offset-2" id="" style="margin-top:64px;margin-bottom:64px;background:#fff;">
 
         <div class="box box-info form-container">
@@ -281,360 +295,6 @@
         </div>
 
     </div>
-</div>
-
-{{--显示-附件-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-attachment">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">订单【<span class="attachment-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-
-
-            {{--attachment--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="">
-            <div class="box-body attachment-box">
-
-            </div>
-            </form>
-
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px-">
-                <h4 class="box-title">【添加附件】</h4>
-            </div>
-
-            {{--上传附件--}}
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-attachment-set-form">
-            <div class="box-body">
-
-                {{ csrf_field() }}
-                <input type="hidden" name="attachment-set-operate" value="item-order-attachment-set" readonly>
-                <input type="hidden" name="attachment-set-order-id" value="0" readonly>
-                <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
-                <input type="hidden" name="attachment-set-column-key" value="" readonly>
-
-                <input type="hidden" name="operate" value="item-order-attachment-set" readonly>
-                <input type="hidden" name="order_id" value="0" readonly>
-                <input type="hidden" name="operate_type" value="add" readonly>
-                <input type="hidden" name="column_key" value="attachment" readonly>
-
-
-                <div class="form-group">
-                    <label class="control-label col-md-2">附件名称</label>
-                    <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="attachment_name" autocomplete="off" placeholder="附件名称" value="">
-                    </div>
-                </div>
-
-                {{--多图上传--}}
-                <div class="form-group">
-
-                    <label class="control-label col-md-2">图片上传</label>
-
-                    <div class="col-md-8">
-                        <input id="multiple-images" type="file" class="file-multiple-images" name="multiple_images[]" multiple >
-                    </div>
-
-                </div>
-
-                {{--多图上传--}}
-                <div class="form-group _none">
-
-                    <label class="control-label col-md-2" style="clear:left;">选择图片</label>
-                    <div class="col-md-8 fileinput-group">
-
-                        <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-new thumbnail">
-                            </div>
-                            <div class="fileinput-preview fileinput-exists thumbnail">
-                            </div>
-                            <div class="btn-tool-group">
-                            <span class="btn-file">
-                                <button class="btn btn-sm btn-primary fileinput-new">选择图片</button>
-                                <button class="btn btn-sm btn-warning fileinput-exists">更改</button>
-                                <input type="file" name="attachment_file" />
-                            </span>
-                                <span class="">
-                                <button class="btn btn-sm btn-danger fileinput-exists" data-dismiss="fileinput">移除</button>
-                            </span>
-                            </div>
-                        </div>
-                        <div id="titleImageError" style="color: #a94442"></div>
-
-                    </div>
-
-                </div>
-
-            </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-attachment-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-attachment-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-
-
-{{--修改-基本-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-text-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-text-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-text-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-order-info-text-set" readonly>
-                    <input type="hidden" name="info-text-set-order-id" value="0" readonly>
-                    <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-text-set-column-key" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-text-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control" name="info-text-set-column-value" autocomplete="off" placeholder="" value="">
-                            <textarea class="form-control" name="info-textarea-set-column-value" rows="6" cols="100%"></textarea>
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-text-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-text-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-时间-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-time-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-time-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-time-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-order-info-time-set" readonly>
-                    <input type="hidden" name="info-time-set-order-id" value="0" readonly>
-                    <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-time-set-column-key" value="" readonly>
-                    <input type="hidden" name="info-time-set-time-type" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-time-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <input type="text" class="form-control form-filter time_picker" name="info-time-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
-                            <input type="text" class="form-control form-filter date_picker" name="info-date-set-column-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-time-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-time-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-radio-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-radio-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-radio-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-radio-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-order-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-order-id" value="0" readonly>
-                    <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
-                    <input type="hidden" name="info-radio-set-column-key" value="" readonly>
-
-
-                    <div class="form-group radio-box">
-                    </div>
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-radio-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-radio-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-{{--修改-select-信息--}}
-<div class="modal fade modal-main-body" id="modal-body-for-info-select-set">
-    <div class="col-md-6 col-md-offset-3 margin-top-64px margin-bottom-64px bg-white">
-
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改订单【<span class="info-select-set-title"></span>】</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            <form action="" method="post" class="form-horizontal form-bordered " id="modal-info-select-set-form">
-                <div class="box-body">
-
-                    {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="item-order-info-option-set" readonly>
-                    <input type="hidden" name="info-select-set-order-id" value="0" readonly>
-                    <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
-                    <input type="hidden" name="info-select-set-column-key" value="" readonly>
-                    <input type="hidden" name="info-select-set-column-key2" value="" readonly>
-
-
-                    <div class="form-group">
-                        <label class="control-label col-md-2 info-select-set-column-name"></label>
-                        <div class="col-md-8 ">
-                            <select class="form-control select-primary" name="info-select-set-column-value" style="width:48%;" id="">
-                                <option data-id="0" value="0">未指定</option>
-                            </select>
-                            <select class="form-control select-assistant" name="info-select-set-column-value2" style="width:48%;" id="">
-                                <option data-id="0" value="0">未指定</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                </div>
-            </form>
-
-            <div class="box-footer">
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success" id="item-submit-for-info-select-set"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" class="btn btn-default" id="item-cancel-for-info-select-set">取消</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-{{--option--}}
-<div class="option-container _none">
-
-    {{--订单类型--}}
-    <div id="location-city-option-list">
-        <option value="">选择城市</option>
-        @foreach(config('info.location_city') as $k => $v)
-            <option value ="{{ $k }}" data-index="{{ $loop->index }}">{{ $k }}</option>
-        @endforeach
-    </div>
-
-
-    {{--是否+V--}}
-    <div id="option-list-for-is-wx">
-        <label class="control-label col-md-2">是否+V</label>
-        <div class="col-md-8">
-            <div class="btn-group">
-
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="is_wx" value="0" class="info-set-column"> 否
-                        </label>
-                    </span>
-                </button>
-                <button type="button" class="btn">
-                    <span class="radio">
-                        <label>
-                            <input type="radio" name="is_wx" value="1" class="info-set-column"> 是
-                        </label>
-                    </span>
-                </button>
-
-            </div>
-        </div>
-    </div>
-
-    {{--审核结果--}}
-    <div id="option-list-for-inspected-result">
-        <option value="-1">审核结果</option>
-        @foreach(config('info.inspected_result') as $v)
-            <option value="{{ $v }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
-    {{--牙齿数量--}}
-    <div id="option-list-for-teeth-count">
-        <option value="-1">选择牙齿数量</option>
-        @foreach(config('info.teeth_count') as $v)
-            <option value="{{ $v }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
-    {{--渠道来源--}}
-    <div id="option-list-for-channel-source">
-        <option value="-1">选择渠道来源</option>
-        @foreach(config('info.channel_source') as $v)
-            <option value="{{ $v }}">{{ $v }}</option>
-        @endforeach
-    </div>
-
 </div>
 
 
@@ -754,12 +414,12 @@
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [[ @if(!in_array($length,[20, 50, 100, 200, 500, 1000])) {{ $length.',' }} @endif 20, 50, 100, 200, 500, 1000], [ @if(!in_array($length,[20, 50, 100, 200, 500, 1000])) {{ $length.',' }} @endif "20", "50", "100", "200", "500", "1000"]],
+                "aLengthMenu": [[ @if(!in_array($length,[10, 50, 100, 200, 500, 1000])) {{ $length.',' }} @endif 10, 50, 100, 200, 500, 1000], [ @if(!in_array($length,[10, 50, 100, 200, 500, 1000])) {{ $length.',' }} @endif "10", "50", "100", "200", "500", "1000"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "iDisplayStart": {{ ($page - 1) * $length }},
-                "iDisplayLength": {{ $length or 20 }},
+                "iDisplayLength": {{ $length or 10 }},
                 "ajax": {
                     'url': "{{ url('/item/delivery-list') }}",
                     "type": 'POST',
@@ -785,6 +445,7 @@
                         d.is_repeat = $('select[name="order-is-repeat"]').val();
                         d.assign_status = $('select[name="order-assign-status"]').val();
                         d.exported_status = $('select[name="order-exported-status"]').val();
+                        d.is_api_pushed = $('select[name="order-is-api-pushed"]').val();
                         d.city = $('select[name="order-city[]"]').val();
                         d.district = $('select[name="order-district[]"]').val();
 //
@@ -914,6 +575,30 @@
                     //         return data;
                     //     }
                     // },
+                    @if($me->client_er->is_api_scrm == 1)
+                    {
+                        "title": "API推送",
+                        "data": "is_api_pushed",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('is_api_pushed');
+                                $(nTd).attr('data-id',row.id).attr('data-name','分配状态');
+                                $(nTd).attr('data-key','is_api_pushed').attr('data-value',data);
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '<small class="btn-xs btn-info">未推送</small>';
+                            else if(data == 1) return '<small class="btn-xs btn-success">已推送</small>';
+                            return data;
+                        }
+                    },
+                    @endif
                     {
                         "title": "工单质量",
                         "data": "order_quality",
@@ -925,7 +610,7 @@
                             {
                                 $(nTd).addClass('order_quality');
                                 $(nTd).attr('data-id',row.id).attr('data-name','工单质量');
-                                $(nTd).attr('data-key','order_quality').attr('data-value',row.id);
+                                $(nTd).attr('data-key','order_quality').attr('data-value',data);
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
                             }
@@ -1254,10 +939,10 @@
                     if($('select[name="order-is-wx"]').val() > 0)  $obj.is_delay = $('select[name="order-is-wx"]').val();
                     if($('select[name="order-is-repeat"]').val() > 0)  $obj.is_delay = $('select[name="order-is-repeat"]').val();
                     if($('select[name="order-assign-status"]').val() != -1)  $obj.assign_status = $('select[name="order-assign-status"]').val();
-                    if($('select[name="order-exported-status"]').val() != -1)  $obj.exported_status = $('select[name="order-exported-status"]').val();
+                    // if($('select[name="order-exported-status"]').val() != -1)  $obj.exported_status = $('select[name="order-exported-status"]').val();
 
                     var $page_length = this.api().context[0]._iDisplayLength; // 当前每页显示多少
-                    if($page_length != 20) $obj.length = $page_length;
+                    if($page_length != 10) $obj.length = $page_length;
                     var $page_start = this.api().context[0]._iDisplayStart; // 当前页开始
                     var $pagination = ($page_start / $page_length) + 1; //得到页数值 比页码小1
                     if($pagination > 1) $obj.page = $pagination;

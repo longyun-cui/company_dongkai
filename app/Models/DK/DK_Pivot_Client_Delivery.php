@@ -30,6 +30,10 @@ class DK_Pivot_Client_Delivery extends Model
         'delivered_status',
         'delivered_result',
 
+        'is_api_pushed',
+        'is_api_pusher_id',
+        'is_api_pushed_at',
+
         'creator_id',
         'updater_id'
     ];

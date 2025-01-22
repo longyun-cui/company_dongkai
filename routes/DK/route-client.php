@@ -214,6 +214,7 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
     Route::post('/item/delivery-bulk-exported-status', $controller.'@operate_item_delivery_bulk_exported_status');
     Route::post('/item/delivery-bulk-assign-status', $controller.'@operate_item_delivery_bulk_assign_status');
     Route::post('/item/delivery-bulk-assign-staff', $controller.'@operate_item_delivery_bulk_assign_staff');
+    Route::post('/item/delivery-bulk-api-push', $controller.'@operate_item_delivery_bulk_api_push');
 
 
 

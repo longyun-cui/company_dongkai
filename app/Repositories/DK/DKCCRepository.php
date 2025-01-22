@@ -21264,7 +21264,7 @@ EOF;
             {
                 $insert_data['location_district'] = $field_value;
             }
-            else if($field_name == "牙齿数量")
+            else if($field_name == "牙齿数量" || $field_name == "牙齿颗数")
             {
                 $insert_data['teeth_count'] = $field_value;
             }

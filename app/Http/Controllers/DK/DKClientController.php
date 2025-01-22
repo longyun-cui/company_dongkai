@@ -478,6 +478,11 @@ class DKClientController extends Controller
     {
         return $this->repo->operate_item_delivery_bulk_assign_staff(request()->all());
     }
+    // 【订单管理】批量-api-推送
+    public function operate_item_delivery_bulk_api_push()
+    {
+        return $this->repo->operate_item_delivery_bulk_api_push(request()->all());
+    }
 
 
 

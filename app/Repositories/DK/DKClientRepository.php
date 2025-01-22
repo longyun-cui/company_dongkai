@@ -53,6 +53,7 @@ class DKClientRepository {
         {
             $this->auth_check = 1;
             $this->me = Auth::guard("dk_client_staff")->user();
+            $this->me->load('client_er');
             view()->share('me',$this->me);
         }
         else $this->auth_check = 0;
@@ -2673,7 +2674,7 @@ class DKClientRepository {
             if(is_numeric($post_data['length']) && $post_data['length'] > 0) $view_data['length'] = $post_data['length'];
             else $view_data['length'] = 20;
         }
-        else $view_data['length'] = 20;
+        else $view_data['length'] = 10;
         // 第几页
         if(!empty($post_data['page']))
         {
@@ -2785,6 +2786,14 @@ class DKClientRepository {
             $view_data['exported_status'] = $post_data['exported_status'];
         }
         else $view_data['exported_status'] = -1;
+
+        // 是否api推送
+        if(!empty($post_data['is_api_pushed']))
+        {
+            $view_data['is_api_pushed'] = $post_data['is_api_pushed'];
+        }
+        else $view_data['is_api_pushed'] = -1;
+
 
 
         $staff_list = DK_Client_User::select('id','username')->where('client_id',$me->client_id)->whereIn('user_type',[81,84,88])->get();
@@ -2912,7 +2921,7 @@ class DKClientRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
 
         if(isset($post_data['order']))
         {
@@ -3284,6 +3293,233 @@ class DKClientRepository {
                 }
 
             }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【交付管理】批量-API-推送
+    public function operate_item_delivery_bulk_api_push($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'ids.required' => 'ids.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'ids' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'delivery-api-push-bulk') return response_error([],"参数[operate]有误！");
+        $ids = $post_data['ids'];
+        $ids_array = explode("-", $ids);
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+        $url = "https://qw-openapi-tx.dustess.com/auth/v1/access_token/token";
+
+        $curl_data['ClientID'] = env('API_SCRM_ClientID');
+        $curl_data['ClientSecret'] = env('API_SCRM_ClientSecret');
+        $curl_data = json_encode($curl_data);
+//        dd($curl_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $curl_data); // post的变量
+        $result = curl_exec($ch);
+        if(curl_errno($ch))
+        {
+            return response_fail([],'token请求失败');
+        }
+        else
+        {
+            $result = json_decode($result);
+            if($result->success)
+            {
+                $token = $result->data->accessToken;
+            }
+        }
+        curl_close($ch);
+
+
+
+
+
+        if(!empty($token))
+        {
+            $delivery_list = DK_Pivot_Client_Delivery::withTrashed()
+                ->with('order_er')
+                ->whereIn('id',$ids_array)->get();
+//        dd($delivery_list->toArray());
+
+            $customer_list = [];
+            foreach($delivery_list as $key => $item)
+            {
+                $customer = [];
+
+//                $customer['source'] = "FNJ";
+                $customer['pool'] = env('API_SCRM_Pool');
+                $customer['remark'] = $item->order_er->client_name;
+                $customer['prov_city'] = $item->order_er->location_city.'-'.$item->order_er->location_district;
+
+
+                $mobile['type'] = "mobile";
+                $mobile['display'] = "手机号";
+                $mobile['tel'] = $item->order_er->client_phone;
+                $customer['mobiles'][] = $mobile;
+
+                if(!empty($item->order_er->wx_id))
+                {
+                    $wx['type'] = "wx_id";
+                    $wx['display'] = "微信号";
+                    $wx['tel'] = $item->order_er->wx_id;
+                    $customer['mobiles'][] = $wx;
+                }
+
+                $customer['description'] = $item->order_er->description;
+
+                // 自定义字段
+                $custom_fields = [];
+
+                $delivery_time['id'] = 'delivery_time';
+                $delivery_time['type'] = 'text';
+                $delivery_time['string_value'] = $item->created_at->format('Y-m-d');
+                $custom_fields[] = $delivery_time;
+
+                $teeth_count['id'] = 'teeth_count';
+                $teeth_count['type'] = 'text';
+                $teeth_count['string_value'] = $item->order_er->teeth_count;
+                $custom_fields[] = $teeth_count;
+
+                $customer['custom_fields'] = $custom_fields;
+
+                $customer['description'] = $item->order_er->description;
+
+                $customer_list[] = $customer;
+            }
+            $api_push_data['customer_list'] = $customer_list;
+            $api_push_data_json = json_encode($api_push_data);
+
+            $push_url = "https://qw-openapi-tx.dustess.com/customer/v1/batchAddCustomer?accessToken=".$token;
+
+            $push_ch = curl_init();
+            curl_setopt($push_ch, CURLOPT_URL, $push_url);
+            curl_setopt($push_ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+            curl_setopt($push_ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($push_ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($push_ch, CURLOPT_POST, true); // post数据
+            curl_setopt($push_ch, CURLOPT_POSTFIELDS, $api_push_data_json); // post的变量
+            $push_result = curl_exec($push_ch);
+            if(curl_errno($push_ch))
+            {
+                return response_fail([],'api推送请求失败！');
+            }
+            else
+            {
+                $push_result_decode = json_decode($push_result);
+                if($push_result_decode->success)
+                {
+                }
+                else
+                {
+                    return response_fail([],'推送数据失败！');
+                }
+            }
+            curl_close($push_ch);
+        }
+        else return response_fail([],'token不存在！');
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+
+            $delivered_update['is_api_pushed'] = 1;
+            $delivered_update['is_api_pusher_id'] = $me->id;
+            $delivered_update['is_api_pushed_at'] = time();
+            $bool = DK_Pivot_Client_Delivery::withTrashed()->whereIn('id',$ids_array)
+                ->update($delivered_update);
+            if(!$bool) throw new Exception("DK_Pivot_Client_Delivery--update--fail");
+            else
+            {
+                    $record = new DK_Client_Record;
+
+                    $record_data["ip"] = Get_IP();
+                    $record_data["record_object"] = 21;
+                    $record_data["record_category"] = 11;
+                    $record_data["record_type"] = 1;
+                    $record_data["creator_id"] = $me->id;
+                    $record_data["operate_object"] = 91;
+                    $record_data["operate_category"] = 111;
+                    $record_data["operate_type"] = 1;
+                    $record_data["column_name"] = "ids";
+
+                    $record_data["title"] = $ids;
+                    $record_data["content"] = $push_result;
+
+                    $bool_1 = $record->fill($record_data)->save();
+                    if(!$bool_1) throw new Exception("insert--record--fail");
+            }
+
+//            foreach($ids_array as $key => $id)
+//            {
+//                $item = DK_Pivot_Client_Delivery::withTrashed()->find($id);
+//                if(!$item) return response_error([],"该【交付】不存在，刷新页面重试！");
+//
+//
+////                $before = $item->client_staff_id;
+//
+//                $item->is_api_pushed = 1;
+//                $bool = $item->save();
+//                if(!$bool) throw new Exception("item--update--fail");
+//                else
+//                {
+////                    $record = new DK_Client_Record;
+////
+////                    $record_data["ip"] = Get_IP();
+////                    $record_data["record_object"] = 21;
+////                    $record_data["record_category"] = 11;
+////                    $record_data["record_type"] = 1;
+////                    $record_data["creator_id"] = $me->id;
+////                    $record_data["order_id"] = $id;
+////                    $record_data["operate_object"] = 91;
+////                    $record_data["operate_category"] = 99;
+////                    $record_data["operate_type"] = 1;
+////                    $record_data["column_name"] = "client_staff_id";
+////
+////                    $record_data["before"] = $before;
+////                    $record_data["after"] = $client_staff_id;
+////
+////                    $bool_1 = $record->fill($record_data)->save();
+////                    if(!$bool_1) throw new Exception("insert--record--fail");
+//                }
+//
+//            }
 
 
             DB::commit();

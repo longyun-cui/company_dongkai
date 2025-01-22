@@ -1652,7 +1652,7 @@
             });
 
         });
-        // 【批量操作】批量-导出
+        // 【批量操作】批量-指派
         $(".main-content").on('click', '#bulk-submit-for-assign-staff', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
@@ -1682,6 +1682,62 @@
                             operate: "delivery-assign-staff-bulk",
                             ids: $ids,
                             operate_staff_id:$('select[name="bulk-operate-staff-id"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $username = $('select[name="bulk-operate-staff-id"]').find('option:selected').html();
+
+                                    $row.find('td[data-key=client_staff_id]').html('<a href="javascript:void(0);">'+$username+'</a>');
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+        // 【批量操作】批量-API推送
+        $(".main-content").on('click', '#bulk-submit-for-api-push', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量导出"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/delivery-bulk-api-push') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "delivery-api-push-bulk",
+                            ids: $ids
                         },
                         function(data){
                             layer.close(index);
