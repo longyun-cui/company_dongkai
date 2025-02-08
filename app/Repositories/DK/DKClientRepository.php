@@ -3381,7 +3381,8 @@ class DKClientRepository {
             {
                 $customer = [];
 
-//                $customer['source'] = "FNJ";
+                $customer['source'] = "2r4";
+
                 $customer['pool'] = env('API_SCRM_Pool');
                 $customer['remark'] = $item->order_er->client_name;
                 $customer['prov_city'] = $item->order_er->location_city.'-'.$item->order_er->location_district;
@@ -3411,6 +3412,11 @@ class DKClientRepository {
                 $custom_fields[] = $delivery_time;
 
                 $teeth_count['id'] = 'teeth_count';
+                $teeth_count['type'] = 'text';
+                $teeth_count['string_value'] = $item->order_er->teeth_count;
+                $custom_fields[] = $teeth_count;
+
+                $teeth_count['id'] = 'field1';
                 $teeth_count['type'] = 'text';
                 $teeth_count['string_value'] = $item->order_er->teeth_count;
                 $custom_fields[] = $teeth_count;

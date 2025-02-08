@@ -238,276 +238,12 @@ class DKAdminRepository {
     public function view_admin_index1()
     {
         $this->get_me();
-        $me = $this->me;
 
-
-//        $condition = request()->all();
-//        $return['condition'] = $condition;
-//
-//        $condition['task-list-type'] = 'unfinished';
-//        $parameter_result = http_build_query($condition);
-//        return redirect('/?'.$parameter_result);
-
-
-        $this_month = date('Y-m');
-        $this_month_start_date = date('Y-m-01'); // 本月开始日期
-        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
-        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
-        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
-        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
-        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
-
-        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
-        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
-        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
-        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
-        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
-        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
-
-
-
-
-
-        // 工单统计
-        $query_order_count_for_all = DK_Order::select('id');
-        $query_order_count_for_export = DK_Order::where('created_type', 9);
-        $query_order_count_for_unpublished = DK_Order::whereIn('created_type', [1,99])->where('is_published', 0);
-        $query_order_count_for_published = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1);
-        $query_order_count_for_waiting_for_inspect = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_status', 0);
-        $query_order_count_for_inspected = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_status', '<>', 0);
-        $query_order_count_for_accepted = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_result','通过');
-        $query_order_count_for_refused = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_result','拒绝');
-        $query_order_count_for_accepted_inside = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('inspected_result','内部通过');
-        $query_order_count_for_repeat = DK_Order::whereIn('created_type', [1,99])->where('is_published', 1)->where('is_repeat','>',0);
-
-
-
-        // 本月每日工单量
-        $query_this_month = DK_Order::select('id','published_at')
-            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
-            ->select(DB::raw("
-                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(published_at,'%e') as day,
-                    count(*) as sum
-                "));
-
-        // 上月每日工单量
-        $query_last_month = DK_Order::select('id','published_at')
-            ->whereBetween('published_at',[$last_month_start_timestamp,$last_month_ended_timestamp])
-            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
-            ->select(DB::raw("
-                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date,
-                    FROM_UNIXTIME(published_at,'%e') as day,
-                    count(*) as sum
-                "));
-
-
-        // 客服经理
-        if($me->user_type == 41)
-        {
-//            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-//            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
-
-//            $query_order_count_for_all->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_unpublished->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_published->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_waiting_for_inspect->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_inspected->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_accepted->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_refused->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_accepted_inside->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_repeat->whereIn('creator_id',$sub_subordinates_array);
-
-//            $query_this_month->whereIn('creator_id',$sub_subordinates_array);
-//            $query_last_month->whereIn('creator_id',$sub_subordinates_array);
-
-
-            $query_order_count_for_all->where('department_manager_id',$me->id);
-            $query_order_count_for_export->where('department_manager_id',$me->id);
-            $query_order_count_for_unpublished->where('department_manager_id',$me->id);
-            $query_order_count_for_published->where('department_manager_id',$me->id);
-            $query_order_count_for_waiting_for_inspect->where('department_manager_id',$me->id);
-            $query_order_count_for_inspected->where('department_manager_id',$me->id);
-            $query_order_count_for_accepted->where('department_manager_id',$me->id);
-            $query_order_count_for_refused->where('department_manager_id',$me->id);
-            $query_order_count_for_accepted_inside->where('department_manager_id',$me->id);
-            $query_order_count_for_repeat->where('department_manager_id',$me->id);
-
-            $query_this_month->where('department_manager_id',$me->id);
-            $query_last_month->where('department_manager_id',$me->id);
-        }
-        // 客服经理
-        if($me->user_type == 81)
-        {
-//            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-//            $sub_subordinates_array = DK_User::select('id')->whereIn('superior_id',$subordinates_array)->get()->pluck('id')->toArray();
-
-//            $query_order_count_for_all->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_unpublished->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_published->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_waiting_for_inspect->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_inspected->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_accepted->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_refused->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_accepted_inside->whereIn('creator_id',$sub_subordinates_array);
-//            $query_order_count_for_repeat->whereIn('creator_id',$sub_subordinates_array);
-
-//            $query_this_month->whereIn('creator_id',$sub_subordinates_array);
-//            $query_last_month->whereIn('creator_id',$sub_subordinates_array);
-
-
-            $query_order_count_for_all->where('department_manager_id',$me->id);
-            $query_order_count_for_export->where('department_manager_id',$me->id);
-            $query_order_count_for_unpublished->where('department_manager_id',$me->id);
-            $query_order_count_for_published->where('department_manager_id',$me->id);
-            $query_order_count_for_waiting_for_inspect->where('department_manager_id',$me->id);
-            $query_order_count_for_inspected->where('department_manager_id',$me->id);
-            $query_order_count_for_accepted->where('department_manager_id',$me->id);
-            $query_order_count_for_refused->where('department_manager_id',$me->id);
-            $query_order_count_for_accepted_inside->where('department_manager_id',$me->id);
-            $query_order_count_for_repeat->where('department_manager_id',$me->id);
-
-            $query_this_month->where('department_manager_id',$me->id);
-            $query_last_month->where('department_manager_id',$me->id);
-        }
-        // 客服主管
-        if($me->user_type == 84)
-        {
-//            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-//
-//            $query_order_count_for_all->whereIn('creator_id',$subordinates_array);
-//            $query_order_count_for_unpublished->whereIn('creator_id',$subordinates_array);
-//            $query_order_count_for_published->whereIn('creator_id',$subordinates_array);
-//            $query_order_count_for_waiting_for_inspect->whereIn('creator_id',$subordinates_array);
-//            $query_order_count_for_inspected->whereIn('creator_id',$subordinates_array);
-//            $query_order_count_for_accepted->whereIn('creator_id',$subordinates_array);
-//            $query_order_count_for_refused->whereIn('creator_id',$subordinates_array);
-//            $query_order_count_for_accepted_inside->whereIn('creator_id',$subordinates_array);
-//            $query_order_count_for_repeat->whereIn('creator_id',$subordinates_array);
-//
-//            $query_this_month->whereIn('creator_id',$subordinates_array);
-//            $query_last_month->whereIn('creator_id',$subordinates_array);
-
-
-            $query_order_count_for_all->where('department_supervisor_id',$me->id);
-            $query_order_count_for_export->where('department_supervisor_id',$me->id);
-            $query_order_count_for_unpublished->where('department_supervisor_id', $me->id);
-            $query_order_count_for_published->where('department_supervisor_id', $me->id);
-            $query_order_count_for_waiting_for_inspect->where('department_supervisor_id', $me->id);
-            $query_order_count_for_inspected->where('department_supervisor_id', $me->id);
-            $query_order_count_for_accepted->where('department_supervisor_id', $me->id);
-            $query_order_count_for_refused->where('department_supervisor_id', $me->id);
-            $query_order_count_for_accepted_inside->where('department_supervisor_id', $me->id);
-            $query_order_count_for_repeat->where('department_supervisor_id', $me->id);
-
-            $query_this_month->where('department_supervisor_id', $me->id);
-            $query_last_month->where('department_supervisor_id', $me->id);
-        }
-        // 客服
-        if($me->user_type == 88)
-        {
-            $query_order_count_for_all->where('creator_id', $me->id);
-            $query_order_count_for_export->where('creator_id', $me->id);
-            $query_order_count_for_unpublished->where('creator_id', $me->id);
-            $query_order_count_for_published->where('creator_id', $me->id);
-            $query_order_count_for_waiting_for_inspect->where('creator_id', $me->id);
-            $query_order_count_for_inspected->where('creator_id', $me->id);
-            $query_order_count_for_accepted->where('creator_id', $me->id);
-            $query_order_count_for_refused->where('creator_id', $me->id);
-            $query_order_count_for_accepted_inside->where('creator_id', $me->id);
-            $query_order_count_for_repeat->where('creator_id', $me->id);
-
-            $query_this_month->where('creator_id', $me->id);
-            $query_last_month->where('creator_id', $me->id);
-        }
-        // 质检经理
-        if($me->user_type == 71)
-        {
-//            $subordinates = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-//            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($subordinates) {
-//                $query->whereIn('user_id', $subordinates);
-//            });
-
-            $subordinates_array = DK_User::select('id')->where('superior_id',$me->id)->get()->pluck('id')->toArray();
-            $project_array = DK_Project::select('id')->whereIn('user_id',$subordinates_array)->get()->pluck('id')->toArray();
-
-            $query_order_count_for_all->whereIn('project_id', $project_array);
-            $query_order_count_for_unpublished->whereIn('project_id', $project_array);
-            $query_order_count_for_published->whereIn('project_id', $project_array);
-            $query_order_count_for_waiting_for_inspect->whereIn('project_id', $project_array);
-            $query_order_count_for_inspected->whereIn('project_id', $project_array);
-            $query_order_count_for_accepted->whereIn('project_id', $project_array);
-            $query_order_count_for_refused->whereIn('project_id', $project_array);
-            $query_order_count_for_accepted_inside->whereIn('project_id', $project_array);
-            $query_order_count_for_repeat->whereIn('project_id', $project_array);
-
-            $query_this_month->whereIn('project_id', $project_array);
-            $query_last_month->whereIn('project_id', $project_array);
-
-        }
-        // 质检员
-        if($me->user_type == 77)
-        {
-//            $query->where('is_published','<>',0)->whereHas('project_er', function ($query) use ($me) {
-//                $query->where('user_id', $me->id);
-//            });
-
-            $project_array = DK_Project::select('id')->where('user_id',$me->id)->get()->pluck('id')->toArray();
-
-            $query_order_count_for_all->whereIn('project_id', $project_array);
-            $query_order_count_for_unpublished->whereIn('project_id', $project_array);
-            $query_order_count_for_published->whereIn('project_id', $project_array);
-            $query_order_count_for_waiting_for_inspect->whereIn('project_id', $project_array);
-            $query_order_count_for_inspected->whereIn('project_id', $project_array);
-            $query_order_count_for_accepted->whereIn('project_id', $project_array);
-            $query_order_count_for_refused->whereIn('project_id', $project_array);
-            $query_order_count_for_accepted_inside->whereIn('project_id', $project_array);
-            $query_order_count_for_repeat->whereIn('project_id', $project_array);
-
-            $query_this_month->whereIn('project_id', $project_array);
-            $query_last_month->whereIn('project_id', $project_array);
-
-        }
-
-
-
-        $order_count_for_all = $query_order_count_for_all->count("*");
-        $order_count_for_export = $query_order_count_for_export->count("*");
-        $order_count_for_unpublished = $query_order_count_for_unpublished->count("*");
-        $order_count_for_published = $query_order_count_for_published->count("*");
-        $order_count_for_waiting_for_inspect = $query_order_count_for_waiting_for_inspect->count("*");
-        $order_count_for_inspected = $query_order_count_for_inspected->count("*");
-        $order_count_for_accepted = $query_order_count_for_accepted->count("*");
-        $order_count_for_refused = $query_order_count_for_refused->count("*");
-        $order_count_for_accepted_inside = $query_order_count_for_accepted_inside->count("*");
-        $order_count_for_repeat = $query_order_count_for_repeat->count("*");
-
-
-        $return['order_count_for_all'] = $order_count_for_all;
-        $return['order_count_for_export'] = $order_count_for_export;
-        $return['order_count_for_unpublished'] = $order_count_for_unpublished;
-        $return['order_count_for_published'] = $order_count_for_published;
-        $return['order_count_for_waiting_for_inspect'] = $order_count_for_waiting_for_inspect;
-        $return['order_count_for_inspected'] = $order_count_for_inspected;
-        $return['order_count_for_accepted'] = $order_count_for_accepted;
-        $return['order_count_for_refused'] = $order_count_for_refused;
-        $return['order_count_for_accepted_inside'] = $order_count_for_accepted_inside;
-        $return['order_count_for_repeat'] = $order_count_for_repeat;
-
-
-
-
-        $statistics_order_this_month_data = $query_this_month->get()->keyBy('day');
-        $return['statistics_order_this_month_data'] = $statistics_order_this_month_data;
-
-        $statistics_order_last_month_data = $query_last_month->get()->keyBy('day');
-        $return['statistics_order_last_month_data'] = $statistics_order_last_month_data;
-
-
-
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.index';
-        return view($view_blade)->with($return);
+        $view_data = [];
+        $view_data['length'] = 10;
+        $view_data['page'] = 1;
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.index1';
+        return view($view_blade)->with($view_data);
     }
 
 
@@ -9236,7 +8972,9 @@ class DKAdminRepository {
             'client_name.required' => '请填写客户信息！',
             'client_phone.required' => '请填写客户电话！',
             'client_phone.numeric' => '客户电话格式有误！',
+            'client_type.required' => '请患者类型！',
             'client_intention.required' => '请选择客户意向！',
+            'teeth_count.required' => '请选择牙齿数量！',
 //            'location_city.required' => '请选择城市！',
 //            'location_district.required' => '请选择行政区！',
             'description.required' => '请输入通话小结！',
@@ -9246,7 +8984,9 @@ class DKAdminRepository {
             'project_id' => 'required|numeric|min:1',
             'client_name' => 'required',
             'client_phone' => 'required|numeric',
+            'client_type' => 'required',
             'client_intention' => 'required',
+            'teeth_count' => 'required',
 //            'location_city' => 'required',
 //            'location_district' => 'required',
             'description' => 'required',
@@ -17686,10 +17426,10 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
-        $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+        $the_day  = isset($post_data['time_date']) ? $post_data['time_date'] : date('Y-m-d');
 
 
-        if(in_array($me->user_type,[41,81,84]))
+        if(in_array($me->user_type,[41,71,77,81,84,88]))
         {
             $department_district_id = $me->department_district_id;
         }

@@ -57,6 +57,7 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 //    Route::post('/is_only_me', $controller.'@check_is_only_me');
     Route::get('/', $controller.'@view_admin_index');
+    Route::get('/index1', $controller.'@view_admin_index1');
 //    Route::get('/404', $controller.'@view_admin_404');
 
 

@@ -80,7 +80,7 @@ table.dataTable .text-bottom { vertical-align: bottom; }
 #item-content-body .select2-container--classic .select2-selection--single { border-radius:0; }
 
 
-.datatable-search-row { margin-bottom:4px; }
+.datatable-search-row { margin-bottom:8px; margin-bottom:4px; }
 .datatable-search-row .form-control { padding:4px; }
 .datatable-search-row .input-group { float:left; margin-right:4px; }
 .datatable-search-row .input-group.pull-right { margin-left:4px; }

@@ -45,6 +45,18 @@
             </div>
         </div>
     </div>
+    {{--患者类型--}}
+    <div class="form-group">
+        <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型</label>
+        <div class="col-md-8 ">
+            <select class="form-control select-select2" name="client_type" id="" style="width:100%;">
+                <option value="">选择患者类型</option>
+                @foreach(config('info.client_type') as $k => $v)
+                    <option value ="{{ $k }}">{{ $v }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
     {{--客户意向--}}
     <div class="form-group">
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
@@ -195,7 +207,7 @@
 
     {{--通话小结--}}
     <div class="form-group">
-        <label class="control-label col-md-2">通话小结</label>
+        <label class="control-label col-md-2"><sup class="text-red">*</sup> 通话小结</label>
         <div class="col-md-8 ">
             <p>要求：准确，全面，丰富</p>
             <p>范本：用户当前3颗后槽牙齿缺失，已经缺失半年，2颗下牙松动，之前没了解过种牙，好说话，要求下午3点前回电，同意医生助理联系</p>

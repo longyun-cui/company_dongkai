@@ -31,7 +31,7 @@ class DK_Order extends Model
         'project_id', 'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id',
         'assign_time',
         'is_distributive_condition',
-        'client_name', 'client_phone', 'client_intention',
+        'client_type', 'client_name', 'client_phone', 'client_intention',
         'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id',
         'recording_address',
         'recording_address_list',

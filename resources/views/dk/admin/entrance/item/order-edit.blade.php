@@ -82,6 +82,19 @@
                     </div>
                 </div>
 
+                {{--client_type--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control select-select2" name="client_type" id="">
+                            <option value="">选择患者类型</option>
+                            @foreach(config('info.client_type') as $k => $v)
+                                <option value ="{{ $k }}" @if($operate == 'edit' && $k == $data->client_type) selected="selected" @endif>{{ $v }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 {{--客户意向--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
@@ -235,7 +248,7 @@
 
                 {{--通话小结--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">通话小结</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 通话小结</label>
                     <div class="col-md-8 ">
                         {{--<input type="text" class="form-control" name="description" placeholder="描述" value="{{$data->description or ''}}">--}}
                         <textarea class="form-control" name="description" rows="3" cols="100%">{{ $data->description or '' }}</textarea>

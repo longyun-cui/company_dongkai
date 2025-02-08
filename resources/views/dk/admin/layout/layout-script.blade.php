@@ -38,6 +38,80 @@
         });
 
 
+        // 【】
+        $(".wrapper").on('click', ".menu-tab-show", function() {
+
+            var $that = $(this);
+            var $tab = $that.attr('data-tab');
+            var $title = $that.attr('data-title');
+
+            if($('#'+$tab).length)
+            {
+                // 元素存在
+                $(".nav-tabs").find('li').removeClass('active');
+                $(".nav-tabs").find('#'+$tab).addClass('active');
+
+                // $(".tab-content").find('.tab-pane').removeClass('active');
+                // $(".tab-content").find('#tab-'+$target).addClass('active');
+
+            }
+            else
+            {
+                // 元素不存在
+                $(".nav-tabs").find('li').removeClass('active');
+                var $nav_html = '<li class="active" id="'+$tab+'"><a href="#tab-'+$tab+'" data-toggle="tab" aria-expanded="true">'+$title+'</a></li>';
+                $(".nav-tabs").append($nav_html);
+
+                //
+                // $(".tab-content").find('.tab-pane').removeClass('active');
+                // var $pane_html = '<div class="tab-pane active" id="tab-'+$target+'">1</div>';
+                // $(".tab-content").append($pane_html);
+            }
+
+            if($('#tab-'+$tab).length)
+            {
+
+                $(".tab-content").find('.tab-pane').removeClass('active');
+                $(".tab-content").find('#tab-'+$tab).addClass('active');
+
+                if ($.fn.DataTable.isDataTable('#datatable-for-'+$tab))
+                {
+                    console.log('DataTable 已初始化1');
+                }
+                else
+                {
+                    console.log('DataTable 未初始化');
+                    if($tab == 'order-list')
+                    {
+                        Table_DatatableAjax_order_list.init();
+                    }
+                    else if($tab == 'department-list')
+                    {
+
+                        Table_DatatableAjax_department_list.init();
+                    }
+                    // $('#datatable-for-'+$tab).DataTable().init();
+                    // ('#datatable-for-'+$tab.split("-").join("_"));
+                }
+
+            }
+            else
+            {
+                $(".tab-content").find('.tab-pane').removeClass('active');
+                var $pane_html = '<div class="tab-pane active" id="tab-'+$tab+'">1</div>';
+                $(".tab-content").append($pane_html);
+            }
+
+
+        });
+
+
+        $('.datatable-search-row .dropdown-menu').on('click', function(event) {
+            // $(this).show();
+            event.stopPropagation(); // 阻止事件冒泡
+        });
+
+
         // 【清空只读文本框】
         $(".main-content").on('click', ".readonly-clear-this", function() {
             var $that = $(this);

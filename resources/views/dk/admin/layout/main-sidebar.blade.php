@@ -55,6 +55,22 @@
             </li>
 
 
+            <li class="treeview _none">
+                <a class="menu-tab-show" data-tab="department-list" data-title="团队列表">
+                    <i class="fa fa-columns text-blue"></i>
+                    <span>团队列表</span>
+                </a>
+            </li>
+            <li class="treeview _none">
+                <a class="menu-tab-show" data-tab="order-list" data-title="工单列表">
+                    <i class="fa fa-columns text-blue"></i>
+                    <span>工单列表</span>
+                </a>
+            </li>
+
+
+
+
             {{--客户管理--}}
             @if(in_array($me->user_type,[0,1,9,11,61]))
             <li class="header">客户管理</li>
@@ -66,6 +82,8 @@
                 </a>
             </li>
             @endif
+
+
 
 
             {{--部门管理--}}

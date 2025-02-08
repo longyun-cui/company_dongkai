@@ -179,6 +179,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->view_admin_index();
     }
+    // 返回主页视图
+    public function view_admin_index1()
+    {
+        return $this->repo->view_admin_index1();
+    }
 
 
     // 返回主页视图
