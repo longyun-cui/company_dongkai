@@ -3239,7 +3239,14 @@ class DKCCRepository {
 //        $url = "https://feiniji.cn/openapi/V2.0.6/addCustomer";
 
         $API_ID = 'C1';
-        $API_Password = env('API_OKCC_C1_PASSWORD');
+
+        if($mine->api_server == "FNJ") $API_Password = env('API_CALL_FNJ_C1_PASSWORD');
+        else if($mine->api_server == "call-01") $API_Password = env('API_CALL_01_C1_PASSWORD');
+        else if($mine->api_server == "call-01") $API_Password = env('API_CALL_02_C1_PASSWORD');
+        else if($mine->api_server == "call-01") $API_Password = env('API_CALL_03_C1_PASSWORD');
+        else if($mine->api_server == "call-01") $API_Password = env('API_CALL_04_C1_PASSWORD');
+        else  $API_Password = env('API_OKCC_C1_PASSWORD');
+
 //        $API_ID = $mine->api_id;
 //        $API_Password = $mine->api_password;
         $API_customerName = $mine->api_client_name;
@@ -21284,17 +21291,6 @@ EOF;
                     return json_encode($return);
                 }
             }
-            else if($field_name == "客户意向")
-            {
-                if($field_value == "【到店】客户上门到店") $insert_data['client_intention'] = '到店';
-                else if($field_value == "【A类】意向度强烈，好沟通，有互动交流，沟通自然舒服，沟通中没有拒绝过") $insert_data['client_intention'] = 'A类';
-                else if($field_value == "【B类】意向度一般，有明确牙齿需求，整体通话自然，通话中拒绝1次") $insert_data['client_intention'] = 'B类';
-                else if($field_value == "【C类】在意价格，沟通寡淡，年纪不大，去过多家医院对比，通过引导成单的") $insert_data['client_intention'] = 'C类';
-            }
-            else if($field_name == "患者类型")
-            {
-                $insert_data['client_type'] = $field_value;
-            }
             else if($field_name == "城市")
             {
                 $insert_data['location_city'] = $field_value;
@@ -21303,9 +21299,22 @@ EOF;
             {
                 $insert_data['location_district'] = $field_value;
             }
+            else if($field_name == "患者类型")
+            {
+                if($field_value == "种植牙") $insert_data['client_type'] = 1;
+                else if($field_value == "矫正") $insert_data['client_type'] = 2;
+                else if($field_value == "正畸") $insert_data['client_type'] = 3;
+            }
             else if($field_name == "牙齿数量" || $field_name == "牙齿颗数")
             {
                 $insert_data['teeth_count'] = $field_value;
+            }
+            else if($field_name == "客户意向")
+            {
+                if($field_value == "【到店】客户上门到店") $insert_data['client_intention'] = '到店';
+                else if($field_value == "【A类】意向度强烈，好沟通，有互动交流，沟通自然舒服，沟通中没有拒绝过") $insert_data['client_intention'] = 'A类';
+                else if($field_value == "【B类】意向度一般，有明确牙齿需求，整体通话自然，通话中拒绝1次") $insert_data['client_intention'] = 'B类';
+                else if($field_value == "【C类】在意价格，沟通寡淡，年纪不大，去过多家医院对比，通过引导成单的") $insert_data['client_intention'] = 'C类';
             }
             else if($field_name == "是否加微信")
             {
