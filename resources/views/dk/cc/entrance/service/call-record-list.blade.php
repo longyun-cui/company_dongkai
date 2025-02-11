@@ -194,6 +194,16 @@
                         }
                     },
                     {
+                        "title": "服务器",
+                        "data": "serverFrom",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "坐席ID",
                         "data": "staffNo",
                         "className": "",
@@ -322,6 +332,26 @@
                         "data": "call_cost",
                         "className": "",
                         "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "任务ID",
+                        "data": "taskID",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "任务名称",
+                        "data": "taskName",
+                        "className": "",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             return data;

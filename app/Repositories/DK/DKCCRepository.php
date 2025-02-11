@@ -6,6 +6,7 @@ use App\Models\DK_CC\DK_CC_Telephone;
 use App\Models\DK_CC\DK_CC_Telephone_Blacklist;
 use App\Models\DK_CC\DK_CC_Task;
 use App\Models\DK_CC\DK_CC_Call_Record;
+use App\Models\DK_CC\DK_CC_Call_Record_Current;
 use App\Models\DK_CC\DK_CC_Call_Statistic;
 use App\Models\DK_CC\DK_CC_API_Received_From_OKCC;
 
@@ -21034,13 +21035,38 @@ EOF;
 //
 //        $bool_c = $mine->fill($insert_data)->save();
 
+        $serverFrom = $post_data['serverFrom'];
+
+        if($serverFrom == 'FNJ')
+        {
+            $server_http = 'https://feiniji.cn';
+        }
+        else if($serverFrom == 'call-01')
+        {
+            $server_http = 'http://call01.zlyx.jjccyun.cn';
+        }
+        else if($serverFrom == 'call-02')
+        {
+            $server_http = 'http://call02.zlyx.jjccyun.cn';
+        }
+        else if($serverFrom == 'call-03')
+        {
+            $server_http = 'http://call03.zlyx.jjccyun.cn';
+        }
+        else if($serverFrom == 'call-04')
+        {
+            $server_http = 'http://call04.zlyx.jjccyun.cn';
+        }
+        else $server_http = 'https://feiniji.cn';
+
 
         $notify = $post_data['notify'];
         $call_data = $notify;
+        $call_data['serverFrom'] = $serverFrom;
 
         // 判断是否重复
         $session = $call_data['session'];
-        $mine = DK_CC_Call_Record::where('session',$session)->orderby('id','desc')->first();
+        $mine = DK_CC_Call_Record_Current::where(['session'=>$session,'serverFrom'=>$serverFrom])->orderby('id','desc')->first();
         if($mine)
         {
             $return['result']['error'] = 0;
@@ -21121,6 +21147,12 @@ EOF;
             if(!$bool_cr) throw new Exception("DK_CC_Call_Record--insert--fail");
 
 
+            $call_data['call_record_id'] = $call->id;
+            $call_current = new DK_CC_Call_Record_Current;
+            $bool_crc = $call_current->fill($call_data)->save();
+            if(!$bool_crc) throw new Exception("DK_CC_Call_Record_Current--insert--fail");
+
+
             $call_date = date('Y-m-d',strtotime($call_data['startTime']));
             $statistic_where['call_date'] = $call_date;
             $statistic_where['provinceName'] = $call_data['area'];
@@ -21164,12 +21196,12 @@ EOF;
                 if($recording_address_list)
                 {
                     $recording_address_list = json_decode($recording_address_list,true);
-                    $recording_address_list[$call->id] = 'https://feiniji.cn' . $call->recordFile;
+                    $recording_address_list[$call->id] = $server_http . $call->recordFile;
                 }
                 else
                 {
                     $recording_address_list = [];
-                    $recording_address_list[$call->id] = 'https://feiniji.cn' . $call->recordFile;
+                    $recording_address_list[$call->id] = $server_http . $call->recordFile;
                 }
 
                 $order->recording_address_list = json_encode($recording_address_list,JSON_UNESCAPED_SLASHES);
@@ -21204,6 +21236,9 @@ EOF;
     public function operate_api_OKCC_receiving_result_by_clientMark($post_data)
     {
 
+        $serverFrom = $post_data['serverFrom'];
+
+        $insert_data['serverFrom'] = $serverFrom;
         $insert_data['team_api_id'] = $post_data['user'];
         $insert_data['api_type'] = $post_data['notify']['type'];
         $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
@@ -21255,6 +21290,10 @@ EOF;
                 else if($field_value == "【A类】意向度强烈，好沟通，有互动交流，沟通自然舒服，沟通中没有拒绝过") $insert_data['client_intention'] = 'A类';
                 else if($field_value == "【B类】意向度一般，有明确牙齿需求，整体通话自然，通话中拒绝1次") $insert_data['client_intention'] = 'B类';
                 else if($field_value == "【C类】在意价格，沟通寡淡，年纪不大，去过多家医院对比，通过引导成单的") $insert_data['client_intention'] = 'C类';
+            }
+            else if($field_name == "患者类型")
+            {
+                $insert_data['client_type'] = $field_value;
             }
             else if($field_name == "城市")
             {
@@ -21354,6 +21393,7 @@ EOF;
             if ($staff->department_group_er) $insert_data['department_supervisor_id'] = $staff->department_group_er->leader_id;
 
 
+            $call_where['serverFrom'] = $serverFrom;
             $call_where['staffNo'] = $api_staffNo;
             $call_where['callee'] = $phone_number;
 
@@ -21362,14 +21402,14 @@ EOF;
 //                $insert_data["call_record_id"] = $call->id;
 //
 //                if (!empty($call->recordFile)) {
-//                    $insert_data["recording_address"] = 'https://feiniji.cn' . $call->recordFile;
+//                    $insert_data["recording_address"] = $server_http . $call->recordFile;
 ////                    $recordFile = $call->recordFile;
 ////                    $suffix = ".mp3";
 ////
 ////                    if (substr($recordFile, - strlen($suffix)) === $suffix)
 ////                    {
 ////                        // 以.mp3结尾
-////                        $insert_data["recording_address"] = 'https://feiniji.cn/'.$call->recordFile;
+////                        $insert_data["recording_address"] = $server_http . '/' . $call->recordFile;
 ////                    }
 ////                    else
 ////                    {
@@ -21379,7 +21419,7 @@ EOF;
 ////                        {
 ////                            if(strpos($decoded, '/data/voicerecord') === 0)
 ////                            {
-////                                $insert_data["recording_address"] = 'https://www.feiniji.cn'.$decoded;
+////                                $insert_data["recording_address"] = $server_http . $decoded;
 ////                            }
 ////                        }
 ////                    }
@@ -21387,19 +21427,43 @@ EOF;
 //            }
 
 
-            $call_list = DK_CC_Call_Record::select("*")->where($call_where)->orderby('id', 'desc')->get();
+            $call_list = DK_CC_Call_Record_Current::select("*")->where($call_where)->orderby('id', 'desc')->get();
             if(count($call_list) > 0)
             {
+
+                if($serverFrom == 'FNJ')
+                {
+                    $server_http = 'https://feiniji.cn';
+                }
+                else if($serverFrom == 'call-01')
+                {
+                    $server_http = 'http://call01.zlyx.jjccyun.cn';
+                }
+                else if($serverFrom == 'call-02')
+                {
+                    $server_http = 'http://call02.zlyx.jjccyun.cn';
+                }
+                else if($serverFrom == 'call-03')
+                {
+                    $server_http = 'http://call03.zlyx.jjccyun.cn';
+                }
+                else if($serverFrom == 'call-04')
+                {
+                    $server_http = 'http://call04.zlyx.jjccyun.cn';
+                }
+                else $server_http = 'https://feiniji.cn';
+
+
                 if(count($call_list) == 1)
                 {
-                    $insert_data["call_record_id"] = $call_list[0]->id;
-                    $insert_data["recording_address"] = 'https://feiniji.cn' . $call_list[0]->recordFile;
+                    $insert_data["call_record_id"] = $call_list[0]->call_id;
+                    $insert_data["recording_address"] = $server_http . $call_list[0]->recordFile;
                 }
 
                 $recording_address_list = [];
                 foreach($call_list as $call)
                 {
-                    $call_address = 'https://feiniji.cn' . $call->recordFile;
+                    $call_address = $server_http . $call->recordFile;
                     $recording_address_list[$call->id] = $call_address;
                 }
 //                $insert_data["recording_address"] = collect($recording_address_list)->toJson();

@@ -24,6 +24,7 @@ class DK_Department extends Model
         'item_id', 'menu_id',
         'leader_id', 'superior_department_id',
 
+        'api_server',
         'api_id',
         'api_name',
         'api_client_name',

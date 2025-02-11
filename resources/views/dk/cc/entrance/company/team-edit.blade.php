@@ -99,6 +99,13 @@
 
                         {{--api--}}
                         <div class="form-group">
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_服务器</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="api_server" placeholder="API_服务器" value="{{ $data->api_server or '' }}">
+                            </div>
+                        </div>
+                        {{--api--}}
+                        <div class="form-group">
                             <label class="control-label col-md-2"><sup class="text-red">*</sup> API_企业名称</label>
                             <div class="col-md-8 ">
                                 <input type="text" class="form-control" name="api_client_name" placeholder="API_客户名称" value="{{ $data->api_client_name or '' }}">

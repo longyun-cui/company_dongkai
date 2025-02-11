@@ -253,6 +253,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="control-label col-md-2">API服务器</label>
+                    <div class="col-md-8 ">
+                        <input type="text" class="form-control" name="api_serverFrom" placeholder="API服务器" value="{{ $data->api_serverFrom or '' }}">
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="control-label col-md-2">API用户No</label>
                     <div class="col-md-8 ">
                         <input type="text" class="form-control" name="api_staffNo" placeholder="API用户No" value="{{ $data->api_staffNo or '' }}">

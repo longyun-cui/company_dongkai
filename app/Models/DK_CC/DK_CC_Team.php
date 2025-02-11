@@ -32,6 +32,7 @@ class DK_CC_Team extends Model
 
         'pre_unit_price',
 
+        'api_server',
         'api_id',
         'api_name',
         'api_password',

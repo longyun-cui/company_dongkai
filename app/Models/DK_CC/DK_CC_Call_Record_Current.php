@@ -5,11 +5,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use DB;
 
-class DK_CC_Call_Record extends Model
+class DK_CC_Call_Record_Current extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_cc_call_record";
+    protected $table = "dk_cc_call_record_of_current";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort', 'form',
 
@@ -38,6 +38,8 @@ class DK_CC_Call_Record extends Model
         'choice_staff_id',
         'customer_staff_id',
 
+        'call_record_id',
+
         'item_id',
         'order_id',
         'clue_id',
@@ -57,7 +59,6 @@ class DK_CC_Call_Record extends Model
 
         'serverFrom',
         'staffNo',
-
         'callee',
         'caller',
         'session',

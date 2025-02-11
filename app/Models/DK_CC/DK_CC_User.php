@@ -33,6 +33,7 @@ class DK_CC_User extends Authenticatable
         'customer_id',
         'department_id',
 
+        'api_serverFrom',
         'api_agent_id',
 
         'QQ_number',

@@ -694,6 +694,16 @@
                         }
                     },
                     {
+                        "title": "API_服务器",
+                        "data": "api_server",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "API_客户名称",
                         "data": "api_client_name",
                         "className": "",

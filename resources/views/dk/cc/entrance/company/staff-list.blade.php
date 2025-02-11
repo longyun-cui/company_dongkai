@@ -405,6 +405,16 @@
                     //    }
                     // },
                     {
+                        "title": "API服务器",
+                        "data": "api_serverFrom",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<a href="javascript:void(0);">'+data+'</a>';
+                        }
+                    },
+                    {
                         "title": "API坐席ID",
                         "data": "api_staffNo",
                         "className": "",
