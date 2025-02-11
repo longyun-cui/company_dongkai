@@ -21456,7 +21456,7 @@ EOF;
 
                 if(count($call_list) == 1)
                 {
-                    $insert_data["call_record_id"] = $call_list[0]->call_id;
+                    $insert_data["call_record_id"] = $call_list[0]->call_record_id;
                     $insert_data["recording_address"] = $server_http . $call_list[0]->recordFile;
                 }
 
