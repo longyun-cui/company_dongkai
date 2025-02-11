@@ -130,7 +130,7 @@ class DKCCRepository {
         $view_data['order_count'] = 0;
 
 
-        $team_list = DK_Department::select('*')->where('department_type','11')->whereNotNull('api_id')
+        $team_list = DK_Department::select('*')->where('department_type','11')->whereNotNull('api_customer_account')
             ->orderBy("rank", "asc")->orderBy("id", "asc")
             ->get();
         $view_data['team_list'] = $team_list;
@@ -3235,56 +3235,54 @@ class DKCCRepository {
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
-//        $url = "https://feiniji.cn/openapi/V2.0.6/addCustomer";
-
-        $API_ID = 'C1';
+        $API_Customer_Account = 'C1';
 
         if($mine->api_server == "FNJ")
         {
             $server = "https://feiniji.cn";
             $url = "https://feiniji.cn/openapi/V2.1.2/login";
-            $API_Password = env('API_CALL_FNJ_C1_PASSWORD');
+            $API_Customer_Password = env('API_CALL_FNJ_C1_PASSWORD');
         }
         else if($mine->api_server == "call-01")
         {
             $server = "http://call01.zlyx.jjccyun.cn";
             $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.1.2/login";
-            $API_Password = env('API_CALL_01_C1_PASSWORD');
+            $API_Customer_Password = env('API_CALL_01_C1_PASSWORD');
         }
         else if($mine->api_server == "call-02")
         {
             $server = "http://call02.zlyx.jjccyun.cn";
             $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.1.2/login";
-            $API_Password = env('API_CALL_02_C1_PASSWORD');
+            $API_Customer_Password = env('API_CALL_02_C1_PASSWORD');
         }
         else if($mine->api_server == "call-03")
         {
             $server = "http://call03.zlyx.jjccyun.cn";
             $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.1.2/login";
-            $API_Password = env('API_CALL_03_C1_PASSWORD');
+            $API_Customer_Password = env('API_CALL_03_C1_PASSWORD');
         }
         else if($mine->api_server == "call-04")
         {
             $server = "http://call04.zlyx.jjccyun.cn";
             $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.1.2/login";
-            $API_Password = env('API_CALL_04_C1_PASSWORD');
+            $API_Customer_Password = env('API_CALL_04_C1_PASSWORD');
         }
         else
         {
             $server = "https://feiniji.cn";
             $url = "https://feiniji.cn/openapi/V2.1.2/login";
-            $API_Password = env('API_OKCC_C1_PASSWORD');
+            $API_Customer_Password = env('API_OKCC_C1_PASSWORD');
         }
 
-//        $API_ID = $mine->api_id;
-//        $API_Password = $mine->api_password;
-        $API_customerName = $mine->api_client_name;
-        $API_userName = $mine->api_user_name;
+//        $API_Customer_Account = $mine->api_customer_account;
+//        $API_Customer_Password = $mine->api_customer_password;
+        $API_customerName = $mine->api_customer_name;
+        $API_customerUserName = $mine->api_customer_user_name;
         $timestamp = time();
         $seq = $timestamp;
-        $digest = md5($API_ID.'@'.$timestamp.'@'.$seq.'@'.$API_Password);
+        $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
 
-        $request_data['authentication']['customer'] = $API_ID;
+        $request_data['authentication']['customer'] = $API_Customer_Account;
         $request_data['authentication']['timestamp'] = $timestamp;
         $request_data['authentication']['seq'] = $seq;
         $request_data['authentication']['digest'] = $digest;
@@ -3292,9 +3290,7 @@ class DKCCRepository {
         $request_data['request']['seq'] = '';
         $request_data['request']['userData'] = '';
         $request_data['request']['customerName'] = $API_customerName;
-        $request_data['request']['userName'] = $API_userName;
-//        $request_data['request']['userName'] = '0556126';
-//        $request_data['request']['agent'] = '0556126';
+        $request_data['request']['userName'] = $API_customerUserName;
 
 //        $request_data['request']['name'] = '我很好';
 //        $request_data['request']['password'] = 'asdzxc2024';
@@ -21016,7 +21012,7 @@ EOF;
 //        if($userData == 'calling')
         if(true)
         {
-            $insert_data['team_api_id'] = $post_data['user'];
+            $insert_data['api_customer_account'] = $post_data['customerAccount'];
             $insert_data['api_type'] = $post_data['notify']['type'];
             $insert_data['content'] = json_encode($post_data);
 
@@ -21063,7 +21059,7 @@ EOF;
     public function operate_api_OKCC_receiving_result_by_billing($post_data)
     {
 
-//        $insert_data['team_api_id'] = $post_data['user'];
+//        $insert_data['api_customer_account'] = $post_data['customerAccount'];
 //        $insert_data['api_type'] = $post_data['notify']['type'];
 //        $insert_data['content'] = json_encode($post_data);
 //
@@ -21075,34 +21071,44 @@ EOF;
 
         if($serverFrom == 'FNJ')
         {
+            $serverFrom_id = 11;
             $server_http = 'https://feiniji.cn';
         }
         else if($serverFrom == 'call-01')
         {
+            $serverFrom_id = 1;
             $server_http = 'http://call01.zlyx.jjccyun.cn';
         }
         else if($serverFrom == 'call-02')
         {
+            $serverFrom_id = 2;
             $server_http = 'http://call02.zlyx.jjccyun.cn';
         }
         else if($serverFrom == 'call-03')
         {
+            $serverFrom_id = 3;
             $server_http = 'http://call03.zlyx.jjccyun.cn';
         }
         else if($serverFrom == 'call-04')
         {
+            $serverFrom_id = 4;
             $server_http = 'http://call04.zlyx.jjccyun.cn';
         }
-        else $server_http = 'https://feiniji.cn';
+        else
+        {
+            $serverFrom_id = 0;
+            $server_http = 'https://feiniji.cn';
+        }
 
 
         $notify = $post_data['notify'];
         $call_data = $notify;
-        $call_data['serverFrom'] = $serverFrom;
+        $call_data['serverFrom_id'] = $serverFrom_id;
+        $call_data['serverFrom_name'] = $serverFrom;
 
         // 判断是否重复
         $session = $call_data['session'];
-        $mine = DK_CC_Call_Record_Current::where(['session'=>$session,'serverFrom'=>$serverFrom])->orderby('id','desc')->first();
+        $mine = DK_CC_Call_Record_Current::where(['session'=>$session,'serverFrom_id'=>$serverFrom_id])->orderby('id','desc')->first();
         if($mine)
         {
             $return['result']['error'] = 0;
@@ -21136,8 +21142,8 @@ EOF;
         {
             $timeMinute = ceil($timeLength / 60);
 
-            $user = $post_data['user'];
-            $team = DK_Department::select('id','api_id','pre_unit_price')->where('api_id',$user)->first();
+            $customerAccount = $post_data['customerAccount'];
+            $team = DK_Department::select('id','api_customer_account','pre_unit_price')->where('api_customer_account',$customerAccount)->first();
             if($team)
             {
                 $call_data['pre_unit_price'] = $team->pre_unit_price;
@@ -21164,7 +21170,7 @@ EOF;
         try
         {
 
-            $insert_data['team_api_id'] = $post_data['user'];
+            $insert_data['api_customer_account'] = $post_data['customerAccount'];
             $insert_data['api_type'] = $post_data['notify']['type'];
             $insert_data['content'] = json_encode($post_data);
 
@@ -21190,9 +21196,13 @@ EOF;
 
 
             $call_date = date('Y-m-d',strtotime($call_data['startTime']));
+            $statistic_where['serverFrom_id'] = $serverFrom_id;
+            $statistic_where['api_customer_account'] = $post_data['customerAccount'];
+            $statistic_where['team_id'] = $team->id;
             $statistic_where['call_date'] = $call_date;
             $statistic_where['provinceName'] = $call_data['area'];
             $statistic_where['cityName'] = $call_data['city'];
+            $statistic_where['taskID'] = $call_data['taskID'];
             $statistic_where['trunkIndex'] = $call_data['trunkIndex'];
             $statistic = DK_CC_Call_Statistic::lockForUpdate()->where($statistic_where)->first();
             if($statistic)
@@ -21207,12 +21217,18 @@ EOF;
             else
             {
                 $statistic = new DK_CC_Call_Statistic;
+                $statistic_insert['serverFrom_id'] = $serverFrom_id;
+                $statistic_insert['serverFrom_name'] = $serverFrom;
+                $statistic_insert['api_customer_account'] = $post_data['customerAccount'];
+                $statistic_insert['team_id'] = $team->id;
                 $statistic_insert['call_date'] = $call_date;
                 $statistic_insert['call_times'] = 1;
                 $statistic_insert['call_duration_total'] = $timeMinute;
                 $statistic_insert['call_cost_total'] = $callCost;
                 $statistic_insert['provinceName'] = $call_data['area'];
                 $statistic_insert['cityName'] = $call_data['city'];
+                $statistic_insert['taskID'] = $call_data['taskID'];
+                $statistic_insert['taskName'] = $call_data['taskName'];
                 $statistic_insert['trunkIndex'] = $call_data['trunkIndex'];
                 $statistic_insert['trunkType'] = $call_data['trunkType'];
                 $statistic_insert['trunkName'] = $call_data['trunkName'];
@@ -21274,8 +21290,35 @@ EOF;
 
         $serverFrom = $post_data['serverFrom'];
 
-        $insert_data['serverFrom'] = $serverFrom;
-        $insert_data['team_api_id'] = $post_data['user'];
+        if($serverFrom == 'FNJ')
+        {
+            $serverFrom_id = 11;
+        }
+        else if($serverFrom == 'call-01')
+        {
+            $serverFrom_id = 1;
+        }
+        else if($serverFrom == 'call-02')
+        {
+            $serverFrom_id = 2;
+        }
+        else if($serverFrom == 'call-03')
+        {
+            $serverFrom_id = 3;
+        }
+        else if($serverFrom == 'call-04')
+        {
+            $serverFrom_id = 4;
+        }
+        else
+        {
+            $serverFrom_id = 0;
+            $server_http = 'https://feiniji.cn';
+        }
+
+        $insert_data['serverFrom_id'] = $serverFrom_id;
+        $insert_data['serverFrom_name'] = $serverFrom;
+        $insert_data['api_customer_account'] = $post_data['customerAccount'];
         $insert_data['api_type'] = $post_data['notify']['type'];
         $insert_data['staffNo'] = $post_data['notify']['data']['userName'];
         $insert_data['telephone_number'] = $post_data['notify']['data']['number1'];
@@ -21340,10 +21383,15 @@ EOF;
             }
             else if($field_name == "客户意向")
             {
-                if($field_value == "【到店】客户上门到店") $insert_data['client_intention'] = '到店';
-                else if($field_value == "【A类】意向度强烈，好沟通，有互动交流，沟通自然舒服，沟通中没有拒绝过") $insert_data['client_intention'] = 'A类';
-                else if($field_value == "【B类】意向度一般，有明确牙齿需求，整体通话自然，通话中拒绝1次") $insert_data['client_intention'] = 'B类';
-                else if($field_value == "【C类】在意价格，沟通寡淡，年纪不大，去过多家医院对比，通过引导成单的") $insert_data['client_intention'] = 'C类';
+//                if($field_value == "【到店】客户上门到店") $insert_data['client_intention'] = '到店';
+//                else if($field_value == "【A类】意向度强烈，好沟通，有互动交流，沟通自然舒服，沟通中没有拒绝过") $insert_data['client_intention'] = 'A类';
+//                else if($field_value == "【B类】意向度一般，有明确牙齿需求，整体通话自然，通话中拒绝1次") $insert_data['client_intention'] = 'B类';
+//                else if($field_value == "【C类】在意价格，沟通寡淡，年纪不大，去过多家医院对比，通过引导成单的") $insert_data['client_intention'] = 'C类';
+
+                if(strpos($field_value, "【到店】") !== false) $insert_data['client_intention'] = '到店';
+                else if(strpos($field_value, "【A类】") !== false) $insert_data['client_intention'] = 'A类';
+                else if(strpos($field_value, "【B类】") !== false) $insert_data['client_intention'] = 'B类';
+                else if(strpos($field_value, "【C类】") !== false) $insert_data['client_intention'] = 'C类';
             }
             else if($field_name == "是否加微信")
             {
@@ -21431,7 +21479,7 @@ EOF;
             if ($staff->department_group_er) $insert_data['department_supervisor_id'] = $staff->department_group_er->leader_id;
 
 
-            $call_where['serverFrom'] = $serverFrom;
+            $call_where['serverFrom_name'] = $serverFrom;
             $call_where['staffNo'] = $api_staffNo;
             $call_where['callee'] = $phone_number;
 

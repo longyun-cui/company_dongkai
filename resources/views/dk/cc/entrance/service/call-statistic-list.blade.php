@@ -198,6 +198,46 @@
                         }
                     },
                     {
+                        "title": "服务器",
+                        "data": "serverFrom_name",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "团队",
+                        "data": "team_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "任务ID",
+                        "data": "taskID",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "任务名称",
+                        "data": "taskName",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "线路ID",
                         "data": "trunkIndex",
                         "className": "",

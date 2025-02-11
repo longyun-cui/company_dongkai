@@ -55,7 +55,10 @@ class DK_CC_Call_Record extends Model
         'area',
         'city',
 
-        'serverFrom',
+        'serverFrom_id',
+        'serverFrom_name',
+        'api_customer_account',
+        'team_id',
         'staffNo',
 
         'callee',
@@ -80,6 +83,9 @@ class DK_CC_Call_Record extends Model
         'callResultMsg',
         'errMsg',
         'errMsgCN',
+
+        'group1',
+        'group2',
 
         'taskID',
         'taskName',

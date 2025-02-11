@@ -24,12 +24,13 @@ class DK_Department extends Model
         'item_id', 'menu_id',
         'leader_id', 'superior_department_id',
 
-        'api_server',
-        'api_id',
-        'api_name',
-        'api_client_name',
-        'api_user_name',
-        'api_password',
+        'serverFrom_id',
+        'serverFrom_name',
+        'api_customer_account',
+        'api_customer_name',
+        'api_customer_user_name',
+        'api_customer_password',
+
         'pre_unit_price',
 
 

@@ -99,34 +99,39 @@
 
                         {{--api--}}
                         <div class="form-group">
-                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_服务器</label>
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_服务器ID</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control" name="api_server" placeholder="API_服务器" value="{{ $data->api_server or '' }}">
+                                <input type="text" class="form-control" name="serverFrom_id" placeholder="API_服务器ID" value="{{ $data->serverFrom_id or '' }}">
                             </div>
                         </div>
-                        {{--api--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_服务器名称</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="serverFrom_name" placeholder="API_服务器名称" value="{{ $data->serverFrom_name or '' }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_对接账户</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="api_customer_account" placeholder="API_对接账户" value="{{ $data->api_customer_account or '' }}">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label col-md-2"><sup class="text-red">*</sup> API_企业名称</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control" name="api_client_name" placeholder="API_客户名称" value="{{ $data->api_client_name or '' }}">
+                                <input type="text" class="form-control" name="api_customer_name" placeholder="API_客户名称" value="{{ $data->api_customer_name or '' }}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-2"><sup class="text-red">*</sup> API_用户名</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control" name="api_user_name" placeholder="API_用户名" value="{{ $data->api_user_name or '' }}">
+                                <input type="text" class="form-control" name="api_customer_user_name" placeholder="API_用户名" value="{{ $data->api_customer_user_name or '' }}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_ID</label>
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_对接账户</label>
                             <div class="col-md-8 ">
-                                <input type="text" class="form-control" name="api_id" placeholder="API_ID" value="{{ $data->api_id or '' }}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-2"><sup class="text-red">*</sup> API_Password</label>
-                            <div class="col-md-8 ">
-                                <input type="text" class="form-control" name="api_password" placeholder="API_Password" value="{{ $data->api_password or '' }}">
+                                <input type="text" class="form-control" name="api_customer_password" placeholder="API_对接账户" value="{{ $data->api_customer_password or '' }}">
                             </div>
                         </div>
 

@@ -694,8 +694,28 @@
                         }
                     },
                     {
+                        "title": "API_服务器ID",
+                        "data": "serverFrom_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
                         "title": "API_服务器",
-                        "data": "api_server",
+                        "data": "serverFrom_name",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "API_对接账户",
+                        "data": "api_customer_account",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
@@ -705,7 +725,7 @@
                     },
                     {
                         "title": "API_客户名称",
-                        "data": "api_client_name",
+                        "data": "api_customer_name",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
@@ -715,7 +735,7 @@
                     },
                     {
                         "title": "API_用户名",
-                        "data": "api_user_name",
+                        "data": "api_customer_user_name",
                         "className": "",
                         "width": "80px",
                         "orderable": false,
@@ -724,18 +744,8 @@
                         }
                     },
                     {
-                        "title": "API_ID",
-                        "data": "api_id",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "API密码",
-                        "data": "api_password",
+                        "title": "API_对接账户",
+                        "data": "api_customer_password",
                         "className": "",
                         "width": "160px",
                         "orderable": false,

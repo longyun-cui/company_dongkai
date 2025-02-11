@@ -195,7 +195,7 @@
                     },
                     {
                         "title": "服务器",
-                        "data": "serverFrom",
+                        "data": "serverFrom_name",
                         "className": "",
                         "width": "80px",
                         "orderable": false,

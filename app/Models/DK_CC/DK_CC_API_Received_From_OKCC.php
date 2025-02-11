@@ -22,8 +22,12 @@ class DK_CC_API_Received_From_OKCC extends Model
         'name', 'title', 'subtitle', 'content', 'description', 'tag', 'remark', 'label', 'custom',
 
 
-        'serverFrom',
+        'serverFrom_id',
+        'serverFrom_name',
+        'api_customer_account',
+        'team_id',
         'staffNo',
+
         'telephone_number',
 
 

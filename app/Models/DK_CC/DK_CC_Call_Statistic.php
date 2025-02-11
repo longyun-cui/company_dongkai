@@ -26,6 +26,12 @@ class DK_CC_Call_Statistic extends Model
 
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
 
+        'serverFrom_id',
+        'serverFrom_name',
+        'api_customer_account',
+        'team_id',
+        'staffNo',
+
         'call_date',
         'call_times',
         'call_duration_total',
@@ -33,6 +39,9 @@ class DK_CC_Call_Statistic extends Model
 
         'provinceName',
         'cityName',
+
+        'taskID',
+        'taskName',
 
         'trunkIndex',
         'trunkType',

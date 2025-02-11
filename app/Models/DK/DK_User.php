@@ -37,7 +37,9 @@ class DK_User extends Authenticatable
         'website',
         'address',
 
-        'api_serverFrom',
+        'api_serverFrom_id',
+        'api_serverFrom_name',
+        'api_customer_account',
         'api_staffNo',
 
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
