@@ -65,8 +65,9 @@
                     else
                     {
                         layer.msg("请求成功！");
+                        var $server = $response.data.server;
                         var $token = $response.data.token;
-                        var $url = 'https://feiniji.cn/service/index.php?m=common&c=loginTransition&f=login&token='+$token;
+                        var $url = $server + '/service/index.php?m=common&c=loginTransition&f=login&token=' + $token;
 
                         console.log($url);
                         window.open($url, '_blank');

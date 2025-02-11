@@ -3235,17 +3235,46 @@ class DKCCRepository {
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
-        $url = "https://feiniji.cn/openapi/V2.1.2/login";
 //        $url = "https://feiniji.cn/openapi/V2.0.6/addCustomer";
 
         $API_ID = 'C1';
 
-        if($mine->api_server == "FNJ") $API_Password = env('API_CALL_FNJ_C1_PASSWORD');
-        else if($mine->api_server == "call-01") $API_Password = env('API_CALL_01_C1_PASSWORD');
-        else if($mine->api_server == "call-01") $API_Password = env('API_CALL_02_C1_PASSWORD');
-        else if($mine->api_server == "call-01") $API_Password = env('API_CALL_03_C1_PASSWORD');
-        else if($mine->api_server == "call-01") $API_Password = env('API_CALL_04_C1_PASSWORD');
-        else  $API_Password = env('API_OKCC_C1_PASSWORD');
+        if($mine->api_server == "FNJ")
+        {
+            $server = "https://feiniji.cn";
+            $url = "https://feiniji.cn/openapi/V2.1.2/login";
+            $API_Password = env('API_CALL_FNJ_C1_PASSWORD');
+        }
+        else if($mine->api_server == "call-01")
+        {
+            $server = "http://call01.zlyx.jjccyun.cn";
+            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Password = env('API_CALL_01_C1_PASSWORD');
+        }
+        else if($mine->api_server == "call-02")
+        {
+            $server = "http://call02.zlyx.jjccyun.cn";
+            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Password = env('API_CALL_02_C1_PASSWORD');
+        }
+        else if($mine->api_server == "call-03")
+        {
+            $server = "http://call03.zlyx.jjccyun.cn";
+            $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Password = env('API_CALL_03_C1_PASSWORD');
+        }
+        else if($mine->api_server == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Password = env('API_CALL_04_C1_PASSWORD');
+        }
+        else
+        {
+            $server = "https://feiniji.cn";
+            $url = "https://feiniji.cn/openapi/V2.1.2/login";
+            $API_Password = env('API_OKCC_C1_PASSWORD');
+        }
 
 //        $API_ID = $mine->api_id;
 //        $API_Password = $mine->api_password;
@@ -3300,7 +3329,7 @@ class DKCCRepository {
             if($result->result->error == "0")
             {
                 $token = $result->data->response->token;
-                return response_success(['token'=>$token],"跳转中！");
+                return response_success(['server'=>$server,'token'=>$token],"跳转中！");
             }
             else
             {
