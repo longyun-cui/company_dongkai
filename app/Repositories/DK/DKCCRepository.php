@@ -21059,13 +21059,14 @@ EOF;
     public function operate_api_OKCC_receiving_result_by_billing($post_data)
     {
 
-//        $insert_data['api_customer_account'] = $post_data['customerAccount'];
-//        $insert_data['api_type'] = $post_data['notify']['type'];
-//        $insert_data['content'] = json_encode($post_data);
-//
-//        $mine = new DK_CC_API_Received_From_OKCC;
-//
-//        $bool_c = $mine->fill($insert_data)->save();
+        $insert_data['api_customer_account'] = $post_data['customerAccount'];
+        $insert_data['api_type'] = $post_data['notify']['type'];
+        $insert_data['content'] = json_encode($post_data);
+
+        $mine = new DK_CC_API_Received_From_OKCC;
+
+        $bool_c = $mine->fill($insert_data)->save();
+
 
         $serverFrom = $post_data['serverFrom'];
 
