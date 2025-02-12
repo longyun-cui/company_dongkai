@@ -10717,6 +10717,7 @@ class DKAdminRepository {
                     $pivot_delivery_data["client_id"] = $delivered_client_id;
                     $pivot_delivery_data["original_project_id"] = $item->project_id;
                     $pivot_delivery_data["order_id"] = $item->id;
+                    $pivot_delivery_data["client_type"] = $item->client_type;
                     $pivot_delivery_data["client_phone"] = $item->client_phone;
                     $pivot_delivery_data["delivered_result"] = $delivered_result;
                     $pivot_delivery_data["creator_id"] = $me->id;
@@ -10897,6 +10898,7 @@ class DKAdminRepository {
                         $pivot_delivery_data["client_id"] = $delivered_client_id;
                         $pivot_delivery_data["original_project_id"] = $item->project_id;
                         $pivot_delivery_data["order_id"] = $item->id;
+                        $pivot_delivery_data["client_type"] = $item->client_type;
                         $pivot_delivery_data["client_phone"] = $item->client_phone;
                         $pivot_delivery_data["delivered_result"] = $delivered_result;
                         $pivot_delivery_data["creator_id"] = $me->id;
@@ -11121,6 +11123,7 @@ class DKAdminRepository {
             $pivot_delivery_data["client_id"] = $client_id;
             $pivot_delivery_data["original_project_id"] = $item->project_id;
             $pivot_delivery_data["order_id"] = $item->id;
+            $pivot_delivery_data["client_type"] = $item->client_type;
             $pivot_delivery_data["client_phone"] = $item->client_phone;
             $pivot_delivery_data["delivered_result"] = $delivered_result;
             $pivot_delivery_data["creator_id"] = $me->id;
@@ -11176,7 +11179,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单】分发
+    // 【工单】下载录音
     public function operate_item_order_download_recording($post_data)
     {
 //        dd($post_data);

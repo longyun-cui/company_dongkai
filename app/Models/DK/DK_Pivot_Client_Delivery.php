@@ -20,6 +20,7 @@ class DK_Pivot_Client_Delivery extends Model
         'original_project_id',
         'order_id',
 
+        'client_type',
         'client_phone',
 
         'is_exported',

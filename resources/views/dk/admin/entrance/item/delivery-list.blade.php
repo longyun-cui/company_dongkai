@@ -1073,6 +1073,42 @@
                         }
                     },
                     {
+                        "title": "患者类型",
+                        "data": "client_type",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.order_er)
+                            {
+                                var $result_html = '';
+                                var $client_type = row.order_er.client_type;
+                                if($client_type == 0)
+                                {
+                                    $result_html = '<small class="btn-xs ">未选择</small>';
+                                }
+                                else if($client_type == 1)
+                                {
+                                    $result_html = '<small class="btn-xs bg-blue">种植牙</small>';
+                                }
+                                else if($client_type == 2)
+                                {
+                                    $result_html = '<small class="btn-xs bg-green">矫正</small>';
+                                }
+                                else if($client_type == 3)
+                                {
+                                    $result_html = '<small class="btn-xs bg-red">正畸</small>';
+                                }
+                                else
+                                {
+                                    $result_html = '未知类型';
+                                }
+                                return $result_html;
+                            }
+                            return "--";
+                        }
+                    },
+                    {
                         "title": "客户姓名",
                         "data": "order_id",
                         "className": "",

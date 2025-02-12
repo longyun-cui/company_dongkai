@@ -3237,31 +3237,31 @@ class DKCCRepository {
 
         $API_Customer_Account = 'C1';
 
-        if($mine->api_server == "FNJ")
+        if($mine->serverFrom_name == "FNJ")
         {
             $server = "https://feiniji.cn";
             $url = "https://feiniji.cn/openapi/V2.1.2/login";
             $API_Customer_Password = env('API_CALL_FNJ_C1_PASSWORD');
         }
-        else if($mine->api_server == "call-01")
+        else if($mine->serverFrom_name == "call-01")
         {
             $server = "http://call01.zlyx.jjccyun.cn";
             $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.1.2/login";
             $API_Customer_Password = env('API_CALL_01_C1_PASSWORD');
         }
-        else if($mine->api_server == "call-02")
+        else if($mine->serverFrom_name == "call-02")
         {
             $server = "http://call02.zlyx.jjccyun.cn";
             $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.1.2/login";
             $API_Customer_Password = env('API_CALL_02_C1_PASSWORD');
         }
-        else if($mine->api_server == "call-03")
+        else if($mine->serverFrom_name == "call-03")
         {
             $server = "http://call03.zlyx.jjccyun.cn";
             $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.1.2/login";
             $API_Customer_Password = env('API_CALL_03_C1_PASSWORD');
         }
-        else if($mine->api_server == "call-04")
+        else if($mine->serverFrom_name == "call-04")
         {
             $server = "http://call04.zlyx.jjccyun.cn";
             $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.1.2/login";
