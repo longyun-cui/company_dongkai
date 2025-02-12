@@ -36,7 +36,7 @@
                             <div class="small-box bg-green">
                                 <div class="inner">
                                     <h3><sup style="font-size: 20px">{{ $team->name or '' }}</sup></h3>
-                                    <p>{{ $team->api_server or '&nbsp;' }}</p>
+                                    <p>{{ $team->serverFrom_name or '&nbsp;' }}</p>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
