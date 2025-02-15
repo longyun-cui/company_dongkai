@@ -19439,6 +19439,15 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
+
+
+        if(in_array($me->user_type,[41,71,77,81,84,88]))
+        {
+            $department_district_id = $me->department_district_id;
+        }
+        else $department_district_id = 0;
+
 
         $time = time();
 
@@ -19570,7 +19579,10 @@ class DKAdminRepository {
                 'project_er'=>function($query) { $query->select('id','name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
-            ]);
+            ])
+            ->when($department_district_id, function ($query) use ($department_district_id) {
+                return $query->where('department_district_id', $department_district_id);
+            });
 
 //        if(in_array($me->user_type,[77]))
 //        {
@@ -19825,6 +19837,14 @@ class DKAdminRepository {
     {
         $this->get_me();
         $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
+
+
+        if(in_array($me->user_type,[41,71,77,81,84,88]))
+        {
+            $department_district_id = $me->department_district_id;
+        }
+        else $department_district_id = 0;
 
 
         $ids = $post_data['ids'];
@@ -19846,6 +19866,9 @@ class DKAdminRepository {
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
+            ->when($department_district_id, function ($query) use ($department_district_id) {
+                return $query->where('department_district_id', $department_district_id);
+            })
             ->whereIn('id',$ids_array);
 
 //        if(in_array($me->user_type,[77]))
