@@ -19,7 +19,7 @@
 <div class="row">
     <div class="col-md-12">
         <!-- BEGIN PORTLET-->
-        <div class="box box-info">
+        <div class="box box-primary">
 
             <div class="box-header with-border" style="margin:16px 0;">
 

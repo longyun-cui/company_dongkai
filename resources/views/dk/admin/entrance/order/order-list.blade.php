@@ -17,7 +17,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-info main-list-body" style="margin-bottom:0;">
+        <div class="box box-primary main-list-body" style="margin-bottom:0;">
 
 
             <div class="col-md-12 datatable-search-row" id="datatable-search-for-order-list" style="margin-top:8px;">

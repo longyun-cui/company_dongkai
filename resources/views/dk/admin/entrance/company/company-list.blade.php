@@ -17,7 +17,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-danger main-list-body">
+        <div class="box box-primary main-list-body">
 
 
             <div class="col-md-12 datatable-search-row" id="datatable-search-for-company-list">
@@ -48,7 +48,7 @@
                                 <i class="fa fa-search"></i> 搜索
                             </button>
 
-                            <div class="dropdown-menu box box-success" style="position: absolute;width:400px;top:-4px;left:auto;right:72px;padding:4px;">
+                            <div class="dropdown-menu box box-danger" style="position: absolute;width:400px;top:-4px;left:auto;right:72px;padding:4px;">
 
                                 <div class="box-header with-border-">
                                     筛选
