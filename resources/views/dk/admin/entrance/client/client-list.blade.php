@@ -2,14 +2,13 @@
 
 
 @section('head_title')
-    {{ $title_text or '客户列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '客户列表' }}
 @endsection
 
 
-
-
-@section('header','')
-@section('description')客户列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('title')<span class="box-title">{{ $title_text or '客户列表' }}</span>@endsection
+@section('header')<span class="box-title">{{ $title_text or '客户列表' }}</span>@endsection
+@section('description')<b>客户列表 - 管理员系统 - {{ config('info.info.short_name') }}</b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/admin') }}"><i class="fa fa-dashboard"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -21,38 +20,101 @@
         <!-- BEGIN PORTLET-->
         <div class="box box-primary">
 
-            <div class="box-header with-border" style="margin:16px 0;">
 
-                <h3 class="box-title">{{ $title_text or '客户列表' }}</h3>
+            <div class="col-md-12 datatable-search-row" id="datatable-search-for-client-list">
 
-                @if(in_array($me->user_type,[0,1,9,11,61]))
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/user/client-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加客户</button>
-                    </a>
+
+                <div class=" pull-left">
+
+                    @if(in_array($me->user_type,[0,1,9,11,19,61]))
+                        <a href="{{ url('/user/client-create') }}">
+                            <button type="button" onclick="" class="btn btn-success btn-filter"><i class="fa fa-plus"></i> 添加</button>
+                        </a>
+                    @endif
+                    <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-play"></i> 启用</button>
+                    <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-stop"></i> 禁用</button>
+                    <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-download"></i> 导出</button>
+                    <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-trash-o"></i> 批量删除</button>
+
                 </div>
-                @endif
+
+
+                <div class="pull-right">
+
+
+                    <div class="nav navbar-nav">
+
+                        <div class="dropdown filter-menu" data-bs-auto-close="outside">
+                            <button type="button" class="btn btn-default btn-filter dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-search"></i> 搜索
+                            </button>
+
+                            <div class="dropdown-menu box box-danger" style="position: absolute;width:400px;top:-4px;left:auto;right:72px;padding:4px;">
+
+                                <div class="box-header with-border-">
+                                    筛选
+                                </div>
+
+
+                                <div class="box-body">
+                                    <label class="col-md-3">客户ID</label>
+                                    <div class="col-md-9 filter-body">
+                                        <input type="text" class="form-control form-filter filter-keyup" name="department-id" placeholder="ID" />
+                                    </div>
+                                </div>
+
+
+                                <div class="box-body">
+                                    <label class="col-md-3">用户名</label>
+                                    <div class="col-md-9 filter-body">
+                                        <input type="text" class="form-control form-filter item-search-keyup" name="client-username" placeholder="用户名" />
+                                    </div>
+                                </div>
+
+                                <div class="box-body">
+                                    <label class="col-md-3">启用状态</label>
+                                    <div class="col-md-9 filter-body">
+                                        <select class="form-control form-filter" name="client-status">
+                                            <option value ="1">启用</option>
+                                            <option value ="-1">全部</option>
+                                            <option value ="9">禁用</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="box-footer" style="text-align: center;">
+
+                                    <button type="button" class="btn btn-default filter-submit" id="filter-submit">
+                                        <i class="fa fa-search"></i> 搜 索
+                                    </button>
+                                    <button type="button" class="btn bg-default filter-empty">
+                                        <i class="fa fa-remove"></i> 重 置
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="btn btn-default btn-filter filter-refresh">
+                        <i class="fa fa-circle-o-notch"></i> 刷新
+                    </button>
+
+                    <button type="button" class="btn btn-default btn-filter filter-cancel">
+                        <i class="fa fa-undo"></i> 重置
+                    </button>
+
+
+                </div>
+
 
             </div>
 
-            <div class="box-body datatable-body item-main-body" id="item-main-body">
 
-                <div class="row col-md-12 datatable-search-row">
-                    <div class="input-group">
-
-                        <input type="text" class="form-control form-filter item-search-keyup" name="username" placeholder="用户名" />
-
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
-                            <i class="fa fa-circle-o-notch"></i> 重置
-                        </button>
-
-                    </div>
-                </div>
+            <div class="box-body datatable-body">
 
 
                 <div class="tableArea">
@@ -68,14 +130,7 @@
 
             </div>
 
-            <div class="box-footer">
-                <div class="row" style="margin:16px 0;">
-                    <div class="col-md-offset-0 col-md-9">
-                        <button type="button" onclick="" class="btn btn-primary _none"><i class="fa fa-check"></i> 提交</button>
-                        <button type="button" onclick="history.go(-1);" class="btn btn-default">返回</button>
-                    </div>
-                </div>
-            </div>
+
         </div>
         <!-- END PORTLET-->
     </div>

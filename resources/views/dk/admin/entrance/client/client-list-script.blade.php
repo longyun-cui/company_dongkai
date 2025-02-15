@@ -2,11 +2,11 @@
     $(function() {
 
         // 【搜索】
-        $(".item-main-body").on('click', ".filter-submit", function() {
+        $(".main-content").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $(".item-main-body").on('click', ".filter-cancel", function() {
+        $(".main-content").on('click', ".filter-cancel", function() {
             $('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
@@ -18,7 +18,7 @@
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【查询】回车
-        $(".item-main-body").on('keyup', ".item-search-keyup", function(event) {
+        $(".main-content").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
                 $("#filter-submit").click();
@@ -27,20 +27,20 @@
 
 
         // 【下载二维码】
-        $("#item-main-body").on('click', ".item-download-qr-code-submit", function() {
+        $(".main-content").on('click', ".item-download-qr-code-submit", function() {
             var $that = $(this);
             window.open("/download/qr-code?type=user&id="+$that.attr('data-id'));
         });
 
         // 【数据分析】
-        $("#item-main-body").on('click', ".item-statistic-link", function() {
+        $(".main-content").on('click', ".item-statistic-link", function() {
             var $that = $(this);
             window.open("/statistic/statistic-user?user-id="+$that.attr('data-id'));
 //            window.location.href = "/statistic/statistic-user?id="+$that.attr('data-id');
         });
 
         // 【编辑】
-        $("#item-main-body").on('click', ".item-admin-edit-submit", function() {
+        $(".main-content").on('click', ".item-admin-edit-submit", function() {
             var $that = $(this);
             window.location.href = "/user/client-edit?id="+$that.attr('data-id');
         });
@@ -49,7 +49,7 @@
 
 
         // 【重置密码】提交
-        $("#item-main-body").on('click', ".item-password-admin-reset-submit", function() {
+        $(".main-content").on('click', ".item-password-admin-reset-submit", function() {
             var $that = $(this);
             layer.msg('确定"重置"么', {
                 time: 0
@@ -79,7 +79,7 @@
 
 
         // 【删除】
-        $("#item-main-body").on('click', ".item-admin-delete-submit", function() {
+        $(".main-content").on('click', ".item-admin-delete-submit", function() {
             var $that = $(this);
             layer.msg('确定"删除"么?', {
                 time: 0
@@ -106,7 +106,7 @@
             });
         });
         // 【恢复】
-        $("#item-main-body").on('click', ".item-admin-restore-submit", function() {
+        $(".main-content").on('click', ".item-admin-restore-submit", function() {
             var $that = $(this);
             layer.msg('确定要"恢复"么？', {
                 time: 0
@@ -133,7 +133,7 @@
             });
         });
         // 【永久删除】
-        $("#item-main-body").on('click', ".item-admin-delete-permanently-submit", function() {
+        $(".main-content").on('click', ".item-admin-delete-permanently-submit", function() {
             var $that = $(this);
             layer.msg('确定"删除"么?', {
                 time: 0
@@ -164,7 +164,7 @@
 
 
         // 【启用】
-        $("#item-main-body").on('click', ".item-admin-enable-submit", function() {
+        $(".main-content").on('click', ".item-admin-enable-submit", function() {
             var $that = $(this);
             layer.msg('确定"启用"？', {
                 time: 0
@@ -191,7 +191,7 @@
             });
         });
         // 【禁用】
-        $("#item-main-body").on('click', ".item-admin-disable-submit", function() {
+        $(".main-content").on('click', ".item-admin-disable-submit", function() {
             var $that = $(this);
             layer.msg('确定"禁用"？', {
                 time: 0

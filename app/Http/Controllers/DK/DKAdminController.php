@@ -497,10 +497,10 @@ class DKAdminController extends Controller
     }
 
     // 【部门】返回-列表-视图（全部任务）
-    public function view_department_list_for_all()
+    public function view_department_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_department_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_department_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_department_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_department_list_datatable(request()->all());
     }
     // 【部门】【修改记录】返回-列表-视图（全部任务）
     public function view_department_modify_record()
@@ -617,10 +617,10 @@ class DKAdminController extends Controller
 
 
     // 【用户-员工】返回-列表-视图
-    public function view_user_staff_list_for_all()
+    public function view_user_staff_list()
     {
-        if(request()->isMethod('get')) return $this->repo->view_user_staff_list_for_all(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_for_all_datatable(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_user_staff_list(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_user_staff_list_datatable(request()->all());
     }
     // 【用户-员工】【修改记录】返回-列表-视图（全部任务）
     public function view_user_staff_modify_record()

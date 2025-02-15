@@ -2,10 +2,8 @@
 
 
 @section('head_title')
-    {{ $title_text or '工单列表' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '工单列表' }}
 @endsection
-
-
 
 
 @section('title')<span class="box-title">{{ $title_text or '工单列表' }}</span>@endsection

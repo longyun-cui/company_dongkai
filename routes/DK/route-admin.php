@@ -159,7 +159,6 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::match(['get','post'], '/department/department_select2_superior_department', $controller.'@operate_department_select2_superior_department');
     // 列表
     Route::match(['get','post'], '/department/department-list', $controller.'@view_department_list');
-    Route::match(['get','post'], '/department/department-list-for-all', $controller.'@view_department_list_for_all');
     // 修改列表
     Route::match(['get','post'], '/department/department-modify-record', $controller.'@view_department_modify_record');
     // 创建 & 修改

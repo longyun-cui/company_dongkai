@@ -2896,18 +2896,18 @@ class DKAdminRepository {
 
 
     // 【部门】返回-列表-视图
-    public function view_department_list_for_all($post_data)
+    public function view_department_list($post_data)
     {
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,41])) return view($this->view_blade_403);
 
-        $return['menu_active_of_department_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-list-for-all';
+        $return['menu_active_of_department_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.department.department-list';
         return view($view_blade)->with($return);
     }
     // 【部门】返回-列表-数据
-    public function get_department_list_for_all_datatable($post_data)
+    public function get_department_list_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -4184,7 +4184,7 @@ class DKAdminRepository {
 
 
     // 【员工】返回-列表-视图
-    public function view_user_staff_list_for_all($post_data)
+    public function view_user_staff_list($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -4196,12 +4196,12 @@ class DKAdminRepository {
             $return['department_district_list'] = $department_district_list;
         }
 
-        $return['menu_active_of_staff_list_for_all'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-list-for-all';
+        $return['menu_active_of_staff_list'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.staff.staff-list';
         return view($view_blade)->with($return);
     }
     // 【员工】返回-列表-数据
-    public function get_user_staff_list_for_all_datatable($post_data)
+    public function get_user_staff_list_datatable($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -4365,7 +4365,7 @@ class DKAdminRepository {
         $item_type_text = '用户';
         $title_text = '添加'.$item_type_text;
         $list_text = $item_type_text.'列表';
-        $list_link = '/user/staff-list-for-all';
+        $list_link = '/user/staff-list';
 
         $return_data['operate'] = 'create';
         $return_data['operate_id'] = 0;
@@ -4376,7 +4376,7 @@ class DKAdminRepository {
         $return_data['list_text'] = $list_text;
         $return_data['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.staff.staff-edit';
         return view($view_blade)->with($return_data);
     }
     // 【员工】返回-编辑-视图
@@ -4387,7 +4387,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,19,21,31,41,61,71,81])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.user.staff-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.staff.staff-edit';
 
         $item_type = 'item';
         $item_type_text = '用户';
