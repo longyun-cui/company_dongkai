@@ -137,7 +137,7 @@
                         </select>
 
                         {{--行政区--}}
-                        <select class="search-filter form-filter filter-xl select2-box select2-district-district" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple">
+                        <select class="search-filter form-filter filter-xxl select2-box select2-district-district" name="order-district[]" id="order-district" data-target="order-city" multiple="multiple">
                             <option value="-1">选择区域</option>
                             @if(!empty($district_district_list) && count($district_district_list) > 0)
                                 @foreach($district_district_list as $v)

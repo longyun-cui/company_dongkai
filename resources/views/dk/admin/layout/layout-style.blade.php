@@ -34,6 +34,7 @@
     .datatable-search-row .search-filter.filter-md { width:120px; }
     .datatable-search-row .search-filter.filter-lg { width:140px; }
     .datatable-search-row .search-filter.filter-xl { width:160px; }
+    .datatable-search-row .search-filter.filter-xxl { width:200px; }
 
 
     .datatable-search-row .select2-container { height:32px; margin-bottom:4px; margin-right:4px; }
