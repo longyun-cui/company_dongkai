@@ -15,7 +15,7 @@
         </div>
 
 
-        <div class="navbar-custom-menu- pull-right">
+        <div class="pull-right">
 
 
             <div class="nav navbar-nav">

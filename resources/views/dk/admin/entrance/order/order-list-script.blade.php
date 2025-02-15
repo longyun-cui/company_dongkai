@@ -1,71 +1,70 @@
 <script>
     $(function() {
 
-
         // 【搜索】
-        $("#datatable-for-order-list").on('click', ".filter-submit", function() {
-            $('#datatable_ajax').DataTable().ajax.reload();
+        $(".main-content").on('click', ".filter-submit", function() {
+            $('#datatable-for-order-list').DataTable().ajax.reload();
         });
         // 【刷新】
-        $("#datatable-for-order-list").on('click', ".filter-refresh", function() {
-            $('#datatable_ajax').DataTable().ajax.reload(null,false);
+        $(".main-content").on('click', ".filter-refresh", function() {
+            $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
         });
         // 【重置】
-        $("#datatable-for-order-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $(".main-content").on('click', ".filter-cancel", function() {
+            $("#datatable-search-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-search-for-order-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-search-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
-            $('#datatable_ajax').DataTable().ajax.reload();
+            $('#datatable-for-order-list').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $("#datatable-for-order-list").on('click', ".filter-empty", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $(".main-content").on('click', ".filter-empty", function() {
+            $("#datatable-search-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-search-for-order-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-search-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $("#datatable-for-order-list").on('keyup', ".filter-keyup", function(event) {
+        $(".main-content").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-order-list").find(".filter-submit").click();
+                $("#datatable-search-for-order-list").find(".filter-submit").click();
             }
         });
 
 
         // 【完整显示】
         $(".main-content").on('click', "#order-show-for-full", function() {
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(11, true);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(12, true);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(16, true);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(17, true);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(18, true);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(19, true);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(11, true);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(12, true);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(16, true);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(17, true);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(18, true);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(19, true);
         });
         // 【简要显示】
         $(".main-content").on('click', "#order-show-for-brief", function() {
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(11, false);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(12, false);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(16, false);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(17, false);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(18, false);
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(19, false);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(11, false);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(12, false);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(16, false);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(17, false);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(18, false);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(19, false);
         });
         // 【财务显示】
         $(".main-content").on('click', "#order-show-for-finance", function() {
-            // $('#datatable_ajax').dataTable().fnSetColumnVis(s19, false);
+            // $('#datatable-for-order-list').dataTable().fnSetColumnVis(s19, false);
         });
 
 
@@ -95,7 +94,7 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-order-list").find(".filter-submit").click();
+            $(".main-content").find(".filter-submit").click();
 
         });
         // 【综合概览】【后一添】
@@ -122,7 +121,7 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-order-list").find(".filter-submit").click();
+            $(".main-content").find(".filter-submit").click();
 
         });
 
@@ -348,7 +347,7 @@
         $(".main-content").on('click', ".item-modal-show-for-detail-inspected", function() {
             var $that = $(this);
             var $row = $that.parents('tr');
-            $('#datatable_ajax').find('tr').removeClass('inspecting');
+            $('#datatable-for-order-list').find('tr').removeClass('inspecting');
             $row.addClass('inspecting');
 
             $('input[name="detail-inspected-order-id"]').val($that.attr('data-id'));
@@ -420,7 +419,7 @@
                         layer.msg(data.msg);
 
                         $(".item-cancel-for-detail-inspected").click();
-                        // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                        // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
 
                         var $result_html = '--';
                         if($inspected_result == "通过" || $inspected_result == "内部通过")
@@ -440,7 +439,7 @@
                             $result_html = '<small class="btn-xs bg-purple">'+$inspected_result+'</small>';
                         }
 
-                        var $row = $('#datatable_ajax').find('tr.inspecting');
+                        var $row = $('#datatable-for-order-list').find('tr.inspecting');
                         $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-blue">已审核</small>');
                         $row.find('td[data-key=inspected_result]').attr('data-value',$inspected_result);
                         $row.find('td[data-key=inspected_result]').html($result_html);
@@ -515,7 +514,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -545,7 +544,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -575,7 +574,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -625,7 +624,7 @@
                             else
                             {
                                 layer.msg("发布成功！");
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -656,7 +655,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -686,7 +685,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -732,7 +731,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -746,7 +745,7 @@
 
             var $that = $(this);
             var $row = $that.parents('tr');
-            $('#datatable_ajax').find('tr').removeClass('operating');
+            $('#datatable-for-order-list').find('tr').removeClass('operating');
             $row.addClass('operating');
 
             var $index = layer.load(1, {
@@ -876,7 +875,7 @@
                             }
                             else
                             {
-                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
 
                                 var $delivered_result = $('select[name="select-delivered-result"]').val();
                                 var $client_id = $('select[name="select-client-id"]').val();
@@ -935,7 +934,7 @@
 
             var $that = $(this);
             var $row = $that.parents('tr');
-            $('#datatable_ajax').find('tr').removeClass('operating');
+            $('#datatable-for-order-list').find('tr').removeClass('operating');
             $row.addClass('operating');
 
             $('.deliver-set-title').html($that.attr("data-id"));
@@ -1131,7 +1130,7 @@
 
             var $that = $(this);
             var $row = $that.parents('tr');
-            $('#datatable_ajax').find('tr').removeClass('operating');
+            $('#datatable-for-order-list').find('tr').removeClass('operating');
             $row.addClass('operating');
 
             var $index = layer.load(1, {
@@ -1280,7 +1279,7 @@
 
             var $that = $(this);
             var $row = $that.parents('tr');
-            $('#datatable_ajax').find('tr').removeClass('operating');
+            $('#datatable-for-order-list').find('tr').removeClass('operating');
             $row.addClass('operating');
 
             $('.distribute-set-title').html($that.attr("data-id"));
@@ -1493,7 +1492,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -1523,7 +1522,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -1553,7 +1552,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -1587,7 +1586,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -1617,7 +1616,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -1682,7 +1681,7 @@
                                     $("body").addClass("modal-open");
                                 });
 
-                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null, false);
                             }
                         },
                         'json'
@@ -1713,7 +1712,7 @@
             var $that = $(this);
             var $row = $that.parents('tr');
 
-            $('#datatable_ajax').find('tr').removeClass('operating');
+            $('#datatable-for-order-list').find('tr').removeClass('operating');
             $row.addClass('operating');
 
             $('.info-text-set-title').html($that.attr("data-id"));
@@ -1760,7 +1759,7 @@
                 var $column_value = $('input[name="info-text-set-column-value"]').val();
             }
 
-            var $row = $('#datatable_ajax').find('tr.operating');
+            var $row = $('#datatable-for-order-list').find('tr.operating');
 
             // layer.msg('确定"提交"么？', {
             //     time: 0
@@ -1794,7 +1793,7 @@
                                 $('input[name=info-text-set-column-value]').val('');
                                 $('textarea[name=info-textarea-set-column-value]').text('');
 
-                                // $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                // $('#datatable-for-order-list').DataTable().ajax.reload(null, false);
 
                                 if($column_key == "recording_address")
                                 {
@@ -1908,7 +1907,7 @@
                                     $("body").addClass("modal-open");
                                 });
 
-                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null, false);
 
                             }
                         },
@@ -1997,7 +1996,7 @@
 //                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
 ////                                TableDatatablesAjax_inner.init($keyword_id);
 
-                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null, false);
 //                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
                             }
                         },
@@ -2319,7 +2318,7 @@
 //                                var $keyword_id = $("#set-rank-bulk-submit").attr("data-keyword-id");
 ////                                TableDatatablesAjax_inner.init($keyword_id);
 
-                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+                                $('#datatable-for-order-list').DataTable().ajax.reload(null, false);
 //                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
                             }
                         },
@@ -2457,7 +2456,7 @@
                                 $('.attachment-box').html($data.html);
                                 $(".fileinput-remove-button").click();
 
-//                                $('#datatable_ajax').DataTable().ajax.reload(null, false);
+//                                $('#datatable-for-order-list').DataTable().ajax.reload(null, false);
 //                                $('#datatable_ajax_inner').DataTable().ajax.reload(null, false);
                             }
                         },
@@ -2496,7 +2495,7 @@
                             else
                             {
                                 $that.parents('.attachment-option').remove();
-//                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+//                                $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
@@ -2552,7 +2551,7 @@
             {{--                if(!data.success) layer.msg(data.msg);--}}
             {{--                else--}}
             {{--                {--}}
-            {{--                    $('#datatable_ajax').DataTable().ajax.reload(null,false);--}}
+            {{--                    $('#datatable-for-order-list').DataTable().ajax.reload(null,false);--}}
             {{--                }--}}
             {{--            },--}}
             {{--            'json'--}}
@@ -2623,7 +2622,7 @@
                             else
                             {
                                 layer.closeAll('loading');
-                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
 
                                 $('input[name="bulk-id"]:checked').each(function() {
 

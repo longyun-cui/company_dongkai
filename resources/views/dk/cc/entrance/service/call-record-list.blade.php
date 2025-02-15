@@ -25,6 +25,7 @@
 
                     <div class="input-group">
 
+                        <input type="text" class="form-control form-filter item-search-keyup" name="call-record-id" placeholder="ID" />
                         <input type="text" class="form-control form-filter item-search-keyup" name="call-record-title" placeholder="名称" />
 
                         <input type="text" class="form-control form-filter filter-keyup" name="call-record-callee" placeholder="电话" value="{{ $callee or '' }}" style="width:120px;" />

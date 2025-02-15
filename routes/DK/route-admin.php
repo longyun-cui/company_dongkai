@@ -71,12 +71,19 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
 
+
+    // select2
+    Route::match(['get','post'], '/select2/select2_company', $controller.'@operate_select2_company');
+
+
+
+
+
     /*
      * 客户管理
      */
     // 列表
     Route::match(['get','post'], '/user/client-list', $controller.'@view_user_client_list');
-    Route::match(['get','post'], '/user/client-list-for-all', $controller.'@view_user_client_list_for_all');
     // 修改列表
     Route::match(['get','post'], '/user/client-modify-record', $controller.'@view_user_client_modify_record');
     // 创建 & 修改
@@ -103,6 +110,38 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::match(['get','post'], '/user/client-company-recharge-record', $controller.'@view_user_client_recharge_record');
     Route::post('/user/client-finance-recharge-create', $controller.'@operate_user_client_finance_recharge_create');
     Route::post('/user/client-finance-recharge-edit', $controller.'@operate_user_client_finance_recharge_edit');
+
+
+
+
+
+
+
+
+
+    /*
+     * 部门管理
+     */
+    // 列表
+    Route::match(['get','post'], '/company/company-list', $controller.'@view_company_list');
+    // 修改列表
+    Route::match(['get','post'], '/company/company-modify-record', $controller.'@view_company_modify_record');
+    // 创建 & 修改
+    Route::match(['get','post'], '/company/company-create', $controller.'@operate_company_create');
+    Route::match(['get','post'], '/company/company-edit', $controller.'@operate_company_edit');
+    // 编辑-信息
+    Route::post('/company/company-info-text-set', $controller.'@operate_company_info_text_set');
+    Route::post('/company/company-info-time-set', $controller.'@operate_company_info_time_set');
+    Route::post('/company/company-info-radio-set', $controller.'@operate_company_info_option_set');
+    Route::post('/company/company-info-select-set', $controller.'@operate_company_info_option_set');
+    Route::post('/company/company-info-select2-set', $controller.'@operate_company_info_option_set');
+    // 删除 & 恢复
+    Route::post('/company/company-admin-delete', $controller.'@operate_company_admin_delete');
+    Route::post('/company/company-admin-restore', $controller.'@operate_company_admin_restore');
+    Route::post('/company/company-admin-delete-permanently', $controller.'@operate_company_admin_delete_permanently');
+    // 启用 & 禁用
+    Route::post('/company/company-admin-enable', $controller.'@operate_company_admin_enable');
+    Route::post('/company/company-admin-disable', $controller.'@operate_company_admin_disable');
 
 
 
@@ -319,7 +358,6 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
     // 列表
     Route::match(['get','post'], '/item/order-list', $controller.'@view_item_order_list');
-    Route::match(['get','post'], '/item/order-list-for-all', $controller.'@view_item_order_list_for_all');
 
     // 订单-基本信息
     Route::post('/item/order-info-text-set', $controller.'@operate_item_order_info_text_set');

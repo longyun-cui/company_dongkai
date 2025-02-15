@@ -106,7 +106,7 @@
         });
 
 
-        $('.datatable-search-row .dropdown-menu').on('click', function(event) {
+        $('.datatable-search-row .dropdown-menu .box-body').on('click', function(event) {
             // $(this).show();
             event.stopPropagation(); // 阻止事件冒泡
         });

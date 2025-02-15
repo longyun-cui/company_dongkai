@@ -24,9 +24,17 @@
         }
     }
 
-    .dropdown.filter-menu {
+    .datatable-search-row .btn-filter { font-size:12px; }
+    .datatable-search-row .dropdown-menu { position:absolute; width:400px; top:-4px; left:auto; right:76px; padding:4px; }
+    .datatable-search-row .pull-left .dropdown-menu { position:absolute; width:400px; top:-4px; left:auto; padding:4px; }
+    .datatable-search-row .pull-right .dropdown-menu { position:absolute; width:400px; top:-4px; left:auto; padding:4px; }
 
-    }
+    .dropdown.filter-menu { position:relative; float:left;}
+    .pull-left .dropdown.filter-menu { position:relative; float:right; }
+    .pull-left .dropdown.filter-menu .dropdown-toggle { margin-left:4px; }
+    .pull-right .dropdown.filter-menu { position:relative; float:left; }
+    .pull-right .dropdown.filter-menu .dropdown-toggle { margin-right:4px; }
+
     .dropdown.filter-menu .box-body { padding:10px 0; margin:0; border-bottom:1px solid #eee; }
     .dropdown.filter-menu .box-body label { padding-right:8px; margin-bottom:0; line-height:28px; text-align:right; }
     .dropdown.filter-menu .box-body .filter-body { height:100%; }

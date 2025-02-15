@@ -3239,8 +3239,8 @@ class DKCCRepository {
 
         if($mine->serverFrom_name == "FNJ")
         {
-            $server = "https://feiniji.cn";
-            $url = "https://feiniji.cn/openapi/V2.1.2/login";
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.1.2/login";
             $API_Customer_Password = env('API_CALL_FNJ_C1_PASSWORD');
         }
         else if($mine->serverFrom_name == "call-01")
@@ -3269,8 +3269,8 @@ class DKCCRepository {
         }
         else
         {
-            $server = "https://feiniji.cn";
-            $url = "https://feiniji.cn/openapi/V2.1.2/login";
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.1.2/login";
             $API_Customer_Password = env('API_OKCC_C1_PASSWORD');
         }
 
@@ -7338,6 +7338,7 @@ EOF;
                 'staff_or'=>function($query) { $query->select(['id','username','api_staffNo']); }
             ]);
 
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
@@ -21073,7 +21074,7 @@ EOF;
         if($serverFrom == 'FNJ')
         {
             $serverFrom_id = 11;
-            $server_http = 'https://feiniji.cn';
+            $server_http = 'http://feiniji.cn';
         }
         else if($serverFrom == 'call-01')
         {
@@ -21098,7 +21099,7 @@ EOF;
         else
         {
             $serverFrom_id = 0;
-            $server_http = 'https://feiniji.cn';
+            $server_http = 'http://feiniji.cn';
         }
 
 
@@ -21314,7 +21315,7 @@ EOF;
         else
         {
             $serverFrom_id = 0;
-            $server_http = 'https://feiniji.cn';
+            $server_http = 'http://feiniji.cn';
         }
 
         $insert_data['serverFrom_id'] = $serverFrom_id;
@@ -21520,7 +21521,7 @@ EOF;
 
                 if($serverFrom == 'FNJ')
                 {
-                    $server_http = 'https://feiniji.cn';
+                    $server_http = 'http://feiniji.cn';
                 }
                 else if($serverFrom == 'call-01')
                 {
@@ -21538,7 +21539,7 @@ EOF;
                 {
                     $server_http = 'http://call04.zlyx.jjccyun.cn';
                 }
-                else $server_http = 'https://feiniji.cn';
+                else $server_http = 'http://feiniji.cn';
 
 
                 if(count($call_list) == 1)
@@ -21551,7 +21552,7 @@ EOF;
                 foreach($call_list as $call)
                 {
                     $call_address = $server_http . $call->recordFile;
-                    $recording_address_list[$call->id] = $call_address;
+                    $recording_address_list[$call->call_record_id] = $call_address;
                 }
 //                $insert_data["recording_address"] = collect($recording_address_list)->toJson();
                 $insert_data["recording_address_list"] = json_encode($recording_address_list,JSON_UNESCAPED_SLASHES);

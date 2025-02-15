@@ -5,17 +5,21 @@
             var dt_order_list = $('#datatable-for-order-list');
             var ajax_datatable_order_list = dt_order_list.DataTable({
 //                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
-                "aLengthMenu": [
-                    [ @if(!in_array($length,[10, 20, 50, 100, 200])) {{ $length.',' }} @endif 10, 20, 50, 100, 200],
-                    [ @if(!in_array($length,[10, 20, 50, 100, 200])) {{ $length.',' }} @endif "10", "20", "50", "100", "200"]
-                ],
+                "aLengthMenu": [[ @if(!in_array($length,[10, 20, 50, 100, 200])) {{ $length.',' }} @endif 10, 20, 50, 100, 200], [ @if(!in_array($length,[10, 20, 50, 100, 200])) {{ $length.',' }} @endif "10", "20", "50", "100", "200"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
                 "iDisplayStart": "{{ ($page - 1) * $length }}",
                 "iDisplayLength": "{{ $length or 10 }}",
+                "pagingType": "simple_numbers",
+                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
+                "order": [],
+                "orderCellsTop": true,
+                "scrollX": true,
+                "scrollY": ($(document).height() - 448)+"px",
+                "scrollCollapse": true,
                 "ajax": {
-                    'url': "{{ url('/item/order-list-for-all') }}",
+                    'url': "{{ url('/item/order-list') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -55,18 +59,11 @@
 
                     },
                 },
-                "pagingType": "simple_numbers",
-                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
-                "order": [],
-                "orderCellsTop": true,
-                "scrollX": true,
-                "scrollY": ($(document).height() - 448)+"px",
-                "scrollCollapse": true,
                 "fixedColumns": {
 
                     @if($me->department_district_id == 0)
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 5 @endif",
-                    "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif",
+                    "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
                     @else
                     "leftColumns": "@if($is_mobile_equipment) 1 @else 7 @endif",
                     "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
@@ -173,18 +170,18 @@
                             }
                             else
                             {
+                                if(row.is_completed == 1)
+                                {
+                                    return '<small class="btn-xs bg-olive">已结束</small>';
+                                }
                             }
+
+
                             // if(row.client_id > 0)
                             // {
                             //     return '<small class="btn-xs bg-olive">已交付</small>';
                             // }
 
-
-                            if(row.is_completed == 1)
-                            {
-                                return '<small class="btn-xs bg-olive">已结束</small>';
-
-                            }
                             if(row.inspected_at)
                             {
 
@@ -630,6 +627,28 @@
                     //     }
                     // },
                     {
+                        "title": "是否重复",
+                        "data": "is_repeat",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                // $(nTd).addClass('modal-show-for-info-radio-set-');
+                                // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
+                                $(nTd).attr('data-key','is_repeat').attr('data-value',data);
+                                // $(nTd).attr('data-column-name','是否重复');
+                                // if(data) $(nTd).attr('data-operate-type','edit');
+                                // else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(data == 0) return '--';
+                            else return '<small class="btn-xs btn-primary">是</small><small class="btn-xs btn-danger">'+(data+1)+'</small>';
+                        }
+                    },
+                    {
                         "title": "客户姓名",
                         "data": "client_name",
                         "className": "",
@@ -674,6 +693,50 @@
                         }
                     },
                     {
+                        "title": "患者类型",
+                        "data": "client_type",
+                        "className": "",
+                        "width": "60px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
+                            {
+                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','患者类型');
+                                $(nTd).attr('data-key','client_type').attr('data-value',data);
+                                $(nTd).attr('data-column-name','患者类型');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            // if(!data) return '--';
+                            // return data;
+                            var $result_html = '';
+                            if(data == 0)
+                            {
+                                $result_html = '<small class="btn-xs ">未选择</small>';
+                            }
+                            else if(data == 1)
+                            {
+                                $result_html = '<small class="btn-xs bg-blue">种植牙</small>';
+                            }
+                            else if(data == 2)
+                            {
+                                $result_html = '<small class="btn-xs bg-green">矫正</small>';
+                            }
+                            else if(data == 3)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">正畸</small>';
+                            }
+                            else
+                            {
+                                $result_html = '未知类型';
+                            }
+                            return $result_html;
+                        }
+                    },
+                    {
                         "title": "客户意向",
                         "data": "client_intention",
                         "className": "",
@@ -694,7 +757,11 @@
                             // if(!data) return '--';
                             // return data;
                             var $result_html = '';
-                            if(data == "A类")
+                            if(data == "到店")
+                            {
+                                $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
+                            }
+                            else if(data == "A类")
                             {
                                 $result_html = '<small class="btn-xs bg-red">'+data+'</small>';
                             }
@@ -726,25 +793,25 @@
                         }
                     },
                     {
-                        "title": "是否重复",
-                        "data": "is_repeat",
+                        "title": "牙齿数量",
+                        "data": "teeth_count",
                         "className": "",
-                        "width": "60px",
+                        "width": "80px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
                             {
-                                // $(nTd).addClass('modal-show-for-info-radio-set-');
-                                // $(nTd).attr('data-id',row.id).attr('data-name','是否重复');
-                                $(nTd).attr('data-key','is_repeat').attr('data-value',data);
-                                // $(nTd).attr('data-column-name','是否重复');
-                                // if(data) $(nTd).attr('data-operate-type','edit');
-                                // else $(nTd).attr('data-operate-type','add');
+                                $(nTd).addClass('modal-show-for-info-select-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
+                                $(nTd).attr('data-key','teeth_count').attr('data-value',data);
+                                $(nTd).attr('data-column-name','牙齿数量');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
                             }
                         },
                         render: function(data, type, row, meta) {
-                            if(data == 0) return '--';
-                            else return '<small class="btn-xs btn-primary">是</small><small class="btn-xs btn-danger">'+(data+1)+'</small>';
+                            return data;
                         }
                     },
                     {
@@ -782,28 +849,6 @@
                                 $(nTd).attr('data-id',row.id).attr('data-name','微信号');
                                 $(nTd).attr('data-key','wx_id').attr('data-value',data);
                                 $(nTd).attr('data-column-name','微信号');
-                                $(nTd).attr('data-text-type','text');
-                                if(data) $(nTd).attr('data-operate-type','edit');
-                                else $(nTd).attr('data-operate-type','add');
-                            }
-                        },
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "title": "牙齿数量",
-                        "data": "teeth_count",
-                        "className": "",
-                        "width": "80px",
-                        "orderable": false,
-                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(!("{{ in_array($me->user_type,[84,88]) }}" && row.is_published == 1) || ("{{ in_array($me->user_type,[84,88]) }}" && row.inspected_result == "二次待审"))
-                            {
-                                $(nTd).addClass('modal-show-for-info-select-set');
-                                $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
-                                $(nTd).attr('data-key','teeth_count').attr('data-value',data);
-                                $(nTd).attr('data-column-name','牙齿数量');
                                 $(nTd).attr('data-text-type','text');
                                 if(data) $(nTd).attr('data-operate-type','edit');
                                 else $(nTd).attr('data-operate-type','add');
@@ -1397,7 +1442,7 @@
                     }
                     else
                     {
-                        $url = "{{ url('/item/order-list-for-all') }}";
+                        $url = "{{ url('/item/order-list') }}";
                         if(window.location.search) history.replaceState({page: 1}, "", $url);
                     }
 
@@ -1411,7 +1456,7 @@
             });
 
             dt_order_list.on('click', '.filter-cancel', function () {
-                $('textarea.form-filter, select.form-filter, input.form-filter', dt_order_list).each(function () {
+                $('textarea.form-filter, select.form-filter, input.form-filter', dt).each(function () {
                     $(this).val("");
                 });
 
@@ -1428,10 +1473,9 @@
 
     $(function () {
 
-        // var $id = $.getUrlParam('id');
-        // if($id) $('input[name="order-id"]').val($id);
-
-        // Table_DatatableAjax_order_list.init();
+        var $id = $.getUrlParam('id');
+        if($id) $('input[name="order-id"]').val($id);
+        Table_DatatableAjax_order_list.init();
         // $('#datatable-for-order-list').DataTable().init().fnPageChange(3);
     });
 </script>

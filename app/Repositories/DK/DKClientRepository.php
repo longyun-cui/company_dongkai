@@ -2,6 +2,7 @@
 namespace App\Repositories\DK;
 
 use App\Models\DK_Choice\DK_Choice_Call_Record;
+
 use App\Models\DK_Client\DK_Client_Department;
 use App\Models\DK_Client\DK_Client_User;
 use App\Models\DK_Client\DK_Client_Project;
@@ -16,6 +17,7 @@ use App\Models\DK\DK_Client;
 use App\Models\DK\DK_District;
 
 use App\Models\DK_CC\DK_CC_Call_Record;
+use App\Models\DK_CC\DK_CC_Call_Record_Current;
 
 use App\Repositories\Common\CommonRepository;
 
@@ -183,12 +185,108 @@ class DKClientRepository {
     public function view_data_voice_record($post_data)
     {
         $record_id = $post_data['record_id'];
+
         $call_record = DK_CC_Call_Record::find($record_id);
+        if($call_record)
+        {
+            $serverFrom = $call_record['serverFrom_name'];
+            if($serverFrom == 'FNJ')
+            {
+                $server_http = 'http://feiniji.cn';
+            }
+            else if($serverFrom == 'call-01')
+            {
+                $server_http = 'http://call01.zlyx.jjccyun.cn';
+            }
+            else if($serverFrom == 'call-02')
+            {
+                $server_http = 'http://call02.zlyx.jjccyun.cn';
+            }
+            else if($serverFrom == 'call-03')
+            {
+                $server_http = 'http://call03.zlyx.jjccyun.cn';
+            }
+            else if($serverFrom == 'call-04')
+            {
+                $server_http = 'http://call04.zlyx.jjccyun.cn';
+            }
+            else
+            {
+                $server_http = 'http://feiniji.cn';
+            }
 
-        $view_data['record_file_address'] = 'https://feiniji.cn' . $call_record->recordFile;
+            $record_file_address = $server_http . $call_record->recordFile;
 
-        $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.data.voice-record';
-        return view($view_blade)->with($view_data);
+
+            $ch = curl_init($record_file_address);
+            curl_setopt_array($ch, [
+                CURLOPT_NOBODY => true,        // 不下载内容，仅请求头
+                CURLOPT_FOLLOWLOCATION => true,// 跟随重定向
+                CURLOPT_TIMEOUT => 5,          // 超时时间（秒）
+                CURLOPT_SSL_VERIFYHOST => false, // 如需跳过SSL验证
+                CURLOPT_SSL_VERIFYPEER => false,
+            ]);
+            curl_exec($ch);
+            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if($statusCode === 200)
+            {
+                $view_data['record_file_address'] = $record_file_address;
+                $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.data.voice-record';
+                return view($view_blade)->with($view_data);
+            }
+        }
+        else
+        {
+            $call_record_current = DK_CC_Call_Record_Current::find($record_id);
+
+            $serverFrom = $call_record_current['serverFrom_name'];
+            if($serverFrom == 'FNJ')
+            {
+                $server_http = 'http://feiniji.cn';
+            }
+            else if($serverFrom == 'call-01')
+            {
+                $server_http = 'http://call01.zlyx.jjccyun.cn';
+            }
+            else if($serverFrom == 'call-02')
+            {
+                $server_http = 'http://call02.zlyx.jjccyun.cn';
+            }
+            else if($serverFrom == 'call-03')
+            {
+                $server_http = 'http://call03.zlyx.jjccyun.cn';
+            }
+            else if($serverFrom == 'call-04')
+            {
+                $server_http = 'http://call04.zlyx.jjccyun.cn';
+            }
+            else
+            {
+                $server_http = 'http://feiniji.cn';
+            }
+
+            $record_file_address = $server_http . $call_record_current->recordFile;
+            $ch = curl_init($record_file_address);
+            curl_setopt_array($ch, [
+                CURLOPT_NOBODY => true,        // 不下载内容，仅请求头
+                CURLOPT_FOLLOWLOCATION => true,// 跟随重定向
+                CURLOPT_TIMEOUT => 5,          // 超时时间（秒）
+                CURLOPT_SSL_VERIFYHOST => false, // 如需跳过SSL验证
+                CURLOPT_SSL_VERIFYPEER => false,
+            ]);
+            curl_exec($ch);
+            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if($statusCode === 200)
+            {
+                $view_data['record_file_address'] = $record_file_address;
+            }
+            $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.data.voice-record';
+            return view($view_blade)->with($view_data);
+
+        }
+
     }
 
 

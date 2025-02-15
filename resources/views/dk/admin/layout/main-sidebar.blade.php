@@ -71,25 +71,15 @@
 
 
 
-            {{--客户管理--}}
-            @if(in_array($me->user_type,[0,1,9,11,61]))
-            <li class="header">客户管理</li>
-
-            <li class="treeview {{ $menu_active_of_client_list_for_all or '' }}">
-                <a href="{{ url('/user/client-list-for-all') }}">
-                    <i class="fa fa-user-secret text-red"></i>
-                    <span>客户列表</span>
-                </a>
-            </li>
-            @endif
-
-
 
 
             {{--部门管理--}}
             @if(in_array($me->user_type,[0,1,9,11,41]))
-            <li class="header">公司管理</li>
+                <li class="header">公司管理</li>
+            @endif
 
+
+            @if(in_array($me->user_type,[0,1,9,11,41]))
             <li class="treeview {{ $menu_active_of_department_list_for_all or '' }}">
                 <a href="{{ url('/department/department-list-for-all') }}">
                     <i class="fa fa-columns text-blue"></i>
@@ -103,6 +93,30 @@
                 <a href="{{ url('/user/staff-list-for-all') }}">
                     <i class="fa fa-user text-red"></i>
                     <span>员工列表</span>
+                </a>
+            </li>
+            @endif
+
+
+
+            {{--客户管理--}}
+            @if(in_array($me->user_type,[0,1,9,11,61]))
+                <li class="header">销售管理</li>
+            @endif
+            @if(in_array($me->user_type,[0,1,9,11]))
+            <li class="treeview {{ $menu_active_of_company_list or '' }}">
+                <a href="{{ url('/company/company-list') }}">
+                    <i class="fa fa-user-secret text-red"></i>
+                    <span>公司列表</span>
+                </a>
+            </li>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,61]))
+            <li class="treeview {{ $menu_active_of_client_list or '' }}">
+                <a href="{{ url('/user/client-list') }}">
+                    <i class="fa fa-user-secret text-red"></i>
+                    <span>客户列表</span>
                 </a>
             </li>
             @endif
@@ -135,7 +149,7 @@
 
             @if(in_array($me->user_type,[0,1,9,11,41,61,66,71,77,81,84,88]))
             <li class="treeview {{ $menu_active_of_order_list_for_all or '' }}">
-                <a href="{{ url('/item/order-list-for-all')}}">
+                <a href="{{ url('/item/order-list')}}">
                     <i class="fa fa-file-text text-yellow"></i>
                     <span>工单列表</span>
                 </a>
