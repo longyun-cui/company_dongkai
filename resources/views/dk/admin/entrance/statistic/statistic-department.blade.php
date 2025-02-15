@@ -7,6 +7,9 @@
 
 
 @section('title')<span class="box-title">{{ $title_text or '部门看板' }}</span>@endsection
+@section('title-2')<b><span class="statistic-time-type-title"></span></b>@endsection
+@section('title-3')<b>（ <span class="statistic-time-title">{{ date('Y-m-d') }}</span> ）</b>@endsection
+
 @section('header')<span class="box-title">{{ $title_text or '部门看板' }}</span>@endsection
 @section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
@@ -17,14 +20,6 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary main-list-body">
-
-                <div class="box-header with-border" style="margin:4px 0;">
-                    <h3 class="box-title">
-                        【<span class="statistic-title">部门看板</span>】
-                        <span class="statistic-time-type-title"></span>
-                        <span class="statistic-time-title">{{ date('Y-m-d') }}</span>
-                    </h3>
-                </div>
 
 
                 <div class="box-body datatable-body item-main-body" id="statistic-for-rank">

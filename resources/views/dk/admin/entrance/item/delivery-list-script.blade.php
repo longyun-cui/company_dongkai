@@ -3,44 +3,44 @@
 
 
         // 【搜索】
-        $("#datatable-for-order-list").on('click', ".filter-submit", function() {
+        $(".main-content").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【刷新】
-        $("#datatable-for-order-list").on('click', ".filter-refresh", function() {
+        $(".main-content").on('click', ".filter-refresh", function() {
             $('#datatable_ajax').DataTable().ajax.reload(null,false);
         });
         // 【重置】
-        $("#datatable-for-order-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $(".main-content").on('click', ".filter-cancel", function() {
+            $("#datatable-search-for-delivery-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-search-for-delivery-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-search-for-delivery-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $("#datatable-for-order-list").on('click', ".filter-empty", function() {
-            $("#datatable-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $(".main-content").on('click', ".filter-empty", function() {
+            $("#datatable-search-for-delivery-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
             $(".select2-box").val(-1).trigger("change");
             $(".select2-box").select2("val", "");
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-order-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-order-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-search-for-delivery-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-search-for-delivery-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $("#datatable-for-order-list").on('keyup', ".filter-keyup", function(event) {
+        $(".main-content").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-order-list").find(".filter-submit").click();
+                $("#datatable_ajax").find(".filter-submit").click();
             }
         });
 

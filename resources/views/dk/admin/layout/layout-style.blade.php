@@ -24,10 +24,10 @@
         }
     }
 
-    .datatable-search-row { margin-top:8px; margin-bottom:8px; }
+    .datatable-search-row { margin-top:8px; margin-bottom:8px; font-size:12px; }
     .datatable-search-row .btn-filter { height:32px; height:32px; font-size:12px; margin-right:4px; margin-bottom:4px; float:left; }
 
-    .datatable-search-row .search-filter { height:32px; height:32px; margin-right:4px; margin-bottom:4px; border:1px solid #ddd; text-align:center; float:left; }
+    .datatable-search-row .search-filter { height:32px; height:32px; margin-right:4px; margin-bottom:4px; border:1px solid #ddd; font-size:12px; text-align:center; float:left; }
     .datatable-search-row .search-filter { width:100px; }
     .datatable-search-row .search-filter.filter-xs { width:60px; }
     .datatable-search-row .search-filter.filter-sm { width:80px; }

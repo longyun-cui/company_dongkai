@@ -18,8 +18,13 @@
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active-">
-                    <a href="javascript:void(0);">
-                        <b>@yield('title') <span class="sr-only">@yield('title')</span></b>
+                    <a href="javascript:void(0);" style="color:#fff;">
+                        <b>
+                            @yield('title')
+                            <span class="sr-only">@yield('title')</span>
+                        </b>
+                        @yield('title-2')
+                        @yield('title-3')
                     </a>
                 </li>
             </ul>

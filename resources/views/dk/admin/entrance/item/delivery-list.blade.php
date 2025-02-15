@@ -2,14 +2,17 @@
 
 
 @section('head_title')
-    {{ $title_text or '交付列表' }} - 录单系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '交付列表' }}
 @endsection
 
 
+@section('title')<span class="box-title">{{ $title_text or '交付列表' }}</span>@endsection
+@section('title-2')@endsection
+@section('title-3')@endsection
 
 
-@section('header','')
-@section('description')交付列表 - 录单系统 - {{ config('info.info.short_name') }}@endsection
+@section('header')<span class="box-title">{{ $title_text or '交付列表' }}</span>@endsection
+@section('description')录单系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -19,63 +22,69 @@
         <div class="box box-info main-list-body" style="margin-bottom:0;">
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-order-list">
 
-                <div class="row col-md-12 datatable-search-row">
-                    <div class="input-group">
-
-                        <input type="text" class="form-control form-filter filter-keyup" name="delivery-id" placeholder="ID" value="{{ $id or '' }}" style="width:88px;" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="delivery-order-id" placeholder="工单ID" value="{{ $order_id or '' }}" style="width:88px;" />
-                        <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
-                            <i class="fa fa-chevron-left"></i>
-                        </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
-                        <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
-                            <i class="fa fa-chevron-right"></i>
-                        </button>
+            <div class="col-md-12 datatable-search-row" id="datatable-search-for-delivery-list" style="margin-top:8px;">
 
 
-                        <select class="form-control form-filter select-select2 select2-box delivery-project" name="delivery-project" style="width:160px;">
-                            <option value="-1">选择项目</option>
-                            @if(!empty($project_list))
-                                @foreach($project_list as $v)
-                                    @if(!empty($project_id))
-                                        @if($v->id == $project_id)
-                                            <option value="{{ $v->id }}" selected="selected">{{ $v->name }}</option>
-                                        @else
-                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                        @endif
+                <div class="pull-right">
+
+                    <input type="text" class="search-filter form-filter filter-keyup" name="delivery-id" placeholder="ID" value="{{ $id or '' }}" style="width:88px;" />
+                    <input type="text" class="search-filter form-filter filter-keyup" name="delivery-order-id" placeholder="工单ID" value="{{ $order_id or '' }}" style="width:88px;" />
+
+                    {{--<input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />--}}
+                    <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" />
+
+
+                    <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-pre-for-order" style="width:24px;">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" />
+                    <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-next-for-order" style="width:24px;">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+
+
+                    <select class="search-filter form-filter select-select2 select2-box delivery-project" name="delivery-project" style="width:160px;">
+                        <option value="-1">选择项目</option>
+                        @if(!empty($project_list))
+                            @foreach($project_list as $v)
+                                @if(!empty($project_id))
+                                    @if($v->id == $project_id)
+                                        <option value="{{ $v->id }}" selected="selected">{{ $v->name }}</option>
                                     @else
                                         <option value="{{ $v->id }}">{{ $v->name }}</option>
                                     @endif
-                                @endforeach
-                            @endif
-                        </select>
+                                @else
+                                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                @endif
+                            @endforeach
+                        @endif
+                    </select>
 
 
-                        <select class="form-control form-filter select-select2 select2-box delivery-client" name="delivery-client" style="width:160px;">
-                            <option value="-1">选择客户</option>
-                            @if(!empty($client_list))
-                                @foreach($client_list as $v)
-                                    @if(!empty($client_id))
-                                        @if($v->id == $client_id)
-                                            <option value="{{ $v->id }}" selected="selected">{{ $v->username }}</option>
-                                        @else
-                                            <option value="{{ $v->id }}">{{ $v->username }}</option>
-                                        @endif
+                    <select class="search-filter form-filter select-select2 select2-box delivery-client" name="delivery-client" style="width:160px;">
+                        <option value="-1">选择客户</option>
+                        @if(!empty($client_list))
+                            @foreach($client_list as $v)
+                                @if(!empty($client_id))
+                                    @if($v->id == $client_id)
+                                        <option value="{{ $v->id }}" selected="selected">{{ $v->username }}</option>
                                     @else
                                         <option value="{{ $v->id }}">{{ $v->username }}</option>
                                     @endif
-                                @endforeach
-                            @endif
-                        </select>
+                                @else
+                                    <option value="{{ $v->id }}">{{ $v->username }}</option>
+                                @endif
+                            @endforeach
+                        @endif
+                    </select>
 
 
-                        <select class="form-control form-filter" name="order-delivery-type" style="width:88px;">
-                            <option value="-1">交付类型</option>
-                            <option value="95">交付</option>
-                            <option value="96">分发</option>
-                        </select>
+                    <select class="search-filter form-filter" name="order-delivery-type" style="width:88px;">
+                        <option value="-1">交付类型</option>
+                        <option value="95">交付</option>
+                        <option value="96">分发</option>
+                    </select>
 
 
 {{--                        <select class="form-control form-filter" name="order-delivered-status" style="width:88px;">--}}
@@ -84,8 +93,6 @@
 {{--                            <option value="已交付" @if("已审核" == $delivered_status) selected="selected" @endif>已交付</option>--}}
 {{--                        </select>--}}
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:88px;" />
 
 {{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
 {{--                            <option value="-1">是否+V</option>--}}
@@ -101,25 +108,30 @@
 
 {{--                        <input type="text" class="form-control form-filter filter-keyup" name="order-description" placeholder="通话小结" value="" style="width:120px;" />--}}
 
-                        <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
-                            <i class="fa fa-remove"></i> 清空重选
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-order">
-                            <i class="fa fa-circle-o-notch"></i> 刷新
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-order">
-                            <i class="fa fa-undo"></i> 重置
-                        </button>
+                    <button type="button" class="btn btn-default btn-filter filter-submit" id="filter-submit-for-order">
+                        <i class="fa fa-search"></i> 搜索
+                    </button>
+                    <button type="button" class="btn btn-default btn-filter filter-empty" id="filter-empty-for-order">
+                        <i class="fa fa-remove"></i> 清空
+                    </button>
+                    <button type="button" class="btn btn-default btn-filter filter-refresh" id="filter-refresh-for-order">
+                        <i class="fa fa-circle-o-notch"></i> 刷新
+                    </button>
+                    <button type="button" class="btn btn-default btn-filter filter-cancel" id="filter-cancel-for-order">
+                        <i class="fa fa-undo"></i> 重置
+                    </button>
 
 
-                        <div class="pull-left clear-both">
-                        </div>
-
+                    <div class="pull-left clear-both">
                     </div>
+
                 </div>
+            </div>
+
+
+
+            <div class="box-body datatable-body item-main-body" id="datatable-for-order-list">
+
 
                 <div class="tableArea">
                 <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
