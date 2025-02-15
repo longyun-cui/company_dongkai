@@ -17,7 +17,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-info main-list-body">
+        <div class="box box-danger main-list-body">
 
 
             <div class="col-md-12 datatable-search-row" id="datatable-search-for-company-list">
@@ -38,7 +38,7 @@
                 </div>
 
 
-                <div class="navbar-custom-menu- pull-right">
+                <div class="pull-right">
 
 
                     <div class="nav navbar-nav">
@@ -64,7 +64,7 @@
 
 
                                 <div class="box-body">
-                                    <label class="col-md-3">ID</label>
+                                    <label class="col-md-3">名称</label>
                                     <div class="col-md-9 filter-body">
                                         <input type="text" class="form-control form-filter item-search-keyup" name="company-title" placeholder="名称" />
                                     </div>
