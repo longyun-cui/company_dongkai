@@ -74,11 +74,11 @@
 
 
                     <button type="button" class="btn btn-default btn-filter filter-submit" id="filter-submit">
-                        <i class="fa fa-search"></i> 搜 索
+                        <i class="fa fa-search"></i> 搜索
                     </button>
 
                     <button type="button" class="btn btn-default btn-filter filter-empty">
-                        <i class="fa fa-remove"></i> 重 置
+                        <i class="fa fa-remove"></i> 清空
                     </button>
 
                     <button type="button" class="btn btn-default btn-filter filter-refresh">

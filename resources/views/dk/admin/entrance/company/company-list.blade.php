@@ -53,7 +53,7 @@
                     </button>
 
                     <button type="button" class="btn btn-default btn-filter filter-empty">
-                        <i class="fa fa-remove"></i> 重置
+                        <i class="fa fa-remove"></i> 清空
                     </button>
 
                     <button type="button" class="btn btn-default btn-filter filter-refresh">
