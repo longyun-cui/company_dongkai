@@ -231,7 +231,6 @@
                                 @endif
 
                                 {{--选择项目--}}
-                                @if(in_array($me->user_type,[0,1,9,11,61,66]))
                                 <div class="box-body">
                                     <label class="col-md-3">项目</label>
                                     <div class="col-md-9 filter-body">
@@ -245,7 +244,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                @endif
 
                                 {{--审核状态--}}
                                 <div class="box-body">
