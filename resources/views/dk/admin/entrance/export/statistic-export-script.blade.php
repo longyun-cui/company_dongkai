@@ -285,5 +285,12 @@
         });
 
 
+
+        // 【搜索】
+        $(".main-content").on('click', "#filter-submit-for-record", function() {
+            $('#datatable_ajax').DataTable().ajax.reload();
+        });
+
+
     });
 </script>

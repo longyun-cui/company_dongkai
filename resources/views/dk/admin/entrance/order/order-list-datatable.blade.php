@@ -71,8 +71,8 @@
                 },
                 "showRefresh": true,
                 "columnDefs": [
-                        {{--@if(!in_array($me->user_type,[0,1,11]))--}}
-                        @if($me->department_district_id != 0)
+                    {{--@if(!in_array($me->user_type,[0,1,11]))--}}
+                    @if($me->department_district_id != 0)
                     {
                         "targets": [0,5,9,10,11],
                         "visible": false,

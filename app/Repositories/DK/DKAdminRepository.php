@@ -19421,7 +19421,7 @@ class DKAdminRepository {
 
 
         $project_list = DK_Project::select('id','name')->whereIn('item_type',[1,21])->get();
-        $staff_list = DK_User::select('id','username','true_name')->where('user_category',11)->whereIn('user_type',[11,81,82,88])->get();
+        $staff_list = DK_User::select('id','username')->where('user_category',11)->whereIn('user_type',[11,41,61,66,71,77,81,84,88])->get();
         $client_list = DK_Client::select('id','username','true_name')->where('user_category',11)->get();
 
         $view_data['project_list'] = $project_list;
@@ -19431,7 +19431,7 @@ class DKAdminRepository {
 
         $view_data['menu_active_of_statistic_export'] = 'active menu-open';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-export';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.export.statistic-export';
         return view($view_blade)->with($view_data);
     }
     // 【数据导出】工单
@@ -20127,6 +20127,25 @@ class DKAdminRepository {
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
         if(!empty($post_data['tag'])) $query->where('tag', 'like', "%{$post_data['tag']}%");
+
+
+        // 创建方式 [人工|导入|api]
+        if(isset($post_data['operate_type']))
+        {
+            if(!in_array($post_data['operate_type'],[-1,'-1']))
+            {
+                $query->where('operate_type', $post_data['operate_type']);
+            }
+        }
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
+            {
+                $query->where('creator_id', $post_data['staff']);
+            }
+        }
 
 
         if($me->user_type == 11)
