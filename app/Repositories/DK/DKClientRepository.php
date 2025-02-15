@@ -186,7 +186,7 @@ class DKClientRepository {
     {
         $record_id = $post_data['record_id'];
 
-        $order = DK_Order::where('call_record_id',$record_id)->first();
+        $order = DK_Order::where('call_record_id',$record_id)->orderBy("id", "desc")->first();
         if($order)
         {
             $call_record = DK_CC_Call_Record::find($record_id);
