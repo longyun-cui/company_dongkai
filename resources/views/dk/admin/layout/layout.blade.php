@@ -118,7 +118,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse- sidebar-expanded-on-hover">
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse sidebar-expanded-on-hover">
 <div class="wrapper">
 
 

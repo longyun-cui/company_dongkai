@@ -4,10 +4,8 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-                // "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
                 // "aLengthMenu": [[-1], ["全部"]],
-                // "aLengthMenu": [[200, -1], ["200", "全部"]],
-                "aLengthMenu": [[20, 50, 100, 200, -1], ["20", "50", "100", "200", "全部"]],
+                "aLengthMenu": [[10, 50, 100, 200, -1], ["10", "50", "100", "200", "全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -21,14 +19,25 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
+                        d.id = $('input[name="staff-id"]').val();
                         d.mobile = $('input[name="staff-mobile"]').val();
                         d.username = $('input[name="staff-username"]').val();
                         d.department_district = $('select[name="staff-department-district"]').val();
                         d.user_type = $('select[name="staff-user-type"]').val();
+                        d.user_status = $('select[name="staff-status"]').val();
 
                     },
                 },
                 "columns": [
+                    {
+                        "title": '<input type="checkbox" id="check-review-all">',
+                        "width": "40px",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+                        }
+                    },
                     {
                         "title": "ID",
                         "data": "id",
@@ -37,6 +46,92 @@
                         "orderable": true,
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "title": "操作",
+                        "data": "id",
+                        "width": "240px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.user_status == 1)
+                            {
+                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                            }
+                            else
+                            {
+                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                            }
+
+                            if(row.user_category == 1)
+                            {
+                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
+                            }
+                            else
+                            {
+                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
+                            }
+
+                            if(row.deleted_at == null)
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
+                            }
+                            else
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
+                            }
+
+                            if(row.user_type == 88)
+                            {
+                                $html_promote = '<a class="btn btn-xs bg-olive item-admin-promote-submit" data-id="'+data+'">晋升</a>';
+                            }
+                            else if(row.user_type == 84)
+                            {
+                                $html_promote = '<a class="btn btn-xs bg-blue item-admin-demote-submit" data-id="'+data+'">降职</a>';
+                            }
+                            else
+                            {
+                                $html_promote = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">晋升</a>';
+                            }
+
+
+                            var html =
+                                $html_edit+
+                                // '<a class="btn btn-xs bg-maroon item-password-admin-change-show" data-id="'+data+'" data-name="'+row.username+'">修改密码</a>'+
+                                '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
+                                $html_promote+
+                                $html_able+
+                                $html_delete+
+                                // '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
+                                // '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
+                                '';
+                            return html;
+                        }
+                    },
+                    {
+                        "title": "状态",
+                        "width": "80px",
+                        "data": "user_status",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.user_status == 1)
+                            {
+                                return '<small class="btn-xs btn-success">正常</small>';
+                            }
+                            else if(row.user_status == 99)
+                            {
+                                return '<small class="btn-xs btn-warning">锁定('+row.login_error_num+')</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs btn-danger">禁用</small>';
+                            }
                         }
                     },
                     {
@@ -216,92 +311,6 @@
                             // return $year+'-'+$month+'-'+$day;
                             // return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                             return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
-                        }
-                    },
-                    {
-                        "title": "状态",
-                        "width": "80px",
-                        "data": "active",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(row.user_status == 1)
-                            {
-                                return '<small class="btn-xs btn-success">正常</small>';
-                            }
-                            else if(row.user_status == 99)
-                            {
-                                return '<small class="btn-xs btn-warning">锁定('+row.login_error_num+')</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
-                            }
-                        }
-                    },
-                    {
-                        "title": "操作",
-                        "data": "id",
-                        "width": "240px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            if(row.user_status == 1)
-                            {
-                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.user_category == 1)
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
-                            }
-                            else
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
-                            }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            if(row.user_type == 88)
-                            {
-                                $html_promote = '<a class="btn btn-xs bg-olive item-admin-promote-submit" data-id="'+data+'">晋升</a>';
-                            }
-                            else if(row.user_type == 84)
-                            {
-                                $html_promote = '<a class="btn btn-xs bg-blue item-admin-demote-submit" data-id="'+data+'">降职</a>';
-                            }
-                            else
-                            {
-                                $html_promote = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">晋升</a>';
-                            }
-
-
-                            var html =
-                                $html_edit+
-                                // '<a class="btn btn-xs bg-maroon item-password-admin-change-show" data-id="'+data+'" data-name="'+row.username+'">修改密码</a>'+
-                                '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
-                                $html_promote+
-                                $html_able+
-                                $html_delete+
-                                // '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
-                                // '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
-                                '';
-                            return html;
                         }
                     }
                 ],

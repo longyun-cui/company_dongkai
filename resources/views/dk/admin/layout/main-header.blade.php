@@ -122,6 +122,121 @@
                 </li>
 
 
+
+
+                {{--统计--}}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        统计 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu right" role="menu">
+
+
+
+                        @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-delivery-by-client') }}">
+                                <i class="fa fa-area-chart text-teal"></i> <span>交付看板(客户)</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="divider"></li>
+
+                        @if(in_array($me->user_type,[0,1,9,11,41,61,66,81,84]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-delivery') }}">
+                                <i class="fa fa-area-chart text-teal"></i> <span>交付看板(项目)</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="divider"></li>
+
+                        @if(in_array($me->user_type,[0,1,9,11,41,81,84,71,77,61,66]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-project') }}">
+                                <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="divider"></li>
+
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-department') }}">
+                                <i class="fa fa-area-chart text-teal"></i> <span>部门看板</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="divider"></li>
+
+                        @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-customer-service') }}">
+                                <i class="fa fa-bar-chart text-maroon"></i> <span>客服看板</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="divider"></li>
+
+                        @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-rank') }}">
+                                <i class="fa fa-line-chart text-maroon"></i> <span>客服排名</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="divider"></li>
+
+                        @if(in_array($me->user_type,[0,1,9,11,61,41,81,84]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-recent') }}">
+                                <i class="fa fa-area-chart text-maroon"></i> <span>近期成果</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="divider"></li>
+
+                        @if(in_array($me->user_type,[0,1,9,11,41,61,71]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-inspector') }}">
+                                <i class="fa fa-bar-chart text-purple"></i> <span>质检看板</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li class="divider"></li>
+
+                        @if(in_array($me->user_type,[0,1,9,11,61]))
+                        <li>
+                            <a href="{{ url('/statistic/statistic-deliverer') }}">
+                                <i class="fa fa-bar-chart text-blue"></i> <span>运营看板</span>
+                            </a>
+                        </li>
+                        @endif
+                    </ul>
+                </li>
+
+
+                {{--财务统计--}}
+                @if(in_array($me->user_type,[0,1,9,11]))
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        财务统计 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu right" role="menu">
+
+                        <li>
+                            <a href="{{ url('/finance/daily-list') }}">
+                                <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+            @endif
+
+
+
+
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu _none">
                     <!-- Menu toggle button -->

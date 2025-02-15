@@ -33,7 +33,7 @@
             $("#datatable-search-for-company-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $(".main-content").on('keyup', ".item-search-keyup", function(event) {
+        $(".main-content").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
                 $("#datatable-search-for-company-list").find(".filter-submit").click();
@@ -41,6 +41,10 @@
         });
 
 
+        // 【批量操作】全选or反选
+        $(".main-content").on('click', '#check-review-all', function () {
+            $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
+        });
 
 
         // 【编辑】

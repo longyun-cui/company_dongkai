@@ -40,84 +40,46 @@
 
                 <div class="pull-right">
 
+                    <input type="text" class="search-filter form-filter filter-keyup" name="staff-id" placeholder="ID" />
+                    <input type="text" class="search-filter form-filter filter-keyup" name="staff-username" placeholder="名称" />
 
-                    <div class="nav navbar-nav">
+                    @if(in_array($me->user_type,[0,1,9,11]))
+                    <select class="search-filter form-filter" name="staff-user-type">
+                        <option value="-1">全部人员</option>
+                        <option value="41">团队·总经理</option>
+                        <option value="88">客服</option>
+                        <option value="84">客服主管</option>
+                        <option value="81">客服经理</option>
+                        <option value="77">质检员</option>
+                        <option value="71">质检经理</option>
+                        <option value="66">运营人员</option>
+                        <option value="61">运营经理</option>
+                    </select>
+                    @endif
 
-                        <div class="dropdown filter-menu" data-bs-auto-close="outside">
-                            <button type="button" class="btn btn-default btn-filter dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-search"></i> 搜索
-                            </button>
+                    @if(in_array($me->user_type,[0,1,9,11]))
+                    <select class="search-filter form-filter select2-box" name="staff-department-district">
+                        <option value="-1">选择大区</option>
+                        @foreach($department_district_list as $v)
+                            <option value="{{ $v->id }}">{{ $v->name }}</option>
+                        @endforeach
+                    </select>
+                    @endif
 
-                            <div class="dropdown-menu box box-danger" style="position: absolute;width:400px;top:-4px;left:auto;right:72px;padding:4px;">
-
-                                <div class="box-header with-border-">
-                                    筛选
-                                </div>
-
-
-                                <div class="box-body">
-                                    <label class="col-md-3">ID</label>
-                                    <div class="col-md-9 filter-body">
-                                        <input type="text" class="form-control form-filter filter-keyup" name="staff-id" placeholder="ID" />
-                                    </div>
-                                </div>
-
-
-                                <div class="box-body">
-                                    <label class="col-md-3">用户名</label>
-                                    <div class="col-md-9 filter-body">
-                                        <input type="text" class="form-control form-filter item-search-keyup" name="staff-username" placeholder="名称" />
-                                    </div>
-                                </div>
-
-                                @if(in_array($me->user_type,[0,1,9,11]))
-                                <div class="box-body">
-                                    <label class="col-md-3">员工类型</label>
-                                    <div class="col-md-9 filter-body">
-                                        <select class="form-control form-filter" name="staff-user-type">
-                                            <option value="-1">全部人员</option>
-                                            <option value="41">团队·总经理</option>
-                                            <option value="88">客服</option>
-                                            <option value="84">客服主管</option>
-                                            <option value="81">客服经理</option>
-                                            <option value="77">质检员</option>
-                                            <option value="71">质检经理</option>
-                                            <option value="66">运营人员</option>
-                                            <option value="61">运营经理</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                @endif
-
-                                @if(in_array($me->user_type,[0,1,9,11]))
-                                <div class="box-body">
-                                    <label class="col-md-3">员工类型</label>
-                                    <div class="col-md-9 filter-body">
-                                        <select class="form-control form-filter select2-box" name="staff-department-district">
-                                            <option value="-1">选择大区</option>
-                                            @foreach($department_district_list as $v)
-                                                <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                @endif
+                    <select class="search-filter form-filter" name="staff-status">
+                        <option value ="-1">全部</option>
+                        <option value ="1">启用</option>
+                        <option value ="9">禁用</option>
+                    </select>
 
 
-                                <div class="box-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-default btn-filter filter-submit" id="filter-submit">
+                        <i class="fa fa-search"></i> 搜 索
+                    </button>
 
-                                    <button type="button" class="btn btn-default filter-submit" id="filter-submit">
-                                        <i class="fa fa-search"></i> 搜 索
-                                    </button>
-                                    <button type="button" class="btn bg-default filter-empty">
-                                        <i class="fa fa-remove"></i> 重 置
-                                    </button>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                    <button type="button" class="btn btn-default btn-filter filter-empty">
+                        <i class="fa fa-remove"></i> 重 置
+                    </button>
 
                     <button type="button" class="btn btn-default btn-filter filter-refresh">
                         <i class="fa fa-circle-o-notch"></i> 刷新
@@ -137,7 +99,7 @@
             <div class="box-body datatable-body">
 
 
-                <table class='table table-striped table-bordered- table-hover' id='datatable_ajax'>
+                <table class='table table-striped table-bordered table-hover' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>

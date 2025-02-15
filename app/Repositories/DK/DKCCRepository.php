@@ -21105,6 +21105,7 @@ EOF;
 
         $notify = $post_data['notify'];
         $call_data = $notify;
+        $call_data['call_date'] = $call_data['startTime'];
         $call_data['serverFrom_id'] = $serverFrom_id;
         $call_data['serverFrom_name'] = $serverFrom;
 

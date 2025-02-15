@@ -445,18 +445,18 @@
                         // },
 
 
-                        {
-                            "title": "备注",
-                            "data": "remark",
-                            "className": "text-left",
-                            "width": "",
-                            "orderable": false,
-                            render: function(data, type, row, meta) {
-                                return data;
-                                // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
-                                // else return '';
-                            }
-                        }
+                        // {
+                        //     "title": "备注",
+                        //     "data": "remark",
+                        //     "className": "text-left",
+                        //     "width": "",
+                        //     "orderable": false,
+                        //     render: function(data, type, row, meta) {
+                        //         return data;
+                        //         // if(data) return '<small class="btn-xs bg-yellow">查看</small>';
+                        //         // else return '';
+                        //     }
+                        // }
                     ],
                     "drawCallback": function (settings) {
 

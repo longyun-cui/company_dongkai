@@ -2,29 +2,29 @@
 
 
 @section('head_title')
-    {{ $title_text or '部门列表' }}
+    {{ $title_text or '项目列表' }}
 @endsection
 
 
-@section('title')<span class="box-title">{{ $title_text or '部门列表' }}</span>@endsection
-@section('header')<span class="box-title">{{ $title_text or '部门列表' }}</span>@endsection
-@section('description')<b>部门列表 - 管理员系统 - {{ config('info.info.short_name') }}</b>@endsection
+@section('title')<span class="box-title">{{ $title_text or '项目列表' }}</span>@endsection
+@section('header')<span class="box-title">{{ $title_text or '项目列表' }}</span>@endsection
+@section('description')<b>项目列表 - 管理员系统 - {{ config('info.info.short_name') }}</b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-info main-list-body">
+        <div class="box box-project main-list-body">
 
 
-            <div class="col-md-12 datatable-search-row" id="datatable-search-for-department-list">
+            <div class="col-md-12 datatable-search-row" id="datatable-search-for-project-list">
 
 
                 <div class=" pull-left">
 
                     @if(in_array($me->user_type,[0,1,9,11,19]))
-                        <a href="{{ url('/department/department-create') }}">
+                        <a href="{{ url('/item/project-create') }}">
                             <button type="button" onclick="" class="btn btn-success btn-filter"><i class="fa fa-plus"></i> 添加</button>
                         </a>
                     @endif
@@ -39,29 +39,21 @@
                 <div class="pull-right">
 
 
-                    <input type="text" class="search-filter form-filter filter-keyup" name="department-id" placeholder="ID" />
 
-                    <input type="text" class="search-filter form-filter filter-keyup" name="department-name" placeholder="名称" />
-
-                    <select class="search-filter form-filter" name="department-type">
-                        <option value ="-1">全部</option>
-                        <option value ="11">大区</option>
-                        <option value ="21">组</option>
-                    </select>
-
-                    <select class="search-filter form-filter" name="department-status">
+                    <input type="text" class="search-filter form-filter filter-keyup" name="project-id" placeholder="ID">
+                    <input type="text" class="search-filter form-filter filter-keyup" name="project-name" placeholder="名称">
+                    <select class="search-filter form-filter" name="project-status">
                         <option value ="1">启用</option>
                         <option value ="-1">全部</option>
                         <option value ="9">禁用</option>
                     </select>
 
-
-                    <button type="button" class="btn btn-default btn-filter filter-submit" id="filter-submit">
+                    <button type="button" class="btn btn-default btn-filter filter-submit" id="filter-submit-for-project">
                         <i class="fa fa-search"></i> 搜索
                     </button>
 
                     <button type="button" class="btn btn-default btn-filter filter-empty">
-                        <i class="fa fa-remove"></i> 重置
+                        <i class="fa fa-remove"></i> 清空
                     </button>
 
                     <button type="button" class="btn btn-default btn-filter filter-refresh">
@@ -79,7 +71,7 @@
             </div>
 
 
-            <div class="box-body datatable-body item-main-body" id="datatable-for-department-list">
+            <div class="box-body datatable-body item-main-body" id="datatable-for-project-list">
 
                 <div class="tableArea">
                 <table class='table table-striped table-bordered table-hover main-table' id='datatable_ajax'>
@@ -93,7 +85,6 @@
                 </div>
 
             </div>
-
 
         </div>
     </div>
@@ -109,7 +100,7 @@
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px margin-bottom-16px">
-                <h3 class="box-title">修改车辆【<span class="info-text-set-title"></span>】</h3>
+                <h3 class="box-title">修改项目【<span class="info-text-set-title"></span>】</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -118,7 +109,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-text-set-operate" value="item-department-info-text-set" readonly>
+                    <input type="hidden" name="info-text-set-operate" value="item-project-info-text-set" readonly>
                     <input type="hidden" name="info-text-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-text-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-text-set-column-key" value="" readonly>
@@ -162,8 +153,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-time-set-operate" value="item-department-info-text-set" readonly>
-                    {{--<input type="hidden" name="info-time-set-operate" value="item-department-info-time-set" readonly>--}}
+                    <input type="hidden" name="info-time-set-operate" value="item-project-info-text-set" readonly>
+                    {{--<input type="hidden" name="info-time-set-operate" value="item-project-info-time-set" readonly>--}}
                     <input type="hidden" name="info-time-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-time-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-time-set-column-key" value="" readonly>
@@ -210,8 +201,8 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-radio-set-operate" value="item-department-info-option-set" readonly>
-                    <input type="hidden" name="info-radio-set-department-id" value="0" readonly>
+                    <input type="hidden" name="info-radio-set-operate" value="item-project-info-option-set" readonly>
+                    <input type="hidden" name="info-radio-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-radio-set-operate-type" value="edit" readonly>
                     <input type="hidden" name="info-radio-set-column-key" value="" readonly>
 
@@ -250,7 +241,7 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="info-select-set-operate" value="department-info-option-set" readonly>
+                    <input type="hidden" name="info-select-set-operate" value="item-project-info-option-set" readonly>
                     <input type="hidden" name="info-select-set-item-id" value="0" readonly>
                     <input type="hidden" name="info-select-set-operate-type" value="add" readonly>
                     <input type="hidden" name="info-select-set-column-key" value="" readonly>
@@ -314,12 +305,12 @@
                 <div class="box-body">
 
                     {{ csrf_field() }}
-                    <input type="hidden" name="attachment-set-operate" value="item-department-attachment-set" readonly>
-                    <input type="hidden" name="attachment-set-department-id" value="0" readonly>
+                    <input type="hidden" name="attachment-set-operate" value="item-project-attachment-set" readonly>
+                    <input type="hidden" name="attachment-set-project-id" value="0" readonly>
                     <input type="hidden" name="attachment-set-operate-type" value="add" readonly>
                     <input type="hidden" name="attachment-set-column-key" value="" readonly>
 
-                    <input type="hidden" name="operate" value="item-department-attachment-set" readonly>
+                    <input type="hidden" name="operate" value="item-project-attachment-set" readonly>
                     <input type="hidden" name="item_id" value="0" readonly>
                     <input type="hidden" name="operate_type" value="add" readonly>
                     <input type="hidden" name="column_key" value="attachment" readonly>
@@ -391,17 +382,26 @@
 {{--option--}}
 <div class="option-container _none">
 
+    <div id="option-list-for-select-name">
+        <option value="-1">选择xx</option>
+        <option value="xx">xx</option>
+        <option value="yyy">yyy</option>
+        <option value="zzzz">zzzz</option>
+    </div>
 
-    <div id="receipt_need-option-list">
 
-        <label class="control-label col-md-2">是否需要回单</label>
+
+
+    <div id="option-list-for-is_distributive">
+
+        <label class="control-label col-md-2">是否分发</label>
         <div class="col-md-8">
             <div class="btn-group">
 
                 <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="receipt_need" value="0" class="info-set-column"> 不需要
+                            <input type="radio" name="is_distributive" value="0" class="info-set-column"> 否
                         </label>
                     </span>
                 </button>
@@ -409,7 +409,7 @@
                 <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="receipt_need" value="1" class="info-set-column"> 需要
+                            <input type="radio" name="is_distributive" value="1" class="info-set-column"> 是
                         </label>
                     </span>
                 </button>
@@ -418,7 +418,6 @@
         </div>
 
     </div>
-
 
 </div>
 
@@ -508,8 +507,9 @@
 @endsection
 @section('custom-style')
 <style>
-    .tableArea table { width:100% !important; min-width:1200px; }
-    .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
+    .tableArea table { width:100% !important; min-width:100%; }
+    /*.tableArea table { min-width:1360px; }*/
+    .tableArea table tr th, .tableArea table tr td { white-space:nowrap-; }
 </style>
 @endsection
 
@@ -520,9 +520,9 @@
 @endsection
 @section('custom-script')
 
-    @include(env('TEMPLATE_DK_ADMIN').'entrance.department.department-list-datatable')
-    @include(env('TEMPLATE_DK_ADMIN').'entrance.department.department-list-script')
+    @include(env('TEMPLATE_DK_ADMIN').'entrance.project.project-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'entrance.project.project-list-script')
 
-    @include(env('TEMPLATE_DK_ADMIN').'entrance.department.department-operation-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'entrance.project.project-operation-datatable')
 
 @endsection

@@ -4,7 +4,7 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-                "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[10, 50, 200, 500, -1], ["10", "50", "200", "500", "全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
@@ -14,16 +14,14 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
+                        d.id = $('input[name="client-id"]').val();
+                        d.name = $('input[name="client-name"]').val();
                         d.username = $('input[name="client-username"]').val();
-//                        d.nickname 	= $('input[name="nickname"]').val();
-//                        d.certificate_type_id = $('select[name="certificate_type_id"]').val();
-//                        d.certificate_state = $('select[name="certificate_state"]').val();
-//                        d.admin_name = $('input[name="admin_name"]').val();
-//
-//                        d.created_at_from = $('input[name="created_at_from"]').val();
-//                        d.created_at_to = $('input[name="created_at_to"]').val();
-//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
-//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
+                        d.title = $('input[name="client-title"]').val();
+                        d.keyword = $('input[name="client-keyword"]').val();
+                        d.item_status = $('select[name="client-status"]').val();
+                        d.client_type = $('select[name="client-type"]').val();
+                        d.client_work_status = $('select[name="client-work-status"]').val();
 
                     },
                 },
@@ -33,6 +31,15 @@
                 "orderCellsTop": true,
                 "columns": [
                     {
+                        "title": '<input type="checkbox" id="check-review-all">',
+                        "width": "40px",
+                        "data": "id",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+                        }
+                    },
+                    {
                         "title": "ID",
                         "data": "id",
                         "className": "font-12px",
@@ -40,6 +47,112 @@
                         "orderable": true,
                         render: function(data, type, row, meta) {
                             return data;
+                        }
+                    },
+                    {
+                        "title": "操作",
+                        "data": "id",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+
+                            var $html =
+                                '<div class="btn-group">'+
+                                '<button type="button" class="btn btn-sm btn-warning btn-flat">Action</button>'+
+                                '<button type="button" class="btn btn-sm btn-warning btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="true">'+
+                                '<span class="caret"></span>'+
+                                '<span class="sr-only">Toggle Dropdown</span>'+
+                                '</button>'+
+                                '<ul class="dropdown-menu" role="menu">'+
+                                '<li><a href="#">Action</a></li>'+
+                                '<li><a href="#">Another action</a></li>'+
+                                '<li><a href="#">Something else here</a></li>'+
+                                '<li class="divider"></li>'+
+                                '<li><a href="#">Separated link</a></li>'+
+                                '</ul>'+
+                                '</div>';
+
+                            var $html_edit = '';
+                            var $html_detail = '';
+                            var $html_record = '';
+                            var $html_delete = '';
+                            var $html_publish = '';
+                            var $html_abandon = '';
+                            var $html_completed = '';
+                            var $html_verified = '';
+                            var $html_inspected = '';
+                            var $html_detail_inspected = '';
+                            var $html_push = '';
+                            var $html_deliver = '';
+                            var $html_distribute = '';
+                            var $html_recharge = '';
+
+
+                            if(row.user_status == 1)
+                            {
+                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                            }
+                            else
+                            {
+                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                            }
+
+                            if(row.user_category == 1)
+                            {
+                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
+                            }
+                            else
+                            {
+                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
+                            }
+
+                            if(row.deleted_at == null)
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
+                            }
+                            else
+                            {
+                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
+                            }
+
+                            @if(in_array($me->user_type,[0,1,11,19]))
+                                $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+                            $html_recharge = '<a class="btn btn-xs bg-orange item-modal-show-for-recharge" data-id="'+data+'">充值</a>';
+                                    @endif
+
+                            var html =
+                                $html_edit+
+                                '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
+                                $html_able+
+                                $html_recharge+
+                                $html_record+
+                                // $html_delete+
+                                // '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
+                                // '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
+                                '';
+                            return html;
+                        }
+                    },
+                    {
+                        "title": "状态",
+                        "data": "active",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return data;
+                            if(row.deleted_at != null)
+                            {
+                                return '<small class="btn-xs bg-black">已删除</small>';
+                            }
+
+                            if(row.user_status == 1)
+                            {
+                                return '<small class="btn-xs btn-success">正常</small>';
+                            }
+                            else
+                            {
+                                return '<small class="btn-xs btn-danger">禁用</small>';
+                            }
                         }
                     },
                     {
@@ -279,112 +392,6 @@
 //                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
 
                             return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                        }
-                    },
-                    {
-                        "title": "状态",
-                        "data": "active",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return data;
-                            if(row.deleted_at != null)
-                            {
-                                return '<small class="btn-xs bg-black">已删除</small>';
-                            }
-
-                            if(row.user_status == 1)
-                            {
-                                return '<small class="btn-xs btn-success">正常</small>';
-                            }
-                            else
-                            {
-                                return '<small class="btn-xs btn-danger">禁用</small>';
-                            }
-                        }
-                    },
-                    {
-                        "title": "操作",
-                        "data": "id",
-                        "width": "120px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-
-                            var $html =
-                                '<div class="btn-group">'+
-                                '<button type="button" class="btn btn-sm btn-warning btn-flat">Action</button>'+
-                                '<button type="button" class="btn btn-sm btn-warning btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="true">'+
-                                '<span class="caret"></span>'+
-                                '<span class="sr-only">Toggle Dropdown</span>'+
-                                '</button>'+
-                                '<ul class="dropdown-menu" role="menu">'+
-                                '<li><a href="#">Action</a></li>'+
-                                '<li><a href="#">Another action</a></li>'+
-                                '<li><a href="#">Something else here</a></li>'+
-                                '<li class="divider"></li>'+
-                                '<li><a href="#">Separated link</a></li>'+
-                                '</ul>'+
-                                '</div>';
-
-                            var $html_edit = '';
-                            var $html_detail = '';
-                            var $html_record = '';
-                            var $html_delete = '';
-                            var $html_publish = '';
-                            var $html_abandon = '';
-                            var $html_completed = '';
-                            var $html_verified = '';
-                            var $html_inspected = '';
-                            var $html_detail_inspected = '';
-                            var $html_push = '';
-                            var $html_deliver = '';
-                            var $html_distribute = '';
-                            var $html_recharge = '';
-
-
-                            if(row.user_status == 1)
-                            {
-                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
-                            }
-                            else
-                            {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
-                            }
-
-                            if(row.user_category == 1)
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-default disabled" data-id="'+data+'">编辑</a>';
-                            }
-                            else
-                            {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
-                            }
-
-                            if(row.deleted_at == null)
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
-                            }
-                            else
-                            {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
-                            }
-
-                            @if(in_array($me->user_type,[0,1,11,19]))
-                                $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
-                            $html_recharge = '<a class="btn btn-xs bg-orange item-modal-show-for-recharge" data-id="'+data+'">充值</a>';
-                                    @endif
-
-                            var html =
-                                $html_edit+
-                                '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
-                                $html_able+
-                                $html_recharge+
-                                $html_record+
-                                // $html_delete+
-                                // '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
-                                // '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
-                                '';
-                            return html;
                         }
                     }
                 ],

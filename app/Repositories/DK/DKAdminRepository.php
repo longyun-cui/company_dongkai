@@ -504,7 +504,14 @@ class DKAdminRepository {
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,61]);
 
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
 
         $total = $query->count();
 
@@ -1957,9 +1964,14 @@ class DKAdminRepository {
             $query->where('superior_company_id',$me->department_district_id);
         }
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
 
         // 公司类型 [公司|渠道]
         if(!empty($post_data['company_category']))
@@ -2926,18 +2938,14 @@ class DKAdminRepository {
             $query->where('superior_department_id',$me->department_district_id);
         }
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
-
-        // 部门类型 [大区|组]
-        if(!empty($post_data['department_type']))
-        {
-            if(!in_array($post_data['department_type'],[-1,0]))
-            {
-                $query->where('department_type', $post_data['department_type']);
-            }
-        }
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
 
         // 状态 [|]
         if(!empty($post_data['item_status']))
@@ -2950,6 +2958,15 @@ class DKAdminRepository {
         else
         {
             $query->where('item_status', 1);
+        }
+
+        // 部门类型 [大区|组]
+        if(!empty($post_data['department_type']))
+        {
+            if(!in_array($post_data['department_type'],[-1,0]))
+            {
+                $query->where('department_type', $post_data['department_type']);
+            }
         }
 
         $total = $query->count();
@@ -4242,8 +4259,27 @@ class DKAdminRepository {
 //            ->where(['userstatus'=>'正常','status'=>1])
 //            ->whereIn('usergroup',['Agent','Agent2']);
 
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+        // 状态 [|]
+        if(!empty($post_data['user_status']))
+        {
+            if(!in_array($post_data['user_status'],[-1,0]))
+            {
+                $query->where('user_status', $post_data['user_status']);
+            }
+        }
+        else
+        {
+            $query->where('user_status', 1);
+        }
 
 
         // 部门-大区
@@ -7326,9 +7362,9 @@ class DKAdminRepository {
         $return['menu_active_of_project_list'] = 'active menu-open';
         if(in_array($me->user_type, [41,71,81]))
         {
-            $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-for-department';
+            $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.project.project-list-for-department';
         }
-        else $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-list';
+        else $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.project.project-list';
         return view($view_blade)->with($return);
     }
     // 【项目】返回-列表-数据
@@ -7342,9 +7378,14 @@ class DKAdminRepository {
             ->withTrashed()
             ->with(['creator','client_er','inspector_er']);
 
-        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
 
         // 状态 [|]
         if(!empty($post_data['item_status']))
@@ -7472,7 +7513,7 @@ class DKAdminRepository {
         $list_text = $item_type_text.'列表';
         $list_link = '/item/project-list';
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.project.project-edit';
         return view($view_blade)->with([
             'operate'=>'create',
             'operate_id'=>0,
@@ -7492,7 +7533,7 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
         $id = request("id",0);
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.project-edit';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.project.project-edit';
 
         $item_type = 'item';
         $item_type_text = '项目';

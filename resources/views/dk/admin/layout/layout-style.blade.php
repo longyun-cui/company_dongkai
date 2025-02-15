@@ -1,7 +1,7 @@
 <style>
     .select2-container { height:100%; border-radius:0; float:left; }
     .select2-container .select2-selection--single { border-radius:0; }
-    .select2-container--classic .select2-selection--multiple  { height:34px; border-radius:0; }
+    .select2-container--classic .select2-selection--multiple  { height:32px; border-radius:0; }
     .sidebar-menu>li>a {
         /*padding: 12px 4px 12px 8px;*/
         font-size:12px;
@@ -25,7 +25,28 @@
     }
 
     .datatable-search-row { margin-top:8px; margin-bottom:8px; }
-    .datatable-search-row .btn-filter { font-size:12px; }
+    .datatable-search-row .btn-filter { height:32px; height:32px; font-size:12px; margin-right:4px; margin-bottom:4px; float:left; }
+
+    .datatable-search-row .search-filter { height:32px; height:32px; margin-right:4px; margin-bottom:4px; border:1px solid #ddd; text-align:center; float:left; }
+    .datatable-search-row .search-filter { width:100px; }
+    .datatable-search-row .search-filter.filter-xs { width:60px; }
+    .datatable-search-row .search-filter.filter-sm { width:80px; }
+    .datatable-search-row .search-filter.filter-md { width:120px; }
+    .datatable-search-row .search-filter.filter-lg { width:140px; }
+    .datatable-search-row .search-filter.filter-xl { width:160px; }
+
+
+    .datatable-search-row .select2-container { height:32px; margin-bottom:4px; margin-right:4px; }
+    .datatable-search-row .select2-container .select2-selection { height:32px; line-height:28px; }
+    .datatable-search-row .select2-container .select2-selection__rendered,
+    .datatable-search-row .select2-container .select2-selection__arrow { height:30px !important; line-height:30px !important; }
+    .datatable-search-row .select2-container .select2-selection__choice  { margin-top:3px; height:24px;line-height:24px; }
+    .datatable-search-row .select2-container .select2-selection__choice__remove { height:24px;line-height:24px; }
+    .datatable-search-row .select2-container .select2-search { height:24px; line-height:24px; }
+
+
+
+
     .datatable-search-row .dropdown-menu { position:absolute; width:400px; top:-4px; left:auto; right:76px; padding:4px; }
     .datatable-search-row .pull-left .dropdown-menu { position:absolute; width:400px; top:-4px; left:auto; padding:4px; }
     .datatable-search-row .pull-right .dropdown-menu { position:absolute; width:400px; top:-4px; left:auto; padding:4px; }
@@ -44,7 +65,7 @@
     .dropdown.filter-menu .box-body .filter-body .select2-container { width:100% !important; height:30px; }
     .dropdown.filter-menu .box-body .filter-body .select2-container .select2-selection { height:28px; line-height:28px; }
     .dropdown.filter-menu .box-body .filter-body .select2-container .select2-selection__rendered,
-    .dropdown.filter-menu .box-body .filter-body .select2-container .select2-selection__arrow { height:26px !important; line-height:26px; }
+    .dropdown.filter-menu .box-body .filter-body .select2-container .select2-selection__arrow { height:26px !important; line-height:26px !important; }
     .dropdown.filter-menu .box-body .filter-body .select2-container .select2-selection__choice  { margin-top:8px; height:22px;line-height:22px; }
     .dropdown.filter-menu .box-body .filter-body .select2-container .select2-selection__choice__remove { height:22px;line-height:22px; }
     .dropdown.filter-menu .box-body .filter-body .select2-container .select2-search { height:22px; line-height:22px; }

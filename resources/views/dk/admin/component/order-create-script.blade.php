@@ -191,7 +191,7 @@
                         $('#modal-body-for-order-create').modal('hide').on("hidden.bs.modal", function () {
                             $("body").addClass("modal-open");
                         });
-                        $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                        $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                     }
                 }
             };

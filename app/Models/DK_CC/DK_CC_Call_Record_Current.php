@@ -54,6 +54,8 @@ class DK_CC_Call_Record_Current extends Model
 
         'telephone',
 
+        'call_date',
+
         'area',
         'city',
 

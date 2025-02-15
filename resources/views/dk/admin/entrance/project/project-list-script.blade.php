@@ -2,27 +2,48 @@
     $(function() {
 
         // 【搜索】
-        $("#datatable-for-project-list").on('click', ".filter-submit", function() {
+        $(".main-content").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#datatable-for-project-list").on('click', ".filter-cancel", function() {
-            $("#datatable-for-project-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+        $(".main-content").on('click', ".filter-cancel", function() {
+            $("#datatable-search-for-project-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
 
 //            $('select.form-filter').selectpicker('refresh');
-            $("#datatable-for-project-list").find('select.form-filter option').attr("selected",false);
-            $("#datatable-for-project-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $("#datatable-search-for-project-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-search-for-project-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
+        // 【清空重选】
+        $(".main-content").on('click', ".filter-empty", function(e) {
+
+            e.stopPropagation(); // 阻止事件冒泡
+
+            $("#datatable-search-for-project-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+            $(".select2-box").val(-1).trigger("change");
+            $(".select2-box").select2("val", "");
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#datatable-search-for-project-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-search-for-project-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+        });
         // 【查询】回车
-        $("#datatable-for-project-list").on('keyup', ".item-search-keyup", function(event) {
+        $(".main-content").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-project-list").find(".filter-submit").click();
+                $("#datatable-search-for-project-list").find(".filter-submit").click();
             }
+        });
+
+
+        // 【批量操作】全选or反选
+        $(".main-content").on('click', '#check-review-all', function () {
+            $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
 
 

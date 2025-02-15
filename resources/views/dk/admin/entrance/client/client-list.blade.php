@@ -42,62 +42,22 @@
                 <div class="pull-right">
 
 
-                    <div class="nav navbar-nav">
-
-                        <div class="dropdown filter-menu" data-bs-auto-close="outside">
-                            <button type="button" class="btn btn-default btn-filter dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-search"></i> 搜索
-                            </button>
-
-                            <div class="dropdown-menu box box-danger" style="position: absolute;width:400px;top:-4px;left:auto;right:72px;padding:4px;">
-
-                                <div class="box-header with-border-">
-                                    筛选
-                                </div>
+                    <input type="text" class="search-filter form-filter filter-keyup" name="client-id" placeholder="ID" />
+                    <input type="text" class="search-filter form-filter filter-keyup" name="client-username" placeholder="用户名" />
+                    <select class="search-filter form-filter form-filter" name="client-status">
+                        <option value ="-1">全部</option>
+                        <option value ="1">启用</option>
+                        <option value ="9">禁用</option>
+                    </select>
 
 
-                                <div class="box-body">
-                                    <label class="col-md-3">客户ID</label>
-                                    <div class="col-md-9 filter-body">
-                                        <input type="text" class="form-control form-filter filter-keyup" name="department-id" placeholder="ID" />
-                                    </div>
-                                </div>
+                    <button type="button" class="btn btn-default btn-filter filter-submit" id="filter-submit">
+                        <i class="fa fa-search"></i> 搜索
+                    </button>
 
-
-                                <div class="box-body">
-                                    <label class="col-md-3">用户名</label>
-                                    <div class="col-md-9 filter-body">
-                                        <input type="text" class="form-control form-filter item-search-keyup" name="client-username" placeholder="用户名" />
-                                    </div>
-                                </div>
-
-                                <div class="box-body">
-                                    <label class="col-md-3">启用状态</label>
-                                    <div class="col-md-9 filter-body">
-                                        <select class="form-control form-filter" name="client-status">
-                                            <option value ="1">启用</option>
-                                            <option value ="-1">全部</option>
-                                            <option value ="9">禁用</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="box-footer" style="text-align: center;">
-
-                                    <button type="button" class="btn btn-default filter-submit" id="filter-submit">
-                                        <i class="fa fa-search"></i> 搜 索
-                                    </button>
-                                    <button type="button" class="btn bg-default filter-empty">
-                                        <i class="fa fa-remove"></i> 重 置
-                                    </button>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                    <button type="button" class="btn btn-default btn-filter filter-empty">
+                        <i class="fa fa-remove"></i> 重置
+                    </button>
 
                     <button type="button" class="btn btn-default btn-filter filter-refresh">
                         <i class="fa fa-circle-o-notch"></i> 刷新
@@ -118,7 +78,7 @@
 
 
                 <div class="tableArea">
-                <table class='table table-striped table-bordered- table-hover main-table' id='datatable_ajax'>
+                <table class='table table-striped table-bordered table-hover main-table' id='datatable_ajax'>
                     <thead>
                         <tr role='row' class='heading'>
                         </tr>
