@@ -8,8 +8,9 @@
 
 
 
-@section('header','')
-@section('description')公司列表 - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('title')<span class="box-title">{{ $title_text or '公司列表' }}</span>@endsection
+@section('header')<span class="box-title">{{ $title_text or '公司列表' }}</span>@endsection
+@section('description')<b>公司列表 - 管理员系统 - {{ config('info.info.short_name') }}</b>@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
 @endsection
@@ -18,35 +19,21 @@
     <div class="col-md-12">
         <div class="box box-info main-list-body">
 
-            <div class="box-header with-border" style="margin:4px 0;">
 
-                <h3 class="box-title">{{ $title_text or '公司列表' }}</h3>
-
-                @if(in_array($me->user_type,[0,1,9,11,19]))
-                <div class="caption pull-right">
-                    <i class="icon-pin font-blue"></i>
-                    <span class="caption-subject font-blue sbold uppercase"></span>
-                    <a href="{{ url('/company/company-create') }}">
-                        <button type="button" onclick="" class="btn btn-success pull-right"><i class="fa fa-plus"></i> 添加公司</button>
-                    </a>
-                </div>
-                @endif
-
-            </div>
-
-
-            <div class="col-md-12 datatable-search-row" id="datatable-search-for-order-list">
+            <div class="col-md-12 datatable-search-row" id="datatable-search-for-company-list">
 
 
                 <div class=" pull-left">
 
                     @if(in_array($me->user_type,[0,1,9,11,19]))
-                    <button type="button" onclick="" class="btn btn-default"><i class="fa fa-plus"></i> 添加</button>
+                    <a href="{{ url('/company/company-create') }}">
+                        <button type="button" onclick="" class="btn btn-success btn-filter"><i class="fa fa-plus"></i> 添加</button>
+                    </a>
                     @endif
-                    <button type="button" onclick="" class="btn btn-default"><i class="fa fa-play"></i> 启用</button>
-                    <button type="button" onclick="" class="btn btn-default"><i class="fa fa-stop"></i> 禁用</button>
-                    <button type="button" onclick="" class="btn btn-default"><i class="fa fa-download"></i> 导出</button>
-                    <button type="button" onclick="" class="btn btn-default"><i class="fa fa-trash-o"></i> 批量删除</button>
+                    <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-play"></i> 启用</button>
+                    <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-stop"></i> 禁用</button>
+                    <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-download"></i> 导出</button>
+                    <button type="button" onclick="" class="btn btn-default btn-filter _none"><i class="fa fa-trash-o"></i> 批量删除</button>
 
                 </div>
 
@@ -57,7 +44,7 @@
                     <div class="nav navbar-nav">
 
                         <div class="dropdown filter-menu" data-bs-auto-close="outside">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <button type="button" class="btn btn-default btn-filter dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-search"></i> 搜索
                             </button>
 
@@ -71,32 +58,31 @@
                                 <div class="box-body">
                                     <label class="col-md-3">ID</label>
                                     <div class="col-md-9 filter-body">
-                                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="" />
+                                        <input type="text" class="form-control form-filter filter-keyup" name="company-id" placeholder="ID" />
                                     </div>
                                 </div>
 
-                                @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
+
+                                <div class="box-body">
+                                    <label class="col-md-3">ID</label>
+                                    <div class="col-md-9 filter-body">
+                                        <input type="text" class="form-control form-filter item-search-keyup" name="company-title" placeholder="名称" />
+                                    </div>
+                                </div>
+
+                                @if(in_array($me->user_type,[0,1,9,11]))
                                     <div class="box-body">
-                                        <label class="col-md-3">创建方式</label>
+                                        <label class="col-md-3">公司类型</label>
                                         <div class="col-md-9 filter-body">
-                                            <select class="form-control form-filter select2-box" name="order-created-type">
-                                                <option value="-1">创建方式</option>
-                                                <option value="1">人工</option>
-                                                <option value="9">导入</option>
-                                                <option value="99">API</option>
+                                            <select class="form-control form-filter select2-box" name="company-category">
+                                                <option value="-1">公司类型</option>
+                                                <option value="1">公司</option>
+                                                <option value="11">渠道</option>
+                                                <option value="21">商务</option>
                                             </select>
                                         </div>
                                     </div>
                                 @endif
-
-                                <div class="box-body">
-                                    <label class="col-md-3">项目</label>
-                                    <div class="col-md-9 filter-body">
-                                        <select class="form-control select2-container" name="project_id" id="select2-project">
-                                            <option data-id="0" value="0">未指定</option>
-                                        </select>
-                                    </div>
-                                </div>
 
 
 
@@ -115,15 +101,15 @@
 
                     </div>
 
-                    <button type="button" class="btn btn-default filter-refresh">
+                    <button type="button" class="btn btn-default btn-filter filter-refresh">
                         <i class="fa fa-circle-o-notch"></i> 刷新
                     </button>
 
-                    <button type="button" class="btn btn-default filter-refresh">
+                    <button type="button" class="btn btn-default btn-filter filter-refresh">
                         <i class="fa fa-circle-o-notch"></i> 刷新
                     </button>
 
-                    <button type="button" class="btn btn-default filter-cancel">
+                    <button type="button" class="btn btn-default btn-filter filter-cancel">
                         <i class="fa fa-undo"></i> 重置
                     </button>
 
@@ -138,42 +124,6 @@
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-company-list">
-
-                <div class="row col-md-12 datatable-search-row">
-                    <div class="input-group">
-
-                        <input type="text" class="form-control form-filter item-search-keyup" name="company-title" placeholder="名称" />
-
-                        {{--<select class="form-control form-filter" name="owner" style="width:96px;">--}}
-                            {{--<option value ="-1">选择员工</option>--}}
-                            {{--@foreach($sales as $v)--}}
-                                {{--<option value ="{{ $v->id }}">{{ $v->true_name }}</option>--}}
-                            {{--@endforeach--}}
-                        {{--</select>--}}
-
-{{--                        <select class="form-control form-filter" name="work_status" style="width:96px;">--}}
-{{--                            <option value ="-1">全部状态</option>--}}
-{{--                            <option value ="0">空闲</option>--}}
-{{--                            <option value ="1">工作中</option>--}}
-{{--                            <option value ="9">待发车</option>--}}
-{{--                            <option value ="19">非工作状态</option>--}}
-{{--                        </select>--}}
-
-                        <select class="form-control form-filter" name="company-category" style="width:96px;">
-                            <option value ="-1">全部</option>
-                            <option value ="1">公司</option>
-                            <option value ="11">渠道</option>
-                        </select>
-
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit">
-                            <i class="fa fa-search"></i> 搜索
-                        </button>
-                        <button type="button" class="form-control btn btn-flat btn-default filter-cancel">
-                            <i class="fa fa-circle-o-notch"></i> 重置
-                        </button>
-
-                    </div>
-                </div>
 
                 <div class="tableArea">
                 <table class='table table-striped table-bordered- table-hover main-table' id='datatable_ajax'>

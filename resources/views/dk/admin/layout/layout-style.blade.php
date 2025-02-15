@@ -24,6 +24,7 @@
         }
     }
 
+    .datatable-search-row { margin-top:8px; margin-bottom:8px; }
     .datatable-search-row .btn-filter { font-size:12px; }
     .datatable-search-row .dropdown-menu { position:absolute; width:400px; top:-4px; left:auto; right:76px; padding:4px; }
     .datatable-search-row .pull-left .dropdown-menu { position:absolute; width:400px; top:-4px; left:auto; padding:4px; }
