@@ -2,14 +2,13 @@
 
 
 @section('head_title')
-    {{ $staff->username or '员工' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $staff->username or '员工' }}
 @endsection
 
 
-
-
-@section('header','')
-@section('description'){{ $title_text or '员工' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('title')<span class="box-title">{{ $title_text or '员工' }}</span>@endsection
+@section('header')<span class="box-title">{{ $title_text or '员工' }}</span>@endsection
+@section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
