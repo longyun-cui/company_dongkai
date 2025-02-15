@@ -46,6 +46,9 @@ Route::group(['prefix'=>'common'], function () {
 Route::group(['domain'=>env('DOMAIN_ROOT'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route.php');
 });
+Route::group(['domain'=>env('DOMAIN_WWW'), 'namespace'=>'DK'], function () {
+    require(__DIR__ . '/DK/route-www.php');
+});
 Route::group(['domain'=>env('DOMAIN_DK_SUPER'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-super.php');
 });
