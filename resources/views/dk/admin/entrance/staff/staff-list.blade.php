@@ -10,7 +10,7 @@
 @section('header')<span class="box-title">{{ $title_text or '员工列表' }}</span>@endsection
 @section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
-    <li><a href="{{url('/')}}"><i class="fa fa-dashboard"></i>首页</a></li>
+    <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
 @section('content')

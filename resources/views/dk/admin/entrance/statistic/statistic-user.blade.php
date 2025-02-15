@@ -12,7 +12,7 @@
 @section('description','管理员后台系统 - 兆益信息')
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-home"></i>首页</a></li>
-    <li><a href="{{ url('//statistic-index') }}"><i class="fa fa-bar-chart"></i>流量统计</a></li>
+    <li><a href="{{ url('/statistic-index') }}"><i class="fa fa-bar-chart"></i>流量统计</a></li>
     {{--<li><a href="{{ url('/user/user-list-for-all') }}"><i class="fa fa-list"></i>用户列表</a></li>--}}
     <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
@@ -21,7 +21,7 @@
 <div class="row">
     <div class="col-md-12">
 
-        <div class="box box-info">
+        <div class="box box-primary">
 
             <div class="box-header with-border" style="margin:16px 0;">
                 <h3 class="box-title">总量统计</h3>

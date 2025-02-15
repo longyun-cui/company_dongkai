@@ -16,7 +16,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-info main-list-body">
+        <div class="box box-primary main-list-body">
 
 
             <div class="box-body datatable-body item-main-body" id="statistic-for-comprehensive">

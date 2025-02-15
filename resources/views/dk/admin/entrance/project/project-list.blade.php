@@ -8,14 +8,15 @@
 
 @section('title')<span class="box-title">{{ $title_text or '项目列表' }}</span>@endsection
 @section('header')<span class="box-title">{{ $title_text or '项目列表' }}</span>@endsection
-@section('description')<b>项目列表 - 管理员系统 - {{ config('info.info.short_name') }}</b>@endsection
+@section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
+    <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-project main-list-body">
+        <div class="box box-primary">
 
 
             <div class="col-md-12 datatable-search-row" id="datatable-search-for-project-list">

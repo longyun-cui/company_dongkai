@@ -2,14 +2,13 @@
 
 
 @section('head_title')
-    {{ $title_text or '审核员看板' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '审核员看板' }}
 @endsection
 
 
-
-
-@section('header','')
-@section('description'){{ $title_text or '审核员看板' }} - 管理员系统 - {{ config('info.info.short_name') }}@endsection
+@section('title')<span class="box-title">{{ $title_text or '审核员看板' }}</span>@endsection
+@section('header')<span class="box-title">{{ $title_text or '审核员看板' }}</span>@endsection
+@section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{url('/')}}"><i class="fa fa-home"></i>首页</a></li>
     <li><a href="#"><i class="fa "></i>Here</a></li>
@@ -17,7 +16,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-info main-list-body">
+        <div class="box box-primary main-list-body">
 
             <div class="box-header with-border" style="margin:4px 0;">
                 <h3 class="box-title">审核员看板(<span class="statistic-title">全部</span>)</h3>
