@@ -1560,12 +1560,12 @@ class DKAdminController extends Controller
     // 【统计】订单-导出
     public function operate_statistic_export_for_order()
     {
-        $this->repo->operate_statistic_export_for_order(request()->all());
+        return $this->repo->operate_statistic_export_for_order(request()->all());
     }
     // 【统计】订单-导出
     public function operate_statistic_export_for_order_by_ids()
     {
-        $this->repo->operate_statistic_export_for_order_by_ids(request()->all());
+        return $this->repo->operate_statistic_export_for_order_by_ids(request()->all());
     }
 
 
