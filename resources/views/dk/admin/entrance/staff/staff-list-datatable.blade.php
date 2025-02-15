@@ -167,18 +167,18 @@
                             return data;
                         }
                     },
-                    {
-                        "title": "姓名",
-                        "data": "id",
-                        "className": "",
-                        "width": "100px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-//                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
-                            if(row.true_name) return row.true_name;
-                            else return '--';
-                        }
-                    },
+//                     {
+//                         "title": "姓名",
+//                         "data": "id",
+//                         "className": "",
+//                         "width": "100px",
+//                         "orderable": false,
+//                         render: function(data, type, row, meta) {
+// //                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
+//                             if(row.username) return row.username;
+//                             else return '--';
+//                         }
+//                     },
                     {
                         "title": "用户名",
                         "data": "id",
