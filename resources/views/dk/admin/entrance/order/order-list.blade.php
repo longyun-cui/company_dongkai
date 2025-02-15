@@ -190,6 +190,9 @@
 
                 </div>
 
+
+                @if(in_array($me->department_district_id,[0]))
+                @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                 <div class="box-footer datatable-search-row" id="">
 
                     <div class=" pull-left">
@@ -244,6 +247,8 @@
                     </div>
 
                 </div>
+                @endif
+                @endif
 
 
 
