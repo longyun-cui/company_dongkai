@@ -1235,5 +1235,5 @@
     //            TableDatatablesAjax_record.init();
     //        });
 </script>
-@include(env('TEMPLATE_DK_ADMIN').'entrance.item.project-list-script')
+@include(env('TEMPLATE_DK_ADMIN').'entrance.project.project-list-script')
 @endsection
