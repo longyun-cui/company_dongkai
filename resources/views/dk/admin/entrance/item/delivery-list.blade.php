@@ -947,7 +947,7 @@
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
-                            if(data) return '<a target="_blank" href="/item/order-list-for-all?order_id='+data+'">'+data+'</a>';;
+                            if(data) return '<a target="_blank" href="/item/order-list?order_id='+data+'">'+data+'</a>';;
                             return "--";
                         }
                     },
