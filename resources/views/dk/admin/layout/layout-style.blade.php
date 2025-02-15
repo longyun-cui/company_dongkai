@@ -41,7 +41,7 @@
     .datatable-search-row .select2-container .select2-selection { height:32px; line-height:28px; }
     .datatable-search-row .select2-container .select2-selection__rendered,
     .datatable-search-row .select2-container .select2-selection__arrow { height:30px !important; line-height:30px !important; }
-    .datatable-search-row .select2-container .select2-selection__choice  { margin-top:3px; height:24px;line-height:24px; }
+    .datatable-search-row .select2-container .select2-selection__choice  { margin-top:3px; height:24px;line-height:24px; font-size:12px; }
     .datatable-search-row .select2-container .select2-selection__choice__remove { height:24px;line-height:24px; }
     .datatable-search-row .select2-container .select2-search { height:24px; line-height:24px; }
 
