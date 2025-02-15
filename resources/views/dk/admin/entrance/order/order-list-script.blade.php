@@ -24,7 +24,10 @@
             $('#datatable-for-order-list').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $(".main-content").on('click', ".filter-empty", function() {
+        $(".main-content").on('click', ".filter-empty", function(e) {
+
+            e.stopPropagation(); // 阻止事件冒泡
+
             $("#datatable-search-for-order-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });

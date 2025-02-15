@@ -2,11 +2,11 @@
     $(function() {
 
         // 【搜索】
-        $("#datatable-for-department-list").on('click', ".filter-submit", function() {
+        $(".main-content").on('click', ".filter-submit", function() {
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【重置】
-        $("#datatable-for-department-list").on('click', ".filter-cancel", function() {
+        $(".main-content").on('click', ".filter-cancel", function() {
             $("#datatable-for-department-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
@@ -17,11 +17,26 @@
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
+        // 【清空重选】
+        $(".main-content").on('click', ".filter-empty", function(e) {
+
+            e.stopPropagation(); // 阻止事件冒泡
+
+            $("#datatable-search-for-department-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+            $(".select2-box").val(-1).trigger("change");
+            $(".select2-box").select2("val", "");
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#datatable-search-for-department-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-search-for-department-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+        });
         // 【查询】回车
-        $("#datatable-for-department-list").on('keyup', ".item-search-keyup", function(event) {
+        $(".main-content").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#datatable-for-department-list").find(".filter-submit").click();
+                $("#datatable-search-for-department-list").find(".filter-submit").click();
             }
         });
 

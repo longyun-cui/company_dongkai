@@ -195,7 +195,6 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
     // 列表
     Route::match(['get','post'], '/user/staff-list', $controller.'@view_user_staff_list');
-    Route::match(['get','post'], '/user/staff-list-for-all', $controller.'@view_user_staff_list_for_all');
     // 修改列表
     Route::match(['get','post'], '/user/staff-modify-record', $controller.'@view_user_staff_modify_record');
     // 创建 & 修改

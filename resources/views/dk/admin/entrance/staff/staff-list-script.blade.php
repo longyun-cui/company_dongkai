@@ -17,11 +17,26 @@
 
             $('#datatable_ajax').DataTable().ajax.reload();
         });
+        // 【清空重选】
+        $(".main-content").on('click', ".filter-empty", function(e) {
+
+            e.stopPropagation(); // 阻止事件冒泡
+
+            $("#datatable-search-for-staff-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
+                $(this).val("");
+            });
+            $(".select2-box").val(-1).trigger("change");
+            $(".select2-box").select2("val", "");
+
+//            $('select.form-filter').selectpicker('refresh');
+            $("#datatable-search-for-staff-list").find('select.form-filter option').attr("selected",false);
+            $("#datatable-search-for-staff-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
+        });
         // 【查询】回车
         $(".main-content").on('keyup', ".item-search-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                $("#filter-submit").click();
+                $('#datatable_ajax').DataTable().ajax.reload();
             }
         });
 
