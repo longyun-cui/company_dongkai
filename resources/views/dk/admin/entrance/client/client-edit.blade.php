@@ -81,6 +81,32 @@
                         </div>
                     </div>
                 </div>
+                {{--渠道--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择渠道</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="channel_id" id="select2-company-channel" style="width:100%;">
+                            @if($operate == 'edit' && $data->channel_id)
+                                <option data-id="{{ $data->channel_id or 0 }}" value="{{ $data->channel_id or 0 }}">{{ $data->channel_er->name }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                {{--商务--}}
+                <div class="form-group">
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择商务</label>
+                    <div class="col-md-8 ">
+                        <select class="form-control" name="channel_id" id="select2-company-business" style="width:100%;">
+                            @if($operate == 'edit' && $data->business_id)
+                                <option data-id="{{ $data->business_id or 0 }}" value="{{ $data->business_id or 0 }}">{{ $data->business_er->name }}</option>
+                            @else
+                                <option data-id="0" value="0">未指定</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
                 {{--ip白名单--}}
                 <div class="form-group">
                     <label class="control-label col-md-2">ip白名单</label>
@@ -197,37 +223,10 @@
 
 
 
-
+@section('custom-js')
+    {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
+    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
+@endsection
 @section('custom-script')
-{{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
-<script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
-<script>
-    $(function() {
-
-        $("#multiple-images").fileinput({
-            allowedFileExtensions : [ 'jpg', 'jpeg', 'png', 'gif' ],
-            showUpload: false
-        });
-
-        // 添加or编辑
-        $("#edit-item-submit").on('click', function() {
-            var options = {
-                url: "{{ url('/user/client-edit') }}",
-                type: "post",
-                dataType: "json",
-                // target: "#div2",
-                success: function (data) {
-                    if(!data.success) layer.msg(data.msg);
-                    else
-                    {
-                        layer.msg(data.msg);
-                        location.href = "{{ url('/user/client-list-for-all') }}";
-                    }
-                }
-            };
-            $("#form-edit-item").ajaxSubmit(options);
-        });
-
-    });
-</script>
+    @include(env('TEMPLATE_DK_ADMIN').'entrance.client.client-edit-script')
 @endsection

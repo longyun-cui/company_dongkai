@@ -120,9 +120,9 @@
                                 $html_able+
                                 $html_recharge+
                                 $html_record+
-                                //                                $html_delete+
-                                //                                '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
-                                //                                '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
+                                // $html_delete+
+                                // '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
+                                // '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
                                 '';
                             return html;
                         }
@@ -159,7 +159,76 @@
                             return '<a href="javascript:void(0);">'+data+'</a>';
                         }
                     },
-                        @if(in_array($me->user_type,[0,1,11,19]))
+                    {
+                        "title": "所属公司",
+                        "data": "company_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','所属公司');
+                                $(nTd).attr('data-key','company_id').attr('data-value',data);
+                                $(nTd).attr('data-column-name','所属公司');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.company_er) return '<a href="javascript:void(0);">'+row.company_er.name+'</a>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "所属渠道",
+                        "data": "channel_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','对接渠道');
+                                $(nTd).attr('data-key','channel_id').attr('data-value',data);
+                                $(nTd).attr('data-column-name','对接渠道');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.channel_er) return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
+                            else return '--';
+                        }
+                    },
+                    {
+                        "title": "对接商务",
+                        "data": "business_id",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1 && row.item_status != 97)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set-');
+                                $(nTd).attr('data-id',row.id).attr('data-name','对接商务');
+                                $(nTd).attr('data-key','business_id').attr('data-value',data);
+                                $(nTd).attr('data-column-name','对接商务');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            if(row.business_er) return '<a href="javascript:void(0);">'+row.business_er.name+'</a>';
+                            else return '--';
+                        }
+                    },
+                    @if(in_array($me->user_type,[0,1,11,19]))
                     {
                         "title": "合作单价",
                         "data": "cooperative_unit_price",
@@ -200,7 +269,7 @@
                             return parseFloat(data);
                         }
                     },
-                        @endif
+                    @endif
                     {
                         "title": "管理员名称",
                         "data": "client_admin_name",

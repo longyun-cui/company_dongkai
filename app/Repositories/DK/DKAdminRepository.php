@@ -284,9 +284,26 @@ class DKAdminRepository {
             if($type == 'all')
             {
             }
-            else if($type == 'company') $query->where(['company_category'=>1]);
-            else if($type == 'channel') $query->where(['company_category'=>11]);
-            else if($type == 'business') $query->where(['company_category'=>21]);
+            else if($type == 'company')
+            {
+                $query->where(['company_category'=>1]);
+            }
+            else if($type == 'channel')
+            {
+                $query->where(['company_category'=>11]);
+                if(!empty($post_data['company_id']))
+                {
+                    $query->where('superior_company_id',$post_data['company_id']);
+                }
+            }
+            else if($type == 'business')
+            {
+                $query->where(['company_category'=>21]);
+                if(!empty($post_data['channel_id']))
+                {
+                    $query->where('superior_company_id',$post_data['channel_id']);
+                }
+            }
             else
             {
 //                $query->where(['department_type'=>11]);
@@ -483,7 +500,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         $query = DK_Client::select('*')
-            ->with(['creator'])
+            ->with(['creator','company_er','channel_er','business_er'])
             ->whereIn('user_category',[11])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,61]);
 

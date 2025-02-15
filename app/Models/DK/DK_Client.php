@@ -35,6 +35,12 @@ class DK_Client extends Authenticatable
         'district_type',
         'district_id',
 
+
+        'company_id',
+        'channel_id',
+        'business_id',
+
+
         'is_ip',
         'ip_whitelist',
 
@@ -96,6 +102,27 @@ class DK_Client extends Authenticatable
     {
         return $this->belongsTo('App\Models\DK\DK_User','user_id','id');
     }
+
+
+
+
+    // 用户
+    function company_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Company','company_id','id');
+    }
+    // 用户
+    function channel_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Company','channel_id','id');
+    }
+    // 用户
+    function business_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Company','business_id','id');
+    }
+
+
 
 
     // 上级领导

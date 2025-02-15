@@ -401,7 +401,7 @@
                     {
                         layer.msg(data.msg);
 
-                        location.href = "{{ url('/item/order-list-for-all') }}";
+                        location.href = "{{ url('/item/order-list') }}";
 
                         {{--if($.getUrlParam('referrer')) location.href = decodeURIComponent($.getUrlParam('referrer'));--}}
                         {{--else if(document.referrer) location.href = document.referrer;--}}
