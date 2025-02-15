@@ -278,12 +278,13 @@
                         "title": "创建人",
                         "data": "creator_id",
                         "className": "font-12px",
-                        "width": "80px",
+                        "width": "100px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 0) return '未知';
                             // return row.creator.true_name;
-                            return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                            if(row.creator) return '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                            else return '--';
                         }
                     },
                     {
