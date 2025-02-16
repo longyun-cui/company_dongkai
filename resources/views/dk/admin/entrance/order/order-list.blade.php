@@ -25,7 +25,7 @@
                     <div class="pull-left">
 
                         {{--ID--}}
-                        <input type="text" class="search-filter form-filter filter-sm filter-keyup" name="order-id" placeholder="ID" value="" />
+                        <input type="text" class="search-filter form-filter filter-sm filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" />
 
                         {{--电话号码--}}
                         <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="电话号码" value="{{ $client_phone or '' }}" />
