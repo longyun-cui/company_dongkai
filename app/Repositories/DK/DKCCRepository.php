@@ -7335,7 +7335,9 @@ EOF;
         $query = DK_CC_Call_Record::select('*')
 //            ->withTrashed()
             ->with([
-                'staff_or'=>function($query) { $query->select(['id','username','api_staffNo']); }
+                'staff_or'=>function($query) {
+                    $query->select(['id','username','api_staffNo','department_district_id'])->with(['department_district_er']);
+                }
             ]);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);

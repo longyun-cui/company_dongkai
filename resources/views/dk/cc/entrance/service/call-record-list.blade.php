@@ -225,6 +225,20 @@
                         }
                     },
                     {
+                        "title": "大区",
+                        "data": "staffNo",
+                        "className": "",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.staff_or)
+                            {
+                                return row.staff_or.department_district_er == null ? '未知' : '<a href="javascript:void(0);">'+row.staff_or.department_district_er.name+'</a>';
+                            }
+                            else return '--';
+                        }
+                    },
+                    {
                         "title": "电话",
                         "data": "callee",
                         "className": "",
