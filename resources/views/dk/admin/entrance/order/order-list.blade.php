@@ -34,7 +34,7 @@
                         <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker" name="order-assign" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" />
 
                         {{--交付日期--}}
-                        <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker" name="order-delivered_date" placeholder="发布日期" value="{{ $assign or '' }}" readonly="readonly" />
+                        <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker" name="order-delivered_date" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" />
 
                         {{--创建方式--}}
                         @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
