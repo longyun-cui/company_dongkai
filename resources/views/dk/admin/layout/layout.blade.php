@@ -209,6 +209,12 @@ desired effect
 <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 
 
+<script src="{{ asset('/resource/common/js/location/location_data.js') }}"></script>
+<script src="{{ asset('/resource/common/js/location/location_city.js') }}"></script>
+{{--<script src="{{ asset('/resource/common/js/location/location_select.js') }}"></script>--}}
+<script src="{{ asset('/resource/common/js/location/location_select_from_city.js') }}"></script>
+
+
 {{--layout-script--}}
 @include(env('TEMPLATE_DK_ADMIN').'layout.layout-script')
 

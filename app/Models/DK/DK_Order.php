@@ -32,7 +32,16 @@ class DK_Order extends Model
         'assign_time',
         'is_distributive_condition',
         'client_type', 'client_name', 'client_phone', 'client_intention',
-        'team_district', 'channel_source', 'location_city', 'location_district', 'is_wx', 'wx_id',
+        'team_district', 'channel_source',
+
+        'location_province',
+        'location_province_code',
+        'location_city',
+        'location_city_code',
+        'location_district',
+        'location_district_code',
+        
+        'is_wx', 'wx_id',
         'recording_address',
         'recording_address_list',
         'is_repeat',

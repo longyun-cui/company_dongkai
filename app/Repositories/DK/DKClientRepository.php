@@ -3532,83 +3532,95 @@ class DKClientRepository {
             $customer_list = [];
             foreach($delivery_list as $key => $item)
             {
-                $customer = [];
-
-                $customer['source'] = "2r4";
-
-                $customer['pool'] = env('API_SCRM_Pool');
-                $customer['remark'] = $item->order_er->client_name;
-                $customer['prov_city'] = $item->order_er->location_city.'-'.$item->order_er->location_district;
-
-
-                $mobile['type'] = "mobile";
-                $mobile['display'] = "手机号";
-                $mobile['tel'] = $item->order_er->client_phone;
-                $customer['mobiles'][] = $mobile;
-
-                if(!empty($item->order_er->wx_id))
+                if($item->is_api_pushed == 0)
                 {
-                    $wx['type'] = "wx_id";
-                    $wx['display'] = "微信号";
-                    $wx['tel'] = $item->order_er->wx_id;
-                    $customer['mobiles'][] = $wx;
+                    $customer = [];
+
+                    $customer['source'] = "2r4";
+
+                    $customer['pool'] = env('API_SCRM_Pool');
+                    $customer['remark'] = $item->order_er->client_name;
+                    $customer['prov_city'] = $item->order_er->location_city.'-'.$item->order_er->location_district;
+
+
+                    $mobile['type'] = "mobile";
+                    $mobile['display'] = "手机号";
+                    $mobile['tel'] = $item->order_er->client_phone;
+                    $customer['mobiles'][] = $mobile;
+
+                    if(!empty($item->order_er->wx_id))
+                    {
+                        $wx['type'] = "wx_id";
+                        $wx['display'] = "微信号";
+                        $wx['tel'] = $item->order_er->wx_id;
+                        $customer['mobiles'][] = $wx;
+                    }
+
+                    $customer['description'] = $item->order_er->description;
+
+                    // 自定义字段
+                    $custom_fields = [];
+
+                    $delivery_time['id'] = 'delivery_time';
+                    $delivery_time['type'] = 'text';
+                    $delivery_time['string_value'] = $item->created_at->format('Y-m-d');
+                    $custom_fields[] = $delivery_time;
+
+                    $teeth_count['id'] = 'teeth_count';
+                    $teeth_count['type'] = 'text';
+                    $teeth_count['string_value'] = $item->order_er->teeth_count;
+                    $custom_fields[] = $teeth_count;
+
+                    $teeth_count['id'] = 'field1';
+                    $teeth_count['type'] = 'text';
+                    $teeth_count['string_value'] = $item->order_er->teeth_count;
+                    $custom_fields[] = $teeth_count;
+
+                    $customer['custom_fields'] = $custom_fields;
+
+                    $customer['description'] = $item->order_er->description;
+
+                    $customer_list[] = $customer;
                 }
-
-                $customer['description'] = $item->order_er->description;
-
-                // 自定义字段
-                $custom_fields = [];
-
-                $delivery_time['id'] = 'delivery_time';
-                $delivery_time['type'] = 'text';
-                $delivery_time['string_value'] = $item->created_at->format('Y-m-d');
-                $custom_fields[] = $delivery_time;
-
-                $teeth_count['id'] = 'teeth_count';
-                $teeth_count['type'] = 'text';
-                $teeth_count['string_value'] = $item->order_er->teeth_count;
-                $custom_fields[] = $teeth_count;
-
-                $teeth_count['id'] = 'field1';
-                $teeth_count['type'] = 'text';
-                $teeth_count['string_value'] = $item->order_er->teeth_count;
-                $custom_fields[] = $teeth_count;
-
-                $customer['custom_fields'] = $custom_fields;
-
-                $customer['description'] = $item->order_er->description;
-
-                $customer_list[] = $customer;
             }
-            $api_push_data['customer_list'] = $customer_list;
-            $api_push_data_json = json_encode($api_push_data);
 
-            $push_url = "https://qw-openapi-tx.dustess.com/customer/v1/batchAddCustomer?accessToken=".$token;
 
-            $push_ch = curl_init();
-            curl_setopt($push_ch, CURLOPT_URL, $push_url);
-            curl_setopt($push_ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
-            curl_setopt($push_ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($push_ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($push_ch, CURLOPT_POST, true); // post数据
-            curl_setopt($push_ch, CURLOPT_POSTFIELDS, $api_push_data_json); // post的变量
-            $push_result = curl_exec($push_ch);
-            if(curl_errno($push_ch))
+            if(count($customer_list) > 0)
             {
-                return response_fail([],'api推送请求失败！');
-            }
-            else
-            {
-                $push_result_decode = json_decode($push_result);
-                if($push_result_decode->success)
+                $api_push_data['customer_list'] = $customer_list;
+                $api_push_data_json = json_encode($api_push_data);
+
+                $push_url = "https://qw-openapi-tx.dustess.com/customer/v1/batchAddCustomer?accessToken=".$token;
+
+                $push_ch = curl_init();
+                curl_setopt($push_ch, CURLOPT_URL, $push_url);
+                curl_setopt($push_ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+                curl_setopt($push_ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($push_ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($push_ch, CURLOPT_POST, true); // post数据
+                curl_setopt($push_ch, CURLOPT_POSTFIELDS, $api_push_data_json); // post的变量
+                $push_result = curl_exec($push_ch);
+                if(curl_errno($push_ch))
                 {
+                    return response_fail([],'api推送请求失败！');
                 }
                 else
                 {
-                    return response_fail([],'推送数据失败！');
+                    $push_result_decode = json_decode($push_result);
+                    if($push_result_decode->success)
+                    {
+                    }
+                    else
+                    {
+                        return response_fail([],'推送数据失败！');
+                    }
                 }
+                curl_close($push_ch);
             }
-            curl_close($push_ch);
+            return response_success(['count'=>count($customer_list)]);
+
+
+
         }
         else return response_fail([],'token不存在！');
 
@@ -3682,7 +3694,7 @@ class DKClientRepository {
 
 
             DB::commit();
-            return response_success([]);
+            return response_success(['count'=>count($customer_list)]);
         }
         catch (Exception $e)
         {

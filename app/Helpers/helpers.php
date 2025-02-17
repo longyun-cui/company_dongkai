@@ -187,6 +187,36 @@ if(!function_exists('isToday'))
 
 
 
+// 模糊匹配城市
+if(!function_exists('searchCityCode'))
+{
+
+    function searchCityCode($inputText, $locationData)
+    {
+        $result = [];
+        $inputText = trim($inputText); // 去除前后空格
+        $charsToRemove = [' ', '&', '%', '*', '#', '^', '@', ',', ',', ':', '!', '_', '-', '(', ')', '，', '。', '！', '：', '（', '）']; // 需要移除的字符列表
+        $inputText = str_replace($charsToRemove, '', $inputText);
+
+        foreach ($locationData as $provinceCode => $cityList)
+        {
+            foreach ($cityList as $cityCode => $cityName)
+            {
+                // 使用多字节字符串函数进行模糊匹配
+                if (mb_strpos($cityName, $inputText) !== false)
+                {
+                    $result[] = [
+                        'provinceCode' => $provinceCode,
+                        'cityCode' => $cityCode,
+                        'cityName' => $cityName
+                    ];
+                }
+            }
+        }
+
+        return $result;
+    }
+}
 
 
 if(!function_exists('replace_blank')) {

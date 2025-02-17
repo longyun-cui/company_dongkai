@@ -1717,6 +1717,9 @@
             // });
             // console.log($checked);
 
+
+
+
             var $ids = '';
             $('input[name="bulk-id"]:checked').each(function() {
                 $ids += $(this).val()+'-';
@@ -1732,6 +1735,26 @@
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
 
+
+                    layer.close(index);
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">耐心等待中</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+
+
                     $.post(
                         "{{ url('/item/delivery-bulk-api-push') }}",
                         {
@@ -1739,11 +1762,18 @@
                             operate: "delivery-api-push-bulk",
                             ids: $ids
                         },
-                        function(data){
-                            layer.close(index);
-                            if(!data.success) layer.msg(data.msg);
+                        'json'
+                    )
+                        .done(function($response) {
+                            // console.log('done');
+
+                            $response = JSON.parse($response);
+                            if(!$response.success) layer.msg($response.msg);
                             else
                             {
+
+                                console.log($response.data.count);
+                                layer.msg("推送 "+$response.data.count+" 条！");
                                 // $('#datatable_ajax').DataTable().ajax.reload(null,false);
 
                                 $('input[name="bulk-id"]:checked').each(function() {
@@ -1757,9 +1787,26 @@
 
                                 });
                             }
-                        },
-                        'json'
-                    );
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            // console.log('fail');
+                            // console.log(jqXHR);
+                            // console.log(textStatus);
+                            // console.log(errorThrown);
+
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, textStatus) {
+                            // console.log('always');
+                            // console.log(jqXHR);
+                            // console.log(textStatus);
+
+                            layer.closeAll('loading');
+                        });
+
+
+
 
                 }
             });
