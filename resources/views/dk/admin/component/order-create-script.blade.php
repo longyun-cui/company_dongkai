@@ -115,6 +115,7 @@
                 cache: true
             },
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            dropdownParent: $('#modal-body-for-order-create'),
             minimumInputLength: 0,
             theme: 'classic'
         });
