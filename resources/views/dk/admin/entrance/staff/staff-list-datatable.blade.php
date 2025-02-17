@@ -167,18 +167,18 @@
                             return data;
                         }
                     },
-//                     {
-//                         "title": "姓名",
-//                         "data": "id",
-//                         "className": "",
-//                         "width": "100px",
-//                         "orderable": false,
-//                         render: function(data, type, row, meta) {
-// //                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
-//                             if(row.username) return row.username;
-//                             else return '--';
-//                         }
-//                     },
+                    {
+                        "title": "真实姓名",
+                        "data": "id",
+                        "className": "",
+                        "width": "100px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+//                            return '<a target="_blank" href="/user/'+data+'">'+row.true_name+'</a>';
+                            if(row.true_name) return row.true_name;
+                            else return '--';
+                        }
+                    },
                     {
                         "title": "用户名",
                         "data": "id",
@@ -195,7 +195,7 @@
                         "title": "大区",
                         "data": "department_district_id",
                         "className": "",
-                        "width": "80px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.department_district_er) {
@@ -208,7 +208,7 @@
                         "title": "小组",
                         "data": "department_group_id",
                         "className": "",
-                        "width":"80px",
+                        "width":"120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(row.department_group_er) {
@@ -279,7 +279,7 @@
                         "title": "创建人",
                         "data": "creator_id",
                         "className": "font-12px",
-                        "width": "100px",
+                        "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 0) return '未知';

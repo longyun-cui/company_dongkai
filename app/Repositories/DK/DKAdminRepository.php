@@ -4506,7 +4506,7 @@ class DKAdminRepository {
 
         if($post_data['api_staffNo'] > 0)
         {
-            $api_staffNo_is_exist = DK_User::where('api_staffNo',$post_data['api_staffNo'])->first();
+            $api_staffNo_is_exist = DK_User::where('api_staffNo',$post_data['api_staffNo'])->where('id','!=',$operate_id)->first();
             if($api_staffNo_is_exist) return response_error([],"坐席用户ID重复，请更换再试一次！");
         }
 

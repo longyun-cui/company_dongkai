@@ -41,6 +41,7 @@
                 <div class="pull-right">
 
                     <input type="text" class="search-filter form-filter filter-keyup" name="staff-id" placeholder="ID" />
+                    <input type="text" class="search-filter form-filter filter-keyup" name="staff-mobile" placeholder="工号" />
                     <input type="text" class="search-filter form-filter filter-keyup" name="staff-username" placeholder="名称" />
 
                     @if(in_array($me->user_type,[0,1,9,11]))
