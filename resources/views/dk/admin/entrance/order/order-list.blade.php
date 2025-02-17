@@ -40,9 +40,9 @@
                         @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
                         <select class="search-filter form-filter filter-md select2-box" name="order-created-type">
                             <option value="-1">创建方式</option>
+                            <option value="99">API</option>
                             <option value="1">人工</option>
                             <option value="9">导入</option>
-                            <option value="99">API</option>
                         </select>
                         @endif
 
@@ -1126,6 +1126,8 @@
 
 
 @section('custom-css')
+    {{--<link rel="stylesheet" href="https://cdn.bootcss.com/select2/4.0.5/css/select2.min.css">--}}
+    <link rel="stylesheet" href="{{ asset('/lib/css/select2-4.0.5.min.css') }}">
 @endsection
 @section('custom-style')
     @include(env('TEMPLATE_DK_ADMIN').'entrance.order.order-list-style')
@@ -1135,6 +1137,8 @@
 
 
 @section('custom-js')
+    {{--<script src="https://cdn.bootcss.com/select2/4.0.5/js/select2.min.js"></script>--}}
+    <script src="{{ asset('/lib/js/select2-4.0.5.min.js') }}"></script>
 @endsection
 @section('custom-script')
 
