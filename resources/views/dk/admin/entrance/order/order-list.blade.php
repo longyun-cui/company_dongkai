@@ -1023,6 +1023,14 @@
             @endforeach
         </div>
 
+        {{--患者类型--}}
+        <div id="option-list-for-client-type">
+            <option value="-1">选择患者类型</option>
+            @foreach(config('info.client_type') as $k => $v)
+                <option value="{{ $k }}">{{ $v }}</option>
+            @endforeach
+        </div>
+
     </div>
 
 

@@ -2062,6 +2062,10 @@
             {
                 var $option_html = $('#option-list-for-client-intention').html();
             }
+            else if($that.attr("data-key") == "client_type")
+            {
+                var $option_html = $('#option-list-for-client-type').html();
+            }
             $('select[name=info-select-set-column-value]').html($option_html);
             $('select[name=info-select-set-column-value]').find("option[value='"+$that.attr("data-value")+"']").attr("selected","selected");
 
