@@ -7,6 +7,14 @@
         });
 
 
+
+        $('.select2-modal-order-create').select2({
+            dropdownParent: $('#modal-body-for-order-create'),
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+
         // 【选择车辆所属】
         $("#form-edit-item").on('click', "input[name=car_owner_type]", function() {
             // checkbox

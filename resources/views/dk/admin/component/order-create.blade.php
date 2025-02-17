@@ -107,7 +107,7 @@
         <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
         <div class="col-md-8 ">
             <div class="col-sm-6 col-md-6 padding-0">
-                <select class="form-control select-select2 select2-district-city" name="location_city" id="select-city-1" data-target="#select-district-1" style="width:100%;">
+                <select class="form-control select2-modal-order-create select2-district-city" name="location_city" id="select-city-1" data-target="#select-district-1" style="width:100%;">
                     <option value="">选择城市</option>
                     @if(!empty($district_city_list) && count($district_city_list) > 0)
                         @foreach($district_city_list as $v)
@@ -117,7 +117,7 @@
                 </select>
             </div>
             <div class="col-sm-6 col-md-6 padding-0">
-                <select class="form-control select-select2 select2-district-district" name="location_district" id="select-district-1" data-target="#select-city-1" style="width:100%;">
+                <select class="form-control select2-modal-order-create select2-district-district" name="location_district" id="select-district-1" data-target="#select-city-1" style="width:100%;">
                     <option value="">选择区域</option>
                 </select>
             </div>

@@ -274,7 +274,6 @@
         });
 
         $('.select-select2').select2({
-            dropdownParent: $('#modal-body-for-order-create'),
             minimumInputLength: 0,
             theme: 'classic'
         });
