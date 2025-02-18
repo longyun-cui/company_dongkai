@@ -19644,6 +19644,14 @@ class DKAdminRepository {
 
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
 //            $cellData[$k]['channel_source'] = $v['channel_source'];
+
+
+            if($v['client_type'] == 1) $cellData[$k]['client_type'] = "种植牙";
+            else if($v['client_type'] == 2) $cellData[$k]['client_type'] = "矫正";
+            else if($v['client_type'] == 3) $cellData[$k]['client_type'] = "正畸";
+            else $cellData[$k]['client_phone'] = "未选择";
+
+
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
             if(in_array($me->user_type,[71,77]))
@@ -19724,6 +19732,7 @@ class DKAdminRepository {
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
 //            'channel_source'=>'渠道来源',
+            'client_type'=>'患者类型',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'wx_id'=>'微信号',
@@ -19820,7 +19829,8 @@ class DKAdminRepository {
                     'R'=>10,
                     'S'=>10,
                     'T'=>30,
-                    'U'=>20
+                    'U'=>20,
+                    'V'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -19898,6 +19908,14 @@ class DKAdminRepository {
 
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
 //            $cellData[$k]['channel_source'] = $v['channel_source'];
+
+
+            if($v['client_type'] == 1) $cellData[$k]['client_type'] = "种植牙";
+            else if($v['client_type'] == 2) $cellData[$k]['client_type'] = "矫正";
+            else if($v['client_type'] == 3) $cellData[$k]['client_type'] = "正畸";
+            else $cellData[$k]['client_type'] = "未选择";
+
+
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
             if(in_array($me->user_type,[71,77]))
@@ -19977,6 +19995,7 @@ class DKAdminRepository {
             'published_time'=>'提交时间',
             'project_er_name'=>'项目',
 //            'channel_source'=>'渠道来源',
+            'client_type'=>'患者类型',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'wx_id'=>'微信号',
@@ -20040,7 +20059,8 @@ class DKAdminRepository {
                     'R'=>10,
                     'S'=>10,
                     'T'=>30,
-                    'U'=>20
+                    'U'=>20,
+                    'V'=>20
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();

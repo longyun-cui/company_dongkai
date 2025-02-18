@@ -10333,7 +10333,15 @@ class DKClientRepository {
 //            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
             $cellData[$k]['delivered_time'] = date('Y-m-d H:i:s', $v['delivered_at']);
             $cellData[$k]['project_er_name'] = $v['project_er']['name'];
-            $cellData[$k]['channel_source'] = $v['channel_source'];
+//            $cellData[$k]['channel_source'] = $v['channel_source'];
+
+
+            if($v['client_type'] == 1) $cellData[$k]['client_type'] = "种植牙";
+            else if($v['client_type'] == 2) $cellData[$k]['client_type'] = "矫正";
+            else if($v['client_type'] == 3) $cellData[$k]['client_type'] = "正畸";
+            else $cellData[$k]['client_type'] = "未选择";
+
+
             $cellData[$k]['client_name'] = $v['client_name'];
             $cellData[$k]['client_phone'] = $v['client_phone'];
 
@@ -10367,7 +10375,8 @@ class DKClientRepository {
 //            'creator_name'=>'创建人',
             'delivered_time'=>'交付时间',
             'project_er_name'=>'项目',
-            'channel_source'=>'渠道来源',
+//            'channel_source'=>'渠道来源',
+            'client_type'=>'患者类型',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'wx_id'=>'微信号',
@@ -10455,7 +10464,8 @@ class DKClientRepository {
                     'I'=>10,
                     'J'=>16,
                     'K'=>40,
-                    'L'=>30
+                    'L'=>30,
+                    'M'=>30
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -10511,6 +10521,12 @@ class DKClientRepository {
 
 //            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
 
+
+            if($v['order_er']['client_type'] == 1) $cellData[$k]['client_type'] = "种植牙";
+            else if($v['order_er']['client_type'] == 2) $cellData[$k]['client_type'] = "矫正";
+            else if($v['order_er']['client_type'] == 3) $cellData[$k]['client_type'] = "正畸";
+            else $cellData[$k]['client_type'] = "未选择";
+
             $cellData[$k]['client_name'] = $v['order_er']['client_name'];
             $cellData[$k]['client_phone'] = $v['order_er']['client_phone'];
 
@@ -10546,6 +10562,7 @@ class DKClientRepository {
             'assign_status'=>'是否分配',
 //            'project_er_name'=>'项目',
 //            'channel_source'=>'渠道来源',
+            'client_type'=>'患者类型',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'wx_id'=>'微信号',
@@ -10600,7 +10617,8 @@ class DKClientRepository {
                     'I'=>10,
                     'J'=>16,
                     'K'=>40,
-                    'L'=>30
+                    'L'=>30,
+                    'M'=>30
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
@@ -10657,6 +10675,13 @@ class DKClientRepository {
             $cellData[$k]['client_phone'] = $v['client_phone'];
 
 
+
+            if($v['client_type'] == 1) $cellData[$k]['client_type'] = "种植牙";
+            else if($v['client_type'] == 2) $cellData[$k]['client_type'] = "矫正";
+            else if($v['client_type'] == 3) $cellData[$k]['client_type'] = "正畸";
+            else $cellData[$k]['client_phone'] = "未选择";
+
+
             // 微信号 & 是否+V
             $cellData[$k]['wx_id'] = $v['wx_id'];
 //            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
@@ -10687,6 +10712,7 @@ class DKClientRepository {
 //            'published_time'=>'提交时间',
             'project_er_name'=>'项目',
             'channel_source'=>'渠道来源',
+            'client_type'=>'患者类型',
             'client_name'=>'客户姓名',
             'client_phone'=>'客户电话',
             'wx_id'=>'微信号',
@@ -10741,7 +10767,8 @@ class DKClientRepository {
                     'I'=>10,
                     'J'=>16,
                     'K'=>40,
-                    'L'=>30
+                    'L'=>30,
+                    'M'=>30
                 ));
                 $sheet->setAutoSize(false);
                 $sheet->freezeFirstRow();
