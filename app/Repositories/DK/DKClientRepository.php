@@ -3617,9 +3617,7 @@ class DKClientRepository {
                 }
                 curl_close($push_ch);
             }
-            return response_success(['count'=>count($customer_list)]);
-
-
+            else return response_fail(['count'=>count($customer_list)],'工单已推送过，本次未推送数据！');
 
         }
         else return response_fail([],'token不存在！');
