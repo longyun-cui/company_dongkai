@@ -29,7 +29,7 @@
 
                         <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:80px;text-align:center;" />
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:100px;text-align:center;" />
+{{--                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:100px;text-align:center;" />--}}
                         <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:100px;text-align:center;" />
 
                         <select class="form-control form-filter select2-box select2-district" name="order-district[]" multiple="multiple" style="width:160px;">
