@@ -4,6 +4,9 @@
 
         // 【搜索】
         $("#datatable-for-delivery-list").on('click', ".filter-submit", function() {
+            var $that = $(this);
+            var $time_type = $that.attr("data-time-type");
+            $("#datatable-for-delivery-list").find('input[name=order-time-type]').val($time_type);
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【刷新】
@@ -71,7 +74,7 @@
 
 
 
-        // 【综合概览】【前一天】
+        // 【按日搜索】【前一天】
         $(".main-content").on('click', ".date-pick-pre-for-order", function() {
 
             var $assign_dom = $('input[name="order-assign"]');
@@ -95,10 +98,12 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-delivery-list").find(".filter-submit").click();
+            $("#datatable-for-delivery-list").find('input[name=order-time-type]').val('date');
+            $('#datatable_ajax').DataTable().ajax.reload();
+            // $("#datatable-for-delivery-list").find(".filter-submit").click();
 
         });
-        // 【综合概览】【后一添】
+        // 【按日搜索】【后一天】
         $(".main-content").on('click', ".date-pick-next-for-order", function() {
 
             var $assign_dom = $('input[name="order-assign"]');
@@ -122,8 +127,69 @@
                 console.log($pre_date);
             }
 
-            $("#datatable-for-delivery-list").find(".filter-submit").click();
+            $("#datatable-for-delivery-list").find('input[name=order-time-type]').val('date');
+            $('#datatable_ajax').DataTable().ajax.reload();
+            // $("#datatable-for-delivery-list").find(".filter-submit").click();
 
+        });
+
+
+
+        // 【前一月】
+        $(".main-content").on('click', ".month-pick-pre-for-order", function() {
+            var $that = $(this);
+            var $month_dom = $('input[name="order-month"]');
+
+            var $the_month = $month_dom.val();
+            var $date = new Date($the_month);
+            var $year = $date.getFullYear();
+            var $month = $date.getMonth();
+
+            var $pre_year = $year;
+            var $pre_month = $month;
+
+            if(parseInt($month) == 0)
+            {
+                $pre_year = $year - 1;
+                $pre_month = 12;
+            }
+
+            if($pre_month < 10) $pre_month = '0'+$pre_month;
+
+            var $pre_month_str = $pre_year+'-'+$pre_month;
+            $month_dom.val($pre_month_str);
+
+            $("#datatable-for-delivery-list").find('input[name=order-time-type]').val('month');
+            $('#datatable_ajax').DataTable().ajax.reload();
+
+        });
+        // 【后一月】
+        $(".main-content").on('click', ".month-pick-next-for-order", function() {
+            var $that = $(this);
+            var $month_dom = $('input[name="order-month"]');
+            var $the_month_str = $month_dom.val();
+
+            var $date = new Date($the_month_str);
+            var $year = $date.getFullYear();
+            var $month = $date.getMonth();
+
+            var $next_year = $year;
+            var $next_month = $month;
+
+            if(parseInt($month) == 11)
+            {
+                $next_year = $year + 1;
+                $next_month = 1;
+            }
+            else $next_month = $month + 2;
+
+            if($next_month < 10) $next_month = '0'+$next_month;
+
+            var $next_month_str = $next_year+'-'+$next_month;
+            $month_dom.val($next_month_str);
+
+            $("#datatable-for-delivery-list").find('input[name=order-time-type]').val('month');
+            $('#datatable_ajax').DataTable().ajax.reload();
         });
 
 

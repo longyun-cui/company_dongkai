@@ -3017,10 +3017,45 @@ class DKClientRepository {
         if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
 
 
-        if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
-        if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '>=', $post_data['assign_start']);
-        if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(assign_time)"), '<=', $post_data['assign_ended']);
 
+
+
+        if(!empty($post_data['time_type']))
+        {
+            if($post_data['time_type'] == "month")
+            {
+                // 指定月份
+                if(!empty($post_data['month']))
+                {
+                    $month_arr = explode('-', $post_data['month']);
+                    $month_year = $month_arr[0];
+                    $month_month = $month_arr[1];
+
+                    $query->whereYear(DB::Raw("from_unixtime(created_at)"), $month_year)->whereMonth(DB::Raw("from_unixtime(created_at)"), $month_month);
+
+//                    $month_start = $post_data['month'].'-01';
+//                    if(in_array($month_month,['01','03','05','07','08','10','12'])) $month_ended = $post_data['month'].'-31';
+//                    else if($month_month == "02") $month_ended = $post_data['month'].'-28';
+//                    else $month_ended = $post_data['month'].'-30';
+//
+//                    $query->whereDate(DB::Raw("from_unixtime(created_at)"), '>=', $month_start)
+//                        ->whereDate(DB::Raw("from_unixtime(created_at)"), '<=', $month_ended);
+                }
+            }
+            else if($post_data['time_type'] == "date")
+            {
+                // 指定日期
+                if(!empty($post_data['assign'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), $post_data['assign']);
+            }
+            else if($post_data['time_type'] == "period")
+            {
+
+                if(!empty($post_data['assign_start'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), '>=', $post_data['assign_start']);
+                if(!empty($post_data['assign_ended'])) $query->whereDate(DB::Raw("from_unixtime(created_at)"), '<=', $post_data['assign_ended']);
+            }
+            else
+            {}
+        }
 
 
 
