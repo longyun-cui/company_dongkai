@@ -19218,6 +19218,11 @@ class DKAdminRepository {
 
 
 
+
+
+
+
+
     // 【流量统计】返回-列表-视图
     public function view_statistic_list_for_all($post_data)
     {
@@ -19384,6 +19389,395 @@ class DKAdminRepository {
             else $list[$k]->is_me = 0;
         }
 //        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
+
+
+
+    // 【统计】员工-客服
+    public function view_staff_statistic_company($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $staff = DK_User::select(['id','user_status','user_type','username','true_name','department_district_id','department_group_id'])
+            ->with([
+                'department_district_er' => function($query) { $query->select(['id','name']); },
+                'department_group_er' => function($query) { $query->select(['id','name']); }
+            ])
+            ->find($post_data['staff_id']);
+        $view_data['staff'] = $staff;
+
+        $view_data['title_text'] = $staff->username;
+        $view_data['menu_active_of_statistic_department'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.statistic-staff-customer-service';
+        return view($view_blade)->with($view_data);
+    }
+    public function get_statistic_data_for_staff_company($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+        $staff_id = $post_data['staff_id'];
+
+
+        $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+
+
+        $query_this_month = DK_Order::select('creator_id','published_at')
+            ->where('creator_id',$staff_id)
+//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
+            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->groupBy(DB::raw("FROM_UNIXTIME(published_at,'%Y-%m-%d')"))
+            ->addSelect(DB::raw("
+                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date_day,
+                    FROM_UNIXTIME(published_at,'%e') as day,
+                    count(*) as sum
+                "))
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
+                    count(IF(delivered_result = '已交付', TRUE, NULL)) as order_count_for_delivered_completed,
+                    count(IF(delivered_result = '内部交付', TRUE, NULL)) as order_count_for_delivered_inside,
+                    count(IF(delivered_result = '隔日交付', TRUE, NULL)) as order_count_for_delivered_tomorrow,
+                    count(IF(delivered_result = '重复', TRUE, NULL)) as order_count_for_delivered_repeated,
+                    count(IF(delivered_result = '驳回', TRUE, NULL)) as order_count_for_delivered_rejected
+                    
+                "));
+
+        $total = $query_this_month->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        $list = $query_this_month->get();
+//        dd($statistics_order_this_month_data);
+
+
+
+
+        $total_data = [];
+        $total_data['creator_id'] = $staff_id;
+        $total_data['published_at'] = 0;
+        $total_data['date_day'] = '统计';
+        $total_data['staff_count'] = 0;
+        $total_data['order_count_for_all'] = 0;
+        $total_data['order_count_for_inspected'] = 0;
+        $total_data['order_count_for_accepted'] = 0;
+        $total_data['order_count_for_refused'] = 0;
+        $total_data['order_count_for_repeated'] = 0;
+        $total_data['order_count_for_accepted_inside'] = 0;
+
+        $total_data['order_count_for_delivered'] = 0;
+        $total_data['order_count_for_delivered_completed'] = 0;
+        $total_data['order_count_for_delivered_inside'] = 0;
+        $total_data['order_count_for_delivered_tomorrow'] = 0;
+        $total_data['order_count_for_delivered_repeated'] = 0;
+        $total_data['order_count_for_delivered_rejected'] = 0;
+
+        $total_data['order_count_for_delivered_per'] = 0;
+        $total_data['order_count_for_delivered_effective'] = 0;
+        $total_data['order_count_for_delivered_effective_per'] = 0;
+        $total_data['order_count_for_delivered_actual'] = 0;
+        $total_data['order_count_for_delivered_actual_per'] = 0;
+
+
+
+        foreach ($list as $k => $v)
+        {
+
+            // 审核
+            // 通过率
+            if($v->order_count_for_all > 0)
+            {
+                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            }
+            else $list[$k]->order_rate_for_accepted = 0;
+
+            // 人均提交量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_all_per = round(($v->order_count_for_all / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_all_per = 0;
+
+            // 人均通过量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_accepted_per = round(($v->order_count_for_accepted / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_accepted_per = 0;
+
+
+            // 交付
+            // 有效交付量
+            $list[$k]->order_count_for_delivered_effective = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow + $v->order_count_for_delivered_inside;
+            // 实际产出
+            $list[$k]->order_count_for_delivered_actual = $v->order_count_for_delivered_completed + $v->order_count_for_delivered_tomorrow;
+
+
+
+            // 有效交付率
+            if($v->order_count_for_delivered > 0)
+            {
+                $list[$k]->order_rate_for_delivered_effective = round(($v->order_count_for_delivered_effective * 100 / $v->order_count_for_delivered),2);
+            }
+            else $list[$k]->order_rate_for_delivered_effective = 0;
+
+
+
+            $total_data['order_count_for_all'] += $v->order_count_for_all;
+            $total_data['order_count_for_inspected'] += $v->order_count_for_inspected;
+            $total_data['order_count_for_accepted'] += $v->order_count_for_accepted;
+            $total_data['order_count_for_refused'] += $v->order_count_for_refused;
+            $total_data['order_count_for_repeated'] += $v->order_count_for_repeated;
+            $total_data['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
+
+            $total_data['order_count_for_delivered'] += $v->order_count_for_delivered;
+            $total_data['order_count_for_delivered_completed'] += $v->order_count_for_delivered_completed;
+            $total_data['order_count_for_delivered_inside'] += $v->order_count_for_delivered_inside;
+            $total_data['order_count_for_delivered_tomorrow'] += $v->order_count_for_delivered_tomorrow;
+            $total_data['order_count_for_delivered_repeated'] += $v->order_count_for_delivered_repeated;
+            $total_data['order_count_for_delivered_rejected'] += $v->order_count_for_delivered_rejected;
+
+            $total_data['order_count_for_delivered_effective'] += $v->order_count_for_delivered_effective;
+            $total_data['order_count_for_delivered_actual'] += $v->order_count_for_delivered_actual;
+
+        }
+
+        // 通过率
+        if($total_data['order_count_for_all'] > 0)
+        {
+            $total_data['order_rate_for_accepted'] = round(($total_data['order_count_for_accepted'] * 100 / $total_data['order_count_for_all']),2);
+        }
+        else $total_data['order_rate_for_accepted'] = 0;
+
+
+
+        // 有效交付率
+        if($total_data['order_count_for_delivered'] > 0)
+        {
+            $total_data['order_rate_for_delivered_effective'] = round(($total_data['order_count_for_delivered_effective'] * 100 / $total_data['order_count_for_delivered']),2);
+        }
+        else $total_data['order_rate_for_delivered_effective'] = 0;
+
+        $list[] = $total_data;
+
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+    // 【统计】交付看板
+    public function view_statistic_company($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return view($this->view_blade_403);
+
+        $company_list = DK_Company::select('id','name')->get();
+        $view_data['company_list'] = $company_list;
+
+        $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
+        $view_data['department_district_list'] = $department_district_list;
+
+        $view_data['menu_active_of_statistic_company'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.marketing.company.statistic-company';
+        return view($view_blade)->with($view_data);
+    }
+    public function get_statistic_data_for_company($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        // 公司统计
+        $query_delivery_for_company = DK_Pivot_Client_Delivery::select('company_id')
+            ->addSelect(DB::raw("
+                    count(*) as delivery_count_for_all
+                "))
+            ->groupBy('company_id');
+
+
+        // 渠道统计
+        $query_delivery_for_channel = DK_Pivot_Client_Delivery::select('channel_id')
+            ->addSelect(DB::raw("
+                    count(*) as delivery_count_for_all
+                "))
+            ->groupBy('channel_id');
+
+        // 商务统计
+        $query_delivery_for_business = DK_Pivot_Client_Delivery::select('business_id')
+            ->addSelect(DB::raw("
+                    count(*) as delivery_count_for_all
+                "))
+            ->groupBy('business_id');
+
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query_delivery_for_company->whereDate('created_date',$the_day);
+            $query_delivery_for_channel->whereDate('created_date',$the_day);
+            $query_delivery_for_business->whereDate('created_date',$the_day);
+
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query_delivery_for_company->whereBetween('created_date',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_delivery_for_channel->whereBetween('created_date',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_delivery_for_business->whereBetween('created_date',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+        }
+        else
+        {
+        }
+
+
+        $query_delivery_for_company = $query_delivery_for_company->get()->keyBy('company_id')->toArray();
+        $query_delivery_for_channel = $query_delivery_for_channel->get()->keyBy('channel_id')->toArray();
+        $query_delivery_for_business = $query_delivery_for_business->get()->keyBy('creator_id')->toArray();
+
+
+
+        $query = DK_Company::select("*")
+            ->with([
+//                'superior' => function($query) { $query->select(['id','username','true_name']); },
+//                'department_district_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); },
+//                'department_group_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); }
+            ])
+            ->where('item_status',1);
+
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+
+            if(isset($query_delivery_for_business[$v->id]))
+            {
+                $list[$k]->delivery_count_for_all = $query_delivery_for_business[$v->id]['delivery_count_for_all'];
+            }
+            else
+            {
+                $list[$k]->delivery_count_for_all = 0;
+            }
+
+
+            if(isset($query_delivery_for_channel[$v->id]))
+            {
+                $list[$k]->channel_count_for_all = $query_delivery_for_channel[$v->id]['delivery_count_for_all'];
+            }
+            else
+            {
+                $list[$k]->channel_count_for_all = 0;
+            }
+
+
+            if(isset($query_delivery_for_company[$v->id]))
+            {
+                $list[$k]->company_count_for_all = $query_delivery_for_company[$v->id]['delivery_count_for_all'];
+            }
+            else
+            {
+                $list[$k]->company_count_for_all = 0;
+            }
+
+
+
+            $v->company_merge = 0;
+            $v->channel_merge = 0;
+        }
+//        dd($list->toArray());
+
+        $grouped_by_company = $list->groupBy('company_id');
+        foreach ($grouped_by_company as $k => $v)
+        {
+            $v[0]->company_merge = count($v);
+
+            $grouped_by_channel = $list->groupBy('channel_id');
+            foreach ($grouped_by_channel as $key => $val)
+            {
+                $val[0]->channel_merge = count($val);
+            }
+        }
+//        dd($list->toArray());
+
         return datatable_response($list, $draw, $total);
     }
 

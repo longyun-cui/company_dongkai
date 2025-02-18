@@ -25,10 +25,13 @@
     }
 
     .datatable-search-row { margin-top:8px; margin-bottom:8px; font-size:12px; }
-    .datatable-search-row .btn-filter { height:32px; height:32px; font-size:12px; margin-right:4px; margin-bottom:4px; float:left; }
+    .datatable-search-row .btn-filter { padding: 4px; }
+    .datatable-search-row .btn-filter { height:32px; height:32px; font-size:12px; padding:0 12px; margin:2px; float:left; }
+    .datatable-search-row .time-picker-move { width:30px; padding:0; text-align:center; }
+    .datatable-search-row .time-picker-move.picker-move-pre { margin-right:-3px; }
+    .datatable-search-row .time-picker-move.picker-move-next { margin-left:-4px; }
 
-    .datatable-search-row .search-filter { height:32px; height:32px; margin-right:4px; margin-bottom:4px; border:1px solid #ddd; font-size:12px; text-align:center; float:left; }
-    .datatable-search-row .search-filter { width:100px; }
+    .datatable-search-row .search-filter { width:100px; height:32px; margin:2px; border:1px solid #ddd; font-size:12px; text-align:center; float:left; }
     .datatable-search-row .search-filter.filter-xs { width:60px; }
     .datatable-search-row .search-filter.filter-sm { width:80px; }
     .datatable-search-row .search-filter.filter-md { width:120px; }
@@ -37,7 +40,8 @@
     .datatable-search-row .search-filter.filter-xxl { width:200px; }
 
 
-    .datatable-search-row .select2-container { height:32px; margin-bottom:4px; margin-right:4px; }
+
+    .datatable-search-row .select2-container { height:32px; margin:2px; }
     .datatable-search-row .select2-container .select2-selection { height:32px; line-height:28px; }
     .datatable-search-row .select2-container .select2-selection__rendered,
     .datatable-search-row .select2-container .select2-selection__arrow { height:30px !important; line-height:30px !important; font-size:12px;  }

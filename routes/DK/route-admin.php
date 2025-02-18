@@ -549,6 +549,8 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
 
+    Route::match(['get','post'], '/statistic/statistic-company', $controller.'@view_statistic_company');
+    Route::post('/statistic/statistic-get-data-for-company', $controller.'@get_statistic_data_for_company');
 
 
 

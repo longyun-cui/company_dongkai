@@ -16,7 +16,7 @@
                 "order": [],
                 "orderCellsTop": true,
                 "scrollX": true,
-                "scrollY": ($(document).height() - 448)+"px",
+                // "scrollY": ($(document).height() - 248)+"px",
                 "scrollCollapse": true,
                 "ajax": {
                     'url': "{{ url('/item/order-list') }}",

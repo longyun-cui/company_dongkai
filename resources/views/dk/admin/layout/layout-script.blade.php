@@ -76,7 +76,7 @@
 
                 if ($.fn.DataTable.isDataTable('#datatable-for-'+$tab))
                 {
-                    console.log('DataTable 已初始化1');
+                    console.log('DataTable 已初始化');
                 }
                 else
                 {
