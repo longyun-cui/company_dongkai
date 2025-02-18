@@ -1783,7 +1783,7 @@
 
                                     var $username = $('select[name="bulk-operate-staff-id"]').find('option:selected').html();
 
-                                    $row.find('td[data-key=client_staff_id]').html('<a href="javascript:void(0);">'+$username+'</a>');
+                                    $row.find('td[data-key=is_api_pushed]').html('<small class="btn-xs btn-success">已推送</small>');
 
                                 });
                             }
