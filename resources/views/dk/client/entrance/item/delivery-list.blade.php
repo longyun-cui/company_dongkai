@@ -56,6 +56,13 @@
                             <option value="1" @if($assign_status == 1) selected="selected" @endif>已分配</option>
                         </select>
 
+                        <select class="form-control form-filter" name="order-client-type" style="width:100px;">
+                            <option value="-1">患者类型</option>
+                            @foreach(config('info.client_type') as $k => $v)
+                                <option value="{{ $k }}">{{ $v }}</option>
+                            @endforeach
+                        </select>
+
 {{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
 {{--                            <option value="-1">是否+V</option>--}}
 {{--                            <option value="1" @if($is_wx == "1") selected="selected" @endif>是</option>--}}
@@ -455,6 +462,7 @@
                         d.project = $('select[name="order-project"]').val();
                         d.status = $('select[name="order-status"]').val();
                         d.order_type = $('select[name="order-type"]').val();
+                        d.client_type = $('select[name="order-client-type"]').val();
                         d.client_name = $('input[name="order-client-name"]').val();
                         d.client_phone = $('input[name="order-client-phone"]').val();
                         d.is_wx = $('select[name="order-is-wx"]').val();

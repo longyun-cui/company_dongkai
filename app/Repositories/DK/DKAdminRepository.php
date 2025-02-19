@@ -12523,6 +12523,16 @@ class DKAdminRepository {
 
 
 
+        // 患者类型
+        if(isset($post_data['client_type']))
+        {
+            if(!in_array($post_data['client_type'],[-1,'-1']))
+            {
+                $query->where('client_type', $post_data['client_type']);
+            }
+        }
+
+
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;

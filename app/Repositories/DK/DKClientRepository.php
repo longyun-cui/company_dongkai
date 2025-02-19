@@ -3017,6 +3017,14 @@ class DKClientRepository {
         if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
 
 
+        // 患者类型
+        if(isset($post_data['client_type']))
+        {
+            if(!in_array($post_data['client_type'],[-1,'-1']))
+            {
+                $query->where('client_type', $post_data['client_type']);
+            }
+        }
 
 
 
