@@ -1037,18 +1037,18 @@
                         }
                     },
                     {
-                        "title": "交付客户",
-                        "data": "client_id",
+                        "title": "原始项目",
+                        "data": "original_project_id",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.client_er == null)
+                            if(row.original_project_er == null)
                             {
                                 return '未指定';
                             }
                             else {
-                                return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
+                                return '<a href="javascript:void(0);">'+row.original_project_er.name+'</a>';
                             }
                         }
                     },
@@ -1069,21 +1069,71 @@
                         }
                     },
                     {
-                        "title": "原始项目",
-                        "data": "original_project_id",
+                        "title": "交付客户",
+                        "data": "client_id",
                         "className": "",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            if(row.original_project_er == null)
+                            if(row.client_er == null)
                             {
                                 return '未指定';
                             }
                             else {
-                                return '<a href="javascript:void(0);">'+row.original_project_er.name+'</a>';
+                                return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
                             }
                         }
                     },
+                    @if(in_array($me->user_type,[0,1,9,11]))
+                    {
+                        "title": "所属公司",
+                        "data": "company_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.company_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.company_er.name+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "title": "所属渠道",
+                        "data": "channel_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.channel_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.channel_er.name+'</a>';
+                            }
+                        }
+                    },
+                    {
+                        "title": "所属商务",
+                        "data": "business_id",
+                        "className": "",
+                        "width": "120px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.business_er == null)
+                            {
+                                return '--';
+                            }
+                            else {
+                                return '<a href="javascript:void(0);">'+row.business_er.name+'</a>';
+                            }
+                        }
+                    },
+                    @endif
                     {
                         "title": "患者类型",
                         "data": "client_type",

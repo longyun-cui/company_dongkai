@@ -15,6 +15,9 @@ class DK_Pivot_Client_Delivery extends Model
 
         'user_id',
         'project_id',
+        'company_id',
+        'channel_id',
+        'business_id',
         'client_id',
         'client_staff_id',
         'original_project_id',
@@ -34,6 +37,8 @@ class DK_Pivot_Client_Delivery extends Model
         'is_api_pushed',
         'is_api_pusher_id',
         'is_api_pushed_at',
+
+        'delivered_date',
 
         'creator_id',
         'updater_id'
@@ -101,6 +106,23 @@ class DK_Pivot_Client_Delivery extends Model
     function order_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Order','order_id','id');
+    }
+
+
+    // 公司
+    function company_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Company','company_id','id');
+    }
+    // 渠道
+    function channel_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Company','channel_id','id');
+    }
+    // 商务
+    function business_er()
+    {
+        return $this->belongsTo('App\Models\DK\DK_Company','business_id','id');
     }
 
 

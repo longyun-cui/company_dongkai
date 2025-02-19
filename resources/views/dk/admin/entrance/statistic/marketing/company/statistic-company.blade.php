@@ -24,25 +24,8 @@
 
                 <div class="pull-left">
 
-
-                    {{--创建方式--}}
-                    @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
-                        <select class="search-filter form-filter filter-md select2-box" name="order-created-type">
-                            <option value="-1">创建方式</option>
-                            <option value="99">API</option>
-                            <option value="1">人工</option>
-                            <option value="9">导入</option>
-                        </select>
-                    @endif
-
-
-
-
                     <input type="hidden" name="statistic-company-time-type" class="time-type" value="" readonly>
 
-                    <select class="search-filter form-filter select2-container select2-project" name="statistic-company-project">
-                        <option value="-1">选择项目</option>
-                    </select>
 
 
                     <button type="button" class="btn btn-success btn-filter filter-submit">

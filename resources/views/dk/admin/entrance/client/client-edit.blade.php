@@ -98,7 +98,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 选择商务</label>
                     <div class="col-md-8 ">
-                        <select class="form-control" name="channel_id" id="select2-company-business" style="width:100%;">
+                        <select class="form-control" name="business_id" id="select2-company-business" style="width:100%;">
                             @if($operate == 'edit' && $data->business_id)
                                 <option data-id="{{ $data->business_id or 0 }}" value="{{ $data->business_id or 0 }}">{{ $data->business_er->name }}</option>
                             @else

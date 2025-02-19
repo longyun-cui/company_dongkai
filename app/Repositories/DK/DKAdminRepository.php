@@ -706,6 +706,36 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,61])) return response_error([],"你没有操作权限！");
 
+        $channel_id = $post_data["channel_id"];
+        if($channel_id > 0)
+        {
+            $channel = DK_Company::find($channel_id);
+            if($channel)
+            {
+                $client_data["company_id"] = $channel->superior_company_id;
+                $client_data["channel_id"] = $channel_id;
+
+                $business_id = $post_data["business_id"];
+                if($business_id > 0)
+                {
+                    $business = DK_Company::find($business_id);
+                    if($business)
+                    {
+                        if($business->superior_company_id == $channel_id)
+                        {
+                            $client_data["business_id"] = $business_id;
+                        }
+                        else return response_error([],"选择的【商务】不属于选择的【渠道】，请重新选择！");
+                    }
+                    else return response_error([],"选择的【商务】不存在，刷新页面重试！");
+                }
+                else
+                {
+                    $client_data["business_id"] = 0;
+                }
+            }
+            else return response_error([],"选择的【渠道】不存在，刷新页面重试！");
+        }
 
         $operate = $post_data["operate"];
         $operate_id = $post_data["operate_id"];
@@ -11653,9 +11683,13 @@ class DKAdminRepository {
         if(in_array($project_id,['-1','0',-1,0]) && in_array($client_id,['-1','0',-1,0]))
         {
             $project = DK_Project::find($item->project_id);
-            if($project->client_id != 0) $delivered_client_id = $project->client_id;
+            if($project->client_id != 0)
+            {
+                $delivered_client_id = $project->client_id;
+                $client = DK_Client::find($delivered_client_id);
+                if(!$client) return response_error([],"客户不存在！");
+            }
             else $delivered_client_id = 0;
-//            dd($delivered_client_id);
 
             $delivered_project_id = $item->project_id;
         }
@@ -11712,6 +11746,8 @@ class DKAdminRepository {
 
         $is_distributive_condition = $post_data["is_distributive_condition"];
 
+        $date = date("Y-m-d");
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -11721,15 +11757,28 @@ class DKAdminRepository {
                 $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$item->id])->first();
                 if($pivot_delivery)
                 {
+                    if($client)
+                    {
+                        $pivot_delivery->company_id = $client->company_id;
+                        $pivot_delivery->channel_id = $client->channel_id;
+                        $pivot_delivery->business_id = $client->business_id;
+                    }
                     $pivot_delivery->project_id = $delivered_project_id;
                     $pivot_delivery->client_id = $delivered_client_id;
                     $pivot_delivery->delivered_result = $delivered_result;
+                    $pivot_delivery->delivered_date = $date;
                     $bool_0 = $pivot_delivery->save();
                     if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
                 }
                 else
                 {
                     $pivot_delivery = new DK_Pivot_Client_Delivery;
+                    if($client)
+                    {
+                        $pivot_delivery_data["company_id"] = $client->company_id;
+                        $pivot_delivery_data["channel_id"] = $client->channel_id;
+                        $pivot_delivery_data["business_id"] = $client->business_id;
+                    }
                     $pivot_delivery_data["pivot_type"] = 95;
                     $pivot_delivery_data["project_id"] = $delivered_project_id;
                     $pivot_delivery_data["client_id"] = $delivered_client_id;
@@ -11738,6 +11787,7 @@ class DKAdminRepository {
                     $pivot_delivery_data["client_type"] = $item->client_type;
                     $pivot_delivery_data["client_phone"] = $item->client_phone;
                     $pivot_delivery_data["delivered_result"] = $delivered_result;
+                    $pivot_delivery_data["delivered_date"] = $date;
                     $pivot_delivery_data["creator_id"] = $me->id;
 
                     $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
@@ -11857,6 +11907,8 @@ class DKAdminRepository {
 
         $delivered_description = $post_data["delivered_description"];
 
+        $date = date("Y-m-d");
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -11885,7 +11937,12 @@ class DKAdminRepository {
                 if(in_array($project_id,['-1','0',-1,0]) && in_array($client_id,['-1','0',-1,0]))
                 {
                     $project = DK_Project::find($item->project_id);
-                    if($project->client_id != 0) $delivered_client_id = $project->client_id;
+                    if($project->client_id != 0)
+                    {
+                        $delivered_client_id = $project->client_id;
+                        $client = DK_Client::find($delivered_client_id);
+                        if(!$client) return response_error([],"客户不存在！");
+                    }
                     else $delivered_client_id = 0;
 
                     $delivered_project_id = $item->project_id;
@@ -11902,14 +11959,27 @@ class DKAdminRepository {
                     $pivot_delivery = DK_Pivot_Client_Delivery::where(['pivot_type'=>95,'order_id'=>$id])->first();
                     if($pivot_delivery)
                     {
+                        if($client)
+                        {
+                            $pivot_delivery->company_id = $client->company_id;
+                            $pivot_delivery->channel_id = $client->channel_id;
+                            $pivot_delivery->business_id = $client->business_id;
+                        }
                         $pivot_delivery->project_id = $delivered_project_id;
                         $pivot_delivery->client_id = $delivered_client_id;
                         $pivot_delivery->delivered_result = $delivered_result;
+                        $pivot_delivery->delivered_date = $date;
                         $bool_0 = $pivot_delivery->save();
                         if(!$bool_0) throw new Exception("pivot_client_delivery--update--fail");
                     }
                     else
                     {
+                        if($client)
+                        {
+                            $pivot_delivery_data["company_id"] = $client->company_id;
+                            $pivot_delivery_data["channel_id"] = $client->channel_id;
+                            $pivot_delivery_data["business_id"] = $client->business_id;
+                        }
                         $pivot_delivery = new DK_Pivot_Client_Delivery;
                         $pivot_delivery_data["pivot_type"] = 95;
                         $pivot_delivery_data["project_id"] = $delivered_project_id;
@@ -11919,6 +11989,7 @@ class DKAdminRepository {
                         $pivot_delivery_data["client_type"] = $item->client_type;
                         $pivot_delivery_data["client_phone"] = $item->client_phone;
                         $pivot_delivery_data["delivered_result"] = $delivered_result;
+                        $pivot_delivery_data["delivered_date"] = $date;
                         $pivot_delivery_data["creator_id"] = $me->id;
 
                         $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
@@ -12129,6 +12200,8 @@ class DKAdminRepository {
 //        $delivered_description = $post_data["delivered_description"];
 //        $recording_address = $post_data["recording_address"];
 
+        $date = date("Y-m-d");
+
         // 启动数据库事务
         DB::beginTransaction();
         try
@@ -12139,12 +12212,16 @@ class DKAdminRepository {
             $pivot_delivery_data["pivot_type"] = 96;
             $pivot_delivery_data["project_id"] = $project_id;
             $pivot_delivery_data["client_id"] = $client_id;
+            $pivot_delivery_data["company_id"] = $client->company_id;
+            $pivot_delivery_data["channel_id"] = $client->channel_id;
+            $pivot_delivery_data["business_id"] = $client->business_id;
             $pivot_delivery_data["original_project_id"] = $item->project_id;
             $pivot_delivery_data["order_id"] = $item->id;
             $pivot_delivery_data["client_type"] = $item->client_type;
             $pivot_delivery_data["client_phone"] = $item->client_phone;
             $pivot_delivery_data["delivered_result"] = $delivered_result;
             $pivot_delivery_data["creator_id"] = $me->id;
+            $pivot_delivery_data["delivered_date"] = $date;
 
             $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
             if(!$bool_0) throw new Exception("insert--pivot_client_delivery--fail");
@@ -12445,6 +12522,9 @@ class DKAdminRepository {
                 'inspector_er',
                 'original_project_er',
                 'client_er',
+                'company_er',
+                'channel_er',
+                'business_er',
                 'project_er',
                 'order_er',
                 'creator'
@@ -19644,28 +19724,14 @@ class DKAdminRepository {
         $me = $this->me;
 
 
-        // 公司统计
-        $query_delivery_for_company = DK_Pivot_Client_Delivery::select('company_id')
+        // 交付统计
+        $query_delivery = DK_Pivot_Client_Delivery::select('company_id','channel_id','business_id')
             ->addSelect(DB::raw("
                     count(*) as delivery_count_for_all
                 "))
-            ->groupBy('company_id');
-
-
-        // 渠道统计
-        $query_delivery_for_channel = DK_Pivot_Client_Delivery::select('channel_id')
-            ->addSelect(DB::raw("
-                    count(*) as delivery_count_for_all
-                "))
-            ->groupBy('channel_id');
-
-        // 商务统计
-        $query_delivery_for_business = DK_Pivot_Client_Delivery::select('business_id')
-            ->addSelect(DB::raw("
-                    count(*) as delivery_count_for_all
-                "))
+            ->groupBy('company_id')
+            ->groupBy('channel_id')
             ->groupBy('business_id');
-
 
 
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
@@ -19673,9 +19739,7 @@ class DKAdminRepository {
         {
             $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
-            $query_delivery_for_company->whereDate('created_date',$the_day);
-            $query_delivery_for_channel->whereDate('created_date',$the_day);
-            $query_delivery_for_business->whereDate('created_date',$the_day);
+            $query_delivery->whereDate('delivered_date',$the_day);
 
         }
         else if($time_type == 'month')
@@ -19690,28 +19754,31 @@ class DKAdminRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-            $query_delivery_for_company->whereBetween('created_date',[$the_month_start_timestamp,$the_month_ended_timestamp]);
-            $query_delivery_for_channel->whereBetween('created_date',[$the_month_start_timestamp,$the_month_ended_timestamp]);
-            $query_delivery_for_business->whereBetween('created_date',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_delivery->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_delivery->whereDate('delivered_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_delivery->whereDate('delivered_date', '<=', $post_data['date_ended']);
         }
         else
         {
         }
 
 
-        $query_delivery_for_company = $query_delivery_for_company->get()->keyBy('company_id')->toArray();
-        $query_delivery_for_channel = $query_delivery_for_channel->get()->keyBy('channel_id')->toArray();
-        $query_delivery_for_business = $query_delivery_for_business->get()->keyBy('creator_id')->toArray();
+        $delivery_list = $query_delivery->get();
 
 
 
-        $query = DK_Company::select("*")
+
+        $query = DK_Company::select('id','name','item_status','company_category','company_type','superior_company_id')
             ->with([
 //                'superior' => function($query) { $query->select(['id','username','true_name']); },
 //                'department_district_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); },
 //                'department_group_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); }
             ])
-            ->where('item_status',1);
+            ->where('item_status',1)
+            ->whereIn('company_category',[1,11,21]);
 
 
 
@@ -19731,64 +19798,150 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "asc");
+        else $query->orderBy("superior_company_id", "asc")->orderBy("id", "asc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
-
-        foreach ($list as $k => $v)
-        {
-
-            if(isset($query_delivery_for_business[$v->id]))
-            {
-                $list[$k]->delivery_count_for_all = $query_delivery_for_business[$v->id]['delivery_count_for_all'];
-            }
-            else
-            {
-                $list[$k]->delivery_count_for_all = 0;
-            }
-
-
-            if(isset($query_delivery_for_channel[$v->id]))
-            {
-                $list[$k]->channel_count_for_all = $query_delivery_for_channel[$v->id]['delivery_count_for_all'];
-            }
-            else
-            {
-                $list[$k]->channel_count_for_all = 0;
-            }
-
-
-            if(isset($query_delivery_for_company[$v->id]))
-            {
-                $list[$k]->company_count_for_all = $query_delivery_for_company[$v->id]['delivery_count_for_all'];
-            }
-            else
-            {
-                $list[$k]->company_count_for_all = 0;
-            }
-
-
-
-            $v->company_merge = 0;
-            $v->channel_merge = 0;
-        }
 //        dd($list->toArray());
 
-        $grouped_by_company = $list->groupBy('company_id');
-        foreach ($grouped_by_company as $k => $v)
-        {
-            $v[0]->company_merge = count($v);
-
-            $grouped_by_channel = $list->groupBy('channel_id');
-            foreach ($grouped_by_channel as $key => $val)
-            {
-                $val[0]->channel_merge = count($val);
-            }
-        }
+        $list_all = [];
+        $grouped_by_category = $list->groupBy('company_category');
 //        dd($list->toArray());
+//        dd($grouped_by_category[11]->toArray());
+        $grouped_by_superior = $list->groupBy('superior_company_id');
+//        dd($grouped_by_superior->toArray());
 
-        return datatable_response($list, $draw, $total);
+
+        // 公司
+        foreach($grouped_by_category[1] as $k => $v)
+        {
+            $collect_company = collect([]);
+            $list_company = [];
+            $index = 0;
+
+            // 渠道是否存在
+            if(isset($grouped_by_superior[$v->id]))
+            {
+                // 渠道
+                foreach($grouped_by_superior[$v->id] as $ke => $val)
+                {
+                    $index++;
+
+                    $un['index'] = $index;
+                    $un['id'] = 0;
+                    $un['name'] = '未分配商务';
+                    $un['company_category'] = 11;
+                    $un['company_id'] = $v->id;
+                    $un['company_name'] = $v->name;
+                    $un['channel_id'] = $val->id;
+                    $un['channel_name'] = $val->name;
+                    $un['business_id'] = 0;
+                    $un['business_name'] = '--';
+                    $un['company_merge'] = 0;
+                    if(isset($grouped_by_superior[$val->id])) $un['channel_merge'] = count($grouped_by_superior[$val->id]) + 1;
+                    else $un['channel_merge'] = 1;
+                    $list_company[] = $un;
+
+                    // 商务是否存在
+                    if(isset($grouped_by_superior[$val->id]))
+                    {
+                        $un['channel_merge'] = count($grouped_by_superior[$val->id]);
+                        // 商务
+                        foreach($grouped_by_superior[$val->id] as $key => $value)
+                        {
+                            $index++;
+
+                            $value->index = $index;
+                            $value->company_id = $v->id;
+                            $value->company_name = $v->name;
+                            $value->channel_id = $val->id;
+                            $value->channel_name = $val->name;
+                            $value->business_id = $value->id;
+                            $value->business_name = $value->name;
+                            $value->company_merge = 0;
+                            $value->channel_merge = 0;
+                            $list_company[] = $value->toArray();
+                        }
+                    }
+                }
+
+                $list_company[0]['company_merge'] = $index;
+            }
+            else
+            {
+                $un['id'] = 0;
+                $un['name'] = '';
+                $un['company_category'] = 1;
+                $un['company_id'] = $v->id;
+                $un['company_name'] = $v->name;
+                $un['channel_id'] = 0;
+                $un['channel_name'] = '--';
+                $un['business_id'] = 0;
+                $un['business_name'] = '--';
+                $un['company_merge'] = 1;
+                $un['channel_merge'] = 1;
+                $list_company[] = $un;
+            }
+
+
+            $list_all = array_merge($list_all,$list_company);
+
+        }
+//        dd($delivery_list->toArray());
+
+
+        $delivery_list = collect($delivery_list->toArray());
+        foreach($list_all as $k => $v)
+        {
+            $list_all[$k]['delivery_count'] = 0;
+            $list_all[$k]['delivery_count_for_channel'] = 0;
+            $list_all[$k]['delivery_count_for_company'] = 0;
+
+            // 统计【商务】交付量
+            $delivery = $delivery_list->where('company_id',$v['company_id'])
+                ->where('channel_id',$v['channel_id'])
+                ->where('business_id',$v['business_id']);
+            if($delivery->isNotEmpty() && $delivery->count() > 0)
+            {
+                $list_all[$k]['delivery_count'] = $delivery->first()['delivery_count_for_all'];
+            }
+
+            $delivery = $delivery_list->where('company_id',$v['company_id']);
+//            dd($delivery);
+
+            // 统计【公司】交付量
+            if($v['company_category'] == 11 && $v['company_merge'] > 0)
+            {
+                $delivery = $delivery_list->where('company_id',$v['company_id']);
+//                dd($delivery);
+                if($delivery->isNotEmpty() && $delivery->count() > 0)
+                {
+                    foreach($delivery as $delivery_ed)
+                    {
+                        $list_all[$k]['delivery_count_for_company'] += $delivery_ed['delivery_count_for_all'];
+                    }
+                }
+            }
+
+
+            // 统计【渠道】交付量
+            if($v['company_category'] == 11 && $v['channel_merge'] > 0)
+            {
+                $delivery = $delivery_list->where('channel_id',$v['channel_id']);
+                if($delivery->isNotEmpty() && $delivery->count() > 0)
+                {
+                    foreach($delivery as $delivery_ed)
+                    {
+                        $list_all[$k]['delivery_count_for_channel'] += $delivery_ed['delivery_count_for_all'];
+                    }
+                }
+            }
+
+        }
+//        dd($list_all);
+
+
+        return datatable_response(collect($list_all), $draw, $total);
     }
 
 

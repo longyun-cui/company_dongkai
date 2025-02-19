@@ -130,13 +130,15 @@
 
 
                 {{--统计--}}
-                <li class="dropdown">
+                <li class="dropdown tasks-menu add-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         统计 <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu right" role="menu">
 
 
+
+                        <li class="header" style="margin-bottom:9px;">统计</li>
 
                         @if(in_array($me->user_type,[0,1,9,11,61,66]))
                         <li>
@@ -217,27 +219,41 @@
                             </a>
                         </li>
                         @endif
+
+
+                        {{--财务统计--}}
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                            <li class="divider"></li>
+                            <li class="header" style="margin-bottom:9px;">销售统计</li>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                            <li>
+                                <a href="{{ url('/statistic/statistic-company') }}">
+                                    <i class="fa fa-pie-chart text-orange"></i> <span>公司统计</span>
+                                </a>
+                            </li>
+                        @endif
+
+
+                        {{--财务统计--}}
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                            <li class="divider"></li>
+                            <li class="header" style="margin-bottom:9px;">财务统计</li>
+                        @endif
+
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                            <li class="header">
+                                <a href="{{ url('/finance/daily-list') }}">
+                                    <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
+                                </a>
+                            </li>
+                        @endif
+
+
+
                     </ul>
                 </li>
-
-
-                {{--财务统计--}}
-                @if(in_array($me->user_type,[0,1,9,11]))
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        财务统计 <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu right" role="menu">
-
-                        <li>
-                            <a href="{{ url('/finance/daily-list') }}">
-                                <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-            @endif
 
 
 

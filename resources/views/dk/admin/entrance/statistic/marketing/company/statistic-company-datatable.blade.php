@@ -19,6 +19,7 @@
                 "serverSide": true,
                 "searching": false,
                 "pagingType": "simple_numbers",
+                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
                 "order": [],
                 "orderCellsTop": true,
                 "ajax": {
@@ -27,15 +28,17 @@
                     "dataType" : 'json',
                     "data": function (d) {
                         d._token = $('meta[name="_token"]').attr('content');
-                        d.id = $('input[name="customer-service-id"]').val();
-                        d.name = $('input[name="customer-service-name"]').val();
-                        d.title = $('input[name="customer-service-title"]').val();
-                        d.keyword = $('input[name="customer-service-keyword"]').val();
-                        d.status = $('select[name="customer-service-status"]').val();
-                        d.time_type = $('input[name="customer-service-time-type"]').val();
-                        d.time_month = $('input[name="customer-service-month"]').val();
-                        d.time_date = $('input[name="customer-service-date"]').val();
-                        d.project = $('select[name="customer-service-project"]').val();
+                        d.id = $('input[name="statistic-company-id"]').val();
+                        d.name = $('input[name="statistic-company-name"]').val();
+                        d.title = $('input[name="statistic-company-title"]').val();
+                        d.keyword = $('input[name="statistic-company-keyword"]').val();
+                        d.status = $('select[name="statistic-company-status"]').val();
+                        d.time_type = $('input[name="statistic-company-time-type"]').val();
+                        d.time_month = $('input[name="statistic-company-month"]').val();
+                        d.time_date = $('input[name="statistic-company-date"]').val();
+                        d.date_start = $('input[name="statistic-company-start"]').val();
+                        d.date_ended = $('input[name="statistic-company-ended"]').val();
+                        d.project = $('select[name="statistic-company-project"]').val();
                     },
                 },
                 // "fixedColumns": {
@@ -66,17 +69,17 @@
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">' + row.name + '</a>';
+                            return '<a href="javascript:void(0);">' + row.company_name + '</a>';
                         }
                     },
                     {
                         "title": "渠道",
-                        "data": "department_group_id",
+                        "data": "id",
                         "className": "vertical-middle",
                         "width": "120px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">' + row.name + '</a>';
+                            return '<a href="javascript:void(0);">' + row.channel_name + '</a>';
                         }
                     },
                     // {s
@@ -91,48 +94,47 @@
                     // },
                     {
                         "title": "商务",
-                        "data": "username",
+                        "data": "name",
                         "className": "text-center",
-                        "width": "160px",
+                        "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return '<a href="javascript:void(0);">' + row.name + '</a>';
+                            return '<a href="javascript:void(0);">' + row.business_name  + '</a>';
                         }
                     },
                     {
                         "title": "商务交付量",
-                        "data": "delivery_count_for_all",
-                        "className": "bg-delivered",
+                        "data": "id",
+                        "className": "",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(row.delivery_count) return row.delivery_count;
+                            else return '';
                         }
                     },
-
-
                     {
                         "title": "渠道交付量",
-                        "data": "channel_count_for_all",
-                        "className": "text-center vertical-middle ",
-                        "width": "80px",
-                        "orderable": false,
-                        render: function(data, type, row, meta) {
-                            return data;
-                        }
-                    },
-
-
-                    {
-                        "title": "公司交付量",
-                        "data": "company_count_for_all",
+                        "data": "id",
                         "className": "text-center vertical-middle",
                         "width": "80px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
-                            return data;
+                            if(row.delivery_count_for_channel) return row.delivery_count_for_channel;
+                            else return '';
                         }
                     },
+                    {
+                        "title": "公司交付量",
+                        "data": "id",
+                        "className": "text-center vertical-middle",
+                        "width": "80px",
+                        "orderable": false,
+                        render: function(data, type, row, meta) {
+                            if(row.delivery_count_for_company) return row.delivery_count_for_company;
+                            else return '';
+                        }
+                    }
                 ],
                 "drawCallback": function (settings) {
 
@@ -178,9 +180,9 @@
                                 $(td).remove();
                             }
                         },
-                        "data": "channel_id",
+                        "data": "channel_name",
                         "render": function (data, type, full) {
-                            return '<a href="javascript:void(0);">'+row.name+'</a>';
+                            return '<a href="javascript:void(0);">'+row.channel_name+'</a>';
                         }
                     },
                     {

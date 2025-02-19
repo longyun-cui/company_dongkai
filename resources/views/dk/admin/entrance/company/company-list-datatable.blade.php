@@ -4,7 +4,7 @@
 
             var dt = $('#datatable_ajax');
             var ajax_datatable = dt.DataTable({
-                "aLengthMenu": [[10, 50, 200, 500, -1], ["10", "50", "200", "500", "全部"]],
+                "aLengthMenu": [[50, 200, 500, -1], ["50", "200", "500", "全部"]],
                 "processing": true,
                 "serverSide": true,
                 "searching": false,
