@@ -549,8 +549,15 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
 
 
-    Route::match(['get','post'], '/statistic/statistic-company', $controller.'@view_statistic_company');
-    Route::post('/statistic/statistic-get-data-for-company', $controller.'@get_statistic_data_for_company');
+    // 概览
+    Route::match(['get','post'], '/statistic/statistic-company-overview', $controller.'@view_statistic_company_overview');
+    Route::post('/statistic/statistic-get-data-for-company-overview', $controller.'@get_statistic_data_for_company_overview');
+    // 日报
+    Route::match(['get','post'], '/statistic/statistic-company-daily', $controller.'@view_statistic_company_daily');
+    Route::post('/statistic/statistic-get-data-for-company-daily', $controller.'@get_statistic_data_for_company_daily');
+    // 旗下项目
+    Route::match(['get','post'], '/statistic/statistic-company-project', $controller.'@view_statistic_company_project');
+    Route::post('/statistic/statistic-get-data-for-company-project', $controller.'@get_statistic_data_for_company_project');
 
 
 

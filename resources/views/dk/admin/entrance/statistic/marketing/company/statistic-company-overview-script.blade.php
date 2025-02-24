@@ -24,15 +24,15 @@
 
             $('#datatable-search-for-statistic-company').find('input[name=statistic-company-time-type]').val($time_type);
 
-            if($.fn.DataTable.isDataTable('#datatable-for-statistic-company'))
+            if($.fn.DataTable.isDataTable('#datatable-for-statistic-company-overview'))
             {
                 console.log('DataTable 已初始化');
-                $('#datatable-for-statistic-company').DataTable().ajax.reload();
+                $('#datatable-for-statistic-company-overview').DataTable().ajax.reload();
             }
             else
             {
                 console.log('DataTable 未初始化');
-                Table_Datatable_Ajax_Statistic_Company.init();
+                Table_Datatable_Ajax_Statistic_Company_Overview.init();
                 // $('#datatable-for-statistic-company').DataTable().init();
                 // ('#datatable-for-'+$tab.split("-").join("_"));
             }
@@ -61,7 +61,7 @@
             $(".statistic-title").html("全部");
 
             // $("#filter-submit-statistic-company").click();
-            $('#datatable-for-statistic-company').DataTable().ajax.reload();
+            $('#datatable-for-statistic-company-overview').DataTable().ajax.reload();
 
         });
         // 【清空重选】
@@ -90,7 +90,7 @@
         $(".main-content").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
-                // $("#datatable-search-for-statistic-company").find(".filter-submit").click();
+                // $("#datatable-search-for-statistic-company-overview").find(".filter-submit").click();
             }
         });
 

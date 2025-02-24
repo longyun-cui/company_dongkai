@@ -229,8 +229,16 @@
 
                         @if(in_array($me->user_type,[0,1,9,11]))
                             <li>
-                                <a href="{{ url('/statistic/statistic-company') }}">
-                                    <i class="fa fa-pie-chart text-orange"></i> <span>公司统计</span>
+                                <a href="{{ url('/statistic/statistic-company-overview') }}">
+                                    <i class="fa fa-pie-chart text-orange"></i> <span>公司概览</span>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                        @endif
+                        @if(in_array($me->user_type,[0,1,9,11]))
+                            <li>
+                                <a href="{{ url('/statistic/statistic-company-daily') }}">
+                                    <i class="fa fa-pie-chart text-orange"></i> <span>公司日报</span>
                                 </a>
                             </li>
                         @endif

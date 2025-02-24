@@ -1544,10 +1544,16 @@ class DKAdminController extends Controller
 
 
     // 【统计】交付看板
-    public function view_statistic_company()
+    public function view_statistic_company_overview()
     {
-        if(request()->isMethod('get')) return $this->repo->view_statistic_company(request()->all());
-        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_company(request()->all());
+        if(request()->isMethod('get')) return $this->repo->view_statistic_company_overview(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_company_overview(request()->all());
+    }
+    // 【统计】交付看板
+    public function view_statistic_company_daily()
+    {
+        if(request()->isMethod('get')) return $this->repo->view_statistic_company_daily(request()->all());
+        else if(request()->isMethod('post')) return $this->repo->get_statistic_data_for_company_daily(request()->all());
     }
 
 

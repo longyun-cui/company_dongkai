@@ -133,7 +133,7 @@
 @endsection
 @section('custom-script')
 
-    @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.marketing.company.statistic-company-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.marketing.company.statistic-company-overview-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'entrance.statistic.marketing.company.statistic-company-script')
 
 @endsection

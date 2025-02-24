@@ -19702,7 +19702,7 @@ class DKAdminRepository {
 
 
     // 【统计】交付看板
-    public function view_statistic_company($post_data)
+    public function view_statistic_company_overview($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -19714,11 +19714,11 @@ class DKAdminRepository {
         $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
         $view_data['department_district_list'] = $department_district_list;
 
-        $view_data['menu_active_of_statistic_company'] = 'active menu-open';
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.marketing.company.statistic-company';
+        $view_data['menu_active_of_statistic_company_overview'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.marketing.company.statistic-company-overview';
         return view($view_blade)->with($view_data);
     }
-    public function get_statistic_data_for_company($post_data)
+    public function get_statistic_data_for_company_overview($post_data)
     {
         $this->get_me();
         $me = $this->me;
@@ -19944,6 +19944,108 @@ class DKAdminRepository {
         return datatable_response(collect($list_all), $draw, $total);
     }
 
+    // 【统计】交付看板
+    public function view_statistic_company_daily($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,9,11])) return view($this->view_blade_403);
+
+        $company_list = DK_Company::select('id','name')->where('company_category',1)->get();
+        $view_data['company_list'] = $company_list;
+
+        $channel_list = DK_Company::select('id','name')->where('company_category',11)->get();
+        $view_data['channel_list'] = $channel_list;
+
+        $business_list = DK_Company::select('id','name')->where('company_category',21)->get();
+        $view_data['business_list'] = $business_list;
+
+        $view_data['menu_active_of_statistic_company_daily'] = 'active menu-open';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.statistic.marketing.company.statistic-company-daily';
+        return view($view_blade)->with($view_data);
+    }
+    public function get_statistic_data_for_company_daily($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        // 交付统计
+        $query = DK_Pivot_Client_Delivery::select('company_id','channel_id','business_id')
+            ->addSelect(DB::raw("
+                    delivered_date as date_day,
+                    count(*) as delivery_count
+                "))
+            ->groupBy('delivered_date');
+
+        $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $query->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+
+
+        // 公司
+        if(isset($post_data['company']))
+        {
+            if(!in_array($post_data['company'],[-1,'-1']))
+            {
+                $query->where('company_id', $post_data['company']);
+            }
+        }
+        // 渠道
+        if(isset($post_data['channel']))
+        {
+            if(!in_array($post_data['channel'],[-1,'-1']))
+            {
+                $query->where('channel_id', $post_data['channel']);
+            }
+        }
+        // 商务
+        if(isset($post_data['business']))
+        {
+            if(!in_array($post_data['business'],[-1,'-1']))
+            {
+                $query->where('business_id', $post_data['business']);
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+
+        foreach($list as $k => $v)
+        {
+        }
+
+        return datatable_response($list, $draw, $total);
+    }
 
 
 

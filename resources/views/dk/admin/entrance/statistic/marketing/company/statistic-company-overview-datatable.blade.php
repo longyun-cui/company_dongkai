@@ -1,17 +1,17 @@
 <script>
 
     $(function () {
-        // Table_Datatable_Ajax_Statistic_Company.init();
+        Table_Datatable_Ajax_Statistic_Company_Overview.init();
     });
 
-    var Table_Datatable_Ajax_Statistic_Company = function ()
+    var Table_Datatable_Ajax_Statistic_Company_Overview = function ()
     {
-        var datatable_Ajax_Statistic_Company = function ()
+        var datatable_Ajax_Statistic_Company_Overview = function ()
         {
 
-            var dt_statistic_company = $('#datatable-for-statistic-company');
+            var dt_statistic_company_overview = $('#datatable-for-statistic-company-overview');
 
-            var ajax_datatable_statistic_company = dt_statistic_company.DataTable({
+            var ajax_datatable_statistic_company_overview = dt_statistic_company_overview.DataTable({
 
                 // "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
                 "aLengthMenu": [[-1], ["全部"]],
@@ -23,7 +23,7 @@
                 "order": [],
                 "orderCellsTop": true,
                 "ajax": {
-                    'url': "{{ url('/statistic/statistic-company') }}",
+                    'url': "{{ url('/statistic/statistic-company-overview') }}",
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {
@@ -215,7 +215,7 @@
 
         };
         return {
-            init: datatable_Ajax_Statistic_Company
+            init: datatable_Ajax_Statistic_Company_Overview
         }
     }();
 
