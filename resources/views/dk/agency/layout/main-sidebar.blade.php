@@ -58,23 +58,29 @@
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
-                   data-unique="n"
+                   data-unique="y"
                    data-id="delivery-list"
                    data-title="客资列表"
                    data-datatable-type="create"
-                   data-datatable-unique="n"
+                   data-datatable-unique="y"
                    data-datatable-id="datatable-delivery-list"
                    data-datatable-target="delivery-list"
                    data-datatable-clone-object="delivery-list-clone"
                 >
                     <i class="fa fa-file-text text-yellow"></i>
-                    <span>工单列表</span>
+                    <span>交付列表</span>
                 </a>
             </li>
             <li class="treeview">
                 <a class="tab-control" data-id="department-list" data-title="团队列表" data-content="团队">
                     <i class="fa fa-columns text-aqua"></i>
-                    <span>团队列表</span>
+                    <span>交付日报</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a class="tab-control" data-id="department-list" data-title="团队列表" data-content="团队">
+                    <i class="fa fa-columns text-aqua"></i>
+                    <span>项目概览</span>
                 </a>
             </li>
             <li class="treeview">

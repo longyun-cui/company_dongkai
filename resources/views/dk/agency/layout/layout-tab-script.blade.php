@@ -4,36 +4,71 @@
         // 通用标签控制逻辑
         $(".wrapper").on('click', ".tab-control", function() {
 
-            let $datatable_order_list_id = sessionStorage.getItem('datatable_order_list_id');
-            sessionStorage.setItem('datatable_order_list_id',parseInt($datatable_order_list_id) + 1);
-            $datatable_order_list_id = sessionStorage.getItem('datatable_order_list_id');
-
             const $btn = $(this);
-            const $config = {
-                type: $btn.data('type'),
-                unique: $btn.data('unique'),
-                id: $btn.data('id') + '-' + $datatable_order_list_id,
-                title: $btn.data('title'),
-                content: $btn.data('content') || '默认内容'
-            };
+            const $unique = $btn.data('unique');
 
-            const $tabLink = $('a[href="#'+ $config.id +'"]');
-            const $tabPane = $('#'+$config.id);
-
-            if($tabPane.length)
+            if($unique == 'y')
             {
-                // 存在则激活
-                console.log('存在');
-                $tabLink.tab('show');
+                const $config = {
+                    type: $btn.data('type'),
+                    unique: $btn.data('unique'),
+                    id: $btn.data('id'),
+                    title: $btn.data('title'),
+                    content: $btn.data('content') || '默认内容'
+                };
+
+                const $tabLink = $('a[href="#'+ $config.id +'"]');
+                const $tabPane = $('#'+$config.id);
+
+                if($tabPane.length)
+                {
+                    // 存在则激活
+                    console.log('已存在！');
+                    $tabLink.tab('show');
+                }
+                else
+                {
+                    // 创建新标签页
+                    console.log('不存在！');
+                    createTab($config);
+                    // 激活新标签页
+                    $('a[href="#'+$config.id+'"]').tab('show');
+                }
             }
             else
             {
-                // 创建新标签页
-                console.log('不存在');
-                createTab($config);
-                // 激活新标签页
-                $('a[href="#'+$config.id+'"]').tab('show');
+                let $session_unique_id = sessionStorage.getItem('session_unique_id');
+                sessionStorage.setItem('session_unique_id',parseInt($session_unique_id) + 1);
+                $session_unique_id = sessionStorage.getItem('session_unique_id');
+
+                const $btn = $(this);
+                const $config = {
+                    type: $btn.data('type'),
+                    unique: $btn.data('unique'),
+                    id: $btn.data('id') + '-' + $session_unique_id,
+                    title: $btn.data('title'),
+                    content: $btn.data('content') || '默认内容'
+                };
+
+                const $tabLink = $('a[href="#'+ $config.id +'"]');
+                const $tabPane = $('#'+$config.id);
+
+                if($tabPane.length)
+                {
+                    // 存在则激活
+                    console.log('存在');
+                    $tabLink.tab('show');
+                }
+                else
+                {
+                    // 创建新标签页
+                    console.log('不存在');
+                    createTab($config);
+                    // 激活新标签页
+                    $('a[href="#'+$config.id+'"]').tab('show');
+                }
             }
+
         });
 
         // 关闭标签页处理（事件委托）
@@ -56,39 +91,70 @@
         // 通用标签控制逻辑
         $(".wrapper").on('click', ".datatable-control", function() {
 
-            let $datatable_order_list_id = sessionStorage.getItem('datatable_order_list_id');
-
             const $btn = $(this);
-            const $config = {
-                type: $btn.data('datatable-type'),
-                unique: $btn.data('datatable-unique'),
-                id: $btn.data('datatable-id') + '-' + $datatable_order_list_id,
-                target: $btn.data('datatable-target') + '-' + $datatable_order_list_id,
-                clone_object: $btn.data('datatable-clone-object')
-            };
+            const $unique = $btn.data('datatable-unique');
 
-            if ($.fn.DataTable.isDataTable('#datatable-delivery-list'))
+            if($unique == 'y')
             {
-                console.log('DataTable 已存在！');
+                const $id = $btn.data('datatable-id');
+                const $target = $btn.data('datatable-target');
+                const $clone_object = $btn.data('datatable-clone-object');
+
+                if($.fn.DataTable.isDataTable('#'+$id))
+                {
+                    console.log('DataTable 已存在！');
+                }
+                else
+                {
+                    console.log('DataTable 未初始化！');
+
+                    let $clone = $('.'+$clone_object).clone(true);
+                    $clone.removeClass($clone_object);
+                    $clone.addClass('datatable-wrapper');
+                    $clone.find('table').attr('id',$id);
+
+                    $('#'+$target).prepend($clone);
+                    $('#'+$target).find('.select2-box-c').select2({
+                        theme: 'classic'
+                    });
+
+                    Datatable_for_OrderList('#'+$id);
+                }
             }
             else
             {
-                console.log('DataTable 未初始化！');
+                let $session_unique_id = sessionStorage.getItem('session_unique_id');
 
-                let $clone = $('.'+$config.clone_object).clone(true);
-                $clone.removeClass($config.clone_object);
-                $clone.addClass('datatable-wrapper');
-                $clone.find('table').attr('id',$config.id);
+                const $config = {
+                    type: $btn.data('datatable-type'),
+                    unique: $btn.data('datatable-unique'),
+                    id: $btn.data('datatable-id') + '-' + $session_unique_id,
+                    target: $btn.data('datatable-target') + '-' + $session_unique_id,
+                    clone_object: $btn.data('datatable-clone-object')
+                };
 
-                console.log($config.id);
-                $('#'+$config.target).prepend($clone);
+                if($.fn.DataTable.isDataTable('#'+$config.id))
+                {
+                    console.log('DataTable 已存在！');
+                }
+                else
+                {
+                    console.log('DataTable 未初始化！');
 
-                $('#'+$config.id).find('.select2-box-c').select2({
-                    theme: 'classic'
-                });
+                    let $clone = $('.'+$config.clone_object).clone(true);
+                    $clone.removeClass($config.clone_object);
+                    $clone.addClass('datatable-wrapper');
+                    $clone.find('table').attr('id',$config.id);
 
-                Datatable_for_OrderList('#'+$config.id);
+                    $('#'+$config.target).prepend($clone);
+                    $('#'+$config.target).find('.select2-box-c').select2({
+                        theme: 'classic'
+                    });
+
+                    Datatable_for_OrderList('#'+$config.id);
+                }
             }
+
 
 
 

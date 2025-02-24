@@ -122,17 +122,17 @@
                 },
                 {
                     "title": "交付项目",
-                    "data": "project_id",
+                    "data": "client_id",
                     "className": "",
                     "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.project_er == null)
+                        if(row.client_er == null)
                         {
                             return '未指定';
                         }
                         else {
-                            return '<a href="javascript:void(0);">'+row.project_er.name+'</a>';
+                            return '<a href="javascript:void(0);">'+row.client_er.username+'</a>';
                         }
                     }
                 },
@@ -146,7 +146,7 @@
                         if(row.order_er)
                         {
                             var $result_html = '';
-                            var $client_type = row.order_er.client_type;
+                            var $client_type = row.client_type;
                             if($client_type == 0)
                             {
                                 $result_html = '<small class="btn-xs ">未选择</small>';

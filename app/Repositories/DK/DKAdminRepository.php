@@ -489,9 +489,18 @@ class DKAdminRepository {
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,61])) return view($this->view_blade_403);
 
-        $return['menu_active_of_client_list'] = 'active menu-open';
+        $company_list = DK_Company::select('id','name')->where('company_category',1)->get();
+        $view_data['company_list'] = $company_list;
+
+        $channel_list = DK_Company::select('id','name')->where('company_category',11)->get();
+        $view_data['channel_list'] = $channel_list;
+
+        $business_list = DK_Company::select('id','name')->where('company_category',21)->get();
+        $view_data['business_list'] = $business_list;
+
+        $view_data['menu_active_of_client_list'] = 'active menu-open';
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.client.client-list';
-        return view($view_blade)->with($return);
+        return view($view_blade)->with($view_data);
     }
     // 【客户】返回-列表-数据
     public function get_user_client_list_datatable($post_data)
@@ -512,6 +521,30 @@ class DKAdminRepository {
         if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
         if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+
+        // 商务
+        if(isset($post_data['business']) && !in_array($post_data['business'],[-1,'-1']))
+        {
+            $query->where('business_id', $post_data['business']);
+        }
+        else
+        {
+            // 渠道
+            if(isset($post_data['channel']) && !in_array($post_data['channel'],[-1,'-1']))
+            {
+                $query->where('channel_id', $post_data['channel']);
+            }
+            else
+            {
+                // 公司
+                if(isset($post_data['company']) && !in_array($post_data['company'],[-1,'-1']))
+                {
+                    $query->where('company_id', $post_data['company']);
+                }
+            }
+        }
+
 
         $total = $query->count();
 
@@ -20050,33 +20083,23 @@ class DKAdminRepository {
 
 
         // 商务
-        if(isset($post_data['business']))
+        if(isset($post_data['business']) && !in_array($post_data['business'],[-1,'-1']))
         {
-            if(!in_array($post_data['business'],[-1,'-1']))
-            {
-                $query->where('business_id', $post_data['business']);
-            }
+            $query->where('business_id', $post_data['business']);
         }
         else
         {
             // 渠道
-            if(isset($post_data['channel']))
+            if(isset($post_data['channel']) && !in_array($post_data['channel'],[-1,'-1']))
             {
-                if(!in_array($post_data['channel'],[-1,'-1']))
-                {
-                    $query->where('company_id', function ($query) {});
-                    $query->where('channel_id', $post_data['channel']);
-                }
+                $query->where('channel_id', $post_data['channel']);
             }
             else
             {
                 // 公司
-                if(isset($post_data['company']))
+                if(isset($post_data['company']) && !in_array($post_data['company'],[-1,'-1']))
                 {
-                    if(!in_array($post_data['company'],[-1,'-1']))
-                    {
-                        $query->where('company_id', $post_data['company']);
-                    }
+                    $query->where('company_id', $post_data['company']);
                 }
             }
         }

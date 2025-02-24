@@ -79,8 +79,27 @@ class DKAgencyRepository {
             $view_blade = env('TEMPLATE_DK_AGENCY').'entrance.login';
             return view($view_blade);
         }
+        $me = $this->me;
 
-        $view_data = [];
+        if($me->company_category == 1)
+        {
+            $client_list = DK_Client::where('company_id',$me->id)->get();
+        }
+        else if($me->company_category == 11)
+        {
+            $client_list = DK_Client::where('channel_id',$me->id)->get();
+        }
+        else if($me->company_category == 21)
+        {
+            $client_list = DK_Client::where('business_id',$me->id)->get();
+        }
+        else
+        {
+            $client_list = [];
+        }
+
+//        dd($client_list->toArray());
+        $view_data['client_list'] = $client_list;
         $view_blade = env('TEMPLATE_DK_AGENCY').'entrance.index';
         return view($view_blade)->with($view_data);
 
@@ -252,7 +271,7 @@ class DKAgencyRepository {
         $query = DK_Pivot_Client_Delivery::select('*')
 //            ->where('client_id',$me->client_id)
             ->with([
-                'project_er',
+                'client_er',
                 'order_er'
             ])
             ->when($me->company_category == 1, function ($query) use ($me) {
@@ -278,14 +297,15 @@ class DKAgencyRepository {
         if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
 
 
-        // 患者类型
-//        if(isset($post_data['client_type']))
-//        {
-//            if(!in_array($post_data['client_type'],[-1,'-1']))
-//            {
-//                $query->where('client_type', $post_data['client_type']);
-//            }
-//        }
+
+        // 交付客户
+        if(isset($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,'-1']))
+            {
+                $query->where('client_id', $post_data['client']);
+            }
+        }
 
 
 

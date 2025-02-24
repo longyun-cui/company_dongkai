@@ -1,7 +1,7 @@
 <script>
 
 
-    sessionStorage.setItem('datatable_order_list_id',1);
+    sessionStorage.setItem('session_unique_id',1);
 
 
     (function ($) {

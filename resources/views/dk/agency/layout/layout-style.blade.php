@@ -85,6 +85,9 @@
     .dropdown.filter-menu .box-footer { border-top:0; }
     .dataTables_wrapper.no-footer .dataTables_scrollBody { border-bottom:0 }
 
+
+
+    .tableArea.full table { width:100% !important; min-width:1380px; }
     .tableArea { margin-top:16px; }
 
 

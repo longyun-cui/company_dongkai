@@ -22,6 +22,9 @@
                         d.item_status = $('select[name="client-status"]').val();
                         d.client_type = $('select[name="client-type"]').val();
                         d.client_work_status = $('select[name="client-work-status"]').val();
+                        d.company = $('select[name="client-company"]').val();
+                        d.channel = $('select[name="client-channel"]').val();
+                        d.business = $('select[name="client-business"]').val();
 
                     },
                 },
