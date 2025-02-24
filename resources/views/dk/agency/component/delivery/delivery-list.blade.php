@@ -40,24 +40,6 @@
             </select>
 
 
-            <select class="search-filter form-filter select-select2 select2-box delivery-client" name="delivery-client" style="width:160px;">
-                <option value="-1">选择客户</option>
-                @if(!empty($client_list))
-                    @foreach($client_list as $v)
-                        @if(!empty($client_id))
-                            @if($v->id == $client_id)
-                                <option value="{{ $v->id }}" selected="selected">{{ $v->username }}</option>
-                            @else
-                                <option value="{{ $v->id }}">{{ $v->username }}</option>
-                            @endif
-                        @else
-                            <option value="{{ $v->id }}">{{ $v->username }}</option>
-                        @endif
-                    @endforeach
-                @endif
-            </select>
-
-
             <select class="search-filter form-filter" name="order-delivery-type" style="width:88px;">
                 <option value="-1">交付类型</option>
                 <option value="95">交付</option>
