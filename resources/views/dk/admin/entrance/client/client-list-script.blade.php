@@ -49,6 +49,28 @@
         });
 
 
+        // 【登录】
+        $(".main-content").on('click', ".item-admin-login-submit", function() {
+            var $that = $(this);
+            $.post(
+                "{{ url('/user/client-login') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: 'client-login',
+                    client_id: $that.attr('data-id')
+                },
+                function(data){
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        console.log(data);
+                        var temp_window=window.open();
+                        temp_window.location = "{{ env('DOMAIN_DK_CLIENT') }}/";
+                    }
+                },
+                'json'
+            );
+        });
 
 
         // 【下载二维码】

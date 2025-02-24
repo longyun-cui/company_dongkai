@@ -224,16 +224,36 @@ class DKSuperController extends Controller
     // 【用户-管理员】登录
     public function operate_user_client_login()
     {
+//        $user_id = request()->get('user_id');
+//        $user = DK_Client::where('id',$user_id)->first();
+//        if($user)
+//        {
+//            Auth::guard('dk_client')->login($user,true);
+//            $token = request()->get('_token');
+//            Auth::guard('dk_client')->user()->admin_token = $token;
+//            Auth::guard('dk_client')->user()->save();
+//
+//            $return['user'] = $user;
+//            $return['url'] = env('DOMAIN_DK_CLIENT');
+//
+//            if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_CLIENT'));
+//            else if(request()->isMethod('post'))
+//            {
+//                return response_success($return);
+//            }
+//        }
+//        else return response_error([]);
         $user_id = request()->get('user_id');
-        $user = DK_Client::where('id',$user_id)->first();
-        if($user)
+        $client = DK_Client::where('id',$user_id)->first();
+        $client_user = DK_Client_User::where('id',$client->client_admin_id)->first();
+        if($client_user)
         {
-            Auth::guard('dk_client')->login($user,true);
+            Auth::guard('dk_client_staff')->login($client_user,true);
             $token = request()->get('_token');
-            Auth::guard('dk_client')->user()->admin_token = $token;
-            Auth::guard('dk_client')->user()->save();
+            Auth::guard('dk_client_staff')->user()->admin_token = $token;
+            Auth::guard('dk_client_staff')->user()->save();
 
-            $return['user'] = $user;
+            $return['user'] = $client_user;
             $return['url'] = env('DOMAIN_DK_CLIENT');
 
             if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_CLIENT'));

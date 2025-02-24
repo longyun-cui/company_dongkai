@@ -868,6 +868,33 @@ class DKAdminRepository {
     }
 
 
+    // 【客户】登录
+    public function operate_client_login($post_data)
+    {
+        $operate = $post_data["operate"];
+        $client_id = $post_data["client_id"];
+        $client = DK_Client::where('id',$client_id)->first();
+        $client_user = DK_Client_User::where('id',$client->client_admin_id)->first();
+        if($client_user)
+        {
+            Auth::guard('dk_client_staff')->login($client_user,true);
+            $token = request()->get('_token');
+            Auth::guard('dk_client_staff')->user()->admin_token = $token;
+            Auth::guard('dk_client_staff')->user()->save();
+
+            $return['user'] = $client_user;
+            $return['url'] = env('DOMAIN_DK_CLIENT');
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_CLIENT'));
+            else if(request()->isMethod('post'))
+            {
+                return response_success($return);
+            }
+        }
+        else return response_error([]);
+    }
+
+
     // 【客户】【文本-信息】设置-文本-类型
     public function operate_client_info_text_set($post_data)
     {
@@ -1963,7 +1990,7 @@ class DKAdminRepository {
 
 
 
-    // 【公司与渠道管理】返回-列表-视图
+    // 【公司与渠道】返回-列表-视图
     public function view_company_list($post_data)
     {
         $this->get_me();
@@ -1974,7 +2001,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.company.company-list';
         return view($view_blade)->with($return);
     }
-    // 【公司与渠道管理】返回-列表-数据
+    // 【公司与渠道】返回-列表-数据
     public function get_company_list_datatable($post_data)
     {
         $this->get_me();
@@ -2065,7 +2092,7 @@ class DKAdminRepository {
     }
 
 
-    // 【公司与渠道管理】【修改记录】返回-列表-视图
+    // 【公司与渠道】【修改记录】返回-列表-视图
     public function view_company_modify_record($post_data)
     {
         $this->get_me();
@@ -2078,7 +2105,7 @@ class DKAdminRepository {
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.company-list-for-all';
         return view($view_blade)->with($return);
     }
-    // 【公司与渠道管理】【修改记录】返回-列表-数据
+    // 【公司与渠道】【修改记录】返回-列表-数据
     public function get_company_modify_record_datatable($post_data)
     {
         $this->get_me();
@@ -2124,7 +2151,7 @@ class DKAdminRepository {
     }
 
 
-    // 【公司与渠道管理】返回-添加-视图
+    // 【公司与渠道】返回-添加-视图
     public function view_company_create()
     {
         $this->get_me();
@@ -2149,7 +2176,7 @@ class DKAdminRepository {
             'list_link'=>$list_link,
         ]);
     }
-    // 【公司与渠道管理】返回-编辑-视图
+    // 【公司与渠道】返回-编辑-视图
     public function view_company_edit()
     {
         $this->get_me();
@@ -2203,7 +2230,7 @@ class DKAdminRepository {
             else return view(env('TEMPLATE_DK_ADMIN').'errors.404');
         }
     }
-    // 【公司与渠道管理】保存数据
+    // 【公司与渠道】保存数据
     public function operate_company_save($post_data)
     {
 //        dd($post_data);
@@ -2302,7 +2329,37 @@ class DKAdminRepository {
     }
 
 
-    // 【公司与渠道管理】【文本-信息】设置-文本-类型
+    // 【公司与渠道】登录
+    public function operate_company_login($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有权限！");
+
+        $operate = $post_data["operate"];
+        $company_id = $post_data["company_id"];
+        $user = DK_Company::where('id',$company_id)->first();
+        if($user)
+        {
+            Auth::guard('dk_agency')->login($user,true);
+            $token = request()->get('_token');
+            Auth::guard('dk_agency')->user()->admin_token = $token;
+            Auth::guard('dk_agency')->user()->save();
+
+            $return['user'] = $user;
+            $return['url'] = env('DOMAIN_DK_AGENCY');
+
+            if(request()->isMethod('get')) return redirect(env('DOMAIN_DK_AGENCY'));
+            else if(request()->isMethod('post'))
+            {
+                return response_success($return);
+            }
+        }
+        else return response_error([]);
+    }
+
+
+    // 【公司与渠道】【文本-信息】设置-文本-类型
     public function operate_company_info_text_set($post_data)
     {
         $messages = [
@@ -2393,7 +2450,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【公司与渠道管理】【时间-信息】修改-时间-类型
+    // 【公司与渠道】【时间-信息】修改-时间-类型
     public function operate_company_info_time_set($post_data)
     {
         $messages = [
@@ -2485,7 +2542,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【公司与渠道管理】【选项-信息】修改-radio-select-[option]-类型
+    // 【公司与渠道】【选项-信息】修改-radio-select-[option]-类型
     public function operate_company_info_option_set($post_data)
     {
         $messages = [
@@ -2585,7 +2642,7 @@ class DKAdminRepository {
     }
 
 
-    // 【公司与渠道管理】管理员-删除
+    // 【公司与渠道】管理员-删除
     public function operate_company_admin_delete($post_data)
     {
         $messages = [
@@ -2640,7 +2697,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【公司与渠道管理】管理员-恢复
+    // 【公司与渠道】管理员-恢复
     public function operate_company_admin_restore($post_data)
     {
         $messages = [
@@ -2693,7 +2750,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【公司与渠道管理】管理员-彻底删除
+    // 【公司与渠道】管理员-彻底删除
     public function operate_company_admin_delete_permanently($post_data)
     {
         $messages = [
@@ -2748,7 +2805,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【公司与渠道管理】管理员-启用
+    // 【公司与渠道】管理员-启用
     public function operate_company_admin_enable($post_data)
     {
         $messages = [
@@ -2799,7 +2856,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【公司与渠道管理】管理员-禁用
+    // 【公司与渠道】管理员-禁用
     public function operate_company_admin_disable($post_data)
     {
         $messages = [

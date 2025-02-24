@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\DK;
 
+use App\Models\DK\DK_Company;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -327,21 +328,9 @@ class DKAdminController extends Controller
     }
 
     // 【客户】登录
-    public function operate_user_client_login()
+    public function operate_client_login()
     {
-        $user_id = request()->get('user_id');
-        $user = DK_Client::select('*')->find($user_id);
-        if($user)
-        {
-            Auth::guard('dk_client')->login($user,true);
-
-            $return['user'] = $user;
-
-            if(request()->isMethod('get')) return redirect(env('DOMAIN_CLIENT'));
-            else if(request()->isMethod('post')) return response_success($return);
-        }
-        else return response_error([]);
-
+        return $this->repo->operate_client_login(request()->all());
     }
 
     // 【客户】修改-密码
@@ -405,70 +394,76 @@ class DKAdminController extends Controller
     /*
      * 部门管理
      */
-    // 【部门】返回-列表-视图（全部任务）
+    // 【公司】返回-列表-视图（全部任务）
     public function view_company_list()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_list(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_company_list_datatable(request()->all());
     }
-    // 【部门】【修改记录】返回-列表-视图（全部任务）
+    // 【公司】【修改记录】返回-列表-视图（全部任务）
     public function view_company_modify_record()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_modify_record(request()->all());
         else if(request()->isMethod('post')) return $this->repo->get_company_modify_record_datatable(request()->all());
     }
 
-    // 【部门】添加
+    // 【公司】添加
     public function operate_company_create()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_create();
         else if (request()->isMethod('post')) return $this->repo->operate_company_save(request()->all());
     }
-    // 【部门】编辑
+    // 【公司】编辑
     public function operate_company_edit()
     {
         if(request()->isMethod('get')) return $this->repo->view_company_edit();
         else if (request()->isMethod('post')) return $this->repo->operate_company_save(request()->all());
     }
 
-    // 【部门】修改-文本-text-信息
+    // 【公司】登录
+    public function operate_company_login()
+    {
+        return $this->repo->operate_company_login(request()->all());
+    }
+
+    // 【公司】修改-文本-text-信息
     public function operate_company_info_text_set()
     {
         return $this->repo->operate_company_info_text_set(request()->all());
     }
-    // 【部门】修改-时间-time-信息
+    // 【公司】修改-时间-time-信息
     public function operate_company_info_time_set()
     {
         return $this->repo->operate_company_info_time_set(request()->all());
     }
-    // 【部门】修改-选项-option-信息
+    // 【公司】修改-选项-option-信息
     public function operate_company_info_option_set()
     {
         return $this->repo->operate_company_info_option_set(request()->all());
     }
 
-    // 【部门】删除
+    // 【公司】删除
     public function operate_company_admin_delete()
     {
         return $this->repo->operate_company_admin_delete(request()->all());
     }
-    // 【部门】恢复
+    // 【公司】恢复
     public function operate_company_admin_restore()
     {
         return $this->repo->operate_company_admin_restore(request()->all());
     }
-    // 【部门】永久删除
+    // 【公司】永久删除
     public function operate_company_admin_delete_permanently()
     {
         return $this->repo->operate_company_admin_delete_permanently(request()->all());
     }
 
-    // 【部门】启用
+    // 【公司】启用
     public function operate_company_admin_enable()
     {
         return $this->repo->operate_company_admin_enable(request()->all());
     }
-    // 【部门】禁用
+    // 【公司】禁用
     public function operate_company_admin_disable()
     {
         return $this->repo->operate_company_admin_disable(request()->all());

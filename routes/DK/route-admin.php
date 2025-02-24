@@ -77,6 +77,8 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     // 创建 & 修改
     Route::match(['get','post'], '/user/client-create', $controller.'@operate_user_client_create');
     Route::match(['get','post'], '/user/client-edit', $controller.'@operate_user_client_edit');
+    // 登录
+    Route::post('/user/client-login', $controller.'@operate_client_login');
     // 编辑-信息
     Route::post('/user/client-info-text-set', $controller.'@operate_client_info_text_set');
     Route::post('/user/client-info-time-set', $controller.'@operate_client_info_time_set');
@@ -86,7 +88,6 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     // 【用户-员工管理】修改密码
     Route::match(['get','post'], '/user/client-password-admin-change', $controller.'@operate_user_client_password_admin_change');
     Route::match(['get','post'], '/user/client-password-admin-reset', $controller.'@operate_user_client_password_admin_reset');
-    Route::match(['get','post'], '/user/client-login', $controller.'@operate_user_client_login');
     // 删除 & 恢复
     Route::post('/user/client-admin-delete', $controller.'@operate_user_client_admin_delete');
     Route::post('/user/client-admin-restore', $controller.'@operate_user_client_admin_restore');
@@ -117,6 +118,8 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     // 创建 & 修改
     Route::match(['get','post'], '/company/company-create', $controller.'@operate_company_create');
     Route::match(['get','post'], '/company/company-edit', $controller.'@operate_company_edit');
+    // 登录
+    Route::post('/company/company-login', $controller.'@operate_company_login');
     // 编辑-信息
     Route::post('/company/company-info-text-set', $controller.'@operate_company_info_text_set');
     Route::post('/company/company-info-time-set', $controller.'@operate_company_info_time_set');

@@ -52,7 +52,7 @@
                     {
                         "title": "操作",
                         "data": "id",
-                        "width": "120px",
+                        "width": "160px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -86,15 +86,19 @@
                             var $html_deliver = '';
                             var $html_distribute = '';
                             var $html_recharge = '';
+                            var $html_login = '';
 
+                            @if(in_array($me->user_type,[0,1,9,11]))
+                            $html_login = '<a class="btn btn-xs btn-primary- item-admin-login-submit" data-id="'+data+'">登录</a>';
+                            @endif
 
                             if(row.user_status == 1)
                             {
-                                $html_able = '<a class="btn btn-xs btn-danger item-admin-disable-submit" data-id="'+data+'">禁用</a>';
+                                $html_able = '<a class="btn btn-xs btn-danger- item-admin-disable-submit" data-id="'+data+'">禁用</a>';
                             }
                             else
                             {
-                                $html_able = '<a class="btn btn-xs btn-success item-admin-enable-submit" data-id="'+data+'">启用</a>';
+                                $html_able = '<a class="btn btn-xs btn-success- item-admin-enable-submit" data-id="'+data+'">启用</a>';
                             }
 
                             if(row.user_category == 1)
@@ -103,29 +107,30 @@
                             }
                             else
                             {
-                                $html_edit = '<a class="btn btn-xs btn-primary item-admin-edit-submit" data-id="'+data+'">编辑</a>';
+                                $html_edit = '<a class="btn btn-xs btn-primary- item-admin-edit-submit" data-id="'+data+'">编辑</a>';
                             }
 
                             if(row.deleted_at == null)
                             {
-                                $html_delete = '<a class="btn btn-xs bg-black item-admin-delete-submit" data-id="'+data+'">删除</a>';
+                                $html_delete = '<a class="btn btn-xs bg-black- item-admin-delete-submit" data-id="'+data+'">删除</a>';
                             }
                             else
                             {
-                                $html_delete = '<a class="btn btn-xs bg-grey item-admin-restore-submit" data-id="'+data+'">恢复</a>';
+                                $html_delete = '<a class="btn btn-xs bg-grey- item-admin-restore-submit" data-id="'+data+'">恢复</a>';
                             }
 
                             @if(in_array($me->user_type,[0,1,11,19]))
-                                $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
-                            $html_recharge = '<a class="btn btn-xs bg-orange item-modal-show-for-recharge" data-id="'+data+'">充值</a>';
+                                $html_record = '<a class="btn btn-xs bg-purple- item-modal-show-for-modify" data-id="'+data+'">记录</a>';
+                                $html_recharge = '<a class="btn btn-xs bg-orange- item-modal-show-for-recharge" data-id="'+data+'">充值</a>';
                                     @endif
 
                             var html =
                                 $html_edit+
-                                '<a class="btn btn-xs bg-maroon item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
+                                '<a class="btn btn-xs bg-maroon- item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
                                 $html_able+
                                 $html_recharge+
                                 $html_record+
+                                $html_login+
                                 // $html_delete+
                                 // '<a class="btn btn-xs bg-olive item-login-submit" data-id="'+data+'">登录</a>'+
                                 // '<a class="btn btn-xs bg-purple item-statistic-link" data-id="'+data+'">统计</a>'+
@@ -147,7 +152,7 @@
 
                             if(row.user_status == 1)
                             {
-                                return '<small class="btn-xs btn-success">正常</small>';
+                                return '<small class="btn-xs btn-success">启用</small>';
                             }
                             else
                             {
@@ -300,7 +305,7 @@
                         "title": "启用ip",
                         "data": "is_ip",
                         "className": "",
-                        "width": "120px",
+                        "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
                             if(data == 0) return '<small class="btn-xs btn-danger">否</small>';

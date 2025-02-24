@@ -47,6 +47,32 @@
         });
 
 
+        // 【登录】
+        $(".main-content").on('click', ".item-admin-login-submit", function() {
+            var $that = $(this);
+            $.post(
+                "{{ url('/company/company-login') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: 'company-login',
+                    company_id: $that.attr('data-id')
+                },
+                function(data){
+                    if(!data.success) layer.msg(data.msg);
+                    else
+                    {
+                        console.log(data);
+                        var temp_window=window.open();
+                        temp_window.location = "{{ env('DOMAIN_DK_AGENCY') }}/";
+                    }
+                },
+                'json'
+            );
+        });
+
+
+
+
         // 【编辑】
         $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);
