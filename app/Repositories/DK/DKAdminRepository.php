@@ -19992,28 +19992,35 @@ class DKAdminRepository {
         $query->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
 
 
-        // 公司
-        if(isset($post_data['company']))
-        {
-            if(!in_array($post_data['company'],[-1,'-1']))
-            {
-                $query->where('company_id', $post_data['company']);
-            }
-        }
-        // 渠道
-        if(isset($post_data['channel']))
-        {
-            if(!in_array($post_data['channel'],[-1,'-1']))
-            {
-                $query->where('channel_id', $post_data['channel']);
-            }
-        }
         // 商务
         if(isset($post_data['business']))
         {
             if(!in_array($post_data['business'],[-1,'-1']))
             {
                 $query->where('business_id', $post_data['business']);
+            }
+        }
+        else
+        {
+            // 渠道
+            if(isset($post_data['channel']))
+            {
+                if(!in_array($post_data['channel'],[-1,'-1']))
+                {
+                    $query->where('company_id', function ($query) {});
+                    $query->where('channel_id', $post_data['channel']);
+                }
+            }
+            else
+            {
+                // 公司
+                if(isset($post_data['company']))
+                {
+                    if(!in_array($post_data['company'],[-1,'-1']))
+                    {
+                        $query->where('company_id', $post_data['company']);
+                    }
+                }
             }
         }
 
