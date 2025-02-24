@@ -61,6 +61,9 @@ Route::group(['domain'=>env('DOMAIN_DK_ADMIN'), 'namespace'=>'DK'], function () 
 Route::group(['domain'=>env('DOMAIN_DK_STAFF'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-staff.php');
 });
+Route::group(['domain'=>env('DOMAIN_DK_AGENCY'), 'namespace'=>'DK'], function () {
+    require(__DIR__ . '/DK/route-agency.php');
+});
 Route::group(['domain'=>env('DOMAIN_DK_CLIENT'), 'namespace'=>'DK'], function () {
     require(__DIR__ . '/DK/route-client.php');
 });

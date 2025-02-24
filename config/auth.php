@@ -86,6 +86,16 @@ return [
         ],
 
 
+        'dk_agency' => [
+            'driver' => 'session',
+            'provider' => 'dk_agency',
+        ],
+        'dk_agency_staff' => [
+            'driver' => 'session',
+            'provider' => 'dk_agency_staffs',
+        ],
+
+
         'dk_client' => [
             'driver' => 'session',
             'provider' => 'dk_clients',
@@ -191,6 +201,16 @@ return [
         'dk_admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\DK\DK_User::class,
+        ],
+
+
+        'dk_agency' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK\DK_Company::class,
+        ],
+        'dk_agency_staffs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DK_Company\DK_Company_User::class,
         ],
 
 

@@ -79,6 +79,9 @@ class Kernel extends HttpKernel
         'dk.admin.login' => \App\Http\Middleware\dk\DKAdminLoginMiddleware::class,
         'dk.admin.password_change' => \App\Http\Middleware\dk\DKAdminPasswordChangeMiddleware::class,
 
+        'dk.agency.login' => \App\Http\Middleware\dk\DKAgencyLoginMiddleware::class,
+        'dk.agency.password_change' => \App\Http\Middleware\dk\DKAgencyPasswordChangeMiddleware::class,
+
         'dk.client.login' => \App\Http\Middleware\dk\DKClientLoginMiddleware::class,
         'dk.client.staff.login' => \App\Http\Middleware\dk\DKClientStaffLoginMiddleware::class,
 

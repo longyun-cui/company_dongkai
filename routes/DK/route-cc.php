@@ -1,12 +1,8 @@
 <?php
 
 
-Route::get('/', function () {
+Route::get('/me', function () {
     dd('route-admin');
-});
-
-Route::get('/phpinfo', function () {
-    phpinfo();
 });
 
 

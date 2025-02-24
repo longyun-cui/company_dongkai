@@ -1,9 +1,11 @@
 <?php
 namespace App\Models\DK;
-use Illuminate\Database\Eloquent\Model;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Company extends Model
+class DK_Company extends Authenticatable
 {
     use SoftDeletes;
     //
@@ -16,7 +18,10 @@ class DK_Company extends Model
         'org_id', 'admin_id',
         'item_id', 'menu_id',
         'leader_id', 'superior_company_id', 'company_id',
-        'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+        'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+        'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
+        'mobile', 'telephone', 'email', 'password',
+        'wx_unionid',
 
         'finance_recharge_total',
         'finance_consumption_total',
@@ -31,7 +36,8 @@ class DK_Company extends Model
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'time_point', 'time_type', 'start_time', 'end_time', 'address',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at'
+        'admin_token',
+        'login_error_num',
     ];
     protected $dateFormat = 'U';
 

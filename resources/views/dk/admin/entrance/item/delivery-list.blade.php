@@ -1448,15 +1448,10 @@
                         d.title = $('input[name="modify-title"]').val();
                         d.keyword = $('input[name="modify-keyword"]').val();
                         d.status = $('select[name="modify-status"]').val();
-//
-//                        d.created_at_from = $('input[name="created_at_from"]').val();
-//                        d.created_at_to = $('input[name="created_at_to"]').val();
-//                        d.updated_at_from = $('input[name="updated_at_from"]').val();
-//                        d.updated_at_to = $('input[name="updated_at_to"]').val();
-
                     },
                 },
                 "pagingType": "simple_numbers",
+                "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
                 "order": [],
                 "orderCellsTop": true,
                 "columns": [

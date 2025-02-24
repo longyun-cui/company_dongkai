@@ -20206,7 +20206,7 @@ class DKAdminRepository {
             if($v['client_type'] == 1) $cellData[$k]['client_type'] = "种植牙";
             else if($v['client_type'] == 2) $cellData[$k]['client_type'] = "矫正";
             else if($v['client_type'] == 3) $cellData[$k]['client_type'] = "正畸";
-            else $cellData[$k]['client_phone'] = "未选择";
+            else $cellData[$k]['client_type'] = "未选择";
 
 
             $cellData[$k]['client_name'] = $v['client_name'];
