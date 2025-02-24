@@ -61,7 +61,7 @@
                         "orderable": true,
                         "orderSequence": ["desc", "asc"],
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(row.is_completed != 1)
                             {
                                 $(nTd).addClass('modal-show-for-attachment-');
                                 $(nTd).attr('data-id',row.id).attr('data-name','附件');
@@ -91,7 +91,7 @@
                             var $html_publish = '';
                             var $html_abandon = '';
 
-                            if(row.item_status == 1)
+                            if(row.user_status == 1)
                             {
                                 $html_able = '<a class="btn btn-xs btn-danger- item-admin-disable-submit" data-id="'+data+'">禁用</a>';
                             }
@@ -140,7 +140,7 @@
                     },
                     {
                         "title": "状态",
-                        "data": "item_status",
+                        "data": "user_status",
                         "width": "60px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
@@ -202,7 +202,7 @@
                         "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(row.is_completed != 1)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','名称');
@@ -258,41 +258,6 @@
                             else return '--';
                         }
                     },
-                    // {
-                    //     "title": "负责人",
-                    //     "data": "leader_id",
-                    //     "className": "text-center",
-                    //     "width": "100px",
-                    //     "orderable": false,
-                    //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                    //         if(row.is_completed != 1 && row.item_status != 97)
-                    //         {
-                    //             $(nTd).addClass('modal-show-for-info-select2-set');
-                    //             $(nTd).attr('data-id',row.id).attr('data-name','负责人');
-                    //             $(nTd).attr('data-key','leader_id').attr('data-value',data);
-                    //             if(row.leader == null) $(nTd).attr('data-option-name','未指定');
-                    //             else {
-                    //                 $(nTd).attr('data-option-name',row.leader.username);
-                    //             }
-                    //             $(nTd).attr('data-column-name','负责人');
-                    //             if(row.project_id) $(nTd).attr('data-operate-type','edit');
-                    //             else $(nTd).attr('data-operate-type','add');
-                    //
-                    //             if(row.company_type == 11)
-                    //             {
-                    //                 $(nTd).attr('data-company-type','manager');
-                    //             }
-                    //             else if(row.company_type == 21)
-                    //             {
-                    //                 $(nTd).attr('data-company-type','supervisor');
-                    //             }
-                    //         }
-                    //     },
-                    //     render: function(data, type, row, meta) {
-                    //         if(row.leader == null) return '--';
-                    //         else return '<a href="javascript:void(0);">'+row.leader.username+' ('+row.leader.id+')'+'</a>';
-                    //     }
-                    // },
                     {
                         "title": "累充金额",
                         "data": "funds_recharge_total",
@@ -361,7 +326,7 @@
                         "width": "100px",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(row.is_completed != 1)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','提示阈值');
@@ -383,7 +348,7 @@
                         "width": "",
                         "orderable": false,
                         "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                            if(row.is_completed != 1 && row.item_status != 97)
+                            if(row.is_completed != 1)
                             {
                                 $(nTd).addClass('modal-show-for-info-text-set');
                                 $(nTd).attr('data-id',row.id).attr('data-name','备注');
