@@ -254,7 +254,16 @@ class DKAgencyRepository {
             ->with([
                 'project_er',
                 'order_er'
-            ]);
+            ])
+            ->when($me->company_category == 1, function ($query) use ($me) {
+                return $query->where('company_id', $me->id);
+            })
+            ->when($me->company_category == 11, function ($query) use ($me) {
+                return $query->where('channel_id', $me->id);
+            })
+            ->when($me->company_category == 21, function ($query) use ($me) {
+                return $query->where('business_id', $me->id);
+            });
 
 
 
