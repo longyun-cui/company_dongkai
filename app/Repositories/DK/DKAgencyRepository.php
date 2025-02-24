@@ -296,6 +296,8 @@ class DKAgencyRepository {
         if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
         if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
 
+        if(!empty($post_data['assign'])) $query->where('delivered_date', $post_data['assign']);
+
 
 
         // 交付客户

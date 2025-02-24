@@ -117,6 +117,21 @@
                     $('#'+$target).find('.select2-box-c').select2({
                         theme: 'classic'
                     });
+                    $('#'+$target).find('.time_picker-c').datetimepicker({
+                        locale: moment.locale('zh-cn'),
+                        format: "YYYY-MM-DD HH:mm",
+                        ignoreReadonly: true
+                    });
+                    $('#'+$target).find('.date_picker-c').datetimepicker({
+                        locale: moment.locale('zh-cn'),
+                        format: "YYYY-MM-DD",
+                        ignoreReadonly: true
+                    });
+                    $('#'+$target).find('.month_picker-c').datetimepicker({
+                        locale: moment.locale('zh-cn'),
+                        format: "YYYY-MM",
+                        ignoreReadonly: true
+                    });
 
                     Datatable_for_OrderList('#'+$id);
                 }
@@ -149,6 +164,21 @@
                     $('#'+$config.target).prepend($clone);
                     $('#'+$config.target).find('.select2-box-c').select2({
                         theme: 'classic'
+                    });
+                    $('#'+$config.target).find('.time_picker-c').datetimepicker({
+                        locale: moment.locale('zh-cn'),
+                        format: "YYYY-MM-DD HH:mm",
+                        ignoreReadonly: true
+                    });
+                    $('#'+$config.target).find('.date_picker-c').datetimepicker({
+                        locale: moment.locale('zh-cn'),
+                        format: "YYYY-MM-DD",
+                        ignoreReadonly: true
+                    });
+                    $('#'+$config.target).find('.month_picker-c').datetimepicker({
+                        locale: moment.locale('zh-cn'),
+                        format: "YYYY-MM",
+                        ignoreReadonly: true
                     });
 
                     Datatable_for_OrderList('#'+$config.id);
