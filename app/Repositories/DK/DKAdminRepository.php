@@ -19771,13 +19771,13 @@ class DKAdminRepository {
 
 
 
-        $query = DK_Company::select('id','name','item_status','company_category','company_type','superior_company_id')
+        $query = DK_Company::select('id','name','user_status','company_category','company_type','superior_company_id')
             ->with([
 //                'superior' => function($query) { $query->select(['id','username','true_name']); },
 //                'department_district_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); },
 //                'department_group_er' => function($query) { $query->select(['id','name','leader_id'])->with(['leader']); }
             ])
-            ->where('item_status',1)
+            ->where('user_status',1)
             ->whereIn('company_category',[1,11,21]);
 
 
