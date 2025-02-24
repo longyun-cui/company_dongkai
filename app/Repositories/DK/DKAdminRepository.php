@@ -19971,12 +19971,13 @@ class DKAdminRepository {
 
 
         // 交付统计
-        $query = DK_Pivot_Client_Delivery::select('company_id','channel_id','business_id')
+        $query = DK_Pivot_Client_Delivery::select('company_id','channel_id','business_id','delivered_date')
             ->addSelect(DB::raw("
                     delivered_date as date_day,
                     count(*) as delivery_count
                 "))
             ->groupBy('delivered_date');
+
 
         $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
         $the_month_timestamp = strtotime($the_month);
@@ -20033,7 +20034,7 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("id", "asc");
+        else $query->orderBy("delivered_date", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();

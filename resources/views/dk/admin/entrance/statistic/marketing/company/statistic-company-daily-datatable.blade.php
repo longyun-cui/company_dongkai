@@ -38,7 +38,7 @@
                         d.time_date = $('input[name="statistic-company-daily-date"]').val();
                         d.date_start = $('input[name="statistic-company-daily-start"]').val();
                         d.date_ended = $('input[name="statistic-company-daily-ended"]').val();
-                        d.company_id = $('select[name="statistic-company-daily-company"]').val();
+                        d.company = $('select[name="statistic-company-daily-company"]').val();
                         d.channel = $('select[name="statistic-company-daily-channel"]').val();
                         d.business = $('select[name="statistic-company-daily-business"]').val();
                     },
