@@ -4,9 +4,9 @@
 Route::get('/me', function () {
     dd('route-agency');
 });
-Route::get('{any}', function () {
-    dd('route-agency-any');
-});
+//Route::get('{any}', function () {
+//    dd('route-agency-any');
+//});
 
 
 $controller = "DKAgencyController";

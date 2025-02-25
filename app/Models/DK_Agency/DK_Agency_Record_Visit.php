@@ -1,5 +1,5 @@
 <?php
-namespace App\Models\DK\DK_Agency;
+namespace App\Models\DK_Agency;
 use Illuminate\Database\Eloquent\Model;
 
 class DK_Agency_Record_Visit extends Model

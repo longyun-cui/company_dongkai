@@ -150,6 +150,14 @@
                             </div>
                         </div>
 
+                        {{--登录手机--}}
+                        <div class="form-group">
+                            <label class="control-label col-md-2"><sup class="text-red">*</sup> 登录手机</label>
+                            <div class="col-md-8 ">
+                                <input type="text" class="form-control" name="mobile" placeholder="登录手机" value="{{ $data->mobile or '' }}">
+                            </div>
+                        </div>
+
 
                         {{--上级部门--}}
                         <div class="form-group select2-superior-box">

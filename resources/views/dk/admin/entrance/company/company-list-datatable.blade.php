@@ -77,7 +77,7 @@
                     {
                         "title": "操作",
                         "data": 'id',
-                        "width": "160px",
+                        "width": "240px",
                         "orderable": false,
                         render: function(data, type, row, meta) {
 
@@ -134,6 +134,7 @@
                                 $html_recharge+
                                 // $html_recharge_record+
                                 $html_record+
+                                '<a class="btn btn-xs bg-maroon- item-password-admin-reset-submit" data-id="'+data+'">重置密码</a>'+
                                 $html_login+
                                 // $html_delete+
                                 // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
@@ -262,6 +263,28 @@
                                 else return '--';
                             }
                             else return '--';
+                        }
+                    },
+                    {
+                        "title": "登录手机",
+                        "data": "mobile",
+                        "className": "text-center company-mobile",
+                        "width": "100px",
+                        "orderable": false,
+                        "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                            if(row.is_completed != 1)
+                            {
+                                $(nTd).addClass('modal-show-for-info-text-set');
+                                $(nTd).attr('data-id',row.id).attr('data-name','登录手机');
+                                $(nTd).attr('data-key','mobile').attr('data-value',data);
+                                $(nTd).attr('data-column-name','登录手机');
+                                $(nTd).attr('data-text-type','text');
+                                if(data) $(nTd).attr('data-operate-type','edit');
+                                else $(nTd).attr('data-operate-type','add');
+                            }
+                        },
+                        render: function(data, type, row, meta) {
+                            return data;
                         }
                     },
                     {

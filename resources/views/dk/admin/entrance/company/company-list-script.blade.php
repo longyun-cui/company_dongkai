@@ -73,6 +73,36 @@
 
 
 
+        // 【重置密码】提交
+        $(".main-content").on('click', ".item-password-admin-reset-submit", function() {
+            var $that = $(this);
+            layer.msg('确定"重置"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+                    $.post(
+                        "{{ url('/company/company-password-admin-reset') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "company-password-admin-reset",
+                            company_id: $that.attr('data-id')
+                        },
+                        function(data){
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                layer.msg('重置成功！');
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+        });
+
+
+
+
         // 【编辑】
         $(".main-content").on('click', ".item-edit-link", function() {
             var $that = $(this);

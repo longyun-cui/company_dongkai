@@ -442,6 +442,19 @@ class DKAdminController extends Controller
         return $this->repo->operate_company_info_option_set(request()->all());
     }
 
+
+    // 【用户-员工】修改-密码
+    public function operate_company_password_admin_change()
+    {
+        return $this->repo->operate_company_password_admin_change(request()->all());
+    }
+    // 【用户-员工】修改-密码
+    public function operate_company_password_admin_reset()
+    {
+        return $this->repo->operate_company_password_admin_reset(request()->all());
+    }
+
+
     // 【公司】删除
     public function operate_company_admin_delete()
     {

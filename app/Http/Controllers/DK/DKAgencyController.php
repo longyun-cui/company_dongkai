@@ -162,17 +162,17 @@ class DKAgencyController extends Controller
     // 退出
     public function logout()
     {
-        Auth::guard('dk_cc')->user()->admin_token = '';
-        Auth::guard('dk_cc')->user()->save();
-        Auth::guard('dk_cc')->logout();
-        return redirect('/login');
+        Auth::guard('dk_agency')->user()->admin_token = '';
+        Auth::guard('dk_agency')->user()->save();
+        Auth::guard('dk_agency')->logout();
+        return redirect('/');
     }
 
     // 退出
     public function logout_without_token()
     {
-        Auth::guard('dk_cc')->logout();
-        return redirect('/login');
+        Auth::guard('dk_agency')->logout();
+        return redirect('/');
     }
 
 

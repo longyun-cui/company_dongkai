@@ -126,6 +126,8 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
     Route::post('/company/company-info-radio-set', $controller.'@operate_company_info_option_set');
     Route::post('/company/company-info-select-set', $controller.'@operate_company_info_option_set');
     Route::post('/company/company-info-select2-set', $controller.'@operate_company_info_option_set');
+    // 修改密码
+    Route::match(['get','post'], '/company/company-password-admin-reset', $controller.'@operate_company_password_admin_reset');
     // 删除 & 恢复
     Route::post('/company/company-admin-delete', $controller.'@operate_company_admin_delete');
     Route::post('/company/company-admin-restore', $controller.'@operate_company_admin_restore');

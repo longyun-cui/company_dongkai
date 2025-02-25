@@ -269,13 +269,13 @@ class DKAdminRepository {
         if(empty($post_data['keyword']))
         {
             $query =DK_Company::select(['id','name as text'])
-                ->where(['item_status'=>1]);
+                ->where(['user_status'=>1]);
         }
         else
         {
             $keyword = "%{$post_data['keyword']}%";
             $query =DK_Department::select(['id','name as text'])->where('name','like',"%$keyword%")
-                ->where(['item_status'=>1]);
+                ->where(['user_status'=>1]);
         }
 
         if(!empty($post_data['type']))
@@ -2269,11 +2269,13 @@ class DKAdminRepository {
 //        dd($post_data);
         $messages = [
             'operate.required' => 'operate.required.',
+            'mobile.required' => '请输入登录手机！',
             'name.required' => '请输入公司或渠道名称！',
 //            'name.unique' => '该公司或渠道号已存在！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
+            'mobile' => 'required',
             'name' => 'required',
 //            'name' => 'required|unique:DK_Company,name',
         ], $messages);
@@ -2300,6 +2302,7 @@ class DKAdminRepository {
             $mine = new DK_Company;
             $post_data["active"] = 1;
             $post_data["creator_id"] = $me->id;
+            $post_data["password"] = password_encode("12345678");
         }
         else if($operate == 'edit') // 编辑
         {
@@ -2659,6 +2662,59 @@ class DKAdminRepository {
                     else throw new Exception("insert--record--fail");
                 }
             }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+    // 【公司与渠道】管理员-重置密码
+    public function operate_company_password_admin_reset($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'company_id.required' => 'company_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'company_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'company-password-admin-reset') return response_error([],"参数【operate】有误！");
+        $id = $post_data["company_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $company = DK_Company::withTrashed()->find($id);
+        if(!$company) return response_error([],"该员工不存在，刷新页面重试！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19])) return response_error([],"你没有该操作权限！");
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $company->password = password_encode('12345678');
+            $bool = $company->save();
+            if(!$bool) throw new Exception("DK_Company--update--fail");
 
             DB::commit();
             return response_success([]);
