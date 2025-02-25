@@ -50,14 +50,6 @@ Route::group(['middleware' => []], function () {
 //    Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
 
 
-    // select2
-    Route::match(['get','post'], '/company/team_select2_leader', $controller.'@operate_department_select2_leader');
-    Route::match(['get','post'], '/company/team_select2_superior_department', $controller.'@operate_department_select2_superior_department');
-
-
-
-
-
 
 
     Route::post('/delivery/delivery-list', $controller.'@get_datatable_delivery_list');
@@ -65,9 +57,6 @@ Route::group(['middleware' => []], function () {
     Route::post('/delivery/delivery-project', $controller.'@get_datatable_delivery_project');
 
     Route::get('/delivery/delivery-export-by-ids', $controller.'@operate_delivery_export_by_ids');
-
-
-
 
 
 

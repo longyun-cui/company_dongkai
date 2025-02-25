@@ -15,6 +15,20 @@
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
+        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active-">
+                    <a href="javascript:void(0);" style="color:#fff;">
+                        <b class="nav-header-title">
+                            @yield('title')
+                            <span class="sr-only">@yield('title')</span>
+                        </b>
+                        <span class="nav-header-title-2">@yield('title-2')</span>
+                        <span class="nav-header-title-3">@yield('title-3')</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">

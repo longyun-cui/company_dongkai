@@ -2,13 +2,14 @@
 
 
 @section('head_title')
-    {{ $title_text or '工单列表' }} - 客户系统 - {{ config('info.info.short_name') }}
+    {{ $title_text or '交付列表' }} - 客户系统 - {{ config('info.info.short_name') }}
 @endsection
 
 
 
 
-@section('header','')
+@section('title')<span class="box-title">{{ $title_text or '交付列表' }}</span>@endsection
+@section('header')<span class="box-title">{{ $title_text or '交付列表' }}</span>@endsection
 @section('description')客户系统 - {{ config('info.info.short_name') }}@endsection
 @section('breadcrumb')
     <li><a href="{{ url('/') }}"><i class="fa fa-home"></i>首页</a></li>
@@ -16,108 +17,111 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <div class="box box-info main-list-body" style="margin-bottom:0;">
+        <div class="box box-info main-list-body datatable-wrapper" style="margin-bottom:0;">
+
 
 
 
             <div class="box-body datatable-body item-main-body" id="datatable-for-delivery-list">
 
                 <div class="row col-md-12 datatable-search-row">
-                    <div class="input-group">
+                    <div class="pull-left">
 
                         <input type="hidden" name="order-time-type" value="all" readonly>
 
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:80px;text-align:center;" />
+                        <input type="text" class="search-filter form-filter filter-keyup" name="order-id" placeholder="ID" value="{{ $order_id or '' }}" style="width:80px;text-align:center;" />
 
-{{--                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:100px;text-align:center;" />--}}
-                        <input type="text" class="form-control form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:100px;text-align:center;" />
+                        {{--                        <input type="text" class="search-filter form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:100px;text-align:center;" />--}}
+                        <input type="text" class="search-filter form-filter filter-keyup" name="order-client-phone" placeholder="客户电话" value="{{ $client_phone or '' }}" style="width:100px;text-align:center;" />
 
-                        <select class="form-control form-filter select2-box select2-district" name="order-district[]" multiple="multiple" style="width:160px;">
+                        <select class="search-filter form-filter select2-box select2-district" name="order-district[]" multiple="multiple" style="width:160px;">
                             <option value="-1">选择区域</option>
                         </select>
 
-{{--                        <select class="form-control form-filter" name="order-exported-status" style="width:100px;">--}}
-{{--                            <option value="-1">导出状态</option>--}}
-{{--                            <option value="0" @if($exported_status == 0) selected="selected" @endif>待导出</option>--}}
-{{--                            <option value="1" @if($exported_status == 1) selected="selected" @endif>已导出</option>--}}
-{{--                        </select>--}}
+                        {{--                        <select class="form-control form-filter" name="order-exported-status" style="width:100px;">--}}
+                        {{--                            <option value="-1">导出状态</option>--}}
+                        {{--                            <option value="0" @if($exported_status == 0) selected="selected" @endif>待导出</option>--}}
+                        {{--                            <option value="1" @if($exported_status == 1) selected="selected" @endif>已导出</option>--}}
+                        {{--                        </select>--}}
 
                         @if($me->client_er->is_api_scrm == 1)
-                        <select class="form-control form-filter" name="order-is-api-pushed" style="width:100px;">
-                            <option value="-1">api推送</option>
-                            <option value="0" @if($is_api_pushed == 0) selected="selected" @endif>未推送</option>
-                            <option value="1" @if($is_api_pushed == 1) selected="selected" @endif>已推送</option>
-                        </select>
+                            <select class="search-filter form-filter" name="order-is-api-pushed" style="width:100px;">
+                                <option value="-1">api推送</option>
+                                <option value="0" @if($is_api_pushed == 0) selected="selected" @endif>未推送</option>
+                                <option value="1" @if($is_api_pushed == 1) selected="selected" @endif>已推送</option>
+                            </select>
                         @endif
 
-                        <select class="form-control form-filter" name="order-assign-status" style="width:100px;">
+                        <select class="search-filter form-filter" name="order-assign-status" style="width:100px;">
                             <option value="-1">分配状态</option>
                             <option value="0" @if($assign_status == 0) selected="selected" @endif>待分配</option>
                             <option value="1" @if($assign_status == 1) selected="selected" @endif>已分配</option>
                         </select>
 
-                        <select class="form-control form-filter" name="order-client-type" style="width:100px;">
+                        <select class="search-filter form-filter" name="order-client-type" style="width:100px;">
                             <option value="-1">患者类型</option>
                             @foreach(config('info.client_type') as $k => $v)
                                 <option value="{{ $k }}">{{ $v }}</option>
                             @endforeach
                         </select>
 
-{{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
-{{--                            <option value="-1">是否+V</option>--}}
-{{--                            <option value="1" @if($is_wx == "1") selected="selected" @endif>是</option>--}}
-{{--                            <option value="0" @if($is_wx == "0") selected="selected" @endif>否</option>--}}
-{{--                        </select>--}}
+                        {{--                        <select class="form-control form-filter" name="order-is-wx" style="width:88px;">--}}
+                        {{--                            <option value="-1">是否+V</option>--}}
+                        {{--                            <option value="1" @if($is_wx == "1") selected="selected" @endif>是</option>--}}
+                        {{--                            <option value="0" @if($is_wx == "0") selected="selected" @endif>否</option>--}}
+                        {{--                        </select>--}}
 
-{{--                        <select class="form-control form-filter" name="order-is-repeat" style="width:88px;">--}}
-{{--                            <option value="-1">是否重复</option>--}}
-{{--                            <option value="1" @if($is_repeat >= 1) selected="selected" @endif>是</option>--}}
-{{--                            <option value="0" @if($is_repeat == 0) selected="selected" @endif>否</option>--}}
-{{--                        </select>--}}
+                        {{--                        <select class="form-control form-filter" name="order-is-repeat" style="width:88px;">--}}
+                        {{--                            <option value="-1">是否重复</option>--}}
+                        {{--                            <option value="1" @if($is_repeat >= 1) selected="selected" @endif>是</option>--}}
+                        {{--                            <option value="0" @if($is_repeat == 0) selected="selected" @endif>否</option>--}}
+                        {{--                        </select>--}}
 
-{{--                        <input type="text" class="form-control form-filter filter-keyup" name="order-description" placeholder="通话小结" value="" style="width:120px;" />--}}
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order-by-all" data-time-type="all">
-                            <i class="fa fa-search"></i> 全部搜索
-                        </button>
+                        {{--                        <input type="text" class="form-control form-filter filter-keyup" name="order-description" placeholder="通话小结" value="" style="width:120px;" />--}}
 
-                        <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
+                        <button type="button" class="btn btn-filter btn-default time-picker-move picker-move-pre date-picker-btn date-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
-                        <button type="button" class="form-control btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
+                        <input type="text" class="search-filter form-filter filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="{{ $assign or '' }}" readonly="readonly" style="width:80px;text-align:center;" />
+                        <button type="button" class="btn btn-filter btn-default time-picker-move picker-move-next date-picker-btn date-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit" id="filter-submit-for-order-by-date" data-time-type="date">
+                        <button type="button" class="search-filter btn btn-filter btn-success filter-submit" id="filter-submit-for-order-by-date" data-time-type="date">
                             <i class="fa fa-search"></i> 按天搜索
                         </button>
 
                         {{--按月导出--}}
-                        <button type="button" class="form-control btn btn-flat btn-default date-picker-btn month-pick-pre-for-order">
+                        <button type="button" class="btn btn-filter btn-default time-picker-move picker-move-pre date-picker-btn month-pick-pre-for-order">
                             <i class="fa fa-chevron-left"></i>
                         </button>
-                        <input type="text" class="form-control form-filter filter-keyup month-picker month_picker" name="order-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-                        <button type="button" class="form-control btn btn-flat btn-default date-picker-btn month-pick-next-for-order">
+                        <input type="text" class="search-filter form-filter filter-keyup month-picker month_picker" name="order-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+                        <button type="button" class="btn btn-filter btn-default time-picker-move picker-move-next date-picker-btn month-pick-next-for-order">
                             <i class="fa fa-chevron-right"></i>
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit"  id="filter-submit-for-order-by-month" data-time-type="month">
+                        <button type="button" class="btn btn-filter btn-success filter-submit"  id="filter-submit-for-order-by-month" data-time-type="month">
                             <i class="fa fa-search"></i> 按月搜索
                         </button>
 
                         {{--按时间段导出--}}
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="width:100px;text-align:center;" />
-                        <input type="text" class="form-control form-filter filter-keyup date_picker" name="order-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="width:100px;text-align:center;" />
+                        <input type="text" class="search-filter form-filter filter-keyup date_picker" name="order-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+                        <input type="text" class="search-filter form-filter filter-keyup date_picker" name="order-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 
-                        <button type="button" class="form-control btn btn-flat btn-success filter-submit filter-submit-for-order" id="filter-submit-for-order-by-period" data-time-type="period" style="width:100px;">
+                        <button type="button" class="btn btn-filter btn-success filter-submit" id="filter-submit-for-order-by-period" data-time-type="period">
                             <i class="fa fa-search"></i> 按时间段搜索
                         </button>
 
-                        <button type="button" class="form-control btn btn-flat bg-teal filter-empty" id="filter-empty-for-order">
+
+                        <button type="button" class="btn btn-filter btn-success filter-submit" id="filter-submit-for-order-by-all" data-time-type="all">
+                            <i class="fa fa-search"></i> 全部搜索
+                        </button>
+
+                        <button type="button" class="btn btn-filter bg-teal filter-empty" id="filter-empty-for-order">
                             <i class="fa fa-remove"></i> 清空重选
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-primary filter-refresh" id="filter-refresh-for-order">
+                        <button type="button" class="btn btn-filter btn-primary filter-refresh" id="filter-refresh-for-order">
                             <i class="fa fa-circle-o-notch"></i> 刷新
                         </button>
-                        <button type="button" class="form-control btn btn-flat btn-warning filter-cancel" id="filter-cancel-for-order">
+                        <button type="button" class="btn btn-filter btn-warning filter-cancel" id="filter-cancel-for-order">
                             <i class="fa fa-undo"></i> 重置
                         </button>
 
@@ -127,6 +131,7 @@
 
                     </div>
                 </div>
+
 
                 <div class="tableArea">
                 <table class='table table-striped table-bordered table-hover order-column' id='datatable_ajax'>
@@ -179,7 +184,7 @@
                                 <option value="1">已分配</option>
                                 <option value="0">待分配</option>
                             </select>
-                            <span class="input-group-addon btn btn-default" id="bulk-submit-for-assign-status"><i class="fa fa-check"></i> 批量更改导出状态</span>
+                            <span class="input-group-addon btn btn-default " id="bulk-submit-for-assign-status"><i class="fa fa-check"></i> 批量更改分配状态</span>
 
                             <select name="bulk-operate-staff-id" class="form-control form-filter">
                                 <option value="-1">选择员工</option>

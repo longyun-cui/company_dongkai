@@ -16,8 +16,128 @@
     <li><a href="#"><i class="fa "></i>Here</a></li>
 @endsection
 @section('content')
-{{--订单统计--}}
 <div class="row">
+    <div class="col-md-12">
+
+        <div class="nav-tabs-custom" id="index-nav-box">
+
+
+            {{--nav--}}
+            <ul class="nav nav-tabs">
+                <li class="nav-item active" id="home"><a href="#tab-home" data-toggle="tab" aria-expanded="true">首页</a></li>
+            </ul>
+
+
+            {{--content--}}
+            <div class="tab-content">
+
+                <div class="row tab-pane active" id="tab-home">
+
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="box box-primary box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title comprehensive-month-title">财务统计</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <ul class="nav nav-stacked">
+                                    <li class="">
+                                        <a href="javascript:void(0);">
+                                            累计充值
+                                            <span class="pull-right">
+                                            <text class="text-blue font-20px">{{ $funds_recharge_total }}</text> 元
+                                        </span>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="javascript:void(0);">
+                                            累计消费
+                                            <span class="pull-right">
+                                                <text class="text-blue font-20px">{{ $funds_consumption_total }}</text> 元
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="javascript:void(0);">
+                                            余额
+                                            <span class="pull-right">
+                                            <text class="text-blue font-20px">{{ $funds_balance }}</text> 元
+                                        </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="box box-success box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title comprehensive-month-title">工单统计</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <ul class="nav nav-stacked">
+                                    <li class="">
+                                        <a href="javascript:void(0);">
+                                            总计
+                                            <span class="pull-right">
+                                                <text class="text-black font-20px">{{ $order_count_for_all or '' }}</text> 单
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="javascript:void(0);">
+                                            本月
+                                            <span class="pull-right">
+                                               <text class="text-green font-20px">{{ $order_count_for_month or '' }}</text> 单
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="javascript:void(0);">
+                                            今日
+                                            <span class="pull-right">
+                                                <text class="text-blue font-20px">{{ $order_count_for_today or '' }}</text> 单
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="component-container _none">
+
+    @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list')
+    @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily')
+    {{--@include(env('TEMPLATE_DK_AGENCY').'component.order-create')--}}
+
+</div>
+
+
+
+
+{{--订单统计--}}
+<div class="row _none">
     <div class="col-md-12">
         <div class="callout callout-success- bg-white">
 
@@ -41,11 +161,11 @@
 
             <h4>工单统计</h4>
 
-            <div class="callout-body">
-                <span>总计 <text class="text-black font-24px">{{ $order_count_for_all or '' }}</text> 单</span>
-                <span>本月 <text class="text-teal font-24px">{{ $order_count_for_month or '' }}</text> 单</span>
-                <span>今日 <text class="text-red font-24px">{{ $order_count_for_today or '' }}</text> 单</span>
-            </div>
+{{--            <div class="callout-body">--}}
+{{--                <span>总计 <text class="text-black font-24px">{{ $order_count_for_all or '' }}</text> 单</span>--}}
+{{--                <span>本月 <text class="text-teal font-24px">{{ $order_count_for_month or '' }}</text> 单</span>--}}
+{{--                <span>今日 <text class="text-red font-24px">{{ $order_count_for_today or '' }}</text> 单</span>--}}
+{{--            </div>--}}
 
             <div class="box box-info margin-top-32px">
 
@@ -173,4 +293,9 @@
 
     });
 </script>
+
+@include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-datatable')
+@include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily-datatable')
+
+@include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-script')
 @endsection

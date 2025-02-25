@@ -121,7 +121,7 @@
                     target: $btn.data('datatable-target') + '-' + $session_unique_id,
                     clone_object: $btn.data('datatable-clone-object'),
 
-                    chart_id: $btn.data('chart-id') + '-' + $session_unique_id
+                    chart_id: $btn.data('chart-id')
                 };
             }
 
@@ -168,10 +168,6 @@
                 else if($id == "datatable-delivery-daily")
                 {
                     Datatable_for_DeliveryDaily('#'+$config.id, $config.chart_id);
-                }
-                else if($id == "datatable-delivery-project")
-                {
-                    Datatable_for_DeliveryProject('#'+$config.id);
                 }
             }
 

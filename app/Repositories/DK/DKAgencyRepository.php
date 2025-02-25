@@ -262,7 +262,7 @@ class DKAgencyRepository {
 
 
 
-    // 【交付管理】返回-列表-数据
+    // 【交付】交付列表
     public function get_datatable_delivery_list($post_data)
     {
         $this->get_me();
@@ -426,6 +426,7 @@ class DKAgencyRepository {
         return datatable_response($list, $draw, $total);
     }
 
+    // 【交付】交付日报
     public function get_datatable_delivery_daily($post_data)
     {
         $this->get_me();
@@ -436,6 +437,7 @@ class DKAgencyRepository {
         $query = DK_Pivot_Client_Delivery::select('company_id','channel_id','business_id','delivered_date')
             ->addSelect(DB::raw("
                     delivered_date as date_day,
+                    DAY(delivered_date) as day,
                     count(*) as delivery_count
                 "))
             ->groupBy('delivered_date')
@@ -500,6 +502,7 @@ class DKAgencyRepository {
         return datatable_response($list, $draw, $total);
     }
 
+    // 【交付】交付项目统计
     public function get_datatable_delivery_project($post_data)
     {
         $this->get_me();

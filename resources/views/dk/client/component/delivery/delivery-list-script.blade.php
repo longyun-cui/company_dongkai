@@ -3,19 +3,18 @@
 
 
         // 【搜索】
-        $(".main-content").on('click', ".filter-submit", function() {
+        $("#datatable-for-delivery-list").on('click', ".filter-submit", function() {
             var $that = $(this);
             var $time_type = $that.attr("data-time-type");
-            console.log($time_type);
             $("#datatable-for-delivery-list").find('input[name=order-time-type]').val($time_type);
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【刷新】
-        $(".main-content").on('click', ".filter-refresh", function() {
+        $("#datatable-for-delivery-list").on('click', ".filter-refresh", function() {
             $('#datatable_ajax').DataTable().ajax.reload(null,false);
         });
         // 【重置】
-        $(".main-content").on('click', ".filter-cancel", function() {
+        $("#datatable-for-delivery-list").on('click', ".filter-cancel", function() {
             $("#datatable-for-delivery-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
@@ -29,7 +28,7 @@
             $('#datatable_ajax').DataTable().ajax.reload();
         });
         // 【清空重选】
-        $(".main-content").on('click', ".filter-empty", function() {
+        $("#datatable-for-delivery-list").on('click', ".filter-empty", function() {
             $("#datatable-for-delivery-list").find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
             });
@@ -41,7 +40,7 @@
             $("#datatable-for-delivery-list").find('select.form-filter').find('option:eq(0)').attr('selected', true);
         });
         // 【查询】回车
-        $(".main-content").on('keyup', ".filter-keyup", function(event) {
+        $("#datatable-for-delivery-list").on('keyup', ".filter-keyup", function(event) {
             if(event.keyCode ==13)
             {
                 $("#datatable-for-delivery-list").find(".filter-submit").click();
@@ -1669,7 +1668,7 @@
             // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
             // window.open($url);
 
-            layer.msg('确定"批量更改"么', {
+            layer.msg('确定"批量导出"么', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
@@ -1737,7 +1736,7 @@
             // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
             // window.open($url);
 
-            layer.msg('确定"批量指派员工"么', {
+            layer.msg('确定"批量导出"么', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){

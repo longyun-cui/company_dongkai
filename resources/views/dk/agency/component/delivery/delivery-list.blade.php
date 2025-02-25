@@ -21,13 +21,13 @@
 {{--            <input type="text" class="search-filter form-filter filter-keyup" name="delivery-order-id" placeholder="工单ID" value="" style="width:80px;" />--}}
 
             {{--<input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="客户电话" value="" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup" name="delivery-client-phone" placeholder="客户电话" value="" />
 
 
             <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-pre-for-order" style="width:24px;">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="交付日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="delivery-assign" placeholder="交付日期" value="" readonly="readonly" />
             <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-next-for-order" style="width:24px;">
                 <i class="fa fa-chevron-right"></i>
             </button>

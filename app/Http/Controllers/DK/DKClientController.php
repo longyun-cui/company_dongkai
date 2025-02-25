@@ -177,6 +177,31 @@ class DKClientController extends Controller
 
 
 
+
+    /*
+     * 交付管理
+     */
+    // 【交付】交付列表
+    public function get_datatable_delivery_list()
+    {
+        return $this->repo->get_datatable_delivery_list(request()->all());
+    }
+    // 【交付】交付日报
+    public function get_datatable_delivery_daily()
+    {
+        return $this->repo->get_datatable_delivery_daily(request()->all());
+    }
+
+    // 【交付】导出
+    public function operate_delivery_export_by_ids()
+    {
+        $this->repo->operate_delivery_export_by_ids(request()->all());
+    }
+
+
+
+
+
     /*
      * 用户基本信息
      */

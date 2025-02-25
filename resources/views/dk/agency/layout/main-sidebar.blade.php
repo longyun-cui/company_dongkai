@@ -74,7 +74,7 @@
                 </a>
             </li>
             <li class="treeview">
-                <a class="tab-control datatable-control"
+                <a class="tab-control datatable-control "
                    data-type="create"
                    data-unique="y"
                    data-id="delivery-daily"
@@ -86,6 +86,8 @@
                    data-datatable-id="datatable-delivery-daily"
                    data-datatable-target="delivery-daily"
                    data-datatable-clone-object="delivery-daily-clone"
+
+                   data-chart-id="eChart-delivery-daily"
                 >
                     <i class="fa fa-bar-chart text-maroon"></i>
                     <span>交付日报</span>

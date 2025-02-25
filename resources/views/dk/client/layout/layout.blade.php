@@ -209,6 +209,8 @@ desired effect
 
 
 {{--layout-script--}}
+@include(env('TEMPLATE_DK_CLIENT').'layout.layout-tab-script')
+@include(env('TEMPLATE_DK_CLIENT').'layout.layout-datatable-script')
 @include(env('TEMPLATE_DK_CLIENT').'layout.layout-script')
 
 

@@ -77,7 +77,7 @@
 @section('custom-script')
 
     @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-list-datatable')
-    @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-daily-datatable')
+    @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-daily-eChart')
     @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-project-datatable')
 
     @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-list-script')
