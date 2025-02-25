@@ -230,6 +230,12 @@ class DKAgencyController extends Controller
         return $this->repo->get_datatable_delivery_project(request()->all());
     }
 
+    // 【统计】订单-导出
+    public function operate_delivery_export_by_ids()
+    {
+        $this->repo->operate_delivery_export_by_ids(request()->all());
+    }
+
 
 
 

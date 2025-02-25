@@ -64,6 +64,8 @@ Route::group(['middleware' => []], function () {
     Route::post('/delivery/delivery-daily', $controller.'@get_datatable_delivery_daily');
     Route::post('/delivery/delivery-project', $controller.'@get_datatable_delivery_project');
 
+    Route::get('/delivery/delivery-export-by-ids', $controller.'@operate_delivery_export_by_ids');
+
 
 
 
