@@ -7,6 +7,8 @@
             const $btn = $(this);
             const $unique = $btn.data('unique');
 
+            // $(".nav-header-title").html($btn.data('title'));
+
             if($unique == 'y')
             {
                 const $config = {

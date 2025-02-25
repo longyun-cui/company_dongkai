@@ -34,7 +34,6 @@
                 $(".nav-header-title-3").html($the_start_str + '-' + $the_ended_str);
             }
 
-
             $('#'+$table_id).DataTable().ajax.reload(null,false);
         });
         // 【刷新】
@@ -99,8 +98,11 @@
         $(".main-content").on('click', ".month-pre", function() {
             var $that = $(this);
             var $target = $that.attr('data-target');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            // var $month_dom = $('input[name="statistic-company-month"]');
+            $datatable_wrapper.find('.time-type').val('month');
+
             var $month_dom = $('input[name='+$target+']');
             var $the_month = $month_dom.val();
             var $date = new Date($the_month);
@@ -121,16 +123,18 @@
             var $pre_month_str = $pre_year+'-'+$pre_month;
             $month_dom.val($pre_month_str);
 
-            // $("#filter-submit-statistic-company-by-month").click();
-            // $('#datatable-for-statistic-company').DataTable().ajax.reload();
+            $('#'+$table_id).DataTable().ajax.reload(null,false);
 
         });
         // 【后一月】
         $(".main-content").on('click', ".month-next", function() {
             var $that = $(this);
             var $target = $that.attr('data-target');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            // var $month_dom = $('input[name="statistic-company-month"]');
+            $datatable_wrapper.find('.time-type').val('month');
+
             var $month_dom = $('input[name='+$target+']');
             var $the_month_str = $month_dom.val();
 
@@ -153,8 +157,7 @@
             var $next_month_str = $next_year+'-'+$next_month;
             $month_dom.val($next_month_str);
 
-            // $("#filter-submit-statistic-company-by-month").click();
-            // $('#datatable-for-statistic-company').DataTable().ajax.reload();
+            $('#'+$table_id).DataTable().ajax.reload(null,false);
 
         });
 
@@ -162,8 +165,11 @@
         $(".main-content").on('click', ".date-pre", function() {
             var $that = $(this);
             var $target = $that.attr('data-target');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            // var $date_dom = $('input[name="statistic-company-date"]');
+            $datatable_wrapper.find('.time-type').val('date');
+
             var $date_dom = $('input[name='+$target+']');
             var $the_date_str = $date_dom.val();
 
@@ -179,17 +185,18 @@
             var $yesterday_date_str = $yesterday_year + '-' + $yesterday_month + '-' + $yesterday_day;
             $date_dom.val($yesterday_date_str);
 
-
-            // $("#filter-submit-statistic-company-by-day").click();
-            // $('#datatable-for-statistic-company').DataTable().ajax.reload();
+            $('#'+$table_id).DataTable().ajax.reload(null,false);
 
         });
         // 【后一天】
         $(".main-content").on('click', ".date-next", function() {
             var $that = $(this);
             var $target = $that.attr('data-target');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            // var $date_dom = $('input[name="statistic-company-date"]');
+            $datatable_wrapper.find('.time-type').val('date');
+
             var $date_dom = $('input[name='+$target+']');
             var $the_date_str = $date_dom.val();
 
@@ -205,8 +212,7 @@
             var $tomorrow_date_str = $tomorrow_year + '-' + $tomorrow_month + '-' + $tomorrow_day;
             $date_dom.val($tomorrow_date_str);
 
-            // $("#filter-submit-statistic-company-by-day").click();
-            // $('#datatable-for-statistic-company').DataTable().ajax.reload();
+            $('#'+$table_id).DataTable().ajax.reload(null,false);
 
         });
 
