@@ -217,6 +217,7 @@ desired effect
 
 {{--layout-script--}}
 @include(env('TEMPLATE_DK_AGENCY').'layout.layout-tab-script')
+@include(env('TEMPLATE_DK_AGENCY').'layout.layout-datatable-script')
 @include(env('TEMPLATE_DK_AGENCY').'layout.layout-script')
 
 

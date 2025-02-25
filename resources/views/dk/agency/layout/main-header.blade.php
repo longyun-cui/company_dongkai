@@ -19,12 +19,12 @@
             <ul class="nav navbar-nav">
                 <li class="active-">
                     <a href="javascript:void(0);" style="color:#fff;">
-                        <b>
+                        <b class="nav-header-title">
                             @yield('title')
                             <span class="sr-only">@yield('title')</span>
                         </b>
-                        @yield('title-2')
-                        @yield('title-3')
+                        <span class="nav-header-title-2">@yield('title-2')</span>
+                        <span class="nav-header-title-3">@yield('title-3')</span>
                     </a>
                 </li>
             </ul>
