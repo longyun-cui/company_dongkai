@@ -161,6 +161,10 @@
                 {
                     Datatable_for_DeliveryDaily('#'+$config.id);
                 }
+                else if($id == "datatable-delivery-project")
+                {
+                    Datatable_for_DeliveryProject('#'+$config.id);
+                }
             }
 
 

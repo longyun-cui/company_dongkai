@@ -225,6 +225,10 @@ class DKAgencyController extends Controller
     {
         return $this->repo->get_datatable_delivery_daily(request()->all());
     }
+    public function get_datatable_delivery_project()
+    {
+        return $this->repo->get_datatable_delivery_project(request()->all());
+    }
 
 
 

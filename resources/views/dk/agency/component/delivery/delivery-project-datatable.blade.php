@@ -1,6 +1,6 @@
 <script>
 
-    function Datatable_for_DeliveryDaily($tableId)
+    function Datatable_for_DeliveryProject($tableId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -20,31 +20,25 @@
             "scrollCollapse": true,
             "showRefresh": true,
             "ajax": {
-                'url': "{{ url('/delivery/delivery-daily') }}",
+                'url': "{{ url('/delivery/delivery-project') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $tableSearch.find('input[name="delivery-daily-id"]').val();
-                    d.order_id = $tableSearch.find('input[name="delivery-daily-order-id"]').val();
-                    d.name = $tableSearch.find('input[name="delivery-daily-name"]').val();
-                    d.title = $tableSearch.find('input[name="delivery-daily-title"]').val();
-                    d.keyword = $tableSearch.find('input[name="delivery-daily-keyword"]').val();
-                    d.remark = $tableSearch.find('input[name="delivery-daily-remark"]').val();
-                    d.description = $tableSearch.find('input[name="delivery-daily-description"]').val();
-                    d.assign = $tableSearch.find('input[name="delivery-project-assign"]').val();
-                    d.assign_start = $tableSearch.find('input[name="delivery-daily-start"]').val();
-                    d.assign_ended = $tableSearch.find('input[name="delivery-daily-ended"]').val();
-                    d.client = $tableSearch.find('select[name="delivery-daily-client"]').val();
-                    d.project = $tableSearch.find('select[name="delivery-daily-project"]').val();
-                    d.status = $tableSearch.find('select[name="delivery-daily-status"]').val();
-                    d.delivery_type = $tableSearch.find('select[name="delivery-daily-delivery-type"]').val();
-                    d.client_type = $tableSearch.find('select[name="delivery-daily-client-type"]').val();
-                    d.client_name = $tableSearch.find('input[name="delivery-daily-client-name"]').val();
-                    d.client_phone = $tableSearch.find('input[name="delivery-daily-client-phone"]').val();
-                    d.delivered_status = $tableSearch.find('select[name="delivery-daily-delivered-status"]').val();
-                    d.delivered_result = $tableSearch.find('select[name="delivery-daily-delivered-result[]"]').val();
-
+                    d.id = $tableSearch.find('input[name="delivery-project-id"]').val();
+                    d.name = $tableSearch.find('input[name="delivery-project-name"]').val();
+                    d.title = $tableSearch.find('input[name="delivery-project-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="delivery-project-keyword"]').val();
+                    d.status = $tableSearch.find('select[name="delivery-project-status"]').val();
+                    d.time_type = $tableSearch.find('input[name="delivery-project-time-type"]').val();
+                    d.time_month = $tableSearch.find('input[name="delivery-project-month"]').val();
+                    d.time_date = $tableSearch.find('input[name="delivery-project-date"]').val();
+                    d.date_start = $tableSearch.find('input[name="delivery-project-start"]').val();
+                    d.date_ended = $tableSearch.find('input[name="delivery-project-ended"]').val();
+                    d.client = $tableSearch.find('select[name="delivery-client"]').val();
+                    d.project = $tableSearch.find('select[name="delivery-project"]').val();
+                    d.project = $tableSearch.find('select[name="delivery-project-project"]').val();
+                    d.delivered_result = $tableSearch.find('select[name="delivery-project-delivered-result[]"]').val();
                 },
             },
             "columnDefs": [
@@ -61,8 +55,8 @@
             },
             "columns": [
                 {
-                    "title": "日期",
-                    "data": "date_day",
+                    "title": "项目",
+                    "data": "client_id",
                     "className": "text-center",
                     "width": "80px",
                     "orderable": false,
@@ -70,7 +64,8 @@
                         // $(nTd).addClass('_bold');
                     },
                     render: function(data, type, row, meta) {
-                        return row.date_day;
+                        if(row.client_er) return row.client_er.username;
+                        else return '--';
                     }
                 },
                 {

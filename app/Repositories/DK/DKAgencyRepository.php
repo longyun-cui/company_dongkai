@@ -500,4 +500,92 @@ class DKAgencyRepository {
         return datatable_response($list, $draw, $total);
     }
 
+    public function get_datatable_delivery_project($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        // 交付统计
+        $query = DK_Pivot_Client_Delivery::select('client_id','delivered_date')
+            ->with(['client_er'])
+            ->addSelect(DB::raw("
+                    delivered_date as date_day,
+                    count(*) as delivery_count
+                "))
+            ->groupBy('client_id')
+            ->when($me->company_category == 1, function ($query) use ($me) {
+                return $query->where('company_id', $me->id);
+            })
+            ->when($me->company_category == 11, function ($query) use ($me) {
+                return $query->where('channel_id', $me->id);
+            })
+            ->when($me->company_category == 21, function ($query) use ($me) {
+                return $query->where('business_id', $me->id);
+            });
+
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query->whereDate('delivered_date',$the_day);
+
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query->whereDate('delivered_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query->whereDate('delivered_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("delivered_date", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+
+        foreach($list as $k => $v)
+        {
+        }
+
+        return datatable_response($list, $draw, $total);
+    }
+
 }

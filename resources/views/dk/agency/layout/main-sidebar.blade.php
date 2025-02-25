@@ -91,10 +91,21 @@
                     <span>交付日报</span>
                 </a>
             </li>
-            <li class="treeview _none">
-                <a class="tab-control" data-id="department-list" data-title="团队列表" data-content="团队">
-                    <i class="fa fa-columns text-aqua"></i>
-                    <span>项目概览</span>
+            <li class="treeview">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="delivery-project"
+                   data-title="项目统计"
+                   data-content="项目统计"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-delivery-project"
+                   data-datatable-target="delivery-project"
+                   data-datatable-clone-object="delivery-project-clone">
+                    <i class="fa fa-pie-chart text-maroon"></i>
+                    <span>项目统计</span>
                 </a>
             </li>
             <li class="treeview _none">

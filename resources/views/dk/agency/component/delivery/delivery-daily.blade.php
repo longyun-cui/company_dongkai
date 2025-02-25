@@ -9,7 +9,7 @@
             <input type="hidden" name="delivery-daily-time-type" class="time-type" value="" readonly>
 
 
-            <select class="search-filter form-filter select2-box-c" name="delivery-client" style="width:200px;">
+            <select class="search-filter form-filter select2-box-c" name="delivery-daily-client" style="width:200px;">
                 <option value="-1">全部项目</option>
                 @if(!empty($client_list) && count($client_list) > 0)
                     @foreach($client_list as $v)
