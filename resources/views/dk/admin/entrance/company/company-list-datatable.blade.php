@@ -92,7 +92,7 @@
                             var $html_abandon = '';
                             var $html_login = '';
 
-                            @if(in_array($me->user_type,[0,1,9]))
+                            @if(in_array($me->user_type,[0,1,9,11]))
                             $html_login = '<a class="btn btn-xs btn-primary- item-admin-login-submit" data-id="'+data+'">登录</a>';
                             @endif
 
