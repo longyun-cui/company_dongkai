@@ -288,59 +288,6 @@
 
 
 
-        // 【获取】内容详情
-        $(".main-content").on('click', ".item-modal-show-for-detail", function() {
-            var $that = $(this);
-            var $row = $that.parents('tr');
-            console.log();
-            var $data = new Object();
-            {{--$.ajax({--}}
-            {{--    type:"post",--}}
-            {{--    dataType:'json',--}}
-            {{--    async:false,--}}
-            {{--    url: "{{ url('/item/order-get-html') }}",--}}
-            {{--    data: {--}}
-            {{--        _token: $('meta[name="_token"]').attr('content'),--}}
-            {{--        operate:"item-get",--}}
-            {{--        order_id: $that.attr('data-id')--}}
-            {{--    },--}}
-            {{--    success:function(data){--}}
-            {{--        if(!data.success) layer.msg(data.msg);--}}
-            {{--        else--}}
-            {{--        {--}}
-            {{--            $data = data.data;--}}
-            {{--        }--}}
-            {{--    }--}}
-            {{--});--}}
-
-//            $('input[name=id]').val($that.attr('data-id'));
-            $('input[name=info-set-order-id]').val($that.attr('data-id'));
-            $('.info-detail-title').html($that.attr('data-id'));
-            $('.info-set-title').html($that.attr('data-id'));
-
-            $('.info-body').html($data.html);
-
-            var $modal = $('#modal-body-for-info-detail');
-
-            $modal.find('.item-detail-project .item-detail-text').html($row.find('td[data-key=project_id]').attr('data-value'));
-            $modal.find('.item-detail-client .item-detail-text').html($row.find('td[data-key=client_name]').attr('data-value'));
-            $modal.find('.item-detail-phone .item-detail-text').html($row.find('td[data-key=client_phone]').attr('data-value'));
-            $modal.find('.item-detail-is-wx .item-detail-text').html($row.find('td[data-key=is_wx]').html());
-            $modal.find('.item-detail-wx-id .item-detail-text').html($row.find('td[data-key=wx_id]').attr('data-value'));
-            $modal.find('.item-detail-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
-            $modal.find('.item-detail-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
-            $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
-            $modal.modal('show');
-
-        });
-        // 【取消】内容详情
-        $(".main-content").on('click', ".item-cancel-for-detail", function() {
-            var that = $(this);
-            $('#modal-body-for-info-detail').modal('hide').on("hidden.bs.modal", function () {
-                $("body").addClass("modal-open");
-            });
-        });
-
 
         // 【获取】内容详情-审核
         $(".main-content").on('click', ".item-modal-show-for-detail-inspected", function() {
