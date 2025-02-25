@@ -60,8 +60,8 @@
                    data-type="create"
                    data-unique="y"
                    data-id="delivery-list"
-                   data-title="客资列表"
-                   data-content="客资列表"
+                   data-title="交付列表"
+                   data-content="交付列表"
 
                    data-datatable-type="create"
                    data-datatable-unique="y"

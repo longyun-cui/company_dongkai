@@ -82,6 +82,9 @@
                     "className": "",
                     "width": "80px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).addClass('_bold');
+                    },
                     render: function(data, type, row, meta) {
                         if(row.delivery_count) return row.delivery_count;
                         else return '';
