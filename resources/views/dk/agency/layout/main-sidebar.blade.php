@@ -61,6 +61,8 @@
                    data-unique="y"
                    data-id="delivery-list"
                    data-title="客资列表"
+                   data-content="客资列表"
+
                    data-datatable-type="create"
                    data-datatable-unique="y"
                    data-datatable-id="datatable-delivery-list"
@@ -72,42 +74,37 @@
                 </a>
             </li>
             <li class="treeview">
-                <a class="tab-control" data-id="department-list" data-title="团队列表" data-content="团队">
-                    <i class="fa fa-columns text-aqua"></i>
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="delivery-daily"
+                   data-title="交付日报"
+                   data-content="交付日报"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-delivery-daily"
+                   data-datatable-target="delivery-daily"
+                   data-datatable-clone-object="delivery-daily-clone"
+                >
+                    <i class="fa fa-bar-chart text-maroon"></i>
                     <span>交付日报</span>
                 </a>
             </li>
-            <li class="treeview">
+            <li class="treeview _none">
                 <a class="tab-control" data-id="department-list" data-title="团队列表" data-content="团队">
                     <i class="fa fa-columns text-aqua"></i>
                     <span>项目概览</span>
                 </a>
             </li>
-            <li class="treeview">
+            <li class="treeview _none">
                 <a class="tab-control" data-id="order-list" data-title="工单列表" data-content="gongdan">
                     <i class="fa fa-columns text-aqua"></i>
-                    <span>工单列表</span>
+                    <span>项目日报</span>
                 </a>
             </li>
 
 
-
-
-            @if(in_array($me->user_type,[0,1,9,11]))
-            {{--数据统计--}}
-            <li class="header">记录</li>
-
-            <li class="treeview {{ $menu_active_of_record_visit_list or '' }}">
-                <a href="{{ url('/record/visit-list') }}">
-                    <i class="fa fa-search text-default"></i> <span>访问记录</span>
-                </a>
-            </li>
-            <li class="treeview {{ $menu_active_of_record_operation_list or '' }} _none">
-                <a href="{{ url('/record/operation-list') }}">
-                    <i class="fa fa-search text-default"></i> <span>操作记录</span>
-                </a>
-            </li>
-            @endif
 
 
 

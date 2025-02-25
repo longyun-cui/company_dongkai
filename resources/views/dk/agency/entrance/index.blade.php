@@ -48,6 +48,7 @@
 <div class="component-container _none">
 
     @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-list')
+    @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-daily')
     {{--@include(env('TEMPLATE_DK_AGENCY').'component.order-create')--}}
 
 </div>
@@ -76,6 +77,9 @@
 
     @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-list-datatable')
     @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-list-script')
+
+    @include(env('TEMPLATE_DK_AGENCY').'component.delivery.delivery-daily-datatable')
+
     {{--    @include(env('TEMPLATE_DK_AGENCY').'page.service.order.order-list-script')--}}
 {{--    @include(env('TEMPLATE_DK_AGENCY').'page.service.order.order-operate-record-datatable-script')--}}
 

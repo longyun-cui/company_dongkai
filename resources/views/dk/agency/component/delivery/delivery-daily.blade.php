@@ -1,36 +1,12 @@
-<div class="row datatable-body datatable-wrapper delivery-list-clone">
+<div class="row datatable-body datatable-wrapper delivery-daily-clone">
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">
 
 
-        <div class=" pull-left">
-
-            <button type="button" onclick="" class="btn btn-default btn-filter" id="bulk-submit-for-export">
-                <i class="fa fa-download"></i> 批量导出
-            </button>
-            {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
-
-
-        </div>
-
-
         <div class="pull-right">
 
-            <input type="text" class="search-filter form-filter filter-keyup" name="delivery-id" placeholder="ID" value="" style="width:80px;" />
-{{--            <input type="text" class="search-filter form-filter filter-keyup" name="delivery-order-id" placeholder="工单ID" value="" style="width:80px;" />--}}
-
-            {{--<input type="text" class="form-control form-filter filter-keyup" name="order-client-name" placeholder="客户姓名" value="{{ $client_name or '' }}" style="width:88px;" />--}}
-            <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="客户电话" value="" />
-
-
-            <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-pre-for-order" style="width:24px;">
-                <i class="fa fa-chevron-left"></i>
-            </button>
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="交付日期" value="" readonly="readonly" />
-            <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-next-for-order" style="width:24px;">
-                <i class="fa fa-chevron-right"></i>
-            </button>
+            <input type="hidden" name="delivery-daily-time-type" class="time-type" value="" readonly>
 
 
             <select class="search-filter form-filter select2-box-c" name="delivery-client" style="width:200px;">
@@ -41,6 +17,16 @@
                     @endforeach
                 @endif
             </select>
+
+
+            {{--按月查看--}}
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="delivery-daily-month">
+                <i class="fa fa-chevron-left"></i>
+            </button>
+            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="delivery-daily-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="delivery-daily-month">
+                <i class="fa fa-chevron-right"></i>
+            </button>
 
 
             <button type="button" class="btn btn-default btn-filter filter-submit" id="filter-submit-for-order">

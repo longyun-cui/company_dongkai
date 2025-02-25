@@ -214,12 +214,16 @@ class DKAgencyController extends Controller
 
 
     /*
-     * 订单管理
+     * 交付管理
      */
-    // 【订单管理】返回-列表-视图（全部任务）
+    // 【交付】返回-列表-视图（全部任务）
     public function get_datatable_delivery_list()
     {
         return $this->repo->get_datatable_delivery_list(request()->all());
+    }
+    public function get_datatable_delivery_daily()
+    {
+        return $this->repo->get_datatable_delivery_daily(request()->all());
     }
 
 

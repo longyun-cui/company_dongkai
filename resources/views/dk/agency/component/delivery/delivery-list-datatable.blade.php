@@ -1,6 +1,6 @@
 <script>
 
-    function Datatable_for_OrderList($tableId)
+    function Datatable_for_DeliveryList($tableId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -323,12 +323,4 @@
             "language": { url: '/common/dataTableI18n' },
         });
     }
-
-    $(function () {
-
-        // var $id = $.getUrlParam('id');
-        // if($id) $('input[name="order-id"]').val($id);
-        // Table_Datatable_Ajax.init();
-        // $('#datatable_ajax').DataTable().init().fnPageChange(3);
-    });
 </script>

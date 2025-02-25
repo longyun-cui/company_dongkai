@@ -92,100 +92,76 @@
         $(".wrapper").on('click', ".datatable-control", function() {
 
             const $btn = $(this);
+            const $id = $btn.data('datatable-id');
             const $unique = $btn.data('datatable-unique');
 
             if($unique == 'y')
             {
-                const $id = $btn.data('datatable-id');
-                const $target = $btn.data('datatable-target');
-                const $clone_object = $btn.data('datatable-clone-object');
+                var $config = {
+                    type: $btn.data('datatable-type'),
+                    unique: $btn.data('datatable-unique'),
+                    id: $btn.data('datatable-id'),
+                    target: $btn.data('datatable-target'),
+                    clone_object: $btn.data('datatable-clone-object')
+                };
 
-                if($.fn.DataTable.isDataTable('#'+$id))
-                {
-                    console.log('DataTable 已存在！');
-                }
-                else
-                {
-                    console.log('DataTable 未初始化！');
-
-                    let $clone = $('.'+$clone_object).clone(true);
-                    $clone.removeClass($clone_object);
-                    $clone.addClass('datatable-wrapper');
-                    $clone.find('table').attr('id',$id);
-
-                    $('#'+$target).prepend($clone);
-                    $('#'+$target).find('.select2-box-c').select2({
-                        theme: 'classic'
-                    });
-                    $('#'+$target).find('.time_picker-c').datetimepicker({
-                        locale: moment.locale('zh-cn'),
-                        format: "YYYY-MM-DD HH:mm",
-                        ignoreReadonly: true
-                    });
-                    $('#'+$target).find('.date_picker-c').datetimepicker({
-                        locale: moment.locale('zh-cn'),
-                        format: "YYYY-MM-DD",
-                        ignoreReadonly: true
-                    });
-                    $('#'+$target).find('.month_picker-c').datetimepicker({
-                        locale: moment.locale('zh-cn'),
-                        format: "YYYY-MM",
-                        ignoreReadonly: true
-                    });
-
-                    Datatable_for_OrderList('#'+$id);
-                }
             }
             else
             {
                 let $session_unique_id = sessionStorage.getItem('session_unique_id');
 
-                const $config = {
+                var $config = {
                     type: $btn.data('datatable-type'),
                     unique: $btn.data('datatable-unique'),
                     id: $btn.data('datatable-id') + '-' + $session_unique_id,
                     target: $btn.data('datatable-target') + '-' + $session_unique_id,
                     clone_object: $btn.data('datatable-clone-object')
                 };
-
-                if($.fn.DataTable.isDataTable('#'+$config.id))
-                {
-                    console.log('DataTable 已存在！');
-                }
-                else
-                {
-                    console.log('DataTable 未初始化！');
-
-                    let $clone = $('.'+$config.clone_object).clone(true);
-                    $clone.removeClass($config.clone_object);
-                    $clone.addClass('datatable-wrapper');
-                    $clone.find('table').attr('id',$config.id);
-
-                    $('#'+$config.target).prepend($clone);
-                    $('#'+$config.target).find('.select2-box-c').select2({
-                        theme: 'classic'
-                    });
-                    $('#'+$config.target).find('.time_picker-c').datetimepicker({
-                        locale: moment.locale('zh-cn'),
-                        format: "YYYY-MM-DD HH:mm",
-                        ignoreReadonly: true
-                    });
-                    $('#'+$config.target).find('.date_picker-c').datetimepicker({
-                        locale: moment.locale('zh-cn'),
-                        format: "YYYY-MM-DD",
-                        ignoreReadonly: true
-                    });
-                    $('#'+$config.target).find('.month_picker-c').datetimepicker({
-                        locale: moment.locale('zh-cn'),
-                        format: "YYYY-MM",
-                        ignoreReadonly: true
-                    });
-
-                    Datatable_for_OrderList('#'+$config.id);
-                }
             }
 
 
+            if($.fn.DataTable.isDataTable('#'+$config.id))
+            {
+                console.log('DataTable 已存在！');
+            }
+            else
+            {
+                console.log('DataTable 未初始化！');
+
+                let $clone = $('.'+$config.clone_object).clone(true);
+                $clone.removeClass($config.clone_object);
+                $clone.addClass('datatable-wrapper');
+                $clone.find('table').attr('id',$config.id);
+
+                $('#'+$config.target).prepend($clone);
+                $('#'+$config.target).find('.select2-box-c').select2({
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.time_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD HH:mm",
+                    ignoreReadonly: true
+                });
+                $('#'+$config.target).find('.date_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD",
+                    ignoreReadonly: true
+                });
+                $('#'+$config.target).find('.month_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM",
+                    ignoreReadonly: true
+                });
+
+                if($id == "datatable-delivery-list")
+                {
+                    Datatable_for_DeliveryList('#'+$config.id);
+                }
+                else if($id == "datatable-delivery-daily")
+                {
+                    Datatable_for_DeliveryDaily('#'+$config.id);
+                }
+            }
 
 
         });
