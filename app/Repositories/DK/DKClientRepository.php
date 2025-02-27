@@ -455,50 +455,55 @@ class DKClientRepository {
         }
 
 
+        // 患者类型
+        if(isset($post_data['client_type']))
+        {
+            if(!in_array($post_data['client_type'],[-1,'-1']))
+            {
+                $query->where('client_type', $post_data['client_type']);
+            }
+        }
 
-        // 审核状态
-        // 项目
-//        if(!empty($post_data['exported_status']))
-//        {
-//            if(is_numeric($post_data['exported_status']) && $post_data['exported_status'] > 0)
-//            {
-//                $query->where('exported_status', $post_data['exported_status']);
-//            }
-//        }
+        // 导出状态
+        if(isset($post_data['exported_status']))
+        {
+            if(!in_array($post_data['exported_status'],[-1,'-1']))
+            {
+                $query->where('exported_status', $post_data['exported_status']);
+            }
+        }
 
+        // 分配状态
+        if(isset($post_data['assign_status']))
+        {
+            if(!in_array($post_data['assign_status'],[-1,'-1']))
+            {
+                $query->where('assign_status', $post_data['assign_status']);
+            }
+        }
 
-//        if(!empty($post_data['exported_status']))
-//        {
-//            $exported_status = $post_data['exported_status'];
-//            if(in_array($exported_status,['待导出','已导出']))
-//            {
-//                if($exported_status == '待发布')
-//                {
-//                    $query->where('is_published', 0);
-//                }
-//                else if($exported_status == '待导出')
-//                {
-//                    $query->where('is_published', 1)->whereIn('exported_status', [0,9]);
-//                }
-//                else if($exported_status == '已导出')
-//                {
-//                    $query->where('exported_status', 1);
-//                }
-//            }
-//        }
+//        dd($post_data['is_api_pushed']);
+        // 是否api推送
+        if(isset($post_data['is_api_pushed']))
+        {
+            if(!in_array($post_data['is_api_pushed'],[-1,'-1']))
+            {
+                $query->where('is_api_pushed', $post_data['is_api_pushed']);
+            }
+        }
+
 
         // 区域
-//        if(isset($post_data['district']))
-//        {
-//            if(count($post_data['district']) > 0)
-//            {
-//                $query->whereHas('order_er', function($query) use($post_data) {
-//                    $query->whereIn('location_district',$post_data['district']);
-//                }
-//                );
-//            }
-//        }
-
+        if(isset($post_data['district']))
+        {
+            if(count($post_data['district']) > 0)
+            {
+                $query->whereHas('order_er', function($query) use($post_data) {
+                    $query->whereIn('location_district',$post_data['district']);
+                }
+                );
+            }
+        }
 
 
 

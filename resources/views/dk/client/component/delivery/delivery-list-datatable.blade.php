@@ -40,8 +40,14 @@
                     d.status = $tableSearch.find('select[name="delivery-status"]').val();
                     d.delivery_type = $tableSearch.find('select[name="delivery-delivery-type"]').val();
                     d.order_type = $tableSearch.find('select[name="delivery-type"]').val();
+                    d.client_type = $tableSearch.find('select[name="delivery-client-type"]').val();
                     d.client_name = $tableSearch.find('input[name="delivery-client-name"]').val();
                     d.client_phone = $tableSearch.find('input[name="delivery-client-phone"]').val();
+
+                    d.exported_status = $('select[name="delivery-exported-status"]').val();
+                    d.assign_status = $('select[name="delivery-assign-status"]').val();
+                    d.is_api_pushed = $('select[name="delivery-is-api-pushed"]').val();
+
                     d.delivered_status = $tableSearch.find('select[name="delivery-delivered-status"]').val();
                     d.delivered_result = $tableSearch.find('select[name="delivery-delivered-result[]"]').val();
                     d.time_type = $tableSearch.find('input[name="delivery-time-type"]').val();
