@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper delivery-list-clone">
+<div class="row datatable-body datatable-wrapper delivery-list-clone" data-datatable-item-category="delivery">
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">
@@ -13,7 +13,7 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="delivery-client-phone" placeholder="客户电话" value="" />
 
 
-            <select class="search-filter form-filter filter-xl select2-box-c- select2-district-" name="delivery-district[]" multiple="multiple">
+            <select class="search-filter form-filter filter-xl select2-box-c- select2-district-c" name="delivery-district[]" multiple="multiple">
                 <option value="-1">全部区域</option>
             </select>
 
@@ -136,13 +136,14 @@
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
 
 
-            <button class="btn btn-default btn-filter" id="bulk-submit-for-delivery-export">
+            <button class="btn btn-default btn-filter bulk-submit-for-export">
                 <i class="fa fa-download"></i> 批量导出
             </button>
 
+
             @if($me->client_er->is_api_scrm == 1)
-            <button class="btn btn-default btn-filter" id="bulk-submit-for-delivery-api-push">
-                <i class="fa fa-share-square"></i> 批量推送
+            <button class="btn btn-default btn-filter bulk-submit-for-api-push">
+                <i class="fa fa-share-square"></i> 批量API推送
             </button>
             @endif
 
@@ -150,26 +151,26 @@
 
 
             <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-assign-status">
-                <option value="-1">请选导出状态</option>
+                <option value="-1">请选分配状态</option>
                 <option value="1">已分配</option>
                 <option value="0">待分配</option>
             </select>
 
-            <button class="btn btn-default btn-filter" id="bulk-submit-for-delivery-assign-status">
-                <i class="fa fa-check"></i> 批量更改导出状态
+            <button class="btn btn-default btn-filter bulk-submit-for-assign-status">
+                <i class="fa fa-check"></i> 批量更改分配状态
             </button>
 
 
 
 
-            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-delivery-staff-id">
+            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-staff-id">
                 <option value="-1">选择员工</option>
-{{--                @foreach($staff_list as $v)--}}
-{{--                    <option value="{{ $v->id }}" @if($v->id == $staff_id) selected="selected" @endif>{{ $v->username }}</option>--}}
-{{--                @endforeach--}}
+                @foreach($staff_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->username }}</option>
+                @endforeach
             </select>
 
-            <button class="btn btn-default btn-filter" id="bulk-submit-for-delivery-assign-staff">
+            <button class="btn btn-default btn-filter bulk-submit-for-assign-staff">
                 <i class="fa fa-check"></i> 批量分配
             </button>
 

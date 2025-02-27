@@ -66,15 +66,15 @@
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
             },
             "columns": [
-                {
-                    "title": '<input type="checkbox" id="check-review-all">',
-                    "data": "id",
-                    "width": "40px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'" data-item-id="'+row.id+'"></label>';
-                    }
-                },
+                // {
+                //     "title": '<input type="checkbox" id="check-review-all">',
+                //     "data": "id",
+                //     "width": "40px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'" data-item-id="'+row.id+'"></label>';
+                //     }
+                // },
 //                    {
 //                        "title": "序号",
 //                        "width": "32px",

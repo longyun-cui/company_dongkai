@@ -1,6 +1,6 @@
 <script>
 
-    function Datatable_for_DeliveryDaily($tableId, $eChartId)
+    function Datatable_for_FinanceDaily($tableId, $eChartId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -20,30 +20,30 @@
             "scrollCollapse": true,
             "showRefresh": true,
             "ajax": {
-                'url': "{{ url('/delivery/delivery-daily') }}",
+                'url': "{{ url('/finance/finance-daily') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $tableSearch.find('input[name="delivery-daily-id"]').val();
-                    d.order_id = $tableSearch.find('input[name="delivery-daily-order-id"]').val();
-                    d.name = $tableSearch.find('input[name="delivery-daily-name"]').val();
-                    d.title = $tableSearch.find('input[name="delivery-daily-title"]').val();
-                    d.keyword = $tableSearch.find('input[name="delivery-daily-keyword"]').val();
-                    d.remark = $tableSearch.find('input[name="delivery-daily-remark"]').val();
-                    d.description = $tableSearch.find('input[name="delivery-daily-description"]').val();
-                    d.assign = $tableSearch.find('input[name="delivery-project-assign"]').val();
-                    d.assign_start = $tableSearch.find('input[name="delivery-daily-start"]').val();
-                    d.assign_ended = $tableSearch.find('input[name="delivery-daily-ended"]').val();
-                    d.client = $tableSearch.find('select[name="delivery-daily-client"]').val();
-                    d.project = $tableSearch.find('select[name="delivery-daily-project"]').val();
-                    d.status = $tableSearch.find('select[name="delivery-daily-status"]').val();
-                    d.delivery_type = $tableSearch.find('select[name="delivery-daily-delivery-type"]').val();
-                    d.client_type = $tableSearch.find('select[name="delivery-daily-client-type"]').val();
-                    d.client_name = $tableSearch.find('input[name="delivery-daily-client-name"]').val();
-                    d.client_phone = $tableSearch.find('input[name="delivery-daily-client-phone"]').val();
-                    d.delivered_status = $tableSearch.find('select[name="delivery-daily-delivered-status"]').val();
-                    d.delivered_result = $tableSearch.find('select[name="delivery-daily-delivered-result[]"]').val();
+                    d.id = $tableSearch.find('input[name="finance-daily-id"]').val();
+                    d.order_id = $tableSearch.find('input[name="finance-daily-order-id"]').val();
+                    d.name = $tableSearch.find('input[name="finance-daily-name"]').val();
+                    d.title = $tableSearch.find('input[name="finance-daily-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="finance-daily-keyword"]').val();
+                    d.remark = $tableSearch.find('input[name="finance-daily-remark"]').val();
+                    d.description = $tableSearch.find('input[name="finance-daily-description"]').val();
+                    d.assign = $tableSearch.find('input[name="finance-project-assign"]').val();
+                    d.assign_start = $tableSearch.find('input[name="finance-daily-start"]').val();
+                    d.assign_ended = $tableSearch.find('input[name="finance-daily-ended"]').val();
+                    d.client = $tableSearch.find('select[name="finance-daily-client"]').val();
+                    d.project = $tableSearch.find('select[name="finance-daily-project"]').val();
+                    d.status = $tableSearch.find('select[name="finance-daily-status"]').val();
+                    d.delivery_type = $tableSearch.find('select[name="finance-daily-delivery-type"]').val();
+                    d.client_type = $tableSearch.find('select[name="finance-daily-client-type"]').val();
+                    d.client_name = $tableSearch.find('input[name="finance-daily-client-name"]').val();
+                    d.client_phone = $tableSearch.find('input[name="finance-daily-client-phone"]').val();
+                    d.delivered_status = $tableSearch.find('select[name="finance-daily-delivered-status"]').val();
+                    d.delivered_result = $tableSearch.find('select[name="finance-daily-delivered-result[]"]').val();
 
                 },
             },
@@ -62,7 +62,7 @@
             "columns": [
                 {
                     "title": "日期",
-                    "data": "date_day",
+                    "data": "assign_date",
                     "className": "text-center",
                     "width": "80px",
                     "orderable": false,
@@ -70,12 +70,12 @@
                         // $(nTd).addClass('_bold');
                     },
                     render: function(data, type, row, meta) {
-                        return row.date_day;
+                        return row.assign_date;
                     }
                 },
                 {
                     "title": "交付量",
-                    "data": "delivery_count",
+                    "data": "delivery_quantity",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
@@ -83,14 +83,35 @@
                         $(nTd).addClass('_bold');
                     },
                     render: function(data, type, row, meta) {
-                        if(row.delivery_count) return row.delivery_count;
+                        if(row.delivery_quantity) return row.delivery_quantity;
                         else return '';
+                    }
+                },
+                {
+                    "title": "合作单价",
+                    "data": "cooperative_unit_price",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!isNaN(parseFloat(data)) && isFinite(data)) return parseFloat(data);
+                        return data;
+                    }
+                },
+                {
+                    "title": "每日花费",
+                    "data": "total_daily_cost",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return parseFloat(data);
                     }
                 }
             ],
             "drawCallback": function (settings) {
 
-                console.log('delivery-daily-datatable-execute');
+                console.log('finance-daily-datatable-execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
@@ -98,13 +119,13 @@
 //                    });
 
                 // 每日交付量
-                var $delivery_res = new Array();
+                var $res = new Array();
                 this.api().rows().every(function() {
                     var $rowData = this.data();
-                    $delivery_res[($rowData.day - 1)] = { value:$rowData.delivery_count, name:$rowData.day };
+                    $res[($rowData.day - 1)] = { value:$rowData.delivery_quantity, name:$rowData.assign_date };
                 });
 
-                var $option_delivery_statistics = {
+                var $option_statistics = {
                     title: {
                         text: '每日交付量'
                     },
@@ -157,12 +178,12 @@
                                 }
                             },
                             itemStyle : { normal: { label : { show: true } } },
-                            data: $delivery_res
+                            data: $res
                         }
                     ]
                 };
                 var $myChart_statistics = echarts.init(document.getElementById($eChartId));
-                $myChart_statistics.setOption($option_delivery_statistics);
+                $myChart_statistics.setOption($option_statistics);
 
             },
             "language": { url: '/common/dataTableI18n' },

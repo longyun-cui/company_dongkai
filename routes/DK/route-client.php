@@ -38,11 +38,46 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
 
 
 
+    // 【交付-管理】
     Route::post('/delivery/delivery-list', $controller.'@get_datatable_delivery_list');
     Route::post('/delivery/delivery-daily', $controller.'@get_datatable_delivery_daily');
     Route::post('/delivery/delivery-project', $controller.'@get_datatable_delivery_project');
 
     Route::get('/delivery/delivery-export-by-ids', $controller.'@operate_delivery_export_by_ids');
+
+
+    // 【财务-管理】
+    Route::post('/finance/finance-daily', $controller.'@get_datatable_finance_daily');
+
+
+    // 【部门-管理】
+    Route::post('/item/item-edit-for-department', $controller.'@operate_item_edit_for_department');
+    Route::post('/item/item-get-for-department', $controller.'@operate_item_get_for_department');
+
+    // 【客户-管理】
+    Route::post('/item/item-edit-for-staff', $controller.'@operate_staff_edit_by_admin');
+    Route::post('/item/item-get-for-staff', $controller.'@operate_staff_get_by_admin');
+
+
+    // 【通用】删除 & 恢复 & 永久删除
+    Route::post('/item/item-delete-by-admin', $controller.'@operate_item_delete_by_admin');
+    Route::post('/item/item-restore-by-admin', $controller.'@operate_item_restore_by_admin');
+    Route::post('/item/item-delete-permanently-by-admin', $controller.'@operate_item_delete_permanently_by_admin');
+    // 【通用】重置密码 & 删除密码
+    Route::post('/item/item-password-reset-by-admin', $controller.'@operate_item_password_reset_by_admin');
+    Route::post('/item/item-password-change-by-admin', $controller.'@operate_item_password_change_by_admin');
+    // 【通用】启用 & 禁用
+    Route::post('/item/item-enable-by-admin', $controller.'@operate_item_enable_by_admin');
+    Route::post('/item/item-disable-by-admin', $controller.'@operate_item_disable_by_admin');
+    // 【通用】晋升 & 降职
+    Route::post('/item/item-promote-by-admin', $controller.'@operate_item_promote_by_admin');
+    Route::post('/item/item-demote-by-admin', $controller.'@operate_item_demote_by_admin');
+
+
+    // 【通用】批量-指派状态
+    Route::post('/item/bulk-assign-status', $controller.'@operate_bulk_assign_status');
+    Route::post('/item/bulk-assign-staff', $controller.'@operate_bulk_assign_staff');
+    Route::post('/item/bulk-api-push', $controller.'@operate_bulk_api_push');
 
 
 

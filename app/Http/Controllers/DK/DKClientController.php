@@ -199,6 +199,233 @@ class DKClientController extends Controller
     }
 
 
+    // 【财务】财务日报
+    public function get_datatable_finance_daily()
+    {
+        return $this->repo->get_datatable_finance_daily(request()->all());
+    }
+
+
+    // 【部门-管理】编辑
+    public function operate_item_edit_for_department()
+    {
+        return $this->repo->operate_department_edit_by_admin(request()->all());
+    }
+    // 【部门-管理】获取
+    public function operate_item_get_for_department()
+    {
+        return $this->repo->operate_department_get_by_admin(request()->all());
+    }
+
+
+    // 【员工-管理】编辑
+    public function operate_staff_edit_by_admin()
+    {
+        return $this->repo->operate_staff_edit_by_admin(request()->all());
+    }
+    // 【员工-管理】获取
+    public function operate_staff_get_by_admin()
+    {
+        return $this->repo->operate_staff_get_by_admin(request()->all());
+    }
+
+
+    // 【通用】修改密码
+    public function operate_item_delete_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->operate_department_delete_by_admin(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_delete_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+    // 【通用】修改密码
+    public function operate_item_restore_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->operate_department_restore_by_admin(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_restore_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+    // 【通用】修改密码
+    public function operate_item_delete_permanently_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->operate_department_delete_permanently_by_admin(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_delete_permanently_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+
+    // 【通用】修改密码
+    public function operate_item_password_reset_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->operate_department_password_reset_by_admin(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_password_reset_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+    // 【通用】修改密码
+    public function operate_item_password_change_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->operate_department_password_change_by_admin(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_password_change_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+
+    // 【通用】启用
+    public function operate_item_enable_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->operate_department_enable_by_admin(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_enable_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+    // 【通用】禁用
+    public function operate_item_disable_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->operate_department_disable_by_admin(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_disable_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+
+    // 【通用】晋升
+    public function operate_item_promote_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_promote_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+    // 【通用】降职
+    public function operate_item_demote_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'staff')
+        {
+            return $this->repo->operate_staff_demote_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+
+
+
+
+
+
+    // 【订单管理】批量-更改分配状态
+    public function operate_bulk_assign_status()
+    {
+        return $this->repo->operate_bulk_assign_status(request()->all());
+    }
+    // 【订单管理】批量-分派
+    public function operate_bulk_assign_staff()
+    {
+        return $this->repo->operate_bulk_assign_staff(request()->all());
+    }
+    // 【订单管理】批量-api-推送
+    public function operate_bulk_api_push()
+    {
+        return $this->repo->operate_bulk_api_push(request()->all());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

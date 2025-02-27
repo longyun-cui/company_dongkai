@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper delivery-daily-clone" data-datatable-item-category="delivery-daily">
+<div class="row datatable-body datatable-wrapper finance-daily-clone" data-datatable-item-category="finance-daily">
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">
@@ -6,15 +6,15 @@
 
         <div class="pull-right">
 
-            <input type="hidden" name="delivery-daily-time-type" class="time-type" value="" readonly>
+            <input type="hidden" class="time-type" name="finance-daily-time-type" value="" readonly>
 
 
             {{--按月查看--}}
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="delivery-daily-month">
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="finance-daily-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="delivery-daily-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="delivery-daily-month">
+            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="finance-daily-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="finance-daily-month">
                 <i class="fa fa-chevron-right"></i>
             </button>
 

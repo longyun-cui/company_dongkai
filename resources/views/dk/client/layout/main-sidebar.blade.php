@@ -7,38 +7,16 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
 
-            <!-- Optionally, you can add icons to the links -->
-
-            <li class="treeview _none">
-                <a href="">
-                    <i class="fa fa-th"></i> <span>Super</span>
-                    <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="{{url('/'.config('common.super.admin.prefix').'/softorg/index')}}">
-                            <i class="fa fa-circle-o text-aqua"></i>基本信息
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{url('/'.config('common.super.admin.prefix').'/softorg/edit')}}">
-                            <i class="fa fa-circle-o text-aqua"></i>编辑基本信息
-                        </a>
-                    </li>
-                </ul>
-            </li>
 
 
             {{--员工管理--}}
             @if(in_array($me->user_type,[0,1,9,11,61,41]))
-                <li class="header">人员管理</li>
+                <li class="header _none">人员管理</li>
             @endif
 
             {{--部门管理--}}
             @if(in_array($me->user_type,[0,1,9,11,41]))
-            <li class="treeview {{ $menu_active_of_department_list_for_all or '' }}">
+            <li class="treeview {{ $menu_active_of_department_list_for_all or '' }} _none">
                 <a href="{{ url('/department/department-list') }}">
                     <i class="fa fa-columns text-red"></i>
                     <span>部门列表</span>
@@ -48,7 +26,7 @@
 
             {{--员工管理--}}
             @if(in_array($me->user_type,[0,1,9,11,61,41,81]))
-            <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }}">
+            <li class="treeview {{ $menu_active_of_staff_list_for_all or '' }} _none">
                 <a href="{{ url('/user/staff-list') }}">
                     <i class="fa fa-user text-red"></i>
                     <span>员工列表</span>
@@ -59,15 +37,12 @@
 
 
 
-
-
-
             @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
             <li class="header">业务管理</li>
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,71,77,81,84,88]))
-                <li class="treeview {{ $menu_active_of_delivery_list or '' }}">
+                <li class="treeview {{ $menu_active_of_delivery_list or '' }} _none">
                     <a href="{{ url('/item/delivery-list') }}">
                         <i class="fa fa-file-text text-yellow"></i>
                         <span>交付列表</span>
@@ -84,7 +59,7 @@
             </li>
             @endif
 
-            <li class="treeview {{ $menu_active_of_statistic_delivery_by_daily or '' }}">
+            <li class="treeview {{ $menu_active_of_statistic_delivery_by_daily or '' }} _none">
                 <a href="{{ url('/statistic/statistic-delivery-by-daily') }}">
                     <i class="fa fa-bar-chart text-yellow"></i> <span>交付日报</span>
                 </a>
@@ -114,16 +89,59 @@
 
 
             {{--财务统计--}}
-            <li class="header">财务统计</li>
+            <li class="header _none">财务统计</li>
 
-            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }}">
+            <li class="treeview {{ $menu_active_of_finance_daily_list or '' }} _none">
                 <a href="{{ url('/finance/daily-list') }}">
                     <i class="fa fa-pie-chart text-green"></i> <span>财务日报</span>
                 </a>
             </li>
 
 
-            <li class="treeview _none">
+            {{--部门列表--}}
+            <li class="treeview">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="department-list"
+                   data-title="部门列表"
+                   data-content="部门列表"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-department-list"
+                   data-datatable-target="department-list"
+                   data-datatable-clone-object="department-list-clone"
+                >
+                    <i class="fa fa-columns text-red"></i>
+                    <span>部门列表</span>
+                </a>
+            </li>
+
+
+            {{--员工列表--}}
+            <li class="treeview">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="staff-list"
+                   data-title="员工列表"
+                   data-content="员工列表"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-staff-list"
+                   data-datatable-target="staff-list"
+                   data-datatable-clone-object="staff-list-clone"
+                >
+                    <i class="fa fa-user text-red"></i>
+                    <span>员工列表</span>
+                </a>
+            </li>
+
+
+            {{--交付列表--}}
+            <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"
@@ -141,7 +159,8 @@
                     <span>交付列表</span>
                 </a>
             </li>
-            <li class="treeview _none">
+            {{--交付日报--}}
+            <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"
@@ -157,8 +176,31 @@
 
                    data-chart-id="eChart-delivery-daily"
                 >
-                    <i class="fa fa-bar-chart text-maroon"></i>
+                    <i class="fa fa-bar-chart text-yellow"></i>
                     <span>交付日报</span>
+                </a>
+            </li>
+
+
+            {{--财务日报--}}
+            <li class="treeview _none">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="finance-daily"
+                   data-title="财务日报"
+                   data-content="财务日报"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-finance-daily"
+                   data-datatable-target="finance-daily"
+                   data-datatable-clone-object="finance-daily-clone"
+
+                   data-chart-id="eChart-finance-daily"
+                >
+                    <i class="fa fa-pie-chart text-green"></i>
+                    <span>财务日报</span>
                 </a>
             </li>
 

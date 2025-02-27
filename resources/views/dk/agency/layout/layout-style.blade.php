@@ -24,9 +24,7 @@
         }
     }
 
-    .nav-tabs-custom>.nav-tabs>li.active {
-        border-top-color: #00a65a;
-    }
+    .nav-tabs-custom>.nav-tabs>li.active { border-top-color: #00a65a; }
 
 
 

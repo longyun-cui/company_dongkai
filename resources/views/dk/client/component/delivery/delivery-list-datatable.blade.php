@@ -5,7 +5,6 @@
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
-        console.log($tableSearch);
 
         $($tableId).DataTable({
             "aLengthMenu": [[10, 50, 200, 500], ["10", "50", "200", "500"]],
@@ -45,9 +44,11 @@
                     d.client_phone = $tableSearch.find('input[name="delivery-client-phone"]').val();
                     d.delivered_status = $tableSearch.find('select[name="delivery-delivered-status"]').val();
                     d.delivered_result = $tableSearch.find('select[name="delivery-delivered-result[]"]').val();
-                    d.assign = $tableSearch.find('input[name="delivery-assign"]').val();
-                    d.assign_start = $tableSearch.find('input[name="delivery-start"]').val();
-                    d.assign_ended = $tableSearch.find('input[name="delivery-ended"]').val();
+                    d.time_type = $tableSearch.find('input[name="delivery-time-type"]').val();
+                    d.time_month = $tableSearch.find('input[name="delivery-month"]').val();
+                    d.time_date = $tableSearch.find('input[name="delivery-date"]').val();
+                    d.date_start = $tableSearch.find('input[name="delivery-start"]').val();
+                    d.date_ended = $tableSearch.find('input[name="delivery-ended"]').val();
 
                 },
             },
@@ -213,7 +214,8 @@
                         {
                             return '未指定';
                         }
-                        else {
+                        else
+                        {
                             return '<a href="javascript:void(0);">'+row.client_staff_er.username+'</a>';
                         }
                     }
@@ -411,6 +413,8 @@
                 },
             ],
             "drawCallback": function (settings) {
+
+                console.log('delivery-list-datatable-execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {

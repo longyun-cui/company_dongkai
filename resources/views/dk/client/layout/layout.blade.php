@@ -42,6 +42,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
     -->
+    <link rel="stylesheet" href="{{ asset('/AdminLTE/dist/css/skins/_all-skins.min.css') }}">
     {{--<link rel="stylesheet" href="/AdminLTE/dist/css/skins/skin-blue.min.css">--}}
     <link rel="stylesheet" href="{{ asset('/AdminLTE/dist/css/skins/skin-blue.min.css') }}">
 
@@ -117,7 +118,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse-">
+<body class="hold-transition skin-purple sidebar-mini sidebar-collapse sidebar-expanded-on-hover">
 <div class="wrapper">
 
 
@@ -209,8 +210,9 @@ desired effect
 
 
 {{--layout-script--}}
-@include(env('TEMPLATE_DK_CLIENT').'layout.layout-tab-script')
-@include(env('TEMPLATE_DK_CLIENT').'layout.layout-datatable-script')
+@include(env('TEMPLATE_DK_CLIENT').'layout.layout-script-for-tab')
+@include(env('TEMPLATE_DK_CLIENT').'layout.layout-script-for-datatable')
+@include(env('TEMPLATE_DK_CLIENT').'layout.layout-script-for-item-edit')
 @include(env('TEMPLATE_DK_CLIENT').'layout.layout-script')
 
 

@@ -197,7 +197,7 @@
                         "{{ url('/department/department-admin-enable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "department-admin-enable",
+                            operate: "item-enable-by-admin",
                             item_id: $that.attr('data-id')
                         },
                         function(data){
@@ -224,7 +224,7 @@
                         "{{ url('/department/department-admin-disable') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
-                            operate: "department-admin-disable",
+                            operate: "item-disable-by-admin",
                             item_id: $that.attr('data-id')
                         },
                         function(data){

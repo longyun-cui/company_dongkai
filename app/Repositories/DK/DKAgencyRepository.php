@@ -419,8 +419,8 @@ class DKAgencyRepository {
 
         foreach ($list as $k => $v)
         {
-//            $list[$k]->encode_id = encode($v->id);
-//            $list[$k]->content_decode = json_decode($v->content);
+            $client_phone = $v->client_phone;
+            $v->client_phone = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
         }
 //        dd($list->toArray());
         return datatable_response($list, $draw, $total);

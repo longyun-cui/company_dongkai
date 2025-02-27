@@ -19,8 +19,8 @@
 <div class="row">
     <div class="col-md-12">
 
-        <div class="nav-tabs-custom" id="index-nav-box">
 
+        <div class="nav-tabs-custom" id="index-nav-box">
 
             {{--nav--}}
             <ul class="nav nav-tabs">
@@ -32,7 +32,6 @@
             <div class="tab-content">
 
                 <div class="row tab-pane active" id="tab-home">
-
 
                     <div class="col-xs-12 col-sm-6 col-md-3">
                         <div class="box box-primary box-solid">
@@ -73,7 +72,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-xs-12 col-sm-6 col-md-3">
                         <div class="box box-success box-solid">
                             <div class="box-header with-border">
@@ -118,8 +116,8 @@
 
             </div>
 
-
         </div>
+
 
     </div>
 </div>
@@ -127,12 +125,50 @@
 
 <div class="component-container _none">
 
+    @include(env('TEMPLATE_DK_CLIENT').'component.department.department-list')
+    @include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-list')
+
     @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list')
     @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily')
-    {{--@include(env('TEMPLATE_DK_AGENCY').'component.order-create')--}}
+
+    @include(env('TEMPLATE_DK_CLIENT').'component.finance.finance-daily')
 
 </div>
 
+
+
+{{--编辑-部门--}}
+<div class="modal fade modal-main-body modal-wrapper" id="modal-for-department-edit">
+    <div class="col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px">
+                <h3 class="box-title">添加部门</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            @include(env('TEMPLATE_DK_CLIENT').'component.department.department-edit')
+
+        </div>
+    </div>
+</div>
+{{--编辑-员工--}}
+<div class="modal fade modal-main-body modal-wrapper" id="modal-for-staff-edit">
+    <div class="col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
+        <div class="box- box-info- form-container">
+
+            <div class="box-header with-border margin-top-16px">
+                <h3 class="box-title">添加员工</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            @include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-edit')
+
+        </div>
+    </div>
+</div>
 
 
 
@@ -155,7 +191,7 @@
 
 
 {{--订单统计--}}
-<div class="row">
+<div class="row _none">
     <div class="col-md-12">
         <div class="callout callout-success- bg-white">
 
@@ -205,6 +241,18 @@
     <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
+
+    @include(env('TEMPLATE_DK_CLIENT').'component.department.department-list-datatable')
+    @include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-list-datatable')
+
+    @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-datatable')
+    @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily-datatable')
+
+    @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-script')
+
+    @include(env('TEMPLATE_DK_CLIENT').'component.finance.finance-daily-datatable')
+
+
 <script>
     $(function() {
 
@@ -289,13 +337,9 @@
             ]
         };
         var $myChart_order_statistics = echarts.init(document.getElementById('eChart-order-statistics'));
-        $myChart_order_statistics.setOption($option_order_statistics);
+        // $myChart_order_statistics.setOption($option_order_statistics);
 
     });
 </script>
 
-@include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-datatable')
-@include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily-datatable')
-
-@include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-script')
 @endsection
