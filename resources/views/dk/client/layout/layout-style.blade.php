@@ -90,17 +90,9 @@
 
 
 
-    .close-tab {
-        cursor: pointer;
-        opacity: 0.6;
-        transition: opacity 0.3s;
-    }
-    .close-tab:hover {
-        opacity: 1;
-    }
-    .tab-control {
-        min-width: 120px;
-    }
+    .close-tab { cursor: pointer; opacity: 0.6; transition: opacity 0.3s; }
+    .close-tab:hover { opacity: 1; }
+    /*.tab-control { min-width: 50px; }*/
 
 
 </style>

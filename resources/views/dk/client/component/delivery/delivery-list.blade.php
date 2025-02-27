@@ -20,7 +20,7 @@
 
             @if($me->client_er->is_api_scrm == 1)
                 <select class="search-filter form-filter" name="delivery-is-api-pushed">
-                    <option value="-1">api推送</option>
+                    <option value="-1">API推送</option>
                     <option value="0">未推送</option>
                     <option value="1">已推送</option>
                 </select>

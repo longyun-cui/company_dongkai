@@ -96,6 +96,7 @@
             const $btn = $(this);
             const $id = $btn.data('datatable-id');
             const $unique = $btn.data('datatable-unique');
+            const $reload = $btn.data('datatable-reload');
 
             if($unique == 'y')
             {
@@ -129,6 +130,10 @@
             if($.fn.DataTable.isDataTable('#'+$config.id))
             {
                 console.log('DataTable 已存在！');
+                if($reload == 'y')
+                {
+                    $('#'+$config.id).DataTable().ajax.reload(null,false);
+                }
             }
             else
             {

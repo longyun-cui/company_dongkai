@@ -203,7 +203,7 @@
 
                 <li class="dropdown- notifications-alert">
                     <!-- Menu toggle button -->
-                    <a class="tab-control datatable-control"
+                    <a href="javascript:void(0);" class="tab-control datatable-control"
                        data-type="create"
                        data-unique="y"
                        data-id="delivery-list"
@@ -215,6 +215,7 @@
                        data-datatable-id="datatable-delivery-list"
                        data-datatable-target="delivery-list"
                        data-datatable-clone-object="delivery-list-clone"
+                       data-datatable-reload="y"
                     >
                         <i class="fa fa-bell-o"></i>
                         <span class="label label-danger notification-dom" style="width:16px;border-radius:50%;color:#dd4b39 !important;display: none;">•</span>
