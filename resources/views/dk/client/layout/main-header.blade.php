@@ -203,7 +203,19 @@
 
                 <li class="dropdown- notifications-alert">
                     <!-- Menu toggle button -->
-                    <a href="{{ url('/item/delivery-list') }}">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="delivery-list"
+                       data-title="交付列表"
+                       data-content="交付列表"
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-delivery-list"
+                       data-datatable-target="delivery-list"
+                       data-datatable-clone-object="delivery-list-clone"
+                    >
                         <i class="fa fa-bell-o"></i>
                         <span class="label label-danger notification-dom" style="width:16px;border-radius:50%;color:#dd4b39 !important;display: none;">•</span>
                     </a>
