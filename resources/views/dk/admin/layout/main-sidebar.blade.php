@@ -302,6 +302,27 @@
 
 
 
+            {{--部门列表--}}
+            <li class="treeview _none">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="department-list"
+                   data-title="部门列表"
+                   data-content="部门列表"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-department-list"
+                   data-datatable-target="department-list"
+                   data-datatable-clone-object="department-list-clone"
+                >
+                    <i class="fa fa-columns text-red"></i>
+                    <span>部门列表</span>
+                </a>
+            </li>
+
+
         </ul>
         <!-- /.sidebar-menu -->
     </section>

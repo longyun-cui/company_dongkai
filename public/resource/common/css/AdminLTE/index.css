@@ -100,7 +100,7 @@ table.dataTable .text-bottom { vertical-align: bottom; }
 
 
 
-.form-container .form-group { margin-bottom:0; padding:16px 0; border-bottom:1px solid #eee; }
+.form-container .form-group { width:100%;float:left;margin-bottom:0; padding:16px 0; border-bottom:1px solid #eee; }
 .form-container .box-footer { padding-top:16px; padding-bottom:32px; border-top:0;  }
 .form-container .select2-container--classic .select2-selection--single { border-radius:0; }
 

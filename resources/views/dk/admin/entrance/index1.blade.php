@@ -3,13 +3,14 @@
 
 @section('head_title')
     {{--@if(in_array(env('APP_ENV'),['local']))L.@endif--}}
-    {{ $head_title or '首页' }} - 管理员系统 - {{ config('info.info.short_name') }}
+    {{ $head_title or '首页' }}
 @endsection
 
 
 
 
-@section('header','Admin')
+@section('title')<span class="box-title">首页</span>@endsection
+@section('header')<span class="box-title">首页</span>@endsection
 {{--@section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection--}}
 {{--@section('breadcrumb')--}}
 {{--    <li><a href="{{ url('/') }}"><i class="fa fa-dashboard"></i>首页</a></li>--}}
@@ -19,7 +20,7 @@
 <div class="row">
     <div class="col-md-12">
 
-        <div class="nav-tabs-custom">
+        <div class="nav-tabs-custom" id="index-nav-box">
 
 
             {{--nav--}}
@@ -32,8 +33,8 @@
             <div class="tab-content">
 
                 <div class="tab-pane active" id="tab-home">
-                    @component(env('TEMPLATE_DK_ADMIN').'page.home')
-                    @endcomponent
+{{--                    @component(env('TEMPLATE_DK_ADMIN').'page.home')--}}
+{{--                    @endcomponent--}}
                 </div>
 
                 <div class="tab-pane" id="tab-order-list">
@@ -55,12 +56,12 @@
 </div>
 
 
+@include(env('TEMPLATE_DK_ADMIN').'component.department.department-edit')
+
+
 <div class="component-container _none">
 
-{{--        @component(env('TEMPLATE_DK_ADMIN').'page.department-list')--}}
-
-
-{{--    @include(env('TEMPLATE_DK_ADMIN').'component.order-create')--}}
+    @include(env('TEMPLATE_DK_ADMIN').'component.department.department-list')
 
 </div>
 @endsection
@@ -81,16 +82,19 @@
 
 
 @section('custom-js')
-    <script src="{{ asset('/resource/component/js/echarts-5.4.1.min.js') }}"></script>
 @endsection
 @section('custom-script')
 
-    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-list-datatable-script')
-    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-operate-record-datatable-script')
-    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-list-script')
 
-    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-list-datatable-script')
-    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-operate-record-datatable-script')
-    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-list-script')
+    @include(env('TEMPLATE_DK_ADMIN').'component.department.department-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.department.department-edit-script')
+
+{{--    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-list-datatable-script')--}}
+{{--    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-operate-record-datatable-script')--}}
+{{--    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-list-script')--}}
+
+{{--    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-list-datatable-script')--}}
+{{--    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-operate-record-datatable-script')--}}
+{{--    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-list-script')--}}
 
 @endsection

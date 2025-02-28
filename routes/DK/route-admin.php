@@ -36,6 +36,41 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::get('/404', $controller.'@view_admin_404');
 
     Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
+
+
+
+    // 【部门-管理】
+    Route::post('/v1/operate/department/datatable-list-query', $controller.'@v1_operate_for_department_datatable_list_query');
+    Route::post('/v1/operate/department/item-get', $controller.'@v1_operate_for_department_item_get');
+    Route::post('/v1/operate/department/item-save', $controller.'@v1_operate_for_department_item_save');
+
+
+    // 【客户-管理】
+    Route::post('/item/item-edit-for-staff', $controller.'@operate_staff_edit_by_admin');
+    Route::post('/item/item-get-for-staff', $controller.'@operate_staff_get_by_admin');
+
+
+
+    // 【通用】删除 & 恢复 & 永久删除
+    Route::post('/v1/operate/universal/item-delete-by-admin', $controller.'@v1_operate_for_universal_item_delete_by_admin');
+    Route::post('/v1/operate/universal/item-restore-by-admin', $controller.'@v1_operate_for_universal_item_restore_by_admin');
+    Route::post('/v1/operate/universal/item-delete-permanently-by-admin', $controller.'@v1_operate_for_universal_item_delete_permanently_by_admin');
+    // 【通用】重置密码 & 删除密码
+    Route::post('/v1/operate/universal/password-reset-by-admin', $controller.'@v1_operate_for_universal_password_reset_by_admin');
+    Route::post('/v1/operate/universal/password-change-by-admin', $controller.'@v1_operate_for_universal_password_change_by_admin');
+    // 【通用】启用 & 禁用
+    Route::post('/v1/operate/universal/item-enable-by-admin', $controller.'@v1_operate_for_universal_item_enable_by_admin');
+    Route::post('/v1/operate/universal/item-disable-by-admin', $controller.'@v1_operate_for_universal_item_disable_by_admin');
+    // 【通用】晋升 & 降职
+    Route::post('/v1/operate/universal/item-promote-by-admin', $controller.'@operate_item_promote_by_admin');
+    Route::post('/v1/operate/universal/item-demote-by-admin', $controller.'@operate_item_demote_by_admin');
+
+
+    // 【通用】批量-指派状态
+    Route::post('/v1/operate/universal/bulk-assign-status', $controller.'@v1_operate_for_universal_bulk_assign_status');
+    Route::post('/v1/operate/universal/bulk-assign-staff', $controller.'@v1_operate_for_universal_bulk_assign_staff');
+    Route::post('/v1/operate/universal/bulk-api-push', $controller.'@v1_operate_for_universal_bulk_api_push');
+
 });
 
 Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], function () {

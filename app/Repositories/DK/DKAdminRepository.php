@@ -260,6 +260,345 @@ class DKAdminRepository {
 
 
 
+
+    // 【部门-管理】返回-列表-数据
+    public function v1_operate_for_department_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_Department::select(['id','item_status','name','department_type','leader_id','superior_department_id','remark','creator_id','created_at','updated_at','deleted_at'])
+            ->withTrashed()
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'leader'=>function($query) { $query->select(['id','username','true_name']); },
+                'superior_department_er'=>function($query) { $query->select(['id','name']); }
+            ]);
+
+        if(in_array($me->user_type,[41,81]))
+        {
+            $query->where('superior_department_id',$me->department_district_id);
+        }
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+        // 状态 [|]
+        if(!empty($post_data['item_status']))
+        {
+            if(!in_array($post_data['item_status'],[-1,0]))
+            {
+                $query->where('item_status', $post_data['item_status']);
+            }
+        }
+        else
+        {
+            $query->where('item_status', 1);
+        }
+
+        // 部门类型 [大区|组]
+        if(!empty($post_data['department_type']))
+        {
+            if(!in_array($post_data['department_type'],[-1,0]))
+            {
+                $query->where('department_type', $post_data['department_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("rank", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+//        dd($list->toArray());
+
+        foreach($list as $k => $v)
+        {
+            if($v->department_type == 11)
+            {
+                $v->district_id = $v->id;
+            }
+            else if($v->department_type == 21)
+            {
+                $v->district_id = $v->superior_department_id;
+            }
+
+            $v->district_group_id = $v->district_id.'.'.$v->id;
+        }
+//        $list = $list->sortBy(['rank'=>'asc'])->values();
+//        $list = $list->sortBy(function ($item, $key) {
+//            return $item['district_group_id'];
+//        })->values();
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+    // 【部门-管理】获取 GET
+    public function v1_operate_for_department_item_get($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Department::withTrashed()->
+            with([
+                'leader'=>function($query) { $query->select('id','username'); },
+                'superior_department_er'=>function($query) { $query->select('id','name'); }
+            ])
+            ->find($id);
+        if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        return response_success($item,"");
+    }
+    // 【部门-管理】保存 SAVE
+    public function v1_operate_for_department_item_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'name.required' => '请输入部门名称！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'name' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,11,19,41])) return response_error([],"你没有操作权限！");
+
+
+        if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_Department::select('id')->where('name',$post_data["name"])->count();
+            if($is_exist) return response_error([],"该【部门】已存在，请勿重复添加！");
+
+            $mine = new DK_Department;
+            $post_data["active"] = 1;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate_type == 'edit') // 编辑
+        {
+            $mine = DK_Department::find($operate_id);
+            if(!$mine) return response_error([],"该【部门】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+
+            if(in_array($me->user_type,[41,61,71,81]))
+            {
+                $mine_data['superior_department_id'] = $me->department_district_id;
+            }
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("DK_Department--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+    // 【部门-管理】管理员-启用
+    public function v1_operate_for_department_item_enable_by_admin($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-enable-by-admin') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 判断对象是否合法
+        $mine = DK_Department::find($id);
+        if(!$mine) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if($mine->client_id != $me->client_id) return response_error([],"归属错误，刷新页面重试！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $mine->item_status = 1;
+            $mine->timestamps = false;
+            $bool = $mine->save();
+            if(!$bool) throw new Exception("update--department--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【部门-管理】管理员-禁用
+    public function v1_operate_for_department_item_disable_by_admin($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-disable-by-admin') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 判断对象是否合法
+        $mine = DK_Department::find($id);
+        if(!$mine) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if($mine->client_id != $me->client_id) return response_error([],"归属错误，刷新页面重试！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $mine->item_status = 9;
+            $mine->timestamps = false;
+            $bool = $mine->save();
+            if(!$bool) throw new Exception("update--department--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
     //
     public function operate_select2_company($post_data)
     {
@@ -9855,7 +10194,7 @@ class DKAdminRepository {
         $return['list_text'] = $list_text;
         $return['list_link'] = $list_link;
 
-        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.item.order-import-for-admin';
+        $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.order.order-import-for-admin';
         return view($view_blade)->with($return);
     }
     // 【工单】保存-导入-数据

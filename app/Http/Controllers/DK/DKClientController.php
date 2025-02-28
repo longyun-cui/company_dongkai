@@ -199,11 +199,15 @@ class DKClientController extends Controller
     }
 
 
+
+
     // 【财务】财务日报
     public function get_datatable_finance_daily()
     {
         return $this->repo->get_datatable_finance_daily(request()->all());
     }
+
+
 
 
     // 【部门-管理】编辑
@@ -218,6 +222,8 @@ class DKClientController extends Controller
     }
 
 
+
+
     // 【员工-管理】编辑
     public function operate_staff_edit_by_admin()
     {
@@ -230,7 +236,9 @@ class DKClientController extends Controller
     }
 
 
-    // 【通用】修改密码
+
+
+    // 【通用】删除
     public function operate_item_delete_by_admin()
     {
         $item_category = request('item_category','');
@@ -248,7 +256,7 @@ class DKClientController extends Controller
             return response_fail([]);
         }
     }
-    // 【通用】修改密码
+    // 【通用】恢复
     public function operate_item_restore_by_admin()
     {
         $item_category = request('item_category','');
@@ -266,7 +274,7 @@ class DKClientController extends Controller
             return response_fail([]);
         }
     }
-    // 【通用】修改密码
+    // 【通用】彻底删除
     public function operate_item_delete_permanently_by_admin()
     {
         $item_category = request('item_category','');
