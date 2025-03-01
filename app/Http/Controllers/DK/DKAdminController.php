@@ -224,6 +224,29 @@ class DKAdminController extends Controller
 
 
 
+    // 【部门-管理】datatable
+    public function v1_operate_for_staff_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_staff_datatable_list_query(request()->all());
+    }
+    // 【部门-管理】获取
+    public function v1_operate_for_staff_item_get()
+    {
+        return $this->repo->v1_operate_for_staff_item_get(request()->all());
+    }
+    // 【部门-管理】编辑-保存
+    public function v1_operate_for_staff_item_save()
+    {
+        return $this->repo->v1_operate_for_staff_item_save(request()->all());
+    }
+
+
+
+
+
+
+
+
 
     // 【通用】删除
     public function operate_item_delete_by_admin()
@@ -382,6 +405,10 @@ class DKAdminController extends Controller
             return response_fail([]);
         }
     }
+
+
+
+
 
 
 

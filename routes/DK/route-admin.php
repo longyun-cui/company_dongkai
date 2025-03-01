@@ -45,9 +45,13 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/department/item-save', $controller.'@v1_operate_for_department_item_save');
 
 
+
+
     // 【客户-管理】
-    Route::post('/item/item-edit-for-staff', $controller.'@operate_staff_edit_by_admin');
-    Route::post('/item/item-get-for-staff', $controller.'@operate_staff_get_by_admin');
+    Route::post('/v1/operate/staff/datatable-list-query', $controller.'@v1_operate_for_staff_datatable_list_query');
+    Route::post('/v1/operate/staff/item-get', $controller.'@v1_operate_for_staff_item_get');
+    Route::post('/v1/operate/staff/item-save', $controller.'@v1_operate_for_staff_item_save');
+
 
 
 

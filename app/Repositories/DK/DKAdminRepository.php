@@ -239,10 +239,16 @@ class DKAdminRepository {
     public function view_admin_index1()
     {
         $this->get_me();
+        $me = $this->me;
 
         $view_data = [];
-        $view_data['length'] = 10;
-        $view_data['page'] = 1;
+
+        if(in_array($me->user_type,[0,1,9,11]))
+        {
+            $department_district_list = DK_Department::select('id','name')->where('department_type',11)->orderby('rank','asc')->get();
+            $view_data['department_district_list'] = $department_district_list;
+        }
+
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.index1';
         return view($view_blade)->with($view_data);
     }
@@ -380,8 +386,8 @@ class DKAdminRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Department::withTrashed()->
-            with([
+        $item = DK_Department::withTrashed()
+            ->with([
                 'leader'=>function($query) { $query->select('id','username'); },
                 'superior_department_er'=>function($query) { $query->select('id','name'); }
             ])
@@ -593,6 +599,437 @@ class DKAdminRepository {
 
 
 
+    // 【员工-管理】返回-列表-数据
+    public function v1_operate_for_staff_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_User::withTrashed()->select('*')
+            ->with(['creator','superior','department_district_er','department_group_er'])
+            ->whereIn('user_category',[11]);
+
+        if($me->user_type == 11)
+        {
+            $query->whereIn('user_type',[41,61,66,71,77,81,84,88]);
+        }
+        else if($me->user_type == 61)
+        {
+            $query->whereIn('user_type',[66]);
+        }
+        else if($me->user_type == 41)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[71,77,81,84,88]);
+        }
+        else if($me->user_type == 71)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[77]);
+        }
+        else if($me->user_type == 81)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[84,88]);
+        }
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->with('ep','parent','fund')
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+        // 状态 [|]
+        if(!empty($post_data['user_status']))
+        {
+            if(!in_array($post_data['user_status'],[-1,0]))
+            {
+                $query->where('user_status', $post_data['user_status']);
+            }
+        }
+        else
+        {
+            $query->where('user_status', 1);
+        }
+
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0]))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
+
+        // 员工类型
+        if(!empty($post_data['user_type']))
+        {
+            if(!in_array($post_data['user_type'],[-1,0]))
+            {
+                $query->where('user_type', $post_data['user_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($total);
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+    // 【员工-管理】获取 GET
+    public function v1_operate_for_staff_item_get($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_User::withTrashed()
+            ->with([
+                'superior',
+                'department_district_er'=>function($query) { $query->select('id','name'); },
+                'department_group_er'=>function($query) { $query->select('id','name'); }
+            ])
+            ->find($id);
+        if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        return response_success($item,"");
+    }
+    // 【员工-管理】保存数据
+    public function v1_operate_for_staff_item_save($post_data)
+    {
+//        dd($post_data);
+        $messages = [
+            'operate.required' => '参数有误！',
+            'true_name.required' => '请输入用户名！',
+            'mobile.required' => '请输入电话！',
+//            'mobile.unique' => '电话已存在！',
+            'api_staffNo.required' => '请输入坐席用户ID！',
+            'api_staffNo.numeric' => '坐席用户ID必须为数字！',
+            'api_staffNo.min' => '坐席用户ID必须为数字，并且不小于0！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'true_name' => 'required',
+            'mobile' => 'required',
+//            'mobile' => 'required|unique:dk_user,mobile',
+            'api_staffNo' => 'required|numeric|min:0',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,21,31,41,61,71,81])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_id = $post_data["operate_id"];
+
+
+        if($post_data['api_staffNo'] > 0)
+        {
+            $api_staffNo_is_exist = DK_User::where('api_staffNo',$post_data['api_staffNo'])->where('id','!=',$operate_id)->first();
+            if($api_staffNo_is_exist) return response_error([],"坐席用户ID重复，请更换再试一次！");
+        }
+
+        if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_User::where('mobile',$post_data['mobile'])->first();
+            if($is_exist) return response_error([],"工号已存在！");
+
+            $mine = new DK_User;
+            $post_data["user_status"] = 0;
+            $post_data["user_category"] = 11;
+            $post_data["active"] = 1;
+            $post_data["password"] = password_encode("12345678");
+            $post_data["creator_id"] = $me->id;
+            $post_data['username'] = $post_data['true_name'];
+        }
+        else if($operate == 'edit') // 编辑
+        {
+            $mine = DK_User::find($operate_id);
+            if(!$mine) return response_error([],"该用户不存在，刷新页面重试！");
+            if($mine->mobile != $post_data['mobile'])
+            {
+                $is_exist = DK_User::where('mobile',$post_data['mobile'])->first();
+                if($is_exist) return response_error([],"工号重复，请更换工号再试一次！");
+            }
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+
+            unset($mine_data['operate']);
+            unset($mine_data['operate_id']);
+            unset($mine_data['category']);
+            unset($mine_data['type']);
+
+            if(in_array($me->user_type,[41,61,71,81]))
+            {
+                $mine_data['department_district_id'] = $me->department_district_id;
+            }
+//            if($me->user_type == 81)
+//            {
+//                $mine_data['department_district_id'] = $me->department_district_id;
+//            }
+
+            if($post_data["user_type"] == 71 || $post_data["user_type"] == 77)
+            {
+//                $mine_data['department_district_id'] = $me->department_district_id;
+//                unset($mine_data['department_district_id']);
+                unset($mine_data['department_group_id']);
+            }
+            else if($post_data["user_type"] == 81)
+            {
+                unset($mine_data['department_group_id']);
+            }
+
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+                if($operate == 'create') // 添加 ( $id==0，添加一个新用户 )
+                {
+                    $user_ext = new DK_UserExt;
+                    $user_ext_create['user_id'] = $mine->id;
+                    $bool_2 = $user_ext->fill($user_ext_create)->save();
+                    if(!$bool_2) throw new Exception("insert--user-ext--failed");
+                }
+
+                // 头像
+                if(!empty($post_data["portrait"]))
+                {
+                    // 删除原图片
+                    $mine_portrait_img = $mine->portrait_img;
+                    if(!empty($mine_portrait_img) && file_exists(storage_resource_path($mine_portrait_img)))
+                    {
+                        unlink(storage_resource_path($mine_portrait_img));
+                    }
+
+//                    $result = upload_storage($post_data["portrait"]);
+//                    $result = upload_storage($post_data["portrait"], null, null, 'assign');
+                    $result = upload_img_storage($post_data["portrait"],'portrait_for_user_by_user_'.$mine->id,'dk/unique/portrait_for_user','');
+                    if($result["result"])
+                    {
+                        $mine->portrait_img = $result["local"];
+                        $mine->save();
+                    }
+                    else throw new Exception("upload--portrait_img--file--fail");
+                }
+                else
+                {
+                    if($operate == 'create')
+                    {
+                        $portrait_path = "dk/unique/portrait_for_user/".date('Y-m-d');
+                        if (!is_dir(storage_resource_path($portrait_path)))
+                        {
+                            mkdir(storage_resource_path($portrait_path), 0777, true);
+                        }
+                        copy(storage_resource_path("materials/portrait/user0.jpeg"), storage_resource_path($portrait_path."/portrait_for_user_by_user_".$mine->id.".jpeg"));
+                        $mine->portrait_img = $portrait_path."/portrait_for_user_by_user_".$mine->id.".jpeg";
+                        $mine->save();
+                    }
+                }
+
+            }
+            else throw new Exception("insert--user--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+    // 【员工-管理】管理员-启用
+    public function v1_operate_for_staff_item_enable_by_admin($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-enable-by-admin') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 判断对象是否合法
+        $mine = DK_User::find($id);
+        if(!$mine) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if($mine->client_id != $me->client_id) return response_error([],"归属错误，刷新页面重试！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $mine->user_status = 1;
+            $mine->login_error_num = 0;
+            $mine->timestamps = false;
+            $bool = $mine->save();
+            if(!$bool) throw new Exception("update--department--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【员工-管理】管理员-禁用
+    public function v1_operate_for_staff_item_disable_by_admin($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-disable-by-admin') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+        // 判断对象是否合法
+        $mine = DK_User::find($id);
+        if(!$mine) return response_error([],"该【部门】不存在，刷新页面重试！");
+        if($mine->client_id != $me->client_id) return response_error([],"归属错误，刷新页面重试！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $mine->user_status = 9;
+            $mine->timestamps = false;
+            $bool = $mine->save();
+            if(!$bool) throw new Exception("update--department--fail");
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
 
 
 

@@ -323,6 +323,69 @@
             </li>
 
 
+            {{--员工列表--}}
+            <li class="treeview _none">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="staff-list"
+                   data-title="员工列表"
+                   data-content="员工列表"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-staff-list"
+                   data-datatable-target="staff-list"
+                   data-datatable-clone-object="staff-list-clone"
+                >
+                    <i class="fa fa-user text-red"></i>
+                    <span>员工列表</span>
+                </a>
+            </li>
+
+
+            {{--工单列表--}}
+            <li class="treeview _none">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="order-list"
+                   data-title="工单列表"
+                   data-content="工单列表"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-order-list"
+                   data-datatable-target="order-list"
+                   data-datatable-clone-object="order-list-clone"
+                >
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>工单列表</span>
+                </a>
+            </li>
+
+
+            {{--交付列表--}}
+            <li class="treeview _none">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="delivery-list"
+                   data-title="交付列表"
+                   data-content="交付列表"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-delivery-list"
+                   data-datatable-target="delivery-list"
+                   data-datatable-clone-object="delivery-list-clone"
+                >
+                    <i class="fa fa-file-text text-yellow"></i>
+                    <span>交付列表</span>
+                </a>
+            </li>
+
+
         </ul>
         <!-- /.sidebar-menu -->
     </section>

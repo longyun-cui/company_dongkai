@@ -9,7 +9,7 @@
 
 
         $('.select2-modal-order-create').select2({
-            dropdownParent: $('#modal-body-for-order-create'),
+            dropdownParent: $('#modal-body-for-order-create .modal-content'),
             minimumInputLength: 0,
             theme: 'classic'
         });

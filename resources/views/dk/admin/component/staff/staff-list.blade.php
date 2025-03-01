@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper department-list-clone" data-datatable-item-category="department">
+<div class="row datatable-body datatable-wrapper staff-list-clone" data-datatable-item-category="staff">
 
 
     <div class="col-md-12 datatable-search-row  datatable-search-box">
@@ -8,9 +8,9 @@
 
             @if(in_array($me->user_type,[0,1,9,11,19]))
             <button type="button" onclick="" class="btn btn-filter btn-success- item-create-modal-show"
-                    data-form-id="form-for-department-edit"
-                    data-modal-id="modal-for-department-edit"
-                    data-title="添加部门"
+                    data-form-id="form-for-staff-edit"
+                    data-modal-id="modal-for-staff-edit"
+                    data-title="添加员工"
             >
                 <i class="fa fa-plus"></i> 添加
             </button>
@@ -26,19 +26,36 @@
         <div class="pull-right">
 
 
-            <input type="text" class="search-filter form-filter filter-keyup" name="department-id" placeholder="ID" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="staff-id" placeholder="ID" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="staff-mobile" placeholder="工号" />
+            <input type="text" class="search-filter form-filter filter-keyup" name="staff-username" placeholder="名称" />
 
-            <input type="text" class="search-filter form-filter filter-keyup" name="department-name" placeholder="名称" />
+            @if(in_array($me->user_type,[0,1,9,11]))
+                <select class="search-filter form-filter" name="staff-user-type">
+                    <option value="-1">全部人员</option>
+                    <option value="41">团队·总经理</option>
+                    <option value="88">客服</option>
+                    <option value="84">客服主管</option>
+                    <option value="81">客服经理</option>
+                    <option value="77">质检员</option>
+                    <option value="71">质检经理</option>
+                    <option value="66">运营人员</option>
+                    <option value="61">运营经理</option>
+                </select>
+            @endif
 
-            <select class="search-filter form-filter" name="department-type">
+            @if(in_array($me->user_type,[0,1,9,11]))
+                <select class="search-filter form-filter select2-box-c" name="staff-department-district">
+                    <option value="-1">选择大区</option>
+                    @foreach($department_district_list as $v)
+                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                    @endforeach
+                </select>
+            @endif
+
+            <select class="search-filter form-filter" name="staff-status">
                 <option value ="-1">全部</option>
-                <option value ="11">大区</option>
-                <option value ="21">组</option>
-            </select>
-
-            <select class="search-filter form-filter" name="department-status">
                 <option value ="1">启用</option>
-                <option value ="-1">全部</option>
                 <option value ="9">禁用</option>
             </select>
 

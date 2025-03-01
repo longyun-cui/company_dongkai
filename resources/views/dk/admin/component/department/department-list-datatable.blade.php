@@ -321,6 +321,8 @@
             ],
             "drawCallback": function (settings) {
 
+                console.log('department-list-datatable-execute');
+
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
 //                        cell.innerHTML =  startIndex + i + 1;

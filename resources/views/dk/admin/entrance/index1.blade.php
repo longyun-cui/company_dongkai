@@ -57,11 +57,13 @@
 
 
 @include(env('TEMPLATE_DK_ADMIN').'component.department.department-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-edit')
 
 
 <div class="component-container _none">
 
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-list')
+    @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-list')
 
 </div>
 @endsection
@@ -88,6 +90,9 @@
 
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-list-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-edit-script')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-edit-script')
 
 {{--    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-list-datatable-script')--}}
 {{--    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-operate-record-datatable-script')--}}

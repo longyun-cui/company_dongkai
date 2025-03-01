@@ -8,7 +8,7 @@
 
 
         // 【通用】编辑-显示-创建
-        $(".main-content").on('click', ".item-create-show", function() {
+        $(".main-content").on('click', ".item-create-modal-show", function() {
             var $that = $(this);
             var $form_id = $that.data('form-id');
             var $modal_id = $that.data('modal-id');
@@ -334,6 +334,7 @@
 
     function form_reset($form_id)
     {
+        console.log('form_reset');
         var $form = $($form_id);
         $form.find('textarea.form-control, input.form-control, select').each(function () {
             $(this).val("");
