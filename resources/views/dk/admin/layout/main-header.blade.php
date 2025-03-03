@@ -35,7 +35,7 @@
 
 
                 {{--<!-- Add Menu -->--}}
-                <li class="dropdown tasks-menu add-menu">
+                <li class="dropdown tasks-menu add-menu _none">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-plus"></i>
@@ -130,7 +130,7 @@
 
 
                 {{--统计--}}
-                <li class="dropdown tasks-menu add-menu">
+                <li class="dropdown tasks-menu add-menu _none">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         统计 <span class="caret"></span>
                     </a>
@@ -276,6 +276,65 @@
 
                             <li class="divider"></li>
 
+                            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
+                                <li>
+                                    <a href="javascript:void(0);" class="tab-control datatable-control"
+                                       data-type="create"
+                                       data-unique="y"
+                                       data-id="statistic-caller-daily"
+                                       data-title='<i class="fa fa-bar-chart text-orange"></i> 坐席统计'
+                                       data-content=''
+
+                                       data-datatable-type="create"
+                                       data-datatable-unique="y"
+                                       data-datatable-id="datatable-statistic-caller-daily"
+                                       data-datatable-target="statistic-caller-daily"
+                                       data-datatable-clone-object="statistic-caller-daily-clone"
+                                    >
+                                        <i class="fa fa-bar-chart text-orange"></i> <span>坐席统计</span>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                            @endif
+                            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
+                                <li>
+                                    <a href="javascript:void(0);" class="tab-control datatable-control"
+                                       data-type="create"
+                                       data-unique="y"
+                                       data-id="statistic-caller-rank"
+                                       data-title='<i class="fa fa-line-chart text-orange"></i> 坐席排名'
+                                       data-content=''
+
+                                       data-datatable-type="create"
+                                       data-datatable-unique="y"
+                                       data-datatable-id="datatable-statistic-caller-rank"
+                                       data-datatable-target="statistic-caller-rank"
+                                       data-datatable-clone-object="statistic-caller-rank-clone"
+                                    >
+                                        <i class="fa fa-line-chart text-orange"></i> <span>坐席排名</span>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                            @endif
+                            @if(in_array($me->user_type,[0,1,9,11,41,81,84]))
+                                <li>
+                                    <a href="javascript:void(0);" class="tab-control datatable-control"
+                                       data-type="create"
+                                       data-unique="y"
+                                       data-id="statistic-caller-recent"
+                                       data-title='<i class="fa fa-bar-chart text-orange"></i> 近期成果'
+                                       data-content=''
+
+                                       data-datatable-type="create"
+                                       data-datatable-unique="y"
+                                       data-datatable-id="datatable-statistic-caller-recent"
+                                       data-datatable-target="statistic-caller-recent"
+                                       data-datatable-clone-object="statistic-caller-recent-clone"
+                                    >
+                                        <i class="fa fa-area-chart text-orange"></i> <span>近期成果</span>
+                                    </a>
+                                </li>
+                            @endif
                             @if(in_array($me->user_type,[0,1,9,11,41,61,71]))
                                 <li class="divider"></li>
                                 <li>
@@ -300,11 +359,6 @@
 
                             @if(in_array($me->user_type,[0,1,9,11,61]))
                                 <li>
-                                    <a target="_blank" href="{{ url('/statistic/statistic-deliverer') }}">
-                                        <i class="fa fa-bar-chart text-blue"></i> <span>运营看板</span>
-                                    </a>
-                                </li>
-                                <li>
                                     <a href="javascript:void(0);" class="tab-control datatable-control"
                                        data-type="create"
                                        data-unique="y"
@@ -318,87 +372,12 @@
                                        data-datatable-target="statistic-deliverer-overview"
                                        data-datatable-clone-object="statistic-deliverer-overview-clone"
                                     >
-                                        <i class="fa fa-bar-chart text-orange"></i> <span>运营统计</span>
+                                        <i class="fa fa-bar-chart text-red"></i> <span>运营统计</span>
                                     </a>
                                 </li>
                                 <li class="divider"></li>
                             @endif
-                            @if(in_array($me->user_type,[0,1,9,11]))
-                                <li>
-                                    <a href="javascript:void(0);" class="tab-control datatable-control"
-                                       data-type="create"
-                                       data-unique="y"
-                                       data-id="statistic-company-daily"
-                                       data-title='<i class="fa fa-bar-chart text-orange"></i> 公司日报'
-                                       data-content=''
 
-                                       data-datatable-type="create"
-                                       data-datatable-unique="y"
-                                       data-datatable-id="datatable-statistic-company-daily"
-                                       data-datatable-target="statistic-company-daily"
-                                       data-datatable-clone-object="statistic-company-daily-clone"
-
-                                       data-chart-id="eChart-statistic-company-daily"
-                                    >
-                                        <i class="fa fa-bar-chart text-orange"></i> <span>公司日报</span>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                            @endif
-                            @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                                <li>
-                                    <a href="javascript:void(0);" class="tab-control datatable-control"
-                                       data-type="create"
-                                       data-unique="y"
-                                       data-id="statistic-marketing-client"
-                                       data-title='<i class="fa fa-bar-chart text-orange"></i> 客户交付'
-                                       data-content=''
-
-                                       data-datatable-type="create"
-                                       data-datatable-unique="y"
-                                       data-datatable-id="datatable-statistic-marketing-client"
-                                       data-datatable-target="statistic-marketing-client"
-                                       data-datatable-clone-object="statistic-marketing-client-clone"
-                                    >
-                                        <i class="fa fa-area-chart text-orange"></i> <span>客户交付</span>
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                            @endif
-                            @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                                <li>
-                                    <a href="javascript:void(0);" class="tab-control datatable-control"
-                                       data-type="create"
-                                       data-unique="y"
-                                       data-id="statistic-marketing-project"
-                                       data-title='<i class="fa fa-bar-chart text-orange"></i> 项目交付'
-                                       data-content=''
-
-                                       data-datatable-type="create"
-                                       data-datatable-unique="y"
-                                       data-datatable-id="datatable-statistic-marketing-project"
-                                       data-datatable-target="statistic-marketing-project"
-                                       data-datatable-clone-object="statistic-marketing-project-clone"
-                                    >
-                                        <i class="fa fa-area-chart text-orange"></i> <span>项目交付</span>
-                                    </a>
-                                </li>
-                            @endif
-
-
-                            {{--财务统计--}}
-                            @if(in_array($me->user_type,[0,1,9,11]))
-                                <li class="divider"></li>
-                                <li class="header" style="margin-bottom:9px;">财务统计</li>
-                            @endif
-
-                            @if(in_array($me->user_type,[0,1,9,11]))
-                                <li class="header">
-                                    <a href="{{ url('/finance/daily-list') }}">
-                                        <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
-                                    </a>
-                                </li>
-                            @endif
 
 
 
@@ -503,16 +482,17 @@
 
                         {{--财务统计--}}
                         @if(in_array($me->user_type,[0,1,9,11]))
-                            <li class="divider"></li>
-                            <li class="header" style="margin-bottom:9px;">财务统计</li>
+                            <li class="divider _none"></li>
+                            <li class="header _none" style="margin-bottom:9px;">财务统计</li>
                         @endif
 
                         @if(in_array($me->user_type,[0,1,9,11]))
-                            <li class="header">
+                            <li class="header _none">
                                 <a href="{{ url('/finance/daily-list') }}">
                                     <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
                                 </a>
                             </li>
+                            <li class="divider"></li>
                         @endif
 
 
