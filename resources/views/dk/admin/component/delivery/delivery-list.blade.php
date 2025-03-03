@@ -97,4 +97,27 @@
     </div>
 
 
+    @if(in_array($me->user_type,[0,1,9,11,61,66]))
+        <div class="col-md-12 datatable-search-row">
+            <div class="pull-left">
+
+                <button type="button" onclick="" class="btn btn-default btn-filter" id="bulk-submit-for-delivery-export">
+                    <i class="fa fa-download"></i> 批量导出Excel
+                </button>
+
+                <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-status">
+                    <option value="-1">请选导出状态</option>
+                    <option value="1">已导出</option>
+                    <option value="0">待导出</option>
+                </select>
+
+                <button type="button" class="btn btn-default btn-filter" id="bulk-submit-for-exported">
+                    <i class="fa fa-check"></i> 批量更改导出状态
+                </button>
+
+            </div>
+        </div>
+    @endif
+
+
 </div>

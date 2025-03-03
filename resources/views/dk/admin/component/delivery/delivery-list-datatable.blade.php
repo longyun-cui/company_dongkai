@@ -57,7 +57,7 @@
                     "width": "40px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
+                        return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'" data-order-id="'+row.order_id+'"></label>';
                     }
                 },
                 {

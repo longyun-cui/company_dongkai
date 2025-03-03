@@ -1415,32 +1415,6 @@
             var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
             window.open($url);
 
-            {{--layer.msg('确定"批量审核"么', {--}}
-            {{--    time: 0--}}
-            {{--    ,btn: ['确定', '取消']--}}
-            {{--    ,yes: function(index){--}}
-
-            {{--        $.post(--}}
-            {{--            "{{ url('/admin/business/keyword-review-bulk') }}",--}}
-            {{--            {--}}
-            {{--                _token: $('meta[name="_token"]').attr('content'),--}}
-            {{--                operate: "keyword-review-bulk",--}}
-            {{--                bulk_keyword_id: $checked,--}}
-            {{--                bulk_keyword_status:$('select[name="bulk-review-keyword-status"]').val()--}}
-            {{--            },--}}
-            {{--            function(data){--}}
-            {{--                layer.close(index);--}}
-            {{--                if(!data.success) layer.msg(data.msg);--}}
-            {{--                else--}}
-            {{--                {--}}
-            {{--                    $('#datatable-for-order-list').DataTable().ajax.reload(null,false);--}}
-            {{--                }--}}
-            {{--            },--}}
-            {{--            'json'--}}
-            {{--        );--}}
-
-            {{--    }--}}
-            {{--});--}}
 
         });
         // 【批量操作】批量-交付
@@ -1562,6 +1536,24 @@
 
 
 
+        $(".main-content").on('click', '#bulk-submit-for-delivery-export', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $ids = '';
+            $('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).attr('data-order-id')+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            window.open($url);
+
+        });
 
 
 
