@@ -1,6 +1,11 @@
 <script>
 
 
+    if(sessionStorage.getItem('session_unique_id'))
+    {
+        sessionStorage.setItem('session_unique_id',1);
+    }
+
     (function ($) {
         $.getUrlParam = function (name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

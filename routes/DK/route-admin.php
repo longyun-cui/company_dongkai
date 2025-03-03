@@ -39,18 +39,71 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
 
+    // select2
+    Route::post('/v1/operate/select2/select2_department', $controller.'@v1_operate_select2_department');
+    Route::post('/v1/operate/select2/select2_staff', $controller.'@v1_operate_select2_staff');
+    Route::post('/v1/operate/select2/select2_company', $controller.'@v1_operate_select2_company');
+    Route::post('/v1/operate/select2/select2_client', $controller.'@v1_operate_select2_client');
+    Route::post('/v1/operate/select2/select2_project', $controller.'@v1_operate_select2_project');
+
+
     // 【部门-管理】
     Route::post('/v1/operate/department/datatable-list-query', $controller.'@v1_operate_for_department_datatable_list_query');
     Route::post('/v1/operate/department/item-get', $controller.'@v1_operate_for_department_item_get');
     Route::post('/v1/operate/department/item-save', $controller.'@v1_operate_for_department_item_save');
 
 
-
-
-    // 【客户-管理】
+    // 【员工-管理】
     Route::post('/v1/operate/staff/datatable-list-query', $controller.'@v1_operate_for_staff_datatable_list_query');
     Route::post('/v1/operate/staff/item-get', $controller.'@v1_operate_for_staff_item_get');
     Route::post('/v1/operate/staff/item-save', $controller.'@v1_operate_for_staff_item_save');
+
+
+    // 【公司-管理】
+    Route::post('/v1/operate/company/datatable-list-query', $controller.'@v1_operate_for_company_datatable_list_query');
+    Route::post('/v1/operate/company/item-get', $controller.'@v1_operate_for_company_item_get');
+    Route::post('/v1/operate/company/item-save', $controller.'@v1_operate_for_company_item_save');
+
+
+    // 【客户-管理】
+    Route::post('/v1/operate/client/datatable-list-query', $controller.'@v1_operate_for_client_datatable_list_query');
+    Route::post('/v1/operate/client/item-get', $controller.'@v1_operate_for_client_item_get');
+    Route::post('/v1/operate/client/item-save', $controller.'@v1_operate_for_client_item_save');
+
+
+    // 【项目-管理】
+    Route::post('/v1/operate/project/datatable-list-query', $controller.'@v1_operate_for_project_datatable_list_query');
+    Route::post('/v1/operate/project/item-get', $controller.'@v1_operate_for_project_item_get');
+    Route::post('/v1/operate/project/item-save', $controller.'@v1_operate_for_project_item_save');
+
+
+    // 【地区-管理】
+    Route::post('/v1/operate/location/datatable-list-query', $controller.'@v1_operate_for_location_datatable_list_query');
+    Route::post('/v1/operate/location/item-get', $controller.'@v1_operate_for_location_item_get');
+    Route::post('/v1/operate/location/item-save', $controller.'@v1_operate_for_location_item_save');
+
+
+    // 【工单-管理】
+    Route::post('/v1/operate/order/datatable-list-query', $controller.'@v1_operate_for_order_datatable_list_query');
+    Route::post('/v1/operate/order/item-get', $controller.'@v1_operate_for_order_item_get');
+    Route::post('/v1/operate/order/item-save', $controller.'@v1_operate_for_order_item_save');
+    Route::post('/v1/operate/order/item-publish', $controller.'@v1_operate_for_order_item_publish');
+    Route::post('/v1/operate/order/item-inspect', $controller.'@v1_operate_for_order_item_inspect');
+    Route::post('/v1/operate/order/item-deliver', $controller.'@v1_operate_for_order_item_deliver');
+
+
+    // 【交付-管理】
+    Route::post('/v1/operate/delivery/datatable-list-query', $controller.'@v1_operate_for_delivery_datatable_list_query');
+
+
+
+
+    // 【导出-管理】
+    Route::post('/v1/operate/record/datatable-list-query', $controller.'@v1_operate_for_record_datatable_list_query');
+
+    Route::get('/v1/operate/statistic/order-export', $controller.'@v1_operate_for_statistic_order_export');
+    Route::get('/v1/operate/statistic/delivery-export', $controller.'@v1_operate_for_statistic_delivery_export');
+
 
 
 
@@ -66,14 +119,37 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/universal/item-enable-by-admin', $controller.'@v1_operate_for_universal_item_enable_by_admin');
     Route::post('/v1/operate/universal/item-disable-by-admin', $controller.'@v1_operate_for_universal_item_disable_by_admin');
     // 【通用】晋升 & 降职
-    Route::post('/v1/operate/universal/item-promote-by-admin', $controller.'@operate_item_promote_by_admin');
-    Route::post('/v1/operate/universal/item-demote-by-admin', $controller.'@operate_item_demote_by_admin');
+    Route::post('/v1/operate/universal/item-promote-by-admin', $controller.'@v1_operate_for_universal_item_promote_by_admin');
+    Route::post('/v1/operate/universal/item-demote-by-admin', $controller.'@v1_operate_for_universal_item_demote_by_admin');
+    // 【通用】登录
+    Route::post('/v1/operate/universal/item-login-by-admin', $controller.'@v1_operate_for_universal_item_login_by_admin');
+    // 【通用】字段修改
+    Route::post('/v1/operate/universal/field-set', $controller.'@v1_operate_for_universal_field_set');
 
 
     // 【通用】批量-指派状态
     Route::post('/v1/operate/universal/bulk-assign-status', $controller.'@v1_operate_for_universal_bulk_assign_status');
     Route::post('/v1/operate/universal/bulk-assign-staff', $controller.'@v1_operate_for_universal_bulk_assign_staff');
     Route::post('/v1/operate/universal/bulk-api-push', $controller.'@v1_operate_for_universal_bulk_api_push');
+
+
+
+    Route::post('/v1/operate/statistic/comprehensive-overview', $controller.'@v1_operate_for_get_statistic_data_of_comprehensive_overview');
+
+
+    Route::post('/v1/operate/statistic/company-overview', $controller.'@v1_operate_for_get_statistic_data_of_company_overview');
+    Route::post('/v1/operate/statistic/company-daily', $controller.'@v1_operate_for_get_statistic_data_of_company_daily');
+    Route::post('/v1/operate/statistic/marketing/project', $controller.'@v1_operate_for_get_statistic_data_of_marketing_project');
+    Route::post('/v1/operate/statistic/marketing/client', $controller.'@v1_operate_for_get_statistic_data_of_marketing_client');
+
+    Route::post('/v1/operate/statistic/production/caller-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_overview');
+    Route::post('/v1/operate/statistic/production/inspector-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_inspector_overview');
+    Route::post('/v1/operate/statistic/production/deliverer-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_deliverer_overview');
+
+
+
+
+
 
 });
 
@@ -101,8 +177,6 @@ Route::group(['middleware' => ['yh.admin.login','dk.admin.password_change']], fu
 
     // select2
     Route::match(['get','post'], '/select2/select2_company', $controller.'@operate_select2_company');
-
-
 
 
 

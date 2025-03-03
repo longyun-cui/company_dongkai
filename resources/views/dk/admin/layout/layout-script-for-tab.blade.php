@@ -129,6 +129,7 @@
 
             if($.fn.DataTable.isDataTable('#'+$config.id))
             {
+                console.log($config.id);
                 console.log('DataTable 已存在！');
                 if($reload == 'y')
                 {
@@ -194,6 +195,67 @@
                     minimumInputLength: 0,
                     theme: 'classic'
                 });
+                $('#'+$config.target).find('.select2-project-c').select2({
+                    ajax: {
+                        url: "{{ url('/v1/operate/select2/select2_project') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-client-c').select2({
+                    ajax: {
+                        url: "{{ url('/v1/operate/select2/select2_client') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+
+
+
 
                 if($id == "datatable-list")
                 {
@@ -214,10 +276,72 @@
                 {
                     Datatable_for_StaffList('#'+$config.id);
                 }
+                else if($id == "datatable-company-list")
+                {
+                    Datatable_for_CompanyList('#'+$config.id);
+                }
+                else if($id == "datatable-client-list")
+                {
+                    Datatable_for_ClientList('#'+$config.id);
+                }
+                else if($id == "datatable-project-list")
+                {
+                    Datatable_for_ProjectList('#'+$config.id);
+                }
+                else if($id == "datatable-location-list")
+                {
+                    Datatable_for_LocationList('#'+$config.id);
+                }
+                else if($id == "datatable-order-list")
+                {
+                    Datatable_for_OrderList('#'+$config.id);
+                }
+                else if($id == "datatable-delivery-list")
+                {
+                    Datatable_for_DeliveryList('#'+$config.id);
+                }
                 else if($id == "datatable-finance-daily")
                 {
                     Datatable_for_FinanceDaily('#'+$config.id, $config.chart_id);
                 }
+                else if($id == "datatable-statistic-company-overview")
+                {
+                    Table_Datatable_Ajax_Statistic_Company_Overview('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-company-daily")
+                {
+                    Table_Datatable_Ajax_Statistic_Company_Daily('#'+$config.id, $config.chart_id);
+                }
+                else if($id == "datatable-statistic-marketing-project")
+                {
+                    Table_Datatable_Ajax_Statistic_Marketing_Project('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-marketing-client")
+                {
+                    Table_Datatable_Ajax_Statistic_Marketing_Client('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-caller-overview")
+                {
+                    Table_Datatable_Ajax_Statistic_Caller_Overview('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-inspector-overview")
+                {
+                    Table_Datatable_Ajax_Statistic_Inspector_Overview('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-deliverer-overview")
+                {
+                    Table_Datatable_Ajax_Statistic_Ddeliverer_Overview('#'+$config.id);
+                }
+                else if($id == "statistic-comprehensive-overview")
+                {
+                    // 初始化
+                    $("#filter-submit-for-comprehensive").click();
+                }
+                else if($id == "datatable-statistic-export")
+                {
+                    Datatable_for_ExportList('#'+$config.id);
+                }
+
             }
 
 
@@ -235,7 +359,7 @@
             '<li class="nav-item">'
                 +'<a class="nav-link" href="#'+ $config.id +'" data-toggle="tab">'
                     + $config.title
-                    +'<i class="fa fa-close ml-2 close-tab"></i>'
+                    +' <i class="fa fa-close ml-2 close-tab"></i>'
                 +'</a>'
             +'</li>';
 

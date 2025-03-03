@@ -1,6 +1,6 @@
 {{--编辑-部门--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-for-staff-edit">
-    <div class="col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white modal-content">
+    <div class="modal-content col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
         <div class="box- box-info- form-container modal-body">
 
             <div class="box-header with-border margin-top-16px">
@@ -17,7 +17,7 @@
                 <input readonly type="hidden" class="form-control" name="operate[type]" value="create" data-default="create">
                 <input readonly type="hidden" class="form-control" name="operate[id]" value="0" data-default="0">
                 <input readonly type="hidden" class="form-control" name="operate[item_category]" value="item" data-default="item">
-                <input readonly type="hidden" class="form-control" name="operate[item_type]" value="department" data-default="department">
+                <input readonly type="hidden" class="form-control" name="operate[item_type]" value="staff" data-default="department">
 
 
                 {{--类别--}}
@@ -27,7 +27,7 @@
                         <div class="btn-group">
 
                             @if(in_array($me->user_type, [0,1]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="user_type" value="11"> 总经理
@@ -37,7 +37,7 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="user_type" value="41"> 团队·总经理
@@ -47,7 +47,7 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11,41]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="user_type" value="81"> 客服经理
@@ -57,7 +57,7 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11,41,81]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="user_type" value="84"> 客服主管
@@ -67,7 +67,7 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11,41,81]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="user_type" value="88" checked="checked"> 客服
@@ -77,7 +77,7 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11,41]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="user_type" value="71"> 质检经理
@@ -87,7 +87,7 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11,41]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="user_type" value="77"> 质检员
@@ -97,17 +97,17 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11]))
-                                <button type="button" class="btn">
-                                    <span class="radio">
-                                        <label>
-                                            <input type="radio" name="user_type" value="61"> 运营经理
-                                        </label>
-                                    </span>
-                                </button>
+                            <button type="button" class="btn radio-btn radio-user-type">
+                                <span class="radio">
+                                    <label>
+                                        <input type="radio" name="user_type" value="61"> 运营经理
+                                    </label>
+                                </span>
+                            </button>
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11,61]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="user_type" value="66"> 运营人员

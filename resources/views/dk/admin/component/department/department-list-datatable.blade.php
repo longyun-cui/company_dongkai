@@ -25,13 +25,13 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $('input[name="department-id"]').val();
-                    d.name = $('input[name="department-name"]').val();
-                    d.title = $('input[name="department-title"]').val();
-                    d.keyword = $('input[name="department-keyword"]').val();
-                    d.item_status = $('select[name="department-status"]').val();
-                    d.department_type = $('select[name="department-type"]').val();
-                    d.department_work_status = $('select[name="department-work-status"]').val();
+                    d.id = $tableSearch.find('input[name="department-id"]').val();
+                    d.name = $tableSearch.find('input[name="department-name"]').val();
+                    d.title = $tableSearch.find('input[name="department-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="department-keyword"]').val();
+                    d.item_status = $tableSearch.find('select[name="department-status"]').val();
+                    d.department_type = $tableSearch.find('select[name="department-type"]').val();
+                    d.department_work_status = $tableSearch.find('select[name="department-work-status"]').val();
                 },
             },
             "fixedColumns": {

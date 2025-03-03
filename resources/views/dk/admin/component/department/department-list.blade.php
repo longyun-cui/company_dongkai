@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper department-list-clone" data-datatable-item-category="department">
+<div class="row datatable-body datatable-wrapper department-list-clone" data-datatable-item-category="department" data-item-name="部门">
 
 
     <div class="col-md-12 datatable-search-row  datatable-search-box">

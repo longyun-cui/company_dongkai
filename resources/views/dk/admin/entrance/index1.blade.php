@@ -25,7 +25,11 @@
 
             {{--nav--}}
             <ul class="nav nav-tabs">
-                <li class="active" id="home"><a href="#tab-home" data-toggle="tab" aria-expanded="true">首页</a></li>
+                <li class="active" id="home">
+                    <a href="#tab-home" data-toggle="tab" aria-expanded="true">
+                        <i class="fa fa-home text-green"></i> 首页
+                    </a>
+                </li>
             </ul>
 
 
@@ -33,18 +37,6 @@
             <div class="tab-content">
 
                 <div class="tab-pane active" id="tab-home">
-{{--                    @component(env('TEMPLATE_DK_ADMIN').'page.home')--}}
-{{--                    @endcomponent--}}
-                </div>
-
-                <div class="tab-pane" id="tab-order-list">
-                    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-list')
-                    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-operate-record')
-                </div>
-
-                <div class="tab-pane" id="tab-department-list">
-                    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-list')
-                    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-operate-record')
                 </div>
 
             </div>
@@ -56,14 +48,43 @@
 </div>
 
 
+@include(env('TEMPLATE_DK_ADMIN').'component.common')
+
 @include(env('TEMPLATE_DK_ADMIN').'component.department.department-edit')
 @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.company.company-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.client.client-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.project.project-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.location.location-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.order.order-edit')
 
 
 <div class="component-container _none">
 
     @include(env('TEMPLATE_DK_ADMIN').'component.department.department-list')
     @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-list')
+    @include(env('TEMPLATE_DK_ADMIN').'component.company.company-list')
+    @include(env('TEMPLATE_DK_ADMIN').'component.client.client-list')
+    @include(env('TEMPLATE_DK_ADMIN').'component.project.project-list')
+    @include(env('TEMPLATE_DK_ADMIN').'component.location.location-list')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list')
+    @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-list')
+
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-index')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.company.statistic-company-overview')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.company.statistic-company-daily')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.project.statistic-marketing-project')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.client.statistic-marketing-client')
+
+
+{{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-overview')--}}
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-inspector-overview')
+{{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-deliverer-overview')--}}
 
 </div>
 @endsection
@@ -77,7 +98,9 @@
     .btn-app>.badge { position: absolute; top: -6px; right: -10px; font-size: 12px; font-weight: 400; }
     .tableArea table { min-width:1380px; }
     .tableArea.full table { width:100% !important; min-width:1200px; }
-    .tableArea table tr th, .tableArea table tr td { white-space:nowrap; }
+    .tableArea table tr th,
+    .tableArea table tr td { white-space:nowrap; }
+    .white-space-normal { white-space:normal !important; }
 </style>
 @endsection
 
@@ -94,12 +117,39 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-list-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-edit-script')
 
-{{--    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-list-datatable-script')--}}
-{{--    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-operate-record-datatable-script')--}}
-{{--    @include(env('TEMPLATE_DK_ADMIN').'page.service.order.order-list-script')--}}
+    @include(env('TEMPLATE_DK_ADMIN').'component.company.company-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.company.company-edit-script')
 
-{{--    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-list-datatable-script')--}}
-{{--    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-operate-record-datatable-script')--}}
-{{--    @include(env('TEMPLATE_DK_ADMIN').'page.company.department.department-list-script')--}}
+    @include(env('TEMPLATE_DK_ADMIN').'component.client.client-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.client.client-edit-script')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.project.project-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.project.project-edit-script')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.location.location-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.location.location-edit-script')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list-script')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-list-datatable')
+
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-index-script')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.export.statistic-export-script')
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.company.statistic-company-overview-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.company.statistic-company-daily-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.project.statistic-marketing-project-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.client.statistic-marketing-client-datatable')
+
+
+{{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-overview-datatable')--}}
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-inspector-overview-datatable')
+{{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-deliverer-overview-datatable')--}}
+
+
 
 @endsection

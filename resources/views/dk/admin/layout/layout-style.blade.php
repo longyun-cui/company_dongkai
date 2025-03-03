@@ -79,6 +79,8 @@
     .dataTables_wrapper.no-footer .dataTables_scrollBody { border-bottom:0 }
 
     .tableArea { margin-top:16px; }
+    .tableArea.table-order table { min-width:2400px; }
+    .tableArea.table-delivery table { min-width:1280px; }
 
 
 

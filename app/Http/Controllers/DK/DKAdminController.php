@@ -198,6 +198,26 @@ class DKAdminController extends Controller
 
 
 
+    public function v1_operate_select2_department()
+    {
+        return $this->repo->v1_operate_select2_department(request()->all());
+    }
+    public function v1_operate_select2_staff()
+    {
+        return $this->repo->v1_operate_select2_staff(request()->all());
+    }
+    public function v1_operate_select2_company()
+    {
+        return $this->repo->v1_operate_select2_company(request()->all());
+    }
+    public function v1_operate_select2_client()
+    {
+        return $this->repo->v1_operate_select2_client(request()->all());
+    }
+    public function v1_operate_select2_project()
+    {
+        return $this->repo->v1_operate_select2_project(request()->all());
+    }
 
 
 
@@ -220,21 +240,17 @@ class DKAdminController extends Controller
 
 
 
-
-
-
-
-    // 【部门-管理】datatable
+    // 【员工-管理】datatable
     public function v1_operate_for_staff_datatable_list_query()
     {
         return $this->repo->v1_operate_for_staff_datatable_list_query(request()->all());
     }
-    // 【部门-管理】获取
+    // 【员工-管理】获取
     public function v1_operate_for_staff_item_get()
     {
         return $this->repo->v1_operate_for_staff_item_get(request()->all());
     }
-    // 【部门-管理】编辑-保存
+    // 【员工-管理】编辑-保存
     public function v1_operate_for_staff_item_save()
     {
         return $this->repo->v1_operate_for_staff_item_save(request()->all());
@@ -243,23 +259,165 @@ class DKAdminController extends Controller
 
 
 
+    // 【公司&代理-管理】datatable
+    public function v1_operate_for_company_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_company_datatable_list_query(request()->all());
+    }
+    // 【公司&代理-管理】获取
+    public function v1_operate_for_company_item_get()
+    {
+        return $this->repo->v1_operate_for_company_item_get(request()->all());
+    }
+    // 【公司&代理-管理】编辑-保存
+    public function v1_operate_for_company_item_save()
+    {
+        return $this->repo->v1_operate_for_company_item_save(request()->all());
+    }
+
+
+
+
+    // 【客户-管理】datatable
+    public function v1_operate_for_client_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_client_datatable_list_query(request()->all());
+    }
+    // 【客户-管理】获取
+    public function v1_operate_for_client_item_get()
+    {
+        return $this->repo->v1_operate_for_client_item_get(request()->all());
+    }
+    // 【客户-管理】编辑-保存
+    public function v1_operate_for_client_item_save()
+    {
+        return $this->repo->v1_operate_for_client_item_save(request()->all());
+    }
+
+
+
+
+    // 【项目-管理】datatable
+    public function v1_operate_for_project_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_project_datatable_list_query(request()->all());
+    }
+    // 【项目-管理】获取
+    public function v1_operate_for_project_item_get()
+    {
+        return $this->repo->v1_operate_for_project_item_get(request()->all());
+    }
+    // 【项目-管理】编辑-保存
+    public function v1_operate_for_project_item_save()
+    {
+        return $this->repo->v1_operate_for_project_item_save(request()->all());
+    }
+
+
+
+
+    // 【地域-管理】datatable
+    public function v1_operate_for_location_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_location_datatable_list_query(request()->all());
+    }
+    // 【地域-管理】获取
+    public function v1_operate_for_location_item_get()
+    {
+        return $this->repo->v1_operate_for_location_item_get(request()->all());
+    }
+    // 【地域-管理】编辑-保存
+    public function v1_operate_for_location_item_save()
+    {
+        return $this->repo->v1_operate_for_location_item_save(request()->all());
+    }
+
+
+
+
+    // 【工单-管理】datatable
+    public function v1_operate_for_order_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_order_datatable_list_query(request()->all());
+    }
+    // 【工单-管理】获取
+    public function v1_operate_for_order_item_get()
+    {
+        return $this->repo->v1_operate_for_order_item_get(request()->all());
+    }
+    // 【工单-管理】编辑-保存
+    public function v1_operate_for_order_item_save()
+    {
+        return $this->repo->v1_operate_for_order_item_save(request()->all());
+    }
+    // 【工单-管理】
+    public function v1_operate_for_order_item_inspect()
+    {
+        return $this->repo->v1_operate_for_order_item_inspect(request()->all());
+    }
+    // 【工单-管理】
+    public function v1_operate_for_order_item_deliver()
+    {
+        return $this->repo->v1_operate_for_order_item_deliver(request()->all());
+    }
+    // 【工单-管理】批量-交付
+    public function v1_operate_for_order_bulk_deliver()
+    {
+        return $this->repo->v1_operate_for_order_bulk_deliver(request()->all());
+    }
+    // 【工单-管理】
+    public function v1_operate_for_order_deliver_get_delivered()
+    {
+        return $this->repo->v1_operate_for_order_deliver_get_delivered(request()->all());
+    }
+    // 【工单-管理】分发
+    public function v1_operate_for_order_item_distribute()
+    {
+        return $this->repo->v1_operate_for_order_distribute(request()->all());
+    }
+
+
+
+
+    // 【交付-管理】datatable
+    public function v1_operate_for_delivery_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_delivery_datatable_list_query(request()->all());
+    }
+
 
 
 
 
 
     // 【通用】删除
-    public function operate_item_delete_by_admin()
+    public function v1_operate_for_universal_item_delete_by_admin()
     {
         $item_category = request('item_category','');
 
         if($item_category == 'department')
         {
-            return $this->repo->operate_department_delete_by_admin(request()->all());
+            return $this->repo->v1_operate_for_department_item_delete_by_admin(request()->all());
         }
         else if($item_category == 'staff')
         {
-            return $this->repo->operate_staff_delete_by_admin(request()->all());
+            return $this->repo->v1_operate_for_staff_item_delete_by_admin(request()->all());
+        }
+        else if($item_category == 'company')
+        {
+            return $this->repo->v1_operate_for_company_item_delete_by_admin(request()->all());
+        }
+        else if($item_category == 'client')
+        {
+            return $this->repo->v1_operate_for_client_item_delete_by_admin(request()->all());
+        }
+        else if($item_category == 'project')
+        {
+            return $this->repo->v1_operate_for_project_item_restore_by_admin(request()->all());
+        }
+        else if($item_category == 'location')
+        {
+            return $this->repo->v1_operate_for_location_item_delete_by_admin(request()->all());
         }
         else
         {
@@ -267,17 +425,33 @@ class DKAdminController extends Controller
         }
     }
     // 【通用】恢复
-    public function operate_item_restore_by_admin()
+    public function v1_operate_for_universal_item_restore_by_admin()
     {
         $item_category = request('item_category','');
 
         if($item_category == 'department')
         {
-            return $this->repo->operate_department_restore_by_admin(request()->all());
+            return $this->repo->v1_operate_for_department_item_restore_by_admin(request()->all());
         }
         else if($item_category == 'staff')
         {
-            return $this->repo->operate_staff_restore_by_admin(request()->all());
+            return $this->repo->v1_operate_for_staff_item_restore_by_admin(request()->all());
+        }
+        else if($item_category == 'company')
+        {
+            return $this->repo->v1_operate_for_company_item_restore_by_admin(request()->all());
+        }
+        else if($item_category == 'client')
+        {
+            return $this->repo->v1_operate_for_client_item_restore_by_admin(request()->all());
+        }
+        else if($item_category == 'project')
+        {
+            return $this->repo->v1_operate_for_project_item_restore_by_admin(request()->all());
+        }
+        else if($item_category == 'location')
+        {
+            return $this->repo->v1_operate_for_location_item_restore_by_admin(request()->all());
         }
         else
         {
@@ -285,17 +459,33 @@ class DKAdminController extends Controller
         }
     }
     // 【通用】彻底删除
-    public function operate_item_delete_permanently_by_admin()
+    public function v1_operate_for_universal_item_delete_permanently_by_admin()
     {
         $item_category = request('item_category','');
 
         if($item_category == 'department')
         {
-            return $this->repo->operate_department_delete_permanently_by_admin(request()->all());
+            return $this->repo->v1_operate_for_department_item_delete_permanently_by_admin(request()->all());
         }
         else if($item_category == 'staff')
         {
-            return $this->repo->operate_staff_delete_permanently_by_admin(request()->all());
+            return $this->repo->v1_operate_for_staff_item_delete_permanently_by_admin(request()->all());
+        }
+        else if($item_category == 'company')
+        {
+            return $this->repo->v1_operate_for_company_item_delete_permanently_by_admin(request()->all());
+        }
+        else if($item_category == 'client')
+        {
+            return $this->repo->v1_operate_for_client_item_delete_permanently_by_admin(request()->all());
+        }
+        else if($item_category == 'project')
+        {
+            return $this->repo->v1_operate_for_project_item_delete_permanently_by_admin(request()->all());
+        }
+        else if($item_category == 'location')
+        {
+            return $this->repo->v1_operate_for_location_item_delete_permanently_by_admin(request()->all());
         }
         else
         {
@@ -303,18 +493,22 @@ class DKAdminController extends Controller
         }
     }
 
-    // 【通用】修改密码
-    public function operate_item_password_reset_by_admin()
+    // 【通用】重置密码
+    public function v1_operate_for_universal_password_reset_by_admin()
     {
         $item_category = request('item_category','');
 
-        if($item_category == 'department')
+        if($item_category == 'staff')
         {
-            return $this->repo->operate_department_password_reset_by_admin(request()->all());
+            return $this->repo->v1_operate_for_staff_password_reset_by_admin(request()->all());
         }
-        else if($item_category == 'staff')
+        else if($item_category == 'company')
         {
-            return $this->repo->operate_staff_password_reset_by_admin(request()->all());
+            return $this->repo->v1_operate_for_company_password_reset_by_admin(request()->all());
+        }
+        else if($item_category == 'client')
+        {
+            return $this->repo->v1_operate_for_client_password_reset_by_admin(request()->all());
         }
         else
         {
@@ -322,17 +516,13 @@ class DKAdminController extends Controller
         }
     }
     // 【通用】修改密码
-    public function operate_item_password_change_by_admin()
+    public function v1_operate_for_universal_password_change_by_admin()
     {
         $item_category = request('item_category','');
 
-        if($item_category == 'department')
+        if($item_category == 'staff')
         {
-            return $this->repo->operate_department_password_change_by_admin(request()->all());
-        }
-        else if($item_category == 'staff')
-        {
-            return $this->repo->operate_staff_password_change_by_admin(request()->all());
+            return $this->repo->v1_operate_for_staff_password_change_by_admin(request()->all());
         }
         else
         {
@@ -353,6 +543,22 @@ class DKAdminController extends Controller
         {
             return $this->repo->v1_operate_for_staff_item_enable_by_admin(request()->all());
         }
+        else if($item_category == 'company')
+        {
+            return $this->repo->v1_operate_for_company_item_enable_by_admin(request()->all());
+        }
+        else if($item_category == 'client')
+        {
+            return $this->repo->v1_operate_for_client_item_enable_by_admin(request()->all());
+        }
+        else if($item_category == 'project')
+        {
+            return $this->repo->v1_operate_for_project_item_enable_by_admin(request()->all());
+        }
+        else if($item_category == 'location')
+        {
+            return $this->repo->v1_operate_for_location_item_enable_by_admin(request()->all());
+        }
         else
         {
             return response_fail([]);
@@ -371,40 +577,195 @@ class DKAdminController extends Controller
         {
             return $this->repo->v1_operate_for_staff_item_disable_by_admin(request()->all());
         }
+        else if($item_category == 'company')
+        {
+            return $this->repo->v1_operate_for_company_item_disable_by_admin(request()->all());
+        }
+        else if($item_category == 'client')
+        {
+            return $this->repo->v1_operate_for_client_item_disable_by_admin(request()->all());
+        }
+        else if($item_category == 'project')
+        {
+            return $this->repo->v1_operate_for_project_item_disable_by_admin(request()->all());
+        }
+        else if($item_category == 'location')
+        {
+            return $this->repo->v1_operate_for_location_item_disable_by_admin(request()->all());
+        }
         else
         {
             return response_fail([]);
         }
     }
 
-    // 【通用】晋升
-    public function operate_item_promote_by_admin()
+    // 【通用】晋升 promote
+    public function v1_operate_for_universal_item_promote_by_admin()
     {
         $item_category = request('item_category','');
 
         if($item_category == 'staff')
         {
-            return $this->repo->operate_staff_promote_by_admin(request()->all());
+            return $this->repo->v1_operate_for_staff_item_promote_by_admin(request()->all());
         }
         else
         {
             return response_fail([]);
         }
     }
-    // 【通用】降职
-    public function operate_item_demote_by_admin()
+    // 【通用】降职 demote
+    public function v1_operate_for_universal_item_demote_by_admin()
     {
         $item_category = request('item_category','');
 
         if($item_category == 'staff')
         {
-            return $this->repo->operate_staff_demote_by_admin(request()->all());
+            return $this->repo->v1_operate_for_staff_item_demote_by_admin(request()->all());
         }
         else
         {
             return response_fail([]);
         }
     }
+
+    // 【通用】登录 login
+    public function v1_operate_for_universal_item_login_by_admin()
+    {
+        $item_category = request('item_category','');
+
+        if($item_category == 'staff')
+        {
+            return $this->repo->v1_operate_for_staff_item_login_by_admin(request()->all());
+        }
+        else if($item_category == 'company')
+        {
+            return $this->repo->v1_operate_for_company_item_login_by_admin(request()->all());
+        }
+        else if($item_category == 'client')
+        {
+            return $this->repo->v1_operate_for_client_item_login_by_admin(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+
+    // 【通用】字段修改
+    public function v1_operate_for_universal_field_set()
+    {
+        $item_category = request('item-category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->v1_operate_for_department_field_set(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->v1_operate_for_staff_field_set(request()->all());
+        }
+        else if($item_category == 'company')
+        {
+            return $this->repo->v1_operate_for_company_field_set(request()->all());
+        }
+        else if($item_category == 'client')
+        {
+            return $this->repo->v1_operate_for_client_field_set(request()->all());
+        }
+        else if($item_category == 'project')
+        {
+            return $this->repo->v1_operate_for_project_field_set(request()->all());
+        }
+        else if($item_category == 'location')
+        {
+            return $this->repo->v1_operate_for_location_field_set(request()->all());
+        }
+        else if($item_category == 'order')
+        {
+            return $this->repo->v1_operate_for_order_field_set(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+
+
+
+
+    // 【统计】公司概览
+    public function v1_operate_for_get_statistic_data_of_comprehensive_overview()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_comprehensive_overview(request()->all());
+    }
+
+
+
+
+    // 【统计】公司概览
+    public function v1_operate_for_get_statistic_data_of_company_overview()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_company_overview(request()->all());
+    }
+    // 【统计】公司日报
+    public function v1_operate_for_get_statistic_data_of_company_daily()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_company_daily(request()->all());
+    }
+    // 【销售-统计】项目日报
+    public function v1_operate_for_get_statistic_data_of_marketing_project()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_marketing_project(request()->all());
+    }
+    // 【销售-统计】公司日报
+    public function v1_operate_for_get_statistic_data_of_marketing_client()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_marketing_client(request()->all());
+    }
+
+
+
+
+    // 【生产-统计】质检看板
+    public function v1_operate_for_get_statistic_data_of_production_caller_overview()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_production_caller_overview(request()->all());
+    }
+    // 【生产-统计】质检看板
+    public function v1_operate_for_get_statistic_data_of_production_inspector_overview()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_production_inspector_overview(request()->all());
+    }
+    // 【生产-统计】质检看板
+    public function v1_operate_for_get_statistic_data_of_production_deliverer_overview()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_production_deliverer_overview(request()->all());
+    }
+
+
+
+
+    // 【】
+    public function v1_operate_for_record_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_record_datatable_list_query(request()->all());
+    }
+
+
+
+
+    // 【】
+    public function v1_operate_for_statistic_order_export()
+    {
+        return $this->repo->v1_operate_for_statistic_order_export(request()->all());
+    }
+    public function v1_operate_for_statistic_delivery_export()
+    {
+        return $this->repo->v1_operate_for_statistic_delivery_export(request()->all());
+    }
+
+
+
 
 
 

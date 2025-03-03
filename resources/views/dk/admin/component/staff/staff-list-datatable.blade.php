@@ -27,9 +27,9 @@
                     d.id = $('input[name="staff-id"]').val();
                     d.mobile = $('input[name="staff-mobile"]').val();
                     d.username = $('input[name="staff-username"]').val();
-                    d.department_district = $('select[name="staff-department-district"]').val();
-                    d.user_type = $('select[name="staff-user-type"]').val();
-                    d.user_status = $('select[name="staff-status"]').val();
+                    d.department_district = $tableSearch.find('select[name="staff-department-district"]').val();
+                    d.user_type = $tableSearch.find('select[name="staff-user-type"]').val();
+                    d.user_status = $tableSearch.find('select[name="staff-user-status"]').val();
                 },
             },
             "fixedColumns": {
@@ -104,7 +104,8 @@
 
 
                         var html =
-                            $html_edit+
+                            // $html_edit+
+                            '<a class="btn btn-xs btn-primary- staff-edit-show" data-id="'+data+'">编辑</a>'+
                             // '<a class="btn btn-xs bg-maroon item-password-admin-change-show" data-id="'+data+'" data-name="'+row.username+'">修改密码</a>'+
                             '<a class="btn btn-xs bg-maroon- item-password-reset-by-admin-submit" data-id="'+data+'">重置密码</a>'+
                             $html_promote+

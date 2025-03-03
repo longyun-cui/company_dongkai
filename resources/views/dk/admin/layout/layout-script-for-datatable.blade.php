@@ -52,6 +52,7 @@
 
             $search_box.find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
+                $(this).val($(this).data("default"));
             });
             $search_box.find(".select2-box-c").val(-1).trigger("change");
             $search_box.find(".select2-box-c").select2("val", "");
@@ -71,6 +72,7 @@
 
             $search_box.find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
+                $(this).val($(this).data("default"));
             });
             $search_box.find(".select2-box-c").val(-1).trigger("change");
             $search_box.find(".select2-box-c").select2("val", "");
@@ -230,54 +232,64 @@
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            //
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在提交</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
+
+            layer.msg('确定"启用"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
                     });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
+
+                    //
+                    $.post(
+                        "{{ url('/v1/operate/universal/item-enable-by-admin') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "item-enable-by-admin",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
                 }
             });
-
-            //
-            $.post(
-                "{{ url('/v1/operate/universal/item-enable-by-admin') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-enable-by-admin",
-                    item_category: $item_category,
-                    item_id: $that.attr('data-id')
-                },
-                'json'
-            )
-                .done(function($response, status, jqXHR) {
-                    console.log('done');
-                    $response = JSON.parse($response);
-                    if(!$response.success)
-                    {
-                        if($response.msg) layer.msg($response.msg);
-                    }
-                    else
-                    {
-                        $('#'+$table_id).DataTable().ajax.reload(null,false);
-                    }
-                })
-                .fail(function(jqXHR, status, error) {
-                    console.log('fail');
-                    layer.msg('服务器错误！');
-
-                })
-                .always(function(jqXHR, status) {
-                    console.log('always');
-                    layer.closeAll('loading');
-                });
 
         });
         // 【通用】禁用
@@ -287,54 +299,64 @@
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            //
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在提交</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
+
+            layer.msg('确定"禁用"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
                     });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
+
+                    //
+                    $.post(
+                        "{{ url('/v1/operate/universal/item-disable-by-admin') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "item-disable-by-admin",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
                 }
             });
-
-            //
-            $.post(
-                "{{ url('/v1/operate/universal/item-disable-by-admin') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-disable-by-admin",
-                    item_category: $item_category,
-                    item_id: $that.attr('data-id')
-                },
-                'json'
-            )
-                .done(function($response, status, jqXHR) {
-                    console.log('done');
-                    $response = JSON.parse($response);
-                    if(!$response.success)
-                    {
-                        if($response.msg) layer.msg($response.msg);
-                    }
-                    else
-                    {
-                        $('#'+$table_id).DataTable().ajax.reload(null,false);
-                    }
-                })
-                .fail(function(jqXHR, status, error) {
-                    console.log('fail');
-                    layer.msg('服务器错误！');
-
-                })
-                .always(function(jqXHR, status) {
-                    console.log('always');
-                    layer.closeAll('loading');
-                });
         });
 
 
@@ -345,6 +367,74 @@
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
+
+            layer.msg('确定"重置密码"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    //
+                    $.post(
+                        "{{ url('/v1/operate/universal/password-reset-by-admin') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "item-password-reset-by-admin",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                layer.msg('重置成功！');
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
+                }
+            });
+        });
+
+        // 【通用】登录
+        $(".main-content").on('click', ".item-login-by-admin-submit", function() {
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+
             //
             var $index = layer.load(1, {
                 shade: [0.3, '#fff'],
@@ -363,10 +453,10 @@
 
             //
             $.post(
-                "{{ url('/item/item-password-reset-by-admin') }}",
+                "{{ url('/v1/operate/universal/item-login-by-admin') }}",
                 {
                     _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-password-reset-by-admin",
+                    operate: "item-login-by-admin",
                     item_category: $item_category,
                     item_id: $that.attr('data-id')
                 },
@@ -381,7 +471,22 @@
                     }
                     else
                     {
-                        layer.msg('重置成功！');
+                        layer.msg('登录成功，即将跳转！');
+                        if($item_category == 'staff')
+                        {
+                            var temp_window=window.open();
+                            temp_window.location = "{{ env('DOMAIN_DK_ADMIN') }}/";
+                        }
+                        else if($item_category == 'company')
+                        {
+                            var temp_window=window.open();
+                            temp_window.location = "{{ env('DOMAIN_DK_AGENCY') }}/";
+                        }
+                        else if($item_category == 'client')
+                        {
+                            var temp_window=window.open();
+                            temp_window.location = "{{ env('DOMAIN_DK_CLIENT') }}/";
+                        }
                     }
                 })
                 .fail(function(jqXHR, status, error) {
@@ -393,6 +498,8 @@
                     console.log('always');
                     layer.closeAll('loading');
                 });
+
+
         });
 
 
@@ -403,54 +510,64 @@
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            //
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在提交</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
+
+            layer.msg('确定"删除"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
                     });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
+
+                    //
+                    $.post(
+                        "{{ url('/v1/operate/universal/item-delete-by-admin') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "item-delete-by-admin",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
                 }
             });
-
-            //
-            $.post(
-                "{{ url('/item/item-delete-by-admin') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-delete-by-admin",
-                    item_category: $item_category,
-                    item_id: $that.attr('data-id')
-                },
-                'json'
-            )
-                .done(function($response, status, jqXHR) {
-                    console.log('done');
-                    $response = JSON.parse($response);
-                    if(!$response.success)
-                    {
-                        if($response.msg) layer.msg($response.msg);
-                    }
-                    else
-                    {
-                        $('#'+$table_id).DataTable().ajax.reload(null,false);
-                    }
-                })
-                .fail(function(jqXHR, status, error) {
-                    console.log('fail');
-                    layer.msg('服务器错误！');
-
-                })
-                .always(function(jqXHR, status) {
-                    console.log('always');
-                    layer.closeAll('loading');
-                });
         });
         // 【通用】恢复
         $(".main-content").on('click', ".item-restore-by-admin-submit", function() {
@@ -459,54 +576,64 @@
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            //
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在提交</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
+
+            layer.msg('确定"恢复"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
                     });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
+
+                    //
+                    $.post(
+                        "{{ url('/v1/operate/universal/item-restore-by-admin') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "item-restore-by-admin",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
                 }
             });
-
-            //
-            $.post(
-                "{{ url('/item/item-restore-by-admin') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-restore-by-admin",
-                    item_category: $item_category,
-                    item_id: $that.attr('data-id')
-                },
-                'json'
-            )
-                .done(function($response, status, jqXHR) {
-                    console.log('done');
-                    $response = JSON.parse($response);
-                    if(!$response.success)
-                    {
-                        if($response.msg) layer.msg($response.msg);
-                    }
-                    else
-                    {
-                        $('#'+$table_id).DataTable().ajax.reload(null,false);
-                    }
-                })
-                .fail(function(jqXHR, status, error) {
-                    console.log('fail');
-                    layer.msg('服务器错误！');
-
-                })
-                .always(function(jqXHR, status) {
-                    console.log('always');
-                    layer.closeAll('loading');
-                });
         });
         // 【通用】永久删除
         $(".main-content").on('click', ".item-delete-permanently-by-admin-submit", function() {
@@ -515,54 +642,64 @@
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            //
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在提交</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
+
+            layer.msg('确定"永久删除"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
                     });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
+
+                    //
+                    $.post(
+                        "{{ url('/item/item-delete-permanently-by-admin') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "item-delete-permanently-by-admin",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
                 }
             });
-
-            //
-            $.post(
-                "{{ url('/item/item-delete-permanently-by-admin') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-delete-permanently-by-admin",
-                    item_category: $item_category,
-                    item_id: $that.attr('data-id')
-                },
-                'json'
-            )
-                .done(function($response, status, jqXHR) {
-                    console.log('done');
-                    $response = JSON.parse($response);
-                    if(!$response.success)
-                    {
-                        if($response.msg) layer.msg($response.msg);
-                    }
-                    else
-                    {
-                        $('#'+$table_id).DataTable().ajax.reload(null,false);
-                    }
-                })
-                .fail(function(jqXHR, status, error) {
-                    console.log('fail');
-                    layer.msg('服务器错误！');
-
-                })
-                .always(function(jqXHR, status) {
-                    console.log('always');
-                    layer.closeAll('loading');
-                });
         });
 
 
@@ -573,54 +710,64 @@
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            //
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在提交</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
+
+            layer.msg('确定"晋升"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
                     });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
+
+                    //
+                    $.post(
+                        "{{ url('/v1/operate/universal/item-promote-by-admin') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "item-promote-by-admin",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
                 }
             });
-
-            //
-            $.post(
-                "{{ url('/item/item-promote-by-admin') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-promote-by-admin",
-                    item_category: $item_category,
-                    item_id: $that.attr('data-id')
-                },
-                'json'
-            )
-                .done(function($response, status, jqXHR) {
-                    console.log('done');
-                    $response = JSON.parse($response);
-                    if(!$response.success)
-                    {
-                        if($response.msg) layer.msg($response.msg);
-                    }
-                    else
-                    {
-                        $('#'+$table_id).DataTable().ajax.reload(null,false);
-                    }
-                })
-                .fail(function(jqXHR, status, error) {
-                    console.log('fail');
-                    layer.msg('服务器错误！');
-
-                })
-                .always(function(jqXHR, status) {
-                    console.log('always');
-                    layer.closeAll('loading');
-                });
 
         });
         // 【通用】降职
@@ -630,54 +777,64 @@
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
 
-            //
-            var $index = layer.load(1, {
-                shade: [0.3, '#fff'],
-                content: '<span class="loadtip">正在提交</span>',
-                success: function (layer) {
-                    layer.find('.layui-layer-content').css({
-                        'padding-top': '40px',
-                        'width': '100px',
+
+            layer.msg('确定"降职"么?', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index)
+                {
+                    layer.close(index);
+                    //
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在提交</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
                     });
-                    layer.find('.loadtip').css({
-                        'font-size':'20px',
-                        'margin-left':'-18px'
-                    });
+
+                    //
+                    $.post(
+                        "{{ url('/v1/operate/universal/item-demote-by-admin') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "item-demote-by-admin",
+                            item_category: $item_category,
+                            item_id: $that.attr('data-id')
+                        },
+                        'json'
+                    )
+                        .done(function($response, status, jqXHR) {
+                            console.log('done');
+                            $response = JSON.parse($response);
+                            if(!$response.success)
+                            {
+                                if($response.msg) layer.msg($response.msg);
+                            }
+                            else
+                            {
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
+                            }
+                        })
+                        .fail(function(jqXHR, status, error) {
+                            console.log('fail');
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, status) {
+                            console.log('always');
+                            layer.closeAll('loading');
+                        });
                 }
             });
 
-            //
-            $.post(
-                "{{ url('/item/item-demote-by-admin') }}",
-                {
-                    _token: $('meta[name="_token"]').attr('content'),
-                    operate: "item-demote-by-admin",
-                    item_category: $item_category,
-                    item_id: $that.attr('data-id')
-                },
-                'json'
-            )
-                .done(function($response, status, jqXHR) {
-                    console.log('done');
-                    $response = JSON.parse($response);
-                    if(!$response.success)
-                    {
-                        if($response.msg) layer.msg($response.msg);
-                    }
-                    else
-                    {
-                        $('#'+$table_id).DataTable().ajax.reload(null,false);
-                    }
-                })
-                .fail(function(jqXHR, status, error) {
-                    console.log('fail');
-                    layer.msg('服务器错误！');
-
-                })
-                .always(function(jqXHR, status) {
-                    console.log('always');
-                    layer.closeAll('loading');
-                });
 
         });
 

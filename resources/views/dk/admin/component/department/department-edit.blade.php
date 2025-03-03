@@ -1,6 +1,6 @@
 {{--编辑-部门--}}
 <div class="modal fade modal-main-body modal-wrapper" id="modal-for-department-edit">
-    <div class="col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
+    <div class="modal-content col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px">
@@ -27,7 +27,7 @@
                         <div class="btn-group">
 
                             @if(in_array($me->user_type, [0,1,11]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-department-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="department_type" value="11" checked="checked"> 大区
@@ -37,7 +37,7 @@
                             @endif
 
                             @if(in_array($me->user_type, [0,1,11,41]))
-                            <button type="button" class="btn">
+                            <button type="button" class="btn radio-btn radio-department-type">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="department_type" value="21"> 组

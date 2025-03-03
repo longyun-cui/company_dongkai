@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper staff-list-clone" data-datatable-item-category="staff">
+<div class="row datatable-body datatable-wrapper staff-list-clone" data-datatable-item-category="staff" data-item-name="员工">
 
 
     <div class="col-md-12 datatable-search-row  datatable-search-box">
@@ -53,7 +53,7 @@
                 </select>
             @endif
 
-            <select class="search-filter form-filter" name="staff-status">
+            <select class="search-filter form-filter" name="staff-user-status">
                 <option value ="-1">全部</option>
                 <option value ="1">启用</option>
                 <option value ="9">禁用</option>

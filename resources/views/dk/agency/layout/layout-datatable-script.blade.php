@@ -53,6 +53,7 @@
 
             $search_box.find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
+                $(this).val($(this).data('default'));
             });
             $search_box.find(".select2-box").val(-1).trigger("change");
             $search_box.find(".select2-box").select2("val", "");
@@ -73,6 +74,7 @@
 
             $search_box.find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
+                $(this).val($(this).data('default'));
             });
             $search_box.find(".select2-box").val(-1).trigger("change");
             $search_box.find(".select2-box").select2("val", "");
