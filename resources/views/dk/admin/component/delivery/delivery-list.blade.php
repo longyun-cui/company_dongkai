@@ -27,7 +27,7 @@
             <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker" name="order-assign" placeholder="交付日期" value="" readonly="readonly" />
+            <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="交付日期" value="" readonly="readonly" />
             <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
                 <i class="fa fa-chevron-right"></i>
             </button>

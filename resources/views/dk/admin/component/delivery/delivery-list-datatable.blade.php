@@ -98,11 +98,11 @@
 
                         if(row.deleted_at == null)
                         {
-                            $html_delete = '<a class="btn btn-xs bg-black item-delete-submit" data-id="'+data+'">删除</a>';
+                            $html_delete = '<a class="btn btn-xs bg-black- item-delete-by-admin-submit" data-id="'+data+'">删除</a>';
                         }
                         else
                         {
-                            $html_delete = '<a class="btn btn-xs bg-grey item-restore-submit" data-id="'+data+'">恢复</a>';
+                            $html_delete = '<a class="btn btn-xs bg-grey- item-restore-by-admin-submit" data-id="'+data+'">恢复</a>';
                         }
 
                         var $more_html =

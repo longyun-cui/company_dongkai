@@ -419,6 +419,10 @@ class DKAdminController extends Controller
         {
             return $this->repo->v1_operate_for_location_item_delete_by_admin(request()->all());
         }
+        else if($item_category == 'delivery')
+        {
+            return $this->repo->v1_operate_for_delivery_item_delete_by_admin(request()->all());
+        }
         else
         {
             return response_fail([]);

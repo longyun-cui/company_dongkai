@@ -328,6 +328,10 @@
                 {
                     Table_Datatable_Ajax_Statistic_Caller_Rank('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-caller-recent")
+                {
+                    Table_Datatable_Ajax_Statistic_Caller_Recent('#'+$config.id);
+                }
                 else if($id == "datatable-statistic-inspector-overview")
                 {
                     Table_Datatable_Ajax_Statistic_Inspector_Overview('#'+$config.id);
@@ -344,6 +348,10 @@
                 else if($id == "datatable-statistic-export")
                 {
                     Datatable_for_ExportList('#'+$config.id);
+                }
+                else if($id == "datatable-statistic-production-project")
+                {
+                    Table_Datatable_Ajax_Statistic_Production_Project('#'+$config.id);
                 }
 
             }
