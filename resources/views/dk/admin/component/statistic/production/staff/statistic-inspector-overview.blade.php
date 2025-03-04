@@ -7,7 +7,7 @@
         <div class="pull-right">
 
 
-            <input type="hidden" name="statistic-inspector-time-type" class="time-type" value="" readonly>
+            <input type="hidden" name="statistic-inspector-time-type" class="time-type" value="date" readonly>
 
 
             {{--按天查看--}}
