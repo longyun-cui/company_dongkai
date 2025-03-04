@@ -8196,7 +8196,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 员工统计
-        $query_order = DK_Order::select('creator_id')
+        $query_order = DK_Order::select('creator_id','published_date')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
@@ -8223,6 +8223,7 @@ class DKAdminRepository {
         {
             $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
             $query_order->where('published_date',$the_date);
+//            $query_order->whereDate('published_date',$the_date);
         }
         else if($time_type == 'month')
         {
@@ -8236,13 +8237,14 @@ class DKAdminRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
+//            dd($the_month_ended_date);
 //            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
-            $query_order->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($time_type == 'period')
         {
-            if(!empty($post_data['date_start'])) $query_order->whereDate('published_date', '>=', $post_data['date_start']);
-            if(!empty($post_data['date_ended'])) $query_order->whereDate('published_date', '<=', $post_data['date_ended']);
+            if(!empty($post_data['date_start'])) $query_order->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('published_date', '<=', $post_data['date_ended']);
         }
         else
         {
@@ -8300,7 +8302,7 @@ class DKAdminRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
 
         if(isset($post_data['order']))
         {
