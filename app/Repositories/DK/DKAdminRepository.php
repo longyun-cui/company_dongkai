@@ -8710,7 +8710,7 @@ class DKAdminRepository {
             ])
             ->where('user_status',1)
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[71,77]);
+            ->whereIn('user_type',[61,66,71,77]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 

@@ -88,6 +88,29 @@
                 //     }
                 // },
                 {
+                    "title": "员工类型",
+                    "data": 'user_type',
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs bg-black">BOSS</small>';
+                        else if(data == 11) return '<small class="btn-xs btn-danger">总经理</small>';
+                        else if(data == 21) return '<small class="btn-xs bg-purple">人事经理</small>';
+                        else if(data == 22) return '<small class="btn-xs bg-purple">人事</small>';
+                        else if(data == 31) return '<small class="btn-xs bg-orange">财务经理</small>';
+                        else if(data == 33) return '<small class="btn-xs bg-orange">财务</small>';
+                        else if(data == 41) return '<small class="btn-xs bg-purple">团队·总经理</small>';
+                        else if(data == 71) return '<small class="btn-xs bg-purple">质检</small><small class="btn-xs btn-danger">经理</small>';
+                        else if(data == 77) return '<small class="btn-xs bg-purple">质检员</small>';
+                        else if(data == 81) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs btn-danger">经理</small>';
+                        else if(data == 84) return '<small class="btn-xs bg-olive">客服</small><small class="btn-xs bg-olive">主管</small>';
+                        else if(data == 88) return '<small class="btn-xs bg-olive">客服</small>';
+                        else if(data == 61) return '<small class="btn-xs bg-blue">运营</small><small class="btn-xs btn-danger">经理</small>';
+                        else if(data == 66) return '<small class="btn-xs bg-blue">运营人员</small>';
+                        else return "有误";
+                    }
+                },
+                {
                     "title": "姓名",
                     "data": "username",
                     "className": "text-center",
@@ -134,7 +157,7 @@
                     }
                 },
                 {
-                    targets: [3],
+                    targets: [4],
                     createdCell: function (td, cellData, rowData, row, col) {
                         var rowspan = rowData.merge;
                         if (rowspan > 1) {
