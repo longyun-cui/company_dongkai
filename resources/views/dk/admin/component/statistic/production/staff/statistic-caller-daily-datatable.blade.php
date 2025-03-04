@@ -97,7 +97,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.order_rate_for_accepted) return row.order_rate_for_accepted;
+                        if(row.order_rate_for_accepted) return row.order_rate_for_accepted + '%';
                         else return '';
                     }
                 },
@@ -108,7 +108,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.order_rate_for_effective) return row.order_rate_for_effective;
+                        if(row.order_rate_for_effective) return row.order_rate_for_effective + '%';
                         else return '';
                     }
                 }
@@ -120,10 +120,14 @@
 //                        cell.innerHTML =  startIndex + i + 1;
 //                    });
                 // 每日交付量
-                var $res = new Array();
+                var $res_total = new Array();
+                var $res_accepted = new Array();
+                var $res_effective = new Array();
                 this.api().rows().every(function() {
                     var $rowData = this.data();
-                    $res[($rowData.day - 1)] = { value:$rowData.delivery_count, name:$rowData.day };
+                    $res_total[($rowData.day - 1)] = { value:$rowData.order_count_for_all, name:$rowData.day };
+                    $res_accepted[($rowData.day - 1)] = { value:$rowData.order_count_for_accepted, name:$rowData.day };
+                    $res_effective[($rowData.day - 1)] = { value:$rowData.order_count_for_effective, name:$rowData.day };
                 });
 
                 var $option_statistics = {
@@ -170,7 +174,7 @@
                     ],
                     series : [
                         {
-                            name:'本月',
+                            name:'提单量',
                             type:'line',
                             label: {
                                 normal: {
@@ -179,7 +183,31 @@
                                 }
                             },
                             itemStyle : { normal: { label : { show: true } } },
-                            data: $res
+                            data: $res_total
+                        },
+                        {
+                            name:'通过量',
+                            type:'line',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            },
+                            itemStyle : { normal: { label : { show: true } } },
+                            data: $res_accepted
+                        },
+                        {
+                            name:'通过量',
+                            type:'line',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            },
+                            itemStyle : { normal: { label : { show: true } } },
+                            data: $res_effective
                         }
                     ]
                 };

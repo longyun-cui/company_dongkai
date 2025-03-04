@@ -538,7 +538,7 @@
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return row.creator == null ? '未知' : '<a href="javascript:void(0);">'+row.creator.username+'</a>';
+                        return row.creator == null ? '未知' : '<a class="caller-control" data-id="'+data+'" data-title="'+row.creator.username+'">'+row.creator.username+'</a>';
                     }
                 },
                 {
