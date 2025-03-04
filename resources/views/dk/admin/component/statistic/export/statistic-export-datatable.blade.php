@@ -189,30 +189,33 @@
 
                         if(row.column_type == 'datetime' || row.column_type == 'date')
                         {
-                            // if(data == 0) return '';
-                            if(parseInt(data))
+                            if(!isNaN(data) && data.trim() !== "")
                             {
-                                var $date = new Date(data*1000);
-                                var $year = $date.getFullYear();
-                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                                var $day = ('00'+($date.getDate())).slice(-2);
-                                var $hour = ('00'+$date.getHours()).slice(-2);
-                                var $minute = ('00'+$date.getMinutes()).slice(-2);
-                                var $second = ('00'+$date.getSeconds()).slice(-2);
+                                if(parseInt(data))
+                                {
+                                    var $date = new Date(data*1000);
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    var $hour = ('00'+$date.getHours()).slice(-2);
+                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                    var $second = ('00'+$date.getSeconds()).slice(-2);
 
-                                var $currentYear = new Date().getFullYear();
-                                if($year == $currentYear)
-                                {
-                                    if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                                    else if(row.column_type == 'date') return $month+'-'+$day;
+                                    var $currentYear = new Date().getFullYear();
+                                    if($year == $currentYear)
+                                    {
+                                        if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $month+'-'+$day;
+                                    }
+                                    else
+                                    {
+                                        if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                    }
                                 }
-                                else
-                                {
-                                    if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                                    else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
-                                }
+                                else return '';
                             }
-                            else return '';
+                            else return data;
                         }
 
                         if(row.column_name == 'attachment' && row.operate_category == 71 && row.operate_type == 91)
@@ -236,29 +239,33 @@
 
                         if(row.column_type == 'datetime' || row.column_type == 'date')
                         {
-                            if(parseInt(data))
+                            if(!isNaN(data) && data.trim() !== "")
                             {
-                                var $date = new Date(data*1000);
-                                var $year = $date.getFullYear();
-                                var $month = ('00'+($date.getMonth()+1)).slice(-2);
-                                var $day = ('00'+($date.getDate())).slice(-2);
-                                var $hour = ('00'+$date.getHours()).slice(-2);
-                                var $minute = ('00'+$date.getMinutes()).slice(-2);
-                                var $second = ('00'+$date.getSeconds()).slice(-2);
+                                if(parseInt(data))
+                                {
+                                    var $date = new Date(data*1000);
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    var $hour = ('00'+$date.getHours()).slice(-2);
+                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                    var $second = ('00'+$date.getSeconds()).slice(-2);
 
-                                var $currentYear = new Date().getFullYear();
-                                if($year == $currentYear)
-                                {
-                                    if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                                    else if(row.column_type == 'date') return $month+'-'+$day;
+                                    var $currentYear = new Date().getFullYear();
+                                    if($year == $currentYear)
+                                    {
+                                        if(row.column_type == 'datetime') return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $month+'-'+$day;
+                                    }
+                                    else
+                                    {
+                                        if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                                        else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
+                                    }
                                 }
-                                else
-                                {
-                                    if(row.column_type == 'datetime') return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
-                                    else if(row.column_type == 'date') return $year+'-'+$month+'-'+$day;
-                                }
+                                else return '';
                             }
-                            else return '';
+                            else return data;
                         }
 
                         if(row.column_name == 'attachment' && row.operate_category == 71 && row.operate_type == 1)

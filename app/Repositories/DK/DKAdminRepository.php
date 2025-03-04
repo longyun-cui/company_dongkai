@@ -9836,7 +9836,7 @@ class DKAdminRepository {
             $record_data["item_id"] = $project_id;
             $record_data["title"] = $record_data_title;
         }
-
+dd($record_data);
         $record->fill($record_data)->save();
 
 
