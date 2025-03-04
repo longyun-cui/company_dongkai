@@ -8695,8 +8695,6 @@ class DKAdminRepository {
         }
         else
         {
-            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
-            $query_order->where('inspected_date',$the_date);
         }
 
 
