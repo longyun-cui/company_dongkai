@@ -58,13 +58,57 @@
                     }
                 },
                 {
-                    "title": "交付量",
+                    "title": "提单量",
                     "data": "id",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.delivery_count) return row.delivery_count;
+                        if(row.order_count_for_all) return row.order_count_for_all;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "通过量",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.order_count_for_accepted) return row.order_count_for_accepted;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "通过率",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.order_count_for_effective) return row.order_count_for_effective;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "有效量",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.order_rate_for_accepted) return row.order_rate_for_accepted;
+                        else return '';
+                    }
+                },
+                {
+                    "title": "有效率",
+                    "data": "id",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(row.order_rate_for_effective) return row.order_rate_for_effective;
                         else return '';
                     }
                 }

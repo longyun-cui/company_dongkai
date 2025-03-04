@@ -8707,8 +8707,8 @@ class DKAdminRepository {
             ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
             ->groupBy('published_date')
             ->addSelect(DB::raw("
-                    DATE_FORMAT(published_at,'%Y-%m-%d') as date_day,
-                    DATE_FORMAT(published_at,'%e') as day,
+                    DATE_FORMAT(published_date,'%Y-%m-%d') as date_day,
+                    DATE_FORMAT(published_date,'%e') as day,
                     count(*) as sum
                 "))
             ->addSelect(DB::raw("
@@ -8745,6 +8745,7 @@ class DKAdminRepository {
         $total_data['order_count_for_refused'] = 0;
         $total_data['order_count_for_repeated'] = 0;
         $total_data['order_count_for_accepted_inside'] = 0;
+        $total_data['order_count_for_effective'] = 0;
 
 
 
@@ -8752,6 +8753,9 @@ class DKAdminRepository {
         {
 
             // 审核
+            $v->order_count_for_effective = $v->order_count_for_accepted + $v->order_count_for_repeated + $v->order_count_for_accepted_inside;
+            $list[$k]->order_count_for_effective = $v->order_count_for_effective;
+
             // 通过率
             if($v->order_count_for_all > 0)
             {
@@ -8759,20 +8763,12 @@ class DKAdminRepository {
             }
             else $list[$k]->order_rate_for_accepted = 0;
 
-            // 人均提交量
-            if($v->staff_count > 0)
+            // 有效率
+            if($v->order_count_for_all > 0)
             {
-                $list[$k]->order_count_for_all_per = round(($v->order_count_for_all / $v->staff_count),2);
+                $list[$k]->order_rate_for_effective = round(($v->order_count_for_effective * 100 / $v->order_count_for_all),2);
             }
-            else $list[$k]->order_count_for_all_per = 0;
-
-            // 人均通过量
-            if($v->staff_count > 0)
-            {
-                $list[$k]->order_count_for_accepted_per = round(($v->order_count_for_accepted / $v->staff_count),2);
-            }
-            else $list[$k]->order_count_for_accepted_per = 0;
-
+            else $list[$k]->order_rate_for_effective = 0;
 
 
             $total_data['order_count_for_all'] += $v->order_count_for_all;
@@ -8781,6 +8777,7 @@ class DKAdminRepository {
             $total_data['order_count_for_refused'] += $v->order_count_for_refused;
             $total_data['order_count_for_repeated'] += $v->order_count_for_repeated;
             $total_data['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
+            $total_data['order_count_for_effective'] += $list[$k]->order_count_for_effective;
 
         }
 
@@ -8790,6 +8787,13 @@ class DKAdminRepository {
             $total_data['order_rate_for_accepted'] = round(($total_data['order_count_for_accepted'] * 100 / $total_data['order_count_for_all']),2);
         }
         else $total_data['order_rate_for_accepted'] = 0;
+
+        // 有效率
+        if($total_data['order_count_for_all'] > 0)
+        {
+            $total_data['order_rate_for_effective'] = round(($total_data['order_count_for_effective'] * 100 / $total_data['order_count_for_all']),2);
+        }
+        else $total_data['order_rate_for_effective'] = 0;
 
         $list[] = $total_data;
 
