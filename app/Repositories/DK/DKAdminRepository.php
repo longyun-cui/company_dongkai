@@ -8659,7 +8659,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 员工统计
-        $query_order = DK_Order::select('inspector_id')
+        $query_order = DK_Order::select('inspector_id','inspected_date')
             ->addSelect(DB::raw("
                     count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
