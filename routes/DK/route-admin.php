@@ -149,6 +149,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/statistic/production/deliverer-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_deliverer_overview');
 
     Route::post('/v1/operate/statistic/production/project', $controller.'@v1_operate_for_get_statistic_data_of_production_project');
+    Route::post('/v1/operate/statistic/production/department', $controller.'@v1_operate_for_get_statistic_data_of_production_department');
 
 
 

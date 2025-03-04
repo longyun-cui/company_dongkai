@@ -149,7 +149,7 @@
                         <li class="divider"></li>
                         @endif
 
-                        @if(in_array($me->user_type,[0,1,9,11,41,61,66,81,84]))
+                        @if(in_array($me->user_type,[0,1,9,11,61,66]))
                         <li>
                             <a target="_blank" href="{{ url('/statistic/statistic-delivery') }}">
                                 <i class="fa fa-area-chart text-teal"></i> <span>交付(项目)看板</span>
@@ -266,7 +266,7 @@
 
 
                 {{--生产统计--}}
-                @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                @if(in_array($me->user_type,[0,1,9,11,61,66,41,81,84]))
                     <li class="dropdown tasks-menu add-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                             生产统计 <span class="caret"></span>
@@ -334,8 +334,9 @@
                                         <i class="fa fa-area-chart text-orange"></i> <span>近期成果</span>
                                     </a>
                                 </li>
+                                <li class="divider"></li>
                             @endif
-                            @if(in_array($me->user_type,[0,1,9,11,41,61,71]))
+                            @if(in_array($me->user_type,[0,1,9,11,61,71]))
                                 <li class="divider"></li>
                                 <li>
                                     <a href="javascript:void(0);" class="tab-control datatable-control"
@@ -394,6 +395,27 @@
                                        data-datatable-clone-object="statistic-production-project-clone"
                                     >
                                         <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                            @endif
+
+                            @if(in_array($me->user_type,[0,1,9,11]))
+                                <li>
+                                    <a href="javascript:void(0);" class="tab-control datatable-control"
+                                       data-type="create"
+                                       data-unique="y"
+                                       data-id="statistic-production-department"
+                                       data-title='<i class="fa fa-area-chart text-teal"></i> <span>部门看板</span>'
+                                       data-content=''
+
+                                       data-datatable-type="create"
+                                       data-datatable-unique="y"
+                                       data-datatable-id="datatable-statistic-production-department"
+                                       data-datatable-target="statistic-production-department"
+                                       data-datatable-clone-object="statistic-production-department-clone"
+                                    >
+                                        <i class="fa fa-area-chart text-teal"></i> <span>部门看板</span>
                                     </a>
                                 </li>
                                 <li class="divider"></li>

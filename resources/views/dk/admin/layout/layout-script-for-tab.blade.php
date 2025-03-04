@@ -353,6 +353,10 @@
                 {
                     Table_Datatable_Ajax_Statistic_Production_Project('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-production-department")
+                {
+                    Table_Datatable_Ajax_Statistic_Production_Department('#'+$config.id);
+                }
 
             }
 

@@ -762,6 +762,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_production_project(request()->all());
     }
+    // 【销售-统计】项目日报
+    public function v1_operate_for_get_statistic_data_of_production_department()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_production_department(request()->all());
+    }
 
 
 

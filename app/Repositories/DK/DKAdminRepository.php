@@ -8959,10 +8959,178 @@ class DKAdminRepository {
 
     }
 
+    public function v1_operate_for_get_statistic_data_of_production_department($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+        // 部门统计
+        $query_order = DK_Order::select('department_district_id','published_date')
+            ->addSelect(DB::raw("
+                    count(DISTINCT creator_id) as staff_count,
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
+                    
+                "))
+            ->whereDate("published_date",$the_date)
+//            ->groupBy('department_district_id')
+            ->get()
+            ->keyBy('department_district_id')
+            ->toArray();
+//        dd($query_order);
+
+        $query = DK_Department::select('id','name')
+//            ->withCount([
+//                'department_district_staff_list as staff_count' => function($query) use($the_day) {
+//                    $query->whereHas('order_list', function($query) use($the_day) {
+//                        $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+//                    });
+//                },
+//                'order_list_for_district as order_count_for_all'=>function($query) use($the_day) {
+//                    $query->where('is_published', 1)->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+//                },
+//                'order_list_for_district as order_count_for_accepted'=>function($query) use($the_day) {
+//                    $query->where('inspected_result', '通过')->whereDate(DB::raw("DATE(FROM_UNIXTIME(published_at))"),$the_day);
+//                }
+//            ])
+            ->where('department_type',11)
+            ->where(['item_status'=>1]);
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        $total_data = [];
+        $total_data['id'] = '统计';
+        $total_data['name'] = '所有区';
+        $total_data['staff_count'] = 0;
+        $total_data['order_count_for_all'] = 0;
+        $total_data['order_count_for_inspected'] = 0;
+        $total_data['order_count_for_accepted'] = 0;
+        $total_data['order_count_for_refused'] = 0;
+        $total_data['order_count_for_repeated'] = 0;
+        $total_data['order_count_for_accepted_inside'] = 0;
+
+
+
+        foreach ($list as $k => $v)
+        {
+            if(isset($query_order[$v->id]))
+            {
+                $list[$k]->staff_count = $query_order[$v->id]['staff_count'];
+                $list[$k]->order_count_for_all = $query_order[$v->id]['order_count_for_all'];
+                $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
+                $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
+                $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
+                $list[$k]->order_count_for_repeated = $query_order[$v->id]['order_count_for_repeated'];
+                $list[$k]->order_count_for_accepted_inside = $query_order[$v->id]['order_count_for_accepted_inside'];
+            }
+            else
+            {
+                $list[$k]->staff_count = 0;
+                $list[$k]->order_count_for_all = 0;
+                $list[$k]->order_count_for_inspected = 0;
+                $list[$k]->order_count_for_accepted = 0;
+                $list[$k]->order_count_for_refused = 0;
+                $list[$k]->order_count_for_repeated = 0;
+                $list[$k]->order_count_for_accepted_inside = 0;
+            }
+
+            // 审核
+            // 通过率
+            if($v->order_count_for_all > 0)
+            {
+                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            }
+            else $list[$k]->order_rate_for_accepted = 0;
+
+            // 人均提交量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_all_per = round(($v->order_count_for_all / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_all_per = 0;
+
+            // 人均通过量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_accepted_per = round(($v->order_count_for_accepted / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_accepted_per = 0;
 
 
 
 
+            $total_data['staff_count'] += $v->staff_count;
+            $total_data['order_count_for_all'] += $v->order_count_for_all;
+            $total_data['order_count_for_inspected'] += $v->order_count_for_inspected;
+            $total_data['order_count_for_accepted'] += $v->order_count_for_accepted;
+            $total_data['order_count_for_refused'] += $v->order_count_for_refused;
+            $total_data['order_count_for_repeated'] += $v->order_count_for_repeated;
+            $total_data['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
+
+        }
+
+        // 通过率
+        if($total_data['order_count_for_all'] > 0)
+        {
+            $total_data['order_rate_for_accepted'] = round(($total_data['order_count_for_accepted'] * 100 / $total_data['order_count_for_all']),2);
+        }
+        else $total_data['order_rate_for_accepted'] = 0;
+
+        // 人均提交量
+        if($total_data['staff_count'] > 0)
+        {
+            $total_data['order_count_for_all_per'] = round(($total_data['order_count_for_all'] / $total_data['staff_count']),2);
+        }
+        else $total_data['order_count_for_all_per'] = 0;
+
+        // 人均通过量
+        if($total_data['staff_count'] > 0)
+        {
+            $total_data['order_count_for_accepted_per'] = round(($total_data['order_count_for_accepted'] / $total_data['staff_count']),2);
+        }
+        else $total_data['order_count_for_accepted_per'] = 0;
+
+
+
+        // 人均交付量
+        if($total_data['staff_count'] > 0)
+        {
+            $total_data['order_count_for_delivered_per'] = round(($total_data['order_count_for_delivered'] / $total_data['staff_count']),2);
+        }
+        else $total_data['order_count_for_all_per'] = 0;
+
+        $total_data = $total_data;
+
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
 
 
 
