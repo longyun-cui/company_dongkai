@@ -207,7 +207,7 @@
                 //     }
                 // },
                 {
-                    "title": "小组<br>审核<br>通过量",
+                    "title": "主管<br>审核<br>通过量",
                     "data": "group_count_for_accepted",
                     "className": "text-center vertical-middle bg-group",
                     "width": "80px",
@@ -217,7 +217,7 @@
                     }
                 },
                 {
-                    "title": "小组<br>审核<br>通过率",
+                    "title": "主管<br>审核<br>通过率",
                     "data": "group_rate_for_accepted",
                     "className": "text-center vertical-middle bg-group",
                     "width": "100px",
@@ -230,7 +230,7 @@
 
 
                 {
-                    "title": "团队<br>客服<br>报单量",
+                    "title": "经理<br>客服<br>报单量",
                     "data": "district_count_for_all",
                     "className": "text-center vertical-middle bg-district",
                     "width": "80px",
@@ -308,7 +308,7 @@
                     }
                 },
                 {
-                    targets: [8,9,10],
+                    targets: [7,8,9],
                     createdCell: function (td, cellData, rowData, row, col) {
                         var rowspan = rowData.group_merge;
                         if (rowspan > 1) {
@@ -320,7 +320,7 @@
                     }
                 },
                 {
-                    targets: [11,12,13],
+                    targets: [10,11,12],
                     createdCell: function (td, cellData, rowData, row, col) {
                         var rowspan = rowData.district_merge;
                         if (rowspan > 1) {
