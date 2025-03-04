@@ -460,6 +460,7 @@
 
 
             {{--交付列表--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
             <li class="treeview _none-">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -478,6 +479,7 @@
                     <span>交付列表</span>
                 </a>
             </li>
+            @endif
 
 
             {{--综合概览--}}
