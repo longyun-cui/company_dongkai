@@ -8700,7 +8700,7 @@ class DKAdminRepository {
         $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
 
-        $query_this_month = DK_Order::select('creator_id','published_at')
+        $query_this_month = DK_Order::select('creator_id','published_at','published_date')
             ->where('creator_id',$staff_id)
 //            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
 //            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
@@ -8720,7 +8720,8 @@ class DKAdminRepository {
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
                     count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                     
-                "));
+                "))
+            ->orderBy("published_date", "desc");
 
         $total = $query_this_month->count();
 
