@@ -8222,7 +8222,7 @@ class DKAdminRepository {
         if($time_type == 'date')
         {
             $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
-            $query_order->whereDate('published_date',$the_date);
+            $query_order->where('published_date',$the_date);
         }
         else if($time_type == 'month')
         {
