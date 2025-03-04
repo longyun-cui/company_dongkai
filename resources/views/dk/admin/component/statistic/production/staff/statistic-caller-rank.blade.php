@@ -40,14 +40,14 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,81]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-department-group">
-                    <option data-id="-1" value="-1">选择小组</option>
-                    @if(!empty($department_group_list))
-                        @foreach($department_group_list as $v)
-                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                        @endforeach
-                    @endif
-                </select>
+{{--                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-department-group">--}}
+{{--                    <option data-id="-1" value="-1">选择小组</option>--}}
+{{--                    @if(!empty($department_group_list))--}}
+{{--                        @foreach($department_group_list as $v)--}}
+{{--                            <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
+{{--                        @endforeach--}}
+{{--                    @endif--}}
+{{--                </select>--}}
             @endif
 
             {{--按天查看--}}

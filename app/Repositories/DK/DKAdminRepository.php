@@ -7944,9 +7944,9 @@ class DKAdminRepository {
         {
             $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
-            $query_order->whereDate('published_date',$the_date);
-            $query_order_for_manager->whereDate('published_date',$the_date);
-            $query_order_for_supervisor->whereDate('published_date',$the_date);
+            $query_order->where('published_date',$the_date);
+            $query_order_for_manager->where('published_date',$the_date);
+            $query_order_for_supervisor->where('published_date',$the_date);
 
         }
         else if($time_type == 'month')
@@ -7969,15 +7969,15 @@ class DKAdminRepository {
         {
             if(!empty($post_data['date_start']))
             {
-                $query_order->whereDate('published_date', '>=', $post_data['date_start']);
-                $query_order_for_manager->whereDate('published_date', '>=', $post_data['date_start']);
-                $query_order_for_supervisor->whereDate('published_date', '>=', $post_data['date_start']);
+                $query_order->where('published_date', '>=', $post_data['date_start']);
+                $query_order_for_manager->where('published_date', '>=', $post_data['date_start']);
+                $query_order_for_supervisor->where('published_date', '>=', $post_data['date_start']);
             }
             if(!empty($post_data['date_ended']))
             {
-                $query_order->whereDate('published_date', '<=', $post_data['date_ended']);
-                $query_order_for_manager->whereDate('published_date', '<=', $post_data['date_ended']);
-                $query_order_for_supervisor->whereDate('published_date', '<=', $post_data['date_ended']);
+                $query_order->where('published_date', '<=', $post_data['date_ended']);
+                $query_order_for_manager->where('published_date', '<=', $post_data['date_ended']);
+                $query_order_for_supervisor->where('published_date', '<=', $post_data['date_ended']);
             }
         }
         else
@@ -8211,10 +8211,19 @@ class DKAdminRepository {
         $project_id = 0;
         if(isset($post_data['project']))
         {
-            if(!in_array($post_data['project'],[0,-1]))
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
             {
                 $project_id = $post_data['project'];
                 $query_order->where('project_id', $project_id);
+            }
+        }
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
+            {
+                $query_order->where('department_district_id', $post_data['department_district']);
             }
         }
 
@@ -8265,6 +8274,14 @@ class DKAdminRepository {
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
+
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
 
         // 部门经理
         if($me->user_type == 41)
