@@ -8231,7 +8231,7 @@ class DKAdminRepository {
         if($time_type == 'date')
         {
             $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
-            $query_order->whereDate('published_date',$the_date);
+            $query_order->where('published_date',$the_date);
 //            $query_order->whereDate('published_date',$the_date);
         }
         else if($time_type == 'month')
@@ -8248,12 +8248,12 @@ class DKAdminRepository {
 
 //            dd($the_month_ended_date);
 //            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
-            $query_order->whereDateBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+            $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($time_type == 'period')
         {
-            if(!empty($post_data['date_start'])) $query_order->whereDate('published_date', '>=', $post_data['date_start']);
-            if(!empty($post_data['date_ended'])) $query_order->whereDate('published_date', '<=', $post_data['date_ended']);
+            if(!empty($post_data['date_start'])) $query_order->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('published_date', '<=', $post_data['date_ended']);
         }
         else
         {
