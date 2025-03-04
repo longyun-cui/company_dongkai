@@ -337,7 +337,6 @@
                                 <li class="divider"></li>
                             @endif
                             @if(in_array($me->user_type,[0,1,9,11,61,71]))
-                                <li class="divider"></li>
                                 <li>
                                     <a href="javascript:void(0);" class="tab-control datatable-control"
                                        data-type="create"
@@ -420,8 +419,6 @@
                                 </li>
                                 <li class="divider"></li>
                             @endif
-
-
 
 
                         </ul>

@@ -12,11 +12,11 @@
 
 
             {{--按天查看--}}
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-production-project-date">
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-production-department-date">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="statistic-production-project-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="statistic-production-project-date">
+            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="statistic-production-department-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="statistic-production-department-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="date">
@@ -25,11 +25,11 @@
 
 
             {{--按月查看--}}
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-production-project-month">
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-production-department-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-production-project-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-production-project-month">
+            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-production-department-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-production-department-month">
                 <i class="fa fa-chevron-right"></i>
             </button>
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="month">
@@ -37,8 +37,8 @@
             </button>
 
             {{--按时间段导出--}}
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-production-project-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-production-project-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-production-department-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
+            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-production-department-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="period">
                 <i class="fa fa-search"></i> 按时间段搜索

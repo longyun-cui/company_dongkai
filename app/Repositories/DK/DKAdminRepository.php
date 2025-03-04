@@ -8227,12 +8227,13 @@ class DKAdminRepository {
             }
         }
 
+
+        // 时间
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
         if($time_type == 'date')
         {
             $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
             $query_order->where('published_date',$the_date);
-//            $query_order->whereDate('published_date',$the_date);
         }
         else if($time_type == 'month')
         {
@@ -8246,7 +8247,6 @@ class DKAdminRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-//            dd($the_month_ended_date);
 //            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
             $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
         }
@@ -8930,7 +8930,7 @@ class DKAdminRepository {
 
         $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
-        // 部门统计
+        // 工单统计
         $query_order = DK_Order::select('department_district_id','published_date')
             ->addSelect(DB::raw("
                     count(DISTINCT creator_id) as staff_count,
@@ -8940,15 +8940,47 @@ class DKAdminRepository {
                     count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
                     count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
                     count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
-                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside,
-                    
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
                 "))
-            ->whereDate("published_date",$the_date)
+            ->whereDate("published_date",$the_date);
 //            ->groupBy('department_district_id')
-            ->get()
-            ->keyBy('department_district_id')
-            ->toArray();
-//        dd($query_order);
+
+
+
+
+        // 时间
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+            $query_order->where('published_date',$the_date);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+//            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_order->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('published_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+        }
+
+        $query_order = $query_order->get()->keyBy('department_district_id')->toArray();
+
 
         $query = DK_Department::select('id','name')
 //            ->withCount([
