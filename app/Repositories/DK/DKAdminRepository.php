@@ -8651,6 +8651,7 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
+
     // 【生产-统计】质检看板
     public function v1_operate_for_get_statistic_data_of_production_inspector_overview($post_data)
     {
@@ -8983,6 +8984,7 @@ class DKAdminRepository {
 
         return datatable_response($collapsed, $draw, $total);
     }
+
 
 
 
@@ -9498,6 +9500,7 @@ class DKAdminRepository {
 
 
 
+
     // 【数据-导出】工单
     public function v1_operate_for_statistic_order_export($post_data)
     {
@@ -9907,6 +9910,7 @@ class DKAdminRepository {
 
 
     }
+    // 【数据-导出】交付
     public function v1_operate_for_statistic_delivery_export($post_data)
     {
         $this->get_me();
