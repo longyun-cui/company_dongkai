@@ -20,7 +20,7 @@
             "scrollCollapse": true,
             "showRefresh": true,
             "ajax": {
-                'url': "{{ url('/delivery/delivery-daily') }}",
+                'url': "{{ url('/delivery/delivery-daily1') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
@@ -32,7 +32,7 @@
                     d.keyword = $tableSearch.find('input[name="delivery-daily-keyword"]').val();
                     d.remark = $tableSearch.find('input[name="delivery-daily-remark"]').val();
                     d.description = $tableSearch.find('input[name="delivery-daily-description"]').val();
-                    d.assign = $tableSearch.find('input[name="delivery-project-assign"]').val();
+                    d.assign = $tableSearch.find('input[name="delivery-daily-assign"]').val();
                     d.assign_start = $tableSearch.find('input[name="delivery-daily-start"]').val();
                     d.assign_ended = $tableSearch.find('input[name="delivery-daily-ended"]').val();
                     d.client = $tableSearch.find('select[name="delivery-daily-client"]').val();

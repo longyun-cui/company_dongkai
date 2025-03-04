@@ -6,7 +6,7 @@
 
         <div class="pull-right">
 
-            <input type="hidden" name="delivery-daily-time-type" class="time-type" value="" readonly>
+            <input type="hidden" name="delivery-daily-time-type" class="time-type" value="month" readonly>
 
 
             <select class="search-filter form-filter select2-box-c" name="delivery-daily-client" style="width:200px;">
@@ -29,16 +29,16 @@
             </button>
 
 
-            <button type="button" class="btn btn-default btn-filter filter-submit" id="filter-submit-for-order">
+            <button type="button" class="btn btn-default btn-filter filter-submit" data-time-type="month">
                 <i class="fa fa-search"></i> 搜索
             </button>
-            <button type="button" class="btn btn-default btn-filter filter-empty" id="filter-empty-for-order">
+            <button type="button" class="btn btn-default btn-filter filter-empty">
                 <i class="fa fa-remove"></i> 清空
             </button>
-            <button type="button" class="btn btn-default btn-filter filter-refresh" id="filter-refresh-for-order">
+            <button type="button" class="btn btn-default btn-filter filter-refresh">
                 <i class="fa fa-circle-o-notch"></i> 刷新
             </button>
-            <button type="button" class="btn btn-default btn-filter filter-cancel" id="filter-cancel-for-order">
+            <button type="button" class="btn btn-default btn-filter filter-cancel">
                 <i class="fa fa-undo"></i> 重置
             </button>
 
