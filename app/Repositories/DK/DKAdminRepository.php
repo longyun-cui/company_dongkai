@@ -8377,6 +8377,280 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
+    // 【生产-统计】坐席看板
+    public function v1_operate_for_get_statistic_data_of_production_caller_recent($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+
+        $rank_object_type  = isset($post_data['rank_object_type'])  ? $post_data['rank_object_type']  : 'staff';
+        $rank_staff_type  = isset($post_data['rank_staff_type'])  ? $post_data['rank_staff_type']  : 88;
+//        dd($rank_staff_type);
+
+
+        if($rank_staff_type == 41)
+        {
+            // 工单统计
+            $query_order = DK_Order::select('department_manager_id','published_at')
+                ->groupBy('department_manager_id');
+        }
+        else if($rank_staff_type == 81)
+        {
+            // 工单统计
+            $query_order = DK_Order::select('department_manager_id','published_at')
+                ->groupBy('department_manager_id');
+        }
+        else if($rank_staff_type == 84)
+        {
+            // 工单统计
+            $query_order = DK_Order::select('department_supervisor_id','published_at')
+                ->groupBy('department_supervisor_id');
+        }
+        else
+        {
+            // 工单统计
+            $query_order = DK_Order::select('creator_id','published_at')
+                ->groupBy('creator_id');
+        }
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+            $query_order->where("published_date",$the_date);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+//            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_order->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_order->where('published_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('published_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+            $query_order->where('published_date','>',date("Y-m-d",strtotime("-7 day")))
+                ->addSelect(DB::raw("
+                    FROM_UNIXTIME(published_at,'%Y-%m-%d') as date_day,
+                    FROM_UNIXTIME(published_at,'%e') as day,
+                    count(*) as sum
+                "))
+                ->groupBy('published_date');
+        }
+
+        $query_order->addSelect(DB::raw("
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                "));
+
+
+
+
+
+//        count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+//                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+//                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+//                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+//                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+//                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+
+
+
+
+
+        if($rank_staff_type == 41)
+        {
+            // 工单统计
+            $order_list = $query_order->get()->groupBy('department_manager_id')->toArray();
+        }
+        else if($rank_staff_type == 81)
+        {
+            // 工单统计
+            $order_list = $query_order->get()->groupBy('department_manager_id')->toArray();
+        }
+        else if($rank_staff_type == 84)
+        {
+            // 工单统计
+            $order_list = $query_order->get()->groupBy('department_supervisor_id')->toArray();
+        }
+        else
+        {
+            // 工单统计
+            $order_list = $query_order->get();
+        }
+
+        foreach($order_list as $k => $v)
+        {
+            $v->order_count_for_effective = $v->order_count_for_accepted + $v->order_count_for_repeated + $v->order_count_for_accepted_inside;
+
+            $date_day = date_create($v->date_day);
+            $today = date_create(date('Y-m-d'));
+
+            $diff = $today->diff($date_day)->days;
+            $v->diff = $diff;
+        }
+        $order_list = $order_list->groupBy('creator_id');
+        foreach($order_list as $k => $v)
+        {
+            $order_list[$k] = $v->keyBy('diff');
+        }
+        $order_list = $order_list->toArray();
+//        dd($order_list);
+
+
+
+
+        $use = [];
+        $use['is_manager'] = 0;
+        $use['is_supervisor'] = 0;
+        $use['is_customer_service'] = 0;
+        $use['is_day'] = 0;
+        $use['is_month'] = 0;
+        $use['project_id'] = 0;
+        $use['the_date'] = 0;
+        $use['the_month_start_timestamp'] = 0;
+        $use['the_month_ended_timestamp'] = 0;
+
+
+
+
+
+        $query = DK_User::select(['id','user_status','user_type','username','true_name','department_district_id','department_group_id'])
+            ->where('user_status',1)
+            ->with([
+                'department_district_er' => function($query) { $query->select(['id','name']); },
+                'department_group_er' => function($query) { $query->select(['id','name']); }
+            ]);
+
+
+        // 部门
+        if($me->user_type == 41)
+        {
+            // 根据部门（大区）查看
+            $query->where('department_district_id', $me->department_district_id);
+        }
+        else if($me->user_type == 81)
+        {
+            // 根据部门（大区）查看
+            $query->where('department_district_id', $me->department_district_id);
+        }
+        else if($me->user_type == 84)
+        {
+            // 根据部门（小组）查看
+            $query->where('department_group_id', $me->department_group_id);
+        }
+
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0]))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
+        // 部门-小组
+        if(!empty($post_data['department_group']))
+        {
+            if(!in_array($post_data['department_group'],[-1,0]))
+            {
+                $query->where('department_group_id', $post_data['department_group']);
+            }
+        }
+
+
+        if($rank_staff_type == 81)
+        {
+            $query->where('user_type', 81);
+        }
+        else if($rank_staff_type == 84)
+        {
+            $query->where('user_type', 84);
+        }
+        else
+        {
+            $query->where('department_district_id','>',0)
+                ->where('department_group_id','>',0)
+                ->whereIn('user_type',[81,84,88]);
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("department_district_id", "asc")->orderBy("department_group_id", "asc")->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+            if(isset($order_list[$v->id]))
+            {
+//                if(isset($order_list[$v->id][7])) $list[$k]->order_7 = $order_list[$v->id][7]['order_count_for_effective'];
+//                else $list[$k]->order_7 = 0;
+                if(isset($order_list[$v->id][6])) $list[$k]->order_6 = $order_list[$v->id][6]['order_count_for_effective'];
+                else $list[$k]->order_6 = 0;
+                if(isset($order_list[$v->id][5])) $list[$k]->order_5 = $order_list[$v->id][5]['order_count_for_effective'];
+                else $list[$k]->order_5 = 0;
+                if(isset($order_list[$v->id][4])) $list[$k]->order_4 = $order_list[$v->id][4]['order_count_for_effective'];
+                else $list[$k]->order_4 = 0;
+                if(isset($order_list[$v->id][3])) $list[$k]->order_3 = $order_list[$v->id][3]['order_count_for_effective'];
+                else $list[$k]->order_3 = 0;
+                if(isset($order_list[$v->id][2])) $list[$k]->order_2 = $order_list[$v->id][2]['order_count_for_effective'];
+                else $list[$k]->order_2 = 0;
+                if(isset($order_list[$v->id][1])) $list[$k]->order_1 = $order_list[$v->id][1]['order_count_for_effective'];
+                else $list[$k]->order_1 = 0;
+                if(isset($order_list[$v->id][0])) $list[$k]->order_0 = $order_list[$v->id][0]['order_count_for_effective'];
+                else $list[$k]->order_0 = 0;
+            }
+            else
+            {
+//                $list[$k]->order_7 = 0;
+                $list[$k]->order_6 = 0;
+                $list[$k]->order_5 = 0;
+                $list[$k]->order_4 = 0;
+                $list[$k]->order_3 = 0;
+                $list[$k]->order_2 = 0;
+                $list[$k]->order_1 = 0;
+                $list[$k]->order_0 = 0;
+            }
+
+
+        }
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
     // 【生产-统计】质检看板
     public function v1_operate_for_get_statistic_data_of_production_inspector_overview($post_data)
     {
@@ -8396,9 +8670,9 @@ class DKAdminRepository {
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
         if($time_type == 'date')
         {
-            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
-            $query_order->whereDate('inspected_date',$the_day);
+            $query_order->where('inspected_date',$the_date);
 
         }
         else if($time_type == 'month')
@@ -8417,8 +8691,8 @@ class DKAdminRepository {
         }
         else if($time_type == 'period')
         {
-            if(!empty($post_data['date_start'])) $query_order->whereDate('inspected_date', '>=', $post_data['date_start']);
-            if(!empty($post_data['date_ended'])) $query_order->whereDate('inspected_date', '<=', $post_data['date_ended']);
+            if(!empty($post_data['date_start'])) $query_order->where('inspected_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('inspected_date', '<=', $post_data['date_ended']);
         }
         else
         {
