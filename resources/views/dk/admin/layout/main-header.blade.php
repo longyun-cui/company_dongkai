@@ -517,6 +517,7 @@
                                     <i class="fa fa-area-chart text-orange"></i> <span>项目交付</span>
                                 </a>
                             </li>
+                            <li class="divider"></li>
                         @endif
 
 

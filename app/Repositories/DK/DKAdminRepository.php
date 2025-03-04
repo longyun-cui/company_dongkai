@@ -8828,21 +8828,19 @@ class DKAdminRepository {
         if(!in_array($me->user_type,[0,1,9,11,41,61])) return view($this->view_blade_403);
 
         // 员工统计
-        $query_order = DK_Order::select('inspector_id')
+        $query_delivery = DK_Pivot_Client_Delivery::select('creator_id')
             ->addSelect(DB::raw("
-                    count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as order_count_for_delivered,
-                    count(IF(delivered_result = '通过', TRUE, NULL)) as order_count_for_accepted,
-                    count(IF(delivered_result = '拒绝', TRUE, NULL)) as order_count_for_refused
+                    count(*) as order_count_for_delivered
                 "))
-            ->groupBy('deliverer_id');
+            ->groupBy('creator_id');
 
 
         $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
-        if($time_type == 'day')
+        if($time_type == 'date')
         {
-            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
 
-            $query_order->whereDate(DB::raw("DATE(FROM_UNIXTIME(delivered_at))"),$the_day);
+            $query_delivery->where("delivered_date",$the_date);
 
         }
         else if($time_type == 'month')
@@ -8857,16 +8855,20 @@ class DKAdminRepository {
             $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
             $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
 
-            $query_order->whereBetween('inspected_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+//            $query_delivery->whereBetween('delivered_date',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_delivery->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_delivery->where('delivered_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_delivery->where('delivered_date', '<=', $post_data['date_ended']);
         }
         else
         {
         }
 
 
-        $query_order = $query_order->get()->keyBy('inspector_id')->toArray();
-
-
+        $query_order = $query_delivery->get()->keyBy('creator_id')->toArray();
 
 
         $query = DK_User::select(['id','mobile','user_status','user_type','username','true_name','department_district_id','department_group_id','superior_id'])
@@ -8876,7 +8878,7 @@ class DKAdminRepository {
             ])
             ->where('user_status',1)
             ->whereIn('user_category',[11])
-            ->whereIn('user_type',[71,77]);
+            ->whereIn('user_type',[61,66]);
 
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
@@ -8923,15 +8925,11 @@ class DKAdminRepository {
         {
             if(isset($query_order[$v->id]))
             {
-                $list[$k]->order_count_for_inspected = $query_order[$v->id]['order_count_for_inspected'];
-                $list[$k]->order_count_for_accepted = $query_order[$v->id]['order_count_for_accepted'];
-                $list[$k]->order_count_for_refused = $query_order[$v->id]['order_count_for_refused'];
+                $list[$k]->order_count_for_delivered = $query_order[$v->id]['order_count_for_delivered'];
             }
             else
             {
-                $list[$k]->order_count_for_inspected = 0;
-                $list[$k]->order_count_for_accepted = 0;
-                $list[$k]->order_count_for_refused = 0;
+                $list[$k]->order_count_for_delivered = 0;
             }
         }
 
@@ -8957,12 +8955,12 @@ class DKAdminRepository {
         foreach ($grouped as $k => $v)
         {
             $order_sum_for_all = 0;
-            $order_sum_for_inspected = 0;
+            $order_sum_for_delivered = 0;
 
             foreach ($v as $key => $val)
             {
 //                $order_sum_for_all += $val->order_count_for_all;
-                $order_sum_for_inspected += $val->order_count_for_inspected;
+                $order_sum_for_delivered += $val->order_count_for_delivered;
             }
 
 
@@ -8970,7 +8968,7 @@ class DKAdminRepository {
             {
                 $v[$key]->merge = 0;
 //                $v[$key]->order_sum_for_all = $order_sum_for_all;
-                $v[$key]->order_sum_for_inspected = $order_sum_for_inspected;
+                $v[$key]->order_sum_for_delivered = $order_sum_for_delivered;
 
 //                if($order_sum_for_all > 0)
 //                {

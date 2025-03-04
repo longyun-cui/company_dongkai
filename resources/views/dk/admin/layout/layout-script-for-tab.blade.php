@@ -338,7 +338,7 @@
                 }
                 else if($id == "datatable-statistic-deliverer-overview")
                 {
-                    Table_Datatable_Ajax_Statistic_Ddeliverer_Overview('#'+$config.id);
+                    Table_Datatable_Ajax_Statistic_Deliverer_Overview('#'+$config.id);
                 }
                 else if($id == "statistic-comprehensive-overview")
                 {
