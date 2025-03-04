@@ -165,7 +165,7 @@
                 {
                     "title": "导出范围",
                     "data": "title",
-                    "className": "font-12px",
+                    "className": " white-space-normal",
                     "width": "480px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
