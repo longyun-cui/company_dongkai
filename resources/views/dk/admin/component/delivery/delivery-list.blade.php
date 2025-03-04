@@ -24,11 +24,11 @@
             <input type="text" class="search-filter form-filter filter-md filter-keyup" name="order-client-phone" placeholder="客户电话" value="" />
 
 
-            <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-pre-for-order">
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="order-assign">
                 <i class="fa fa-chevron-left"></i>
             </button>
             <input type="text" class="search-filter form-filter filter-md filter-keyup date_picker-c" name="order-assign" placeholder="交付日期" value="" readonly="readonly" />
-            <button type="button" class="search-filter btn btn-flat btn-default date-picker-btn date-pick-next-for-order">
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="order-assign">
                 <i class="fa fa-chevron-right"></i>
             </button>
 
