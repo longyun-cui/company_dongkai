@@ -27,7 +27,7 @@
                     d.title = $tableSearch.find('input[name="statistic-company-title"]').val();
                     d.keyword = $tableSearch.find('input[name="statistic-company-keyword"]').val();
                     d.status = $tableSearch.find('select[name="statistic-company-status"]').val();
-                    d.time_type = $tableSearch.find('input[name="statistic-company-time-type"]').val();
+                    d.time_type = $tableSearch.find('input[name="statistic-company-overview-time-type"]').val();
                     d.time_month = $tableSearch.find('input[name="statistic-company-month"]').val();
                     d.time_date = $tableSearch.find('input[name="statistic-company-date"]').val();
                     d.date_start = $tableSearch.find('input[name="statistic-company-start"]').val();
