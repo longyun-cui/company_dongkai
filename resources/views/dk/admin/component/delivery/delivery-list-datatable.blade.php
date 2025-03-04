@@ -90,7 +90,7 @@
 
                         var $html_edit = '';
                         var $html_delete = '';
-                        var $html_exported = '<a class="btn btn-xs bg-blue item-exported-submit" data-id="'+data+'">导出</a>';
+                        var $html_exported = '<a class="btn btn-xs bg-blue- item-exported-submit" data-id="'+data+'">导出</a>';
                         var $html_follow = '<a class="btn btn-xs bg-blue item-modal-show-for-follow" data-id="'+data+'">客户跟进</a>';
                         var $html_quality = '<a class="btn btn-xs bg-olive item-quality-evaluate-submit" data-id="'+data+'">质量评估</a>';
 
