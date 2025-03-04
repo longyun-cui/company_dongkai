@@ -9113,14 +9113,6 @@ class DKAdminRepository {
         else $total_data['order_count_for_accepted_per'] = 0;
 
 
-
-        // 人均交付量
-        if($total_data['staff_count'] > 0)
-        {
-            $total_data['order_count_for_delivered_per'] = round(($total_data['order_count_for_delivered'] / $total_data['staff_count']),2);
-        }
-        else $total_data['order_count_for_all_per'] = 0;
-
         $total_data = $total_data;
 
 //        dd($list->toArray());

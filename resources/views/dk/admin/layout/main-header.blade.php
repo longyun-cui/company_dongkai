@@ -532,7 +532,7 @@
                                     <i class="fa fa-pie-chart text-orange"></i> <span>财务日报</span>
                                 </a>
                             </li>
-                            <li class="divider"></li>
+                            <li class="divider _none"></li>
                         @endif
 
 
