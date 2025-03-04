@@ -9501,6 +9501,7 @@ class DKAdminRepository {
     // 【数据-导出】工单
     public function v1_operate_for_statistic_order_export($post_data)
     {
+//        dd($post_data);
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);

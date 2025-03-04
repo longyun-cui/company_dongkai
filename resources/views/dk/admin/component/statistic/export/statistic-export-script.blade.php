@@ -25,10 +25,10 @@
             if($('input[name="export-date"]').val())  $obj.date = $('input[name="export-date"]').val();
             if($('input[name="export-start"]').val())  $obj.order_start = $('input[name="export-start"]').val();
             if($('input[name="export-ended"]').val())  $obj.order_ended = $('input[name="export-ended"]').val();
-            if($('select[name="order-client"]').val() > 0)  $obj.client = $('select[name="order-client"]').val();
-            if($('select[name="order-staff"]').val() > 0)  $obj.staff = $('select[name="order-staff"]').val();
-            if($('select[name="order-project"]').val() > 0)  $obj.project = $('select[name="order-project"]').val();
-            if($('select[name="order-inspected-result"]').val() != -1)  $obj.inspected_result = $('select[name="order-inspected-result"]').val();
+            if($('select[name="export-client"]').val() > 0)  $obj.client = $('select[name="export-client"]').val();
+            if($('select[name="export-staff"]').val() > 0)  $obj.staff = $('select[name="export-staff"]').val();
+            if($('select[name="export-project"]').val() > 0)  $obj.project = $('select[name="export-project"]').val();
+            if($('select[name="export-inspected-result"]').val() != -1)  $obj.inspected_result = $('select[name="export-inspected-result"]').val();
 
             var $url = url_build('/v1/operate/statistic/order-export',$obj);
             window.open($url);
