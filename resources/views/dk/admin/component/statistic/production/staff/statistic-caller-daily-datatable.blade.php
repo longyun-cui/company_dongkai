@@ -198,7 +198,7 @@
                             data: $res_accepted
                         },
                         {
-                            name:'通过量',
+                            name:'有效量',
                             type:'line',
                             label: {
                                 normal: {
