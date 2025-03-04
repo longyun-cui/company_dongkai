@@ -12,23 +12,23 @@
 
             <select class="search-filter form-filter filter-lg select2-box-c select2-company" name="statistic-company-daily-company">
                 <option value="-1">选择公司</option>
-{{--                @foreach($company_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
+                @foreach($company_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                @endforeach
             </select>
 
             <select class="search-filter form-filter filter-lg select2-box-c select2-channel" name="statistic-company-daily-channel">
                 <option value="-1">选择渠道</option>
-{{--                @foreach($channel_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
+                @foreach($channel_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                @endforeach
             </select>
 
             <select class="search-filter form-filter filter-lg select2-box-c select2-business" name="statistic-company-daily-business">
                 <option value="-1">选择商务</option>
-{{--                @foreach($business_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
+                @foreach($business_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                @endforeach
             </select>
 
 

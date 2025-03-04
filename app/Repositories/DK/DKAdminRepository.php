@@ -310,6 +310,16 @@ class DKAdminRepository {
         }
 
 
+        $company_list = DK_Company::select('id','name')->where('company_category',1)->get();
+        $view_data['company_list'] = $company_list;
+
+        $channel_list = DK_Company::select('id','name')->where('company_category',11)->get();
+        $view_data['channel_list'] = $channel_list;
+
+        $business_list = DK_Company::select('id','name')->where('company_category',21)->get();
+        $view_data['business_list'] = $business_list;
+
+
         $view_blade = env('TEMPLATE_DK_ADMIN').'entrance.index1';
         return view($view_blade)->with($view_data);
     }
@@ -749,7 +759,6 @@ class DKAdminRepository {
         }
 
     }
-
 
 
     // 【部门-管理】管理员-删除
