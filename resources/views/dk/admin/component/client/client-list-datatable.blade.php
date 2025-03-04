@@ -43,7 +43,7 @@
             },
             "columns": [
                 {
-                    "title": '<input type="checkbox" id="check-review-all">',
+                    "title": '<input type="checkbox" class="check-review-all">',
                     "width": "40px",
                     "data": "id",
                     "orderable": false,
@@ -315,7 +315,7 @@
                     "title": "ip白名单",
                     "data": "ip_whitelist",
                     "className": "",
-                    "width": "200px",
+                    "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -337,7 +337,7 @@
                     "title": "备注",
                     "data": "remark",
                     "className": "text-left",
-                    "width": "",
+                    "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)

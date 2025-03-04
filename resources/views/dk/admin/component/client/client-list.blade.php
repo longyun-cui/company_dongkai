@@ -29,28 +29,28 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="client-id" placeholder="ID" />
             <input type="text" class="search-filter form-filter filter-keyup" name="client-username" placeholder="用户名" />
 
-            <select class="search-filter form-filter filter-lg select2-box select2-company" name="client-company">
+            <select class="search-filter form-filter filter-lg select2-box-c select2-company" name="client-company">
                 <option value="-1">选择公司</option>
-{{--                @foreach($company_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
+                @foreach($company_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                @endforeach
             </select>
 
-            <select class="search-filter form-filter filter-lg select2-box select2-channel" name="client-channel">
+            <select class="search-filter form-filter filter-lg select2-box-c select2-channel" name="client-channel">
                 <option value="-1">选择渠道</option>
-{{--                @foreach($channel_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
+                @foreach($channel_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                @endforeach
             </select>
 
-            <select class="search-filter form-filter filter-lg select2-box select2-business" name="client-business">
+            <select class="search-filter form-filter filter-lg select2-box-c select2-business" name="client-business">
                 <option value="-1">选择商务</option>
-{{--                @foreach($business_list as $v)--}}
-{{--                    <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                @endforeach--}}
+                @foreach($business_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->name }}</option>
+                @endforeach
             </select>
 
-            <select class="search-filter form-filter form-filter" name="client-user-status">
+            <select class="search-filter form-filter form-filter select2-box-c" name="client-user-status">
                 <option value ="-1">全部</option>
                 <option value ="1">启用</option>
                 <option value ="9">禁用</option>

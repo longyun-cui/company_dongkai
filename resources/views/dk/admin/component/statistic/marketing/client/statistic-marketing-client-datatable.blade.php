@@ -74,7 +74,7 @@
                 },
                 {
                     "title": "客户名称",
-                    "data": "username",
+                    "data": "name",
                     "className": "",
                     "width": "160px",
                     "orderable": false,

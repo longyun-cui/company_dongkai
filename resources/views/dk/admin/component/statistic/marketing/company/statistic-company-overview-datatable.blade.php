@@ -17,7 +17,7 @@
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic/company-overview') }}",
+                'url': "{{ url('/v1/operate/statistic/marketing/company-overview') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {

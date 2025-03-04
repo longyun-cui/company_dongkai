@@ -177,6 +177,13 @@
             {{--<button type="button" onclick="" class="btn btn-success btn-filter item-create-show"><i class="fa fa-plus"></i> 添加</button>--}}
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-play"></i> 启用</button>--}}
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-stop"></i> 禁用</button>--}}
+
+
+            <button class="btn btn-default btn-filter">
+                <input type="checkbox" class="check-review-all">
+            </button>
+
+
             <button type="button" onclick="" class="btn btn-default btn-filter" id="bulk-submit-for-export">
                 <i class="fa fa-download"></i> 批量导出
             </button>

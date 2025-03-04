@@ -30,13 +30,13 @@
 
             <input type="text" class="search-filter form-filter filter-keyup" name="department-name" placeholder="名称" />
 
-            <select class="search-filter form-filter" name="department-type">
+            <select class="search-filter form-filter select2-box-c" name="department-type">
                 <option value ="-1">全部</option>
                 <option value ="11">大区</option>
-                <option value ="21">组</option>
+                <option value ="21">小组</option>
             </select>
 
-            <select class="search-filter form-filter" name="department-status">
+            <select class="search-filter form-filter select2-box-c" name="department-status">
                 <option value ="1">启用</option>
                 <option value ="-1">全部</option>
                 <option value ="9">禁用</option>

@@ -38,7 +38,7 @@
             },
             "columns": [
                 {
-                    "title": '<input type="checkbox" id="check-review-all">',
+                    "title": '<input type="checkbox" class="check-review-all">',
                     "width": "40px",
                     "data": "id",
                     "orderable": false,
@@ -196,7 +196,14 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
 //                            return '<a target="_blank" href="/user/'+data+'">'+row.nickname+'</a>';
-                        if(row.username) return row.username;
+                        if(row.username)
+                        {
+                            if(row.user_type == 88)
+                            {
+                                return '<a class="caller-control" data-id="'+row.id+'" data-title="'+data+'">'+data+' ('+row.id+')'+'</a>';
+                            }
+                            else return row.username;
+                        }
                         else return '--';
                     }
                 },

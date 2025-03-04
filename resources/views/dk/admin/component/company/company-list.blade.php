@@ -30,14 +30,14 @@
 
             <input type="text" class="search-filter form-filter filter-keyup" name="company-username" placeholder="名称">
 
-            <select class="search-filter form-filter select2-box" name="company-category">
+            <select class="search-filter form-filter select2-box-c" name="company-category">
                 <option value="-1">公司类型</option>
                 <option value="1">公司</option>
                 <option value="11">渠道</option>
                 <option value="21">商务</option>
             </select>
 
-            <select class="search-filter form-filter" name="company-user-status">
+            <select class="search-filter form-filter select2-box-c" name="company-user-status">
                 <option value ="-1">全部</option>
                 <option value ="1">启用</option>
                 <option value ="9">禁用</option>

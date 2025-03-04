@@ -94,7 +94,8 @@
                     "width": "160px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return '<a href="/staff-statistic/statistic-customer-service?staff_id=' + row.id + '" target="_blank">'+data+' ('+row.id+')'+'</a>';
+                        // return '<a href="/staff-statistic/statistic-customer-service?staff_id=' + row.id + '" target="_blank">'+data+' ('+row.id+')'+'</a>';
+                        return '<a class="caller-control" data-id="'+row.id+'" data-title="'+data+'">'+data+' ('+row.id+')'+'</a>';
                     }
                 },
                 {

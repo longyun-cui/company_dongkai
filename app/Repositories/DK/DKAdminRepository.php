@@ -8198,7 +8198,7 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
-    // 【生产-统计】坐席看板
+    // 【生产-统计】坐席排名
     public function v1_operate_for_get_statistic_data_of_production_caller_rank($post_data)
     {
         $this->get_me();
@@ -8386,7 +8386,7 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
-    // 【生产-统计】坐席看板
+    // 【生产-统计】坐席近期
     public function v1_operate_for_get_statistic_data_of_production_caller_recent($post_data)
     {
         $this->get_me();
@@ -8660,6 +8660,144 @@ class DKAdminRepository {
 
         return datatable_response($list, $draw, $total);
     }
+
+    // 【生产-统计】坐席日报
+    public function v1_operate_for_get_statistic_data_of_production_caller_daily($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+        $staff_id = $post_data['staff_id'];
+
+
+        $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+
+        $query_this_month = DK_Order::select('creator_id','published_at')
+            ->where('creator_id',$staff_id)
+//            ->whereBetween('published_at',[$this_month_start_timestamp,$this_month_ended_timestamp])  // 当月
+//            ->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->whereBetween('published_date',[$the_month_start_date,$the_month_ended_date])
+            ->groupBy('published_date')
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(published_at,'%Y-%m-%d') as date_day,
+                    DATE_FORMAT(published_at,'%e') as day,
+                    count(*) as sum
+                "))
+            ->addSelect(DB::raw("
+                    count(IF(is_published = 1, TRUE, NULL)) as order_count_for_all,
+                    
+                    count(IF(is_published = 1 AND inspected_status = 1, TRUE, NULL)) as order_count_for_inspected,
+                    count(IF(inspected_result = '通过', TRUE, NULL)) as order_count_for_accepted,
+                    count(IF(inspected_result = '拒绝', TRUE, NULL)) as order_count_for_refused,
+                    count(IF(inspected_result = '重复', TRUE, NULL)) as order_count_for_repeated,
+                    count(IF(inspected_result = '内部通过', TRUE, NULL)) as order_count_for_accepted_inside
+                    
+                "));
+
+        $total = $query_this_month->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        $list = $query_this_month->get();
+//        dd($statistics_order_this_month_data);
+
+
+
+
+        $total_data = [];
+        $total_data['creator_id'] = $staff_id;
+        $total_data['published_at'] = 0;
+        $total_data['date_day'] = '统计';
+        $total_data['staff_count'] = 0;
+        $total_data['order_count_for_all'] = 0;
+        $total_data['order_count_for_inspected'] = 0;
+        $total_data['order_count_for_accepted'] = 0;
+        $total_data['order_count_for_refused'] = 0;
+        $total_data['order_count_for_repeated'] = 0;
+        $total_data['order_count_for_accepted_inside'] = 0;
+
+
+
+        foreach ($list as $k => $v)
+        {
+
+            // 审核
+            // 通过率
+            if($v->order_count_for_all > 0)
+            {
+                $list[$k]->order_rate_for_accepted = round(($v->order_count_for_accepted * 100 / $v->order_count_for_all),2);
+            }
+            else $list[$k]->order_rate_for_accepted = 0;
+
+            // 人均提交量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_all_per = round(($v->order_count_for_all / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_all_per = 0;
+
+            // 人均通过量
+            if($v->staff_count > 0)
+            {
+                $list[$k]->order_count_for_accepted_per = round(($v->order_count_for_accepted / $v->staff_count),2);
+            }
+            else $list[$k]->order_count_for_accepted_per = 0;
+
+
+
+            $total_data['order_count_for_all'] += $v->order_count_for_all;
+            $total_data['order_count_for_inspected'] += $v->order_count_for_inspected;
+            $total_data['order_count_for_accepted'] += $v->order_count_for_accepted;
+            $total_data['order_count_for_refused'] += $v->order_count_for_refused;
+            $total_data['order_count_for_repeated'] += $v->order_count_for_repeated;
+            $total_data['order_count_for_accepted_inside'] += $v->order_count_for_accepted_inside;
+
+        }
+
+        // 通过率
+        if($total_data['order_count_for_all'] > 0)
+        {
+            $total_data['order_rate_for_accepted'] = round(($total_data['order_count_for_accepted'] * 100 / $total_data['order_count_for_all']),2);
+        }
+        else $total_data['order_rate_for_accepted'] = 0;
+
+        $list[] = $total_data;
+
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
 
     // 【生产-统计】质检看板
     public function v1_operate_for_get_statistic_data_of_production_inspector_overview($post_data)
@@ -10332,6 +10470,22 @@ class DKAdminRepository {
 
 
 
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
 
 
 

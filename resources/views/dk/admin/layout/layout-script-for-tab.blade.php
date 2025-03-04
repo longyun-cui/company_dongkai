@@ -88,6 +88,93 @@
         });
 
 
+        // 通用标签控制逻辑
+        $(".wrapper").on('click', ".caller-control", function() {
+
+            const $that = $(this);
+            const $id = $that.data('id');
+            const $title = $that.data('title');
+            const $caller_daily_id = 'caller-daily-' + $id;
+            const $datatable_id = 'datatable-caller-daily-' + $id;
+            const $datatable_clone_object = 'statistic-caller-daily-clone';
+            const $datatable_target = $caller_daily_id;
+            const $chart_id = "eChart-caller-daily-" + $id;
+
+            // $(".nav-header-title").html($btn.data('title'));
+
+            const $config = {
+                type: $that.data('type'),
+                unique: 'y',
+                id: $caller_daily_id,
+                title: $that.data('title'),
+                content: $that.data('content') || '默认内容'
+            };
+
+            const $tabLink = $('a[href="#'+ $caller_daily_id +'"]');
+            const $tabPane = $('#' + $caller_daily_id);
+
+            if($tabPane.length)
+            {
+                // 存在则激活
+                console.log('已存在！');
+                $tabLink.tab('show');
+            }
+            else
+            {
+                // 创建新标签页
+                console.log('不存在！');
+                createTab($config);
+                // 激活新标签页
+                $('a[href="#' + $caller_daily_id + '"]').tab('show');
+            }
+
+
+            // data-datatable-id="datatable-location-list"
+            // data-datatable-target="location-list"
+            // data-datatable-clone-object="location-list-clone"
+            // data-chart-id="eChart-statistic-company-daily"
+
+
+            if($.fn.DataTable.isDataTable('#'+$config.id))
+            {
+                console.log($config.id);
+                console.log('DataTable 已存在！');
+            }
+            else
+            {
+                console.log('DataTable 未初始化！');
+
+                let $clone = $('.'+$datatable_clone_object).clone(true);
+                $clone.removeClass($datatable_clone_object);
+                $clone.addClass('datatable-wrapper');
+                $clone.find('table').attr('id',$datatable_id);
+                $clone.find('input[name="statistic-caller-daily-staff-id"]').val($id);
+                $clone.find('.eChart').attr('id',$chart_id);
+
+                $('#'+$caller_daily_id).prepend($clone);
+                $('#'+$caller_daily_id).find('.select2-box-c').select2({
+                    theme: 'classic'
+                });
+                $('#'+$caller_daily_id).find('.time_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD HH:mm",
+                    ignoreReadonly: true
+                });
+                $('#'+$caller_daily_id).find('.date_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD",
+                    ignoreReadonly: true
+                });
+                $('#'+$caller_daily_id).find('.month_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM",
+                    ignoreReadonly: true
+                });
+
+                Datatable_Statistic_Caller_Daily('#'+$datatable_id,$chart_id);
+            }
+
+        });
 
 
         // 通用标签控制逻辑

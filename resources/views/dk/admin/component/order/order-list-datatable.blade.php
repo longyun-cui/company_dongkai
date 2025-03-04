@@ -76,7 +76,7 @@
             ],
             "columns": [
                 {
-                    "title": '<input type="checkbox" id="check-review-all">',
+                    "title": '<input type="checkbox" class="check-review-all">',
                     "width": "id",
                     "data": null,
                     "width": "60px",

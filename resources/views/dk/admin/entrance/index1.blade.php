@@ -65,7 +65,13 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.staff.staff-list')
     @include(env('TEMPLATE_DK_ADMIN').'component.company.company-list')
     @include(env('TEMPLATE_DK_ADMIN').'component.client.client-list')
-    @include(env('TEMPLATE_DK_ADMIN').'component.project.project-list')
+
+    @if(in_array($me->user_type, [41,71,81]))
+        @include(env('TEMPLATE_DK_ADMIN').'component.project.project-list-for-department')
+    @else
+        @include(env('TEMPLATE_DK_ADMIN').'component.project.project-list')
+    @endif
+
     @include(env('TEMPLATE_DK_ADMIN').'component.location.location-list')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list')
@@ -85,6 +91,7 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-overview')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-rank')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-recent')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-daily')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-inspector-overview')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-deliverer-overview')
@@ -129,7 +136,11 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.client.client-list-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.client.client-edit-script')
 
-    @include(env('TEMPLATE_DK_ADMIN').'component.project.project-list-datatable')
+    @if(in_array($me->user_type, [41,71,81]))
+        @include(env('TEMPLATE_DK_ADMIN').'component.project.project-list-for-department-datatable')
+    @else
+        @include(env('TEMPLATE_DK_ADMIN').'component.project.project-list-datatable')
+    @endif
     @include(env('TEMPLATE_DK_ADMIN').'component.project.project-edit-script')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.location.location-list-datatable')
@@ -155,6 +166,7 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-overview-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-rank-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-recent-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-daily-datatable')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-inspector-overview-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-deliverer-overview-datatable')

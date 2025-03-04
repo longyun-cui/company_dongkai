@@ -52,7 +52,7 @@
             },
             "columns": [
                 {
-                    "title": '<input type="checkbox" id="check-review-all">',
+                    "title": '<input type="checkbox" class="check-review-all">',
                     "data": "id",
                     "width": "40px",
                     "orderable": false,

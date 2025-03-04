@@ -730,21 +730,28 @@ class DKAdminController extends Controller
 
 
 
-    // 【生产-统计】质检看板
+    // 【生产-统计】坐席概览
     public function v1_operate_for_get_statistic_data_of_production_caller_overview()
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_production_caller_overview(request()->all());
     }
-    // 【生产-统计】质检看板
+    // 【生产-统计】坐席排名
     public function v1_operate_for_get_statistic_data_of_production_caller_rank()
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_production_caller_rank(request()->all());
     }
-    // 【生产-统计】质检看板
+    // 【生产-统计】坐席近期
     public function v1_operate_for_get_statistic_data_of_production_caller_recent()
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_production_caller_recent(request()->all());
     }
+    // 【生产-统计】坐席近期
+    public function v1_operate_for_get_statistic_data_of_production_caller_daily()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_production_caller_daily(request()->all());
+    }
+
+
     // 【生产-统计】质检看板
     public function v1_operate_for_get_statistic_data_of_production_inspector_overview()
     {

@@ -452,7 +452,7 @@
                                    data-datatable-target="statistic-company-overview"
                                    data-datatable-clone-object="statistic-company-overview-clone"
                                 >
-                                    <i class="fa fa-pie-chart text-orange"></i> <span>公司概览</span>
+                                    <i class="fa fa-pie-chart text-green"></i> <span>公司概览</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
@@ -474,7 +474,7 @@
 
                                    data-chart-id="eChart-statistic-company-daily"
                                 >
-                                    <i class="fa fa-bar-chart text-orange"></i> <span>公司日报</span>
+                                    <i class="fa fa-bar-chart text-green"></i> <span>公司日报</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
@@ -494,7 +494,7 @@
                                    data-datatable-target="statistic-marketing-client"
                                    data-datatable-clone-object="statistic-marketing-client-clone"
                                 >
-                                    <i class="fa fa-area-chart text-orange"></i> <span>客户交付</span>
+                                    <i class="fa fa-area-chart text-green"></i> <span>客户交付</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
@@ -514,7 +514,7 @@
                                    data-datatable-target="statistic-marketing-project"
                                    data-datatable-clone-object="statistic-marketing-project-clone"
                                 >
-                                    <i class="fa fa-area-chart text-orange"></i> <span>项目交付</span>
+                                    <i class="fa fa-area-chart text-green"></i> <span>项目交付</span>
                                 </a>
                             </li>
                             <li class="divider"></li>

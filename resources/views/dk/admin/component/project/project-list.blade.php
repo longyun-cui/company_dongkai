@@ -29,7 +29,7 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="project-id" placeholder="ID">
             <input type="text" class="search-filter form-filter filter-keyup" name="project-name" placeholder="名称">
 
-            <select class="search-filter form-filter" name="project-item-status">
+            <select class="search-filter form-filter select2-box-c" name="project-item-status">
                 <option value ="1">启用</option>
                 <option value ="-1">全部</option>
                 <option value ="9">禁用</option>

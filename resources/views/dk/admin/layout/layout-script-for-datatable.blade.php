@@ -221,6 +221,13 @@
         $(".main-content").on('click', '#check-review-all', function () {
             var $that = $(this);
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            $datatable_wrapper.find('.check-review-all').prop('checked',this.checked); // checked为true时为默认显示的状态
+            $datatable_wrapper.find('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
+        });
+        $(".main-content").on('click', '.check-review-all', function () {
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            $datatable_wrapper.find('.check-review-all').prop('checked',this.checked); // checked为true时为默认显示的状态
             $datatable_wrapper.find('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
 

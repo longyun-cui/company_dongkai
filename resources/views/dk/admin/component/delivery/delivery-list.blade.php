@@ -33,7 +33,7 @@
             </button>
 
 
-            <select class="search-filter form-filter select2-box-c delivery-project" name="delivery-project">
+            <select class="search-filter form-filter filter-lg select2-box-c delivery-project" name="delivery-project">
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list))
                     @foreach($project_list as $v)
@@ -43,7 +43,7 @@
             </select>
 
 
-            <select class="search-filter form-filter select2-box-c delivery-client" name="delivery-client">
+            <select class="search-filter form-filter filter-lg select2-box-c delivery-client" name="delivery-client">
                 <option value="-1">选择客户</option>
                 @if(!empty($client_list))
                     @foreach($client_list as $v)
@@ -53,7 +53,7 @@
             </select>
 
 
-            <select class="search-filter form-filter" name="order-delivery-type" style="width:88px;">
+            <select class="search-filter form-filter filter-md select2-box-c" name="order-delivery-type" style="width:88px;">
                 <option value="-1">交付类型</option>
                 <option value="95">交付</option>
                 <option value="96">分发</option>
@@ -100,6 +100,10 @@
     @if(in_array($me->user_type,[0,1,9,11,61,66]))
         <div class="col-md-12 datatable-search-row">
             <div class="pull-left">
+
+                <button class="btn btn-default btn-filter">
+                    <input type="checkbox" class="check-review-all">
+                </button>
 
                 <button type="button" onclick="" class="btn btn-default btn-filter" id="bulk-submit-for-delivery-export">
                     <i class="fa fa-download"></i> 批量导出Excel

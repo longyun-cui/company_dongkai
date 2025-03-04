@@ -1,6 +1,6 @@
 <script>
 
-    function Table_Datatable_Ajax_Statistic_Company_Daily($tableId, $eChartId)
+    function Datatable_Statistic_Caller_Daily($tableId, $eChartId)
     {
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
@@ -18,24 +18,22 @@
             "order": [],
             "orderCellsTop": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/statistic/marketing/company-daily') }}",
+                'url': "{{ url('/v1/operate/statistic/production/caller-daily') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $tableSearch.find('input[name="statistic-company-id"]').val();
-                    d.name = $tableSearch.find('input[name="statistic-company-name"]').val();
-                    d.title = $tableSearch.find('input[name="statistic-company-title"]').val();
-                    d.keyword = $tableSearch.find('input[name="statistic-company-keyword"]').val();
-                    d.status = $tableSearch.find('select[name="statistic-company-status"]').val();
-                    d.time_type = $tableSearch.find('input[name="statistic-company-daily-time-type"]').val();
-                    d.time_month = $tableSearch.find('input[name="statistic-company-daily-month"]').val();
-                    d.time_date = $tableSearch.find('input[name="statistic-company-daily-date"]').val();
-                    d.date_start = $tableSearch.find('input[name="statistic-company-daily-start"]').val();
-                    d.date_ended = $tableSearch.find('input[name="statistic-company-daily-ended"]').val();
-                    d.company = $tableSearch.find('select[name="statistic-company-daily-company"]').val();
-                    d.channel = $tableSearch.find('select[name="statistic-company-daily-channel"]').val();
-                    d.business = $tableSearch.find('select[name="statistic-company-daily-business"]').val();
+                    d.staff_id = $tableSearch.find('input[name="statistic-caller-daily-staff-id"]').val();
+                    d.id = $tableSearch.find('input[name="statistic-caller-daily-id"]').val();
+                    d.name = $tableSearch.find('input[name="statistic-caller-daily-name"]').val();
+                    d.title = $tableSearch.find('input[name="statistic-caller-daily-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="statistic-caller-daily-keyword"]').val();
+                    d.status = $tableSearch.find('select[name="statistic-caller-daily-status"]').val();
+                    d.time_type = $tableSearch.find('input[name="statistic-caller-daily-time-type"]').val();
+                    d.time_month = $tableSearch.find('input[name="statistic-caller-daily-month"]').val();
+                    d.time_date = $tableSearch.find('input[name="statistic-caller-daily-date"]').val();
+                    d.date_start = $tableSearch.find('input[name="statistic-caller-daily-start"]').val();
+                    d.date_ended = $tableSearch.find('input[name="statistic-caller-daily-ended"]').val();
                 },
             },
             // "fixedColumns": {

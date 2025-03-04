@@ -137,14 +137,15 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/statistic/comprehensive-overview', $controller.'@v1_operate_for_get_statistic_data_of_comprehensive_overview');
 
 
-    Route::post('/v1/operate/statistic/company-overview', $controller.'@v1_operate_for_get_statistic_data_of_company_overview');
-    Route::post('/v1/operate/statistic/company-daily', $controller.'@v1_operate_for_get_statistic_data_of_company_daily');
+    Route::post('/v1/operate/statistic/marketing/company-overview', $controller.'@v1_operate_for_get_statistic_data_of_company_overview');
+    Route::post('/v1/operate/statistic/marketing/company-daily', $controller.'@v1_operate_for_get_statistic_data_of_company_daily');
     Route::post('/v1/operate/statistic/marketing/project', $controller.'@v1_operate_for_get_statistic_data_of_marketing_project');
     Route::post('/v1/operate/statistic/marketing/client', $controller.'@v1_operate_for_get_statistic_data_of_marketing_client');
 
     Route::post('/v1/operate/statistic/production/caller-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_overview');
     Route::post('/v1/operate/statistic/production/caller-rank', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_rank');
     Route::post('/v1/operate/statistic/production/caller-recent', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_recent');
+    Route::post('/v1/operate/statistic/production/caller-daily', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_daily');
     Route::post('/v1/operate/statistic/production/inspector-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_inspector_overview');
     Route::post('/v1/operate/statistic/production/deliverer-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_deliverer_overview');
 
