@@ -185,7 +185,7 @@
                             if(data == 1) return '正常';
                             else if(data == 9) return '压车';
                             else return '--';
-                        }
+                        }s
 
                         if(row.column_type == 'datetime' || row.column_type == 'date')
                         {
