@@ -82,7 +82,7 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.client.statistic-marketing-client')
 
 
-{{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-overview')--}}
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-overview')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-inspector-overview')
 {{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-deliverer-overview')--}}
 
@@ -146,7 +146,7 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.marketing.client.statistic-marketing-client-datatable')
 
 
-{{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-overview-datatable')--}}
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-overview-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-inspector-overview-datatable')
 {{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-deliverer-overview-datatable')--}}
 

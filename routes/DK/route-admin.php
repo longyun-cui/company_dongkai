@@ -143,6 +143,8 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/statistic/marketing/client', $controller.'@v1_operate_for_get_statistic_data_of_marketing_client');
 
     Route::post('/v1/operate/statistic/production/caller-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_overview');
+    Route::post('/v1/operate/statistic/production/caller-rank', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_rank');
+    Route::post('/v1/operate/statistic/production/caller-recent', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_recent');
     Route::post('/v1/operate/statistic/production/inspector-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_inspector_overview');
     Route::post('/v1/operate/statistic/production/deliverer-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_deliverer_overview');
 

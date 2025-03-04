@@ -130,7 +130,7 @@
 
 
                 {{--统计--}}
-                <li class="dropdown tasks-menu add-menu _none">
+                <li class="dropdown tasks-menu add-menu _none-">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         统计 <span class="caret"></span>
                     </a>
@@ -281,15 +281,15 @@
                                     <a href="javascript:void(0);" class="tab-control datatable-control"
                                        data-type="create"
                                        data-unique="y"
-                                       data-id="statistic-caller-daily"
+                                       data-id="statistic-caller-overview"
                                        data-title='<i class="fa fa-bar-chart text-orange"></i> 坐席统计'
                                        data-content=''
 
                                        data-datatable-type="create"
                                        data-datatable-unique="y"
-                                       data-datatable-id="datatable-statistic-caller-daily"
-                                       data-datatable-target="statistic-caller-daily"
-                                       data-datatable-clone-object="statistic-caller-daily-clone"
+                                       data-datatable-id="datatable-statistic-caller-overview"
+                                       data-datatable-target="statistic-caller-overview"
+                                       data-datatable-clone-object="statistic-caller-overview-clone"
                                     >
                                         <i class="fa fa-bar-chart text-orange"></i> <span>坐席统计</span>
                                     </a>
