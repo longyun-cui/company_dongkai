@@ -6177,6 +6177,8 @@ class DKAdminRepository {
         $this->get_me();
         $me = $this->me;
 
+        if(!in_array($me->user_type,[0,1,9,11,61,66])) return response_error([],"你没有操作权限！");
+
         $query = DK_Pivot_Client_Delivery::select('*')
 //            ->selectAdd(DB::Raw("FROM_UNIXTIME(assign_time, '%Y-%m-%d') as assign_date"))
 //            ->where('client_id',$me->id)
