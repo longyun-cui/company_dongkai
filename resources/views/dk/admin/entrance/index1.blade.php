@@ -87,6 +87,8 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-inspector-overview')
 {{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-deliverer-overview')--}}
 
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.project.statistic-production-project')
+
 </div>
 @endsection
 
@@ -151,6 +153,8 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-caller-rank-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-inspector-overview-datatable')
 {{--    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.staff.statistic-deliverer-overview-datatable')--}}
+
+    @include(env('TEMPLATE_DK_ADMIN').'component.statistic.production.project.statistic-production-project-datatable')
 
 
 

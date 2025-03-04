@@ -378,6 +378,27 @@
                                 <li class="divider"></li>
                             @endif
 
+                            @if(in_array($me->user_type,[0,1,9,11,41,81,84,71,77,61,66]))
+                                <li>
+                                    <a href="javascript:void(0);" class="tab-control datatable-control"
+                                       data-type="create"
+                                       data-unique="y"
+                                       data-id="statistic-production-project"
+                                       data-title='<i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>'
+                                       data-content=''
+
+                                       data-datatable-type="create"
+                                       data-datatable-unique="y"
+                                       data-datatable-id="datatable-statistic-production-project"
+                                       data-datatable-target="statistic-production-project"
+                                       data-datatable-clone-object="statistic-production-project-clone"
+                                    >
+                                        <i class="fa fa-area-chart text-teal"></i> <span>项目看板</span>
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                            @endif
+
 
 
 

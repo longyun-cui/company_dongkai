@@ -11,7 +11,7 @@
 
 
             @if(in_array($me->user_type,[0,1,9,11]))
-                <select class="form-control form-filter select-select2-c rank-department-district" name="rank-department-district" style="width:100px;">
+                <select class="form-control form-filter select2-box-c rank-department-district" name="rank-department-district" style="width:100px;">
                     <option value="-1">选择大区</option>
                     @if(!empty($department_district_list))
                         @foreach($department_district_list as $v)
