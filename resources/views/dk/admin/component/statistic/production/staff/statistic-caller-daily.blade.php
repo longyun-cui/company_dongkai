@@ -45,7 +45,7 @@
 
 
     <div class="col-md-12 datatable-body" style="margin-top:40px;">
-        <div class="eChart" id="" style="width:100%;height:320px;"></div>
+        <div class="eChart" id="" style="width:100%;min-width:100px;height:320px;"></div>
     </div>
 
 
