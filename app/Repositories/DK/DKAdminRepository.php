@@ -1550,7 +1550,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,41,61,81])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
         $mine = DK_User::find($id);
@@ -1607,7 +1607,7 @@ class DKAdminRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,41,61,81])) return response_error([],"你没有操作权限！");
 
         // 判断对象是否合法
         $mine = DK_User::find($id);
@@ -7850,24 +7850,6 @@ class DKAdminRepository {
             else $v->group_rate_for_accepted = 0;
 
 
-            // 交付
-            // 有效交付量
-            $v->group_count_for_delivered_effective = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_tomorrow + $v->group_count_for_delivered_inside;
-            // 有效交付率
-            if($v->group_count_for_delivered > 0)
-            {
-                $v->group_rate_for_delivered_effective = round(($v->group_count_for_delivered_effective * 100 / $v->group_count_for_delivered),2);
-            }
-            else $v->group_rate_for_delivered_effective = 0;
-
-            // 实际产量
-            $v->group_count_for_delivered_actual = $v->group_count_for_delivered_completed + $v->group_count_for_delivered_tomorrow;
-            // 实际产率
-            if($v->group_count_for_delivered > 0)
-            {
-                $v->group_rate_for_delivered_actual = round(($v->group_count_for_delivered_actual * 100 / $v->group_count_for_delivered),2);
-            }
-            else $v->group_rate_for_delivered_actual = 0;
 
 
 
