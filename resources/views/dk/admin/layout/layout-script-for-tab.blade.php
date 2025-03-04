@@ -324,6 +324,10 @@
                 {
                     Table_Datatable_Ajax_Statistic_Caller_Overview('#'+$config.id);
                 }
+                else if($id == "datatable-statistic-caller-rank")
+                {
+                    Table_Datatable_Ajax_Statistic_Caller_Rank('#'+$config.id);
+                }
                 else if($id == "datatable-statistic-inspector-overview")
                 {
                     Table_Datatable_Ajax_Statistic_Inspector_Overview('#'+$config.id);
