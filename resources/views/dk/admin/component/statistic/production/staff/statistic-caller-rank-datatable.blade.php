@@ -22,17 +22,21 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $tableSearch.find('input[name="caller-id"]').val();
-                    d.name = $tableSearch.find('input[name="caller-name"]').val();
-                    d.title = $tableSearch.find('input[name="caller-title"]').val();
-                    d.keyword = $tableSearch.find('input[name="caller-keyword"]').val();
-                    d.status = $tableSearch.find('select[name="caller-status"]').val();
-                    d.time_type = $tableSearch.find('input[name="statistic-caller-time-type"]').val();
-                    d.time_month = $tableSearch.find('input[name="statistic-caller-month"]').val();
-                    d.time_date = $tableSearch.find('input[name="statistic-caller-date"]').val();
-                    d.date_start = $tableSearch.find('input[name="statistic-caller-start"]').val();
-                    d.date_ended = $tableSearch.find('input[name="statistic-caller-ended"]').val();
+                    d.id = $tableSearch.find('input[name="caller-rank-id"]').val();
+                    d.name = $tableSearch.find('input[name="caller-rank-name"]').val();
+                    d.title = $tableSearch.find('input[name="caller-rank-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="caller-rank-keyword"]').val();
+                    d.status = $tableSearch.find('select[name="caller-rank-status"]').val();
+                    d.time_type = $tableSearch.find('input[name="statistic-caller-rank-time-type"]').val();
+                    d.time_month = $tableSearch.find('input[name="statistic-caller-rank-month"]').val();
+                    d.time_date = $tableSearch.find('input[name="statistic-caller-rank-date"]').val();
+                    d.date_start = $tableSearch.find('input[name="statistic-caller-rank-start"]').val();
+                    d.date_ended = $tableSearch.find('input[name="statistic-caller-rank-ended"]').val();
                     d.project = $tableSearch.find('input[name="statistic-caller-project"]').val();
+                    d.rank_object_type = $tableSearch.find('select[name="statistic-caller-rank-object-type"]').val();
+                    d.rank_staff_type = $tableSearch.find('select[name="statistic-caller-rank-staff-type"]').val();
+                    d.department_district = $tableSearch.find('select[name="statistic-caller-rank-department-district"]').val();
+                    d.department_group = $tableSearch.find('select[name="statistic-caller-rank-department-group"]').val();
 
                 },
             },

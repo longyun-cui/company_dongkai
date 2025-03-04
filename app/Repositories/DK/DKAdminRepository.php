@@ -4602,6 +4602,7 @@ class DKAdminRepository {
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+        if($limit > 100) $limit = 100;
 
         if(isset($post_data['order']))
         {
@@ -4615,7 +4616,7 @@ class DKAdminRepository {
         }
         else $query->orderBy("id", "desc");
 
-        if($limit == -1) $list = $query->get();
+        if($limit == -1) $list = $query->skip($skip)->take(100)->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)
@@ -6282,6 +6283,7 @@ class DKAdminRepository {
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
         $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+        if($limit > 100) $limit = 100;
 
         if(isset($post_data['order']))
         {
@@ -6295,7 +6297,7 @@ class DKAdminRepository {
         }
         else $query->orderBy("id", "desc");
 
-        if($limit == -1) $list = $query->get();
+        if($limit == -1) $list = $query->skip($skip)->take(100)->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)
@@ -9210,7 +9212,8 @@ class DKAdminRepository {
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
-        $limit = isset($post_data['length']) ? $post_data['length'] : 20;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+        if($limit > 100) $limit = 100;
 
         if(isset($post_data['order']))
         {
@@ -9224,7 +9227,7 @@ class DKAdminRepository {
         }
         else $query->orderBy("id", "desc");
 
-        if($limit == -1) $list = $query->get();
+        if($limit == -1) $list = $query->skip($skip)->take(100)->get();
         else $list = $query->skip($skip)->take($limit)->get();
 
         foreach ($list as $k => $v)

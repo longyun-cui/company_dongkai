@@ -7,10 +7,29 @@
         <div class="pull-right">
 
 
-            <input type="hidden" name="statistic-caller-time-type" class="time-type" value="" readonly>
+            <input type="hidden" name="statistic-caller-rank-time-type" class="time-type" value="" readonly>
+
+            @if($me->user_type == 1)
+                <select class="form-control form-filter" name="statistic-caller-rank-object-type" style="width:88px;">
+                    <option value="staff">员工</option>
+                    <option value="department">部门</option>
+                </select>
+            @endif
+
+            @if(in_array($me->user_type,[0,1,9,11,81]))
+                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-staff-type" style="width:88px;">
+                    <option value="88">客服</option>
+                    @if(in_array($me->user_type,[0,1,9,11,81]))
+                        <option value="84">主管</option>
+                    @endif
+                    @if(in_array($me->user_type,[0,1,9,11]))
+                        <option value="81">经理</option>
+                    @endif
+                </select>
+            @endif
 
             @if(in_array($me->user_type,[0,1,9,11]))
-                <select class="search-filter form-filter filter-xl select2-box-c rank-department-district" name="rank-department-district" style="width:100px;">
+                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-department-district">
                     <option value="-1">选择大区</option>
                     @if(!empty($department_district_list))
                         @foreach($department_district_list as $v)
@@ -21,7 +40,7 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,81]))
-                <select class="search-filter form-filter filter-xl select2-box-c rank-department-group" name="rank-department-group" style="width:100px;">
+                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-department-group">
                     <option data-id="-1" value="-1">选择小组</option>
                     @if(!empty($department_group_list))
                         @foreach($department_group_list as $v)
@@ -32,11 +51,11 @@
             @endif
 
             {{--按天查看--}}
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-caller-date">
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-caller-rank-date">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="statistic-caller-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="statistic-caller-date">
+            <input type="text" class="search-filter form-filter filter-keyup date_picker" name="statistic-caller-rank-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="statistic-caller-rank-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="date">
@@ -45,11 +64,11 @@
 
 
             {{--按月查看--}}
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-caller-month">
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="statistic-caller-rank-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-caller-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
-            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-caller-month">
+            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="statistic-caller-rank-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="statistic-caller-rank-month">
                 <i class="fa fa-chevron-right"></i>
             </button>
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="month">
@@ -57,8 +76,8 @@
             </button>
 
             {{--按时间段导出--}}
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-caller-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
-            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-caller-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-caller-rank-start" placeholder="起始时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" style="margin-right:-3px;" />
+            <input type="text" class="search-filter filter-keyup date_picker" name="statistic-caller-rank-ended" placeholder="终止时间" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
 
             <button type="button" class="btn btn-success btn-filter filter-submit" data-time-type="period">
                 <i class="fa fa-search"></i> 按时间段搜索
