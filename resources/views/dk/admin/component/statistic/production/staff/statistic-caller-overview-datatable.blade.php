@@ -109,26 +109,6 @@
                 },
 
 
-                // {
-                //     "title": "交付<br>总量",
-                //     "data": "order_count_for_delivered",
-                //     "className": "bg-delivered",
-                //     "width": "100px",
-                //     "orderable": false,
-                //     render: function(data, type, row, meta) {
-                //         return data
-                //     }
-                // },
-                {
-                    "title": "交付<br>有效量",
-                    "data": "order_count_for_delivered_effective",
-                    "className": "bg-delivered",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
 
 
                 // {
