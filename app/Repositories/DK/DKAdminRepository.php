@@ -344,6 +344,7 @@ class DKAdminRepository {
         }
         else
         {
+            cache()->put('key1',11234);
             dd('not exist');
         }
 //        dd(1);
