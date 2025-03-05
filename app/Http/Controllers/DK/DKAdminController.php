@@ -196,6 +196,13 @@ class DKAdminController extends Controller
 
 
 
+    // 返回主页视图
+    public function okcc_test()
+    {
+        return $this->repo->okcc_test();
+    }
+
+
 
 
     public function v1_operate_select2_department()

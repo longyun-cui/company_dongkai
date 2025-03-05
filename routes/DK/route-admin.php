@@ -13,6 +13,8 @@ Route::get('/test', function () {
     $result = searchCityCode($input, config('location_city.city'));
     dd($result);
 
+
+
 });
 
 
@@ -34,6 +36,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/is_only_me', $controller.'@check_is_only_me');
 
     Route::get('/404', $controller.'@view_admin_404');
+    Route::get('/okcc-test', $controller.'@okcc_test');
 
     Route::match(['get','post'], '/my-account/my-password-change', $controller.'@operate_my_account_password_change');
 

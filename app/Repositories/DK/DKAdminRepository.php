@@ -334,6 +334,247 @@ class DKAdminRepository {
     }
 
 
+    // 【api】登录
+    public function okcc_test()
+    {
+        dd(1);
+
+        $mine = DK_Department::find($id);
+        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
+
+
+        $API_Customer_Account = 'C1';
+        $serverFrom_name = "call-01";
+
+        if($serverFrom_name == "FNJ")
+        {
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_FNJ_C1_PASSWORD');
+        }
+        else if($serverFrom_name == "call-01")
+        {
+            $server = "http://call01.zlyx.jjccyun.cn";
+            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_01_C1_PASSWORD');
+        }
+        else if($serverFrom_name == "call-02")
+        {
+            $server = "http://call02.zlyx.jjccyun.cn";
+            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_02_C1_PASSWORD');
+        }
+        else if($serverFrom_name == "call-03")
+        {
+            $server = "http://call03.zlyx.jjccyun.cn";
+            $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_03_C1_PASSWORD');
+        }
+        else if($serverFrom_name == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_04_C1_PASSWORD');
+        }
+        else
+        {
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_OKCC_C1_PASSWORD');
+        }
+
+//        $API_Customer_Account = $mine->api_customer_account;
+//        $API_Customer_Password = $mine->api_customer_password;
+        $API_customerName = $mine->api_customer_name;
+        $API_customerUserName = $mine->api_customer_user_name;
+        $timestamp = time();
+        $seq = $timestamp;
+        $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
+
+        $request_data['authentication']['customer'] = $API_Customer_Account;
+        $request_data['authentication']['timestamp'] = $timestamp;
+        $request_data['authentication']['seq'] = $seq;
+        $request_data['authentication']['digest'] = $digest;
+
+        $request_data['request']['seq'] = '';
+        $request_data['request']['userData'] = '';
+        $request_data['request']['customerName'] = $API_customerName;
+        $request_data['request']['userName'] = $API_customerUserName;
+        $request_data['request']['userName'] = $API_customerUserName;
+
+//        $request_data['request']['name'] = '我很好';
+//        $request_data['request']['password'] = 'asdzxc2024';
+//        $request_data['request']['status'] = '1';
+//        $request_data['request']['lineMode'] = [1];
+//        $request_data['request']['billingPackage'] = '3';
+//        $request_data['request']['parentId'] = '';
+
+//        dd($request_data);
+        $request_data = json_encode($request_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
+        $request_result = curl_exec($ch);
+//        dd($request_result);
+
+        if(curl_errno($ch))
+        {
+            curl_close($ch);
+            return response_error([],"请求登录失败！");
+        }
+        else
+        {
+            curl_close($ch);
+
+            $result = json_decode($request_result);
+            if($result->result->error == "0")
+            {
+                $token = $result->data->response->token;
+                return response_success(['server'=>$server,'token'=>$token],"跳转中！");
+            }
+            else
+            {
+                return response_error([],$result->result->msg);
+            }
+        }
+    }
+
+
+    // 【api】登录
+    public function operate_company_team_login_okcc($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'company-team-admin-login-okcc') return response_error([],"参数【operate】有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数【ID】有误！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        $mine = DK_Department::find($id);
+        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
+
+
+        $API_Customer_Account = 'C1';
+
+        if($mine->serverFrom_name == "FNJ")
+        {
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_FNJ_C1_PASSWORD');
+        }
+        else if($mine->serverFrom_name == "call-01")
+        {
+            $server = "http://call01.zlyx.jjccyun.cn";
+            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_01_C1_PASSWORD');
+        }
+        else if($mine->serverFrom_name == "call-02")
+        {
+            $server = "http://call02.zlyx.jjccyun.cn";
+            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_02_C1_PASSWORD');
+        }
+        else if($mine->serverFrom_name == "call-03")
+        {
+            $server = "http://call03.zlyx.jjccyun.cn";
+            $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_03_C1_PASSWORD');
+        }
+        else if($mine->serverFrom_name == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_CALL_04_C1_PASSWORD');
+        }
+        else
+        {
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.1.2/login";
+            $API_Customer_Password = env('API_OKCC_C1_PASSWORD');
+        }
+
+//        $API_Customer_Account = $mine->api_customer_account;
+//        $API_Customer_Password = $mine->api_customer_password;
+        $API_customerName = $mine->api_customer_name;
+        $API_customerUserName = $mine->api_customer_user_name;
+        $timestamp = time();
+        $seq = $timestamp;
+        $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
+
+        $request_data['authentication']['customer'] = $API_Customer_Account;
+        $request_data['authentication']['timestamp'] = $timestamp;
+        $request_data['authentication']['seq'] = $seq;
+        $request_data['authentication']['digest'] = $digest;
+
+        $request_data['request']['seq'] = '';
+        $request_data['request']['userData'] = '';
+        $request_data['request']['customerName'] = $API_customerName;
+        $request_data['request']['userName'] = $API_customerUserName;
+
+//        $request_data['request']['name'] = '我很好';
+//        $request_data['request']['password'] = 'asdzxc2024';
+//        $request_data['request']['status'] = '1';
+//        $request_data['request']['lineMode'] = [1];
+//        $request_data['request']['billingPackage'] = '3';
+//        $request_data['request']['parentId'] = '';
+
+//        dd($request_data);
+        $request_data = json_encode($request_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
+        $request_result = curl_exec($ch);
+//        dd($request_result);
+
+        if(curl_errno($ch))
+        {
+            curl_close($ch);
+            return response_error([],"请求登录失败！");
+        }
+        else
+        {
+            curl_close($ch);
+
+            $result = json_decode($request_result);
+            if($result->result->error == "0")
+            {
+                $token = $result->data->response->token;
+                return response_success(['server'=>$server,'token'=>$token],"跳转中！");
+            }
+            else
+            {
+                return response_error([],$result->result->msg);
+            }
+        }
+    }
+
+
+
 
 
     // 【工单】select2
@@ -6106,6 +6347,8 @@ class DKAdminRepository {
 
                 $before = $item->location_city.' - '.$item->location_district;
                 $after = $column_value.' - '.$column_value2;
+                $return['value2'] = $column_value2;
+                $return['text'] = $after;
             }
 
             $item->$column_key = $column_value;

@@ -926,7 +926,7 @@
                             $(nTd).attr('data-key','location_city').attr('data-value',data);
                             $(nTd).attr('data-key2','location_district').attr('data-value2',row.location_district);
 
-                            $(nTd).attr('data-column-type','text');
+                            $(nTd).attr('data-column-type','select2');
                             $(nTd).attr('data-column-name','所在城市');
 
                             if(data) $(nTd).attr('data-operate-type','edit');

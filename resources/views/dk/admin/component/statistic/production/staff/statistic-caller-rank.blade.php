@@ -28,7 +28,7 @@
                 </select>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,11,61]))
                 <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-department-district">
                     <option value="-1">选择大区</option>
                     @if(!empty($department_district_list))
@@ -39,16 +39,11 @@
                 </select>
             @endif
 
-            @if(in_array($me->user_type,[0,1,9,11,81]))
-{{--                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-department-group">--}}
+{{--            @if(in_array($me->user_type,[0,1,9,11,61,81]))--}}
+{{--                <select class="search-filter form-filter filter-xl select2-box-c- select2-district-c" name="statistic-caller-rank-department-group">--}}
 {{--                    <option data-id="-1" value="-1">选择小组</option>--}}
-{{--                    @if(!empty($department_group_list))--}}
-{{--                        @foreach($department_group_list as $v)--}}
-{{--                            <option value="{{ $v->id }}">{{ $v->name }}</option>--}}
-{{--                        @endforeach--}}
-{{--                    @endif--}}
 {{--                </select>--}}
-            @endif
+{{--            @endif--}}
 
             {{--按天查看--}}
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-caller-rank-date">

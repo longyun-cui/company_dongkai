@@ -1106,6 +1106,9 @@
             $modal.attr('data-datatable-id',$table_id);
             $modal.attr('data-datatable-row-index',$that.data('row-index'));
 
+            var $form = $('#form-for-field-set');
+            form_reset('#form-for-field-set');
+
             $('.datatable-wrapper').removeClass('operating');
             $datatable_wrapper.addClass('operating');
             $datatable_wrapper.find('tr').removeClass('operating');
@@ -1124,12 +1127,25 @@
             $('input[name="item-id"]').val($that.attr("data-id"));
 
             $('input[name="column-key"]').val($that.attr("data-key"));
+            $('input[name="column-key2"]').val($that.attr("data-key2"));
 
             $modal.find('.column-value').val('').hide();
+            // $modal.find('.select-assistant').val('').hide();
             if($modal.find('select[name="field-set-select-value"]').data('select2'))
             {
                 $modal.find('select[name="field-set-select-value"]').select2('destroy');
             }
+            if($modal.find('select[name="field-set-select-value2"]').data('select2'))
+            {
+                $modal.find('select[name="field-set-select-value2"]').select2('destroy');
+            }
+            $form.find('.select2-container').remove();
+            $form.find('.select2-dropdown').remove();
+            $form.find('.select2-results__options').remove();
+
+            $modal.find(".select2-city").off('change');
+            $('select[name=field-set-select-value2]').html('').hide();
+            $('select[name=field-set-select-value]').removeClass('select2-city');
 
             var $column_type = $that.attr('data-column-type');
             $('input[name="column-type"]').val($column_type);
@@ -1143,6 +1159,7 @@
             }
             else if($column_type == "select")
             {
+                // console.log("select");
 
                 if($that.attr("data-key") == "location_city")
                 {
@@ -1182,19 +1199,51 @@
             }
             else if($column_type == "select2")
             {
+                // console.log("select2");
+                // console.log($that.attr("data-key"));
+
+                var $select_value2 = $modal.find('select[name="field-set-select-value2"]');
+                // console.log($select_value2);
+                // $select_value2.hide();
+
+                if ($select_value2.data('select2'))
+                {
+                    $select_value2.select2('destroy'); // 销毁旧实例
+                }
+                else
+                {
+                }
+                console.log($that.data('option-name'));
 
                 if($that.attr("data-key") == "location_city")
                 {
-                    $('select[name=info-select-set-column-value2]').show();
+
+
+                    // console.log("location_city11");
+                    // var $select2_dom = $modal.find('select[name="field-set-select-value"]');
+                    // var $option_html = $('#location-city-option-list').html();
+                    // $select2_dom.html($option_html);
+                    //
+                    // var $select2_dom2 = $modal.find('select[name="field-set-select-value2"]');
+                    // $select2_dom2.show();
+                    // var $existed_class = $select2_dom.data('class');
+                    // $select2_dom.attr('data-class','select2-city');
+                    // $select2_dom.removeClass($existed_class).addClass('select2-');
+                    // select2_location_district_init($select2_dom2);
+                    // $select2_dom.append(new Option($that.data("option-name"), $that.data("value"), true, true)).trigger('change');
+
+
+
+                    $('select[name="field-set-select-value2"]').show();
 
                     var $option_html = $('#location-city-option-list').html();
-                    $('select[name=info-select-set-column-value]').html($option_html);
-                    $('select[name=info-select-set-column-value]').find("option[value='"+$that.attr("data-value")+"']").attr("selected","selected");
+                    $('select[name="field-set-select-value"]').html($option_html);
+                    $('select[name="field-set-select-value"]').find("option[value='"+$that.attr("data-value")+"']").prop("selected",true);
 
-                    $('select[name=info-select-set-column-value]').removeClass('select2-project').addClass('select2-city');
-                    $('select[name=info-select-set-column-value2]').removeClass('select2-project').addClass('select2-district');
+                    $('select[name="field-set-select-value"]').removeClass('select2-project').addClass('select2-city');
+                    $('select[name="field-set-select-value2"]').addClass('select2-district');
 
-                    $('select[name=info-select-set-column-value2]').show();
+                    $('select[name="field-set-select-value2"]').show();
 
                     // var $city_index = $(".select2-city").find('option:selected').attr('data-index');
                     // $(".select2-district").html('<option value="">选择区划</option>');
@@ -1205,11 +1254,11 @@
 
                     $('.select2-city').select2();
                     $('.select2-district').select2();
-                    $('.select2-district').val(null).trigger('change');
+                    $('.select2-district').val($that.attr("data-value2")).trigger('change');
 
 
                     var $city_value = $that.attr("data-value");
-                    console.log($that.attr("data-value"));
+                    // console.log($that.attr("data-value"));
                     $('.select2-district').select2({
                         ajax: {
                             url: "/district/district_select2_district?district_city=" + $city_value,
@@ -1237,6 +1286,8 @@
                         minimumInputLength: 0,
                         theme: 'classic'
                     });
+                    $('.select2-district').find("option[value='"+$that.attr("data-value2")+"']").prop("selected",true);
+                    $('.select2-district').append(new Option($that.data("data-value2"), $that.data("data-value2"), true, true)).trigger('change');
 
 
                     $(".select2-city").change(function() {
@@ -1297,6 +1348,7 @@
                     $select2_dom.removeClass($existed_class).addClass('select2-client');
                     select2_client_init($select2_dom);
                     $select2_dom.append(new Option($that.data("option-name"), $that.data("value"), true, true)).trigger('change');
+                    $('select[name=field-set-select-value2]').html('').hide();
                 }
                 else if($that.attr("data-key") == "project_id")
                 {
@@ -1306,6 +1358,13 @@
                     $select2_dom.removeClass($existed_class).addClass('select2-project');
                     select2_project_init($select2_dom);
                     $select2_dom.append(new Option($that.data("option-name"), $that.data("value"), true, true)).trigger('change');
+
+                    if ($('select[name=field-set-select-value2]').data('select2'))
+                    {
+                        // $select_value2.select2('destroy'); // 销毁旧实例
+                        $('select[name=field-set-select-value2]').select2('destroy');
+                    }
+
                 }
             }
 
@@ -1364,21 +1423,30 @@
                     {
                         layer.msg($response.msg);
 
+                        console.log($response.data);
+                        // $('#'+$table_id).DataTable().ajax.reload(null,false);
+
+                        var $form = $('#form-for-field-set');
+                        var column_key = $form.find('input[name="column-key"]');
+                        if(column_key == 'location_city')
+                        {
+                            $td.data('value2',$response.data.data.value2);
+                        }
+
+
+                        // var $rowIndex = $modal.data('datatable-row-index');
+                        // $('#'+$table_id).DataTable().row($rowIndex).data($response.data.data).invalidate().draw(false);
+
+                        $td.data('value',$response.data.data.value);
+                        $td.data('option-name',$response.data.data.text);
+                        $td.html($response.data.data.text);
+
                         // 重置输入框
                         form_reset('#form-for-field-set');
 
                         $modal.modal('hide').on("hidden.bs.modal", function () {
                             $("body").addClass("modal-open");
                         });
-
-
-                        console.log($response.data);
-                        // $('#'+$table_id).DataTable().ajax.reload(null,false);
-
-                        // var $rowIndex = $modal.data('datatable-row-index');
-                        // $('#'+$table_id).DataTable().row($rowIndex).data($response.data.data).invalidate().draw(false);
-
-                        $td.html($response.data.data.text);
                     }
                 },
                 error: function(xhr, status, error, $form) {
@@ -1407,6 +1475,7 @@
     {
         console.log('form_reset');
         var $form = $($form_id);
+        $form.find('.select2-container').remove();
         $form.find('textarea.form-control, input.form-control, select').each(function () {
             $(this).val("");
             $(this).val($(this).data('default'));
