@@ -1,7 +1,7 @@
 <div class="row datatable-body datatable-wrapper statistic-caller-rank-clone" data-datatable-item-category="statistic-caller-rank">
 
 
-    <div class="col-md-12 datatable-search-row  datatable-search-box">
+    <div class="col-md-12 datatable-search-row datatable-search-box select2-wrapper">
 
 
         <div class="pull-right">
@@ -29,7 +29,10 @@
             @endif
 
             @if(in_array($me->user_type,[0,1,9,11,61]))
-                <select class="search-filter form-filter filter-xl select2-box-c" name="statistic-caller-rank-department-district">
+                <select class="search-filter form-filter filter-xl select2-department-team select2-box-change"
+                        name="statistic-caller-rank-department-district"
+                        data-target=".select2-department-group"
+                >
                     <option value="-1">选择大区</option>
                     @if(!empty($department_district_list))
                         @foreach($department_district_list as $v)
@@ -39,11 +42,14 @@
                 </select>
             @endif
 
-{{--            @if(in_array($me->user_type,[0,1,9,11,61,81]))--}}
-{{--                <select class="search-filter form-filter filter-xl select2-box-c- select2-district-c" name="statistic-caller-rank-department-group">--}}
-{{--                    <option data-id="-1" value="-1">选择小组</option>--}}
-{{--                </select>--}}
-{{--            @endif--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,81]))
+                <select class="search-filter form-filter filter-xl select2-department-group select2-box-c- select2-district-c-"
+                        name="statistic-caller-rank-department-group"
+                        data-target=".select2-department-team"
+                >
+                    <option data-id="-1" value="-1">选择小组</option>
+                </select>
+            @endif
 
             {{--按天查看--}}
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="statistic-caller-rank-date">

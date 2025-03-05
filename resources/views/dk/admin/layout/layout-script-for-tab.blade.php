@@ -235,9 +235,7 @@
                 $clone.find('.eChart').attr('id',$config.chart_id);
 
                 $('#'+$config.target).prepend($clone);
-                $('#'+$config.target).find('.select2-box-c').select2({
-                    theme: 'classic'
-                });
+
                 $('#'+$config.target).find('.time_picker-c').datetimepicker({
                     locale: moment.locale('zh-cn'),
                     format: "YYYY-MM-DD HH:mm",
@@ -254,16 +252,43 @@
                     ignoreReadonly: true
                 });
 
+                $('#'+$config.target).find('.select2-box-c').select2({
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-box-change').select2({
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-box-change').change(function() {
+
+                    var $that = $(this);
+                    var $target = $that.data('target');
+
+                    var $select2_wrapper = $that.parents('.select2-wrapper');
+
+                    console.log($select2_wrapper.find($target).val());
+                    // $form.find(".select2-box").val(-1).trigger("change");
+                    // $form.find(".select2-box").val("-1").trigger("change");
+                    // $select2_wrapper.find($target).val(-1).trigger("change");
+                    // $select2_wrapper.find($target).find('-1').trigger("change");
+                    $select2_wrapper.find($target).find('option:eq(0)').prop('selected', true).trigger("change");
+                });
+
+
+
                 // select2
-                $('#'+$config.target).find('.select2-district-c').select2({
+                $('#'+$config.target).find('.select2-department-group').select2({
                     ajax: {
-                        url: "{{ url('/select2/select2_district') }}",
+                        url: "{{ url('/v1/operate/select2/select2_department') }}",
+                        type: 'post',
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
                             return {
+                                _token: $('meta[name="_token"]').attr('content'),
                                 keyword: params.term, // search term
-                                page: params.page
+                                page: params.page,
+                                type: 'group',
+                                superior_id: $(this).parents('.select2-wrapper').find($(this).data('target')).val()
                             };
                         },
                         processResults: function (data, params) {

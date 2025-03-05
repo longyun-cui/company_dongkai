@@ -57,6 +57,7 @@
 @include(env('TEMPLATE_DK_ADMIN').'component.project.project-edit')
 @include(env('TEMPLATE_DK_ADMIN').'component.location.location-edit')
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.order.order-operation-record')
 
 
 <div class="component-container _none">
@@ -75,6 +76,7 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.location.location-list')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list')
+
     @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-list')
 
 
@@ -148,6 +150,7 @@
 
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list-datatable')
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list-script')
+    @include(env('TEMPLATE_DK_ADMIN').'component.order.order-operation-record-datatable')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-list-datatable')
 

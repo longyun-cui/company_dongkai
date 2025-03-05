@@ -846,6 +846,23 @@
         });
 
 
+        // 【通用】修改记录
+        $(".main-content").on('click', ".item-modal-show-for-operation-record", function() {
+            var $that = $(this);
+            var $id = $(this).data('id');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+
+            Datatable_Order_Operation_Record.init($id);
+
+            $('#modal-for-order-operation-record-list').modal('show');
+
+
+        });
+
+
 
     });
 </script>

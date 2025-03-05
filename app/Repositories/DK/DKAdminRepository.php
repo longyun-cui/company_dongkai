@@ -339,7 +339,7 @@ class DKAdminRepository {
     {
         dd(1);
 
-        $mine = DK_Department::find($id);
+//        $mine = DK_Department::find($id);
         if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
@@ -584,7 +584,7 @@ class DKAdminRepository {
         $query = DK_Department::select(['id','name as text'])
             ->where(['item_status'=>1]);
 
-        if(empty(!$post_data['keyword']))
+        if(!empty($post_data['keyword']))
         {
             $keyword = "%{$post_data['keyword']}%";
             $query->where('name','like',"%$keyword%");
@@ -8478,6 +8478,14 @@ class DKAdminRepository {
                 $query_order->where('department_district_id', $post_data['department_district']);
             }
         }
+        // 部门-小组
+        if(!empty($post_data['department_group']))
+        {
+            if(!in_array($post_data['department_group'],[-1,0,'-1','0']))
+            {
+                $query_order->where('department_group_id', $post_data['department_group']);
+            }
+        }
 
 
         // 时间
@@ -8532,6 +8540,14 @@ class DKAdminRepository {
             if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
             {
                 $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
+        // 部门-小组
+        if(!empty($post_data['department_group']))
+        {
+            if(!in_array($post_data['department_group'],[-1,0,'-1','0']))
+            {
+                $query->where('department_group_id', $post_data['department_group']);
             }
         }
 
