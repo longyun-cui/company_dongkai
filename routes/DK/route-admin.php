@@ -94,6 +94,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/order/item-publish', $controller.'@v1_operate_for_order_item_publish');
     Route::post('/v1/operate/order/item-inspect', $controller.'@v1_operate_for_order_item_inspect');
     Route::post('/v1/operate/order/item-deliver', $controller.'@v1_operate_for_order_item_deliver');
+    Route::post('/v1/operate/order/item-get-api-call-record', $controller.'@v1_operate_for_order_item_get_api_call_record');
 
 
     // 【交付-管理】
@@ -145,6 +146,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/statistic/marketing/company-daily', $controller.'@v1_operate_for_get_statistic_data_of_company_daily');
     Route::post('/v1/operate/statistic/marketing/project', $controller.'@v1_operate_for_get_statistic_data_of_marketing_project');
     Route::post('/v1/operate/statistic/marketing/client', $controller.'@v1_operate_for_get_statistic_data_of_marketing_client');
+
 
     Route::post('/v1/operate/statistic/production/caller-overview', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_overview');
     Route::post('/v1/operate/statistic/production/caller-rank', $controller.'@v1_operate_for_get_statistic_data_of_production_caller_rank');

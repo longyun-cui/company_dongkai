@@ -337,10 +337,13 @@ class DKAdminRepository {
     // 【api】登录
     public function okcc_test()
     {
-        dd(1);
+        Cache::set('key',1123);
+        Cache::get('key');
+        dd(Cache::get('key'));
+//        dd(1);
 
 //        $mine = DK_Department::find($id);
-        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
+//        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
 
 
         $API_Customer_Account = 'C1';
@@ -355,7 +358,7 @@ class DKAdminRepository {
         else if($serverFrom_name == "call-01")
         {
             $server = "http://call01.zlyx.jjccyun.cn";
-            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.1.2/login";
+            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
             $API_Customer_Password = env('API_CALL_01_C1_PASSWORD');
         }
         else if($serverFrom_name == "call-02")
@@ -385,8 +388,13 @@ class DKAdminRepository {
 
 //        $API_Customer_Account = $mine->api_customer_account;
 //        $API_Customer_Password = $mine->api_customer_password;
-        $API_customerName = $mine->api_customer_name;
-        $API_customerUserName = $mine->api_customer_user_name;
+
+        $API_Customer_Account = 'C13';
+        $API_Customer_Password = 'D60D4F0B58C03CB2A67D886451AFB2E1';
+//        $API_customerName = $mine->api_customer_name;
+        $API_customerName = 'C13';
+//        $API_customerUserName = $mine->api_customer_user_name;
+        $API_customerUserName = 'FNJ三区';
         $timestamp = time();
         $seq = $timestamp;
         $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
@@ -398,9 +406,8 @@ class DKAdminRepository {
 
         $request_data['request']['seq'] = '';
         $request_data['request']['userData'] = '';
-        $request_data['request']['customerName'] = $API_customerName;
-        $request_data['request']['userName'] = $API_customerUserName;
-        $request_data['request']['userName'] = $API_customerUserName;
+        $request_data['request']['agent'] = ['802052'];
+        $request_data['request']['callee'] = '13871525313';
 
 //        $request_data['request']['name'] = '我很好';
 //        $request_data['request']['password'] = 'asdzxc2024';
@@ -420,8 +427,9 @@ class DKAdminRepository {
         curl_setopt($ch, CURLOPT_POST, true); // post数据
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
         $request_result = curl_exec($ch);
+        dd(json_decode($request_result,true));
 //        dd($request_result);
-
+//
         if(curl_errno($ch))
         {
             curl_close($ch);
