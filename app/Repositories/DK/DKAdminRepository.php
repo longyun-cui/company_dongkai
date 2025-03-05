@@ -337,9 +337,15 @@ class DKAdminRepository {
     // 【api】登录
     public function okcc_test()
     {
-        Cache::put('key',1123);
-        Cache::get('key');
-        dd(Cache::get('key'));
+        cache()->put('key1',1123);
+        if(cache('key1'))
+        {
+            dd(Cache::get('key1'));
+        }
+        else
+        {
+            dd('not exist');
+        }
 //        dd(1);
 
 //        $mine = DK_Department::find($id);
