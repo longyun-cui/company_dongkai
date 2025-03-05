@@ -14,7 +14,7 @@
                 "serverSide": true,
                 "searching": false,
                 "ajax": {
-                    'url': "/item/order-modify-record?id="+$id,
+                    'url': "/v1/operate/order/item-operation-record-datatable-query?id="+$id,
                     "type": 'POST',
                     "dataType" : 'json',
                     "data": function (d) {

@@ -5128,6 +5128,63 @@ class DKAdminRepository {
 
     }
 
+    // 【工单-管理】【操作记录】返回-列表-数据
+    public function v1_operate_for_order_item_operation_record_datatable_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Record::select('*')
+            ->with([
+                'creator',
+                'before_client_er'=>function($query) { $query->select('id','username'); },
+                'after_client_er'=>function($query) { $query->select('id','username'); },
+                'before_project_er'=>function($query) { $query->select('id','name'); },
+                'after_project_er'=>function($query) { $query->select('id','name'); }
+            ])
+            ->where(['order_id'=>$id]);
+//            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!in_array($me->user_type,[0,1,9,11,61,66]))
+        {
+            $query->whereNotIn('operate_category',[96]);
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
 
     // 【工单】发布
     public function v1_operate_for_order_item_publish($post_data)

@@ -347,6 +347,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_order_datatable_list_query(request()->all());
     }
+    // 【工单-管理】操作记录
+    public function v1_operate_for_order_item_operation_record_datatable_query()
+    {
+        return $this->repo->v1_operate_for_order_item_operation_record_datatable_query(request()->all());
+    }
     // 【工单-管理】获取
     public function v1_operate_for_order_item_get()
     {

@@ -88,6 +88,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
     // 【工单-管理】
     Route::post('/v1/operate/order/datatable-list-query', $controller.'@v1_operate_for_order_datatable_list_query');
+    Route::post('/v1/operate/order/item-operation-record-datatable-query', $controller.'@v1_operate_for_order_item_operation_record_datatable_query');
     Route::post('/v1/operate/order/item-get', $controller.'@v1_operate_for_order_item_get');
     Route::post('/v1/operate/order/item-save', $controller.'@v1_operate_for_order_item_save');
     Route::post('/v1/operate/order/item-publish', $controller.'@v1_operate_for_order_item_publish');
