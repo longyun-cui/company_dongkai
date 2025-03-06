@@ -1066,7 +1066,7 @@
                                 $.each($recording_list, function(index, value)
                                 {
 
-                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio>'
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
                                     $return_html += $audio_html;
                                 });
                                 return $return_html;
