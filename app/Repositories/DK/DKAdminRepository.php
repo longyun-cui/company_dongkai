@@ -2862,11 +2862,15 @@ class DKAdminRepository {
             'operate.required' => 'operate.required.',
             'username.required' => '请输入客户名称！',
 //            'username.unique' => '该客户已存在！',
+            'client_admin_name.required' => '请输入管理员名称！',
+            'client_admin_mobile.required' => '请输入管理员登录电话！',
         ];
         $v = Validator::make($post_data, [
             'operate' => 'required',
             'username' => 'required',
 //            'username' => 'required|unique:dk_client,username',
+            'client_admin_name' => 'required',
+            'client_admin_mobile' => 'required',
         ], $messages);
         if ($v->fails())
         {
@@ -3553,7 +3557,8 @@ class DKAdminRepository {
             $field = $columns[$order_column]["data"];
             $query->orderBy($field, $order_dir);
         }
-        else $query->orderBy("name", "asc");
+//        else $query->orderBy("name", "asc");
+        else $query->orderBy("id", "desc");
 
         if($limit == -1) $list = $query->get();
         else $list = $query->skip($skip)->take($limit)->get();

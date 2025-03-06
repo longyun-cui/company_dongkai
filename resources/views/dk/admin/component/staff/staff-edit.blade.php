@@ -110,7 +110,7 @@
                             <button type="button" class="btn radio-btn radio-user-type">
                                 <span class="radio">
                                     <label>
-                                        <input type="radio" name="user_type" value="66"> 运营人员
+                                        <input type="radio" name="user_type" value="66" @if($me->user_type == 61) checked="checked" @endif> 运营人员
                                     </label>
                                 </span>
                             </button>

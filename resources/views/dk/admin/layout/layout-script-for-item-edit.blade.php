@@ -23,7 +23,7 @@
             var $modal = $('#'+$modal_id);
             $modal.find('.box-title').html($title);
             $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
-            $modal.find('.radio-btn').hide();
+            $modal.find('.radio-btn').show();
             $modal.modal('show');
         });
         // 【通用】编辑-取消

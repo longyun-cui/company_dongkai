@@ -37,7 +37,7 @@
                     <div class="col-md-8">
                         <div class="btn-group">
 
-                            <button type="button" class="btn radio-btn">
+                            <button type="button" class="btn radio-btn-">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="is_ip" value="0" checked="checked"> 否
@@ -45,7 +45,7 @@
                                 </span>
                             </button>
 
-                            <button type="button" class="btn radio-btn">
+                            <button type="button" class="btn radio-btn-">
                                 <span class="radio">
                                     <label>
                                         <input type="radio" name="is_ip" value="1"> 是
