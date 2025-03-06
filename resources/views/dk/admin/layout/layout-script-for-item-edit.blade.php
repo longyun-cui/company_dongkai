@@ -1118,11 +1118,11 @@
             $that.addClass('operating');
 
 
-            $('.field-set-item-name').html($datatable_wrapper.data("item-name"));
+            $('.field-set-item-name').html($datatable_wrapper.attr("data-item-name"));
             $('.field-set-item-id').html($that.attr("data-id"));
-            $('.field-set-column-name').html($that.data("column-name"));
+            $('.field-set-column-name').html($that.attr("data-column-name"));
 
-            $('input[name="operate-type"]').val($that.data('operate-type'));
+            $('input[name="operate-type"]').val($that.attr('data-operate-type'));
 
             $('input[name="item-category"]').val($datatable_wrapper.data("datatable-item-category"));
             $('input[name="item-id"]').val($that.attr("data-id"));
@@ -1214,7 +1214,7 @@
                 else
                 {
                 }
-                console.log($that.data('option-name'));
+                console.log($that.attr('data-option-name'));
 
                 if($that.attr("data-key") == "location_city")
                 {
@@ -1231,7 +1231,7 @@
                     // $select2_dom.attr('data-class','select2-city');
                     // $select2_dom.removeClass($existed_class).addClass('select2-');
                     // select2_location_district_init($select2_dom2);
-                    // $select2_dom.append(new Option($that.data("option-name"), $that.data("value"), true, true)).trigger('change');
+                    // $select2_dom.append(new Option($that.attr("data-option-name"), $that.attr("data-value"), true, true)).trigger('change');
 
 
 
@@ -1288,7 +1288,7 @@
                         theme: 'classic'
                     });
                     $('.select2-district').find("option[value='"+$that.attr("data-value2")+"']").prop("selected",true);
-                    $('.select2-district').append(new Option($that.data("data-value2"), $that.data("data-value2"), true, true)).trigger('change');
+                    $('.select2-district').append(new Option($that.attr("data-value2"), $that.attr("data-value2"), true, true)).trigger('change');
 
 
                     $(".select2-city").change(function() {
@@ -1348,7 +1348,7 @@
                     $select2_dom.attr('data-class','select2-client');
                     $select2_dom.removeClass($existed_class).addClass('select2-client');
                     select2_client_init($select2_dom);
-                    $select2_dom.append(new Option($that.data("option-name"), $that.data("value"), true, true)).trigger('change');
+                    $select2_dom.append(new Option($that.attr("data-option-name"), $that.attr("data-value"), true, true)).trigger('change');
                     $('select[name=field-set-select-value2]').html('').hide();
                 }
                 else if($that.attr("data-key") == "project_id")
@@ -1358,7 +1358,7 @@
                     $select2_dom.attr('data-class','select2-project');
                     $select2_dom.removeClass($existed_class).addClass('select2-project');
                     select2_project_init($select2_dom);
-                    $select2_dom.append(new Option($that.data("option-name"), $that.data("value"), true, true)).trigger('change');
+                    $select2_dom.append(new Option($that.attr("data-option-name"), $that.attr("data-value"), true, true)).trigger('change');
 
                     if ($('select[name=field-set-select-value2]').data('select2'))
                     {
@@ -1428,6 +1428,7 @@
                         // $('#'+$table_id).DataTable().ajax.reload(null,false);
 
                         var $form = $('#form-for-field-set');
+                        var item_category = $form.find('input[name="item-category"]').val();
                         var column_key = $form.find('input[name="column-key"]');
                         if(column_key == 'location_city')
                         {
@@ -1438,9 +1439,25 @@
                         // var $rowIndex = $modal.data('datatable-row-index');
                         // $('#'+$table_id).DataTable().row($rowIndex).data($response.data.data).invalidate().draw(false);
 
-                        $td.data('value',$response.data.data.value);
-                        $td.data('option-name',$response.data.data.text);
+                        $td.attr('data-value',$response.data.data.value);
+                        $td.attr('data-option-name',$response.data.data.text);
                         $td.html($response.data.data.text);
+
+                        if(item_category == 'order')
+                        {
+                            var $item = $response.data.data.item;
+                            $row.find('[data-key="is_repeat"]').html('');
+                            if($item.is_repeat == 0)
+                            {
+                                $row.find('[data-key="is_repeat"]').attr('data-value',$item.is_repeat).html('');
+                            }
+                            else
+                            {
+                                console.log($item.is_repeat);
+                                var $is_repeat_html = '<small class="btn-xs btn-primary">是</small><small class="btn-xs btn-danger">'+($item.is_repeat+1)+'</small>';
+                                $row.find('[data-key="is_repeat"]').attr('data-value',$item.is_repeat).html($is_repeat_html);
+                            }
+                        }
 
                         // 重置输入框
                         form_reset('#form-for-field-set');

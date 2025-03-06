@@ -5098,7 +5098,7 @@ class DKAdminRepository {
     }
 
 
-    // 【工单】发布
+    // 【工单-管理】发布
     public function v1_operate_for_order_item_publish($post_data)
     {
         $messages = [
@@ -5187,7 +5187,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单】审核
+    // 【工单-管理】审核
     public function v1_operate_for_order_item_inspect($post_data)
     {
 //        dd($post_data);
@@ -5347,7 +5347,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单】交付
+    // 【工单-管理】交付
     public function v1_operate_for_order_item_deliver($post_data)
     {
 //        dd($post_data);
@@ -5553,7 +5553,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单】批量-交付
+    // 【工单-管理】批量-交付
     public function v1_operate_for_order_bulk_deliver($post_data)
     {
         $messages = [
@@ -5760,7 +5760,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单】【获取】已交付记录
+    // 【工单-管理】【获取】已交付记录
     public function v1_operate_for_order_deliver_get_delivered($post_data)
     {
         $messages = [
@@ -5820,7 +5820,7 @@ class DKAdminRepository {
         return response_success($return,"");
 
     }
-    // 【工单】分发
+    // 【工单-管理】分发
     public function v1_operate_for_order_item_distribute($post_data)
     {
 //        dd($post_data);
@@ -5985,7 +5985,7 @@ class DKAdminRepository {
         }
 
     }
-    // 【工单】分发
+    // 【工单-管理】分发
     public function v1_operate_for_order_item_get_api_call_record($post_data)
     {
 //        dd($post_data);
@@ -6425,6 +6425,18 @@ class DKAdminRepository {
         $before = $item->$column_key;
         $after = $column_value;
 
+        if($before == $after)
+        {
+            if($column_key == "location_city")
+            {
+                if($item->$column_key2 == $column_select_value2) return response_error([],"没有修改！");
+            }
+            else
+            {
+                return response_error([],"没有修改！");
+            }
+        }
+
         $return['value'] = $column_value;
         $return['text'] = $column_value;
 
@@ -6461,6 +6473,10 @@ class DKAdminRepository {
 
                 $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$column_value])
                     ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                if($is_repeat == 0)
+                {
+                    $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>$column_value])->count("*");
+                }
                 $item->is_repeat = $is_repeat;
             }
             else if($column_key == "project_id")
@@ -6480,7 +6496,7 @@ class DKAdminRepository {
                         ->where('id','<>',$id)->where('is_published','>',0)->count("*");
                     if($is_repeat == 0)
                     {
-                        $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>$client_phone])->count("*");
+                        $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$column_value,'client_phone'=>$client_phone])->count("*");
                     }
                     $item->is_repeat = $is_repeat;
 
@@ -6504,6 +6520,9 @@ class DKAdminRepository {
             if(!$bool) throw new Exception("DK_Order--update--fail");
             else
             {
+
+                $return['item'] = $item;
+
                 // 需要记录(已发布 || 他人修改)
                 if($me->id == $item->creator_id && $item->is_published == 0 && false)
                 {
