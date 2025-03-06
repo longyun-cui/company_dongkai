@@ -10111,6 +10111,16 @@ class DKAdminRepository {
             $record_before = $the_date;
             $record_after = $the_date;
         }
+        else if($export_type == "period")
+        {
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start']  : date('Y-m-d');
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended']  : date('Y-m-d');
+
+            $record_operate_type = 21;
+            $record_column_type = 'period';
+            $record_before = $the_start;
+            $record_after = $the_ended;
+        }
         else if($export_type == "latest")
         {
             $record_last = DK_Record::select('*')
@@ -10222,6 +10232,10 @@ class DKAdminRepository {
         else if($export_type == "date")
         {
             $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_date);
+        }
+        else if($export_type == "period")
+        {
+            $query->whereBetween('inspected_date',[$the_start,$the_ended]);
         }
         else if($export_type == "latest")
         {
