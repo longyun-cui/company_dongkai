@@ -5065,6 +5065,14 @@ class DKAdminRepository {
             $query->whereNotIn('operate_category',[96]);
         }
 
+
+        if(!in_array($me->department_district_id,[0]))
+        {
+            $department_district_id = $me->department_district_id;
+            $staff_list = DK_User::select('id')->where('department_district_id',$department_district_id)->get();
+            $query->whereIn('creator_id',$staff_list);
+        }
+
         $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
@@ -10034,6 +10042,7 @@ class DKAdminRepository {
         {
 
         }
+
 
         $item_type = isset($post_data['item_type']) ? $post_data['item_type'] : '';
         if($item_type == "record") $query->where('operate_category', 109);
