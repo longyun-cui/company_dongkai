@@ -406,7 +406,7 @@
                 }
                 else if($id == "datatable-order-list")
                 {
-                    Datatable_for_OrderList('#'+$config.id);
+                    Datatable_for_OrderList($config.id);
                 }
                 else if($id == "datatable-delivery-list")
                 {

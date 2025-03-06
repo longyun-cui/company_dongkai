@@ -1,16 +1,25 @@
 <script>
+
+    window.dataTableInstances = window.dataTableInstances || {};
+
     function Datatable_for_OrderList($tableId)
     {
+        console.log($tableId);
+        var table_Id = $tableId
+        if (window.dataTableInstances[table_Id])
+        {
+            return window.dataTableInstances[table_Id];
+        }
 
-        let $that = $($tableId);
+        let $that = $('#'+$tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
 
-        $($tableId).DataTable({
+        var table = $('#'+$tableId).DataTable({
             "aLengthMenu": [[10, 50, 100], ["10", "50", "100"]],
             "processing": true,
             "serverSide": true,
-            "searching": false,
+            "searching": true,
             "pagingType": "simple_numbers",
             "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
             "order": [],
@@ -1074,6 +1083,10 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
+                            console.log(iRow);
+                            console.log(iCol);
+                            $(nTd).attr('data-row-index',iRow);
+
                             $(nTd).attr('data-id',row.id).attr('data-name','录音下载');
                             $(nTd).attr('data-key','recording_address_download').attr('data-value',data);
                             $(nTd).attr('data-address-list',data);
@@ -1103,14 +1116,20 @@
                             {
                                 return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
                             }
-                            else return '';
+                            else
+                            {
+                                return '<a class="btn btn-xs item-get-recording-list-submit" data-id="'+row.id+'">获取录音</a>';
+                            }
                         }
 
-                        if(data || row.recording_address)
+                        if($.trim(data) || row.recording_address)
                         {
                             return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
                         }
-                        else return '';
+                        else
+                        {
+                            return '<a class="btn btn-xs item-get-recording-list-submit" data-id="'+row.id+'">获取录音1</a>';
+                        }
                     }
                 },
                     @endif
@@ -1472,5 +1491,8 @@
             "language": { url: '/common/dataTableI18n' },
         });
 
+        window.dataTableInstances[table_Id] = table;
+
+        return table;
     }
 </script>

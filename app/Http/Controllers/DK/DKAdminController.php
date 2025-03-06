@@ -387,6 +387,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_order_distribute(request()->all());
     }
+    // 【工单-管理】分发
+    public function v1_operate_for_order_item_get_api_call_record()
+    {
+        return $this->repo->v1_operate_for_order_item_get_api_call_record(request()->all());
+    }
 
 
 

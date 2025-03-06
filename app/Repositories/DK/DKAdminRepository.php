@@ -349,114 +349,6 @@ class DKAdminRepository {
         }
 //        dd(1);
 
-//        $mine = DK_Department::find($id);
-//        if(!$mine) return response_error([],"该【团队】不存在，刷新页面重试！");
-
-
-        $API_Customer_Account = 'C1';
-        $serverFrom_name = "call-01";
-
-        if($serverFrom_name == "FNJ")
-        {
-            $server = "http://feiniji.cn";
-            $url = "http://feiniji.cn/openapi/V2.1.2/login";
-            $API_Customer_Password = env('API_CALL_FNJ_C1_PASSWORD');
-        }
-        else if($serverFrom_name == "call-01")
-        {
-            $server = "http://call01.zlyx.jjccyun.cn";
-            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
-            $API_Customer_Password = env('API_CALL_01_C1_PASSWORD');
-        }
-        else if($serverFrom_name == "call-02")
-        {
-            $server = "http://call02.zlyx.jjccyun.cn";
-            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.1.2/login";
-            $API_Customer_Password = env('API_CALL_02_C1_PASSWORD');
-        }
-        else if($serverFrom_name == "call-03")
-        {
-            $server = "http://call03.zlyx.jjccyun.cn";
-            $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.1.2/login";
-            $API_Customer_Password = env('API_CALL_03_C1_PASSWORD');
-        }
-        else if($serverFrom_name == "call-04")
-        {
-            $server = "http://call04.zlyx.jjccyun.cn";
-            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.1.2/login";
-            $API_Customer_Password = env('API_CALL_04_C1_PASSWORD');
-        }
-        else
-        {
-            $server = "http://feiniji.cn";
-            $url = "http://feiniji.cn/openapi/V2.1.2/login";
-            $API_Customer_Password = env('API_OKCC_C1_PASSWORD');
-        }
-
-//        $API_Customer_Account = $mine->api_customer_account;
-//        $API_Customer_Password = $mine->api_customer_password;
-
-        $API_Customer_Account = 'C13';
-        $API_Customer_Password = 'D60D4F0B58C03CB2A67D886451AFB2E1';
-//        $API_customerName = $mine->api_customer_name;
-        $API_customerName = 'C13';
-//        $API_customerUserName = $mine->api_customer_user_name;
-        $API_customerUserName = 'FNJ三区';
-        $timestamp = time();
-        $seq = $timestamp;
-        $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
-
-        $request_data['authentication']['customer'] = $API_Customer_Account;
-        $request_data['authentication']['timestamp'] = $timestamp;
-        $request_data['authentication']['seq'] = $seq;
-        $request_data['authentication']['digest'] = $digest;
-
-        $request_data['request']['seq'] = '';
-        $request_data['request']['userData'] = '';
-        $request_data['request']['agent'] = ['802052'];
-        $request_data['request']['callee'] = '13871525313';
-
-//        $request_data['request']['name'] = '我很好';
-//        $request_data['request']['password'] = 'asdzxc2024';
-//        $request_data['request']['status'] = '1';
-//        $request_data['request']['lineMode'] = [1];
-//        $request_data['request']['billingPackage'] = '3';
-//        $request_data['request']['parentId'] = '';
-
-//        dd($request_data);
-        $request_data = json_encode($request_data);
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true); // post数据
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
-        $request_result = curl_exec($ch);
-        dd(json_decode($request_result,true));
-//        dd($request_result);
-//
-        if(curl_errno($ch))
-        {
-            curl_close($ch);
-            return response_error([],"请求登录失败！");
-        }
-        else
-        {
-            curl_close($ch);
-
-            $result = json_decode($request_result);
-            if($result->result->error == "0")
-            {
-                $token = $result->data->response->token;
-                return response_success(['server'=>$server,'token'=>$token],"跳转中！");
-            }
-            else
-            {
-                return response_error([],$result->result->msg);
-            }
-        }
     }
 
 
@@ -6088,6 +5980,182 @@ class DKAdminRepository {
         }
 
     }
+    // 【工单】分发
+    public function v1_operate_for_order_item_get_api_call_record($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get-api-call-record') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Order::withTrashed()->find($id);
+        if(!$item) return response_error([],"该【内容】不存在，刷新页面重试！");
+
+        $staff_id = $item->creator_id;
+        $department_id = $item->department_district_id;
+
+        $staff = DK_User::withTrashed()->find($staff_id);
+        if(!$staff) return response_error([],"该【员工】不存在，刷新页面重试！");
+        $agent[] = $staff->api_staffNo;
+
+        $department = DK_Department::withTrashed()->find($department_id);
+        if(!$department) return response_error([],"该【所属部门】不存在，刷新页面重试！");
+
+
+        $serverFrom_name = $department->serverFrom_name;
+        $API_Customer_Password = $department->api_customer_password;
+        $API_Customer_Account = $department->api_customer_account;
+        $API_customerUserName = $department->api_customer_name;
+
+
+        $timestamp = time();
+        $seq = $timestamp;
+        $digest = md5($API_Customer_Account.'@'.$timestamp.'@'.$seq.'@'.$API_Customer_Password);
+
+        $request_data['authentication']['customer'] = $API_Customer_Account;
+        $request_data['authentication']['timestamp'] = $timestamp;
+        $request_data['authentication']['seq'] = $seq;
+        $request_data['authentication']['digest'] = $digest;
+
+        $request_data['request']['seq'] = '';
+        $request_data['request']['userData'] = '';
+        $request_data['request']['agent'] = ['802052'];
+        $request_data['request']['callee'] = $item->client_phone;
+        $request_data['request']['startTime'] = $item->published_date.' 00:00:00';
+        $request_data['request']['endTime'] = $item->published_date.' 23:59:59';
+
+
+        if($serverFrom_name == "FNJ")
+        {
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-01")
+        {
+            $server = "http://call01.zlyx.jjccyun.cn";
+            $url = "http://call01.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-02")
+        {
+            $server = "http://call02.zlyx.jjccyun.cn";
+            $url = "http://call02.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-03")
+        {
+            $server = "http://call03.zlyx.jjccyun.cn";
+            $url = "http://call03.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else if($serverFrom_name == "call-04")
+        {
+            $server = "http://call04.zlyx.jjccyun.cn";
+            $url = "http://call04.zlyx.jjccyun.cn/openapi/V2.0.6/getCdrList";
+        }
+        else
+        {
+            $server = "http://feiniji.cn";
+            $url = "http://feiniji.cn/openapi/V2.0.6/getCdrList";
+        }
+
+
+        $request_data = json_encode($request_data);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Accept: application/json"));
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true); // post数据
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request_data); // post的变量
+        $request_result = curl_exec($ch);
+
+
+        if(curl_errno($ch))
+        {
+            curl_close($ch);
+            return response_error([],"请求失败！");
+        }
+        else
+        {
+            curl_close($ch);
+
+            $result = json_decode($request_result);
+            if($result->result->error == "0")
+            {
+                if($result->data)
+                {
+                    $file = [];
+                    $response = $result->data->response;
+                    if($response->total > 0)
+                    {
+                        foreach ($response->cdr as $k => $v)
+                        {
+                            if(!empty($v->filename)) $file[] = $server.$v->filename;
+                        }
+
+                        if(count($file) > 0)
+                        {
+
+                            if(count($file) == 1)
+                            {
+                                $item->recording_address = $file[0];
+                                $item->recording_address_list = json_encode($file);
+                            }
+                            else
+                            {
+                                $item->recording_address_list = json_encode($file);
+                            }
+                            // 启动数据库事务
+                            DB::beginTransaction();
+                            try
+                            {
+                                $bool_1 = $item->save();
+                                if(!$bool_1) throw new Exception("DK_Order--update--fail");
+
+                                DB::commit();
+                                return response_success(['data'=>$item]);
+                            }
+                            catch (Exception $e)
+                            {
+                                DB::rollback();
+                                $msg = '操作失败，请重试！';
+                                $msg = $e->getMessage();
+//                                exit($e->getMessage());
+                                return response_fail([],$msg);
+                            }
+                        }
+                        return response_error([],'没有有效通话记录！');
+                    }
+                    return response_error([],'没有有效通话记录！');
+                }
+                else
+                {
+                    return response_error([],'未找到通话记录！');
+                }
+            }
+            else
+            {
+                return response_error([],$result->result->msg);
+            }
+        }
+
+
+    }
 
 
 
@@ -6359,7 +6427,7 @@ class DKAdminRepository {
 
         if($column_key == "client_phone")
         {
-            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,84,88])) return response_error([],"你没有操作权限！");
         }
         else if($column_key == "inspected_description")
         {
@@ -6367,7 +6435,7 @@ class DKAdminRepository {
         }
         else
         {
-            if(!in_array($me->user_type,[0,1,11,61,66,71,77,81,84,88])) return response_error([],"你没有操作权限！");
+            if(!in_array($me->user_type,[0,1,11,61,66,71,77,84,88])) return response_error([],"你没有操作权限！");
         }
 
         if(in_array($column_key,['client_id','project_id']))
@@ -6406,6 +6474,10 @@ class DKAdminRepository {
 
                     $is_repeat = DK_Order::where(['project_id'=>$column_value,'client_phone'=>$client_phone])
                         ->where('id','<>',$id)->where('is_published','>',0)->count("*");
+                    if($is_repeat == 0)
+                    {
+                        $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>$client_phone])->count("*");
+                    }
                     $item->is_repeat = $is_repeat;
 
                     $return['text'] = $project->name;

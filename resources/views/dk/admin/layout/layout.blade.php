@@ -157,7 +157,8 @@ desired effect
 
 <script src="{{ asset('AdminLTE/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('AdminLTE/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
-<script src="{{ asset('/resource/component/js/jquery.dataTables-1.13.1.min.js') }}"></script>
+{{--<script src="{{ asset('/resource/component/js/jquery.dataTables-1.13.1.min.js') }}"></script>--}}
+<script src="{{ asset('/resource/component/js/jquery.dataTables-1.13.6.min.js') }}"></script>
 <script src="{{ asset('/resource/component/js/dataTables.fixedColumns.min.js') }}"></script>
 
 {{--<script src="https://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>--}}
