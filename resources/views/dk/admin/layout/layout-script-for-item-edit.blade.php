@@ -246,6 +246,7 @@
                         $modal.find('input[name="mobile"]').val($response.data.mobile);
                         $modal.find('input[name="username"]').val($response.data.username);
                         $modal.find('input[name="true_name"]').val($response.data.true_name);
+                        $modal.find('input[name="api_staffNo"]').val($response.data.api_staffNo);
 
                         $modal.find('input[name="user_type"]').prop('checked', false);
                         $modal.find('input[name="user_type"][value="'+$response.data.user_type+'"]').prop('checked', true).trigger('change');
