@@ -16,6 +16,12 @@ Route::get('/test', function () {
 
 
 });
+Route::get('/test-memcached', function () {
+    $key = 'test_key_' . time(); // 确保唯一性
+    Cache::put($key, 'test_value', 10);
+    $value = Cache::get($key);
+    return $value === 'test_value' ? '成功' : '失败';
+});
 
 
 $controller = "DKAdminController";
