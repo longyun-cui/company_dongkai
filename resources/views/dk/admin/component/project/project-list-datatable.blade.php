@@ -161,7 +161,7 @@
                     "data": "name",
                     "className": "text-center",
                     "width": "100px",
-                    "orderable": false,
+                    "orderable": true,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
