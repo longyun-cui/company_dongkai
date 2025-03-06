@@ -156,6 +156,7 @@
                     render: function(data, type, row, meta) {
                         if(data == 1) return '自定义时间导出';
                         else if(data == 11) return '按月导出';
+                        else if(data == 21) return '按时间段导出';
                         else if(data == 31) return '按日导出';
                         else if(data == 99) return '最新导出';
                         else if(data == 100) return 'ID导出';

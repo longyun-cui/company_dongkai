@@ -10139,8 +10139,8 @@ class DKAdminRepository {
         }
         else
         {
-            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].':00'  : '';
-            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].':59'  : '';
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].'00:00:00'  : '';
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].'23:59:50'  : '';
 
             $the_start_timestamp  = strtotime($the_start);
             $the_ended_timestamp  = strtotime($the_ended);
@@ -10227,11 +10227,13 @@ class DKAdminRepository {
 
         if($export_type == "month")
         {
-            $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
+//            $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
+            $query->whereBetween('inspected_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($export_type == "date")
         {
-            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_date);
+//            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_date);
+            $query->where('inspected_date',$the_date);
         }
         else if($export_type == "period")
         {
