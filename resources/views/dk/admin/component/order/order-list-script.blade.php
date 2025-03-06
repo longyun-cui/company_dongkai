@@ -63,7 +63,7 @@
                             $.each($recording_list, function(index, value)
                             {
 
-                                var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio>'
+                                var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
                                 $recording_list_html += $audio_html;
                             });
                             $row.find('[data-key="recording_address_play"]').html($recording_list_html);
