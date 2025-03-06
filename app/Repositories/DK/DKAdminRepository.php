@@ -6139,9 +6139,9 @@ class DKAdminRepository {
                                 return response_fail([],$msg);
                             }
                         }
-                        return response_error([],'没有有效通话记录！');
+                        return response_error([],'没有有效通话记录b！');
                     }
-                    return response_error([],'没有有效通话记录！');
+                    return response_error([],'没有有效通话记录a！');
                 }
                 else
                 {
