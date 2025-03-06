@@ -6006,12 +6006,11 @@ class DKAdminRepository {
 
         $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该【内容】不存在，刷新页面重试！");
-
         $staff_id = $item->creator_id;
-        $department_id = $item->department_district_id;
 
         $staff = DK_User::withTrashed()->find($staff_id);
         if(!$staff) return response_error([],"该【员工】不存在，刷新页面重试！");
+        $department_id = $staff->department_district_id;
         $agent[] = $staff->api_staffNo;
 
         $department = DK_Department::withTrashed()->find($department_id);
@@ -6035,11 +6034,11 @@ class DKAdminRepository {
 
         $request_data['request']['seq'] = '';
         $request_data['request']['userData'] = '';
-        $request_data['request']['agent'] = ['802052'];
+        $request_data['request']['agent'] = $agent;
         $request_data['request']['callee'] = $item->client_phone;
 //        $request_data['request']['startTime'] = $item->published_date.' 00:00:00';
 //        $request_data['request']['endTime'] = $item->published_date.' 23:59:59';
-
+//dd($request_data);
 
         if($serverFrom_name == "FNJ")
         {
