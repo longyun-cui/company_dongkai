@@ -503,7 +503,7 @@
                             $(nTd).attr('data-column-type','select2');
                             $(nTd).attr('data-column-name','客户');
 
-                            if(row.project_id) $(nTd).attr('data-operate-type','edit');
+                            if(row.client_id) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
                         }
                     },
