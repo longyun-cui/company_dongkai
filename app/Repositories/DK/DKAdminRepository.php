@@ -5013,6 +5013,8 @@ class DKAdminRepository {
             unset($mine_data['operate_category']);
             unset($mine_data['operate_type']);
 
+            $mine_data['client_phone'] = ltrim($mine_data['client_phone'], '0');
+
             $bool = $mine->fill($mine_data)->save();
             if($bool)
             {
@@ -5140,11 +5142,11 @@ class DKAdminRepository {
         $project_id = $item->project_id;
         $client_phone = $item->client_phone;
 
-        $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$client_phone])
+        $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])
             ->where('id','<>',$id)->where('is_published','>',0)->count("*");
         if($is_repeat == 0)
         {
-            $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>$client_phone])->count("*");
+            $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
         }
 
         $date = date("Y-m-d");
@@ -6432,10 +6434,15 @@ class DKAdminRepository {
 
         $before = $item->$column_key;
         $after = $column_value;
+//        dd((string)$before.'-'.(string)$after.'-'.strlen($before));
 
         if($before == $after)
         {
-            if($column_key == "location_city")
+            if($column_key == "client_phone")
+            {
+                return response_error([],"没有修改！");
+            }
+            else if($column_key == "location_city")
             {
                 if($item->$column_key2 == $column_select_value2) return response_error([],"没有修改！");
             }
@@ -6478,12 +6485,13 @@ class DKAdminRepository {
             {
                 $project_id = $item->project_id;
                 $client_phone = $item->client_phone;
+                $column_value = (int)$column_value;
 
-                $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>$column_value])
+                $is_repeat = DK_Order::where(['project_id'=>$project_id,'client_phone'=>(int)$column_value])
                     ->where('id','<>',$id)->where('is_published','>',0)->count("*");
                 if($is_repeat == 0)
                 {
-                    $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>$column_value])->count("*");
+                    $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$column_value])->count("*");
                 }
                 $item->is_repeat = $is_repeat;
             }
@@ -6500,11 +6508,11 @@ class DKAdminRepository {
                     $project_id = $item->project_id;
                     $client_phone = $item->client_phone;
 
-                    $is_repeat = DK_Order::where(['project_id'=>$column_value,'client_phone'=>$client_phone])
+                    $is_repeat = DK_Order::where(['project_id'=>$column_value,'client_phone'=>(int)$client_phone])
                         ->where('id','<>',$id)->where('is_published','>',0)->count("*");
                     if($is_repeat == 0)
                     {
-                        $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$column_value,'client_phone'=>$client_phone])->count("*");
+                        $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$column_value,'client_phone'=>(int)$client_phone])->count("*");
                     }
                     $item->is_repeat = $is_repeat;
 
