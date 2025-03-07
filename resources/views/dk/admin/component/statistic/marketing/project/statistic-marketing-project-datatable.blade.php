@@ -61,10 +61,10 @@
 //                        "orderable": false
 //                    },
                 {
-                    "title": "项目<br>ID",
+                    "title": "项目ID",
                     "data": "id",
                     "className": "text-center",
-                    "width": "60px",
+                    "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
@@ -77,10 +77,10 @@
                     }
                 },
                 {
-                    "title": "项目<br>名称",
+                    "title": "项目名称",
                     "data": "name",
                     "className": "text-center",
-                    "width": "100px",
+                    "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
@@ -93,12 +93,12 @@
 
                     }
                 },
-                @if($me->department_district_id == 0)
+                    @if($me->department_district_id == 0)
                 {
                     "title": "团队",
                     "data": "pivot_project_team",
                     "className": "text-center",
-                    "width": "160px",
+                    "width": "200px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
@@ -115,9 +115,9 @@
                         return html;
                     }
                 },
-                @endif
+                    @endif
                 {
-                    "title": "每日<br>目标",
+                    "title": "每日目标",
                     "data": "daily_goal",
                     "className": "text-center text-green",
                     "width": "80px",
@@ -132,23 +132,23 @@
                         return data;
                     }
                 },
-                {
-                    "title": "客服<br>报单量",
-                    "data": "order_count_for_all",
-                    "className": "bg-service-customer",
-                    "width": "80px",
-                    "orderable": true,
-                    "orderSequence": ["desc", "asc"],
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
+                // {
+                //     "title": "客服<br>报单量",
+                //     "data": "order_count_for_all",
+                //     "className": "bg-service-customer",
+                //     "width": "80px",
+                //     "orderable": true,
+                //     "orderSequence": ["desc", "asc"],
+                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                //         if(row.id == "统计")
+                //         {
+                //             $(nTd).addClass('_bold');
+                //         }
+                //     },
+                //     render: function(data, type, row, meta) {
+                //         return data;
+                //     }
+                // },
 
 
                 // {
@@ -169,7 +169,23 @@
                 //     }
                 // },
                 {
-                    "title": "交付<br>有效量",
+                    "title": "今日交付",
+                    "data": "order_count_for_delivered_today",
+                    "className": "bg-delivered _bold",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "有效产出",
                     "data": "order_count_for_delivered_effective",
                     "className": "bg-delivered _bold",
                     "width": "80px",
@@ -185,23 +201,7 @@
                     }
                 },
                 {
-                    "title": "交付<br>实际产出",
-                    "data": "order_count_for_delivered_actual",
-                    "className": "bg-delivered _bold",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                {
-                    "title": "交付<br>已交付",
+                    "title": "已交付",
                     "data": "order_count_for_delivered_completed",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -217,24 +217,7 @@
                     }
                 },
                 {
-                    "title": "交付<br>隔日交付",
-                    "data": "order_count_for_delivered_tomorrow",
-                    "className": "bg-delivered",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-
-                        return data;
-                    }
-                },
-                {
-                    "title": "交付<br>内部交付",
+                    "title": "内部交付",
                     "data": "order_count_for_delivered_inside",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -251,7 +234,24 @@
                     }
                 },
                 {
-                    "title": "交付<br>重复",
+                    "title": "隔日交付",
+                    "data": "order_count_for_delivered_tomorrow",
+                    "className": "bg-delivered",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+
+                        return data;
+                    }
+                },
+                {
+                    "title": "重复",
                     "data": "order_count_for_delivered_repeated",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -268,7 +268,7 @@
                     }
                 },
                 {
-                    "title": "交付<br>驳回",
+                    "title": "驳回",
                     "data": "order_count_for_delivered_rejected",
                     "className": "bg-delivered",
                     "width": "80px",
@@ -284,9 +284,26 @@
                     }
                 },
                 {
-                    "title": "交付<br>有效率",
+                    "title": "有效率",
                     "data": "order_rate_for_delivered_effective",
-                    "className": "bg-delivered",
+                    "className": "bg-inspected",
+                    "width": "100px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data) return data + " %";
+                        return data
+                    }
+                },
+                {
+                    "title": "产出率",
+                    "data": "order_rate_for_delivered_actual",
+                    "className": "bg-inspected",
                     "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
@@ -316,106 +333,6 @@
                 //     },
                 //     render: function(data, type, row, meta) {
                 //         return data;
-                //     }
-                // },
-                {
-                    "title": "审核<br>通过",
-                    "data": "order_count_for_accepted",
-                    "className": "bg-inspected",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return data;
-                    }
-                },
-                // {
-                //     "title": "审核<br>完成率",
-                //     "data": "order_rate_for_achieved",
-                //     "className": "text-blue _bold bg-inspected",
-                //     "width": "80px",
-                //     "orderable": false,
-                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                //         if(row.id == "统计")
-                //         {
-                //             $(nTd).addClass('_bold');
-                //         }
-                //     },
-                //     render: function(data, type, row, meta) {
-                //         if(data) return data + " %";
-                //         return data
-                //     }
-                // },
-                {
-                    "title": "审核<br>拒绝",
-                    "data": "order_count_for_refused",
-                    "className": "bg-inspected",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.id == "统计")
-                        {
-                            $(nTd).addClass('_bold');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-
-                        return data;
-                    }
-                },
-                // {
-                //     "title": "审核<br>重复量",
-                //     "data": "order_count_for_repeated",
-                //     "className": "bg-inspected",
-                //     "width": "80px",
-                //     "orderable": false,
-                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                //         if(row.id == "统计")
-                //         {
-                //             $(nTd).addClass('_bold');
-                //         }
-                //     },
-                //     render: function(data, type, row, meta) {
-                //
-                //         return data;
-                //     }
-                // },
-                // {
-                //     "title": "审核<br>内部通过",
-                //     "data": "order_count_for_accepted_inside",
-                //     "className": "bg-inspected",
-                //     "width": "80px",
-                //     "orderable": false,
-                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                //         if(row.id == "统计")
-                //         {
-                //             $(nTd).addClass('_bold');
-                //         }
-                //     },
-                //     render: function(data, type, row, meta) {
-                //         return data;
-                //     }
-                // },
-                // {
-                //     "title": "审核<br>通过率",
-                //     "data": "order_rate_for_accepted",
-                //     "className": "bg-inspected",
-                //     "width": "100px",
-                //     "orderable": false,
-                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                //         if(row.id == "统计")
-                //         {
-                //             $(nTd).addClass('_bold');
-                //         }
-                //     },
-                //     render: function(data, type, row, meta) {
-                //         if(data) return data + " %";
-                //         return data
                 //     }
                 // },
 

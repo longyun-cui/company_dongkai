@@ -485,7 +485,7 @@
                                    data-type="create"
                                    data-unique="y"
                                    data-id="statistic-marketing-client"
-                                   data-title='<i class="fa fa-bar-chart text-orange"></i> 客户交付'
+                                   data-title='<i class="fa fa-bar-chart text-orange"></i> 交付(客户)看板'
                                    data-content=''
 
                                    data-datatable-type="create"
@@ -494,7 +494,7 @@
                                    data-datatable-target="statistic-marketing-client"
                                    data-datatable-clone-object="statistic-marketing-client-clone"
                                 >
-                                    <i class="fa fa-area-chart text-green"></i> <span>客户交付</span>
+                                    <i class="fa fa-area-chart text-green"></i> <span>交付(客户)看板</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
@@ -505,7 +505,7 @@
                                    data-type="create"
                                    data-unique="y"
                                    data-id="statistic-marketing-project"
-                                   data-title='<i class="fa fa-bar-chart text-orange"></i> 项目交付'
+                                   data-title='<i class="fa fa-bar-chart text-orange"></i> 交付(项目)看板'
                                    data-content=''
 
                                    data-datatable-type="create"
@@ -514,7 +514,7 @@
                                    data-datatable-target="statistic-marketing-project"
                                    data-datatable-clone-object="statistic-marketing-project-clone"
                                 >
-                                    <i class="fa fa-area-chart text-green"></i> <span>项目交付</span>
+                                    <i class="fa fa-area-chart text-green"></i> <span>交付(项目)看板</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
