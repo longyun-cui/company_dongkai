@@ -575,7 +575,8 @@
                     });
 
                     $.post(
-                        "{{ url('/item/order-publish') }}",
+                        {{--"{{ url('/item/order-publish') }}",--}}
+                        "{{ url('/v1/operate/order/item-publish') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "order-publish",

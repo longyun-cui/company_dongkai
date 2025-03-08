@@ -4575,6 +4575,16 @@ class DKAdminRepository {
                 $query->where('department_district_id',$me->department_district_id);
             }
         }
+        // 运营经理
+        if($me->user_type == 61)
+        {
+            $query->where('is_published','<>',0);
+        }
+        // 运营人员
+        if($me->user_type == 66)
+        {
+            $query->where('is_published','<>',0);
+        }
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
         if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
@@ -5132,6 +5142,11 @@ class DKAdminRepository {
 
         $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        if($item->is_published != 0)
+        {
+            return response_error([],"该【工单】已经发布过了，不要重复发布，刷新页面看下！");
+        }
 
         $this->get_me();
         $me = $this->me;
@@ -22156,6 +22171,11 @@ class DKAdminRepository {
 
         $item = DK_Order::withTrashed()->find($id);
         if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        if($item->is_published != 0)
+        {
+            return response_error([],"该【工单】已经发布过了，不要重复发布，刷新页面看看！");
+        }
 
         $this->get_me();
         $me = $this->me;
