@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper delivery-list-clone" data-datatable-item-category="delivery" data-item-name="交付">
+<div class="row datatable-body datatable-wrapper delivery-luxury-list-clone" data-datatable-item-category="delivery" data-item-name="交付">
 
 
     <div class="col-md-12 datatable-search-row  datatable-search-box">
@@ -33,7 +33,7 @@
             </button>
 
 
-            <select class="search-filter form-filter filter-lg select2-project-c delivery-project" data-item-category="1" name="delivery-project">
+            <select class="search-filter form-filter filter-lg select2-project-c delivery-project" data-item-category="31" name="delivery-project">
                 <option value="-1">选择项目</option>
                 @if(!empty($project_list))
                     @foreach($project_list as $v)
@@ -105,7 +105,7 @@
                     <input type="checkbox" class="check-review-all">
                 </button>
 
-                <button type="button" onclick="" class="btn btn-default btn-filter" id="bulk-submit-for-delivery-export">
+                <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-delivery-export" id="" data-item-category="31">
                     <i class="fa fa-download"></i> 批量导出Excel
                 </button>
 
@@ -115,7 +115,7 @@
                     <option value="0">待导出</option>
                 </select>
 
-                <button type="button" class="btn btn-default btn-filter" id="bulk-submit-for-exported">
+                <button type="button" class="btn btn-default btn-filter bulk-submit-for-delivery-exported" id="">
                     <i class="fa fa-check"></i> 批量更改导出状态
                 </button>
 

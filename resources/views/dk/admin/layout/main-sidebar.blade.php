@@ -444,7 +444,7 @@
                    data-type="create"
                    data-unique="n"
                    data-id="order-list"
-                   data-title='<i class="fa fa-file-text text-yellow"></i> 工单列表'
+                   data-title='<i class="fa fa-file-text text-yellow"></i> 口腔•工单'
                    data-content=''
 
                    data-datatable-type="create"
@@ -454,7 +454,7 @@
                    data-datatable-clone-object="order-list-clone"
                 >
                     <i class="fa fa-file-text text-yellow"></i>
-                    <span>工单列表</span>
+                    <span>口腔•工单</span>
                 </a>
             </li>
 
@@ -466,7 +466,7 @@
                    data-type="create"
                    data-unique="y"
                    data-id="delivery-list"
-                   data-title='<i class="fa fa-file-text text-yellow"></i> 交付列表'
+                   data-title='<i class="fa fa-share text-yellow"></i> 口腔•交付'
                    data-content=''
 
                    data-datatable-type="create"
@@ -476,9 +476,50 @@
                    data-datatable-clone-object="delivery-list-clone"
                 >
                     <i class="fa fa-share text-yellow"></i>
-                    <span>交付列表</span>
+                    <span>口腔•交付</span>
                 </a>
             </li>
+            @endif
+
+
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="order-luxury-list"
+                   data-title='<i class="fa fa-file-text text-purple"></i> 奢侈品•工单'
+                   data-content=''
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-order-luxury-list"
+                   data-datatable-target="order-luxury-list"
+                   data-datatable-clone-object="order-luxury-list-clone"
+                >
+                    <i class="fa fa-file-text text-purple"></i>
+                    <span>奢侈品•工单</span>
+                </a>
+            </li>
+            {{--交付列表--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="delivery-luxury-list"
+                       data-title='<i class="fa fa-share text-purple"></i> 奢侈品•交付'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-delivery-luxury-list"
+                       data-datatable-target="delivery-luxury-list"
+                       data-datatable-clone-object="delivery-luxury-list-clone"
+                    >
+                        <i class="fa fa-share text-purple"></i>
+                        <span>奢侈品•交付</span>
+                    </a>
+                </li>
             @endif
 
 

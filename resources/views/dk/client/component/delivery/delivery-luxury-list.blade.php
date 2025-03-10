@@ -136,7 +136,7 @@
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
 
 
-            <button class="btn btn-default btn-filter bulk-submit-for-export" data-item-category="1">
+            <button class="btn btn-default btn-filter bulk-submit-for-export" data-item-category="31">
                 <i class="fa fa-download"></i> 批量导出
             </button>
 

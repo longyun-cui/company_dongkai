@@ -1,16 +1,16 @@
 {{--编辑-工单--}}
-<div class="modal fade modal-main-body modal-wrapper" id="modal-for-order-edit">
+<div class="modal fade modal-main-body modal-wrapper" id="modal-for-order-luxury-edit">
     <div class="modal-content col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
         <div class="box- box-info- form-container">
 
             <div class="box-header with-border margin-top-16px">
-                <h3 class="box-title">添加工单</h3>
+                <h3 class="box-title">添加（奢侈品）工单</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
 
 
-            <form action="" method="post" class="form-horizontal form-bordered" id="form-for-order-edit">
+            <form action="" method="post" class="form-horizontal form-bordered" id="form-for-order-luxury-edit">
             <div class="box-body">
 
                 {{ csrf_field() }}
@@ -18,6 +18,7 @@
                 <input readonly type="hidden" class="form-control" name="operate[id]" value="0" data-default="0">
                 <input readonly type="hidden" class="form-control" name="operate[item_category]" value="item" data-default="item">
                 <input readonly type="hidden" class="form-control" name="operate[item_type]" value="order" data-default="order">
+                <input readonly type="hidden" class="form-control" name="operate[order_category]" value="luxury" data-default="luxury">
 
 
 
@@ -32,7 +33,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select2-box-c select2-project" name="project_id" id="order-edit-select2-project" data-item-category="1" style="width:100%;">
+                        <select class="form-control select2-box-c select2-project" name="project_id" id="order-edit-select2-project" data-item-category="31" style="width:100%;">
                             <option data-id="-1" value="-1">选择项目</option>
                         </select>
                     </div>
@@ -56,7 +57,7 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 所在城市</label>
                     <div class="col-md-8 ">
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control select-select2 select2-box-c select2-district-city" name="location_city" id="select-city-1" data-target="#select-district-1" style="width:100%;">
+                            <select class="form-control select-select2 select2-box-c select2-district-city" name="location_city" id="select-city-2" data-target="#select-district-2" style="width:100%;">
                                 <option value="">选择城市</option>
                                 @if(!empty($district_city_list) && count($district_city_list) > 0)
                                     @foreach($district_city_list as $v)
@@ -66,7 +67,7 @@
                             </select>
                         </div>
                         <div class="col-sm-6 col-md-6 padding-0">
-                            <select class="form-control select-select2 select2-box-c select2-district-district" name="location_district" id="select-district-1" data-target="#select-city-1" style="width:100%;">
+                            <select class="form-control select-select2 select2-box-c select2-district-district" name="location_district" id="select-district-2" data-target="#select-city-2" style="width:100%;">
                                 <option value="">选择区域</option>
                             </select>
                         </div>
@@ -74,40 +75,28 @@
                 </div>
                 {{--患者类型--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 患者类型</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 品类</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select-select2 select2-box-c" name="client_type" id="" style="width:100%;">
-                            <option value="">选择患者类型</option>
-                            @foreach(config('info.client_type') as $k => $v)
+                        <select class="form-control select-select2 select2-box-c" name="field_1" id="" style="width:100%;">
+                            <option value="">选择品类</option>
+                            @foreach(config('info.luxury_type') as $k => $v)
                                 <option value ="{{ $k }}">{{ $v }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                {{--牙齿数量--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 牙齿数量</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control select-select2 select2-box-c" name="teeth_count" id="" style="width:100%;">
-                            <option value="">选择牙齿数量</option>
-                            @foreach(config('info.teeth_count') as $v)
-                                <option value ="{{ $v }}">{{ $v }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 {{--客户意向--}}
-                <div class="form-group">
-                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>
-                    <div class="col-md-8 ">
-                        <select class="form-control select-select2 select2-box-c" name="client_intention" id="" style="width:100%;">
-                            <option value="">选择客户意向</option>
-                            @foreach(config('info.client_intention') as $k => $v)
-                                <option value ="{{ $k }}">{{ $v }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+{{--                <div class="form-group _none">--}}
+{{--                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户意向</label>--}}
+{{--                    <div class="col-md-8 ">--}}
+{{--                        <select class="form-control select-select2 select2-box-c" name="client_intention" id="" style="width:100%;">--}}
+{{--                            <option value="">选择客户意向</option>--}}
+{{--                            @foreach(config('info.client_intention') as $k => $v)--}}
+{{--                                <option value ="{{ $k }}">{{ $v }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
 
                 {{--是否+V--}}
@@ -173,7 +162,7 @@
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 通话小结</label>
                     <div class="col-md-8 ">
                         <p>要求：准确，全面，丰富</p>
-                        <p>范本：用户当前3颗后槽牙齿缺失，已经缺失半年，2颗下牙松动，之前没了解过种牙，好说话，要求下午3点前回电，同意医生助理联系</p>
+                        <p>范本：用户当前</p>
                     </div>
                 </div>
 
@@ -184,7 +173,7 @@
             <div class="box-footer">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <button type="button" class="btn btn-success edit-submit" id="edit-submit-for-order">
+                        <button type="button" class="btn btn-success edit-submit" id="edit-submit-for-order-luxury">
                             <i class="fa fa-check"></i> 提交
                         </button>
                         <button type="button" class="btn btn-default edit-cancel">取消</button>

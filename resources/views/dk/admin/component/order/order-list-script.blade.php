@@ -1483,8 +1483,17 @@
 
         // 【批量操作】全选or反选
         $(".main-content").on('click', '#check-review-all', function () {
-            console.log(1);
+            console.log('#check-review-all.click');
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
             $('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
+        });
+        // 【批量操作】全选or反选
+        $(".main-content").on('click', '.check-review-all', function () {
+            console.log('.check-review-all.click');
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            $datatable_wrapper.find('input[name="bulk-id"]').prop('checked',this.checked); // checked为true时为默认显示的状态
         });
         // 【批量操作】批量-导出
         $(".main-content").on('click', '#bulk-submit-for-export', function() {
@@ -1493,6 +1502,10 @@
             //     $checked.push($(this).val());
             // });
             // console.log($checked);
+
+            var $that = $(this);
+            var $item_category = $that.data('item-category');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
 
             var $ids = '';
             $('input[name="bulk-id"]:checked').each(function() {
@@ -1514,8 +1527,159 @@
             // });
             // console.log($checked);
 
+            var $that = $(this);
+            var $item_category = $that.data('item-category');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+
             var $ids = '';
-            $('input[name="bulk-id"]:checked').each(function() {
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            // console.log($ids);
+
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            // window.open($url);
+
+            layer.msg('确定"批量交付"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    layer.close(index);
+
+                    var $index = layer.load(1, {
+                        shade: [0.3, '#fff'],
+                        content: '<span class="loadtip">正在发布</span>',
+                        success: function (layer) {
+                            layer.find('.layui-layer-content').css({
+                                'padding-top': '40px',
+                                'width': '100px',
+                            });
+                            layer.find('.loadtip').css({
+                                'font-size':'20px',
+                                'margin-left':'-18px'
+                            });
+                        }
+                    });
+
+                    $.post(
+                        "{{ url('/item/order-bulk-deliver') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "order-delivered-bulk",
+                            ids: $ids,
+                            project_id:$('select[name="bulk-operate-delivered-project"]').val(),
+                            client_id:$('select[name="bulk-operate-delivered-client"]').val(),
+                            delivered_result:$('select[name="bulk-operate-delivered-result"]').val(),
+                            delivered_description:$('input[name="bulk-operate-delivered-description"]').val()
+                        },
+                        'json'
+                    )
+                        .done(function($response) {
+                            console.log('done');
+
+                            $response = JSON.parse($response);
+                            if(!$response.success) layer.msg($response.msg);
+                            else
+                            {
+                                layer.closeAll('loading');
+                                // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $delivered_result = $('select[name="bulk-operate-delivered-result"]').val();
+                                    var $client_id = $('select[name="bulk-operate-delivered-client"]').val();
+                                    var $client_name = $('select[name="bulk-operate-delivered-client"]').find('option:selected').html();
+                                    console.log($client_name);
+
+                                    $row.find('td[data-key=deliverer_name]').html('<a href="javascript:void(0);">{{ $me->true_name }}</a>');
+                                    $row.find('td[data-key=delivered_status]').html('<small class="btn-xs bg-blue">已交付</small>');
+                                    $row.find('td[data-key=delivered_result]').html('<small class="btn-xs bg-olive">'+$delivered_result+'</small>');
+                                    $row.find('td[data-key=client_id]').attr('data-value',$client_id);
+                                    if($client_id != "-1")
+                                    {
+                                        $row.find('td[data-key=client_id]').html('<a href="javascript:void(0);">'+$client_name+'</a>');
+                                    }
+                                    $row.find('td[data-key=order_status]').html('<small class="btn-xs bg-olive">已交付</small>');
+                                    // $row.find('.item-deliver-submit').replaceWith('<a class="btn btn-xs bg-green disabled">已交</a>');
+
+
+                                    var $date = new Date();
+                                    var $year = $date.getFullYear();
+                                    var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                                    var $day = ('00'+($date.getDate())).slice(-2);
+                                    var $hour = ('00'+$date.getHours()).slice(-2);
+                                    var $minute = ('00'+$date.getMinutes()).slice(-2);
+                                    var $second = ('00'+$date.getSeconds()).slice(-2);
+                                    var $time_html = $month+'-'+$day+'&nbsp;'+$hour+':'+$minute+':'+$second;
+                                    $row.find('td[data-key=delivered_at]').html($time_html);
+
+                                });
+                            }
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            console.log('fail');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                            layer.msg('服务器错误！');
+
+                        })
+                        .always(function(jqXHR, textStatus) {
+                            layer.closeAll('loading');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                        });
+
+                }
+            });
+
+        });
+        // 【批量操作】批量-导出
+        $(".main-content").off('click', '.bulk-submit-for-order-export').on('click', '.bulk-submit-for-order-export', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $that = $(this);
+            var $item_category = $that.data('item-category');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+
+            var $that = $(this);
+            var $item_category = $that.data('item-category');
+
+            var $ids = '';
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            console.log($ids);
+
+            var $url = url_build('/v1/operate/statistic/order-export-by-ids?item_category='+$item_category+'&ids='+$ids);
+            window.open($url);
+
+
+        });
+        // 【批量操作】批量-交付
+        $(".main-content").off('click', '.bulk-submit-for-order-delivered').on('click', '.bulk-submit-for-order-delivered', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $that = $(this);
+            var $item_category = $that.data('item-category');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+
+            var $ids = '';
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
                 $ids += $(this).val()+'-';
             });
             $ids = $ids.slice(0, -1);
@@ -1633,8 +1797,12 @@
             // });
             // console.log($checked);
 
+            var $that = $(this);
+            var $item_category = $that.data('item-category');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+
             var $ids = '';
-            $('input[name="bulk-id"]:checked').each(function() {
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
                 $ids += $(this).attr('data-order-id')+'-';
             });
             $ids = $ids.slice(0, -1);
@@ -1646,6 +1814,98 @@
         });
         // 【交付列表】【批量操作】批量-更改导出状态
         $(".main-content").on('click', '#bulk-submit-for-exported', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $that = $(this);
+            var $item_category = $that.data('item-category');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+
+            var $ids = '';
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).val()+'-';
+            });
+            $ids = $ids.slice(0, -1);
+
+
+            layer.msg('确定"批量导出"么', {
+                time: 0
+                ,btn: ['确定', '取消']
+                ,yes: function(index){
+
+                    $.post(
+                        "{{ url('/item/delivery-bulk-exported') }}",
+                        {
+                            _token: $('meta[name="_token"]').attr('content'),
+                            operate: "delivery-exported-bulk",
+                            ids: $ids,
+                            operate_result:$('select[name="bulk-operate-status"]').val()
+                        },
+                        function(data){
+                            layer.close(index);
+                            if(!data.success) layer.msg(data.msg);
+                            else
+                            {
+                                // $('#datatable_ajax').DataTable().ajax.reload(null,false);
+
+                                $('input[name="bulk-id"]:checked').each(function() {
+
+                                    var $that = $(this);
+                                    var $row = $that.parents('tr');
+
+                                    var $operate_result = $('select[name="bulk-operate-status"]').val();
+
+                                    if($operate_result == "1")
+                                    {
+                                        $row.find('td[data-key=is_exported]').html('<small class="btn-xs btn-success">已导出</small>');
+                                    }
+                                    else if($operate_result == "0")
+                                    {
+                                        $row.find('td[data-key=is_exported]').html('<small class="btn-xs btn-primary">未导出</small>');
+                                    }
+                                    else
+                                    {
+                                    }
+
+
+                                });
+                            }
+                        },
+                        'json'
+                    );
+
+                }
+            });
+
+        });
+        // 【交付列表】【批量操作】批量-导出
+        $(".main-content").off('click', '.bulk-submit-for-delivery-export').on('click', '.bulk-submit-for-delivery-export', function() {
+            // var $checked = [];
+            // $('input[name="bulk-id"]:checked').each(function() {
+            //     $checked.push($(this).val());
+            // });
+            // console.log($checked);
+
+            var $that = $(this);
+            var $item_category = $that.data('item-category');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+
+            var $ids = '';
+            $datatable_wrapper.find('input[name="bulk-id"]:checked').each(function() {
+                $ids += $(this).attr('data-order-id')+'-';
+            });
+            $ids = $ids.slice(0, -1);
+            console.log($ids);
+
+            var $url = url_build('/v1/operate/statistic/order-export-by-ids?item_category='+$item_category+'&ids='+$ids);
+            window.open($url);
+
+        });
+        // 【交付列表】【批量操作】批量-更改导出状态
+        $(".main-content").off('click', '.bulk-submit-for-delivery-exported').on('click', '.bulk-submit-for-delivery-exported', function() {
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
@@ -1723,6 +1983,7 @@
                 data: function (params) {
                     return {
                         _token: $('meta[name="_token"]').attr('content'),
+                        item_category: this.data('item-category'),
                         keyword: params.term, // search term
                         page: params.page
                     };

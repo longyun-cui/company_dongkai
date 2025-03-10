@@ -12,6 +12,7 @@ class DK_Pivot_Client_Delivery extends Model
         'pivot_active', 'pivot_category', 'pivot_type',
         'relation_active', 'relation_category', 'relation_type',
         'delivery_type',
+        'order_category',
 
         'user_id',
         'project_id',

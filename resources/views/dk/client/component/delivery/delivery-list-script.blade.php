@@ -50,11 +50,15 @@
 
         // 【批量操作】
         $(".main-content").on('click', '.bulk-submit-for-export', function() {
+            console.log('.bulk-submit-for-export.click');
             // var $checked = [];
             // $('input[name="bulk-id"]:checked').each(function() {
             //     $checked.push($(this).val());
             // });
             // console.log($checked);
+
+            var $that = $(this);
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
 
             var $ids = '';
             $('input[name="bulk-id"]:checked').each(function() {
@@ -64,7 +68,8 @@
             $ids = $ids.slice(0, -1);
             // console.log($ids);
 
-            var $url = url_build('/statistic/statistic-export-for-order-by-ids?ids='+$ids);
+            var $item_category = $that.data('item-category');
+            var $url = url_build('/statistic/statistic-export-for-order-by-ids?item_category='+$item_category+'&ids='+$ids);
             window.open($url);
 
 

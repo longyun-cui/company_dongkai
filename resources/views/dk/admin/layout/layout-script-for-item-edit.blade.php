@@ -545,6 +545,11 @@
                         $modal.find('input[name="operate[type]"]').val('edit');
                         $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
 
+                        $modal.find('input[name="user_category"]').prop('checked', false);
+                        $modal.find('input[name="user_category"][value="'+$response.data.user_category+'"]').prop('checked', true).trigger('change');
+                        $modal.find('.radio-user-category').hide();
+                        $modal.find('input[name="user_category"][value="'+$response.data.user_category+'"]').parents('.radio-user-category').show();
+
                         $modal.find('input[name="username"]').val($response.data.username);
                         $modal.find('input[name="ip_whitelist"]').val($response.data.ip_whitelist);
                         $modal.find('input[name="client_admin_name"]').val($response.data.client_admin_name);
@@ -694,6 +699,12 @@
                         $modal.find('.box-title').html('编辑项目【'+$that.attr('data-id')+'】');
                         $modal.find('input[name="operate[type]"]').val('edit');
                         $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
+
+                        $modal.find('input[name="item_category"]').prop('checked', false);
+                        $modal.find('input[name="item_category"][value="'+$response.data.item_category+'"]').prop('checked', true).trigger('change');
+                        $modal.find('.radio-item-category').hide();
+                        $modal.find('input[name="item_category"][value="'+$response.data.item_category+'"]').parents('.radio-item-category').show();
+
 
                         $modal.find('input[name="name"]').val($response.data.name);
 
@@ -1065,7 +1076,7 @@
                         layer.msg(response.msg);
 
                         // 重置输入框
-                        form_reset('#form-edit-for-order');
+                        form_reset('#form-for-order-edit');
 
                         $('#modal-for-order-edit').modal('hide').on("hidden.bs.modal", function () {
                             $("body").addClass("modal-open");
@@ -1088,6 +1099,161 @@
 
             };
             $("#form-for-order-edit").ajaxSubmit(options);
+        });
+
+
+        // 【工单-管理】编辑-显示-编辑
+        $(".main-content").on('click', ".order-luxury-edit-show", function() {
+            var $that = $(this);
+            var $row = $that.parents('tr');
+
+            var $data = new Object();
+
+            //
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在提交</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            //
+            $.post(
+                "{{ url('/v1/operate/order/item-get') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "item-get",
+                    item_type: "order",
+                    item_id: $that.data('id')
+                },
+                'json'
+            )
+                .done(function($response, status, jqXHR) {
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+
+                        form_reset('#modal-for-order-luxury-edit');
+
+                        var $modal = $('#modal-for-order-luxury-edit');
+                        $modal.find('.box-title').html('编辑地域【'+$that.attr('data-id')+'】');
+                        $modal.find('input[name="operate[type]"]').val('edit');
+                        $modal.find('input[name="operate[id]"]').val($that.attr('data-id'));
+
+                        $modal.find('input[name="client_name"]').val($response.data.client_name);
+                        $modal.find('input[name="client_phone"]').val($response.data.client_phone);
+
+                        // $modal.find('select[name="client_type"]').val($response.data.client_type).trigger('change');
+                        // $modal.find('select[name="client_intention"]').val($response.data.client_intention).trigger('change');
+                        $modal.find('select[name="field_1"]').val($response.data.field_1).trigger('change');
+
+                        $modal.find('select[name="location_city"]').val($response.data.location_city).trigger('change');
+                        $modal.find('#select-district-1').append(new Option($response.data.location_district, $response.data.location_district, true, true)).trigger('change');
+
+                        if($response.data.project_er)
+                        {
+                            $modal.find('#order-edit-select2-project').append(new Option($response.data.project_er.name, $response.data.project_id, true, true)).trigger('change');
+                        }
+
+                        $modal.find('input[name="is_wx"]').prop('checked', false);
+                        $modal.find('input[name="is_wx"][value="'+$response.data.is_wx+'"]').prop('checked', true).trigger('change');
+
+                        $modal.find('input[name="wx_id"]').val($response.data.wx_id);
+                        $modal.find('input[name="recording_address"]').val($response.data.recording_address);
+                        $modal.find('textarea[name="description"]').val($response.data.description);
+
+                        var $datatable_wrapper = $that.closest('.datatable-wrapper');
+                        var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+                        $modal.find('.edit-submit').attr('data-datatable-list-id',$table_id);
+
+                        $modal.modal('show');
+                    }
+                })
+                .fail(function(jqXHR, status, error) {
+                    console.log('fail');
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, status) {
+                    console.log('always');
+                    layer.closeAll('loading');
+                });
+
+        });
+        // 【工单-管理】编辑-提交
+        $(".main-content").on('click', "#edit-submit-for-order-luxury", function() {
+            var $that = $(this);
+            var $table_id = $that.data('datatable-list-id');
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">正在提交</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            var options = {
+                url: "{{ url('/v1/operate/order/luxury/item-save') }}",
+                type: "post",
+                dataType: "json",
+                // target: "#div2",
+                // clearForm: true,
+                // restForm: true,
+                success: function (response, status, xhr, $form) {
+                    // 请求成功时的回调
+                    if(!response.success)
+                    {
+                        layer.msg(response.msg);
+                    }
+                    else
+                    {
+                        layer.msg(response.msg);
+
+                        // 重置输入框
+                        form_reset('#form-for-order-luxury-edit');
+
+                        $('#modal-for-order-luxury-edit').modal('hide').on("hidden.bs.modal", function () {
+                            $("body").addClass("modal-open");
+                        });
+
+                        $('#'+$table_id).DataTable().ajax.reload(null,false);
+                    }
+                },
+                error: function(xhr, status, error, $form) {
+                    // 请求失败时的回调
+                    console.log('error');
+                    layer.closeAll('loading');
+                },
+                complete: function(xhr, status, $form) {
+                    // 无论成功或失败都会执行的回调
+                    console.log('always');
+                    layer.closeAll('loading');
+                }
+
+
+            };
+            $("#form-for-order-luxury-edit").ajaxSubmit(options);
         });
 
 

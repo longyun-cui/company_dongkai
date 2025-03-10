@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select2-box-c select2-project" name="project_id" id="order-edit-select2-project" data-item-category="1" style="width:100%;">
+                        <select class="form-control select2-box-c select2-project" name="project_id" id="order-edit-select2-project" style="width:100%;">
                             <option data-id="-1" value="-1">选择项目</option>
                         </select>
                     </div>

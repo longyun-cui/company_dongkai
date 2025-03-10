@@ -128,7 +128,11 @@
     @include(env('TEMPLATE_DK_CLIENT').'component.department.department-list')
     @include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-list')
 
-    @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list')
+    @if($me->client_er->user_category == 1)
+        @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list')
+    @elseif($me->client_er->user_category == 31)
+        @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-luxury-list')
+    @endif
     @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily')
 
     @include(env('TEMPLATE_DK_CLIENT').'component.finance.finance-daily')
@@ -245,7 +249,11 @@
     @include(env('TEMPLATE_DK_CLIENT').'component.department.department-list-datatable')
     @include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-list-datatable')
 
-    @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-datatable')
+    @if($me->client_er->user_category == 1)
+        @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-datatable')
+    @elseif($me->client_er->user_category == 31)
+        @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-luxury-list-datatable')
+    @endif
     @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily-datatable')
 
     @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-script')

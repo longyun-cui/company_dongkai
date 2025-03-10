@@ -11,22 +11,46 @@
          */
         // 【导出】
         $(".main-content").on('click', ".filter-submit-for-order-export", function() {
+            console.log(".filter-submit-for-order-export.click");
             var that = $(this);
             var $id = that.attr("data-id");
             var $export_type = that.attr("data-type");
+
+            var $item_category = $('select[name="export-item-category"]').val();
+            if($item_category == '')
+            {
+                layer.msg('请先选择工单类型!');
+                return false;
+            }
+
+            // var $array = [0, 1, '0', '-1'];
+            //
+            // var $client = $('select[name="export-client"]').val();
+            // var $project = $('select[name="export-project"]').val();
+            // // if($client == "-1" && $project == "-1")
+            // if($array.includes($client) && $array.includes($project))
+            // {
+            //     var $item_category = $('select[name="export-item-category"]').val();
+            //     if($item_category == '')
+            //     {
+            //         layer.msg('请先选择工单类型，或者选择项目，或者选择客户!');
+            //         return false;
+            //     }
+            // }
 
             var $month = $('input[name="export-month"]').val();
             var $date = $('input[name="export-date"]').val();
 
             var $obj = new Object();
             $obj.export_type = $export_type;
+            if($('select[name="export-item-category"]').val() > 0)  $obj.item_category = $('select[name="export-item-category"]').val();
             if($('select[name="order-type"]').val() > 0)  $obj.order_type = $('select[name="order-type"]').val();
             if($('input[name="export-month"]').val())  $obj.month = $('input[name="export-month"]').val();
             if($('input[name="export-date"]').val())  $obj.date = $('input[name="export-date"]').val();
             if($('input[name="export-start"]').val())  $obj.order_start = $('input[name="export-start"]').val();
             if($('input[name="export-ended"]').val())  $obj.order_ended = $('input[name="export-ended"]').val();
-            if($('select[name="export-client"]').val() > 0)  $obj.client = $('select[name="export-client"]').val();
             if($('select[name="export-staff"]').val() > 0)  $obj.staff = $('select[name="export-staff"]').val();
+            if($('select[name="export-client"]').val() > 0)  $obj.client = $('select[name="export-client"]').val();
             if($('select[name="export-project"]').val() > 0)  $obj.project = $('select[name="export-project"]').val();
             if($('select[name="export-inspected-result"]').val() != -1)  $obj.inspected_result = $('select[name="export-inspected-result"]').val();
 

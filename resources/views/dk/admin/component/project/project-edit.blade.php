@@ -22,6 +22,41 @@
 
 
 
+                {{--项目类型--}}
+                <div class="form-group form-category">
+                    <label class="control-label col-md-2">项目种类</label>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn radio-btn radio-item-category">
+                            <span class="radio">
+                                <label>
+                                    <input type="radio" name="item_category" value="1" checked="checked"> 口腔
+                                </label>
+                            </span>
+                            </button>
+
+                            <button type="button" class="btn radio-btn radio-item-category">
+                            <span class="radio">
+                                <label>
+                                    <input type="radio" name="item_category" value="11"> 医美
+                                </label>
+                            </span>
+                            </button>
+
+                            <button type="button" class="btn radio-btn radio-item-category">
+                            <span class="radio">
+                                <label>
+                                    <input type="radio" name="item_category" value="31"> 二手奢侈品
+                                </label>
+                            </span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+
                 {{--项目名称--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 项目名称</label>
@@ -35,7 +70,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">客户</label>
                     <div class="col-md-8 ">
-                        <select class="form-control select2-box-c" name="client_id" id="select2-client" style="width:100%;">
+                        <select class="form-control select2-box-c" name="client_id" id="select2-client" data-user-category="" style="width:100%;">
                             <option data-id="-1" value="-1">选择客户</option>
                         </select>
                     </div>

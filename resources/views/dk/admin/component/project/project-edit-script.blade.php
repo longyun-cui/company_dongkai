@@ -5,11 +5,14 @@
         //
         $('#select2-client').select2({
             ajax: {
-                url: "{{ url('/item/item_select2_client') }}",
+                url: "{{ url('/v1/operate/select2/select2_client') }}",
+                type: 'post',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
                     return {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        // user_category: this.data('user-category'),
                         keyword: params.term, // search term
                         page: params.page
                     };

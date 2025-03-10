@@ -136,24 +136,27 @@
                     }
                 },
                 {
-                    "title": "分发",
-                    "data": "is_distributive",
-                    "className": "",
+                    "title": "项目种类",
+                    "data": "item_category",
                     "width": "60px",
                     "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.is_completed != 1 && row.item_status != 97)
-                        {
-                            $(nTd).addClass('modal-show-for-info-radio-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','分发');
-                            $(nTd).attr('data-key','is_distributive').attr('data-value',data);
-                            $(nTd).attr('data-column-name','分发');
-                        }
-                    },
                     render: function(data, type, row, meta) {
-                        if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
-                        else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
-                        else return '--';
+                        if(data == 1)
+                        {
+                            return '<small class="btn-xs bg-orange">口腔</small>';
+                        }
+                        if(data == 11)
+                        {
+                            return '<small class="btn-xs bg-red">医美</small>';
+                        }
+                        if(data == 31)
+                        {
+                            return '<small class="btn-xs bg-purple">奢侈品</small>';
+                        }
+                        else
+                        {
+                            return '未知类型';
+                        }
                     }
                 },
                 {
@@ -281,6 +284,27 @@
                     },
                     render: function(data, type, row, meta) {
                         return data;
+                    }
+                },
+                {
+                    "title": "分发",
+                    "data": "is_distributive",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).addClass('modal-show-for-info-radio-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','分发');
+                            $(nTd).attr('data-key','is_distributive').attr('data-value',data);
+                            $(nTd).attr('data-column-name','分发');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '<small class="btn-xs btn-danger">否</small>';
+                        else if(data == 1) return '<small class="btn-xs btn-success">是</small>';
+                        else return '--';
                     }
                 },
                 {

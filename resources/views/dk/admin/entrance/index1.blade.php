@@ -57,6 +57,7 @@
 @include(env('TEMPLATE_DK_ADMIN').'component.project.project-edit')
 @include(env('TEMPLATE_DK_ADMIN').'component.location.location-edit')
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-edit')
+@include(env('TEMPLATE_DK_ADMIN').'component.order.order-luxury.order-luxury-edit')
 @include(env('TEMPLATE_DK_ADMIN').'component.order.order-operation-record')
 
 
@@ -76,8 +77,10 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.location.location-list')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list')
+    @include(env('TEMPLATE_DK_ADMIN').'component.order.order-luxury.order-luxury-list')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-list')
+    @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-luxury.delivery-luxury-list')
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-index')
@@ -149,10 +152,15 @@
     @include(env('TEMPLATE_DK_ADMIN').'component.location.location-edit-script')
 
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.order.order-luxury.order-luxury-list-datatable')
+
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-list-script')
+
     @include(env('TEMPLATE_DK_ADMIN').'component.order.order-operation-record-datatable')
 
+
     @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-list-datatable')
+    @include(env('TEMPLATE_DK_ADMIN').'component.delivery.delivery-luxury.delivery-luxury-list-datatable')
 
 
     @include(env('TEMPLATE_DK_ADMIN').'component.statistic.comprehensive.statistic-index-script')

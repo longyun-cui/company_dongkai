@@ -316,6 +316,7 @@
                         data: function (params) {
                             return {
                                 _token: $('meta[name="_token"]').attr('content'),
+                                item_category: this.data('item-category'),
                                 keyword: params.term, // search term
                                 page: params.page
                             };
@@ -345,6 +346,7 @@
                         data: function (params) {
                             return {
                                 _token: $('meta[name="_token"]').attr('content'),
+                                user_category: this.data('user-category'),
                                 keyword: params.term, // search term
                                 page: params.page
                             };
@@ -408,9 +410,17 @@
                 {
                     Datatable_for_OrderList($config.id);
                 }
+                else if($id == "datatable-order-luxury-list")
+                {
+                    Datatable_for_Order_Luxury_List($config.id);
+                }
                 else if($id == "datatable-delivery-list")
                 {
                     Datatable_for_DeliveryList('#'+$config.id);
+                }
+                else if($id == "datatable-delivery-luxury-list")
+                {
+                    Datatable_for_Delivery_Luxury_List('#'+$config.id);
                 }
                 else if($id == "datatable-finance-daily")
                 {

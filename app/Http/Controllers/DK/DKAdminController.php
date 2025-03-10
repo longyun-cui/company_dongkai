@@ -362,6 +362,11 @@ class DKAdminController extends Controller
     {
         return $this->repo->v1_operate_for_order_item_save(request()->all());
     }
+    // 【工单-管理】编辑-保存
+    public function v1_operate_for_order_luxury_item_save()
+    {
+        return $this->repo->v1_operate_for_order_luxury_item_save(request()->all());
+    }
     // 【工单-管理】
     public function v1_operate_for_order_item_publish()
     {
@@ -815,8 +820,50 @@ class DKAdminController extends Controller
     // 【】
     public function v1_operate_for_statistic_order_export()
     {
-        return $this->repo->v1_operate_for_statistic_order_export(request()->all());
+        $item_category = request('item_category',0);
+
+        if($item_category == 1)
+        {
+            return $this->repo->v1_operate_for_statistic_order_export(request()->all());
+        }
+        else if($item_category == 11)
+        {
+            return $this->repo->v1_operate_for_statistic_order_export(request()->all());
+        }
+        else if($item_category == 31)
+        {
+            return $this->repo->v1_operate_for_statistic_order_luxury_export(request()->all());
+        }
+        else
+        {
+            return $this->repo->v1_operate_for_statistic_order_export(request()->all());
+        }
+
     }
+    // 【统计】订单-导出
+    public function v1_operate_for_statistic_order_export_by_ids()
+    {
+        $item_category = request('item_category',0);
+
+        if($item_category == 1)
+        {
+            return $this->repo->v1_operate_for_statistic_order_export_by_ids(request()->all());
+        }
+        else if($item_category == 11)
+        {
+            return $this->repo->v1_operate_for_statistic_order_export_by_ids(request()->all());
+        }
+        else if($item_category == 31)
+        {
+            return $this->repo->v1_operate_for_statistic_order_luxury_export_by_ids(request()->all());
+        }
+        else
+        {
+            return $this->repo->v1_operate_for_statistic_order_export_by_ids(request()->all());
+        }
+    }
+
+
     public function v1_operate_for_statistic_delivery_export()
     {
         return $this->repo->v1_operate_for_statistic_delivery_export(request()->all());

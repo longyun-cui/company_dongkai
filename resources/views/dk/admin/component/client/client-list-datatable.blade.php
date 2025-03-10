@@ -159,6 +159,30 @@
                     }
                 },
                 {
+                    "title": "客户类型",
+                    "data": "user_category",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 1)
+                        {
+                            return '<small class="btn-xs bg-orange">口腔</small>';
+                        }
+                        if(data == 11)
+                        {
+                            return '<small class="btn-xs bg-red">医美</small>';
+                        }
+                        if(data == 31)
+                        {
+                            return '<small class="btn-xs bg-purple">奢侈品</small>';
+                        }
+                        else
+                        {
+                            return '未知类型';
+                        }
+                    }
+                },
+                {
                     "title": "客户名称",
                     "data": "username",
                     "className": "client-name",

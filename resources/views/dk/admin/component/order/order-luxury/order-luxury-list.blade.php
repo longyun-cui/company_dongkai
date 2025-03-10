@@ -1,4 +1,4 @@
-<div class="row datatable-body datatable-wrapper order-list-clone" data-datatable-item-category="order" data-item-name="工单">
+<div class="row datatable-body datatable-wrapper order-luxury-list-clone" data-datatable-item-category="luxury" data-item-name="奢侈品">
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">
@@ -50,7 +50,7 @@
 
             {{--选择客户--}}
             @if(in_array($me->user_type,[0,1,9,11,61,66]))
-                <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="1" name="order-client">
+                <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="31" name="order-client">
                     <option value="-1">选择客户</option>
                     @foreach($client_list as $v)
                         <option value="{{ $v->id }}">{{ $v->username }}</option>
@@ -59,7 +59,7 @@
             @endif
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="order-project">
+            <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="31" name="order-project">
                 <option value="-1">选择项目</option>
                 @foreach($project_list as $v)
                     <option value="{{ $v->id }}">{{ $v->name }}</option>
@@ -141,9 +141,9 @@
 
 
             <button type="button" onclick="" class="btn btn-filter btn-success  pull-right item-create-modal-show"
-                    data-form-id="form-for-order-edit"
-                    data-modal-id="modal-for-order-edit"
-                    data-title="添加工单"
+                    data-form-id="form-for-order-luxury-edit"
+                    data-modal-id="modal-for-order-luxury-edit"
+                    data-title="添加【奢侈品】工单"
             >
                 <i class="fa fa-plus"></i> 添加
             </button>
@@ -184,7 +184,7 @@
             </button>
 
 
-            <button type="button" onclick="" class="btn btn-default btn-filter " id="bulk-submit-for-export">
+            <button type="button" onclick="" class="btn btn-default btn-filter bulk-submit-for-order-export" id="" data-item-category="31">
                 <i class="fa fa-download"></i> 批量导出
             </button>
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
@@ -194,7 +194,7 @@
                 @if(in_array($me->user_type,[0,1,9,11,61,66,71,77]))
 
                     {{--交付项目--}}
-                    <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="1" name="bulk-operate-delivered-project">
+                    <select class="search-filter form-filter filter-lg select2-box-c- select2-project-c" data-item-category="31" name="bulk-operate-delivered-project">
                         <option value="-1">选择交付项目</option>
                         {{--@foreach($project_list as $v)--}}
                         {{--<option value="{{ $v->id }}">{{ $v->name }}</option>--}}
@@ -202,7 +202,7 @@
                     </select>
 
                     {{--交付客户--}}
-                    <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="1" name="bulk-operate-delivered-client">
+                    <select class="search-filter form-filter filter-lg select2-box-c- select2-client-c" data-user-category="31" name="bulk-operate-delivered-client">
                         <option value="-1">交付客户</option>
                         @foreach($client_list as $v)
                             <option value="{{ $v->id }}">{{ $v->username }}</option>
@@ -221,7 +221,7 @@
                     <input type="text" class="search-filter filter-lg form-filter" name="bulk-operate-delivered-description" placeholder="交付说明">
 
 
-                    <button type="button" class="btn btn-default btn-filter" id="bulk-submit-for-delivered">
+                    <button type="button" class="btn btn-default btn-filter bulk-submit-for-order-delivered" id="">
                         <i class="fa fa-share"></i> 批量交付
                     </button>
 

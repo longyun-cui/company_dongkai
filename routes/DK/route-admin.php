@@ -94,9 +94,11 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
     // 【工单-管理】
     Route::post('/v1/operate/order/datatable-list-query', $controller.'@v1_operate_for_order_datatable_list_query');
+//    Route::post('/v1/operate/order/luxury/datatable-list-query', $controller.'@v1_operate_for_order_luxury_datatable_list_query');
     Route::post('/v1/operate/order/item-operation-record-datatable-query', $controller.'@v1_operate_for_order_item_operation_record_datatable_query');
     Route::post('/v1/operate/order/item-get', $controller.'@v1_operate_for_order_item_get');
     Route::post('/v1/operate/order/item-save', $controller.'@v1_operate_for_order_item_save');
+    Route::post('/v1/operate/order/luxury/item-save', $controller.'@v1_operate_for_order_luxury_item_save');
     Route::post('/v1/operate/order/item-publish', $controller.'@v1_operate_for_order_item_publish');
     Route::post('/v1/operate/order/item-inspect', $controller.'@v1_operate_for_order_item_inspect');
     Route::post('/v1/operate/order/item-deliver', $controller.'@v1_operate_for_order_item_deliver');
@@ -113,7 +115,9 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/record/datatable-list-query', $controller.'@v1_operate_for_record_datatable_list_query');
 
     Route::get('/v1/operate/statistic/order-export', $controller.'@v1_operate_for_statistic_order_export');
+    Route::get('/v1/operate/statistic/order-export-by-ids', $controller.'@v1_operate_for_statistic_order_export_by_ids');
     Route::get('/v1/operate/statistic/delivery-export', $controller.'@v1_operate_for_statistic_delivery_export');
+
 
 
 

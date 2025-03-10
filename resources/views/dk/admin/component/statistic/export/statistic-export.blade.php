@@ -20,11 +20,18 @@
                                 <input type="hidden" name="export-time-type" class="time-type" value="" readonly>
 
 
-                                <select class="search-filter form-filter filter-xl select2-project-c" name="export-project">
+                                <select class="search-filter form-filter filter-lg select2-box-c" name="export-item-category">
+                                    <option value="">选择工单类型</option>
+                                    <option value="1">口腔</option>
+                                    <option value="11">医美</option>
+                                    <option value="31">二奢</option>
+                                </select>
+
+                                <select class="search-filter form-filter filter-lg select2-project-c" name="export-project">
                                     <option value="-1">选择项目</option>
                                 </select>
 
-                                <select class="search-filter form-filter filter-xl select2-client-c" name="export-client">
+                                <select class="search-filter form-filter filter-lg select2-client-c" name="export-client">
                                     <option value="-1">选择客户</option>
                                 </select>
 

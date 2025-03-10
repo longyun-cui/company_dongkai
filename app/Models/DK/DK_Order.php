@@ -47,6 +47,17 @@ class DK_Order extends Model
         'is_repeat',
         'receipt_status', 'receipt_need', 'receipt_address', 'GPS',
         'teeth_count',
+
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+        'field_5',
+        'field_6',
+        'field_7',
+        'field_8',
+        'field_9',
+
         'company', 'fund', 'mobile', 'city', 'address',
         'api_is_pushed',
 

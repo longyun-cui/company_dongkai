@@ -1,5 +1,5 @@
 <script>
-    function Datatable_for_DeliveryList($tableId)
+    function Datatable_for_Delivery_Luxury_List($tableId)
     {
 
         let $that = $($tableId);
@@ -24,6 +24,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
+                    d.order_category = 31;
                     d.id = $tableSearch.find('input[name="delivery-id"]').val();
                     d.order_id = $tableSearch.find('input[name="delivery-order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
@@ -170,6 +171,34 @@
                 //         return data;
                 //     }
                 // },
+                {
+                    "title": "工单种类",
+                    "data": "order_category",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(!data) return '--';
+                        var $result_html = '';
+                        if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-orange">口腔</small>';
+                        }
+                        if(data == 11)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">医美</small>';
+                        }
+                        else if(data == 31)
+                        {
+                            $result_html = '<small class="btn-xs bg-purple">奢侈品</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+                        return $result_html;
+                    }
+                },
                 {
                     "title": "工单ID",
                     "data": "order_id",
@@ -354,31 +383,39 @@
                 },
                     @endif
                 {
-                    "title": "患者类型",
-                    "data": "client_type",
+                    "title": "品类",
+                    "data": "order_id",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(row.order_er)
                         {
+                            var $field_1 = row.order_er.field_1;
                             var $result_html = '';
-                            var $client_type = row.order_er.client_type;
-                            if($client_type == 0)
+                            if($field_1 == 0)
                             {
-                                $result_html = '<small class="btn-xs ">未选择</small>';
+                                $result_html = '<small class="btn-xs bg-default"></small>';
                             }
-                            else if($client_type == 1)
+                            else if($field_1 == 1)
                             {
-                                $result_html = '<small class="btn-xs bg-blue">种植牙</small>';
+                                $result_html = '<small class="btn-xs bg-blue">鞋帽服装</small>';
                             }
-                            else if($client_type == 2)
+                            else if($field_1 == 2)
                             {
-                                $result_html = '<small class="btn-xs bg-green">矫正</small>';
+                                $result_html = '<small class="btn-xs bg-green">包</small>';
                             }
-                            else if($client_type == 3)
+                            else if($field_1 == 3)
                             {
-                                $result_html = '<small class="btn-xs bg-red">正畸</small>';
+                                $result_html = '<small class="btn-xs bg-orange">手表</small>';
+                            }
+                            else if($field_1 == 4)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">珠宝</small>';
+                            }
+                            else if($field_1 == 99)
+                            {
+                                $result_html = '<small class="btn-xs bg-navy">其他</small>';
                             }
                             else
                             {
@@ -422,46 +459,42 @@
                     }
                 },
                 {
-                    "title": "客户意向",
-                    "data": "order_id",
-                    "className": "",
-                    "width": "60px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        // if(!data) return '--';
-                        // return data;
-                        var $result_html = '';
-                        if(row.order_er)
-                        {
-                            var $data = row.order_er.client_intention;
-                            if($data == "A类")
-                            {
-                                $result_html = '<small class="btn-xs bg-red">'+$data+'</small>';
-                            }
-                            else if($data == "B类")
-                            {
-                                $result_html = '<small class="btn-xs bg-blue">'+$data+'</small>';
-                            }
-                            else if($data == "C类")
-                            {
-                                $result_html = '<small class="btn-xs bg-green">'+$data+'</small>';
-                            }
-                            else
-                            {
-                                $result_html = '--';
-                            }
-                        }
-                        return $result_html;
-                    }
-                },
-                {
-                    "title": "牙齿数量",
+                    "title": "品类",
                     "data": "order_id",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(row.order_er) return row.order_er.teeth_count;
+                        if(row.order_er)
+                        {
+                            var $result_html = '';
+                            var $field_1 = row.order_er.field_1;
+                            if($field_1 == 0)
+                            {
+                                $result_html = '<small class="btn-xs bg-default"></small>';
+                            }
+                            else if($field_1 == 1)
+                            {
+                                $result_html = '<small class="btn-xs bg-blue">鞋帽服装</small>';
+                            }
+                            else if($field_1 == 2)
+                            {
+                                $result_html = '<small class="btn-xs bg-orange">手表</small>';
+                            }
+                            else if($field_1 == 3)
+                            {
+                                $result_html = '<small class="btn-xs bg-red">珠宝</small>';
+                            }
+                            else if($field_1 == 99)
+                            {
+                                $result_html = '<small class="btn-xs bg-navy">其他</small>';
+                            }
+                            else
+                            {
+                                $result_html = '未知类型';
+                            }
+                            return $result_html;
+                        }
                         return "--";
                     }
                 },

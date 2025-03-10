@@ -1030,7 +1030,25 @@ class DKClientController extends Controller
     // 【统计】订单-导出
     public function operate_statistic_export_for_order_by_ids()
     {
-        $this->repo->operate_statistic_export_for_order_by_ids(request()->all());
+        $item_category = request('item_category',0);
+
+        if($item_category == 1)
+        {
+            return $this->repo->operate_statistic_export_for_order_by_ids(request()->all());
+        }
+        else if($item_category == 11)
+        {
+            return $this->repo->operate_statistic_export_for_order_by_ids(request()->all());
+        }
+        else if($item_category == 31)
+        {
+            return $this->repo->operate_statistic_export_for_order_luxury_by_ids(request()->all());
+        }
+        else
+        {
+            return $this->repo->operate_statistic_export_for_order_by_ids(request()->all());
+        }
+
     }
 
 

@@ -22,6 +22,42 @@
 
 
 
+                {{--客户类型--}}
+                <div class="form-group form-category">
+                    <label class="control-label col-md-2">客户种类</label>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+
+                            <button type="button" class="btn radio-btn radio-user-category">
+                            <span class="radio">
+                                <label>
+                                    <input type="radio" name="user_category" value="1" checked="checked"> 口腔
+                                </label>
+                            </span>
+                            </button>
+
+                            <button type="button" class="btn radio-btn radio-user-category">
+                            <span class="radio">
+                                <label>
+                                    <input type="radio" name="user_category" value="11"> 医美
+                                </label>
+                            </span>
+                            </button>
+
+                            <button type="button" class="btn radio-btn radio-user-category">
+                            <span class="radio">
+                                <label>
+                                    <input type="radio" name="user_category" value="31"> 二手奢侈品
+                                </label>
+                            </span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
                 {{--客户名称--}}
                 <div class="form-group">
                     <label class="control-label col-md-2"><sup class="text-red">*</sup> 客户名称</label>
