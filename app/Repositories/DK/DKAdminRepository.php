@@ -13088,7 +13088,7 @@ class DKAdminRepository {
 
         $query = DK_Client::select('*')
             ->with(['creator','company_er','channel_er','business_er'])
-            ->whereIn('user_category',[11])
+            ->whereIn('user_category',[1,11,31])
             ->whereIn('user_type',[0,1,9,11,19,21,22,41,61]);
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
@@ -13272,7 +13272,7 @@ class DKAdminRepository {
             $mine = DK_Client::with(['parent'])->find($id);
             if($mine)
             {
-                if(!in_array($mine->user_category,[0,1,9,11,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
+                if(!in_array($mine->user_category,[0,1,9,11,31,88])) return view(env('TEMPLATE_DK_ADMIN').'errors.404');
                 $mine->custom = json_decode($mine->custom);
                 $mine->custom2 = json_decode($mine->custom2);
                 $mine->custom3 = json_decode($mine->custom3);
@@ -13363,8 +13363,8 @@ class DKAdminRepository {
             if($is_mobile_exist) return response_error([],"该电话已存在，请勿重复添加！");
 
             $client = new DK_Client;
-            $client_data["user_category"] = 11;
-            $client_staff_data["user_type"] = 11;
+            $client_data["user_category"] = 1;
+            $client_staff_data["user_type"] = 1;
             $client_data["active"] = 1;
             $client_data["creator_id"] = $me->id;
             $client_data["username"] = $post_data["username"];
