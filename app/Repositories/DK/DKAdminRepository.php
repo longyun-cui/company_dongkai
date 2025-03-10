@@ -4617,7 +4617,8 @@ class DKAdminRepository {
         if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
 
         if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
-        if(!empty($post_data['client_phone'])) $query->where('client_phone', 'like', "%{$post_data['client_phone']}");
+        if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
+//        if(!empty($post_data['client_phone'])) $query->where('client_phone', 'like', "%{$post_data['client_phone']}");
 
         if(!empty($post_data['assign'])) $query->where('published_date', $post_data['assign']);
         if(!empty($post_data['assign_start'])) $query->where('published_date', '>=', $post_data['assign_start']);
