@@ -24,6 +24,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
+                    d.order_category = 1;
                     d.id = $tableSearch.find('input[name="delivery-id"]').val();
                     d.order_id = $tableSearch.find('input[name="delivery-order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
