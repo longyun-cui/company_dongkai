@@ -184,7 +184,7 @@
                         {
                             $result_html = '<small class="btn-xs bg-orange">口腔</small>';
                         }
-                        if(data == 11)
+                        else if(data == 11)
                         {
                             $result_html = '<small class="btn-xs bg-red">医美</small>';
                         }

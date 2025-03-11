@@ -172,6 +172,33 @@
                 //     }
                 // },
                 {
+                    "title": "工单种类",
+                    "data": "order_category",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        var $result_html = '';
+                        if(data == 1)
+                        {
+                            $result_html = '<small class="btn-xs bg-orange">口腔</small>';
+                        }
+                        else if(data == 11)
+                        {
+                            $result_html = '<small class="btn-xs bg-red">医美</small>';
+                        }
+                        else if(data == 31)
+                        {
+                            $result_html = '<small class="btn-xs bg-purple">奢侈品</small>';
+                        }
+                        else
+                        {
+                            $result_html = '<small class="btn-xs bg-black">有误</small>';
+                        }
+                        return $result_html;
+                    }
+                },
+                {
                     "title": "工单ID",
                     "data": "order_id",
                     "className": "",
