@@ -1309,6 +1309,7 @@
             $form.find('.select2-container').remove();
             $form.find('.select2-dropdown').remove();
             $form.find('.select2-results__options').remove();
+            $form.find('.radio-wrapper').html('');
 
             $modal.find(".select2-city").off('change');
             $('select[name=field-set-select-value2]').html('').hide();
@@ -1323,6 +1324,21 @@
             else if($column_type == "textarea")
             {
                 $modal.find('textarea[name="field-set-textarea-value"]').val($that.attr("data-value")).show();
+            }
+            else if($column_type == "radio")
+            {
+                if($that.attr("data-key") == "is_distributive_condition")
+                {
+                    var $option_html = $('#option-list-for-is_distributive_condition').html();
+                    $modal.find('.radio-wrapper').html($option_html).show();
+                    $modal.find('input[name=option_is_distributive_condition][value="'+$that.attr("data-value")+'"]').attr("checked","checked");
+                }
+                else if($that.attr("data-key") == "is_wx")
+                {
+                    var $option_html = $('#option-list-for-is-wx').html();
+                    $modal.find('.radio-wrapper').html($option_html).show();
+                    $modal.find('.radio-wrapper').find('input[name="field-set-radio-value"][value="'+$that.attr("data-value")+'"]').prop("checked",true);
+                }
             }
             else if($column_type == "select")
             {
@@ -1595,10 +1611,28 @@
 
                         var $form = $('#form-for-field-set');
                         var item_category = $form.find('input[name="item-category"]').val();
-                        var column_key = $form.find('input[name="column-key"]');
+                        var column_key = $form.find('input[name="column-key"]').val();
+                        console.log(column_key);
                         if(column_key == 'location_city')
                         {
                             $td.data('value2',$response.data.data.value2);
+                        }
+                        else if(column_key == 'is_wx')
+                        {
+                            var $radio_value = $form.find('input[name="field-set-radio-value"]').val();
+                            console.log($radio_value);
+                            if($radio_value == 0)
+                            {
+                                $row.find('[data-key="is_wx"]').attr('data-value',$radio_value).html('--');
+                            }
+                            else if($radio_value == 1)
+                            {
+                                $row.find('[data-key="is_wx"]').attr('data-value',$radio_value).html('<small class="btn-xs btn-primary">是</small>');
+                            }
+                            else
+                            {
+
+                            }
                         }
 
 
@@ -1608,6 +1642,23 @@
                         $td.attr('data-value',$response.data.data.value);
                         $td.attr('data-option-name',$response.data.data.text);
                         $td.html($response.data.data.text);
+                        if(column_key == 'is_wx')
+                        {
+                            var $radio_value = $response.data.data.value;
+                            console.log($radio_value);
+                            if($radio_value == 0)
+                            {
+                                $row.find('[data-key="is_wx"]').attr('data-value',$radio_value).html('--');
+                            }
+                            else if($radio_value == 1)
+                            {
+                                $row.find('[data-key="is_wx"]').attr('data-value',$radio_value).html('<small class="btn-xs btn-primary">是</small>');
+                            }
+                            else
+                            {
+
+                            }
+                        }
 
                         if(item_category == 'order')
                         {
@@ -1623,6 +1674,7 @@
                                 var $is_repeat_html = '<small class="btn-xs btn-primary">是</small><small class="btn-xs btn-danger">'+($item.is_repeat+1)+'</small>';
                                 $row.find('[data-key="is_repeat"]').attr('data-value',$item.is_repeat).html($is_repeat_html);
                             }
+
                         }
 
                         // 重置输入框

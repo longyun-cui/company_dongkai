@@ -4696,7 +4696,7 @@ class DKAdminRepository {
         // 工单种类 []
         if(isset($post_data['item_category']))
         {
-            if(!in_array($post_data['item_category'],[-1,'-1']))
+            if(!in_array($post_data['item_category'],[-1,0,'-1','0']))
             {
                 $query->where('item_category', $post_data['item_category']);
             }
@@ -6795,7 +6795,10 @@ class DKAdminRepository {
 
         if($column_type == 'text') $column_value = $column_text_value;
         else if($column_type == 'textarea') $column_value = $column_textarea_value;
-        else if($column_type == 'radio') $column_value = $column_radio_value;
+        else if($column_type == 'radio')
+        {
+            $column_value = $column_radio_value;
+        }
         else if($column_type == 'select') $column_value = $column_select_value;
         else if($column_type == 'select2') $column_value = $column_select_value;
         else if($column_type == 'datetime') $column_value = $column_datetime_value;
@@ -6808,19 +6811,24 @@ class DKAdminRepository {
         $after = $column_value;
 //        dd((string)$before.'-'.(string)$after.'-'.strlen($before));
 
+        if($column_type == "radio")
+        {
+            $after = $column_value;
+        }
+
         if($before == $after)
         {
             if($column_key == "client_phone")
             {
-                return response_error([],"没有修改！");
+                return response_error([],"没有修改1！");
             }
             else if($column_key == "location_city")
             {
-                if($item->$column_key2 == $column_select_value2) return response_error([],"没有修改！");
+                if($item->$column_key2 == $column_select_value2) return response_error([],"没有修改2！");
             }
             else
             {
-                return response_error([],"没有修改！");
+                return response_error([],"没有修改3！");
             }
         }
 
@@ -7044,7 +7052,7 @@ class DKAdminRepository {
         // 工单种类 []
         if(isset($post_data['order_category']))
         {
-            if(!in_array($post_data['order_category'],[-1,'-1']))
+            if(!in_array($post_data['order_category'],[-1,0,'-1','0']))
             {
                 $query->where('order_category', $post_data['order_category']);
             }
@@ -7072,7 +7080,7 @@ class DKAdminRepository {
         // 交付类型
         if(!empty($post_data['delivery_type']))
         {
-            if(!in_array($post_data['delivery_type'],[-1]))
+            if(!in_array($post_data['delivery_type'],[-1,'-1']))
             {
                 $query->where('pivot_type', $post_data['delivery_type']);
             }
@@ -22520,6 +22528,7 @@ class DKAdminRepository {
                     {
                         $order = new DK_Order;
 
+                        $order->item_category = 1;
                         $order->client_id = $client_id;
                         $order->project_id = $project_id;
                         $order->creator_id = $me->id;

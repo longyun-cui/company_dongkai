@@ -39,6 +39,10 @@
                             <input type="text" class="form-control form-filter column-value time_picker" name="field-set-datetime-value" autocomplete="off" placeholder="" value="" data-time-type="datetime" readonly="readonly">
                             <input type="text" class="form-control form-filter column-value date_picker" name="field-set-date-value" autocomplete="off" placeholder="" value="" data-time-type="date" readonly="readonly">
 
+                            <div  class="form-control- form-filter- btn-group radio-wrapper">
+
+                            </div>
+
                             <select class="form-control column-value select-primary" name="field-set-select-value" data-class="" style="width:48%;" id="">
                                 <option data-id="0" value="0">未指定</option>
                             </select>
@@ -418,29 +422,25 @@
 
 
         {{--是否+V--}}
-        <div id="option-list-for-is-wx">
-            <label class="control-label col-md-2">是否+V</label>
-            <div class="col-md-8">
-                <div class="btn-group">
+                <div class="btn-group" id="option-list-for-is-wx">
 
                     <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="is_wx" value="0" class="info-set-column"> 否
+                            <input type="radio" name="field-set-radio-value" value="0" class="info-set-column"> 否
                         </label>
                     </span>
                     </button>
                     <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="is_wx" value="1" class="info-set-column"> 是
+                            <input type="radio" name="field-set-radio-value" value="1" class="info-set-column"> 是
                         </label>
                     </span>
                     </button>
 
                 </div>
-            </div>
-        </div>
+
         {{--是否+V--}}
         <div id="option-list-for-is_distributive_condition">
             <label class="control-label col-md-2">是否符合分发</label>
