@@ -16,12 +16,12 @@
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
 
         var table = $('#'+$tableId).DataTable({
-            "aLengthMenu": [[10, 50, 100], ["10", "50", "100"]],
+            "aLengthMenu": [[10, 50, 100, 200], ["10", "50", "100", "200"]],
             "processing": true,
             "serverSide": true,
             "searching": true,
             "pagingType": "simple_numbers",
-            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
+            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t> <"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p>',
             "order": [],
             "orderCellsTop": true,
             "scrollX": true,
