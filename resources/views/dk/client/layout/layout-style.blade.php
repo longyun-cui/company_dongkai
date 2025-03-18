@@ -86,7 +86,10 @@
 
 
     .tableArea.full table { width:100% !important; min-width:1380px; }
+    .tableArea.table-luxury table { min-width:2600px; }
     .tableArea { margin-top:16px; }
+    .tableArea tr.operating { background:#99bbff !important; }
+    .tableArea tr.operating td { background:#99bbff !important; }
 
 
 

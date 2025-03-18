@@ -98,13 +98,15 @@
             </li>
 
 
+
             {{--部门列表--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"
                    data-id="department-list"
-                   data-title="部门列表"
+                   data-title='<i class="fa fa-columns text-red"></i> <span>部门列表</span>'
                    data-content="部门列表"
 
                    data-datatable-type="create"
@@ -117,15 +119,17 @@
                     <span>部门列表</span>
                 </a>
             </li>
+            @endif
 
 
             {{--员工列表--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"
                    data-id="staff-list"
-                   data-title="员工列表"
+                   data-title='<i class="fa fa-user text-red"></i> <span>员工列表</span>'
                    data-content="员工列表"
 
                    data-datatable-type="create"
@@ -138,6 +142,30 @@
                     <span>员工列表</span>
                 </a>
             </li>
+            @endif
+
+
+            {{--联系渠道--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
+            <li class="treeview">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="contact-list"
+                   data-title='<i class="fa fa-chain text-red"></i> <span>联系渠道</span>'
+                   data-content="联系渠道"
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-contact-list"
+                   data-datatable-target="contact-list"
+                   data-datatable-clone-object="contact-list-clone"
+                >
+                    <i class="fa fa-chain text-red"></i>
+                    <span>联系渠道</span>
+                </a>
+            </li>
+            @endif
 
 
             {{--交付列表--}}
@@ -146,7 +174,7 @@
                    data-type="create"
                    data-unique="y"
                    data-id="delivery-list"
-                   data-title="交付列表"
+                   data-title='<i class="fa fa-file-text text-yellow"></i> <span>交付列表</span>'
                    data-content="交付列表"
 
                    data-datatable-type="create"
@@ -160,12 +188,13 @@
                 </a>
             </li>
             {{--交付日报--}}
+            @if(in_array($me->user_type,[0,1,9,11]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"
                    data-id="delivery-daily"
-                   data-title="交付日报"
+                   data-title='<i class="fa fa-bar-chart text-yellow"></i> <span>交付日报</span>'
                    data-content="交付日报"
 
                    data-datatable-type="create"
@@ -180,6 +209,52 @@
                     <span>交付日报</span>
                 </a>
             </li>
+            @endif
+            {{--员工看板--}}
+            @if($me->client_er->user_category == 31 && in_array($me->user_type,[0,1,9,11]))
+                <li class="treeview">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="statistic-staff-rank"
+                       data-title='<i class="fa fa-line-chart text-green"></i> <span>员工看板</span>'
+                       data-content="员工看板"
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-statistic-staff-rank"
+                       data-datatable-target="statistic-staff-rank"
+                       data-datatable-clone-object="statistic-staff-rank-clone"
+                    >
+                        <i class="fa fa-line-chart text-green"></i>
+                        <span>员工看板</span>
+                    </a>
+                </li>
+            @endif
+            {{--成交记录--}}
+            @if($me->client_er->user_category == 31 && in_array($me->user_type,[0,1,9,11]))
+                <li class="treeview">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="trade-list"
+                       data-title='<i class="fa fa-cny text-aqua"></i> <span>成交记录</span>'
+                       data-content="成交记录"
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-trade-list"
+                       data-datatable-target="trade-list"
+                       data-datatable-clone-object="datatable-trade-list-clone"
+                    >
+                        <i class="fa fa-cny text-aqua"></i>
+                        <span>成交记录</span>
+                    </a>
+                </li>
+            @endif
+
+
+
 
 
             {{--财务日报--}}

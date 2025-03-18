@@ -154,7 +154,7 @@ class DKClientController extends Controller
     // 返回主页视图
     public function view_admin_index()
     {
-        return $this->repo->view_admin_index();
+        return $this->repo->view_admin_index1();
     }
 
 
@@ -175,6 +175,199 @@ class DKClientController extends Controller
 
 
 
+
+
+
+
+
+    public function v1_operate_for_select2_department()
+    {
+        return $this->repo->v1_operate_for_select2_department(request()->all());
+    }
+    public function v1_operate_for_select2_staff()
+    {
+        return $this->repo->v1_operate_for_select2_staff(request()->all());
+    }
+    public function v1_operate_for_select2_contact()
+    {
+        return $this->repo->v1_operate_for_select2_contact(request()->all());
+    }
+
+
+
+
+
+
+
+
+    // 【联系渠道-管理】datatable
+    public function v1_operate_for_department_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_department_datatable_list_query(request()->all());
+    }
+    // 【联系渠道-管理】获取
+    public function v1_operate_for_department_item_get()
+    {
+        return $this->repo->v1_operate_for_department_item_get(request()->all());
+    }
+    // 【联系渠道-管理】编辑-保存
+    public function v1_operate_for_department_item_save()
+    {
+        return $this->repo->v1_operate_for_department_item_save(request()->all());
+    }
+
+
+
+
+
+    // 【员工-管理】datatable
+    public function v1_operate_for_staff_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_staff_datatable_list_query(request()->all());
+    }
+    // 【员工-管理】获取
+    public function v1_operate_for_staff_item_get()
+    {
+        return $this->repo->v1_operate_for_staff_item_get(request()->all());
+    }
+    // 【员工-管理】编辑-保存
+    public function v1_operate_for_staff_item_save()
+    {
+        return $this->repo->v1_operate_for_staff_item_save(request()->all());
+    }
+
+
+
+
+
+    // 【联系渠道-管理】datatable
+    public function v1_operate_for_contact_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_contact_datatable_list_query(request()->all());
+    }
+    // 【联系渠道-管理】获取
+    public function v1_operate_for_contact_item_get()
+    {
+        return $this->repo->v1_operate_for_contact_item_get(request()->all());
+    }
+    // 【联系渠道-管理】编辑-保存
+    public function v1_operate_for_contact_item_save()
+    {
+        return $this->repo->v1_operate_for_contact_item_save(request()->all());
+    }
+
+
+
+
+
+    // 【联系渠道-管理】datatable
+    public function v1_operate_for_trade_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_trade_datatable_list_query(request()->all());
+    }
+    // 【联系渠道-管理】获取
+    public function v1_operate_for_trade_item_get()
+    {
+        return $this->repo->v1_operate_for_trade_item_get(request()->all());
+    }
+    // 【联系渠道-管理】编辑-保存
+    public function v1_operate_for_trade_item_save()
+    {
+        return $this->repo->v1_operate_for_trade_item_save(request()->all());
+    }
+
+
+
+
+
+    // 【通用】字段修改
+    public function v1_operate_for_universal_field_set()
+    {
+        $item_category = request('item-category','');
+
+        if($item_category == 'department')
+        {
+            return $this->repo->v1_operate_for_department_field_set(request()->all());
+        }
+        else if($item_category == 'staff')
+        {
+            return $this->repo->v1_operate_for_staff_field_set(request()->all());
+        }
+        else if($item_category == 'contact')
+        {
+            return $this->repo->v1_operate_for_staff_field_set(request()->all());
+        }
+        else if($item_category == 'order')
+        {
+            return $this->repo->v1_operate_for_order_field_set(request()->all());
+        }
+        else if($item_category == 'luxury')
+        {
+            return $this->repo->v1_operate_for_order_field_set(request()->all());
+        }
+        else
+        {
+            return response_fail([]);
+        }
+    }
+    // 【通用】字段修改
+    public function v1_operate_for_user_field_set()
+    {
+        return $this->repo->v1_operate_for_user_field_set(request()->all());
+    }
+    // 【通用】字段修改
+    public function v1_operate_for_parent_client_field_set()
+    {
+        return $this->repo->v1_operate_for_parent_client_field_set(request()->all());
+    }
+
+
+
+
+    // 【工单-管理】datatable
+    public function v1_operate_for_delivery_datatable_list_query()
+    {
+        return $this->repo->v1_operate_for_delivery_datatable_list_query(request()->all());
+    }
+    // 【工单-管理】获取
+    public function v1_operate_for_delivery_item_get()
+    {
+        return $this->repo->v1_operate_for_delivery_item_get(request()->all());
+    }
+    // 【工单-管理】编辑-保存
+    public function v1_operate_for_delivery_item_customer_save()
+    {
+        return $this->repo->v1_operate_for_delivery_item_customer_save(request()->all());
+    }
+    // 【工单-管理】编辑-保存
+    public function v1_operate_for_delivery_item_come_save()
+    {
+        return $this->repo->v1_operate_for_delivery_item_come_save(request()->all());
+    }
+    // 【工单-管理】编辑-保存
+    public function v1_operate_for_delivery_item_trade_save()
+    {
+        return $this->repo->v1_operate_for_delivery_item_trade_save(request()->all());
+    }
+    // 【工单-管理】编辑-保存
+    public function v1_operate_for_delivery_item_follow_save()
+    {
+        return $this->repo->v1_operate_for_delivery_item_follow_save(request()->all());
+    }
+
+
+    // 【工单-管理】编辑-保存
+    public function v1_operate_for_delivery_automatic_dispatching_by_admin()
+    {
+        return $this->repo->v1_operate_for_delivery_automatic_dispatching_by_admin(request()->all());
+    }
+
+
+    // 【工单-管理】操作记录
+    public function v1_operate_for_delivery_item_follow_record_datatable_query()
+    {
+        return $this->repo->v1_operate_for_delivery_item_follow_record_datatable_query(request()->all());
+    }
 
 
 
@@ -234,6 +427,8 @@ class DKClientController extends Controller
     {
         return $this->repo->operate_staff_get_by_admin(request()->all());
     }
+
+
 
 
 
@@ -418,6 +613,26 @@ class DKClientController extends Controller
     }
 
 
+
+
+
+
+
+
+
+
+
+
+    // 【生产-统计】员工排名
+    public function v1_operate_for_get_statistic_data_of_production_staff_rank()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_production_staff_rank(request()->all());
+    }
+    // 【生产-统计】员工日报
+    public function v1_operate_for_get_statistic_data_of_production_staff_daily()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_production_staff_daily(request()->all());
+    }
 
 
 

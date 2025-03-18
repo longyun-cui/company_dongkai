@@ -4,14 +4,14 @@
         // 通用标签控制逻辑
         $(".wrapper").on('click', ".tab-control", function() {
 
-            const $btn = $(this);
-            const $unique = $btn.data('unique');
+            var $btn = $(this);
+            var $unique = $btn.data('unique');
 
             // $(".nav-header-title").html($btn.data('title'));
 
             if($unique == 'y')
             {
-                const $config = {
+                var $config = {
                     type: $btn.data('type'),
                     unique: $btn.data('unique'),
                     id: $btn.data('id'),
@@ -19,8 +19,8 @@
                     content: $btn.data('content') || '默认内容'
                 };
 
-                const $tabLink = $('a[href="#'+ $config.id +'"]');
-                const $tabPane = $('#'+$config.id);
+                var $tabLink = $('a[href="#'+ $config.id +'"]');
+                var $tabPane = $('#'+$config.id);
 
                 if($tabPane.length)
                 {
@@ -39,12 +39,12 @@
             }
             else
             {
-                let $session_unique_id = sessionStorage.getItem('session_unique_id');
+                var $session_unique_id = sessionStorage.getItem('session_unique_id');
                 sessionStorage.setItem('session_unique_id',parseInt($session_unique_id) + 1);
                 $session_unique_id = sessionStorage.getItem('session_unique_id');
 
-                const $btn = $(this);
-                const $config = {
+                var $btn = $(this);
+                var $config = {
                     type: $btn.data('type'),
                     unique: $btn.data('unique'),
                     id: $btn.data('id') + '-' + $session_unique_id,
@@ -52,8 +52,8 @@
                     content: $btn.data('content') || '默认内容'
                 };
 
-                const $tabLink = $('a[href="#'+ $config.id +'"]');
-                const $tabPane = $('#'+$config.id);
+                var $tabLink = $('a[href="#'+ $config.id +'"]');
+                var $tabPane = $('#'+$config.id);
 
                 if($tabPane.length)
                 {
@@ -76,8 +76,8 @@
         // 关闭标签页处理（事件委托）
         $('.nav-tabs').on('click', '.close-tab', function(e) {
             e.stopPropagation();
-            const $targetTab = $(this).closest('.nav-item');
-            const $tabId = $targetTab.find('a').attr('href');
+            var $targetTab = $(this).closest('.nav-item');
+            var $tabId = $targetTab.find('a').attr('href');
 
             // 移除对应内容
             $($tabId).remove();
@@ -93,10 +93,10 @@
         // 通用标签控制逻辑
         $(".wrapper").on('click', ".datatable-control", function() {
 
-            const $btn = $(this);
-            const $id = $btn.data('datatable-id');
-            const $unique = $btn.data('datatable-unique');
-            const $reload = $btn.data('datatable-reload');
+            var $btn = $(this);
+            var $id = $btn.data('datatable-id');
+            var $unique = $btn.data('datatable-unique');
+            var $reload = $btn.data('datatable-reload');
 
             if($unique == 'y')
             {
@@ -113,7 +113,7 @@
             }
             else
             {
-                let $session_unique_id = sessionStorage.getItem('session_unique_id');
+                var $session_unique_id = sessionStorage.getItem('session_unique_id');
 
                 var $config = {
                     type: $btn.data('datatable-type'),
@@ -139,7 +139,7 @@
             {
                 console.log('DataTable 未初始化！');
 
-                let $clone = $('.'+$config.clone_object).clone(true);
+                var $clone = $('.'+$config.clone_object).clone(true);
                 $clone.removeClass($config.clone_object);
                 $clone.addClass('datatable-wrapper');
                 $clone.find('table').attr('id',$config.id);
@@ -214,12 +214,117 @@
                 {
                     Datatable_for_StaffList('#'+$config.id);
                 }
+                else if($id == "datatable-contact-list")
+                {
+                    console.log('#'+$config.id);
+                    Datatable_for_ContactList('#'+$config.id);
+                }
+                else if($id == "datatable-trade-list")
+                {
+                    console.log('#'+$config.id);
+                    Datatable_for_Trade_List('#'+$config.id);
+                }
                 else if($id == "datatable-finance-daily")
                 {
                     Datatable_for_FinanceDaily('#'+$config.id, $config.chart_id);
                 }
+                else if($id == "datatable-statistic-staff-rank")
+                {
+                    Datatable_for_Statistic_Staff_Rank('#'+$config.id);
+                }
             }
 
+
+        });
+
+
+
+
+        // 通用标签控制逻辑
+        $(".wrapper").on('click', ".staff-control", function() {
+
+            const $that = $(this);
+            const $id = $that.data('id');
+            const $title = $that.data('title');
+            const $staff_daily_id = 'staff-daily-' + $id;
+            const $datatable_id = 'datatable-staff-daily-' + $id;
+            const $datatable_clone_object = 'statistic-staff-daily-clone';
+            const $datatable_target = $staff_daily_id;
+            const $chart_id = "eChart-staff-daily-" + $id;
+
+            // $(".nav-header-title").html($btn.data('title'));
+
+            const $config = {
+                type: $that.data('type'),
+                unique: 'y',
+                id: $staff_daily_id,
+                title: $that.data('title'),
+                content: $that.data('content') || '默认内容'
+            };
+
+            const $tabLink = $('a[href="#'+ $staff_daily_id +'"]');
+            const $tabPane = $('#' + $staff_daily_id);
+
+            if($tabPane.length)
+            {
+                // 存在则激活
+                console.log('已存在！');
+                $tabLink.tab('show');
+            }
+            else
+            {
+                // 创建新标签页
+                console.log('不存在！');
+                createTab($config);
+                // 激活新标签页
+                $('a[href="#' + $staff_daily_id + '"]').tab('show');
+            }
+
+
+            // data-datatable-id="datatable-location-list"
+            // data-datatable-target="location-list"
+            // data-datatable-clone-object="location-list-clone"
+            // data-chart-id="eChart-statistic-company-daily"
+
+
+            if($.fn.DataTable.isDataTable('#'+$config.id))
+            {
+                console.log($config.id);
+                console.log('DataTable 已存在！');
+            }
+            else
+            {
+                console.log('DataTable 未初始化！');
+
+                let $clone = $('.'+$datatable_clone_object).clone(true);
+                $clone.removeClass($datatable_clone_object);
+                $clone.addClass('datatable-wrapper');
+                $clone.find('table').attr('id',$datatable_id);
+                $clone.find('input[name="statistic-staff-daily-staff-id"]').val($id);
+                $clone.find('.eChart').attr('id',$chart_id);
+
+                $('#'+$staff_daily_id).prepend($clone);
+                $('#'+$staff_daily_id).find('.select2-box-c').select2({
+                    theme: 'classic'
+                });
+                $('#'+$staff_daily_id).find('.time_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD HH:mm",
+                    ignoreReadonly: true
+                });
+                $('#'+$staff_daily_id).find('.date_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD",
+                    ignoreReadonly: true
+                });
+                $('#'+$staff_daily_id).find('.month_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM",
+                    ignoreReadonly: true
+                });
+
+                Datatable_for_Statistic_Staff_Daily('#'+$datatable_id,$chart_id);
+            }
 
         });
 
@@ -231,7 +336,7 @@
     function createTab($config)
     {
         // 导航标签模板
-        const navItem =
+        var navItem =
             '<li class="nav-item">'
                 +'<a class="nav-link" href="#'+ $config.id +'" data-toggle="tab">'
                     + $config.title
@@ -240,7 +345,7 @@
             +'</li>';
 
         // 内容面板模板
-        const contentPane = '<div class="tab-pane fade" id="'+ $config.id +'"></div>';
+        var contentPane = '<div class="tab-pane fade" id="'+ $config.id +'"></div>';
 
         // 添加元素
         $('#index-nav-box').find('.nav-tabs').append(navItem);

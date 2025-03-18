@@ -20,17 +20,36 @@ class DK_Client_User extends Authenticatable
         'user_group', 'user_category', 'user_type',
         'group', 'category', 'type',
 
-        'creator_id', 'parent_id', 'p_id',
+        'creator_id',
+        'updater_id',
+        'deleter_id',
+
+        'parent_id',
+        'p_id',
+
         'name', 'username', 'nickname', 'true_name', 'short_name', 'description', 'portrait_img', 'tag',
+
         'mobile', 'telephone', 'email', 'password',
 
         'wx_unionid',
-        'department_district_id', 'department_group_id', 'department_manager_id', 'department_supervisor_id', 'superior_id',
-        'district_category', 'district_type', 'district_id',
-        'introduction_id', 'advertising_id',
+        'department_district_id',
+        'department_group_id',
+        'department_manager_id',
+        'department_supervisor_id',
+        'superior_id',
+
+        'district_category',
+        'district_type',
+        'district_id',
+        'introduction_id',
+        'advertising_id',
 
         'client_id',
         'department_id',
+
+        'is_take_order',
+        'is_take_order_date',
+        'is_take_order_today',
 
         'QQ_number',
         'wx_id',

@@ -14,7 +14,7 @@
             "iDisplayStart": 0,
             "iDisplayLength": 10,
             "pagingType": "simple_numbers",
-            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
+            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t> <"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p>',
             "order": [],
             "orderCellsTop": true,
             "scrollX": true,
@@ -22,7 +22,7 @@
             "scrollCollapse": true,
             "showRefresh": true,
             "ajax": {
-                'url': "{{ url('/delivery/delivery-list') }}",
+                'url': "{{ url('/v1/operate/delivery/datatable-list-query') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
@@ -56,6 +56,9 @@
                     d.date_start = $tableSearch.find('input[name="delivery-start"]').val();
                     d.date_ended = $tableSearch.find('input[name="delivery-ended"]').val();
 
+                    d.is_come = $tableSearch.find('select[name="delivery-is-come"]').val();
+                    d.come_date = $tableSearch.find('input[name="delivery-come-date"]').val();
+
                 },
             },
             "columnDefs": [
@@ -67,8 +70,8 @@
                 }
             ],
             "fixedColumns": {
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
-                "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",
+                "rightColumns": "@if($is_mobile_equipment) 0 @else 0 @endif"
             },
             "columns": [
                 {
@@ -102,7 +105,7 @@
                     "title": "操作",
                     "data": 'id',
                     "className": "",
-                    "width": "120px",
+                    "width": "240px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -116,13 +119,21 @@
                     render: function(data, type, row, meta) {
 
                         var $html_edit = '';
-                        var $html_follow = '<a class="btn btn-xs bg-default item-modal-show-for-follow" data-id="'+data+'">客户跟进</a>';
-                        var $html_quality = '<a class="btn btn-xs bg-default item-quality-evaluate-submit" data-id="'+data+'">质量评估</a>';
+                        var $html_quality = '<a class="btn btn-xs bg-default item-quality-evaluate-submit" data-id="'+data+'">质量评价</a>';
+                        var $html_update = '<a class="btn btn-xs bg-default item-modal-show-for-customer-update" data-id="'+data+'">更新</a>';
+                        var $html_come = '<a class="btn btn-xs bg-default item-modal-show-for-come-update" data-id="'+data+'">上门</a>';
+                        var $html_trade = '<a class="btn btn-xs bg-default item-modal-show-for-trade-create" data-id="'+data+'">成交</a>';
+                        var $html_follow = '<a class="btn btn-xs bg-default item-modal-show-for-follow-create" data-id="'+data+'">跟进</a>';
+                        var $html_follow_record = '<a class="btn btn-xs bg-default item-modal-show-for-follow-record" data-id="'+data+'">记录</a>';
 
 
                         var $html =
-                            // $html_follow+
                             $html_quality+
+                            $html_update+
+                            $html_come+
+                            $html_trade+
+                            $html_follow+
+                            $html_follow_record+
                             // $html_record+
                             '';
                         return $html;
@@ -153,6 +164,7 @@
                     }
                 },
                 @endif
+                @if(in_array($me->user_type,[0,1,9,11]))
                 {
                     "title": "工单质量",
                     "data": "order_quality",
@@ -194,8 +206,11 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data == 0) return '<small class="btn-xs btn-warning">待分配</small>';
-                        else if(data == 1) return '<small class="btn-xs btn-success">已分配</small>';
+                        // if(data == 0) return '<small class="btn-xs btn-warning">待分配</small>';
+                        // else if(data == 1) return '<small class="btn-xs btn-success">已分配</small>';
+                        // return data;
+                        if(row.client_staff_id == 0) return '<small class="btn-xs btn-warning">待分配</small>';
+                        else if(row.client_staff_id > 1) return '<small class="btn-xs btn-success">已分配</small>';
                         return data;
                     }
                 },
@@ -203,7 +218,7 @@
                     "title": "分派员工",
                     "data": "client_staff_id",
                     "className": "",
-                    "width": "120px",
+                    "width": "100px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -226,6 +241,7 @@
                         }
                     }
                 },
+                @endif
                 {
                     "title": "交付时间",
                     "data": 'created_at',
@@ -251,42 +267,6 @@
                         var $currentYear = new Date().getFullYear();
                         if($year == $currentYear) return $month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
                         else return $year+'-'+$month+'-'+$day+'&nbsp;'+$hour+':'+$minute;
-                    }
-                },
-                {
-                    "title": "患者类型",
-                    "data": "client_type",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.order_er)
-                        {
-                            var $result_html = '';
-                            var $client_type = row.client_type;
-                            if($client_type == 0)
-                            {
-                                $result_html = '<small class="btn-xs ">未选择</small>';
-                            }
-                            else if($client_type == 1)
-                            {
-                                $result_html = '<small class="btn-xs bg-blue">种植牙</small>';
-                            }
-                            else if($client_type == 2)
-                            {
-                                $result_html = '<small class="btn-xs bg-green">矫正</small>';
-                            }
-                            else if($client_type == 3)
-                            {
-                                $result_html = '<small class="btn-xs bg-red">正畸</small>';
-                            }
-                            else
-                            {
-                                $result_html = '未知类型';
-                            }
-                            return $result_html;
-                        }
-                        return "--";
                     }
                 },
                 {
@@ -325,7 +305,7 @@
                     "title": "品类",
                     "data": "order_id",
                     "className": "",
-                    "width": "60px",
+                    "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         // if(!data) return '--';
@@ -388,6 +368,112 @@
                             else return '--';
                         }
                         else return '--';
+                    }
+                },
+                {
+                    "title": "是否+V",
+                    "data": "is_wx",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs btn-primary">是</small>';
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "客户备注",
+                    "data": "customer_remark",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "联系渠道",
+                    "data": "client_contact_id",
+                    "className": "",
+                    "width": "100px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return row.client_contact_er == null ? '--' : '<a href="javascript:void(0);">'+row.client_contact_er.name+'</a>';
+                    }
+                },
+                {
+                    "title": "上门状态",
+                    "data": "is_come",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '<small class="btn-xs btn-info">否</small>';
+                        if(data == 9) return '<small class="btn-xs btn-warning">预约中</small>';
+                        if(data == 11) return '<small class="btn-xs btn-success">已上门</small>';
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "上门时间",
+                    "data": "come_datetime",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data)
+                        {
+                            let d = new Date(data);
+                            let year = d.getFullYear();
+                            let month = ('0' + (d.getMonth() + 1)).slice(-2); // 月份是从0开始的
+                            let day = ('0' + d.getDate()).slice(-2);
+                            let hours = ('0' + d.getHours()).slice(-2);
+                            let minutes = ('0' + d.getMinutes()).slice(-2);
+                            let seconds = ('0' + d.getSeconds()).slice(-2);
+
+                            return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
+                        }
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "成交次数",
+                    "data": "transaction_num",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "成交总数",
+                    "data": "transaction_count",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "成交总额",
+                    "data": "transaction_amount",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "最新跟进说明",
+                    "data": "follow_latest_description",
+                    "className": "",
+                    "width": "",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
                     }
                 },
                 {

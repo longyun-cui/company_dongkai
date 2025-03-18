@@ -1,10 +1,18 @@
 <?php
 namespace App\Repositories\DK;
 
+use App\Models\DK\DK_Department;
+use App\Models\DK\DK_User;
 use App\Models\DK_Choice\DK_Choice_Call_Record;
 
 use App\Models\DK_Client\DK_Client_Department;
 use App\Models\DK_Client\DK_Client_User;
+use App\Models\DK_Client\DK_Client_Contact;
+
+use App\Models\DK_Client\DK_Client_Follow_Record;
+use App\Models\DK_Client\DK_Client_Trade_Record;
+
+
 use App\Models\DK_Client\DK_Client_Project;
 use App\Models\DK_Client\DK_Client_Record;
 use App\Models\DK_Client\DK_Client_Finance_Daily;
@@ -178,6 +186,31 @@ class DKClientRepository {
         $return['staff_list'] = $staff_list;
 
         $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.index';
+        return view($view_blade)->with($return);
+    }
+    public function view_admin_index1()
+    {
+        $this->get_me();
+        $me = $this->me;
+
+//        $condition = request()->all();
+//        $return['condition'] = $condition;
+//
+//        $condition['task-list-type'] = 'unfinished';
+//        $parameter_result = http_build_query($condition);
+//        return redirect('/?'.$parameter_result);
+
+        $department_list = DK_Client_Department::select('id','name')
+            ->where('client_id',$me->client_id)
+            ->get();
+        $return['department_list'] = $department_list;
+
+        $staff_list = DK_Client_User::select('id','username')
+            ->where('client_id',$me->client_id)
+            ->get();
+        $return['staff_list'] = $staff_list;
+
+        $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.index1';
         return view($view_blade)->with($return);
     }
 
@@ -372,6 +405,125 @@ class DKClientRepository {
     }
 
 
+
+
+
+
+    /*
+     * select2
+     */
+    // 【部门】
+    public function v1_operate_for_select2_department($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query =DK_Client_Department::select(['id','name as text'])
+            ->where('client_id',$me->client_id)
+            ->where(['item_status'=>1]);
+
+        if(!empty($post_data['keyword']))
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query->where('name','like',"%$keyword%");
+        }
+
+//        if(!empty($post_data['type']))
+//        {
+//            $type = $post_data['type'];
+//            if($type == 'manager') $query->where(['user_type'=>81]);
+//            else if($type == 'supervisor') $query->where(['user_type'=>84]);
+//            else $query->where(['user_type'=>81]);
+//        }
+//        else $query->where(['user_type'=>81]);
+
+//        if($me->user_type == 81)
+//        {
+//            $query->where('department_district_id',$me->department_district_id);
+//        }
+
+        $list = $query->orderBy('id','desc')->get()->toArray();
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        $unSpecified = ['id'=>'-1','text'=>'选择部门'];
+        array_unshift($list,$unSpecified);
+        return $list;
+    }
+    // 【员工】
+    public function v1_operate_for_select2_staff($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query =DK_Client_User::select(['id','username as text'])
+            ->where('client_id',$me->client_id)
+            ->where('user_type','!=',11)
+            ->where(['user_status'=>1]);
+
+        if(!empty($post_data['keyword']))
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query->where('username','like',"%$keyword%");
+        }
+
+//        if(in_array($me->user_type,[41,71,77,81,84,88]))
+//        {
+//            $department_district_id = $me->department_district_id;
+//            $query->where('department_district_id',$department_district_id);
+//        }
+//
+//        if(!empty($post_data['type']))
+//        {
+//            $type = $post_data['type'];
+//            if($type == 'inspector') $query->where(['user_type'=>77]);
+//        }
+
+        $list = $query->orderBy('id','desc')->get()->toArray();
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        $unSpecified = ['id'=>'-1','text'=>'选择员工'];
+        array_unshift($list,$unSpecified);
+        return $list;
+    }
+    // 【联系渠道】
+    public function v1_operate_for_select2_contact($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query =DK_Client_Contact::select(['id','name as text'])
+            ->where('client_id',$me->client_id)
+            ->where(['item_status'=>1])
+            ->when(in_array($me->user_type,[81,84,88]), function ($query) use ($me) {
+                return $query->where('client_staff_id', $me->id);
+            });
+
+        if(!empty($post_data['keyword']))
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query->where('username','like',"%$keyword%");
+        }
+
+//        if(in_array($me->user_type,[41,71,77,81,84,88]))
+//        {
+//            $department_district_id = $me->department_district_id;
+//            $query->where('department_district_id',$department_district_id);
+//        }
+//
+//        if(!empty($post_data['type']))
+//        {
+//            $type = $post_data['type'];
+//            if($type == 'inspector') $query->where(['user_type'=>77]);
+//        }
+
+        $list = $query->orderBy('id','desc')->get()->toArray();
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        $unSpecified = ['id'=>'-1','text'=>'选择联系渠道'];
+        array_unshift($list,$unSpecified);
+        return $list;
+    }
+    
 
 
 
@@ -772,6 +924,65 @@ class DKClientRepository {
 
 
 
+
+
+
+    // 【工单-管理】【操作记录】返回-列表-数据
+    public function v1_operate_for_delivery_item_follow_record_datatable_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $id  = $post_data["id"];
+        $query = DK_Client_Follow_Record::select('*')
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+            ])
+            ->where(['delivery_id'=>$id]);
+//            ->where(['record_object'=>21,'operate_object'=>61,'item_id'=>$id]);
+
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+
+            if($v->owner_id == $me->id) $list[$k]->is_me = 1;
+            else $list[$k]->is_me = 0;
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+
+
+
+
+
+
+
+
     // 【财务-管理】返回-列表-数据
     public function get_datatable_finance_daily($post_data)
     {
@@ -922,8 +1133,79 @@ class DKClientRepository {
     /*
      * 部门管理
      */
+    // 【部门-管理】返回-列表-数据
+    public function v1_operate_for_department_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_Client_Department::select(['id','item_status','name','department_type','leader_id','superior_department_id','remark','creator_id','created_at','updated_at','deleted_at'])
+            ->withTrashed()
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'leader'=>function($query) { $query->select(['id','username','true_name']); },
+                'superior_department_er'=>function($query) { $query->select(['id','name']); }
+            ])
+            ->where('client_id',$me->client_id);
+
+        if(in_array($me->user_type,[41,81]))
+        {
+            $query->where('superior_department_id',$me->department_district_id);
+        }
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        // 部门类型 [大区|组]
+        if(!empty($post_data['department_type']))
+        {
+            if(!in_array($post_data['department_type'],[-1,0]))
+            {
+                $query->where('item_type', $post_data['department_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach($list as $k => $v)
+        {
+            if($v->department_type == 11)
+            {
+                $v->district_id = $v->id;
+            }
+            else if($v->department_type == 21)
+            {
+                $v->district_id = $v->superior_department_id;
+            }
+
+            $v->district_group_id = $v->district_id.'.'.$v->id;
+        }
+
+        return datatable_response($list, $draw, $total);
+    }
     // 【部门-管理】保存数据
-    public function operate_department_edit_by_admin($post_data)
+    public function v1_operate_for_department_item_save($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -1009,8 +1291,8 @@ class DKClientRepository {
         }
 
     }
-    // 【部门管理】获取数据
-    public function operate_department_get_by_admin($post_data)
+    // 【部门-管理】获取数据
+    public function v1_operate_for_department_item_get($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -1324,11 +1606,113 @@ class DKClientRepository {
 
 
 
+
+
+
+
     /*
      * 员工管理
      */
+    // 【员工-员工管理】返回-列表-数据
+    public function v1_operate_for_staff_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Client_User::withTrashed()->select('*')
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'department_er'=>function($query) { $query->select(['id','name']); }
+            ])
+            ->whereIn('user_category',[11])
+            ->where('client_id',$me->client_id)
+            ->where('id','!=',$me->id);
+
+        if($me->user_type == 11)
+        {
+            $query->whereIn('user_type',[41,61,66,71,77,81,84,88]);
+        }
+        else if($me->user_type == 61)
+        {
+            $query->whereIn('user_type',[66]);
+        }
+        else if($me->user_type == 41)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[71,77,81,84,88]);
+        }
+        else if($me->user_type == 71)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[77]);
+        }
+        else if($me->user_type == 81)
+        {
+            $query->where('department_district_id',$me->department_district_id)
+                ->whereIn('user_type',[84,88]);
+        }
+//            ->whereHas('fund', function ($query1) { $query1->where('totalfunds', '>=', 1000); } )
+//            ->with('ep','parent','fund')
+//            ->withCount([
+//                'members'=>function ($query) { $query->where('usergroup','Agent2'); },
+//                'fans'=>function ($query) { $query->where('usergroup','Service'); }
+//            ]);
+//            ->where(['userstatus'=>'正常','status'=>1])
+//            ->whereIn('usergroup',['Agent','Agent2']);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['mobile'])) $query->where('mobile', $post_data['mobile']);
+
+
+        // 部门-大区
+        if(!empty($post_data['department']))
+        {
+            if(!in_array($post_data['department'],[-1,0,'-1','0']))
+            {
+                $query->where('department_id', $post_data['department']);
+            }
+        }
+
+        // 员工类型
+        if(!empty($post_data['user_type']))
+        {
+            if(!in_array($post_data['user_type'],[-1,0]))
+            {
+                $query->where('user_type', $post_data['user_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+            $list[$k]->encode_id = encode($v->id);
+        }
+//        dd($total);
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
     // 【员工-管理】保存数据
-    public function operate_staff_edit_by_admin($post_data)
+    public function v1_operate_for_staff_item_save($post_data)
     {
 //        dd($post_data);
         $messages = [
@@ -1487,7 +1871,8 @@ class DKClientRepository {
         }
 
     }
-    public function operate_staff_get_by_admin($post_data)
+    // 【员工-管理】获取数据
+    public function v1_operate_for_staff_item_get($post_data)
     {
         $messages = [
             'operate.required' => 'operate.required.',
@@ -1511,7 +1896,9 @@ class DKClientRepository {
         $id = $post_data["item_id"];
         if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
 
-        $item = DK_Client_User::with([])->withTrashed()->find($id);
+        $item = DK_Client_User::with([
+                'department_er'=>function($query) { $query->select(['id','name']); }
+            ])->withTrashed()->find($id);
         if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
 
         return response_success($item,"");
@@ -2489,6 +2876,1602 @@ class DKClientRepository {
     }
 
 
+
+
+
+
+
+    // 【工单-管理】字段修改
+    public function v1_operate_for_user_field_set($post_data)
+    {
+        $messages = [
+            'operate_category.required' => 'operate_category.required.',
+            'column_key.required' => 'column_key.required.',
+            'column_value.required' => 'column_value.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate_category' => 'required',
+            'column_key' => 'required',
+            'column_value' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate_category = $post_data["operate_category"];
+        if($operate_category != 'field-set') return response_error([],"参数[operate]有误！");
+//        $id = $post_data["item-id"];
+//        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+//        $operate_type = $post_data["operate-type"];
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+//        if($item->owner_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+
+
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if($column_key == 'is_take_order')
+            {
+                if(($column_value == 1) && ($me->is_take_order_date != date('Y-m-d')))
+                {
+                    $me->is_take_order_date = date('Y-m-d');
+                    $me->is_take_order_today = 0;
+                }
+            }
+            $me->$column_key = $column_value;
+            $bool = $me->save();
+            if(!$bool) throw new Exception("DK_Client_User--update--fail");
+            else
+            {
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+    // 【工单-管理】字段修改
+    public function v1_operate_for_parent_client_field_set($post_data)
+    {
+        $messages = [
+            'operate_category.required' => 'operate_category.required.',
+            'column_key.required' => 'column_key.required.',
+            'column_value.required' => 'column_value.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate_category' => 'required',
+            'column_key' => 'required',
+            'column_value' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate_category = $post_data["operate_category"];
+        if($operate_category != 'field-set') return response_error([],"参数[operate]有误！");
+//        $id = $post_data["item-id"];
+//        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+//        $operate_type = $post_data["operate-type"];
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+
+
+        $parent_client = DK_Client::find($me->client_id);
+        if(!$parent_client) return response_error([],"所属客户不存在！");
+
+        $column_key = $post_data["column_key"];
+        $column_value = $post_data["column_value"];
+
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $parent_client->$column_key = $column_value;
+            $bool = $parent_client->save();
+            if(!$bool) throw new Exception("DK_Client--update--fail");
+            else
+            {
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+    // 【交付管理】自动-分配
+    public function v1_operate_for_delivery_automatic_dispatching_by_admin($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+//            'ids.required' => 'ids.required.',
+//            'staff_id.required' => 'staff_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+//            'ids' => 'required',
+//            'staff_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $operate = $post_data["operate"];
+        if($operate != 'automatic-dispatching-by-admin') return response_error([],"参数[operate]有误！");
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+//        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
+
+        // 判断操作参数是否合法
+//        $client_staff_id = $post_data["staff_id"];
+//        if(!in_array($operate_result,config('info.delivered_result'))) return response_error([],"交付结果参数有误！");
+
+        $staff_list = DK_Client_User::select('id','client_id','is_take_order','is_take_order_date')
+            ->where('client_id',$me->client_id)
+            ->where('is_take_order',1)
+            ->where('is_take_order_date',date('Y-m-d'))
+            ->orderBy('is_take_order_today','asc')
+            ->get();
+        $staff_count = count($staff_list);
+//        dd($staff_count);
+
+        $delivery_list = DK_Pivot_Client_Delivery::withTrashed()
+            ->where('client_id',$me->client_id)
+            ->where('client_staff_id',0)
+            ->get();
+        $delivery_count = count($delivery_list);
+        dd($delivery_count);
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $num = 0;
+            foreach($delivery_list as $key => $delivery)
+            {
+                $mine = DK_Pivot_Client_Delivery::withTrashed()->where($delivery->id);
+                if(!$mine) throw new Exception("该【交付】不存在，刷新页面重试！");
+                if($mine->client_id != $me->client_id) throw new Exception("归属错误，刷新页面重试！");
+
+                $before = $mine->client_staff_id;
+
+                $mine->client_staff_id = $client_staff_id;
+                $bool = $mine->save();
+                if(!$bool) throw new Exception("DK_Pivot_Client_Delivery--update--fail");
+                else
+                {
+//                    $record = new DK_Client_Record;
+//
+//                    $record_data["ip"] = Get_IP();
+//                    $record_data["record_object"] = 21;
+//                    $record_data["record_category"] = 11;
+//                    $record_data["record_type"] = 1;
+//                    $record_data["creator_id"] = $me->id;
+//                    $record_data["order_id"] = $id;
+//                    $record_data["operate_object"] = 91;
+//                    $record_data["operate_category"] = 99;
+//                    $record_data["operate_type"] = 1;
+//                    $record_data["column_name"] = "client_staff_id";
+//
+//                    $record_data["before"] = $before;
+//                    $record_data["after"] = $client_staff_id;
+//
+//                    $bool_1 = $record->fill($record_data)->save();
+//                    if(!$bool_1) throw new Exception("DK_Client_Record--insert--fail");
+                }
+
+            }
+
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+    /*
+     * 联系渠道管理
+     */
+    // 【联系渠道-员工管理】返回-列表-数据
+    public function v1_operate_for_contact_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_Client_Contact::select(['id','item_status','name','contact_type','client_staff_id','remark','creator_id','created_at','updated_at','deleted_at'])
+            ->withTrashed()
+            ->with([
+                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); }
+            ])
+            ->where('client_id',$me->client_id);
+
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+        // 部门类型 [大区|组]
+        if(!empty($post_data['contact_type']))
+        {
+            if(!in_array($post_data['contact_type'],[-1,0,'-1','0']))
+            {
+                $query->where('contact_type', $post_data['contact_type']);
+            }
+        }
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach($list as $k => $v)
+        {
+        }
+
+        return datatable_response($list, $draw, $total);
+    }
+    // 【联系渠道-管理】保存数据
+    public function v1_operate_for_contact_item_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'name.required' => '请输入联系渠道名称！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'name' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+        if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_Client_Contact::select('id')->where('name',$post_data["name"])->where('client_id',$me->client_id)->count();
+            if($is_exist) return response_error([],"该【名称】已存在，请勿重复添加！");
+
+            $mine = new DK_Client_Contact;
+            $post_data["active"] = 1;
+            $post_data["client_id"] = $me->client_id;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate_type == 'edit') // 编辑
+        {
+            $mine = DK_Client_Contact::find($operate_id);
+            if(!$mine) return response_error([],"该【联系渠道】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("DK_Client_Contact--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【联系渠道-管理】获取数据
+    public function v1_operate_for_contact_item_get($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client_Contact::with([
+            'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); }
+        ])->withTrashed()->find($id);
+        if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        return response_success($item,"");
+    }
+
+
+
+
+    // 【交付-管理】返回-列表-数据
+    public function v1_operate_for_delivery_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        $query = DK_Pivot_Client_Delivery::select('*')
+            ->where('client_id',$me->client_id)
+            ->with([
+                'order_er',
+                'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); },
+                'client_contact_er'=>function($query) { $query->select(['id','name']); }
+            ])
+            ->when($me->company_category == 1, function ($query) use ($me) {
+                return $query->where('company_id', $me->id);
+            })
+            ->when($me->company_category == 11, function ($query) use ($me) {
+                return $query->where('channel_id', $me->id);
+            })
+            ->when($me->company_category == 21, function ($query) use ($me) {
+                return $query->where('business_id', $me->id);
+            })
+            ->when(in_array($me->user_type,[81,84,88]), function ($query) use ($me) {
+                return $query->where('client_staff_id', $me->id);
+            });
+
+
+
+        if(!empty($post_data['id'])) $query->where('id', $post_data['id']);
+        if(!empty($post_data['order_id'])) $query->where('order_id', $post_data['order_id']);
+        if(!empty($post_data['remark'])) $query->where('remark', 'like', "%{$post_data['remark']}%");
+        if(!empty($post_data['description'])) $query->where('description', 'like', "%{$post_data['description']}%");
+        if(!empty($post_data['keyword'])) $query->where('content', 'like', "%{$post_data['keyword']}%");
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+        if(!empty($post_data['client_name'])) $query->where('client_name', $post_data['client_name']);
+        if(!empty($post_data['client_phone'])) $query->where('client_phone', $post_data['client_phone']);
+
+        if(!empty($post_data['assign'])) $query->where('delivered_date', $post_data['assign']);
+
+
+
+        // 交付客户
+        if(isset($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,'-1']))
+            {
+                $query->where('client_id', $post_data['client']);
+            }
+        }
+
+        // 上门状态
+        if(isset($post_data['is_come']))
+        {
+            if(!in_array($post_data['is_come'],[-1,'-1']))
+            {
+                $query->where('is_come', $post_data['is_come']);
+            }
+        }
+        // 上门时间
+        if(!empty($post_data['come_date'])) $query->where('come_date', $post_data['come_date']);
+
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query->whereDate('delivered_date',$the_day);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query->whereDate('delivered_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query->whereDate('delivered_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+        }
+
+
+        // 患者类型
+        if(isset($post_data['client_type']))
+        {
+            if(!in_array($post_data['client_type'],[-1,'-1']))
+            {
+                $query->where('client_type', $post_data['client_type']);
+            }
+        }
+
+        // 导出状态
+        if(isset($post_data['exported_status']))
+        {
+            if(!in_array($post_data['exported_status'],[-1,'-1']))
+            {
+                $query->where('exported_status', $post_data['exported_status']);
+            }
+        }
+
+        // 分配状态
+        if(isset($post_data['assign_status']))
+        {
+            if(!in_array($post_data['assign_status'],[-1,'-1']))
+            {
+//                $query->where('assign_status', $post_data['assign_status']);
+                if($post_data['assign_status'] == 0)
+                {
+                    $query->where('client_staff_id', 0);
+                }
+                else if($post_data['assign_status'] == 1)
+                {
+                    $query->where('client_staff_id', '>', 0);
+                }
+            }
+        }
+
+//        dd($post_data['is_api_pushed']);
+        // 是否api推送
+        if(isset($post_data['is_api_pushed']))
+        {
+            if(!in_array($post_data['is_api_pushed'],[-1,'-1']))
+            {
+                $query->where('is_api_pushed', $post_data['is_api_pushed']);
+            }
+        }
+
+
+        // 区域
+        if(isset($post_data['district']))
+        {
+            if(count($post_data['district']) > 0)
+            {
+                $query->whereHas('order_er', function($query) use($post_data) {
+                    $query->whereIn('location_district',$post_data['district']);
+                }
+                );
+            }
+        }
+
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw'] : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start'] : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach ($list as $k => $v)
+        {
+//            $list[$k]->encode_id = encode($v->id);
+//            $list[$k]->content_decode = json_decode($v->content);
+        }
+//        dd($list->toArray());
+        return datatable_response($list, $draw, $total);
+    }
+    // 【交付-管理】获取数据
+    public function v1_operate_for_delivery_item_get($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Pivot_Client_Delivery::with([
+            'client_contact_er'=>function($query) { $query->select(['id','name']); }
+        ])->withTrashed()->find($id);
+        if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        return response_success($item,"");
+    }
+
+    // 【交付-管理】保存数据
+    public function v1_operate_for_delivery_item_customer_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'is_wx.required' => '请选择是否加微信！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'is_wx' => 'required',
+            'is_wx' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,81,84,88])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+
+        $mine = DK_Pivot_Client_Delivery::with([
+            'client_contact_er'=>function($query) { $query->select(['id','name']); }
+        ])->withTrashed()->find($operate_id);
+        if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
+
+
+        $datetime = date('Y-m-d H:i:s');
+
+
+        $follow_update = [];
+
+        $is_wx = $post_data["is_wx"];
+        if($is_wx != $mine->is_wx)
+        {
+            $update['field'] = 'is_wx';
+            $update['before'] = $mine->is_wx;
+            $update['after'] = $is_wx;
+            $follow_update[] = $update;
+
+            $mine->is_wx = $is_wx;
+        }
+
+        $customer_remark = $post_data["customer_remark"];
+        if($customer_remark != $mine->customer_remark)
+        {
+            $update['field'] = 'customer_remark';
+            $update['before'] = $mine->customer_remark;
+            $update['after'] = $customer_remark;
+            $follow_update[] = $update;
+
+            $mine->customer_remark = $customer_remark;
+        }
+
+        $client_contact_id = $post_data["client_contact_id"];
+        $contact = DK_Client_Contact::select('id','name')->find($client_contact_id);
+        if(!$contact) return response_error([],"【联系渠道】不存在，请刷新页面重试！");
+        if($client_contact_id != $mine->client_contact_id)
+        {
+            $update['field'] = 'client_contact_id';
+            if($mine->client_contact_er)
+            {
+                $update['before'] = $mine->client_contact_er->name;
+            }
+            else
+            {
+                $update['before'] = '';
+            }
+            $update['before_id'] = $mine->client_contact_id;
+            $update['after'] = $contact->name;
+            $update['after_id'] = $client_contact_id;
+            $follow_update[] = $update;
+
+            $mine->client_contact_id = $client_contact_id;
+        }
+
+
+        $follow = new DK_Client_Follow_Record;
+
+        $follow_data["follow_category"] = 1;
+        $follow_data["follow_type"] = 11;
+        $follow_data["client_id"] = $me->client_id;
+        $follow_data["delivery_id"] = $operate_id;
+        $follow_data["creator_id"] = $me->id;
+        $follow_data["custom_text_1"] = json_encode($follow_update);
+        $follow_data["follow_datetime"] = $datetime;
+        $follow_data["follow_date"] = $datetime;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $bool = $follow->fill($follow_data)->save();
+            if($bool)
+            {
+//                $mine->timestamps = false;
+                $mine->last_operation_datetime = $datetime;
+                $mine->last_operation_date = $datetime;
+                $bool_d = $mine->save();
+            }
+            else throw new Exception("DK_Client_Follow_Record--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【交付-管理】保存数据
+    public function v1_operate_for_delivery_item_come_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'follow-datetime.required' => '请输入跟进时间！',
+            'is_come.required' => '请选择上门状态！',
+//            'come-datetime.required' => '请选择上门时间！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'follow-datetime' => 'required',
+            'is_come' => 'required',
+//            'come-datetime' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,81,84,88])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+
+        $mine = DK_Pivot_Client_Delivery::with([
+        ])->withTrashed()->find($operate_id);
+        if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
+
+
+        $datetime = date('Y-m-d H:i:s');
+
+
+        $follow_update = [];
+
+        // 上门状态
+        $is_come = $post_data["is_come"];
+        if($is_come != $mine->is_come)
+        {
+            $update['field'] = 'is_come';
+            $update['before'] = $mine->is_come;
+            $update['after'] = $is_come;
+            $follow_update[] = $update;
+
+            $mine->is_come = $is_come;
+        }
+        // 上门时间
+        $come_datetime = $post_data['come-datetime'];
+        if(!empty($come_datetime))
+        {
+            $update['field'] = 'come_datetime';
+            $update['before'] = '';
+            $update['after'] = $come_datetime;
+            $follow_update[] = $update;
+
+            $mine->come_datetime = $come_datetime;
+            $mine->come_date = $come_datetime;
+        }
+        // 上门备注
+        $trade_data["description"] = $post_data['come-description'];
+        if(!empty($trade_data["description"]))
+        {
+            $update['field'] = 'come_description';
+            $update['before'] = '';
+            $update['after'] = $trade_data["description"];
+            $follow_update[] = $update;
+        }
+
+
+
+        $follow = new DK_Client_Follow_Record;
+
+        $follow_data["follow_category"] = 1;
+        $follow_data["follow_type"] = 31;
+        $follow_data["client_id"] = $me->client_id;
+        $follow_data["delivery_id"] = $operate_id;
+        $follow_data["creator_id"] = $me->id;
+        $follow_data["custom_text_1"] = json_encode($follow_update);
+        $follow_data["follow_datetime"] = $post_data['follow-datetime'];
+        $follow_data["follow_date"] = $post_data['follow-datetime'];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $bool = $follow->fill($follow_data)->save();
+            if($bool)
+            {
+//                $mine->timestamps = false;
+                $mine->last_operation_datetime = $datetime;
+                $mine->last_operation_date = $datetime;
+                $bool_d = $mine->save();
+            }
+            else throw new Exception("DK_Client_Follow_Record--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【交付-管理】保存数据
+    public function v1_operate_for_delivery_item_trade_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'transaction-datetime.required' => '请输入成交时间！',
+            'transaction-count.required' => '请输入成交数量！',
+            'transaction-amount.required' => '请输入成交金额！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'transaction-datetime' => 'required',
+            'transaction-count' => 'required',
+            'transaction-amount' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,81,84,88])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+        $mine = DK_Pivot_Client_Delivery::with([
+        ])->withTrashed()->find($operate_id);
+        if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
+
+
+        $datetime = date('Y-m-d H:i:s');
+
+        $follow_update = [];
+
+
+        $trade = new DK_Client_Trade_Record;
+
+        $trade_data["trade_category"] = 1;
+        $trade_data["trade_type"] = 1;
+        $trade_data["client_id"] = $me->client_id;
+        $trade_data["delivery_id"] = $operate_id;
+        $trade_data["creator_id"] = $me->id;
+
+        $trade_data["title"] = $post_data['transaction-title'];
+
+        $trade_data["transaction_datetime"] = $post_data['transaction-datetime'];
+        if(!empty($trade_data["transaction_datetime"]))
+        {
+            $update['field'] = 'transaction_datetime';
+            $update['before'] = '';
+            $update['after'] = $trade_data["transaction_datetime"];
+            $follow_update[] = $update;
+        }
+        $trade_data["transaction_date"] = $post_data['transaction-datetime'];
+
+        $trade_data["transaction_count"] = $post_data['transaction-count'];
+        if(!empty($trade_data["transaction_count"]))
+        {
+            $update['field'] = 'transaction_count';
+            $update['before'] = '';
+            $update['after'] = $trade_data["transaction_count"];
+            $follow_update[] = $update;
+        }
+        $trade_data["transaction_amount"] = $post_data['transaction-amount'];
+        if(!empty($trade_data["transaction_amount"]))
+        {
+            $update['field'] = 'transaction_amount';
+            $update['before'] = '';
+            $update['after'] = $trade_data["transaction_amount"];
+            $follow_update[] = $update;
+        }
+
+        $trade_data["transaction_pay_account"] = $post_data['transaction-pay-account'];
+        $trade_data["transaction_receipt_account"] = $post_data['transaction-receipt-account'];
+        $trade_data["transaction_order_number"] = $post_data['transaction-order-number'];
+
+        $trade_data["description"] = $post_data['transaction-description'];
+        if(!empty($trade_data["description"]))
+        {
+            $update['field'] = 'transaction_description';
+            $update['before'] = '';
+            $update['after'] = $trade_data["description"];
+            $follow_update[] = $update;
+        }
+
+
+        $follow = new DK_Client_Follow_Record;
+
+        $follow_data["follow_category"] = 1;
+        $follow_data["follow_type"] = 88;
+        $follow_data["client_id"] = $me->client_id;
+        $follow_data["delivery_id"] = $operate_id;
+        $follow_data["creator_id"] = $me->id;
+        $follow_data["custom_text_1"] = json_encode($follow_update);
+//        $follow_data["follow_datetime"] = $datetime;
+//        $follow_data["follow_date"] = $datetime;
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $bool_t = $trade->fill($trade_data)->save();
+            if($bool_t)
+            {
+                $follow_data['custom_id'] = $trade->id;
+                $bool_f = $follow->fill($follow_data)->save();
+                if($bool_f)
+                {
+                    $trade->follow_id = $follow->id;
+                    $bool_t_2 = $trade->save();
+                    if(!$bool_t_2) throw new Exception("DK_Client_Trade_Record--update--fail");
+
+                    $mine = DK_Pivot_Client_Delivery::lockForUpdate()->withTrashed()->find($operate_id);
+
+//                $mine->timestamps = false;
+                    $mine->transaction_num += 1;
+                    $mine->transaction_count += $post_data['transaction-count'];
+                    $mine->transaction_amount += $post_data['transaction-amount'];
+                    $mine->transaction_datetime = $post_data['transaction-datetime'];
+                    $mine->transaction_date = $post_data['transaction-datetime'];
+                    $mine->last_operation_datetime = $datetime;
+                    $mine->last_operation_date = $datetime;
+                    $bool_d = $mine->save();
+                    if(!$bool_d) throw new Exception("DK_Pivot_Client_Delivery--update--fail");
+                }
+                else throw new Exception("DK_Client_Follow_Record--insert--fail");
+            }
+            else throw new Exception("DK_Client_Trade_Record--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【交付-管理】保存数据
+    public function v1_operate_for_delivery_item_follow_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'follow-datetime.required' => '请输入跟进时间！',
+//            'name.required' => '请输入联系渠道名称！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'follow-datetime' => 'required',
+//            'name' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,81,84,88])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+        $mine = DK_Pivot_Client_Delivery::with([
+        ])->withTrashed()->find($operate_id);
+        if(!$mine) return response_error([],"不存在警告，请刷新页面重试！");
+
+
+        $datetime = date('Y-m-d H:i:s');
+
+
+        $follow = new DK_Client_Follow_Record;
+
+        $follow_data["follow_category"] = 1;
+        $follow_data["follow_type"] = 1;
+        $follow_data["client_id"] = $me->client_id;
+        $follow_data["delivery_id"] = $operate_id;
+        $follow_data["creator_id"] = $me->id;
+        $follow_data["custom_text_1"] = $post_data['follow-description'];
+        $follow_data["follow_datetime"] = $post_data['follow-datetime'];
+        $follow_data["follow_date"] = $post_data['follow-datetime'];
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $bool = $follow->fill($follow_data)->save();
+            if($bool)
+            {
+//                $mine->timestamps = false;
+                $mine->follow_latest_description = $post_data['follow-description'];
+                $mine->follow_datetime = $post_data['follow-datetime'];
+                $mine->follow_date = $post_data['follow-datetime'];
+                $mine->last_operation_datetime = $datetime;
+                $mine->last_operation_date = $datetime;
+                $bool_d = $mine->save();
+                if(!$bool_d) throw new Exception("DK_Pivot_Client_Delivery--update--fail");
+            }
+            else throw new Exception("DK_Client_Follow_Record--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
+    /*
+     * 联系渠道管理
+     */
+    // 【联系渠道-员工管理】返回-列表-数据
+    public function v1_operate_for_trade_datatable_list_query($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $query = DK_Client_Trade_Record::select('*')
+            ->withTrashed()
+            ->with([
+                'delivery_er',
+                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); }
+            ])
+            ->where('client_id',$me->client_id);
+
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+        if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+
+
+        // 类型 [|]
+        if(!empty($post_data['trade_type']))
+        {
+            if(!in_array($post_data['trade_type'],[-1,0,'-1','0']))
+            {
+                $query->where('trade_type', $post_data['trade_type']);
+            }
+        }
+        // 是否确认 [|]
+        if(!empty($post_data['is_confirmed']))
+        {
+            if(!in_array($post_data['is_confirmed'],[-1,'-1']))
+            {
+                $query->where('is_confirmed', $post_data['is_confirmed']);
+            }
+        }
+
+
+
+
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_day  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+            $query->whereDate('transaction_date',$the_day);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $query->whereBetween('transaction_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query->whereDate('transaction_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query->whereDate('transaction_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+        }
+
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 10;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "desc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->get();
+
+        foreach($list as $k => $v)
+        {
+        }
+
+        return datatable_response($list, $draw, $total);
+    }
+    // 【联系渠道-管理】保存数据
+    public function v1_operate_for_trade_item_save($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'name.required' => '请输入联系渠道名称！',
+//            'name.unique' => '该部门号已存在！',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'name' => 'required',
+//            'name' => 'required|unique:dk_department,name',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return response_error([],"你没有操作权限！");
+
+
+        $operate = $post_data["operate"];
+        $operate_type = $operate["type"];
+        $operate_id = $operate['id'];
+
+        if($operate_type == 'create') // 添加 ( $id==0，添加一个新用户 )
+        {
+            $is_exist = DK_Client_Contact::select('id')->where('name',$post_data["name"])->where('client_id',$me->client_id)->count();
+            if($is_exist) return response_error([],"该【名称】已存在，请勿重复添加！");
+
+            $mine = new DK_Client_Contact;
+            $post_data["active"] = 1;
+            $post_data["client_id"] = $me->client_id;
+            $post_data["creator_id"] = $me->id;
+        }
+        else if($operate_type == 'edit') // 编辑
+        {
+            $mine = DK_Client_Trade_Record::find($operate_id);
+            if(!$mine) return response_error([],"该【联系渠道】不存在，刷新页面重试！");
+        }
+        else return response_error([],"参数有误！");
+
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            if(!empty($post_data['custom']))
+            {
+                $post_data['custom'] = json_encode($post_data['custom']);
+            }
+
+            $mine_data = $post_data;
+            unset($mine_data['operate']);
+
+            $bool = $mine->fill($mine_data)->save();
+            if($bool)
+            {
+            }
+            else throw new Exception("DK_Client_Contact--insert--fail");
+
+            DB::commit();
+            return response_success(['id'=>$mine->id]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+    // 【联系渠道-管理】获取数据
+    public function v1_operate_for_trade_item_get($post_data)
+    {
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+        $this->get_me();
+        $me = $this->me;
+
+        $operate = $post_data["operate"];
+        if($operate != 'item-get') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $item = DK_Client_Trade_Record::with([
+            'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); }
+        ])->withTrashed()->find($id);
+        if(!$item) return response_error([],"不存在警告，请刷新页面重试！");
+
+        return response_success($item,"");
+    }
+
+
+
+
+
+
+
+
+
+    // 【生产-统计】坐席排名
+    public function v1_operate_for_get_statistic_data_of_production_staff_rank($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+        // 员工统计
+        $query_order = DK_Pivot_Client_Delivery::select('client_staff_id','delivered_date')
+            ->addSelect(DB::raw("
+                    count(*) as delivery_count_for_all,
+                    count(IF(is_wx = 1, TRUE, NULL)) as delivery_count_for_wx,
+                    count(IF(is_come = 9, TRUE, NULL)) as delivery_count_for_come_9,
+                    count(IF(is_come = 11, TRUE, NULL)) as delivery_count_for_come_11,
+                    sum(transaction_num) as delivery_count_for_transaction_num,
+                    sum(transaction_count) as delivery_count_for_transaction_count,
+                    sum(transaction_amount) as delivery_count_for_transaction_amount
+                "))
+            ->where('client_id', $me->client_id)
+            ->groupBy('client_staff_id');
+
+        // 项目
+        $project_id = 0;
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
+            {
+                $project_id = $post_data['project'];
+                $query_order->where('project_id', $project_id);
+            }
+        }
+
+        // 部门-大区
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
+            {
+                $query_order->where('department_district_id', $post_data['department_district']);
+            }
+        }
+        // 部门-小组
+        if(!empty($post_data['department_group']))
+        {
+            if(!in_array($post_data['department_group'],[-1,0,'-1','0']))
+            {
+                $query_order->where('department_group_id', $post_data['department_group']);
+            }
+        }
+
+
+        // 时间
+        $time_type  = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == 'date')
+        {
+            $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+            $query_order->where('delivered_date',$the_date);
+        }
+        else if($time_type == 'month')
+        {
+            $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+//            $query_order->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp]);
+            $query_order->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($time_type == 'period')
+        {
+            if(!empty($post_data['date_start'])) $query_order->where('delivered_date', '>=', $post_data['date_start']);
+            if(!empty($post_data['date_ended'])) $query_order->where('delivered_date', '<=', $post_data['date_ended']);
+        }
+        else
+        {
+        }
+
+        $query_order = $query_order->get()->keyBy('client_staff_id')->toArray();
+//        dd($query_order);
+
+
+        $query = DK_Client_User::select(['id','user_type','username','true_name','client_id','department_id'])
+            ->with([
+                'department_er' => function($query) { $query->select(['id','name']); }
+            ])
+            ->where('client_id', $me->client_id)
+            ->whereIn('user_type',[81,84,88]);
+
+        if(!empty($post_data['username'])) $query->where('username', 'like', "%{$post_data['username']}%");
+
+
+        if(!empty($post_data['department_district']))
+        {
+            if(!in_array($post_data['department_district'],[-1,0,'-1','0']))
+            {
+                $query->where('department_district_id', $post_data['department_district']);
+            }
+        }
+        // 部门-小组
+        if(!empty($post_data['department_group']))
+        {
+            if(!in_array($post_data['department_group'],[-1,0,'-1','0']))
+            {
+                $query->where('department_group_id', $post_data['department_group']);
+            }
+        }
+
+
+        $total = $query->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : -1;
+
+        if(isset($post_data['order']))
+        {
+            $columns = $post_data['columns'];
+            $order = $post_data['order'][0];
+            $order_column = $order['column'];
+            $order_dir = $order['dir'];
+
+            $field = $columns[$order_column]["data"];
+            $query->orderBy($field, $order_dir);
+        }
+        else $query->orderBy("id", "asc");
+
+        if($limit == -1) $list = $query->get();
+        else $list = $query->skip($skip)->take($limit)->withTrashed()->get();
+
+        foreach ($list as $k => $v)
+        {
+            if(isset($query_order[$v->id]))
+            {
+                $list[$k]->delivery_count_for_all = $query_order[$v->id]['delivery_count_for_all'];
+                $list[$k]->delivery_count_for_wx = $query_order[$v->id]['delivery_count_for_wx'];
+                $list[$k]->delivery_count_for_come_9 = $query_order[$v->id]['delivery_count_for_come_9'];
+                $list[$k]->delivery_count_for_come_11 = $query_order[$v->id]['delivery_count_for_come_11'];
+                $list[$k]->delivery_count_for_transaction_num = $query_order[$v->id]['delivery_count_for_transaction_num'];
+                $list[$k]->delivery_count_for_transaction_count = $query_order[$v->id]['delivery_count_for_transaction_count'];
+                $list[$k]->delivery_count_for_transaction_amount = $query_order[$v->id]['delivery_count_for_transaction_amount'];
+            }
+            else
+            {
+                $list[$k]->delivery_count_for_all = 0;
+                $list[$k]->delivery_count_for_wx = 0;
+                $list[$k]->delivery_count_for_come_9 = 0;
+                $list[$k]->delivery_count_for_come_11 = 0;
+                $list[$k]->delivery_count_for_transaction_num = 0;
+                $list[$k]->delivery_count_for_transaction_count = 0;
+                $list[$k]->delivery_count_for_transaction_amount = 0;
+            }
+
+        }
+//        dd($list->toArray());
+
+        return datatable_response($list, $draw, $total);
+    }
+
+    // 【生产-统计】坐席日报
+    public function v1_operate_for_get_statistic_data_of_production_staff_daily($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+
+
+        $this_month = date('Y-m');
+        $this_month_start_date = date('Y-m-01'); // 本月开始日期
+        $this_month_ended_date = date('Y-m-t'); // 本月结束日期
+        $this_month_start_datetime = date('Y-m-01 00:00:00'); // 本月开始时间
+        $this_month_ended_datetime = date('Y-m-t 23:59:59'); // 本月结束时间
+        $this_month_start_timestamp = strtotime($this_month_start_date); // 本月开始时间戳
+        $this_month_ended_timestamp = strtotime($this_month_ended_datetime); // 本月结束时间戳
+
+        $last_month_start_date = date('Y-m-01',strtotime('last month')); // 上月开始时间
+        $last_month_ended_date = date('Y-m-t',strtotime('last month')); // 上月开始时间
+        $last_month_start_datetime = date('Y-m-01 00:00:00',strtotime('last month')); // 上月开始时间
+        $last_month_ended_datetime = date('Y-m-t 23:59:59',strtotime('last month')); // 上月结束时间
+        $last_month_start_timestamp = strtotime($last_month_start_date); // 上月开始时间戳
+        $last_month_ended_timestamp = strtotime($last_month_ended_datetime); // 上月月结束时间戳
+
+
+        $staff_id = $post_data['staff_id'];
+
+
+        $the_month  = isset($post_data['time_month']) ? $post_data['time_month']  : date('Y-m');
+        $the_month_timestamp = strtotime($the_month);
+
+        $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+        $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+        $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+        $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+        $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+        $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+        $the_date  = isset($post_data['time_date']) ? $post_data['time_date']  : date('Y-m-d');
+
+
+        $query_this_month = DK_Pivot_Client_Delivery::select('client_staff_id','delivered_date')
+            ->where('client_staff_id',$staff_id)
+            ->whereBetween('delivered_date',[$the_month_start_date,$the_month_ended_date])
+            ->groupBy('delivered_date')
+            ->addSelect(DB::raw("
+                    DATE_FORMAT(delivered_date,'%Y-%m-%d') as date_day,
+                    DATE_FORMAT(delivered_date,'%e') as day,
+                    count(*) as sum
+                "))
+            ->addSelect(DB::raw("
+                    count(*) as delivery_count_for_all,
+                    count(IF(is_wx = 1, TRUE, NULL)) as delivery_count_for_wx,
+                    count(IF(is_come = 9, TRUE, NULL)) as delivery_count_for_come_9,
+                    count(IF(is_come = 11, TRUE, NULL)) as delivery_count_for_come_11,
+                    sum(transaction_num) as delivery_count_for_transaction_num,
+                    sum(transaction_count) as delivery_count_for_transaction_count,
+                    sum(transaction_amount) as delivery_count_for_transaction_amount
+                    
+                "))
+            ->orderBy("delivered_date", "desc");
+
+        $total = $query_this_month->count();
+
+        $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
+        $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
+        $limit = isset($post_data['length']) ? $post_data['length'] : 50;
+
+        $list = $query_this_month->get();
+
+
+        $total_data = [];
+        $total_data['client_staff_id'] = $staff_id;
+        $total_data['date_day'] = '统计';
+        $total_data['staff_count'] = 0;
+        $total_data['delivery_count_for_all'] = 0;
+        $total_data['delivery_count_for_wx'] = 0;
+        $total_data['delivery_count_for_come_9'] = 0;
+        $total_data['delivery_count_for_come_11'] = 0;
+        $total_data['delivery_count_for_transaction_num'] = 0;
+        $total_data['delivery_count_for_transaction_count'] = 0;
+        $total_data['delivery_count_for_transaction_amount'] = 0;
+
+
+        foreach ($list as $k => $v)
+        {
+            $total_data['delivery_count_for_all'] += $v->delivery_count_for_all;
+            $total_data['delivery_count_for_wx'] += $v->delivery_count_for_wx;
+            $total_data['delivery_count_for_come_9'] += $v->delivery_count_for_come_9;
+            $total_data['delivery_count_for_come_11'] += $v->delivery_count_for_come_11;
+            $total_data['delivery_count_for_transaction_num'] += $v->delivery_count_for_transaction_num;
+            $total_data['delivery_count_for_transaction_count'] += $v->delivery_count_for_transaction_count;
+            $total_data['delivery_count_for_transaction_amount'] += $list[$k]->delivery_count_for_transaction_amount;
+        }
+        $list[] = $total_data;
+
+        return datatable_response($list, $draw, $total);
+    }
 
 
 

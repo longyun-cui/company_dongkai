@@ -72,6 +72,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-xs-12 col-sm-6 col-md-3">
                         <div class="box box-success box-solid">
                             <div class="box-header with-border">
@@ -112,6 +113,34 @@
                         </div>
                     </div>
 
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="box box-warning box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title comprehensive-month-title">设置</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <ul class="nav nav-stacked">
+                                    <li class="" style="padding:10px 15px;height:40px;clear:both;">
+                                        <span class="pull-left">
+                                            <b class="toggle-handle-text">开始接单</b>
+                                        </span>
+                                        <button id="toggle-button-for-staff-take" class="toggle-button pull-right
+                                            @if($me->is_staff_take == 1) toggle-button-on
+                                            @else toggle-button-off
+                                            @endif
+                                        ">
+                                            <span class="toggle-handle"></span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -123,16 +152,21 @@
 </div>
 
 
+@include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-follow-record')
+
+
 <div class="component-container _none">
 
     @include(env('TEMPLATE_DK_CLIENT').'component.department.department-list')
     @include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-list')
+    @include(env('TEMPLATE_DK_CLIENT').'component.contact.contact-list')
 
     @if($me->client_er->user_category == 1)
         @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list')
     @elseif($me->client_er->user_category == 31)
         @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-luxury-list')
     @endif
+
     @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily')
 
     @include(env('TEMPLATE_DK_CLIENT').'component.finance.finance-daily')
@@ -141,38 +175,9 @@
 
 
 
-{{--编辑-部门--}}
-<div class="modal fade modal-main-body modal-wrapper" id="modal-for-department-edit">
-    <div class="col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px">
-                <h3 class="box-title">添加部门</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            @include(env('TEMPLATE_DK_CLIENT').'component.department.department-edit')
-
-        </div>
-    </div>
-</div>
-{{--编辑-员工--}}
-<div class="modal fade modal-main-body modal-wrapper" id="modal-for-staff-edit">
-    <div class="col-md-8 col-md-offset-2 margin-top-64px margin-bottom-64px bg-white">
-        <div class="box- box-info- form-container">
-
-            <div class="box-header with-border margin-top-16px">
-                <h3 class="box-title">添加员工</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
-
-            @include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-edit')
-
-        </div>
-    </div>
-</div>
+@include(env('TEMPLATE_DK_CLIENT').'component.department.department-edit')
+@include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-edit')
+@include(env('TEMPLATE_DK_CLIENT').'component.contact.contact-edit')
 
 
 
@@ -220,6 +225,9 @@
                     </div>
                 </div>
 
+
+
+
                 {{--<div class="box-footer">--}}
                 {{--</div>--}}
 
@@ -236,6 +244,30 @@
 @section('custom-style')
 <style>
     .main-content .callout .callout-body span { margin-right:12px; }
+
+    .toggle-button {
+        position: relative;
+        width: 50px;
+        height: 25px;
+        background-color: #ccc;
+        border: none;
+        border-radius: 15px;
+    }
+
+    .toggle-handle {
+        position: absolute;
+        top: 0;
+        width: 25px;
+        height: 25px;
+        background-color: #fff;
+        border-radius: 50%;
+    }
+
+    .toggle-button.toggle-button-on { background-color: #66a3cc; transition: background-color 0.1s; }
+    .toggle-button.toggle-button-off { background-color: #dddddd; transition: background-color 0.1s; }
+
+    .toggle-button.toggle-button-on .toggle-handle { right: 0; background-color: #20e28b; transition: right 0.1s; }
+    .toggle-button.toggle-button-off .toggle-handle { left: 0; background-color: #e00000; transition: left 0.1s; }
 </style>
 @endsection
 
@@ -248,12 +280,18 @@
 
     @include(env('TEMPLATE_DK_CLIENT').'component.department.department-list-datatable')
     @include(env('TEMPLATE_DK_CLIENT').'component.staff.staff-list-datatable')
+    @include(env('TEMPLATE_DK_CLIENT').'component.contact.contact-list-datatable')
+
 
     @if($me->client_er->user_category == 1)
         @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-datatable')
     @elseif($me->client_er->user_category == 31)
         @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-luxury-list-datatable')
     @endif
+
+
+    @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-follow-record-datatable')
+
     @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-daily-datatable')
 
     @include(env('TEMPLATE_DK_CLIENT').'component.delivery.delivery-list-script')
@@ -263,6 +301,112 @@
 
 <script>
     $(function() {
+
+        // 【开关】
+        $(".main-content").on('click', "#toggle-button", function() {
+            $(this).toggleClass('toggle-button-on toggle-button-off');
+            var handle = $(this).find('.toggle-handle');
+            // handle.toggleClass('toggle-on toggle-off');
+            if($(this).hasClass('toggle-button-on'))
+            {
+                $.post(
+                    "{{ url('/setting/setting-customer') }}",
+                    {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        operate: "setting-customer-attribute",
+                        operate_column: "is_preferential",
+                        set_value: 1
+                    },
+                    function(data){
+                        if(!data.success) layer.msg(data.msg);
+                        else
+                        {
+                            layer.msg('已开启优选单');
+                            $(this).find('.toggle-handle-text').html('开启');
+                            handle.animate({'left': '25px'}, 'fast');
+                            $('.menu-of-clue-preferential').show();
+
+                        }
+                    },
+                    'json'
+                );
+            }
+            else
+            {
+                $.post(
+                    "{{ url('/setting/setting-customer') }}",
+                    {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        operate: "setting-customer-attribute",
+                        operate_column: "is_preferential",
+                        set_value: 0
+                    },
+                    function(data){
+                        if(!data.success) layer.msg(data.msg);
+                        else
+                        {
+                            layer.msg('已关闭优选单');
+                            $(this).find('.toggle-handle-text').html('关闭');
+                            handle.animate({'left': '0'}, 'fast');
+                            $('.menu-of-clue-preferential').hide();
+                        }
+                    },
+                    'json'
+                );
+            }
+        });
+
+        // 【开关】
+        $(".main-content").on('click', "#toggle-button-for-staff-take-", function() {
+            $(this).toggleClass('toggle-button-on toggle-button-off');
+            var handle = $(this).find('.toggle-handle');
+            // handle.toggleClass('toggle-on toggle-off');
+            if($(this).hasClass('toggle-button-on'))
+            {
+                $.post(
+                    "{{ url('/setting/setting-customer') }}",
+                    {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        operate: "setting-customer-attribute",
+                        operate_column: "is_staff_take",
+                        set_value: 1
+                    },
+                    function(data){
+                        if(!data.success) layer.msg(data.msg);
+                        else
+                        {
+                            layer.msg('已开启员工接单');
+                            $(this).find('.toggle-handle-text').html('开启');
+                            handle.animate({'left': '25px'}, 'fast');
+
+                        }
+                    },
+                    'json'
+                );
+            }
+            else
+            {
+                $.post(
+                    "{{ url('/setting/setting-customer') }}",
+                    {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        operate: "setting-customer-attribute",
+                        operate_column: "is_staff_take",
+                        set_value: 0
+                    },
+                    function(data){
+                        if(!data.success) layer.msg(data.msg);
+                        else
+                        {
+                            layer.msg('已关闭员工接单');
+                            $(this).find('.toggle-handle-text').html('关闭');
+                            handle.animate({'left': '0'}, 'fast');
+                        }
+                    },
+                    'json'
+                );
+            }
+        });
 
 
         // 每日订单量

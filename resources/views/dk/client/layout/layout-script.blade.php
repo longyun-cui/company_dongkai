@@ -62,11 +62,17 @@
         });
 
 
+
+
         $('.time_picker').datetimepicker({
             locale: moment.locale('zh-cn'),
-            format: "YYYY-MM-DD HH:mm",
+            format: 'YYYY-MM-DD HH:mm', // 同时包含日期和时间
+            sideBySide: true,           // 并排显示日期和时间选择器
+            stepping: 1,               // 时间步长（可选，例如15分钟）
             ignoreReadonly: true
         });
+
+
         $('.date_picker').datetimepicker({
             locale: moment.locale('zh-cn'),
             format: "YYYY-MM-DD",
@@ -167,6 +173,106 @@
         });
 
 
+
+
+
+
+
+        $('.select2-department').select2({
+            ajax: {
+                url: "{{ url('/v1/operate/select2/select2-department') }}",
+                type: 'post',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        department_category: this.data('department-category'),
+                        department_type: this.data('department-type'),
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+        $('.select2-staff').select2({
+            ajax: {
+                url: "{{ url('/v1/operate/select2/select2-staff') }}",
+                type: 'post',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        staff_category: this.data('staff-category'),
+                        staff_type: this.data('staff-type'),
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+        $('.select2-contact').select2({
+            ajax: {
+                url: "{{ url('/v1/operate/select2/select2-contact') }}",
+                type: 'post',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        contact_category: this.data('contact-category'),
+                        contact_type: this.data('contact-type'),
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
 
 
     });
@@ -343,6 +449,52 @@
     // }
     // copyToClipboard('123321');
     // copyToClipboard('135');
+
+
+
+
+
+    function select2_department_init(selector,$default)
+    {
+        var $element = $(selector);
+        if ($element.data('select2'))
+        {
+            $element.select2('destroy'); // 销毁旧实例
+        }
+
+        // 重新初始化
+        $element.select2({
+            ajax: {
+                url: "{{ url('/v1/operate/select2/select2_department') }}",
+                type: 'post',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        _token: $('meta[name="_token"]').attr('content'),
+                        keyword: params.term, // search term
+                        page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+
+                    params.page = params.page || 1;
+                    return {
+                        results: data,
+                        pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 0,
+            theme: 'classic'
+        });
+
+        if($default) $element.val($default).trigger('change');
+    }
 
 
 </script>

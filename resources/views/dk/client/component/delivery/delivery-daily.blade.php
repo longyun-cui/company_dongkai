@@ -13,7 +13,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="delivery-daily-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker" name="delivery-daily-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup month_picker-c" name="delivery-daily-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="delivery-daily-month">
                 <i class="fa fa-chevron-right"></i>
             </button>

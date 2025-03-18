@@ -38,6 +38,98 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
 
 
 
+
+    Route::post('/v1/operate/select2/select2-department', $controller.'@v1_operate_for_select2_department');
+    Route::post('/v1/operate/select2/select2-staff', $controller.'@v1_operate_for_select2_staff');
+    Route::post('/v1/operate/select2/select2-contact', $controller.'@v1_operate_for_select2_contact');
+
+
+    // 【部门-管理】
+    Route::post('/item/item-edit-for-department', $controller.'@operate_item_edit_for_department');
+    Route::post('/item/item-get-for-department', $controller.'@operate_item_get_for_department');
+
+    // 【客户-管理】
+    Route::post('/item/item-edit-for-staff', $controller.'@operate_staff_edit_by_admin');
+    Route::post('/item/item-get-for-staff', $controller.'@operate_staff_get_by_admin');
+
+
+
+
+    // 【部门-管理】
+    Route::post('/v1/operate/department/datatable-list-query', $controller.'@v1_operate_for_department_datatable_list_query');
+    Route::post('/v1/operate/department/item-get', $controller.'@v1_operate_for_department_item_get');
+    Route::post('/v1/operate/department/item-save', $controller.'@v1_operate_for_department_item_save');
+
+
+    // 【员工-管理】
+    Route::post('/v1/operate/staff/datatable-list-query', $controller.'@v1_operate_for_staff_datatable_list_query');
+    Route::post('/v1/operate/staff/item-get', $controller.'@v1_operate_for_staff_item_get');
+    Route::post('/v1/operate/staff/item-save', $controller.'@v1_operate_for_staff_item_save');
+
+
+    // 【联系渠道-管理】
+    Route::post('/v1/operate/contact/datatable-list-query', $controller.'@v1_operate_for_contact_datatable_list_query');
+    Route::post('/v1/operate/contact/item-get', $controller.'@v1_operate_for_contact_item_get');
+    Route::post('/v1/operate/contact/item-save', $controller.'@v1_operate_for_contact_item_save');
+
+
+
+
+    // 【联系渠道-管理】
+    Route::post('/v1/operate/delivery/datatable-list-query', $controller.'@v1_operate_for_delivery_datatable_list_query');
+    Route::post('/v1/operate/delivery/item-get', $controller.'@v1_operate_for_delivery_item_get');
+
+    Route::post('/v1/operate/delivery/item-customer-save', $controller.'@v1_operate_for_delivery_item_customer_save');
+    Route::post('/v1/operate/delivery/item-come-save', $controller.'@v1_operate_for_delivery_item_come_save');
+    Route::post('/v1/operate/delivery/item-follow-save', $controller.'@v1_operate_for_delivery_item_follow_save');
+    Route::post('/v1/operate/delivery/item-trade-save', $controller.'@v1_operate_for_delivery_item_trade_save');
+
+
+    // 【交易-管理】
+    Route::post('/v1/operate/trade/datatable-list-query', $controller.'@v1_operate_for_trade_datatable_list_query');
+    Route::post('/v1/operate/trade/item-get', $controller.'@v1_operate_for_trade_item_get');
+    Route::post('/v1/operate/trade/item-save', $controller.'@v1_operate_for_trade_item_save');
+
+
+
+
+    // 【通用】删除 & 恢复 & 永久删除
+    Route::post('/v1/operate/universal/item-delete-by-admin', $controller.'@v1_operate_for_universal_item_delete_by_admin');
+    Route::post('/v1/operate/universal/item-restore-by-admin', $controller.'@v1_operate_for_universal_item_restore_by_admin');
+    Route::post('/v1/operate/universal/item-delete-permanently-by-admin', $controller.'@v1_operate_for_universal_item_delete_permanently_by_admin');
+    // 【通用】重置密码 & 删除密码
+    Route::post('/v1/operate/universal/password-reset-by-admin', $controller.'@v1_operate_for_universal_password_reset_by_admin');
+    Route::post('/v1/operate/universal/password-change-by-admin', $controller.'@v1_operate_for_universal_password_change_by_admin');
+    // 【通用】启用 & 禁用
+    Route::post('/v1/operate/universal/item-enable-by-admin', $controller.'@v1_operate_for_universal_item_enable_by_admin');
+    Route::post('/v1/operate/universal/item-disable-by-admin', $controller.'@v1_operate_for_universal_item_disable_by_admin');
+    // 【通用】晋升 & 降职
+    Route::post('/v1/operate/universal/item-promote-by-admin', $controller.'@v1_operate_for_universal_item_promote_by_admin');
+    Route::post('/v1/operate/universal/item-demote-by-admin', $controller.'@v1_operate_for_universal_item_demote_by_admin');
+    // 【通用】登录
+    Route::post('/v1/operate/universal/item-login-by-admin', $controller.'@v1_operate_for_universal_item_login_by_admin');
+    // 【通用】字段修改
+    Route::post('/v1/operate/universal/field-set', $controller.'@v1_operate_for_universal_field_set');
+
+
+
+    // 【用户】字段修改
+    Route::post('/v1/operate/user/field-set', $controller.'@v1_operate_for_user_field_set');
+    Route::post('/v1/operate/parent-client/field-set', $controller.'@v1_operate_for_parent_client_field_set');
+
+
+    Route::post('/v1/operate/delivery/automatic-dispatching-by-admin', $controller.'@v1_operate_for_delivery_automatic_dispatching_by_admin');
+
+
+
+
+    Route::post('/v1/operate/delivery/item-follow-record-datatable-query', $controller.'@v1_operate_for_delivery_item_follow_record_datatable_query');
+
+
+
+
+
+
     // 【交付-管理】
     Route::post('/delivery/delivery-list', $controller.'@get_datatable_delivery_list');
     Route::post('/delivery/delivery-daily', $controller.'@get_datatable_delivery_daily');
@@ -48,15 +140,6 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
 
     // 【财务-管理】
     Route::post('/finance/finance-daily', $controller.'@get_datatable_finance_daily');
-
-
-    // 【部门-管理】
-    Route::post('/item/item-edit-for-department', $controller.'@operate_item_edit_for_department');
-    Route::post('/item/item-get-for-department', $controller.'@operate_item_get_for_department');
-
-    // 【客户-管理】
-    Route::post('/item/item-edit-for-staff', $controller.'@operate_staff_edit_by_admin');
-    Route::post('/item/item-get-for-staff', $controller.'@operate_staff_get_by_admin');
 
 
     // 【通用】删除 & 恢复 & 永久删除
@@ -78,6 +161,22 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
     Route::post('/item/bulk-assign-status', $controller.'@operate_bulk_assign_status');
     Route::post('/item/bulk-assign-staff', $controller.'@operate_bulk_assign_staff');
     Route::post('/item/bulk-api-push', $controller.'@operate_bulk_api_push');
+
+
+
+
+
+
+
+
+
+    Route::post('/v1/operate/statistic/production/staff-rank', $controller.'@v1_operate_for_get_statistic_data_of_production_staff_rank');
+    Route::post('/v1/operate/statistic/production/staff-daily', $controller.'@v1_operate_for_get_statistic_data_of_production_staff_daily');
+
+
+
+
+
 
 
 

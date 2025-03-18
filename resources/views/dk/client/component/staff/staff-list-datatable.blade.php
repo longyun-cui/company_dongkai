@@ -22,7 +22,7 @@
             "scrollCollapse": true,
             "showRefresh": true,
             "ajax": {
-                'url': "{{ url('/user/staff-list') }}",
+                'url': "{{ url('/v1/operate/staff/datatable-list-query') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
@@ -184,35 +184,9 @@
                     "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return '<a href="javascript:void(0);">'+data+'</a>';
+                        return '<a class="staff-control" data-id="'+row.id+'" data-title="'+data+'">'+data+'</a>';
                     }
                 },
-                // {
-                //     "title": "大区",
-                //     "data": "department_district_id",
-                //     "className": "",
-                //     "width": "80px",
-                //     "orderable": false,
-                //     render: function(data, type, row, meta) {
-                //         if(row.department_district_er) {
-                //             return '<a href="javascript:void(0);">'+row.department_district_er.name+'</a>';
-                //         }
-                //         else return '--';
-                //     }
-                // },
-                // {
-                //     "title": "小组",
-                //     "data": "department_group_id",
-                //     "className": "",
-                //     "width":"80px",
-                //     "orderable": false,
-                //     render: function(data, type, row, meta) {
-                //         if(row.department_group_er) {
-                //             return '<a href="javascript:void(0);">'+row.department_group_er.name+'</a>';
-                //         }
-                //         else return '--';
-                //     }
-                // },
                 {
                     "title": "团队",
                     "data": "department_id",
@@ -303,4 +277,5 @@
             "language": { url: '/common/dataTableI18n' },
         });
     }
+
 </script>

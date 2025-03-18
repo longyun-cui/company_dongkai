@@ -41,6 +41,9 @@ class DK_Client extends Authenticatable
         'business_id',
 
 
+        'is_automatic_dispatching',
+
+
         'is_ip',
         'ip_whitelist',
 

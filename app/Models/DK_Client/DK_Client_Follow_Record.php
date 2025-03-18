@@ -3,36 +3,65 @@ namespace App\Models\DK_Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Client_Department extends Model
+class DK_Client_Follow_Record extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_client_department";
+    protected $table = "dk_client_follow_record";
     protected $fillable = [
-        'active', 'status', 'category', 'type', 'sort',
-        'item_active', 'item_status',
-        'item_category', 'item_type',
-        'department_active', 'department_status',
-        'department_category', 'department_type',
+        'active', 'status', 'category', 'type', 'form', 'sort',
+
+        'item_active',
+        'item_status',
+        'item_category',
+        'item_type',
+
+        'follow_active',
+        'follow_status',
+        'follow_category',
+        'follow_type',
 
         'owner_active',
         'owner_id',
+        'user_id',
         'creator_id',
         'updater_id',
         'deleter_id',
+        'belong_id',
+        'source_id',
+        'object_id',
 
-        'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+        'p_id',
+        'parent_id',
 
         'org_id',
         'admin_id',
         'item_id',
         'menu_id',
-
         'client_id',
-        'leader_id',
-        'superior_department_id',
+        'client_staff_id',
+        'order_id',
+        'delivery_id',
 
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
+
+        'custom_id',
+        'custom_tinyint_1',
+        'custom_tinyint_2',
+        'custom_int_2',
+        'custom_int_2',
+        'custom_varchar_20',
+        'custom_varchar_80',
+        'custom_varchar_200',
+        'custom_text_1',
+        'custom_datetime',
+        'custom_date',
+
+        'follow_datetime',
+        'follow_date',
+
+        'last_operation_datetime',
+        'last_operation_date',
 
         'contact', 'contact_name', 'contact_phone', 'contact_email', 'contact_wx_id', 'contact_wx_qr_code_img', 'contact_address',
         'linkman', 'linkman_name', 'linkman_phone', 'linkman_email', 'linkman_wx_id', 'linkman_wx_qr_code_img', 'linkman_address',
@@ -100,6 +129,12 @@ class DK_Client_Department extends Model
     function leader()
     {
         return $this->belongsTo('App\Models\DK_Client\DK_Client_User','leader_id','id');
+    }
+
+    // 【反向一对多】管理者
+    function client_staff_er()
+    {
+        return $this->belongsTo('App\Models\DK_Client\DK_Client_User','client_staff_id','id');
     }
 
 

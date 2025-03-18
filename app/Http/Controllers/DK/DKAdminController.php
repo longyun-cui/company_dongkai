@@ -715,6 +715,10 @@ class DKAdminController extends Controller
         {
             return $this->repo->v1_operate_for_order_field_set(request()->all());
         }
+        else if($item_category == 'luxury')
+        {
+            return $this->repo->v1_operate_for_order_field_set(request()->all());
+        }
         else
         {
             return response_fail([]);

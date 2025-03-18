@@ -3,17 +3,17 @@ namespace App\Models\DK_Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DK_Client_Department extends Model
+class DK_Client_Contact extends Model
 {
     use SoftDeletes;
     //
-    protected $table = "dk_client_department";
+    protected $table = "dk_client_contact";
     protected $fillable = [
         'active', 'status', 'category', 'type', 'sort',
         'item_active', 'item_status',
         'item_category', 'item_type',
-        'department_active', 'department_status',
-        'department_category', 'department_type',
+        'contact_active', 'contact_status',
+        'contact_category', 'contact_type',
 
         'owner_active',
         'owner_id',
@@ -21,7 +21,12 @@ class DK_Client_Department extends Model
         'updater_id',
         'deleter_id',
 
-        'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
+        'user_id',
+        'belong_id',
+        'source_id',
+        'object_id',
+        'p_id',
+        'parent_id',
 
         'org_id',
         'admin_id',
@@ -29,6 +34,7 @@ class DK_Client_Department extends Model
         'menu_id',
 
         'client_id',
+        'client_staff_id',
         'leader_id',
         'superior_department_id',
 
@@ -40,7 +46,10 @@ class DK_Client_Department extends Model
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
         'time_point', 'time_type', 'start_time', 'end_time', 'address',
         'visit_num', 'share_num', 'favor_num', 'comment_num',
-        'published_at'
+        'published_at',
+
+        'last_operation_datetime',
+        'last_operation_date'
     ];
     protected $dateFormat = 'U';
 
@@ -100,6 +109,12 @@ class DK_Client_Department extends Model
     function leader()
     {
         return $this->belongsTo('App\Models\DK_Client\DK_Client_User','leader_id','id');
+    }
+
+    // 【反向一对多】管理者
+    function client_staff_er()
+    {
+        return $this->belongsTo('App\Models\DK_Client\DK_Client_User','client_staff_id','id');
     }
 
 

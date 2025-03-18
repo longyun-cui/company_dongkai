@@ -26,20 +26,24 @@
                 </select>
             @endif
 
+            @if(in_array($me->user_type, [0,1,9,11,19]))
             <select class="search-filter form-filter" name="delivery-assign-status">
                 <option value="-1">分配状态</option>
                 <option value="0">待分配</option>
                 <option value="1">已分配</option>
             </select>
+            @endif
 
-            <select class="search-filter form-filter" name="delivery-client-type">
-                <option value="-1">患者类型</option>
-                @foreach(config('info.client_type') as $k => $v)
-                    <option value="{{ $k }}">{{ $v }}</option>
-                @endforeach
+
+            <select class="search-filter form-filter" name="delivery-is-come">
+                <option value="-1">上门状态</option>
+                <option value="0">不上门</option>
+                <option value="9">预约中</option>
+                <option value="11">已上门</option>
             </select>
 
 
+            <input type="text" class="search-filter form-filter date_picker-c search-date" name="delivery-come-date" placeholder="上门日期" readonly="readonly" value="" data-default="" />
 
 
 
@@ -48,7 +52,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="delivery-date">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter date_picker-c search-date" name="delivery-date" placeholder="选择日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
+            <input type="text" class="search-filter form-filter date_picker-c search-date" name="delivery-date" placeholder="交付日期" readonly="readonly" value="{{ date('Y-m-d') }}" data-default="{{ date('Y-m-d') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next date-next" data-target="delivery-date">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -61,7 +65,7 @@
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="delivery-month">
                 <i class="fa fa-chevron-left"></i>
             </button>
-            <input type="text" class="search-filter form-filter filter-keyup month_picker-c search-month" name="delivery-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
+            <input type="text" class="search-filter form-filter filter-keyup month_picker-c search-month" name="delivery-month" placeholder="交付月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-next month-next" data-target="delivery-month">
                 <i class="fa fa-chevron-right"></i>
             </button>
@@ -106,7 +110,7 @@
 
 
     <div class="col-md-12 datatable-body">
-        <div class="tableArea full">
+        <div class="tableArea  table-luxury full-">
             <table class='table table-striped table-bordered table-hover order-column'>
                 <thead>
                 </thead>
@@ -119,6 +123,7 @@
     </div>
 
 
+    @if(in_array($me->user_type, [0,1,9,11,19]))
     <div class="col-md-12 datatable-search-row">
 
         <div class=" pull-left">
@@ -150,15 +155,15 @@
 
 
 
-            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-assign-status">
-                <option value="-1">请选分配状态</option>
-                <option value="1">已分配</option>
-                <option value="0">待分配</option>
-            </select>
+{{--            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-assign-status">--}}
+{{--                <option value="-1">请选分配状态</option>--}}
+{{--                <option value="1">已分配</option>--}}
+{{--                <option value="0">待分配</option>--}}
+{{--            </select>--}}
 
-            <button class="btn btn-default btn-filter bulk-submit-for-assign-status">
-                <i class="fa fa-check"></i> 批量更改分配状态
-            </button>
+{{--            <button class="btn btn-default btn-filter bulk-submit-for-assign-status">--}}
+{{--                <i class="fa fa-check"></i> 批量更改分配状态--}}
+{{--            </button>--}}
 
 
 
@@ -177,6 +182,7 @@
         </div>
 
     </div>
+    @endif
 
 
 </div>

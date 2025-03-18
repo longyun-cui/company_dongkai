@@ -1,7 +1,8 @@
 <script>
 
-    function Datatable_for_DepartmentList($tableId)
+    function Datatable_for_ContactList($tableId)
     {
+
         let $that = $($tableId);
         let $datatable_wrapper = $that.parents('.datatable-wrapper');
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
@@ -11,51 +12,40 @@
             "processing": true,
             "serverSide": true,
             "searching": false,
-            "iDisplayStart": 0,
-            "iDisplayLength": 10,
             "pagingType": "simple_numbers",
             "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
             "order": [],
             "orderCellsTop": true,
             "scrollX": true,
-            // "scrollY": ($(document).height() - 448)+"px",
+//                "scrollY": true,
             "scrollCollapse": true,
-            "showRefresh": true,
             "ajax": {
-                'url': "{{ url('/v1/operate/department/datatable-list-query') }}",
+                'url': "{{ url('/v1/operate/contact/datatable-list-query') }}",
                 "type": 'POST',
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.id = $('input[name="department-id"]').val();
-                    d.name = $('input[name="department-name"]').val();
-                    d.title = $('input[name="department-title"]').val();
-                    d.keyword = $('input[name="department-keyword"]').val();
-                    d.status = $('select[name="department-status"]').val();
-                    d.department_type = $('select[name="department-type"]').val();
-                    d.work_status = $('select[name="department-work-status"]').val();
+                    d.id = $tableSearch.find('input[name="contact-id"]').val();
+                    d.name = $tableSearch.find('input[name="contact-name"]').val();
+                    d.title = $tableSearch.find('input[name="contact-title"]').val();
+                    d.keyword = $tableSearch.find('input[name="contact-keyword"]').val();
+                    d.item_status = $tableSearch.find('select[name="contact-status"]').val();
+                    d.contact_type = $tableSearch.find('select[name="v-type"]').val();
+                    d.contact_work_status = $tableSearch.find('select[name="contact-work-status"]').val();
                 },
             },
-            "columnDefs": [
-                {
-                    // "targets": [10, 11, 15, 16],
-                    "targets": [],
-                    "visible": false,
-                    "searchable": false
-                }
-            ],
             "fixedColumns": {
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 2 @endif",
-                "rightColumns": "@if($is_mobile_equipment) 0 @else 0 @endif"
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 1 @endif",
+                "rightColumns": "0"
             },
             "columns": [
                 {
-                    "title": '<input type="checkbox" id="check-review-all">',
-                    "data": "id",
+                    "title": '<input type="checkbox" class="check-review-all">',
                     "width": "40px",
+                    "data": "id",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'" data-item-id="'+row.id+'"></label>';
+                        return '<label><input type="checkbox" name="bulk-id" class="minimal" value="'+data+'"></label>';
                     }
                 },
 //                    {
@@ -75,7 +65,7 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
-                            $(nTd).addClass('modal-show-for-attachment');
+                            $(nTd).addClass('modal-show-for-attachment-');
                             $(nTd).attr('data-id',row.id).attr('data-name','附件');
                             $(nTd).attr('data-key','attachment_list').attr('data-value','');
                             if(data) $(nTd).attr('data-operate-type','edit');
@@ -122,8 +112,8 @@
                         $html_record = '<a class="btn btn-xs bg-purple- item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
                         var html =
-                            // '<a class="btn btn-xs btn-primary- item-edit-link" data-id="'+data+'">编辑</a>'+
-                            '<a class="btn btn-xs btn-primary- department-edit-show" data-id="'+data+'">编辑</a>'+
+                            // '<a class="btn btn-xs btn-primary item-edit-link" data-id="'+data+'">编辑</a>'+
+                            '<a class="btn btn-xs btn-primary- contact-edit-show" data-id="'+data+'">编辑</a>'+
                             $html_able+
                             // '<a class="btn btn-xs" href="/item/edit?id='+data+'">编辑</a>'+
                             // $html_publish+
@@ -140,7 +130,7 @@
                 {
                     "title": "状态",
                     "data": "item_status",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
 //                            return data;
@@ -160,88 +150,51 @@
                     }
                 },
                 {
+                    "title": "类型",
+                    "data": 'contact_type',
+                    "width": "80px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 1) return '<small class="btn-xs bg-green">微信</small>';
+                        else return "有误";
+                    }
+                },
+                {
                     "title": "名称",
                     "data": "name",
-                    "className": "",
-                    "width":"160px",
+                    "className": "text-center",
+                    "width": "120px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return '<a href="javascript:void(0);">'+data+'</a>';
                     }
                 },
-                // {
-                //     "title": "大区名称",
-                //     "data": "superior_department_id",
-                //     "className": "",
-                //     "width":"100px",
-                //     "orderable": false,
-                //     render: function(data, type, row, meta) {
-                //         if(row.department_type == 11)
-                //         {
-                //             return '<a href="javascript:void(0);">'+row.name+'</a>';
-                //         }
-                //         else if(row.department_type == 21)
-                //         {
-                //             if(row.superior_department_er) {
-                //                 return '<a href="javascript:void(0);">'+row.superior_department_er.name+'</a>';
-                //             }
-                //             else return '--';
-                //         }
-                //     }
-                // },
-                // {
-                //     "title": "小组名称",
-                //     "data": "name",
-                //     "className": "text-center",
-                //     "width": "100px",
-                //     "orderable": false,
-                //     render: function(data, type, row, meta) {
-                //         if(row.department_type == 11)
-                //         {
-                //             return '--';
-                //         }
-                //         else if(row.department_type == 21)
-                //         {
-                //             return '<a href="javascript:void(0);">'+data+'</a>';
-                //         }
-                //     }
-                // },
-                // {
-                //     "title": "负责人",
-                //     "data": "leader_id",
-                //     "className": "text-center",
-                //     "width": "160px",
-                //     "orderable": false,
-                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                //         if(row.is_completed != 1 && row.item_status != 97)
-                //         {
-                //             $(nTd).addClass('modal-show-for-info-select2-set');
-                //             $(nTd).attr('data-id',row.id).attr('data-name','负责人');
-                //             $(nTd).attr('data-key','leader_id').attr('data-value',data);
-                //             if(row.leader == null) $(nTd).attr('data-option-name','未指定');
-                //             else {
-                //                 $(nTd).attr('data-option-name',row.leader.username);
-                //             }
-                //             $(nTd).attr('data-column-name','负责人');
-                //             if(row.leader_id) $(nTd).attr('data-operate-type','edit');
-                //             else $(nTd).attr('data-operate-type','add');
-                //
-                //             if(row.department_type == 11)
-                //             {
-                //                 $(nTd).attr('data-department-type','manager');
-                //             }
-                //             else if(row.department_type == 21)
-                //             {
-                //                 $(nTd).attr('data-department-type','supervisor');
-                //             }
-                //
-                //         }
-                //     },
-                //     render: function(data, type, row, meta) {
-                //         if(row.leader == null) return '--';
-                //         else return '<a href="javascript:void(0);">'+row.leader.username+' ('+row.leader.id+')'+'</a>';
-                //     }
-                // },
+                {
+                    "title": "负责人",
+                    "data": "client_staff_id",
+                    "className": "text-center",
+                    "width": "160px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).addClass('modal-show-for-info-select2-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','负责人');
+                            $(nTd).attr('data-key','client_staff_id').attr('data-value',data);
+                            if(row.client_staff_er == null) $(nTd).attr('data-option-name','未指定');
+                            else {
+                                $(nTd).attr('data-option-name',row.client_staff_er.username);
+                            }
+                            $(nTd).attr('data-column-name','负责人');
+                            if(row.client_staff_id) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        if(row.client_staff_er == null) return '--';
+                        else return '<a href="javascript:void(0);">'+row.client_staff_er.username+'</a>';
+                    }
+                },
                 {
                     "title": "备注",
                     "data": "remark",
@@ -251,7 +204,7 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
-                            $(nTd).addClass('modal-show-for-info-text-set-');
+                            $(nTd).addClass('modal-show-for-info-text-set');
                             $(nTd).attr('data-id',row.id).attr('data-name','备注');
                             $(nTd).attr('data-key','remark').attr('data-value',data);
                             $(nTd).attr('data-column-name','备注');
@@ -268,7 +221,7 @@
                 },
                 {
                     "className": "text-center",
-                    "width": "120px",
+                    "width": "80px",
                     "title": "创建者",
                     "data": "creator_id",
                     "orderable": false,
@@ -325,11 +278,11 @@
                         if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                         else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                     }
-                },
+                }
             ],
             "drawCallback": function (settings) {
 
-                console.log('department-list-datatable-execute');
+                console.log('contact-list-datatable-execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {
@@ -340,4 +293,5 @@
             "language": { url: '/common/dataTableI18n' },
         });
     }
+
 </script>

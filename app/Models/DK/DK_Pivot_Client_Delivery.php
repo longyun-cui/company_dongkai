@@ -39,10 +39,36 @@ class DK_Pivot_Client_Delivery extends Model
         'is_api_pusher_id',
         'is_api_pushed_at',
 
+        'is_vx',
+        'customer_remark',
+        'client_contact_id',
+
+        'follow_description',
+        'follow_datetime',
+        'follow_date',
+
+        'follow_latest_description',
+        'follow_latest_datetime',
+        'follow_latest_date',
+
+        'is_come',
+        'come_datetime',
+        'come_date',
+
+        'transaction_num',
+        'transaction_count',
+        'transaction_amount',
+        'transaction_datetime',
+        'transaction_date',
+
+
         'delivered_date',
 
         'creator_id',
-        'updater_id'
+        'updater_id',
+
+        'last_operation_datetime',
+        'last_operation_date'
     ];
     protected $dateFormat = 'U';
 
@@ -101,6 +127,12 @@ class DK_Pivot_Client_Delivery extends Model
     function original_project_er()
     {
         return $this->belongsTo('App\Models\DK\DK_Project','original_project_id','id');
+    }
+
+    // 原始项目
+    function client_contact_er()
+    {
+        return $this->belongsTo('App\Models\DK_Client\DK_Client_Contact','client_contact_id','id');
     }
 
     // 订单
