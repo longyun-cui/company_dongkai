@@ -3060,14 +3060,18 @@ class DKClientRepository {
             ->orderBy('is_take_order_today','asc')
             ->get();
         $staff_count = count($staff_list);
-//        dd($staff_count);
+        if($staff_count < 1) return response_error([],"暂时没有接单员工！");
 
-        $delivery_list = DK_Pivot_Client_Delivery::withTrashed()
+        $delivery_list = DK_Pivot_Client_Delivery::select('*')
             ->where('client_id',$me->client_id)
             ->where('client_staff_id',0)
             ->get();
-        $delivery_count = count($delivery_list);
-        dd($delivery_count);
+
+        $staff_list = $staff_list->values(); // 重置索引确保从0开始
+        $staffCount = $staff_list->count();
+        if($staffCount == 0) return response_error([],"暂时没有接单员工！");
+        $deliveryCount = $delivery_list->count();
+        if($deliveryCount == 0) return response_error([],"暂时没有未分配工单！");
 
         // 启动数据库事务
         DB::beginTransaction();
@@ -3076,17 +3080,18 @@ class DKClientRepository {
             $num = 0;
             foreach($delivery_list as $key => $delivery)
             {
-                $mine = DK_Pivot_Client_Delivery::withTrashed()->where($delivery->id);
-                if(!$mine) throw new Exception("该【交付】不存在，刷新页面重试！");
-                if($mine->client_id != $me->client_id) throw new Exception("归属错误，刷新页面重试！");
+                $staffIndex = 0;
+                foreach ($delivery_list as $delivery) {
+                    $staff = $staff_list[$staffIndex % $staffCount];
+                    $delivery->client_staff_id = $staff->id;
+                    $delivery->save(); // 触发模型事件（如有）
+                    $staffIndex++;
+                }
 
-                $before = $mine->client_staff_id;
-
-                $mine->client_staff_id = $client_staff_id;
-                $bool = $mine->save();
-                if(!$bool) throw new Exception("DK_Pivot_Client_Delivery--update--fail");
-                else
-                {
+//                $bool = $mine->save();
+//                if(!$bool) throw new Exception("DK_Pivot_Client_Delivery--update--fail");
+//                else
+//                {
 //                    $record = new DK_Client_Record;
 //
 //                    $record_data["ip"] = Get_IP();
@@ -3105,7 +3110,7 @@ class DKClientRepository {
 //
 //                    $bool_1 = $record->fill($record_data)->save();
 //                    if(!$bool_1) throw new Exception("DK_Client_Record--insert--fail");
-                }
+//                }
 
             }
 

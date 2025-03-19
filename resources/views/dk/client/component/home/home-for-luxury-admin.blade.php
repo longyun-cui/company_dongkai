@@ -29,7 +29,7 @@
                             <span class="toggle-handle"></span>
                         </button>
                     </li>
-                    <li class="_none" style="padding:10px 15px;height:40px;clear:both;">
+                    <li class="_none-" style="padding:10px 15px;height:40px;clear:both;">
                         <span class="pull-left">
                             <b class="toggle-handle-text-">一键派单</b>
                         </span>

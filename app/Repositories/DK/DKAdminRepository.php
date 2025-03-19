@@ -7545,7 +7545,9 @@ class DKAdminRepository {
 
         // 工单统计
         // 总量统计
-        $query_order_of_all = (clone $query)->whereIn('created_type',[1,99])
+        $query_order_of_all = (clone $query)
+            ->whereIn('created_type',[1,99])
+            ->where('item_category',1)
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -7615,6 +7617,7 @@ class DKAdminRepository {
 
         $query_delivered_of_all = (clone $query)
             ->whereIn('created_type',[1,99])
+            ->where('item_category',1)
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_result = '已交付', TRUE, NULL)) as delivered_count_for_completed,
@@ -7648,7 +7651,8 @@ class DKAdminRepository {
 
 
         // 分发当天数据
-        $query_distributed_of_today = (clone $query_distributed)->whereDate(DB::raw("DATE(FROM_UNIXTIME(updated_at))"),$the_date)
+        $query_distributed_of_today = (clone $query_distributed)
+            ->whereDate(DB::raw("DATE(FROM_UNIXTIME(updated_at))"),$the_date)
             ->select(DB::raw("
                     count(*) as distributed_count_for_all
                 "))
@@ -7661,6 +7665,7 @@ class DKAdminRepository {
         // 客服报单-当天统计
         $query_order_of_today = (clone $query)->where('published_date',$the_date)
             ->whereIn('created_type',[1,99])
+            ->where('item_category',1)
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -7729,6 +7734,7 @@ class DKAdminRepository {
         // 交付人员-工作统计
         $query_delivered_of_today = (clone $query)->where('delivered_date',$the_date)
             ->whereIn('created_type',[1,99])
+            ->where('item_category',1)
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
                     count(IF(delivered_status = 1 AND published_date = '{$the_date}', TRUE, NULL)) as delivered_count_for_all_by_same_day,
@@ -7811,7 +7817,9 @@ class DKAdminRepository {
 
 
         // 分发当月数据
-        $query_distributed_of_month = (clone $query_distributed)->whereBetween('updated_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+        $query_distributed_of_month = (clone $query_distributed)
+            ->where('item_category',1)
+            ->whereBetween('updated_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->select(DB::raw("
                     count(*) as distributed_count_for_all
                 "))
@@ -7824,6 +7832,7 @@ class DKAdminRepository {
         // 当月统计
         $query_order_of_month = (clone $query)->whereBetween('published_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
             ->whereIn('created_type',[1,99])
+            ->where('item_category',1)
             ->select(DB::raw("
                     count(*) as order_count_for_all,
                     count(IF(is_published = 0, TRUE, NULL)) as order_count_for_unpublished,
@@ -7892,7 +7901,9 @@ class DKAdminRepository {
 
 
 
-        $query_delivered_of_month = (clone $query)->whereBetween('delivered_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+        $query_delivered_of_month = (clone $query)
+            ->whereBetween('delivered_at',[$the_month_start_timestamp,$the_month_ended_timestamp])
+            ->where('item_category',1)
             ->whereIn('created_type',[1,99])
             ->select(DB::raw("
                     count(IF(is_published = 1 AND delivered_status = 1, TRUE, NULL)) as delivered_count_for_all,
