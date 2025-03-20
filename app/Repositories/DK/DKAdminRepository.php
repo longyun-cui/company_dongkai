@@ -26377,7 +26377,7 @@ class DKAdminRepository {
 
 
             DB::commit();
-//            return response_success([]);
+            return response_success([]);
         }
         catch (Exception $e)
         {
