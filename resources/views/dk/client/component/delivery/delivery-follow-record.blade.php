@@ -31,6 +31,20 @@
                             <span class="delivery-client-name-box"></span>
                         </div>
                     </div>
+                    {{--电话--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">电话</label>
+                        <div class="col-md-8 ">
+                            <span class="delivery-client-mobile-box"></span>
+                        </div>
+                    </div>
+                    {{--微信--}}
+                    <div class="form-group">
+                        <label class="control-label col-md-2">微信</label>
+                        <div class="col-md-8 ">
+                            <span class="delivery-client-wx-box"></span>
+                        </div>
+                    </div>
                     {{--意向--}}
                     <div class="form-group">
                         <label class="control-label col-md-2">意向</label>
