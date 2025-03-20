@@ -885,7 +885,24 @@ class DKAdminController extends Controller
 
     public function v1_operate_for_statistic_delivery_export()
     {
-        return $this->repo->v1_operate_for_statistic_delivery_export(request()->all());
+        $item_category = request('item_category',0);
+
+        if($item_category == 1)
+        {
+            return $this->repo->v1_operate_for_statistic_delivery_export(request()->all());
+        }
+        else if($item_category == 11)
+        {
+            return $this->repo->v1_operate_for_statistic_delivery_aesthetic_export(request()->all());
+        }
+        else if($item_category == 31)
+        {
+            return $this->repo->v1_operate_for_statistic_delivery_luxury_export(request()->all());
+        }
+        else
+        {
+            return $this->repo->v1_operate_for_statistic_delivery_export(request()->all());
+        }
     }
 
 

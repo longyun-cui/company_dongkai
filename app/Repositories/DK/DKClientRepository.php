@@ -563,6 +563,13 @@ class DKClientRepository {
             })
             ->when($me->company_category == 21, function ($query) use ($me) {
                 return $query->where('business_id', $me->id);
+            })
+            ->when(in_array($me->user_type,[81,84]), function ($query) use ($me) {
+                $staff_list = DK_Client_User::select('id')->where('department_id',$me->department_id)->get()->pluck('id')->toArray();
+                return $query->whereIn('client_staff_id', $staff_list);
+            })
+            ->when(in_array($me->user_type,[88]), function ($query) use ($me) {
+                return $query->where('client_staff_id', $me->id);
             });
 
 
@@ -644,9 +651,21 @@ class DKClientRepository {
         // 分配状态
         if(isset($post_data['assign_status']))
         {
+//            if(!in_array($post_data['assign_status'],[-1,'-1']))
+//            {
+//                $query->where('assign_status', $post_data['assign_status']);
+//            }
             if(!in_array($post_data['assign_status'],[-1,'-1']))
             {
-                $query->where('assign_status', $post_data['assign_status']);
+//                $query->where('assign_status', $post_data['assign_status']);
+                if($post_data['assign_status'] == 0)
+                {
+                    $query->where('client_staff_id', 0);
+                }
+                else if($post_data['assign_status'] == 1)
+                {
+                    $query->where('client_staff_id', '>', 0);
+                }
             }
         }
 

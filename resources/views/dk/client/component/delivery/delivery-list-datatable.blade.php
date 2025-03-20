@@ -197,8 +197,11 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        if(data == 0) return '<small class="btn-xs btn-warning">待分配</small>';
-                        else if(data == 1) return '<small class="btn-xs btn-success">已分配</small>';
+                        // if(data == 0) return '<small class="btn-xs btn-warning">待分配</small>';
+                        // else if(data == 1) return '<small class="btn-xs btn-success">已分配</small>';
+                        // return data;
+                        if(row.client_staff_id == 0) return '<small class="btn-xs btn-warning">待分配</small>';
+                        else if(row.client_staff_id > 1) return '<small class="btn-xs btn-success">已分配</small>';
                         return data;
                     }
                 },

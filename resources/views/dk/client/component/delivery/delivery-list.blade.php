@@ -150,13 +150,13 @@
 
 
 
-            <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-assign-status">
+            <select class="search-filter form-filter filter-lg select2-box-c- _none" name="bulk-operate-assign-status">
                 <option value="-1">请选分配状态</option>
                 <option value="1">已分配</option>
                 <option value="0">待分配</option>
             </select>
 
-            <button class="btn btn-default btn-filter bulk-submit-for-assign-status">
+            <button class="btn btn-default btn-filter bulk-submit-for-assign-status _none">
                 <i class="fa fa-check"></i> 批量更改分配状态
             </button>
 

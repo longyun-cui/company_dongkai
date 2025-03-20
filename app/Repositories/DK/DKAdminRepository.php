@@ -11644,8 +11644,9 @@ class DKAdminRepository {
 
 
         // 工单
-        $query = DK_Order::select('*')
+        $query = DK_Pivot_Client_Delivery::select('*')
             ->with([
+                'order_er'=>function($query) { $query->select('*'); },
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
