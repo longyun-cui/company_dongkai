@@ -301,6 +301,10 @@
                     "className": "",
                     "width": "80px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','客户姓名');
+                        $(nTd).attr('data-key','client_name').attr('data-value',data);
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er) return row.order_er.client_name;
                         return "--";
@@ -312,6 +316,10 @@
                     "className": "",
                     "width": "100px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
+                        $(nTd).attr('data-key','client_phone').attr('data-value',data);
+                    },
                     render: function(data, type, row, meta) {
                         return data;
                     }
@@ -322,6 +330,10 @@
                     "className": "",
                     "width": "100px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','微信号');
+                        $(nTd).attr('data-key','client_wx').attr('data-value',data);
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er) return row.order_er.wx_id;
                         return "--";
@@ -333,6 +345,10 @@
                     "className": "",
                     "width": "60px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','客户意向');
+                        $(nTd).attr('data-key','client_intention').attr('data-value',data);
+                    },
                     render: function(data, type, row, meta) {
                         // if(!data) return '--';
                         // return data;
@@ -366,6 +382,10 @@
                     "className": "",
                     "width": "80px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','牙齿数量');
+                        $(nTd).attr('data-key','teeth_count').attr('data-value',data);
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er) return row.order_er.teeth_count;
                         return "--";
@@ -377,6 +397,10 @@
                     "className": "",
                     "width": "120px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
+                        $(nTd).attr('data-key','location').attr('data-value','');
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er)
                         {
@@ -399,6 +423,28 @@
                     "className": "",
                     "width": "80px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).addClass('modal-show-for-item-detail');
+                        $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
+                        $(nTd).attr('data-key','description').attr('data-value',row.order_er.description);
+                        if(row.order_er.recording_address_list)
+                        {
+                            var $recording_address = row.order_er.recording_address_list;
+                            if($recording_address)
+                            {
+                                var $recording_list = JSON.parse($recording_address);
+                                var $recording_list_html = '';
+                                $.each($recording_list, function(index, value)
+                                {
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:480px;height:40px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                    $recording_list_html += $audio_html;
+                                });
+                                $(nTd).attr('data-recording-address',$recording_list_html);
+                            }
+                        }
+
+
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er)
                         {
@@ -408,21 +454,21 @@
                         else return "--";
                     }
                 },
-                {
-                    "title": "录音地址",
-                    "data": "order_id",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.order_er)
-                        {
-                            if(row.order_er.recording_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
-                            else return "--";
-                        }
-                        else return "--";
-                    }
-                },
+                // {
+                //     "title": "录音地址",
+                //     "data": "order_id",
+                //     "className": "",
+                //     "width": "80px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         if(row.order_er)
+                //         {
+                //             if(row.order_er.recording_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
+                //             else return "--";
+                //         }
+                //         else return "--";
+                //     }
+                // },
             ],
             "drawCallback": function (settings) {
 

@@ -450,6 +450,29 @@
 
 
 
+        // 【通用】详情
+        $(".main-content").on('dblclick', ".modal-show-for-item-detail", function() {
+            var $that = $(this);
+            var $id = $(this).data('id');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            var $modal = $('#modal-for-delivery-item-detail');
+            $modal.find('.id-title').html('【'+$id+'】');
+            $modal.find('.delivery-location-box').html($row.find('[data-key="location"]').html());
+            $modal.find('.delivery-client-name-box').html($row.find('[data-key="client_name"]').html());
+            $modal.find('.delivery-client-mobile-box').html($row.find('[data-key="client_phone"]').html());
+            $modal.find('.delivery-client-wx-box').html($row.find('[data-key="client_wx"]').html());
+            $modal.find('.delivery-client-intention-box').html($row.find('[data-key="client_intention"]').html());
+            $modal.find('.delivery-teeth-count-box').html($row.find('[data-key="teeth_count"]').html());
+            $modal.find('.delivery-description-box').html($row.find('[data-key="description"]').data('value'));
+            $modal.find('.delivery-recording-address-box').html($row.find('[data-key="description"]').data('recording-address'));
+
+            $modal.modal('show');
+        });
+
 
 
         // 【通用】修改记录
@@ -464,8 +487,6 @@
             Datatable_Delivery_Follow_Record.init($id);
 
             $('#modal-for-delivery-follow-record-list').modal('show');
-
-
         });
 
 

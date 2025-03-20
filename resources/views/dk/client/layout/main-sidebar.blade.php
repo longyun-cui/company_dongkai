@@ -146,7 +146,7 @@
 
 
             {{--联系渠道--}}
-            @if(in_array($me->user_type,[0,1,9,11,81,84]))
+            @if($me->client_er->user_category == 31 && in_array($me->user_type,[0,1,9,11,81,84]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
