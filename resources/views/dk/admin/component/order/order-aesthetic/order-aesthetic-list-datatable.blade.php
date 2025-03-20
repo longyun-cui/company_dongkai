@@ -2,7 +2,7 @@
 
     window.dataTableInstances = window.dataTableInstances || {};
 
-    function Datatable_for_Order_Luxury_List($tableId)
+    function Datatable_for_Order_Aesthetic_List($tableId)
     {
         console.log($tableId);
         var table_Id = $tableId
@@ -34,7 +34,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.item_category = 31;
+                    d.item_category = 11;
                     d.id = $tableSearch.find('input[name="order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
                     d.description = $tableSearch.find('input[name="order-description"]').val();
@@ -725,19 +725,15 @@
                         }
                         else if(data == 1)
                         {
-                            $result_html = '<small class="btn-xs bg-blue">鞋帽服装</small>';
+                            $result_html = '<small class="btn-xs bg-blue">脸部</small>';
                         }
-                        else if(data == 2)
+                        else if(data == 21)
                         {
-                            $result_html = '<small class="btn-xs bg-green">包</small>';
+                            $result_html = '<small class="btn-xs bg-blue">植发</small>';
                         }
-                        else if(data == 3)
+                        else if(data == 31)
                         {
-                            $result_html = '<small class="btn-xs bg-orange">手表</small>';
-                        }
-                        else if(data == 4)
-                        {
-                            $result_html = '<small class="btn-xs bg-red">珠宝</small>';
+                            $result_html = '<small class="btn-xs bg-blue">身体</small>';
                         }
                         else if(data == 99)
                         {
@@ -1423,7 +1419,7 @@
             ],
             "drawCallback": function (settings) {
 
-                console.log('luxury-list-datatable-execute');
+                console.log('aesthetic-list-datatable-execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {

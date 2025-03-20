@@ -295,10 +295,17 @@
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
-                            $(nTd).addClass('modal-show-for-info-radio-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','分发');
+                            $(nTd).attr('data-row-index',iRow);
+
+                            $(nTd).addClass('modal-show-for-field-set');
+                            $(nTd).attr('data-id',row.id).attr('data-name','是否+V');
                             $(nTd).attr('data-key','is_distributive').attr('data-value',data);
-                            $(nTd).attr('data-column-name','分发');
+
+                            $(nTd).attr('data-column-type','radio');
+                            $(nTd).attr('data-column-name','是否分发');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
                         }
                     },
                     render: function(data, type, row, meta) {

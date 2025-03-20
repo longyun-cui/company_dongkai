@@ -99,6 +99,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::post('/v1/operate/order/item-get', $controller.'@v1_operate_for_order_item_get');
     Route::post('/v1/operate/order/item-save', $controller.'@v1_operate_for_order_item_save');
     Route::post('/v1/operate/order/luxury/item-save', $controller.'@v1_operate_for_order_luxury_item_save');
+    Route::post('/v1/operate/order/aesthetic/item-save', $controller.'@v1_operate_for_order_aesthetic_item_save');
     Route::post('/v1/operate/order/item-publish', $controller.'@v1_operate_for_order_item_publish');
     Route::post('/v1/operate/order/item-inspect', $controller.'@v1_operate_for_order_item_inspect');
     Route::post('/v1/operate/order/item-deliver', $controller.'@v1_operate_for_order_item_deliver');
@@ -150,6 +151,8 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
 
 
     Route::post('/v1/operate/statistic/comprehensive-overview', $controller.'@v1_operate_for_get_statistic_data_of_comprehensive_overview');
+
+    Route::post('/v1/operate/statistic/statistic-comprehensive', $controller.'@v1_operate_for_get_statistic_data_of_statistic_comprehensive');
 
 
     Route::post('/v1/operate/statistic/marketing/company-overview', $controller.'@v1_operate_for_get_statistic_data_of_company_overview');

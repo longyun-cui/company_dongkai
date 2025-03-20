@@ -363,6 +363,11 @@ class DKAdminController extends Controller
         return $this->repo->v1_operate_for_order_item_save(request()->all());
     }
     // 【工单-管理】编辑-保存
+    public function v1_operate_for_order_aesthetic_item_save()
+    {
+        return $this->repo->v1_operate_for_order_aesthetic_item_save(request()->all());
+    }
+    // 【工单-管理】编辑-保存
     public function v1_operate_for_order_luxury_item_save()
     {
         return $this->repo->v1_operate_for_order_luxury_item_save(request()->all());
@@ -715,6 +720,10 @@ class DKAdminController extends Controller
         {
             return $this->repo->v1_operate_for_order_field_set(request()->all());
         }
+        else if($item_category == 'aesthetic')
+        {
+            return $this->repo->v1_operate_for_order_field_set(request()->all());
+        }
         else if($item_category == 'luxury')
         {
             return $this->repo->v1_operate_for_order_field_set(request()->all());
@@ -732,6 +741,12 @@ class DKAdminController extends Controller
     public function v1_operate_for_get_statistic_data_of_comprehensive_overview()
     {
         return $this->repo->v1_operate_for_get_statistic_data_of_comprehensive_overview(request()->all());
+    }
+
+    // 【统计】公司概览
+    public function v1_operate_for_get_statistic_data_of_statistic_comprehensive()
+    {
+        return $this->repo->v1_operate_for_get_statistic_data_of_statistic_comprehensive(request()->all());
     }
 
 
@@ -832,7 +847,7 @@ class DKAdminController extends Controller
         }
         else if($item_category == 11)
         {
-            return $this->repo->v1_operate_for_statistic_order_export(request()->all());
+            return $this->repo->v1_operate_for_statistic_aesthetic_export(request()->all());
         }
         else if($item_category == 31)
         {
@@ -855,7 +870,7 @@ class DKAdminController extends Controller
         }
         else if($item_category == 11)
         {
-            return $this->repo->v1_operate_for_statistic_order_export_by_ids(request()->all());
+            return $this->repo->v1_operate_for_statistic_order_aesthetic_export_by_ids(request()->all());
         }
         else if($item_category == 31)
         {

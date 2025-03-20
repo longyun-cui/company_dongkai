@@ -56,6 +56,9 @@
                     d.date_start = $tableSearch.find('input[name="delivery-start"]').val();
                     d.date_ended = $tableSearch.find('input[name="delivery-ended"]').val();
 
+                    d.city = $('select[name="delivery-city[]"]').val();
+                    d.district = $('select[name="delivery-district[]"]').val();
+
                 },
             },
             "columnDefs": [

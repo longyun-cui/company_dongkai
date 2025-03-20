@@ -14,7 +14,7 @@
 
         // localStorage.removeItem('last_delivery_id');
 
-        setInterval(query_last_delivery, 30000);
+        setInterval(query_last_delivery, 60000);
 
 
         {{--$.post(--}}
@@ -345,7 +345,7 @@
     {
         // $("body").append('<embed src="/resource/common/sounds/ding.mp3" autostart="true" hidden="true" loop="false">');
         var audio = new Audio('/resource/common/sounds/ding.mp3');
-        audio.preload = 'none';
+        audio.preload = 'auto';
         audio.play();
     }
 

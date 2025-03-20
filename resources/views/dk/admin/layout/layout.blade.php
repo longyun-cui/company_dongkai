@@ -217,6 +217,7 @@ desired effect
 
 
 {{--layout-script--}}
+@include(env('TEMPLATE_DK_ADMIN').'layout.layout-script-for-common')
 @include(env('TEMPLATE_DK_ADMIN').'layout.layout-script-for-tab')
 @include(env('TEMPLATE_DK_ADMIN').'layout.layout-script-for-datatable')
 @include(env('TEMPLATE_DK_ADMIN').'layout.layout-script-for-item-edit')

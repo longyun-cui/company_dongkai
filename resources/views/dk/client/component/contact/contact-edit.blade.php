@@ -26,7 +26,7 @@
                         <div class="col-md-8">
                             <div class="btn-group">
 
-                                @if(in_array($me->user_type, [0,1,11,41]))
+                                @if(in_array($me->user_type, [0,1,11,19,41,81,84]))
                                 <button type="button" class="btn radio-btn radio-contact-type">
                                     <span class="radio">
                                         <label>

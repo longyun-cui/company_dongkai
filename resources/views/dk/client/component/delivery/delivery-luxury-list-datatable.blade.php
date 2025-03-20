@@ -59,6 +59,9 @@
                     d.is_come = $tableSearch.find('select[name="delivery-is-come"]').val();
                     d.come_date = $tableSearch.find('input[name="delivery-come-date"]').val();
 
+                    d.city = $('select[name="delivery-city[]"]').val();
+                    d.district = $('select[name="delivery-district[]"]').val();
+
                 },
             },
             "columnDefs": [
@@ -214,6 +217,7 @@
                         return data;
                     }
                 },
+                @endif
                 {
                     "title": "分派员工",
                     "data": "client_staff_id",
@@ -241,7 +245,6 @@
                         }
                     }
                 },
-                @endif
                 {
                     "title": "交付时间",
                     "data": 'created_at',
@@ -510,6 +513,28 @@
             "drawCallback": function (settings) {
 
                 console.log('delivery-list-datatable-execute');
+                var firstRow = this.api().row(0).data();
+                if (firstRow)
+                {
+                    var $last_id = firstRow.id;
+                    var $last_delivery_id = localStorage.getItem('last_delivery_id');
+                    if($last_delivery_id)
+                    {
+                        if($last_id > $last_delivery_id)
+                        {
+                            localStorage.setItem('last_delivery_id',$last_id);
+                            // $('.notification-dom').show();
+                            // alertSound();
+                        }
+                    }
+                    else
+                    {
+                        localStorage.setItem('last_delivery_id',$last_id);
+                        // $('.notification-dom').show();
+                        // alertSound();
+                    }
+                    $('.notification-dom').hide();
+                }
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {

@@ -89,6 +89,8 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
     Route::post('/v1/operate/trade/datatable-list-query', $controller.'@v1_operate_for_trade_datatable_list_query');
     Route::post('/v1/operate/trade/item-get', $controller.'@v1_operate_for_trade_item_get');
     Route::post('/v1/operate/trade/item-save', $controller.'@v1_operate_for_trade_item_save');
+    Route::post('/v1/operate/trade/item-confirm', $controller.'@v1_operate_for_trade_item_confirm');
+    Route::post('/v1/operate/trade/item-delete', $controller.'@v1_operate_for_trade_item_delete');
 
 
 

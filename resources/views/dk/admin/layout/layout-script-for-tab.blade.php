@@ -25,13 +25,13 @@
                 if($tabPane.length)
                 {
                     // 存在则激活
-                    console.log('已存在！');
+                    console.log('Tab已存在！');
                     $tabLink.tab('show');
                 }
                 else
                 {
                     // 创建新标签页
-                    console.log('不存在！');
+                    console.log('Tab不存在！');
                     createTab($config);
                     // 激活新标签页
                     $('a[href="#'+$config.id+'"]').tab('show');
@@ -58,13 +58,13 @@
                 if($tabPane.length)
                 {
                     // 存在则激活
-                    console.log('存在');
+                    console.log('Tab存在');
                     $tabLink.tab('show');
                 }
                 else
                 {
                     // 创建新标签页
-                    console.log('不存在');
+                    console.log('Tab不存在');
                     createTab($config);
                     // 激活新标签页
                     $('a[href="#'+$config.id+'"]').tab('show');
@@ -410,6 +410,10 @@
                 {
                     Datatable_for_OrderList($config.id);
                 }
+                else if($id == "datatable-order-aesthetic-list")
+                {
+                    Datatable_for_Order_Aesthetic_List($config.id);
+                }
                 else if($id == "datatable-order-luxury-list")
                 {
                     Datatable_for_Order_Luxury_List($config.id);
@@ -417,6 +421,10 @@
                 else if($id == "datatable-delivery-list")
                 {
                     Datatable_for_DeliveryList('#'+$config.id);
+                }
+                else if($id == "datatable-delivery-aesthetic-list")
+                {
+                    Datatable_for_Delivery_Aesthetic_List('#'+$config.id);
                 }
                 else if($id == "datatable-delivery-luxury-list")
                 {
@@ -478,6 +486,214 @@
                 else if($id == "datatable-statistic-production-department")
                 {
                     Table_Datatable_Ajax_Statistic_Production_Department('#'+$config.id);
+                }
+
+            }
+
+
+        });
+
+
+        // 通用标签控制逻辑
+        $(".wrapper").on('click', ".comprehensive-control", function() {
+
+            const $btn = $(this);
+            const $id = $btn.data('comprehensive-id');
+            const $unique = $btn.data('comprehensive-unique');
+            const $reload = $btn.data('comprehensive-reload');
+
+            if($unique == 'y')
+            {
+                var $config = {
+                    type: $btn.data('comprehensive-type'),
+                    unique: $btn.data('comprehensive-unique'),
+                    id: $btn.data('comprehensive-id'),
+                    target: $btn.data('comprehensive-target'),
+                    clone_object: $btn.data('comprehensive-clone-object'),
+
+                    chart_id: $btn.data('chart-id')
+                };
+
+            }
+            else
+            {
+                let $session_unique_id = sessionStorage.getItem('session_unique_id');
+
+                var $config = {
+                    type: $btn.data('comprehensive-type'),
+                    unique: $btn.data('comprehensive-unique'),
+                    id: $btn.data('comprehensive-id') + '-' + $session_unique_id,
+                    target: $btn.data('comprehensive-target') + '-' + $session_unique_id,
+                    clone_object: $btn.data('comprehensive-clone-object'),
+
+                    chart_id: $btn.data('chart-id')
+                };
+            }
+
+
+            if($('#'+$config.id).length)
+            {
+                console.log('comprehensive 已存在！');
+            }
+            else
+            {
+                console.log('comprehensive 未初始化！');
+
+                let $clone = $('.'+$config.clone_object).clone(true);
+                $clone.removeClass($config.clone_object);
+                $clone.addClass('comprehensive-wrapper');
+                $clone.attr('id',$config.id);
+
+                $clone.find('.eChart').attr('id',$config.chart_id);
+
+                $('#'+$config.target).prepend($clone);
+
+                $('#'+$config.target).find('.time_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD HH:mm",
+                    ignoreReadonly: true
+                });
+                $('#'+$config.target).find('.date_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM-DD",
+                    ignoreReadonly: true
+                });
+                $('#'+$config.target).find('.month_picker-c').datetimepicker({
+                    locale: moment.locale('zh-cn'),
+                    format: "YYYY-MM",
+                    ignoreReadonly: true
+                });
+
+                $('#'+$config.target).find('.select2-box-c').select2({
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-box-change').select2({
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-box-change').change(function() {
+
+                    var $that = $(this);
+                    var $target = $that.data('target');
+
+                    var $select2_wrapper = $that.parents('.select2-wrapper');
+
+                    console.log($select2_wrapper.find($target).val());
+                    // $form.find(".select2-box").val(-1).trigger("change");
+                    // $form.find(".select2-box").val("-1").trigger("change");
+                    // $select2_wrapper.find($target).val(-1).trigger("change");
+                    // $select2_wrapper.find($target).find('-1').trigger("change");
+                    $select2_wrapper.find($target).find('option:eq(0)').prop('selected', true).trigger("change");
+                });
+
+
+
+                // select2
+                $('#'+$config.target).find('.select2-department-group').select2({
+                    ajax: {
+                        url: "{{ url('/v1/operate/select2/select2_department') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                keyword: params.term, // search term
+                                page: params.page,
+                                type: 'group',
+                                superior_id: $(this).parents('.select2-wrapper').find($(this).data('target')).val()
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-project-c').select2({
+                    ajax: {
+                        url: "{{ url('/v1/operate/select2/select2_project') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                item_category: this.data('item-category'),
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+                $('#'+$config.target).find('.select2-client-c').select2({
+                    ajax: {
+                        url: "{{ url('/v1/operate/select2/select2_client') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                user_category: this.data('user-category'),
+                                keyword: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                    minimumInputLength: 0,
+                    theme: 'classic'
+                });
+
+
+
+
+                if($id == "comprehensive-list")
+                {
+                }
+                else if($id == "statistic-comprehensive")
+                {
+                    statistic_get_data_for_comprehensive('#'+$config.target);
+                }
+                else if($id == "statistic-comprehensive-overview")
+                {
+                    // 初始化
+                    $("#filter-submit-for-comprehensive").click();
                 }
 
             }

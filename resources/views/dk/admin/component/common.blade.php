@@ -441,30 +441,26 @@
 
                 </div>
 
-        {{--是否+V--}}
-        <div id="option-list-for-is_distributive_condition">
-            <label class="control-label col-md-2">是否符合分发</label>
-            <div class="col-md-8">
-                <div class="btn-group">
+        {{--是否分发--}}
+                <div class="btn-group" id="option-list-for-is-distributive">
 
                     <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="option_is_distributive_condition" value="0" class="info-set-column"> 否
+                            <input type="radio" name="field-set-radio-value" value="0" class="info-set-column"> 否
                         </label>
                     </span>
                     </button>
                     <button type="button" class="btn">
                     <span class="radio">
                         <label>
-                            <input type="radio" name="option_is_distributive_condition" value="1" class="info-set-column"> 是
+                            <input type="radio" name="field-set-radio-value" value="1" class="info-set-column"> 是
                         </label>
                     </span>
                     </button>
 
                 </div>
-            </div>
-        </div>
+
         <div id="option-list-for-is_distributive_condition-2">
             <label class="control-label col-md-2">是否符合分发</label>
             <div class="col-md-8">

@@ -7,6 +7,7 @@
 
 
 
+            @if(in_array($me->user_type,[0,1,9,11,19]))
             <button type="button" onclick="" class="btn btn-filter btn-success- item-create-show"
                 data-form-id="form-for-staff-edit"
                 data-modal-id="modal-for-staff-edit"
@@ -14,12 +15,7 @@
             >
                 <i class="fa fa-plus"></i> 添加
             </button>
-
-            <button class="btn btn-default btn-filter _none">
-                <input type="checkbox" id="check-review-all">
-            </button>
-
-
+            @endif
             {{--<button type="button" onclick="" class="btn btn-success btn-filter item-create-show"><i class="fa fa-plus"></i> 添加</button>--}}
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-play"></i> 启用</button>--}}
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-stop"></i> 禁用</button>--}}

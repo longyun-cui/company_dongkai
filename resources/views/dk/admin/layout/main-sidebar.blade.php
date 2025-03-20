@@ -486,6 +486,47 @@
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"
+                   data-id="order-aesthetic-list"
+                   data-title='<i class="fa fa-file-text text-red"></i> 医美•工单'
+                   data-content=''
+
+                   data-datatable-type="create"
+                   data-datatable-unique="y"
+                   data-datatable-id="datatable-order-aesthetic-list"
+                   data-datatable-target="order-aesthetic-list"
+                   data-datatable-clone-object="order-aesthetic-list-clone"
+                >
+                    <i class="fa fa-file-text text-red"></i>
+                    <span>医美•工单</span>
+                </a>
+            </li>
+            {{--交付列表--}}
+            @if(in_array($me->user_type,[0,1,9,11,61,66]))
+                <li class="treeview _none-">
+                    <a class="tab-control datatable-control"
+                       data-type="create"
+                       data-unique="y"
+                       data-id="delivery-aesthetic-list"
+                       data-title='<i class="fa fa-share text-red"></i> 医美•交付'
+                       data-content=''
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-delivery-aesthetic-list"
+                       data-datatable-target="delivery-aesthetic-list"
+                       data-datatable-clone-object="delivery-aesthetic-list-clone"
+                    >
+                        <i class="fa fa-share text-red"></i>
+                        <span>医美•交付</span>
+                    </a>
+                </li>
+            @endif
+
+
+            <li class="treeview _none-">
+                <a class="tab-control datatable-control"
+                   data-type="create"
+                   data-unique="y"
                    data-id="order-luxury-list"
                    data-title='<i class="fa fa-file-text text-purple"></i> 奢侈品•工单'
                    data-content=''
@@ -542,6 +583,29 @@
                     <span>综合概览</span>
                 </a>
             </li>
+
+
+            {{--综合概览--}}
+            @if(in_array($me->user_type,[0,1,9]))
+            <li class="treeview _none-">
+                <a class="tab-control comprehensive-control"
+                   data-type="create"
+                   data-unique="y"
+                   data-id="tab-comprehensive"
+                   data-title='<i class="fa fa-file-text text-green"></i> 综合概览2'
+                   data-content=''
+
+                   data-comprehensive-type="create"
+                   data-comprehensive-unique="y"
+                   data-comprehensive-id="statistic-comprehensive"
+                   data-comprehensive-target="tab-comprehensive"
+                   data-comprehensive-clone-object="statistic-comprehensive-clone"
+                >
+                    <i class="fa fa-pie-chart text-green"></i>
+                    <span>综合概览2</span>
+                </a>
+            </li>
+            @endif
 
 
             {{----}}

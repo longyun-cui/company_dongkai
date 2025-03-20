@@ -122,6 +122,16 @@ class DK_Client_Trade_Record extends Model
     {
         return $this->belongsTo('App\Models\DK_Client\DK_Client_User','user_id','id');
     }
+    // 删除人
+    function deleter_er()
+    {
+        return $this->belongsTo('App\Models\DK_Client\DK_Client_User','deleter_id','id');
+    }
+    // 确认人
+    function authenticator_er()
+    {
+        return $this->belongsTo('App\Models\DK_Client\DK_Client_User','authenticator_id','id');
+    }
 
 
 

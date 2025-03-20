@@ -260,20 +260,31 @@ class DKClientController extends Controller
 
 
 
-    // 【联系渠道-管理】datatable
+    // 【交易-管理】datatable
     public function v1_operate_for_trade_datatable_list_query()
     {
         return $this->repo->v1_operate_for_trade_datatable_list_query(request()->all());
     }
-    // 【联系渠道-管理】获取
+    // 【交易-管理】获取
     public function v1_operate_for_trade_item_get()
     {
         return $this->repo->v1_operate_for_trade_item_get(request()->all());
     }
-    // 【联系渠道-管理】编辑-保存
+    // 【交易-管理】编辑-保存
     public function v1_operate_for_trade_item_save()
     {
         return $this->repo->v1_operate_for_trade_item_save(request()->all());
+    }
+
+    // 【交易-管理】删除
+    public function v1_operate_for_trade_item_delete()
+    {
+        return $this->repo->v1_operate_for_trade_item_delete(request()->all());
+    }
+    // 【交易-管理】确认
+    public function v1_operate_for_trade_item_confirm()
+    {
+        return $this->repo->v1_operate_for_trade_item_confirm(request()->all());
     }
 
 
@@ -446,6 +457,10 @@ class DKClientController extends Controller
         {
             return $this->repo->operate_staff_delete_by_admin(request()->all());
         }
+        else if($item_category == 'contact')
+        {
+            return $this->repo->operate_contact_delete_by_admin(request()->all());
+        }
         else
         {
             return response_fail([]);
@@ -464,6 +479,10 @@ class DKClientController extends Controller
         {
             return $this->repo->operate_staff_restore_by_admin(request()->all());
         }
+        else if($item_category == 'contact')
+        {
+            return $this->repo->operate_contact_restore_by_admin(request()->all());
+        }
         else
         {
             return response_fail([]);
@@ -481,6 +500,10 @@ class DKClientController extends Controller
         else if($item_category == 'staff')
         {
             return $this->repo->operate_staff_delete_permanently_by_admin(request()->all());
+        }
+        else if($item_category == 'contact')
+        {
+            return $this->repo->operate_contact_delete_permanently_by_admin(request()->all());
         }
         else
         {
@@ -538,6 +561,10 @@ class DKClientController extends Controller
         {
             return $this->repo->operate_staff_enable_by_admin(request()->all());
         }
+        else if($item_category == 'contact')
+        {
+            return $this->repo->operate_contact_enable_by_admin(request()->all());
+        }
         else
         {
             return response_fail([]);
@@ -555,6 +582,10 @@ class DKClientController extends Controller
         else if($item_category == 'staff')
         {
             return $this->repo->operate_staff_disable_by_admin(request()->all());
+        }
+        else if($item_category == 'contact')
+        {
+            return $this->repo->operate_contact_disable_by_admin(request()->all());
         }
         else
         {

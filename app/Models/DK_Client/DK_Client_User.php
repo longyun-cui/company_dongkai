@@ -48,6 +48,7 @@ class DK_Client_User extends Authenticatable
         'department_id',
 
         'is_take_order',
+        'is_take_order_datetime',
         'is_take_order_date',
         'is_take_order_today',
 

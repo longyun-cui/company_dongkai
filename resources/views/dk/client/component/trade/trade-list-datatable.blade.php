@@ -114,16 +114,70 @@
                     },
                     render: function(data, type, row, meta) {
 
-                        var $html_confirm = '<a class="btn btn-xs bg-default item-modal-show-for-confirm" data-id="'+data+'">确认</a>';
-                        var $html_delete = '<a class="btn btn-xs bg-default item-modal-show-for-delete" data-id="'+data+'">删除</a>';
+                        if(row.deleted_at)
+                        {
+                            var $html_confirm = '<a class="btn btn-xs bg-default disabled">确认</a>';
+                            var $html_delete = '<a class="btn btn-xs bg-default disabled">删除</a>';
+                        }
+                        else
+                        {
+
+                            if(row.is_confirmed > 0)
+                            {
+                                var $html_confirm = '<a class="btn btn-xs bg-default disabled">确认</a>';
+                                var $html_delete = '<a class="btn btn-xs bg-default disabled">删除</a>';
+                            }
+                            else
+                            {
+                                var $html_confirm = '<a class="btn btn-xs bg-default trade-submit-for-confirm" data-id="'+data+'">确认</a>';
+                                var $html_delete = '<a class="btn btn-xs bg-default trade-submit-for-delete" data-id="'+data+'">删除</a>';
+                            }
+                        }
 
 
                         var $html =
+                            @if(in_array($me->user_type,[0,1,9,11,81,84]))
                             $html_confirm+
+                            @endif
                             $html_delete+
                             // $html_record+
                             '';
                         return $html;
+
+                    }
+                },
+                {
+                    "title": "交易状态",
+                    "className": "",
+                    "width": "80px",
+                    "data": "is_confirmed",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.is_completed != 1 && row.item_status != 97)
+                        {
+                            $(nTd).addClass('is_confirmed');
+                            $(nTd).attr('data-id',row.id).attr('data-name','交易状态');
+                            $(nTd).attr('data-key','is_confirmed').attr('data-value',row.id);
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+
+                        if(row.deleted_at != null)
+                        {
+                            return '<small class="btn-xs bg-black">已删除</small>';
+                        }
+
+                        if(data == 0)
+                        {
+                            return '<small class="btn-xs btn-warning">待确认</small>';
+                        }
+                        else if(data == 1)
+                        {
+                            return '<small class="btn-xs btn-success">已确认</small>';
+                        }
+                        else return '--';
 
                     }
                 },
@@ -202,6 +256,67 @@
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return data;
+                    }
+                },
+                {
+                    "title": "操作人",
+                    "data": "id",
+                    "className": "text-center",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+
+                        if(row.deleted_at)
+                        {
+                            return row.deleter_er == null ? '未知' : '<a href="javascript:void(0);">'+row.deleter_er.username+'</a>';
+                        }
+                        else
+                        {
+
+                            if(row.is_confirmed > 0)
+                            {
+                                return row.authenticator_er == null ? '未知' : '<a href="javascript:void(0);">'+row.authenticator_er.username+'</a>';
+                            }
+                            else return '';
+                        }
+                    }
+                },
+                {
+                    "title": "操作时间",
+                    "data": "id",
+                    "className": "text-center",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+
+                        if(row.deleted_at)
+                        {
+                            var $date = new Date(row.deleted_at * 1000);
+                        }
+                        else
+                        {
+
+                            if(row.is_confirmed > 0)
+                            {
+                                var $date = new Date(row.confirmed_at * 1000);
+                            }
+                            else return '';
+                        }
+//                            return data;
+                        var $year = $date.getFullYear();
+                        var $month = ('00'+($date.getMonth()+1)).slice(-2);
+                        var $day = ('00'+($date.getDate())).slice(-2);
+                        var $hour = ('00'+$date.getHours()).slice(-2);
+                        var $minute = ('00'+$date.getMinutes()).slice(-2);
+                        var $second = ('00'+$date.getSeconds()).slice(-2);
+
+//                            return $year+'-'+$month+'-'+$day;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+//                            return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute+':'+$second;
+
+                        var $currentYear = new Date().getFullYear();
+                        if($year == $currentYear) return $month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
+                        else return $year+'-'+$month+'-'+$day+'&nbsp;&nbsp;'+$hour+':'+$minute;
                     }
                 },
                 {

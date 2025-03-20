@@ -123,7 +123,7 @@
 
 
             {{--员工列表--}}
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,11,81,84]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -146,7 +146,7 @@
 
 
             {{--联系渠道--}}
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,11,81,84]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -188,7 +188,7 @@
                 </a>
             </li>
             {{--交付日报--}}
-            @if(in_array($me->user_type,[0,1,9,11]))
+            @if(in_array($me->user_type,[0,1,9,11,81,84]))
             <li class="treeview">
                 <a class="tab-control datatable-control"
                    data-type="create"
@@ -211,7 +211,7 @@
             </li>
             @endif
             {{--员工看板--}}
-            @if($me->client_er->user_category == 31 && in_array($me->user_type,[0,1,9,11]))
+            @if($me->client_er->user_category == 31 && in_array($me->user_type,[0,1,9,11,81,84]))
                 <li class="treeview">
                     <a class="tab-control datatable-control"
                        data-type="create"
@@ -231,8 +231,31 @@
                     </a>
                 </li>
             @endif
+            {{--员工看板--}}
+            @if($me->client_er->user_category == 31 && in_array($me->user_type,[88]))
+                <li class="treeview">
+                    <a class="tab-control- staff-control"
+                       data-id="{{ $me->id }}"
+
+                       data-type="create"
+                       data-unique="y"
+                       data-id="statistic-staff-rank"
+                       data-title='<i class="fa fa-line-chart text-green"></i> 日报'
+                       data-content="员工看板"
+
+                       data-datatable-type="create"
+                       data-datatable-unique="y"
+                       data-datatable-id="datatable-statistic-staff-rank"
+                       data-datatable-target="statistic-staff-rank"
+                       data-datatable-clone-object="statistic-staff-rank-clone"
+                    >
+                        <i class="fa fa-line-chart text-green"></i>
+                        <span>日报</span>
+                    </a>
+                </li>
+            @endif
             {{--成交记录--}}
-            @if($me->client_er->user_category == 31 && in_array($me->user_type,[0,1,9,11]))
+            @if($me->client_er->user_category == 31 && in_array($me->user_type,[0,1,9,11,81,84,88]))
                 <li class="treeview">
                     <a class="tab-control datatable-control"
                        data-type="create"

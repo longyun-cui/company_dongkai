@@ -1,5 +1,5 @@
 <script>
-    function Datatable_for_Delivery_Luxury_List($tableId)
+    function Datatable_for_Delivery_Aesthetic_List($tableId)
     {
 
         let $that = $($tableId);
@@ -24,7 +24,7 @@
                 "dataType" : 'json',
                 "data": function (d) {
                     d._token = $('meta[name="_token"]').attr('content');
-                    d.order_category = 31;
+                    d.order_category = 11;
                     d.id = $tableSearch.find('input[name="delivery-id"]').val();
                     d.order_id = $tableSearch.find('input[name="delivery-order-id"]').val();
                     d.remark = $tableSearch.find('input[name="order-remark"]').val();
@@ -399,19 +399,15 @@
                             }
                             else if($field_1 == 1)
                             {
-                                $result_html = '<small class="btn-xs bg-blue">鞋帽服装</small>';
+                                $result_html = '<small class="btn-xs bg-blue">脸部</small>';
                             }
-                            else if($field_1 == 2)
+                            else if($field_1 == 21)
                             {
-                                $result_html = '<small class="btn-xs bg-green">包</small>';
+                                $result_html = '<small class="btn-xs bg-green">植发</small>';
                             }
-                            else if($field_1 == 3)
+                            else if($field_1 == 31)
                             {
-                                $result_html = '<small class="btn-xs bg-orange">手表</small>';
-                            }
-                            else if($field_1 == 4)
-                            {
-                                $result_html = '<small class="btn-xs bg-red">珠宝</small>';
+                                $result_html = '<small class="btn-xs bg-orange">身体</small>';
                             }
                             else if($field_1 == 99)
                             {
@@ -560,7 +556,7 @@
             ],
             "drawCallback": function (settings) {
 
-                console.log('delivery-luxury-list-datatable-execute');
+                console.log('delivery-aesthetic-list-datatable-execute');
 
 //                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
 //                    this.api().column(1).nodes().each(function(cell, i) {

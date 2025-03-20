@@ -287,13 +287,14 @@
             // data-chart-id="eChart-statistic-company-daily"
 
 
-            if($.fn.DataTable.isDataTable('#'+$config.id))
+            if($.fn.DataTable.isDataTable('#'+$datatable_id))
             {
                 console.log($config.id);
                 console.log('DataTable 已存在！');
             }
             else
             {
+                console.log($config.id);
                 console.log('DataTable 未初始化！');
 
                 let $clone = $('.'+$datatable_clone_object).clone(true);
