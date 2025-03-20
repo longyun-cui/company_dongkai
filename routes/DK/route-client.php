@@ -75,14 +75,19 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
 
 
 
-    // 【联系渠道-管理】
+    // 【交付-管理】
     Route::post('/v1/operate/delivery/datatable-list-query', $controller.'@v1_operate_for_delivery_datatable_list_query');
     Route::post('/v1/operate/delivery/item-get', $controller.'@v1_operate_for_delivery_item_get');
 
+    // 客户跟进
     Route::post('/v1/operate/delivery/item-customer-save', $controller.'@v1_operate_for_delivery_item_customer_save');
     Route::post('/v1/operate/delivery/item-come-save', $controller.'@v1_operate_for_delivery_item_come_save');
     Route::post('/v1/operate/delivery/item-follow-save', $controller.'@v1_operate_for_delivery_item_follow_save');
     Route::post('/v1/operate/delivery/item-trade-save', $controller.'@v1_operate_for_delivery_item_trade_save');
+
+    // 工单质量评价
+    Route::post('/v1/operate/delivery/item-quality-evaluate', $controller.'@v1_operate_for_delivery_item_quality_evaluate');
+
 
 
     // 【交易-管理】

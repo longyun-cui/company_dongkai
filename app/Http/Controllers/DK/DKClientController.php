@@ -367,18 +367,30 @@ class DKClientController extends Controller
     }
 
 
-    // 【工单-管理】编辑-保存
-    public function v1_operate_for_delivery_automatic_dispatching_by_admin()
-    {
-        return $this->repo->v1_operate_for_delivery_automatic_dispatching_by_admin(request()->all());
-    }
-
-
     // 【工单-管理】操作记录
     public function v1_operate_for_delivery_item_follow_record_datatable_query()
     {
         return $this->repo->v1_operate_for_delivery_item_follow_record_datatable_query(request()->all());
     }
+
+
+    // 【工单-管理】编辑-保存
+    public function v1_operate_for_delivery_item_quality_evaluate()
+    {
+        return $this->repo->v1_operate_for_delivery_item_quality_evaluate(request()->all());
+    }
+
+
+
+
+
+
+    // 【工单-管理】一键分派工单
+    public function v1_operate_for_delivery_automatic_dispatching_by_admin()
+    {
+        return $this->repo->v1_operate_for_delivery_automatic_dispatching_by_admin(request()->all());
+    }
+
 
 
 
@@ -395,7 +407,6 @@ class DKClientController extends Controller
     {
         return $this->repo->get_datatable_delivery_daily(request()->all());
     }
-
     // 【交付】导出
     public function operate_delivery_export_by_ids()
     {

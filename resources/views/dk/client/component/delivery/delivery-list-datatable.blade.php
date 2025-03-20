@@ -120,7 +120,7 @@
 
                         var $html_edit = '';
                         var $html_follow = '<a class="btn btn-xs bg-default item-modal-show-for-follow" data-id="'+data+'">客户跟进</a>';
-                        var $html_quality = '<a class="btn btn-xs bg-default item-quality-evaluate-submit" data-id="'+data+'">质量评估</a>';
+                        var $html_quality = '<a class="btn btn-xs bg-default item-quality-evaluate-submit" data-id="'+data+'">质量评价</a>';
 
 
                         var $html =

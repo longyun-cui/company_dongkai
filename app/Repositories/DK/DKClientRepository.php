@@ -207,6 +207,7 @@ class DKClientRepository {
 
         $staff_list = DK_Client_User::select('id','username')
             ->where('client_id',$me->client_id)
+            ->whereNotIn('user_type',[0,1,9,11])
             ->get();
         $return['staff_list'] = $staff_list;
 
@@ -4383,6 +4384,102 @@ class DKClientRepository {
         }
 
     }
+
+    // 【交付-管理】质量评价
+    public function v1_operate_for_delivery_item_quality_evaluate($post_data)
+    {
+//        dd($post_data);
+//        return response_success([]);
+        $messages = [
+            'operate.required' => 'operate.required.',
+            'item_id.required' => 'item_id.required.',
+        ];
+        $v = Validator::make($post_data, [
+            'operate' => 'required',
+            'item_id' => 'required',
+        ], $messages);
+        if ($v->fails())
+        {
+            $messages = $v->errors();
+            return response_error([],$messages->first());
+        }
+
+
+
+
+
+
+        // 判断参数是否合法
+        $operate = $post_data["operate"];
+        if($operate != 'delivery-quality-evaluate') return response_error([],"参数[operate]有误！");
+        $id = $post_data["item_id"];
+        if(intval($id) !== 0 && !$id) return response_error([],"参数[ID]有误！");
+
+        $order_quality = $post_data["order_quality"];
+        if(!in_array($order_quality,config('info.order_quality'))) return response_error([],"质量结果非法！");
+
+
+        $this->get_me();
+        $me = $this->me;
+
+        // 判断用户操作权限
+        if(!in_array($me->user_type,[0,1,9,11,19,81,84,88])) return response_error([],"你没有操作权限！");
+
+        // 判断对象是否合法
+        $item = DK_Pivot_Client_Delivery::withTrashed()->find($id);
+        if(!$item) return response_error([],"该内容不存在，刷新页面重试！");
+
+        if($item->client_id != $me->client_id) return response_error([],"该【工单】不是你的，你不能操作！");
+        if(in_array($me->user_type,[88]) && $item->client_staff_id != $me->id) return response_error([],"该【工单】不是你的，你不能操作！");
+
+
+        $before = $item->order_quality;
+
+        // 启动数据库事务
+        DB::beginTransaction();
+        try
+        {
+            $item->order_quality = $order_quality;
+            $bool = $item->save();
+            if(!$bool) throw new Exception("DK_Pivot_Client_Delivery--update--fail");
+            else
+            {
+                $record = new DK_Client_Record;
+
+                $record_data["ip"] = Get_IP();
+                $record_data["record_object"] = 31;
+                $record_data["record_category"] = 11;
+                $record_data["record_type"] = 1;
+                $record_data["creator_id"] = $me->id;
+                $record_data["order_id"] = $id;
+                $record_data["operate_object"] = 71;
+                $record_data["operate_category"] = 93;
+                $record_data["operate_type"] = 1;
+
+                $record_data["before"] = $before;
+                $record_data["after"] = $order_quality;
+
+                $bool_1 = $record->fill($record_data)->save();
+                if(!$bool_1) throw new Exception("DK_Client_Record--record--fail");
+            }
+
+            DB::commit();
+            return response_success([]);
+        }
+        catch (Exception $e)
+        {
+            DB::rollback();
+            $msg = '操作失败，请重试！';
+            $msg = $e->getMessage();
+//            exit($e->getMessage());
+            return response_fail([],$msg);
+        }
+
+    }
+
+
+
+
 
 
 

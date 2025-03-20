@@ -8,6 +8,12 @@
         // 【质量评估】
         $(".main-content").on('click', ".item-quality-evaluate-submit", function() {
             var $that = $(this);
+            var $id = $(this).data('id');
+            var $row = $that.parents('tr');
+            var $datatable_wrapper = $that.closest('.datatable-wrapper');
+            var $item_category = $datatable_wrapper.data('datatable-item-category');
+            var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
             layer.open({
                 time: 0
                 ,btn: ['确定', '取消']
@@ -21,7 +27,8 @@
                     '</select>'
                 ,yes: function(index){
                     $.post(
-                        "{{ url('/item/delivery-quality-evaluate') }}",
+                        {{--"{{ url('/item/delivery-quality-evaluate') }}",--}}
+                        "{{ url('/v1/operate/delivery/item-quality-evaluate') }}",
                         {
                             _token: $('meta[name="_token"]').attr('content'),
                             operate: "delivery-quality-evaluate",
@@ -37,7 +44,7 @@
                             }
                             else
                             {
-                                $('#datatable_ajax').DataTable().ajax.reload(null,false);
+                                $('#'+$table_id).DataTable().ajax.reload(null,false);
                             }
                         },
                         'json'
