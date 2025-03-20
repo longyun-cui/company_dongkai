@@ -457,7 +457,7 @@
 
 
 
-        // 【通用】详情
+        // 【通用】显示详情
         $(".main-content").on('dblclick', ".modal-show-for-item-detail", function() {
             var $that = $(this);
             var $id = $(this).data('id');
@@ -465,6 +465,11 @@
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
 
             var $modal = $('#modal-for-delivery-item-detail');
             $modal.find('.id-title').html('【'+$id+'】');
