@@ -108,7 +108,7 @@
 
 
     {{--交付--}}
-    @if(in_array($me->user_type,[0,1,9,11]))
+    @if(in_array($me->user_type,[0,1,9,11,19,61,66]))
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="box box-success box-solid">
             <div class="box-header with-border">
