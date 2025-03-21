@@ -11179,21 +11179,21 @@ class DKAdminRepository {
         $staff_id = 0;
         $project_id = 0;
 
-        // 客户
-        if(!empty($post_data['client']))
-        {
-            if(!in_array($post_data['client'],[-1,0,'-1','0']))
-            {
-                $client_id = $post_data['client'];
-            }
-        }
-
         // 员工
         if(!empty($post_data['staff']))
         {
             if(!in_array($post_data['staff'],[-1,0,'-1','0']))
             {
                 $staff_id = $post_data['staff'];
+            }
+        }
+
+        // 客户
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0,'-1','0']))
+            {
+                $client_id = $post_data['client'];
             }
         }
 
@@ -11265,19 +11265,21 @@ class DKAdminRepository {
         }
         else if($export_type == "latest")
         {
-            $query->whereBetween('inspected_at',[$start_timestamp,$time]);
+            $query->whereBetween('inspected_date',[$start_timestamp,$time]);
         }
         else
         {
             if(!empty($post_data['order_start']))
             {
 //                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-                $query->where('inspected_at', '>=', $the_start_timestamp);
+//                $query->where('inspected_at', '>=', $the_start_timestamp);
+                $query->where('inspected_date', '>=', $the_start);
             }
             if(!empty($post_data['order_ended']))
             {
 //                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-                $query->where('inspected_at', '<=', $the_ended_timestamp);
+//                $query->where('inspected_at', '<=', $the_ended_timestamp);
+                $query->where('inspected_date', '<=', $the_ended);
             }
         }
 
@@ -11628,6 +11630,7 @@ class DKAdminRepository {
         // 工单
         $query = DK_Order::select('*')
             ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
+            ->where('dk_admin_order.item_category',1)
             ->with([
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
@@ -11635,8 +11638,7 @@ class DKAdminRepository {
                 'project_er'=>function($query) { $query->select('id','name'); },
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
-            ])
-            ->where('dk_admin_order.item_category',1);
+            ]);
 
 
 
@@ -11668,7 +11670,7 @@ class DKAdminRepository {
         if($client_id) $query->where('dk_pivot_client_delivery.client_id',$client_id);
         if($project_id) $query->where('dk_pivot_client_delivery.project_id',$project_id);
 
-        $data = $query->orderBy('dk_admin_order.id','desc')->get();
+        $data = $query->orderBy('dk_pivot_client_delivery.id','desc')->get();
         $data = $data->toArray();
 
         $cellData = [];
@@ -11800,7 +11802,7 @@ class DKAdminRepository {
         $record_data["record_type"] = 1;
         $record_data["creator_id"] = $me->id;
         $record_data["operate_object"] = 71;
-        $record_data["operate_category"] = 109;
+        $record_data["operate_category"] = 110;
         $record_data["operate_type"] = $record_operate_type;
         $record_data["column_type"] = $record_column_type;
         $record_data["before"] = $record_before;
@@ -11981,18 +11983,9 @@ class DKAdminRepository {
 
         $item_category = isset($post_data['item_category']) ? $post_data['item_category'] : 31;
 
-        $client_id = 0;
         $staff_id = 0;
+        $client_id = 0;
         $project_id = 0;
-
-        // 客户
-        if(!empty($post_data['client']))
-        {
-            if(!in_array($post_data['client'],[-1,0,'-1','0']))
-            {
-                $client_id = $post_data['client'];
-            }
-        }
 
         // 员工
         if(!empty($post_data['staff']))
@@ -12000,6 +11993,15 @@ class DKAdminRepository {
             if(!in_array($post_data['staff'],[-1,0,'-1','0']))
             {
                 $staff_id = $post_data['staff'];
+            }
+        }
+
+        // 客户
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0,'-1','0']))
+            {
+                $client_id = $post_data['client'];
             }
         }
 
@@ -12079,18 +12081,20 @@ class DKAdminRepository {
             if(!empty($post_data['order_start']))
             {
 //                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-                $query->where('inspected_at', '>=', $the_start_timestamp);
+//                $query->where('inspected_at', '>=', $the_start_timestamp);
+                $query->where('inspected_date', '>=', $the_start_timestamp);
             }
             if(!empty($post_data['order_ended']))
             {
 //                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-                $query->where('inspected_at', '<=', $the_ended_timestamp);
+//                $query->where('inspected_at', '<=', $the_ended_timestamp);
+                $query->where('inspected_date', '<=', $the_ended_timestamp);
             }
         }
 
 
-        if($client_id) $query->where('client_id',$client_id);
         if($staff_id) $query->where('creator_id',$staff_id);
+        if($client_id) $query->where('client_id',$client_id);
         if($project_id) $query->where('project_id',$project_id);
         if($inspected_result) $query->where('inspected_result',$inspected_result);
 
@@ -12297,7 +12301,7 @@ class DKAdminRepository {
                     'L'=>10,
                     'M'=>10,
                     'N'=>10,
-                    'O'=>60,
+                    'O'=>20,
                     'P'=>60,
                     'Q'=>10,
                     'R'=>10,
@@ -12457,6 +12461,8 @@ class DKAdminRepository {
 
         // 工单
         $query = DK_Order::select('*')
+            ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
+            ->where('dk_admin_order.item_category',31)
             ->with([
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
@@ -12470,47 +12476,37 @@ class DKAdminRepository {
                 return $query->where('department_district_id', $department_district_id);
             });
 
-//        if(in_array($me->user_type,[77]))
-//        {
-//            $query->where('inspector_id',$me->id);
-//        }
 
 
         if($export_type == "month")
         {
-            $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
+            $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($export_type == "date")
         {
-            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_date);
+            $query->whereDate('dk_pivot_client_delivery.delivered_date',$the_date);
         }
         else if($export_type == "latest")
         {
-            $query->whereBetween('inspected_at',[$start_timestamp,$time]);
+            $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$start_timestamp,$time]);
         }
         else
         {
             if(!empty($post_data['order_start']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-                $query->where('inspected_at', '>=', $the_start_timestamp);
+                $query->where('dk_pivot_client_delivery.delivered_date', '>=', $the_start);
             }
             if(!empty($post_data['order_ended']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-                $query->where('inspected_at', '<=', $the_ended_timestamp);
+                $query->where('dk_pivot_client_delivery.delivered_date', '<=', $the_ended);
             }
         }
 
 
         if($client_id) $query->where('client_id',$client_id);
-        if($staff_id) $query->where('creator_id',$staff_id);
         if($project_id) $query->where('project_id',$project_id);
-        if($inspected_result) $query->where('inspected_result',$inspected_result);
 
-//        $data = $query->orderBy('inspected_at','desc')->orderBy('id','desc')->get();
-//        $data = $query->orderBy('published_at','desc')->orderBy('id','desc')->get();
-        $data = $query->orderBy('id','desc')->get();
+        $data = $query->orderBy('dk_pivot_client_delivery.id','desc')->get();
         $data = $data->toArray();
 //        $data = $data->groupBy('car_id')->toArray();
 //        dd($data);
