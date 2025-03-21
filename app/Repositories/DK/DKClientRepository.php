@@ -661,11 +661,14 @@ class DKClientRepository {
 //                $query->where('assign_status', $post_data['assign_status']);
                 if($post_data['assign_status'] == 0)
                 {
+                    $query->where('assign_status', 0);
                     $query->where('client_staff_id', 0);
                 }
                 else if($post_data['assign_status'] == 1)
                 {
-                    $query->where('client_staff_id', '>', 0);
+                    $query->where(function ($query) {
+                        $query->where('assign_status', 1)->orWhere('client_staff_id', '>', 0);
+                    });
                 }
             }
         }
@@ -688,8 +691,7 @@ class DKClientRepository {
             {
                 $query->whereHas('order_er', function($query) use($post_data) {
                     $query->whereIn('location_district',$post_data['district']);
-                }
-                );
+                });
             }
         }
 
