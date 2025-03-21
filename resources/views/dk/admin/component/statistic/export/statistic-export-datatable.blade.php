@@ -152,13 +152,13 @@
                     "title": "导出类型",
                     "data": "operate_type",
                     "className": "font-12px",
-                    "width": "120px",
+                    "width": "100px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
-                        if(data == 1) return '自定义时间导出';
-                        else if(data == 11) return '按月导出';
-                        else if(data == 21) return '按时间段导出';
-                        else if(data == 31) return '按日导出';
+                        if(data == 1) return '自定义时间';
+                        else if(data == 11) return '按月';
+                        else if(data == 21) return '按时间段';
+                        else if(data == 31) return '按日';
                         else if(data == 99) return '最新导出';
                         else if(data == 100) return 'ID导出';
                         else return '';
@@ -168,7 +168,7 @@
                     "title": "导出范围",
                     "data": "title",
                     "className": " white-space-normal",
-                    "width": "480px",
+                    "width": "600px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         return data;
