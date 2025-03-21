@@ -11038,7 +11038,7 @@ class DKAdminRepository {
 
 
         $item_type = isset($post_data['item_type']) ? $post_data['item_type'] : '';
-        if($item_type == "record") $query->where('operate_category', 109);
+        if($item_type == "record") $query->whereIn('operate_category', [109,100]);
 //        else if($item_type == "object") $query->where('item_type', 1);
 //        else if($item_type == "people") $query->where('item_type', 11);
 //        else if($item_type == "product") $query->where('item_type', 22);
