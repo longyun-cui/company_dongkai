@@ -54,15 +54,15 @@
 
             var $obj = new Object();
             $obj.export_type = $export_type;
+            if($('select[name="delivery-export-item-category"]').val() > 0)  $obj.item_category = $('select[name="delivery-export-item-category"]').val();
             if($('select[name="delivery-order-type"]').val() > 0)  $obj.order_type = $('select[name="delivery-order-type"]').val();
             if($('input[name="delivery-export-month"]').val())  $obj.month = $('input[name="delivery-export-month"]').val();
             if($('input[name="delivery-export-date"]').val())  $obj.date = $('input[name="delivery-export-date"]').val();
             if($('input[name="delivery-export-start"]').val())  $obj.order_start = $('input[name="delivery-export-start"]').val();
             if($('input[name="delivery-export-ended"]').val())  $obj.order_ended = $('input[name="delivery-export-ended"]').val();
             if($('select[name="delivery-order-client"]').val() > 0)  $obj.client = $('select[name="delivery-order-client"]').val();
-            if($('select[name="delivery-order-staff"]').val() > 0)  $obj.staff = $('select[name="delivery-order-staff"]').val();
             if($('select[name="delivery-order-project"]').val() > 0)  $obj.project = $('select[name="delivery-order-project"]').val();
-            if($('select[name="delivery-order-inspected-result"]').val() != -1)  $obj.inspected_result = $('select[name="delivery-order-inspected-result"]').val();
+
 
             var $url = url_build('/v1/operate/statistic/delivery-export',$obj);
             window.open($url);

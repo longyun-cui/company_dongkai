@@ -45,9 +45,9 @@
                                 </select>
 
 
-                                {{--            <button type="button" class="btn btn-default btn-filter filter-submit filter-submit-for-order" data-type="latest">--}}
-                                {{--                <i class="fa fa-download"></i> 最新导出--}}
-                                {{--            </button>--}}
+                                {{--<button type="button" class="btn btn-default btn-filter filter-submit filter-submit-for-order" data-type="latest">--}}
+                                {{--<i class="fa fa-download"></i> 最新导出--}}
+                                {{--</button>--}}
 
 
                                 {{--按天导出--}}
@@ -108,7 +108,8 @@
 
 
     {{--交付--}}
-    <div class="col-xs-12 col-sm-12 col-md-12 _none">
+    @if(in_array($me->user_type,[0,1,9,11]))
+    <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="box box-success box-solid">
             <div class="box-header with-border">
                 <h3 class="box-title comprehensive-month-title">交付•导出</h3>
@@ -142,19 +143,6 @@
                                     <option value="-1">选择客户</option>
                                 </select>
 
-                                <select class="search-filter form-filter filter-lg" name="delivery-export-inspected-result">
-                                    <option value ="-1">审核结果</option>
-                                    <option value ="通过">通过</option>
-                                    <option value ="拒绝">拒绝</option>
-                                    <option value ="重复">重复</option>
-                                    <option value ="内部通过">内部通过</option>
-                                </select>
-
-
-                                {{--            <button type="button" class="btn btn-default btn-filter filter-submit filter-submit-for-order" data-type="latest">--}}
-                                {{--                <i class="fa fa-download"></i> 最新导出--}}
-                                {{--            </button>--}}
-
 
                                 {{--按天导出--}}
                                 <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="delivery-export-date">
@@ -170,7 +158,7 @@
 
 
                                 {{--按月导出--}}
-                                <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="export-month-for-d">
+                                <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre month-pre" data-target="delivery-export-month">
                                     <i class="fa fa-chevron-left"></i>
                                 </button>
                                 <input type="text" class="search-filter form-filter filter-keyup month-picker month_picker-c" name="delivery-export-month" placeholder="选择月份" readonly="readonly" value="{{ date('Y-m') }}" data-default="{{ date('Y-m') }}" />
@@ -211,6 +199,7 @@
             </div>
         </div>
     </div>
+    @endif
 
 
     <div class="col-md-12 datatable-search-row datatable-search-box">

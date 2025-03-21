@@ -11488,7 +11488,7 @@ class DKAdminRepository {
                     'L'=>10,
                     'M'=>10,
                     'N'=>10,
-                    'O'=>60,
+                    'O'=>20,
                     'P'=>60,
                     'Q'=>10,
                     'R'=>10,
@@ -11510,6 +11510,7 @@ class DKAdminRepository {
     // 【数据-导出】交付
     public function v1_operate_for_statistic_delivery_export($post_data)
     {
+//        dd($post_data);
         $this->get_me();
         $me = $this->me;
         if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
@@ -11590,7 +11591,6 @@ class DKAdminRepository {
 
 
         $client_id = 0;
-        $staff_id = 0;
         $project_id = 0;
 
         // 客户
@@ -11599,15 +11599,6 @@ class DKAdminRepository {
             if(!in_array($post_data['client'],[-1,0,'-1','0']))
             {
                 $client_id = $post_data['client'];
-            }
-        }
-
-        // 员工
-        if(!empty($post_data['staff']))
-        {
-            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
-            {
-                $staff_id = $post_data['staff'];
             }
         }
 
@@ -11628,15 +11619,6 @@ class DKAdminRepository {
             }
         }
 
-        // 审核结果
-        $inspected_result = 0;
-        if(!empty($post_data['inspected_result']))
-        {
-            if(!in_array($post_data['inspected_result'],['-1','0']))
-            {
-                $inspected_result = $post_data['inspected_result'];
-            }
-        }
 
 
         $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
@@ -11644,9 +11626,9 @@ class DKAdminRepository {
 
 
         // 工单
-        $query = DK_Pivot_Client_Delivery::select('*')
+        $query = DK_Order::select('*')
+            ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
             ->with([
-                'order_er'=>function($query) { $query->select('*'); },
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
                 'inspector'=>function($query) { $query->select('id','name','true_name'); },
@@ -11654,54 +11636,40 @@ class DKAdminRepository {
                 'department_district_er'=>function($query) { $query->select('id','name'); },
                 'department_group_er'=>function($query) { $query->select('id','name'); }
             ])
-            ->when($department_district_id, function ($query) use ($department_district_id) {
-                return $query->where('department_district_id', $department_district_id);
-            });
+            ->where('dk_admin_order.item_category',1);
 
-//        if(in_array($me->user_type,[77]))
-//        {
-//            $query->where('inspector_id',$me->id);
-//        }
 
 
         if($export_type == "month")
         {
-            $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
+            $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($export_type == "date")
         {
-            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_date);
+            $query->whereDate('dk_pivot_client_delivery.delivered_date',$the_date);
         }
         else if($export_type == "latest")
         {
-            $query->whereBetween('inspected_at',[$start_timestamp,$time]);
+            $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$start_timestamp,$time]);
         }
         else
         {
             if(!empty($post_data['order_start']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-                $query->where('inspected_at', '>=', $the_start_timestamp);
+                $query->where('dk_pivot_client_delivery.delivered_date', '>=', $the_start);
             }
             if(!empty($post_data['order_ended']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-                $query->where('inspected_at', '<=', $the_ended_timestamp);
+                $query->where('dk_pivot_client_delivery.delivered_date', '<=', $the_ended);
             }
         }
 
 
-        if($client_id) $query->where('client_id',$client_id);
-        if($staff_id) $query->where('creator_id',$staff_id);
-        if($project_id) $query->where('project_id',$project_id);
-        if($inspected_result) $query->where('inspected_result',$inspected_result);
+        if($client_id) $query->where('dk_pivot_client_delivery.client_id',$client_id);
+        if($project_id) $query->where('dk_pivot_client_delivery.project_id',$project_id);
 
-//        $data = $query->orderBy('inspected_at','desc')->orderBy('id','desc')->get();
-//        $data = $query->orderBy('published_at','desc')->orderBy('id','desc')->get();
-        $data = $query->orderBy('id','desc')->get();
+        $data = $query->orderBy('dk_admin_order.id','desc')->get();
         $data = $data->toArray();
-//        $data = $data->groupBy('car_id')->toArray();
-//        dd($data);
 
         $cellData = [];
         foreach($data as $k => $v)
@@ -11877,10 +11845,10 @@ class DKAdminRepository {
         }
 
 
-        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
+        $title = '【交付】'.date('Ymd.His').$project_title.$month_title.$time_title;
 
         $file = Excel::create($title, function($excel) use($cellData) {
-            $excel->sheet('全部工单', function($sheet) use($cellData) {
+            $excel->sheet('交付工单', function($sheet) use($cellData) {
                 $sheet->rows($cellData);
                 $sheet->setWidth(array(
                     'A'=>10,
@@ -11897,7 +11865,7 @@ class DKAdminRepository {
                     'L'=>10,
                     'M'=>10,
                     'N'=>10,
-                    'O'=>60,
+                    'O'=>20,
                     'P'=>60,
                     'Q'=>10,
                     'R'=>10,
