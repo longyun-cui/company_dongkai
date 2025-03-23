@@ -10,7 +10,7 @@
             // "aLengthMenu": [[20, 50, 200, 500, -1], ["20", "50", "200", "500", "全部"]],
             "aLengthMenu": [[-1], ["全部"]],
             "processing": true,
-            "serverSide": true,
+            "serverSide": false,
             "searching": false,
             "pagingType": "simple_numbers",
             "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
@@ -130,7 +130,8 @@
                     "data": "order_count_for_delivered_today",
                     "className": "bg-delivered _bold",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -146,7 +147,8 @@
                     "data": "order_count_for_delivered_effective",
                     "className": "bg-delivered _bold",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -162,7 +164,8 @@
                     "data": "order_count_for_delivered_completed",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -178,7 +181,8 @@
                     "data": "order_count_for_delivered_inside",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -195,7 +199,8 @@
                     "data": "order_count_for_delivered_tomorrow",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -212,7 +217,8 @@
                     "data": "order_count_for_delivered_repeated",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -229,7 +235,8 @@
                     "data": "order_count_for_delivered_rejected",
                     "className": "bg-delivered",
                     "width": "80px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -245,7 +252,8 @@
                     "data": "order_rate_for_delivered_effective",
                     "className": "bg-inspected",
                     "width": "100px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {
@@ -262,7 +270,8 @@
                     "data": "order_rate_for_delivered_actual",
                     "className": "bg-inspected",
                     "width": "100px",
-                    "orderable": false,
+                    "orderable": true,
+                    "orderSequence": ["desc", "asc"],
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.id == "统计")
                         {

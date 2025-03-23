@@ -11256,7 +11256,6 @@ class DKAdminRepository {
         }
         else if($export_type == "date")
         {
-//            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_date);
             $query->where('inspected_date',$the_date);
         }
         else if($export_type == "period")
@@ -11271,14 +11270,10 @@ class DKAdminRepository {
         {
             if(!empty($post_data['order_start']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-//                $query->where('inspected_at', '>=', $the_start_timestamp);
                 $query->where('inspected_date', '>=', $the_start);
             }
             if(!empty($post_data['order_ended']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-//                $query->where('inspected_at', '<=', $the_ended_timestamp);
                 $query->where('inspected_date', '<=', $the_ended);
             }
         }
@@ -12060,12 +12055,10 @@ class DKAdminRepository {
 
         if($export_type == "month")
         {
-//            $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
             $query->whereBetween('inspected_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($export_type == "date")
         {
-//            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_date);
             $query->where('inspected_date',$the_date);
         }
         else if($export_type == "period")
@@ -12080,14 +12073,10 @@ class DKAdminRepository {
         {
             if(!empty($post_data['order_start']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
-//                $query->where('inspected_at', '>=', $the_start_timestamp);
                 $query->where('inspected_date', '>=', $the_start_timestamp);
             }
             if(!empty($post_data['order_ended']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
-//                $query->where('inspected_at', '<=', $the_ended_timestamp);
                 $query->where('inspected_date', '<=', $the_ended_timestamp);
             }
         }
@@ -12098,8 +12087,6 @@ class DKAdminRepository {
         if($project_id) $query->where('project_id',$project_id);
         if($inspected_result) $query->where('inspected_result',$inspected_result);
 
-//        $data = $query->orderBy('inspected_at','desc')->orderBy('id','desc')->get();
-//        $data = $query->orderBy('published_at','desc')->orderBy('id','desc')->get();
         $data = $query->orderBy('id','desc')->get();
         $data = $data->toArray();
 //        $data = $data->groupBy('car_id')->toArray();
@@ -12900,12 +12887,10 @@ class DKAdminRepository {
 
         if($export_type == "month")
         {
-//            $query->whereBetween('inspected_at',[$start_timestamp,$ended_timestamp]);
             $query->whereBetween('inspected_date',[$the_month_start_date,$the_month_ended_date]);
         }
         else if($export_type == "date")
         {
-//            $query->whereDate(DB::raw("DATE(FROM_UNIXTIME(inspected_at))"),$the_date);
             $query->where('inspected_date',$the_date);
         }
         else if($export_type == "period")
@@ -12920,12 +12905,10 @@ class DKAdminRepository {
         {
             if(!empty($post_data['order_start']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '>=', $post_data['order_start']);
                 $query->where('inspected_at', '>=', $the_start_timestamp);
             }
             if(!empty($post_data['order_ended']))
             {
-//                $query->whereDate(DB::raw("FROM_UNIXTIME(inspected_at,'%Y-%m-%d')"), '<=', $post_data['order_ended']);
                 $query->where('inspected_at', '<=', $the_ended_timestamp);
             }
         }
@@ -12936,8 +12919,6 @@ class DKAdminRepository {
         if($project_id) $query->where('project_id',$project_id);
         if($inspected_result) $query->where('inspected_result',$inspected_result);
 
-//        $data = $query->orderBy('inspected_at','desc')->orderBy('id','desc')->get();
-//        $data = $query->orderBy('published_at','desc')->orderBy('id','desc')->get();
         $data = $query->orderBy('id','desc')->get();
         $data = $data->toArray();
 //        $data = $data->groupBy('car_id')->toArray();
@@ -24420,7 +24401,6 @@ class DKAdminRepository {
 //
 
                 $item->is_repeat = $is_repeat;
-//                dd($item->is_repeat);
             }
 
             $item->$column_key = $column_value;
