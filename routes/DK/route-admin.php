@@ -118,6 +118,7 @@ Route::group(['middleware' => ['yh.admin.login']], function () {
     Route::get('/v1/operate/statistic/order-export', $controller.'@v1_operate_for_statistic_order_export');
     Route::get('/v1/operate/statistic/order-export-by-ids', $controller.'@v1_operate_for_statistic_order_export_by_ids');
     Route::get('/v1/operate/statistic/delivery-export', $controller.'@v1_operate_for_statistic_delivery_export');
+    Route::get('/v1/operate/statistic/duplicate-export', $controller.'@v1_operate_for_statistic_duplicate_export');
 
 
 

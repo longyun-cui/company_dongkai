@@ -143,8 +143,9 @@
                         else if(data == 101) return '<small class="btn-xs bg-black">删除</small>';
                         else if(data == 102) return '<small class="btn-xs bg-grey">恢复</small>';
                         else if(data == 103) return '<small class="btn-xs bg-black">永久删除</small>';
-                        else if(data == 109) return '<small class="btn-xs bg-fuchsia">录单•导出</small>';
-                        else if(data == 110) return '<small class="btn-xs bg-purple">交付•导出</small>';
+                        else if(data == 109) return '<small class="btn-xs bg-blue">录单•导出</small>';
+                        else if(data == 110) return '<small class="btn-xs bg-green">交付•导出</small>';
+                        else if(data == 111) return '<small class="btn-xs bg-maroon">去重•导出</small>';
                         else return '有误';
                     }
                 },
@@ -161,6 +162,7 @@
                         else if(data == 31) return '按日';
                         else if(data == 99) return '最新导出';
                         else if(data == 100) return 'ID导出';
+                        else if(data == 101) return '全部';
                         else return '';
                     }
                 },

@@ -68,6 +68,51 @@
             window.open($url);
 
         });
+        // 【导出】交付
+        $(".main-content").on('click', ".filter-submit-for-duplicate-export", function() {
+            var $that = $(this);
+            var $id = $that.attr("data-id");
+            var $time_type = $that.data("time-type");
+
+            var $item_category = $('select[name="duplicate-export-item-category"]').val();
+
+            var $date = $('input[name="duplicate-export-date"]').val();
+            var $month = $('input[name="duplicate-export-month"]').val();
+            var $start = $('input[name="duplicate-export-start"]').val();
+            var $ended = $('input[name="duplicate-export-ended"]').val();
+
+            var $project = $('select[name="duplicate-export-project"]').val();
+            var $client = $('select[name="duplicate-export-client"]').val();
+            var $city = $('select[name="duplicate-export-city"]').val();
+            var $district = $('select[name="duplicate-export-district"]').val();
+
+            // if($project <= 0 && $client <= 0)
+            // {
+            //     layer.msg('项目和客户必选一个！');
+            //     return false;
+            // }
+
+            if($project <= 0)
+            {
+                layer.msg('请选择项目！');
+                return false;
+            }
+
+            var $obj = new Object();
+            $obj.time_type = $time_type;
+            if($item_category > 0)  $obj.item_category = $item_category;
+            if($date)  $obj.date = $date;
+            if($month)  $obj.month = $month;
+            if($start)  $obj.start = $start;
+            if($ended)  $obj.ended = $ended;
+            if($project > 0)  $obj.project = $project;
+            if($client > 0)  $obj.client = $client;
+            if($city > 0)  $obj.client = $city;
+            if($district > 0)  $obj.district = $district;
+
+            var $url = url_build('/v1/operate/statistic/duplicate-export',$obj);
+            window.open($url);
+        });
 
 
 
@@ -76,15 +121,18 @@
         $(".main-content").on('click', ".filter-empty-for-export", function() {
 
             var $that = $(this);
-            var $filter_box = $that.closest('.filer-box');
+            var $filter_box = $that.closest('.filter-box');
+            // console.log(1);
 
             $filter_box.find('textarea.form-filter, input.form-filter, select.form-filter').each(function () {
                 $(this).val("");
                 $(this).val($(this).data("default"));
             });
 
-            $filter_box.find('select.form-filter option').attr("selected",false);
-            $filter_box.find('select.form-filter').find('option:eq(0)').attr('selected', true);
+            $filter_box.find('select.form-filter option').prop("selected",false);
+            $filter_box.find('select.form-filter').find('option:eq(-1)').prop('selected', true);
+
+            $filter_box.find(".select2-reset").val(-1).trigger("change");
 
         });
 

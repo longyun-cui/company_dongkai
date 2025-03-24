@@ -611,6 +611,8 @@ class DKAdminRepository {
         $list = $query->orderBy('id','desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
         array_unshift($list,$unSpecified);
+        $unSpecified = ['id'=>-1,'text'=>'选择项目'];
+        array_unshift($list,$unSpecified);
         return $list;
     }
     //
@@ -634,6 +636,8 @@ class DKAdminRepository {
 
         $list = $query->orderBy('id','desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        $unSpecified = ['id'=>-1,'text'=>'选择客户'];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -695,6 +699,8 @@ class DKAdminRepository {
 
         $list = $query->orderBy('id','desc')->get()->toArray();
         $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        $unSpecified = ['id'=>-1,'text'=>'[选择]'];
         array_unshift($list,$unSpecified);
         return $list;
     }
@@ -7061,11 +7067,11 @@ class DKAdminRepository {
             }
             else if($column_key == "location_city")
             {
+                $before = $item->location_city.' - '.$item->location_district;
+
                 $column_value2 = $column_select_value2;
                 $item->$column_key2 = $column_value2;
 
-
-                $before = $item->location_city.' - '.$item->location_district;
                 $after = $column_value.' - '.$column_value2;
                 $return['value2'] = $column_value2;
                 $return['text'] = $after;
@@ -10974,6 +10980,10 @@ class DKAdminRepository {
 
 
 
+
+
+
+
     // 【修改记录】返回-列表-数据
     public function v1_operate_for_record_datatable_list_query($post_data)
     {
@@ -11038,7 +11048,7 @@ class DKAdminRepository {
 
 
         $item_type = isset($post_data['item_type']) ? $post_data['item_type'] : '';
-        if($item_type == "record") $query->whereIn('operate_category', [109,110]);
+        if($item_type == "record") $query->whereIn('operate_category', [109,110,111]);
 //        else if($item_type == "object") $query->where('item_type', 1);
 //        else if($item_type == "people") $query->where('item_type', 11);
 //        else if($item_type == "product") $query->where('item_type', 22);
@@ -11884,838 +11894,6 @@ class DKAdminRepository {
 
 
     // 【数据-导出】工单
-    public function v1_operate_for_statistic_order_luxury_export($post_data)
-    {
-//        dd($post_data);
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
-
-
-        if(in_array($me->user_type,[41,71,77,81,84,88]))
-        {
-            $department_district_id = $me->department_district_id;
-        }
-        else $department_district_id = 0;
-
-
-        $time = time();
-
-        $record_operate_type = 1;
-        $record_column_type = null;
-        $record_before = '';
-        $record_after = '';
-
-        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
-        if($export_type == "month")
-        {
-            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
-            $the_month_timestamp = strtotime($the_month);
-
-            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
-            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
-            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
-            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
-            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
-            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
-
-            $start_timestamp = $the_month_start_timestamp;
-            $ended_timestamp = $the_month_ended_timestamp;
-
-            $record_operate_type = 11;
-            $record_column_type = 'month';
-            $record_before = $the_month;
-            $record_after = $the_month;
-        }
-        else if($export_type == "date")
-        {
-            $the_date  = isset($post_data['date']) ? $post_data['date']  : date('Y-m-d');
-
-            $record_operate_type = 31;
-            $record_column_type = 'date';
-            $record_before = $the_date;
-            $record_after = $the_date;
-        }
-        else if($export_type == "period")
-        {
-            $the_start  = isset($post_data['order_start']) ? $post_data['order_start']  : date('Y-m-d');
-            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended']  : date('Y-m-d');
-
-            $record_operate_type = 21;
-            $record_column_type = 'period';
-            $record_before = $the_start;
-            $record_after = $the_ended;
-        }
-        else if($export_type == "latest")
-        {
-            $record_last = DK_Record::select('*')
-                ->where(['creator_id'=>$me->id,'operate_category'=>109,'operate_type'=>99])
-                ->orderBy('id','desc')->first();
-
-            if($record_last) $start_timestamp = $record_last->after;
-            else $start_timestamp = 0;
-
-            $ended_timestamp = $time;
-
-            $record_operate_type = 99;
-            $record_column_type = 'datetime';
-            $record_before = '';
-            $record_after = $time;
-        }
-        else
-        {
-            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].'00:00:00'  : '';
-            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].'23:59:50'  : '';
-
-            $the_start_timestamp  = strtotime($the_start);
-            $the_ended_timestamp  = strtotime($the_ended);
-
-            $record_operate_type = 1;
-            $record_before = $the_start;
-            $record_after = $the_ended;
-        }
-
-
-        $item_category = isset($post_data['item_category']) ? $post_data['item_category'] : 31;
-
-        $staff_id = 0;
-        $client_id = 0;
-        $project_id = 0;
-
-        // 员工
-        if(!empty($post_data['staff']))
-        {
-            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
-            {
-                $staff_id = $post_data['staff'];
-            }
-        }
-
-        // 客户
-        if(!empty($post_data['client']))
-        {
-            if(!in_array($post_data['client'],[-1,0,'-1','0']))
-            {
-                $client_id = $post_data['client'];
-            }
-        }
-
-        // 项目
-        $project_title = '';
-        $record_data_title = '';
-        if(!empty($post_data['project']))
-        {
-            if(!in_array($post_data['project'],[-1,0,'-1','0']))
-            {
-                $project_id = $post_data['project'];
-                $project_er = DK_Project::find($project_id);
-                if($project_er)
-                {
-                    $project_title = '【'.$project_er->name.'】';
-                    $record_data_title = $project_er->name;
-                }
-            }
-        }
-
-        // 审核结果
-        $inspected_result = 0;
-        if(!empty($post_data['inspected_result']))
-        {
-            if(!in_array($post_data['inspected_result'],['-1','0']))
-            {
-                $inspected_result = $post_data['inspected_result'];
-            }
-        }
-
-
-        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
-        $the_date  = isset($post_data['date'])  ? $post_data['date']  : date('Y-m-d');
-
-
-        // 工单
-        $query = DK_Order::select('*')
-            ->with([
-                'client_er'=>function($query) { $query->select('id','username','true_name'); },
-                'creator'=>function($query) { $query->select('id','name','true_name'); },
-                'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
-                'department_district_er'=>function($query) { $query->select('id','name'); },
-                'department_group_er'=>function($query) { $query->select('id','name'); }
-            ])
-            ->where('item_category',$item_category)
-            ->when($department_district_id, function ($query) use ($department_district_id) {
-                return $query->where('department_district_id', $department_district_id);
-            });
-
-//        if(in_array($me->user_type,[77]))
-//        {
-//            $query->where('inspector_id',$me->id);
-//        }
-
-
-        if($export_type == "month")
-        {
-            $query->whereBetween('inspected_date',[$the_month_start_date,$the_month_ended_date]);
-        }
-        else if($export_type == "date")
-        {
-            $query->where('inspected_date',$the_date);
-        }
-        else if($export_type == "period")
-        {
-            $query->whereBetween('inspected_date',[$the_start,$the_ended]);
-        }
-        else if($export_type == "latest")
-        {
-            $query->whereBetween('inspected_at',[$start_timestamp,$time]);
-        }
-        else
-        {
-            if(!empty($post_data['order_start']))
-            {
-                $query->where('inspected_date', '>=', $the_start_timestamp);
-            }
-            if(!empty($post_data['order_ended']))
-            {
-                $query->where('inspected_date', '<=', $the_ended_timestamp);
-            }
-        }
-
-
-        if($staff_id) $query->where('creator_id',$staff_id);
-        if($client_id) $query->where('client_id',$client_id);
-        if($project_id) $query->where('project_id',$project_id);
-        if($inspected_result) $query->where('inspected_result',$inspected_result);
-
-        $data = $query->orderBy('id','desc')->get();
-        $data = $data->toArray();
-//        $data = $data->groupBy('car_id')->toArray();
-//        dd($data);
-
-        $cellData = [];
-        foreach($data as $k => $v)
-        {
-            $cellData[$k]['id'] = $v['id'];
-
-            $cellData[$k]['client_er_name'] = $v['client_er']['username'];
-            if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
-            else $cellData[$k]['delivered_at'] = '';
-
-            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
-            $cellData[$k]['team'] = $v['department_district_er']['name'].' - '.$v['department_group_er']['name'];
-            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
-
-            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
-//            $cellData[$k]['channel_source'] = $v['channel_source'];
-
-
-            if($v['field_1'] == 1) $cellData[$k]['field_1'] = "鞋帽服装";
-            else if($v['field_1'] == 2) $cellData[$k]['field_1'] = "包";
-            else if($v['field_1'] == 3) $cellData[$k]['field_1'] = "手表";
-            else if($v['field_1'] == 4) $cellData[$k]['field_1'] = "珠宝";
-            else if($v['field_1'] == 99) $cellData[$k]['field_1'] = "其他";
-            else $cellData[$k]['field_1'] = "未选择";
-
-
-            $cellData[$k]['client_name'] = $v['client_name'];
-            $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->user_type,[71,77]))
-            {
-                $time = time();
-                // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
-                if(($v['inspected_at'] > 0) && (!isToday($v['inspected_at'])))
-                {
-                    $client_phone = $v['client_phone'];
-                    $cellData[$k]['client_phone'] = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
-                }
-            }
-
-
-            // 微信号 & 是否+V
-            $cellData[$k]['wx_id'] = $v['wx_id'];
-            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
-            else $cellData[$k]['is_wx'] = '--';
-
-            $cellData[$k]['location_city'] = $v['location_city'];
-            $cellData[$k]['location_district'] = $v['location_district'];
-
-//            $cellData[$k]['teeth_count'] = $v['teeth_count'];
-
-            $cellData[$k]['description'] = $v['description'];
-
-            // 录音
-            if($v['recording_address_list'])
-            {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
-            }
-            else
-            {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
-            }
-
-
-            // 是否重复
-            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
-            else $cellData[$k]['is_repeat'] = '--';
-
-            // 审核
-            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
-            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
-            $cellData[$k]['inspected_result'] = $v['inspected_result'];
-        }
-
-
-        $title_row = [
-            'id'=>'ID',
-            'client_er_name'=>'客户',
-            'delivered_at'=>'交付时间',
-            'creator_name'=>'创建人',
-            'team'=>'团队',
-            'published_time'=>'提交时间',
-            'project_er_name'=>'项目',
-//            'channel_source'=>'渠道来源',
-            'field_1'=>'品类',
-            'client_name'=>'客户姓名',
-            'client_phone'=>'客户电话',
-            'wx_id'=>'微信号',
-            'is_wx'=>'是否+V',
-            'location_city'=>'所在城市',
-            'location_district'=>'行政区',
-//            'teeth_count'=>'牙齿数量',
-            'description'=>'通话小结',
-            'recording_address'=>'录音地址',
-            'is_repeat'=>'是否重复',
-            'inspector_name'=>'审核人',
-            'inspected_time'=>'审核时间',
-            'inspected_result'=>'审核结果',
-        ];
-        array_unshift($cellData, $title_row);
-
-
-        $record = new DK_Record;
-
-        $record_data["ip"] = Get_IP();
-        $record_data["record_object"] = 21;
-        $record_data["record_category"] = 11;
-        $record_data["record_type"] = 1;
-        $record_data["creator_id"] = $me->id;
-        $record_data["operate_object"] = 71;
-        $record_data["operate_category"] = 109;
-        $record_data["operate_type"] = $record_operate_type;
-        $record_data["column_type"] = $record_column_type;
-        $record_data["before"] = $record_before;
-        $record_data["after"] = $record_after;
-        if($project_id)
-        {
-            $record_data["item_id"] = $project_id;
-            $record_data["title"] = $record_data_title;
-        }
-
-        $record->fill($record_data)->save();
-
-
-        $month_title = '';
-        $time_title = '';
-        if($export_type == "month")
-        {
-            $month_title = '【'.$the_month.'月】';
-        }
-        else if($export_type == "date")
-        {
-            $month_title = '【'.$the_date.'】';
-        }
-        else if($export_type == "latest")
-        {
-            $month_title = '【最新】';
-        }
-        else
-        {
-            if($the_start && $the_ended)
-            {
-                $time_title = '【'.$the_start.' - '.$the_ended.'】';
-            }
-            else if($the_start)
-            {
-                $time_title = '【'.$the_start.'】';
-            }
-            else if($the_ended)
-            {
-                $time_title = '【'.$the_ended.'】';
-            }
-        }
-
-
-        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
-
-        $file = Excel::create($title, function($excel) use($cellData) {
-            $excel->sheet('全部工单', function($sheet) use($cellData) {
-                $sheet->rows($cellData);
-                $sheet->setWidth(array(
-                    'A'=>10,
-                    'B'=>10,
-                    'C'=>20,
-                    'D'=>10,
-                    'E'=>20,
-                    'F'=>20,
-                    'G'=>20,
-                    'H'=>10,
-                    'I'=>10,
-                    'J'=>16,
-                    'K'=>16,
-                    'L'=>10,
-                    'M'=>10,
-                    'N'=>10,
-                    'O'=>20,
-                    'P'=>60,
-                    'Q'=>10,
-                    'R'=>10,
-                    'S'=>10,
-                    'T'=>30,
-                    'U'=>20,
-                    'V'=>20
-                ));
-                $sheet->setAutoSize(false);
-                $sheet->freezeFirstRow();
-            });
-        })->export('xls');
-
-
-
-
-
-    }
-    // 【数据-导出】交付
-    public function v1_operate_for_statistic_delivery_luxury_export($post_data)
-    {
-        $this->get_me();
-        $me = $this->me;
-        if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
-
-
-        if(in_array($me->user_type,[41,71,77,81,84,88]))
-        {
-            $department_district_id = $me->department_district_id;
-        }
-        else $department_district_id = 0;
-
-
-        $time = time();
-
-        $record_operate_type = 1;
-        $record_column_type = null;
-        $record_before = '';
-        $record_after = '';
-
-        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
-        if($export_type == "month")
-        {
-            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
-            $the_month_timestamp = strtotime($the_month);
-
-            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
-            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
-            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
-            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
-            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
-            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
-
-            $start_timestamp = $the_month_start_timestamp;
-            $ended_timestamp = $the_month_ended_timestamp;
-
-            $record_operate_type = 11;
-            $record_column_type = 'month';
-            $record_before = $the_month;
-            $record_after = $the_month;
-        }
-        else if($export_type == "date")
-        {
-            $the_date  = isset($post_data['date']) ? $post_data['date']  : date('Y-m-d');
-
-            $record_operate_type = 31;
-            $record_column_type = 'date';
-            $record_before = $the_date;
-            $record_after = $the_date;
-        }
-        else if($export_type == "latest")
-        {
-            $record_last = DK_Record::select('*')
-                ->where(['creator_id'=>$me->id,'operate_category'=>109,'operate_type'=>99])
-                ->orderBy('id','desc')->first();
-
-            if($record_last) $start_timestamp = $record_last->after;
-            else $start_timestamp = 0;
-
-            $ended_timestamp = $time;
-
-            $record_operate_type = 99;
-            $record_column_type = 'datetime';
-            $record_before = '';
-            $record_after = $time;
-        }
-        else
-        {
-            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].':00'  : '';
-            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].':59'  : '';
-
-            $the_start_timestamp  = strtotime($the_start);
-            $the_ended_timestamp  = strtotime($the_ended);
-
-            $record_operate_type = 1;
-            $record_before = $the_start;
-            $record_after = $the_ended;
-        }
-
-
-        $item_category = isset($post_data['item_category']) ? $post_data['item_category'] : 31;
-
-
-        $client_id = 0;
-        $staff_id = 0;
-        $project_id = 0;
-
-        // 客户
-        if(!empty($post_data['client']))
-        {
-            if(!in_array($post_data['client'],[-1,0,'-1','0']))
-            {
-                $client_id = $post_data['client'];
-            }
-        }
-
-        // 员工
-        if(!empty($post_data['staff']))
-        {
-            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
-            {
-                $staff_id = $post_data['staff'];
-            }
-        }
-
-        // 项目
-        $project_title = '';
-        $record_data_title = '';
-        if(!empty($post_data['project']))
-        {
-            if(!in_array($post_data['project'],[-1,0,'-1','0']))
-            {
-                $project_id = $post_data['project'];
-                $project_er = DK_Project::find($project_id);
-                if($project_er)
-                {
-                    $project_title = '【'.$project_er->name.'】';
-                    $record_data_title = $project_er->name;
-                }
-            }
-        }
-
-        // 审核结果
-        $inspected_result = 0;
-        if(!empty($post_data['inspected_result']))
-        {
-            if(!in_array($post_data['inspected_result'],['-1','0']))
-            {
-                $inspected_result = $post_data['inspected_result'];
-            }
-        }
-
-
-        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
-        $the_date  = isset($post_data['date'])  ? $post_data['date']  : date('Y-m-d');
-
-
-        // 工单
-        $query = DK_Order::select('*')
-            ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
-            ->where('dk_admin_order.item_category',31)
-            ->with([
-                'client_er'=>function($query) { $query->select('id','username','true_name'); },
-                'creator'=>function($query) { $query->select('id','name','true_name'); },
-                'inspector'=>function($query) { $query->select('id','name','true_name'); },
-                'project_er'=>function($query) { $query->select('id','name'); },
-                'department_district_er'=>function($query) { $query->select('id','name'); },
-                'department_group_er'=>function($query) { $query->select('id','name'); }
-            ])
-            ->where('item_category',$item_category)
-            ->when($department_district_id, function ($query) use ($department_district_id) {
-                return $query->where('department_district_id', $department_district_id);
-            });
-
-
-
-        if($export_type == "month")
-        {
-            $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$the_month_start_date,$the_month_ended_date]);
-        }
-        else if($export_type == "date")
-        {
-            $query->whereDate('dk_pivot_client_delivery.delivered_date',$the_date);
-        }
-        else if($export_type == "latest")
-        {
-            $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$start_timestamp,$time]);
-        }
-        else
-        {
-            if(!empty($post_data['order_start']))
-            {
-                $query->where('dk_pivot_client_delivery.delivered_date', '>=', $the_start);
-            }
-            if(!empty($post_data['order_ended']))
-            {
-                $query->where('dk_pivot_client_delivery.delivered_date', '<=', $the_ended);
-            }
-        }
-
-
-        if($client_id) $query->where('client_id',$client_id);
-        if($project_id) $query->where('project_id',$project_id);
-
-        $data = $query->orderBy('dk_pivot_client_delivery.id','desc')->get();
-        $data = $data->toArray();
-//        $data = $data->groupBy('car_id')->toArray();
-//        dd($data);
-
-        $cellData = [];
-        foreach($data as $k => $v)
-        {
-            $cellData[$k]['id'] = $v['id'];
-
-            $cellData[$k]['client_er_name'] = $v['client_er']['username'];
-            if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
-            else $cellData[$k]['delivered_at'] = '';
-
-            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
-            $cellData[$k]['team'] = $v['department_district_er']['name'].' - '.$v['department_group_er']['name'];
-            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
-
-            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
-//            $cellData[$k]['channel_source'] = $v['channel_source'];
-
-
-            if($v['field_1'] == 1) $cellData[$k]['field_1'] = "鞋帽服装";
-            else if($v['field_1'] == 2) $cellData[$k]['field_1'] = "包";
-            else if($v['field_1'] == 3) $cellData[$k]['field_1'] = "手表";
-            else if($v['field_1'] == 4) $cellData[$k]['field_1'] = "珠宝";
-            else if($v['field_1'] == 99) $cellData[$k]['field_1'] = "其他";
-            else $cellData[$k]['field_1'] = "未选择";
-
-
-            $cellData[$k]['client_name'] = $v['client_name'];
-            $cellData[$k]['client_phone'] = $v['client_phone'];
-            if(in_array($me->user_type,[71,77]))
-            {
-                $time = time();
-                // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
-                if(($v['inspected_at'] > 0) && (!isToday($v['inspected_at'])))
-                {
-                    $client_phone = $v['client_phone'];
-                    $cellData[$k]['client_phone'] = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
-                }
-            }
-
-
-            // 微信号 & 是否+V
-            $cellData[$k]['wx_id'] = $v['wx_id'];
-            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
-            else $cellData[$k]['is_wx'] = '--';
-
-            $cellData[$k]['location_city'] = $v['location_city'];
-            $cellData[$k]['location_district'] = $v['location_district'];
-
-//            $cellData[$k]['teeth_count'] = $v['teeth_count'];
-
-            $cellData[$k]['description'] = $v['description'];
-
-            // 录音
-            if($v['recording_address_list'])
-            {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
-            }
-            else
-            {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
-            }
-
-
-            // 是否重复
-            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
-            else $cellData[$k]['is_repeat'] = '--';
-
-            // 审核
-            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
-            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
-            $cellData[$k]['inspected_result'] = $v['inspected_result'];
-        }
-
-
-        $title_row = [
-            'id'=>'ID',
-            'client_er_name'=>'客户',
-            'delivered_at'=>'交付时间',
-            'creator_name'=>'创建人',
-            'team'=>'团队',
-            'published_time'=>'提交时间',
-            'project_er_name'=>'项目',
-//            'channel_source'=>'渠道来源',
-            'field_1'=>'品类',
-            'client_name'=>'客户姓名',
-            'client_phone'=>'客户电话',
-            'wx_id'=>'微信号',
-            'is_wx'=>'是否+V',
-            'location_city'=>'所在城市',
-            'location_district'=>'行政区',
-//            'teeth_count'=>'牙齿数量',
-            'description'=>'通话小结',
-            'recording_address'=>'录音地址',
-            'is_repeat'=>'是否重复',
-            'inspector_name'=>'审核人',
-            'inspected_time'=>'审核时间',
-            'inspected_result'=>'审核结果',
-        ];
-        array_unshift($cellData, $title_row);
-
-
-        $record = new DK_Record;
-
-        $record_data["ip"] = Get_IP();
-        $record_data["record_object"] = 21;
-        $record_data["record_category"] = 11;
-        $record_data["record_type"] = 1;
-        $record_data["creator_id"] = $me->id;
-        $record_data["operate_object"] = 71;
-        $record_data["operate_category"] = 109;
-        $record_data["operate_type"] = $record_operate_type;
-        $record_data["column_type"] = $record_column_type;
-        $record_data["before"] = $record_before;
-        $record_data["after"] = $record_after;
-        if($project_id)
-        {
-            $record_data["item_id"] = $project_id;
-            $record_data["title"] = $record_data_title;
-        }
-
-        $record->fill($record_data)->save();
-
-
-        $month_title = '';
-        $time_title = '';
-        if($export_type == "month")
-        {
-            $month_title = '【'.$the_month.'月】';
-        }
-        else if($export_type == "date")
-        {
-            $month_title = '【'.$the_date.'】';
-        }
-        else if($export_type == "latest")
-        {
-            $month_title = '【最新】';
-        }
-        else
-        {
-            if($the_start && $the_ended)
-            {
-                $time_title = '【'.$the_start.' - '.$the_ended.'】';
-            }
-            else if($the_start)
-            {
-                $time_title = '【'.$the_start.'】';
-            }
-            else if($the_ended)
-            {
-                $time_title = '【'.$the_ended.'】';
-            }
-        }
-
-
-        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
-
-        $file = Excel::create($title, function($excel) use($cellData) {
-            $excel->sheet('全部工单', function($sheet) use($cellData) {
-                $sheet->rows($cellData);
-                $sheet->setWidth(array(
-                    'A'=>10,
-                    'B'=>10,
-                    'C'=>20,
-                    'D'=>10,
-                    'E'=>20,
-                    'F'=>20,
-                    'G'=>20,
-                    'H'=>10,
-                    'I'=>10,
-                    'J'=>16,
-                    'K'=>16,
-                    'L'=>10,
-                    'M'=>10,
-                    'N'=>10,
-                    'O'=>60,
-                    'P'=>60,
-                    'Q'=>10,
-                    'R'=>10,
-                    'S'=>10,
-                    'T'=>30,
-                    'U'=>20,
-                    'V'=>20
-                ));
-                $sheet->setAutoSize(false);
-                $sheet->freezeFirstRow();
-            });
-        })->export('xls');
-
-
-
-
-
-    }
-
-
-    // 【数据-导出】工单
     public function v1_operate_for_statistic_order_aesthetic_export($post_data)
     {
 //        dd($post_data);
@@ -13334,6 +12512,845 @@ class DKAdminRepository {
 //        $data = $query->orderBy('inspected_at','desc')->orderBy('id','desc')->get();
 //        $data = $query->orderBy('published_at','desc')->orderBy('id','desc')->get();
         $data = $query->orderBy('id','desc')->get();
+        $data = $data->toArray();
+//        $data = $data->groupBy('car_id')->toArray();
+//        dd($data);
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+            $cellData[$k]['client_er_name'] = $v['client_er']['username'];
+            if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            else $cellData[$k]['delivered_at'] = '';
+
+            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['team'] = $v['department_district_er']['name'].' - '.$v['department_group_er']['name'];
+            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
+
+            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+//            $cellData[$k]['channel_source'] = $v['channel_source'];
+
+
+            if($v['field_1'] == 1) $cellData[$k]['field_1'] = "鞋帽服装";
+            else if($v['field_1'] == 2) $cellData[$k]['field_1'] = "包";
+            else if($v['field_1'] == 3) $cellData[$k]['field_1'] = "手表";
+            else if($v['field_1'] == 4) $cellData[$k]['field_1'] = "珠宝";
+            else if($v['field_1'] == 99) $cellData[$k]['field_1'] = "其他";
+            else $cellData[$k]['field_1'] = "未选择";
+
+
+            $cellData[$k]['client_name'] = $v['client_name'];
+            $cellData[$k]['client_phone'] = $v['client_phone'];
+            if(in_array($me->user_type,[71,77]))
+            {
+                $time = time();
+                // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
+                if(($v['inspected_at'] > 0) && (!isToday($v['inspected_at'])))
+                {
+                    $client_phone = $v['client_phone'];
+                    $cellData[$k]['client_phone'] = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
+
+
+            // 微信号 & 是否+V
+            $cellData[$k]['wx_id'] = $v['wx_id'];
+            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
+            else $cellData[$k]['is_wx'] = '--';
+
+            $cellData[$k]['location_city'] = $v['location_city'];
+            $cellData[$k]['location_district'] = $v['location_district'];
+
+//            $cellData[$k]['teeth_count'] = $v['teeth_count'];
+
+            $cellData[$k]['description'] = $v['description'];
+
+            // 录音
+            if($v['recording_address_list'])
+            {
+                $recording_address_list_text = "";
+                $recording_address_list = json_decode($v['recording_address_list']);
+                if(count($recording_address_list) > 0)
+                {
+                    foreach($recording_address_list as $key => $recording)
+                    {
+//                        $recording_address_list_text .= $recording."\r\n";
+                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+                    }
+                }
+                else
+                {
+                    if($v['call_record_id'] > 0)
+                    {
+                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+                    }
+                    else $recording_address_list_text = $v['recording_address'];
+                }
+                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+
+            }
+            else
+            {
+                if($v['call_record_id'] > 0)
+                {
+                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+                }
+                else $cellData[$k]['recording_address'] = $v['recording_address'];
+            }
+
+
+            // 是否重复
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+        }
+
+
+        $title_row = [
+            'id'=>'ID',
+            'client_er_name'=>'客户',
+            'delivered_at'=>'交付时间',
+            'creator_name'=>'创建人',
+            'team'=>'团队',
+            'published_time'=>'提交时间',
+            'project_er_name'=>'项目',
+//            'channel_source'=>'渠道来源',
+            'field_1'=>'品类',
+            'client_name'=>'客户姓名',
+            'client_phone'=>'客户电话',
+            'wx_id'=>'微信号',
+            'is_wx'=>'是否+V',
+            'location_city'=>'所在城市',
+            'location_district'=>'行政区',
+//            'teeth_count'=>'牙齿数量',
+            'description'=>'通话小结',
+            'recording_address'=>'录音地址',
+            'is_repeat'=>'是否重复',
+            'inspector_name'=>'审核人',
+            'inspected_time'=>'审核时间',
+            'inspected_result'=>'审核结果',
+        ];
+        array_unshift($cellData, $title_row);
+
+
+        $record = new DK_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 21;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 71;
+        $record_data["operate_category"] = 109;
+        $record_data["operate_type"] = $record_operate_type;
+        $record_data["column_type"] = $record_column_type;
+        $record_data["before"] = $record_before;
+        $record_data["after"] = $record_after;
+        if($project_id)
+        {
+            $record_data["item_id"] = $project_id;
+            $record_data["title"] = $record_data_title;
+        }
+
+        $record->fill($record_data)->save();
+
+
+        $month_title = '';
+        $time_title = '';
+        if($export_type == "month")
+        {
+            $month_title = '【'.$the_month.'月】';
+        }
+        else if($export_type == "date")
+        {
+            $month_title = '【'.$the_date.'】';
+        }
+        else if($export_type == "latest")
+        {
+            $month_title = '【最新】';
+        }
+        else
+        {
+            if($the_start && $the_ended)
+            {
+                $time_title = '【'.$the_start.' - '.$the_ended.'】';
+            }
+            else if($the_start)
+            {
+                $time_title = '【'.$the_start.'】';
+            }
+            else if($the_ended)
+            {
+                $time_title = '【'.$the_ended.'】';
+            }
+        }
+
+
+        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
+
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('全部工单', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setWidth(array(
+                    'A'=>10,
+                    'B'=>10,
+                    'C'=>20,
+                    'D'=>10,
+                    'E'=>20,
+                    'F'=>20,
+                    'G'=>20,
+                    'H'=>10,
+                    'I'=>10,
+                    'J'=>16,
+                    'K'=>16,
+                    'L'=>10,
+                    'M'=>10,
+                    'N'=>10,
+                    'O'=>60,
+                    'P'=>60,
+                    'Q'=>10,
+                    'R'=>10,
+                    'S'=>10,
+                    'T'=>30,
+                    'U'=>20,
+                    'V'=>20
+                ));
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
+
+
+
+
+
+    }
+
+
+    // 【数据-导出】工单
+    public function v1_operate_for_statistic_order_luxury_export($post_data)
+    {
+//        dd($post_data);
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
+
+
+        if(in_array($me->user_type,[41,71,77,81,84,88]))
+        {
+            $department_district_id = $me->department_district_id;
+        }
+        else $department_district_id = 0;
+
+
+        $time = time();
+
+        $record_operate_type = 1;
+        $record_column_type = null;
+        $record_before = '';
+        $record_after = '';
+
+        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
+        if($export_type == "all")
+        {
+            $record_operate_type = 100;
+            $record_column_type = 'all';
+            $record_before = '全部';
+            $record_after = '全部';
+        }
+        else if($export_type == "date")
+        {
+            $the_date  = isset($post_data['date']) ? $post_data['date']  : date('Y-m-d');
+
+            $record_operate_type = 31;
+            $record_column_type = 'date';
+            $record_before = $the_date;
+            $record_after = $the_date;
+        }
+        else if($export_type == "month")
+        {
+            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $start_timestamp = $the_month_start_timestamp;
+            $ended_timestamp = $the_month_ended_timestamp;
+
+            $record_operate_type = 11;
+            $record_column_type = 'month';
+            $record_before = $the_month;
+            $record_after = $the_month;
+        }
+        else if($export_type == "period")
+        {
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start']  : date('Y-m-d');
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended']  : date('Y-m-d');
+
+            $record_operate_type = 21;
+            $record_column_type = 'period';
+            $record_before = $the_start;
+            $record_after = $the_ended;
+        }
+        else if($export_type == "latest")
+        {
+            $record_last = DK_Record::select('*')
+                ->where(['creator_id'=>$me->id,'operate_category'=>109,'operate_type'=>99])
+                ->orderBy('id','desc')->first();
+
+            if($record_last) $start_timestamp = $record_last->after;
+            else $start_timestamp = 0;
+
+            $ended_timestamp = $time;
+
+            $record_operate_type = 99;
+            $record_column_type = 'datetime';
+            $record_before = '';
+            $record_after = $time;
+        }
+        else
+        {
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].'00:00:00'  : '';
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].'23:59:50'  : '';
+
+            $the_start_timestamp  = strtotime($the_start);
+            $the_ended_timestamp  = strtotime($the_ended);
+
+            $record_operate_type = 1;
+            $record_before = $the_start;
+            $record_after = $the_ended;
+        }
+
+
+        $item_category = isset($post_data['item_category']) ? $post_data['item_category'] : 31;
+
+        $staff_id = 0;
+        $client_id = 0;
+        $project_id = 0;
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
+            {
+                $staff_id = $post_data['staff'];
+            }
+        }
+
+        // 客户
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0,'-1','0']))
+            {
+                $client_id = $post_data['client'];
+            }
+        }
+
+        // 项目
+        $project_title = '';
+        $record_data_title = '';
+        if(!empty($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
+            {
+                $project_id = $post_data['project'];
+                $project_er = DK_Project::find($project_id);
+                if($project_er)
+                {
+                    $project_title = '【'.$project_er->name.'】';
+                    $record_data_title = $project_er->name;
+                }
+            }
+        }
+
+        // 审核结果
+        $inspected_result = 0;
+        if(!empty($post_data['inspected_result']))
+        {
+            if(!in_array($post_data['inspected_result'],['-1','0']))
+            {
+                $inspected_result = $post_data['inspected_result'];
+            }
+        }
+
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+        $the_date  = isset($post_data['date'])  ? $post_data['date']  : date('Y-m-d');
+
+
+        // 工单
+        $query = DK_Order::select('*')
+            ->with([
+                'client_er'=>function($query) { $query->select('id','username','true_name'); },
+                'creator'=>function($query) { $query->select('id','name','true_name'); },
+                'inspector'=>function($query) { $query->select('id','name','true_name'); },
+                'project_er'=>function($query) { $query->select('id','name'); },
+                'department_district_er'=>function($query) { $query->select('id','name'); },
+                'department_group_er'=>function($query) { $query->select('id','name'); }
+            ])
+            ->where('item_category',$item_category)
+            ->when($department_district_id, function ($query) use ($department_district_id) {
+                return $query->where('department_district_id', $department_district_id);
+            });
+
+//        if(in_array($me->user_type,[77]))
+//        {
+//            $query->where('inspector_id',$me->id);
+//        }
+
+
+        if($export_type == "month")
+        {
+            $query->whereBetween('inspected_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($export_type == "date")
+        {
+            $query->where('inspected_date',$the_date);
+        }
+        else if($export_type == "period")
+        {
+            $query->whereBetween('inspected_date',[$the_start,$the_ended]);
+        }
+        else if($export_type == "latest")
+        {
+            $query->whereBetween('inspected_at',[$start_timestamp,$time]);
+        }
+        else
+        {
+            if(!empty($post_data['order_start']))
+            {
+                $query->where('inspected_date', '>=', $the_start_timestamp);
+            }
+            if(!empty($post_data['order_ended']))
+            {
+                $query->where('inspected_date', '<=', $the_ended_timestamp);
+            }
+        }
+
+
+        if($staff_id) $query->where('creator_id',$staff_id);
+        if($client_id) $query->where('client_id',$client_id);
+        if($project_id) $query->where('project_id',$project_id);
+        if($inspected_result) $query->where('inspected_result',$inspected_result);
+
+        $data = $query->orderBy('id','desc')->get();
+        $data = $data->toArray();
+//        $data = $data->groupBy('car_id')->toArray();
+//        dd($data);
+
+        $cellData = [];
+        foreach($data as $k => $v)
+        {
+            $cellData[$k]['id'] = $v['id'];
+
+            $cellData[$k]['client_er_name'] = $v['client_er']['username'];
+            if($v['delivered_at']) $cellData[$k]['delivered_at'] = date('Y-m-d H:i:s', $v['delivered_at']);
+            else $cellData[$k]['delivered_at'] = '';
+
+            $cellData[$k]['creator_name'] = $v['creator']['true_name'];
+            $cellData[$k]['team'] = $v['department_district_er']['name'].' - '.$v['department_group_er']['name'];
+            $cellData[$k]['published_time'] = date('Y-m-d H:i:s', $v['published_at']);
+
+            $cellData[$k]['project_er_name'] = $v['project_er']['name'];
+//            $cellData[$k]['channel_source'] = $v['channel_source'];
+
+
+            if($v['field_1'] == 1) $cellData[$k]['field_1'] = "鞋帽服装";
+            else if($v['field_1'] == 2) $cellData[$k]['field_1'] = "包";
+            else if($v['field_1'] == 3) $cellData[$k]['field_1'] = "手表";
+            else if($v['field_1'] == 4) $cellData[$k]['field_1'] = "珠宝";
+            else if($v['field_1'] == 99) $cellData[$k]['field_1'] = "其他";
+            else $cellData[$k]['field_1'] = "未选择";
+
+
+            $cellData[$k]['client_name'] = $v['client_name'];
+            $cellData[$k]['client_phone'] = $v['client_phone'];
+            if(in_array($me->user_type,[71,77]))
+            {
+                $time = time();
+                // if(($v['inspected_at'] > 0) && (($time - $v['inspected_at']) > 86400))
+                if(($v['inspected_at'] > 0) && (!isToday($v['inspected_at'])))
+                {
+                    $client_phone = $v['client_phone'];
+                    $cellData[$k]['client_phone'] = substr($client_phone, 0, 3).'****'.substr($client_phone, -4);
+                }
+            }
+
+
+            // 微信号 & 是否+V
+            $cellData[$k]['wx_id'] = $v['wx_id'];
+            if($v['is_wx'] == 1) $cellData[$k]['is_wx'] = '是';
+            else $cellData[$k]['is_wx'] = '--';
+
+            $cellData[$k]['location_city'] = $v['location_city'];
+            $cellData[$k]['location_district'] = $v['location_district'];
+
+//            $cellData[$k]['teeth_count'] = $v['teeth_count'];
+
+            $cellData[$k]['description'] = $v['description'];
+
+            // 录音
+            if($v['recording_address_list'])
+            {
+                $recording_address_list_text = "";
+                $recording_address_list = json_decode($v['recording_address_list']);
+                if(count($recording_address_list) > 0)
+                {
+                    foreach($recording_address_list as $key => $recording)
+                    {
+//                        $recording_address_list_text .= $recording."\r\n";
+                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+                    }
+                }
+                else
+                {
+                    if($v['call_record_id'] > 0)
+                    {
+                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+                    }
+                    else $recording_address_list_text = $v['recording_address'];
+                }
+                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+
+            }
+            else
+            {
+                if($v['call_record_id'] > 0)
+                {
+                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+                }
+                else $cellData[$k]['recording_address'] = $v['recording_address'];
+            }
+
+
+            // 是否重复
+            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
+            else $cellData[$k]['is_repeat'] = '--';
+
+            // 审核
+            $cellData[$k]['inspector_name'] = $v['inspector']['true_name'];
+            $cellData[$k]['inspected_time'] = date('Y-m-d H:i:s', $v['inspected_at']);
+            $cellData[$k]['inspected_result'] = $v['inspected_result'];
+        }
+
+
+        $title_row = [
+            'id'=>'ID',
+            'client_er_name'=>'客户',
+            'delivered_at'=>'交付时间',
+            'creator_name'=>'创建人',
+            'team'=>'团队',
+            'published_time'=>'提交时间',
+            'project_er_name'=>'项目',
+//            'channel_source'=>'渠道来源',
+            'field_1'=>'品类',
+            'client_name'=>'客户姓名',
+            'client_phone'=>'客户电话',
+            'wx_id'=>'微信号',
+            'is_wx'=>'是否+V',
+            'location_city'=>'所在城市',
+            'location_district'=>'行政区',
+//            'teeth_count'=>'牙齿数量',
+            'description'=>'通话小结',
+            'recording_address'=>'录音地址',
+            'is_repeat'=>'是否重复',
+            'inspector_name'=>'审核人',
+            'inspected_time'=>'审核时间',
+            'inspected_result'=>'审核结果',
+        ];
+        array_unshift($cellData, $title_row);
+
+
+        $record = new DK_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 21;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 71;
+        $record_data["operate_category"] = 109;
+        $record_data["operate_type"] = $record_operate_type;
+        $record_data["column_type"] = $record_column_type;
+        $record_data["before"] = $record_before;
+        $record_data["after"] = $record_after;
+        if($project_id)
+        {
+            $record_data["item_id"] = $project_id;
+            $record_data["title"] = $record_data_title;
+        }
+
+        $record->fill($record_data)->save();
+
+
+        $month_title = '';
+        $time_title = '';
+        if($export_type == "month")
+        {
+            $month_title = '【'.$the_month.'月】';
+        }
+        else if($export_type == "date")
+        {
+            $month_title = '【'.$the_date.'】';
+        }
+        else if($export_type == "latest")
+        {
+            $month_title = '【最新】';
+        }
+        else
+        {
+            if($the_start && $the_ended)
+            {
+                $time_title = '【'.$the_start.' - '.$the_ended.'】';
+            }
+            else if($the_start)
+            {
+                $time_title = '【'.$the_start.'】';
+            }
+            else if($the_ended)
+            {
+                $time_title = '【'.$the_ended.'】';
+            }
+        }
+
+
+        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
+
+        $file = Excel::create($title, function($excel) use($cellData) {
+            $excel->sheet('全部工单', function($sheet) use($cellData) {
+                $sheet->rows($cellData);
+                $sheet->setWidth(array(
+                    'A'=>10,
+                    'B'=>10,
+                    'C'=>20,
+                    'D'=>10,
+                    'E'=>20,
+                    'F'=>20,
+                    'G'=>20,
+                    'H'=>10,
+                    'I'=>10,
+                    'J'=>16,
+                    'K'=>16,
+                    'L'=>10,
+                    'M'=>10,
+                    'N'=>10,
+                    'O'=>20,
+                    'P'=>60,
+                    'Q'=>10,
+                    'R'=>10,
+                    'S'=>10,
+                    'T'=>30,
+                    'U'=>20,
+                    'V'=>20
+                ));
+                $sheet->setAutoSize(false);
+                $sheet->freezeFirstRow();
+            });
+        })->export('xls');
+
+
+
+
+
+    }
+    // 【数据-导出】交付
+    public function v1_operate_for_statistic_delivery_luxury_export($post_data)
+    {
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19,61,66,71,77])) return view($this->view_blade_403);
+
+
+        if(in_array($me->user_type,[41,71,77,81,84,88]))
+        {
+            $department_district_id = $me->department_district_id;
+        }
+        else $department_district_id = 0;
+
+
+        $time = time();
+
+        $record_operate_type = 1;
+        $record_column_type = null;
+        $record_before = '';
+        $record_after = '';
+
+        $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
+        if($export_type == "month")
+        {
+            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $start_timestamp = $the_month_start_timestamp;
+            $ended_timestamp = $the_month_ended_timestamp;
+
+            $record_operate_type = 11;
+            $record_column_type = 'month';
+            $record_before = $the_month;
+            $record_after = $the_month;
+        }
+        else if($export_type == "date")
+        {
+            $the_date  = isset($post_data['date']) ? $post_data['date']  : date('Y-m-d');
+
+            $record_operate_type = 31;
+            $record_column_type = 'date';
+            $record_before = $the_date;
+            $record_after = $the_date;
+        }
+        else if($export_type == "latest")
+        {
+            $record_last = DK_Record::select('*')
+                ->where(['creator_id'=>$me->id,'operate_category'=>109,'operate_type'=>99])
+                ->orderBy('id','desc')->first();
+
+            if($record_last) $start_timestamp = $record_last->after;
+            else $start_timestamp = 0;
+
+            $ended_timestamp = $time;
+
+            $record_operate_type = 99;
+            $record_column_type = 'datetime';
+            $record_before = '';
+            $record_after = $time;
+        }
+        else
+        {
+            $the_start  = isset($post_data['order_start']) ? $post_data['order_start'].':00'  : '';
+            $the_ended  = isset($post_data['order_ended']) ? $post_data['order_ended'].':59'  : '';
+
+            $the_start_timestamp  = strtotime($the_start);
+            $the_ended_timestamp  = strtotime($the_ended);
+
+            $record_operate_type = 1;
+            $record_before = $the_start;
+            $record_after = $the_ended;
+        }
+
+
+        $item_category = isset($post_data['item_category']) ? $post_data['item_category'] : 31;
+
+
+        $client_id = 0;
+        $staff_id = 0;
+        $project_id = 0;
+
+        // 客户
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0,'-1','0']))
+            {
+                $client_id = $post_data['client'];
+            }
+        }
+
+        // 员工
+        if(!empty($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
+            {
+                $staff_id = $post_data['staff'];
+            }
+        }
+
+        // 项目
+        $project_title = '';
+        $record_data_title = '';
+        if(!empty($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
+            {
+                $project_id = $post_data['project'];
+                $project_er = DK_Project::find($project_id);
+                if($project_er)
+                {
+                    $project_title = '【'.$project_er->name.'】';
+                    $record_data_title = $project_er->name;
+                }
+            }
+        }
+
+        // 审核结果
+        $inspected_result = 0;
+        if(!empty($post_data['inspected_result']))
+        {
+            if(!in_array($post_data['inspected_result'],['-1','0']))
+            {
+                $inspected_result = $post_data['inspected_result'];
+            }
+        }
+
+
+        $the_month  = isset($post_data['month'])  ? $post_data['month']  : date('Y-m');
+        $the_date  = isset($post_data['date'])  ? $post_data['date']  : date('Y-m-d');
+
+
+        // 工单
+        $query = DK_Order::select('*')
+            ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
+            ->where('dk_admin_order.item_category',31)
+            ->with([
+                'client_er'=>function($query) { $query->select('id','username','true_name'); },
+                'creator'=>function($query) { $query->select('id','name','true_name'); },
+                'inspector'=>function($query) { $query->select('id','name','true_name'); },
+                'project_er'=>function($query) { $query->select('id','name'); },
+                'department_district_er'=>function($query) { $query->select('id','name'); },
+                'department_group_er'=>function($query) { $query->select('id','name'); }
+            ])
+            ->where('item_category',$item_category)
+            ->when($department_district_id, function ($query) use ($department_district_id) {
+                return $query->where('department_district_id', $department_district_id);
+            });
+
+
+
+        if($export_type == "month")
+        {
+            $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$the_month_start_date,$the_month_ended_date]);
+        }
+        else if($export_type == "date")
+        {
+            $query->whereDate('dk_pivot_client_delivery.delivered_date',$the_date);
+        }
+        else if($export_type == "latest")
+        {
+            $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$start_timestamp,$time]);
+        }
+        else
+        {
+            if(!empty($post_data['order_start']))
+            {
+                $query->where('dk_pivot_client_delivery.delivered_date', '>=', $the_start);
+            }
+            if(!empty($post_data['order_ended']))
+            {
+                $query->where('dk_pivot_client_delivery.delivered_date', '<=', $the_ended);
+            }
+        }
+
+
+        if($client_id) $query->where('client_id',$client_id);
+        if($project_id) $query->where('project_id',$project_id);
+
+        $data = $query->orderBy('dk_pivot_client_delivery.id','desc')->get();
         $data = $data->toArray();
 //        $data = $data->groupBy('car_id')->toArray();
 //        dd($data);
@@ -14260,22 +14277,254 @@ class DKAdminRepository {
     }
 
 
+    // 【数据-导出】交付
+    public function v1_operate_for_statistic_duplicate_export($post_data)
+    {
+//        dd($post_data);
+        $this->get_me();
+        $me = $this->me;
+        if(!in_array($me->user_type,[0,1,11,19])) return view($this->view_blade_403);
 
-    
-    
-    
-    
-    
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
+
+        $time = time();
+        $date = date('Y-m-d');
+
+        $record_operate_type = 1;
+        $record_column_type = null;
+        $record_before = '';
+        $record_after = '';
+
+        $when_data = [];
+        $time_type = isset($post_data['time_type']) ? $post_data['time_type']  : '';
+        if($time_type == "all")
+        {
+            $record_operate_type = 101;
+            $record_column_type = 'all';
+            $record_before = '全部';
+            $record_after = '全部';
+
+            $time_title = '【全部】';
+        }
+        else if($time_type == "date")
+        {
+            $the_date  = isset($post_data['date']) ? $post_data['date']  : date('Y-m-d');
+
+            $when_data['the_date'] = $the_date;
+
+            $record_operate_type = 31;
+            $record_column_type = 'date';
+            $record_before = $the_date;
+            $record_after = $the_date;
+
+            $time_title = '【'.$the_date.'】';
+        }
+        else if($time_type == "month")
+        {
+            $the_month  = isset($post_data['month']) ? $post_data['month']  : date('Y-m');
+            $the_month_timestamp = strtotime($the_month);
+
+            $the_month_start_date = date('Y-m-01',$the_month_timestamp); // 指定月份-开始日期
+            $the_month_ended_date = date('Y-m-t',$the_month_timestamp); // 指定月份-结束日期
+            $the_month_start_datetime = date('Y-m-01 00:00:00',$the_month_timestamp); // 本月开始时间
+            $the_month_ended_datetime = date('Y-m-t 23:59:59',$the_month_timestamp); // 本月结束时间
+            $the_month_start_timestamp = strtotime($the_month_start_datetime); // 指定月份-开始时间戳
+            $the_month_ended_timestamp = strtotime($the_month_ended_datetime); // 指定月份-结束时间戳
+
+            $when_data['the_month'] = $the_month;
+            $when_data['the_month_start_date'] = $the_month_start_date;
+            $when_data['the_month_ended_date'] = $the_month_ended_date;
+
+            $record_operate_type = 11;
+            $record_column_type = 'month';
+            $record_before = $the_month;
+            $record_after = $the_month;
+
+            $time_title = '【'.$the_month.'月】';
+        }
+        else if($time_type == 'period')
+        {
+
+            $the_start  = isset($post_data['start']) ? $post_data['start']  : date('Y-m-d');
+            $the_ended  = isset($post_data['ended']) ? $post_data['ended']  : date('Y-m-d');
+
+            $when_data['the_start'] = $the_start;
+            $when_data['the_ended'] = $the_ended;
+
+            $record_operate_type = 21;
+            $record_column_type = 'period';
+            $record_before = $the_start;
+            $record_after = $the_ended;
+
+            $time_title = '【按时间段】【'.$the_start.'-'.$the_ended.'】';
+
+        }
+        else if($time_type == "latest")
+        {
+            $record_last = DK_Record::select('*')
+                ->where(['creator_id'=>$me->id,'operate_category'=>[109,110],'operate_type'=>99])
+                ->orderBy('id','desc')->first();
+
+            if($record_last) $start_timestamp = $record_last->after;
+            else $start_timestamp = 0;
+
+            $ended_timestamp = $time;
+
+            $record_operate_type = 99;
+            $record_column_type = 'datetime';
+            $record_before = '';
+            $record_after = $time;
+
+            $time_title = '【最新】';
+        }
+        else
+        {
+            $record_operate_type = 101;
+            $record_column_type = 'all';
+            $record_before = '全部';
+            $record_after = '全部';
+
+            $time_title = '【全部】';
+        }
+
+
+        $client_id = 0;
+        $project_id = 0;
+
+        // 项目
+        $project_title = '';
+        $record_data_title = '';
+        if(!empty($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
+            {
+                $project_id = $post_data['project'];
+                $project_er = DK_Project::find($project_id);
+                if($project_er)
+                {
+                    $project_title = '【'.$project_er->name.'】';
+                    $record_data_title .= $project_er->name.' ';
+                }
+
+            }
+        }
+
+        // 客户
+        $client_title = '';
+        $record_data_title = '';
+        if(!empty($post_data['client']))
+        {
+            if(!in_array($post_data['client'],[-1,0,'-1','0']))
+            {
+                $client_id = $post_data['client'];
+                $client_er = DK_Project::find($client_id);
+                if($client_er)
+                {
+                    $client_title = '【'.$client_er->username.'】';
+                    $record_data_title = $client_er->username.' ';
+                }
+            }
+        }
+
+
+//        if($client_id > 0 || $project_id > 0)
+//        {
+//        }
+//        else dd('');
+
+
+        $record = new DK_Record;
+
+        $record_data["ip"] = Get_IP();
+        $record_data["record_object"] = 21;
+        $record_data["record_category"] = 11;
+        $record_data["record_type"] = 1;
+        $record_data["creator_id"] = $me->id;
+        $record_data["operate_object"] = 71;
+        $record_data["operate_category"] = 111;
+        $record_data["operate_type"] = $record_operate_type;
+        $record_data["column_type"] = $record_column_type;
+        $record_data["before"] = $record_before;
+        $record_data["after"] = $record_after;
+        if($project_id)
+        {
+            $record_data["item_id"] = $project_id;
+            $record_data["title"] = $record_data_title;
+        }
+        if($client_id)
+        {
+            $record_data["item_id"] = $client_id;
+            $record_data["title"] = $record_data_title;
+        }
+
+        $record->fill($record_data)->save();
+
+        $title = '【去重】'.date('Ymd.His').$time_title.$project_title.$client_title;
+
+
+        // 工单
+        $query = DK_Order::select('dk_pivot_client_delivery.client_phone')
+            ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
+//            ->where('dk_admin_order.item_category',1)
+            ->when(($time_type == "date"), function ($query) use ($when_data) {
+                return $query->where('dk_pivot_client_delivery.delivered_date',$when_data['date']);
+            })
+            ->when(($time_type == "month"), function ($query) use ($when_data) {
+                return $query->whereBetween('dk_pivot_client_delivery.delivered_date',[$when_data['the_month_start_date'],$when_data['the_month_ended_date']]);
+            })
+            ->when(($time_type == "period"), function ($query) use ($when_data) {
+                return $query->where('dk_pivot_client_delivery.delivered_date', '>=',$when_data['the_start'])
+                    ->where('dk_pivot_client_delivery.delivered_date', '<=',$when_data['the_ended']);
+            });
+
+        if($project_id)
+        {
+            $query->where('dk_pivot_client_delivery.project_id',$project_id);
+//            $query->where(function ($query) use($project_id) {
+//                $query->where('dk_admin_order.project_id',$project_id)
+//                    ->orWhere('dk_pivot_client_delivery.project_id',$project_id);
+//            });
+        }
+        if($client_id) $query->where('dk_pivot_client_delivery.client_id',$client_id);
+
+        $data = $query->orderBy('dk_pivot_client_delivery.id','desc')->get();
+
+
+        $upload_path = <<<EOF
+resource/dk/admin/telephone/$date/
+EOF;
+        $url_path = env('DOMAIN_CDN').'/dk/admin/telephone/'.$date.'/';
+
+        $storage_path = storage_path($upload_path);
+        if (!is_dir($storage_path))
+        {
+            mkdir($storage_path, 0766, true);
+        }
+        $filename = $title;
+        $extension = '.txt';
+
+        $file_name = $filename.$extension;
+        $file_url = $url_path.$file_name;
+        $file_path = $storage_path.$file_name;
+
+        // 打开文件准备写入
+        $file = fopen($file_path, 'w');
+
+        // 遍历电话号码数组，逐行写入文件
+        foreach ($data as $phoneNumber)
+        {
+            fwrite($file, $phoneNumber->client_phone . PHP_EOL);
+        }
+
+        // 关闭文件
+        fclose($file);
+
+
+        return response()->download($file_path);
+
+    }
+
+
     
 
 
@@ -27829,18 +28078,18 @@ class DKAdminRepository {
                 // 指定日期
                 if(!empty($post_data['date']))
                 {
-                    $query->whereDate("assign_date", $post_data['date']);
+                    $query->where("assign_date", $post_data['date']);
                 }
             }
             else if($post_data['time_type'] == "period")
             {
                 if(!empty($post_data['assign_start']))
                 {
-                    $query->whereDate("assign_date", ">=", $post_data['assign_start']);
+                    $query->where("assign_date", ">=", $post_data['assign_start']);
                 }
                 if(!empty($post_data['assign_ended']))
                 {
-                    $query->whereDate("assign_date", "<=", $post_data['assign_ended']);
+                    $query->where("assign_date", "<=", $post_data['assign_ended']);
                 }
             }
             else
