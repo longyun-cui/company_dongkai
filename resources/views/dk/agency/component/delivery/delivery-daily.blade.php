@@ -50,6 +50,15 @@
     </div>
 
 
+
+
+    <div class="col-md-12 datatable-body" style="margin-top:40px;">
+        <div class="eChart" id="" style="width:100%;min-width:1000px;height:320px;"></div>
+    </div>
+
+
+
+
     <div class="col-md-12 datatable-body">
         <div class="tableArea full">
             <table class='table table-striped table-bordered table-hover order-column'>
@@ -61,13 +70,6 @@
                 </tfoot>
             </table>
         </div>
-    </div>
-
-
-
-
-    <div class="col-md-12 datatable-body" style="margin-top:40px;">
-        <div class="eChart" id="" style="width:100%;height:320px;"></div>
     </div>
 
 
