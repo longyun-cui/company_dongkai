@@ -59,7 +59,15 @@
                     "width": "40px",
                     "data": null,
                     "targets": 0,
-                    "orderable": false
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.id == "统计")
+                        {
+                            $(nTd).addClass('_bold').addClass('text-red');
+                            $(nTd).html('统计');
+                        }
+                        else $(nTd).html(iRow + 1);
+                    }
                 },
                 {
                     "title": "项目",
@@ -68,9 +76,13 @@
                     "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        // $(nTd).addClass('_bold');
+                        if(row.id == "统计") $(nTd).addClass('_bold').addClass('text-red');
                     },
                     render: function(data, type, row, meta) {
+                        if(row.id == "统计")
+                        {
+                            return data;
+                        }
                         if(row.client_er) return row.client_er.username;
                         else return '--';
                     }
@@ -82,7 +94,7 @@
                     "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).addClass('_bold');
+                        if(row.id == "统计") $(nTd).addClass('_bold').addClass('text-red');
                     },
                     render: function(data, type, row, meta) {
                         if(row.delivery_count) return row.delivery_count;
@@ -92,10 +104,11 @@
             ],
             "drawCallback": function (settings) {
 
-                   let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
-                   this.api().column(0).nodes().each(function(cell, i) {
-                       cell.innerHTML =  startIndex + i + 1;
-                   });
+               // let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+               // this.api().column(0).nodes().each(function(cell, i) {
+               //     console.log(cell);
+               //     cell.innerHTML =  startIndex + i + 1;
+               // });
 
             },
             "language": { url: '/common/dataTableI18n' },

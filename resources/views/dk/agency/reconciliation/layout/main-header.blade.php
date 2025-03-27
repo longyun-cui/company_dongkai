@@ -201,7 +201,7 @@
 
 
 
-                <li class="dropdown- notifications-alert">
+                <li class="dropdown- notifications-alert _none">
                     <!-- Menu toggle button -->
                     <a href="javascript:void(0);" class="tab-control datatable-control"
                        data-type="create"

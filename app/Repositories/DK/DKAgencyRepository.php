@@ -531,7 +531,7 @@ class DKAgencyRepository {
 
 
         // 交付统计
-        $query = DK_Pivot_Client_Delivery::select('client_id','delivered_date')
+        $query = DK_Pivot_Client_Delivery::select('id','client_id','delivered_date')
             ->with(['client_er'])
             ->addSelect(DB::raw("
                     delivered_date as date_day,
@@ -606,9 +606,16 @@ class DKAgencyRepository {
 
         $total = $list->count();
 
+        $total_data = [];
+        $total_data['id'] = '统计';
+        $total_data['delivery_count'] = 0;
+
         foreach($list as $k => $v)
         {
+            $total_data['delivery_count'] += $v->delivery_count;
         }
+        $total_data['client_id'] = '（'.$total.'）个项目';
+        $list[] = $total_data;
 
         return datatable_response($list, $draw, $total);
     }
