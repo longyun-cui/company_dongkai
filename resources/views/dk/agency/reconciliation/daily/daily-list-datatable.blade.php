@@ -77,7 +77,7 @@
                 {
                     "title": "操作",
                     "data": 'id',
-                    "width": "120px",
+                    "width": "80px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
                         if(row.id == "统计")

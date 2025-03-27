@@ -47,7 +47,7 @@
                     >
                         <i class="fa fa-file-text text-yellow"></i>
 {{--                        <i class="fa fa-bar-chart text-yellow"></i>--}}
-                        <span>对账列表</span>
+                        <span>每日对账</span>
                     </a>
                 </li>
 
@@ -57,7 +57,7 @@
                    data-type="create"
                    data-unique="y"
                    data-id="trade-list"
-                   data-title='<i class="fa fa-cny text-aqua"></i> <span>成交记录</span>'
+                   data-title='<i class="fa fa-cny text-aqua"></i> <span>财务记录</span>'
                    data-content="成交记录"
 
                    data-datatable-type="create"
@@ -67,7 +67,7 @@
                    data-datatable-clone-object="datatable-trade-list-clone"
                 >
                     <i class="fa fa-cny text-aqua"></i>
-                    <span>成交记录</span>
+                    <span>财务记录</span>
                 </a>
             </li>
 

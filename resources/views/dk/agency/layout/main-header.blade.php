@@ -4,9 +4,9 @@
     <!-- Logo -->
     <a href="{{url('/')}}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>对账</b></span>
+        <span class="logo-mini"><b>渠道</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>对账系统</b></span>
+        <span class="logo-lg"><b>渠道系统</b></span>
     </a>
 
     <!-- Header Navbar -->
