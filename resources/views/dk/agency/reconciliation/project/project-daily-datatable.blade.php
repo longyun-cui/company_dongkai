@@ -101,8 +101,21 @@
                     }
                 },
                 {
-                    "title": "渠道佣金",
-                    "data": "channel_commission",
+                    "title": "坏账",
+                    "data": "funds_bad_debt_total",
+                    "className": "",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        if(row.date_day == "统计") $(nTd).addClass('_bold').addClass('text-red');
+                    },
+                    render: function(data, type, row, meta) {
+                        return parseFloat(data);
+                    }
+                },
+                {
+                    "title": "应收款",
+                    "data": "funds_should_settled_total",
                     "className": "",
                     "width": "80px",
                     "orderable": false,
@@ -152,45 +165,19 @@
                         return parseFloat(data);
                     }
                 },
-                {
-                    "title": "坏账",
-                    "data": "funds_bad_debt_total",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.date_day == "统计") $(nTd).addClass('_bold').addClass('text-red');
-                    },
-                    render: function(data, type, row, meta) {
-                        return parseFloat(data);
-                    }
-                },
-                {
-                    "title": "应收款",
-                    "data": "funds_should_settled_total",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.date_day == "统计") $(nTd).addClass('_bold').addClass('text-red');
-                    },
-                    render: function(data, type, row, meta) {
-                        return parseFloat(data);
-                    }
-                },
-                {
-                    "title": "已收款",
-                    "data": "funds_already_settled_total",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        if(row.date_day == "统计") $(nTd).addClass('_bold').addClass('text-red');
-                    },
-                    render: function(data, type, row, meta) {
-                        return parseFloat(data);
-                    }
-                }
+                // {
+                //     "title": "已收款",
+                //     "data": "funds_already_settled_total",
+                //     "className": "",
+                //     "width": "80px",
+                //     "orderable": false,
+                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                //         if(row.date_day == "统计") $(nTd).addClass('_bold').addClass('text-red');
+                //     },
+                //     render: function(data, type, row, meta) {
+                //         return parseFloat(data);
+                //     }
+                // }
             ],
             "drawCallback": function (settings) {
 
