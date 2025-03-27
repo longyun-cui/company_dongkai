@@ -29,6 +29,11 @@
 
 {{--            <input type="text" class="search-filter form-filter filter-keyup" name="daily-id" placeholder="ID">--}}
 
+            {{--选择项目--}}
+            <select class="search-filter form-filter filter-lg select2-project-c" data-item-category="1" name="daily-project">
+                <option value="-1">选择项目</option>
+            </select>
+
             {{--按天查看--}}
             <button type="button" class="btn btn-default btn-filter time-picker-move picker-move-pre date-pre" data-target="daily-date">
                 <i class="fa fa-chevron-left"></i>

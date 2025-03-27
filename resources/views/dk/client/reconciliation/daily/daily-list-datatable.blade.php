@@ -30,6 +30,8 @@
                     d.keyword = $tableSearch.find('input[name="daily-keyword"]').val();
                     d.item_status = $tableSearch.find('select[name="daily-item-status"]').val();
 
+                    d.project = $tableSearch.find('select[name="daily-project"]').val();
+
                     d.time_type = $tableSearch.find('input[name="daily-time-type"]').val();
                     d.time_month = $tableSearch.find('input[name="daily-month"]').val();
                     d.time_date = $tableSearch.find('input[name="daily-date"]').val();

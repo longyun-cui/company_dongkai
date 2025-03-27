@@ -245,7 +245,7 @@ class DKClientReconciliationRepository {
 
 
 
-    // 【员工】
+    // 【select2】项目
     public function reconciliation_v1_operate_select2_project($post_data)
     {
         $this->get_me();
@@ -281,6 +281,8 @@ class DKClientReconciliationRepository {
         array_unshift($list,$unSpecified);
         return $list;
     }
+
+
 
 
     /*
@@ -1629,6 +1631,15 @@ class DKClientReconciliationRepository {
         }
         else
         {
+        }
+
+        // 项目
+        if(isset($post_data['project']))
+        {
+            if(!in_array($post_data['project'],[-1,0,'-1','0']))
+            {
+                $query->where('project_id', $post_data['project']);
+            }
         }
 
 

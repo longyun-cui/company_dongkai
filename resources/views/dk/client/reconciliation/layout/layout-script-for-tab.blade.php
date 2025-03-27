@@ -167,13 +167,16 @@
                 });
 
                 // select2
-                $('#'+$config.target).find('.select2-district-c').select2({
+                $('#'+$config.target).find('.select2-project-c').select2({
                     ajax: {
-                        url: "{{ url('/select2/select2_district') }}",
+                        url: "{{ url('/reconciliation/v1/operate/select2/select2-project') }}",
+                        type: 'post',
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
                             return {
+                                _token: $('meta[name="_token"]').attr('content'),
+                                item_category: this.data('item-category'),
                                 keyword: params.term, // search term
                                 page: params.page
                             };
