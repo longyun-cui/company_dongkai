@@ -582,7 +582,7 @@ class DKAgencyRepository {
         }
 
 
-        $total = $query->count();
+//        $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
@@ -604,6 +604,7 @@ class DKAgencyRepository {
         else $list = $query->skip($skip)->take($limit)->get();
 //        dd($list->toArray());
 
+        $total = $list->count();
 
         foreach($list as $k => $v)
         {

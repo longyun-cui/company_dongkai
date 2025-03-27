@@ -3,14 +3,14 @@
 
 @section('head_title')
     {{--@if(in_array(env('APP_ENV'),['local']))L.@endif--}}
-    {{ $head_title or '首页' }}
+    {{ $head_title or '录单系统' }}
 @endsection
 
 
 
 
-@section('title')<span class="box-title">首页</span>@endsection
-@section('header')<span class="box-title">首页</span>@endsection
+@section('title')<span class="box-title">录单系统</span>@endsection
+@section('header')<span class="box-title">录单系统</span>@endsection
 {{--@section('description')管理员系统 - {{ config('info.info.short_name') }}@endsection--}}
 {{--@section('breadcrumb')--}}
 {{--    <li><a href="{{ url('/') }}"><i class="fa fa-dashboard"></i>首页</a></li>--}}
