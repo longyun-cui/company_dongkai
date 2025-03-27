@@ -52,7 +52,7 @@
                 </li>
 
             {{--成交记录--}}
-            <li class="treeview">
+            <li class="treeview _none">
                 <a class="tab-control datatable-control"
                    data-type="create"
                    data-unique="y"

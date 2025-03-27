@@ -624,7 +624,7 @@ class DKAgencyRepository {
         {
             $total_data['delivery_count'] += $v->delivery_count;
         }
-        $total_data['client_id'] = '（'.$total.'）个项目';
+        $total_data['client_id'] = '总计（'.$total.'）个项目';
         $list[] = $total_data;
 
         return datatable_response($list, $draw, $total);
