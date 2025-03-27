@@ -7,12 +7,12 @@
         let $tableSearch = $datatable_wrapper.find('.datatable-search-box');
 
         $($tableId).DataTable({
-            "aLengthMenu": [[10, 50, 100, 200, -1], ["10", "50", "100", "200", "全部"]],
+            "aLengthMenu": [[50, 100, 200, -1], ["50", "100", "200", "全部"]],
             "processing": true,
             "serverSide": true,
             "searching": false,
             "pagingType": "simple_numbers",
-            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
+            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t> <"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p>',
             "order": [],
             "orderCellsTop": true,
             "scrollX": false,
