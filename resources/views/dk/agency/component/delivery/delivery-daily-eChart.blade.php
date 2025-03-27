@@ -12,7 +12,7 @@
             "serverSide": true,
             "searching": false,
             "pagingType": "simple_numbers",
-            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
+            "sDom": '<t>',
             "order": [],
             "orderCellsTop": true,
             "scrollX": true,

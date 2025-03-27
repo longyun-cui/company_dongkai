@@ -12,7 +12,7 @@
             "serverSide": true,
             "searching": false,
             "pagingType": "simple_numbers",
-            "sDom": '<"dataTables_length_box"l> <"dataTables_info_box"i> <"dataTables_paginate_box"p> <t>',
+            "sDom": '<t>',
             "order": [],
             "orderCellsTop": true,
             "scrollX": true,
@@ -55,10 +55,17 @@
             },
             "columns": [
                 {
+                    "title": "序号",
+                    "width": "40px",
+                    "data": null,
+                    "targets": 0,
+                    "orderable": false
+                },
+                {
                     "title": "项目",
                     "data": "client_id",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         // $(nTd).addClass('_bold');
@@ -72,7 +79,7 @@
                     "title": "交付量",
                     "data": "delivery_count",
                     "className": "",
-                    "width": "80px",
+                    "width": "160px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).addClass('_bold');
@@ -85,10 +92,10 @@
             ],
             "drawCallback": function (settings) {
 
-//                    let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
-//                    this.api().column(1).nodes().each(function(cell, i) {
-//                        cell.innerHTML =  startIndex + i + 1;
-//                    });
+                   let startIndex = this.api().context[0]._iDisplayStart;//获取本页开始的条数
+                   this.api().column(0).nodes().each(function(cell, i) {
+                       cell.innerHTML =  startIndex + i + 1;
+                   });
 
             },
             "language": { url: '/common/dataTableI18n' },

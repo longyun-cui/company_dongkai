@@ -27,11 +27,11 @@
             }
             else if($time_type == "period")
             {
-                var $start_dom = $datatable_wrapper.find('input[name="search-start"]');
-                var $ended_dom = $datatable_wrapper.find('input[name="search-ended"]');
+                var $start_dom = $datatable_wrapper.find('.search-start');
+                var $ended_dom = $datatable_wrapper.find('.search-ended');
                 var $the_start_str = $start_dom.val();
                 var $the_ended_str = $ended_dom.val();
-                $(".nav-header-title-3").html($the_start_str + '-' + $the_ended_str);
+                $(".nav-header-title-3").html($the_start_str + ' - ' + $the_ended_str);
             }
 
             $('#'+$table_id).DataTable().ajax.reload(null,false);
