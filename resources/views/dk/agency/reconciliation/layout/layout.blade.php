@@ -95,7 +95,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     @yield('custom-style')
 
     {{--layout-style--}}
-    @include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.layout-style')
+    @include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.layout-style')
 
 </head>
 <!--
@@ -123,19 +123,19 @@ desired effect
 
 
     {{--main-header--}}
-    @include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.main-header')
+    @include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.main-header')
 
     {{--main-sidebar--}}
-    @include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.main-sidebar')
+    @include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.main-sidebar')
 
     {{--main-content--}}
-    @include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.main-content')
+    @include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.main-content')
 
     {{--main-footer--}}
-{{--    @include(env('TEMPLATE_DK_CLIENT').'layout.main-footer')--}}
+{{--    @include(env('TEMPLATE_DK_AGENCY').'layout.main-footer')--}}
 
     {{--control-sidebar--}}
-    @include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.control-sidebar')
+    @include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.control-sidebar')
 
 
 </div>
@@ -210,10 +210,10 @@ desired effect
 
 
 {{--layout-script--}}
-@include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.layout-script-for-tab')
-@include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.layout-script-for-datatable')
-@include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.layout-script-for-item-edit')
-@include(env('TEMPLATE_DK_CLIENT').'reconciliation.layout.layout-script')
+@include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.layout-script-for-tab')
+@include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.layout-script-for-datatable')
+@include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.layout-script-for-item-edit')
+@include(env('TEMPLATE_DK_AGENCY').'reconciliation.layout.layout-script')
 
 
 @yield('js')

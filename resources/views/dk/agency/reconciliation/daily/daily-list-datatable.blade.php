@@ -103,7 +103,7 @@
 
                         // $html_record = '<a class="btn btn-xs bg-purple item-modal-show-for-modify" data-id="'+data+'">记录</a>';
 
-                        var $html_trade = '<a class="btn btn-xs bg-default item-modal-show-for-settle-create" data-id="'+data+'">结算</a>';
+                        // var $html_trade = '<a class="btn btn-xs bg-default item-modal-show-for-settle-create" data-id="'+data+'">结算</a>';
 
                         var $html_operation_record = '<a class="btn btn-xs bg-default item-modal-show-for-operation-record" data-id="'+data+'">记录</a>';
 
@@ -112,7 +112,7 @@
                             // '<a class="btn btn-xs btn-primary- daily-edit-show" data-id="'+data+'">编辑</a>'+
                             $html_able+
                             // $html_delete+
-                            $html_trade+
+                            // $html_trade+
                             $html_operation_record+
                             // $html_record+
                             // '<a class="btn btn-xs bg-navy item-admin-delete-permanently-submit" data-id="'+data+'">彻底删除</a>'+
@@ -258,6 +258,56 @@
                     }
                 },
                 {
+                    "title": "坏账",
+                    "data": "funds_bad_debt_total",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-row-index',iRow);
+
+                        $(nTd).attr('data-id',row.id).attr('data-name','坏账');
+                        $(nTd).attr('data-key','funds_bad_debt_total').attr('data-value',data);
+
+                        if(row.id == "统计") $(nTd).addClass('_bold').addClass('text-red');
+                        else
+                        {
+                            $(nTd).addClass('modal-show-for-field-set');
+
+                            $(nTd).attr('data-column-type','text');
+                            $(nTd).attr('data-column-name','坏账');
+
+                            if(data) $(nTd).attr('data-operate-type','edit');
+                            else $(nTd).attr('data-operate-type','add');
+                        }
+                    },
+                    render: function(data, type, row, meta) {
+                        return parseFloat(data);
+                    }
+                },
+                {
+                    "title": "应收款",
+                    "data": "funds_should_settled_total",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','应收款');
+                        $(nTd).attr('data-key','funds_should_settled_total').attr('data-value',data);
+
+                        if(row.id == "统计") $(nTd).addClass('_bold').addClass('text-red');
+                    },
+                    render: function(data, type, row, meta) {
+                        if(row.id == "统计")
+                        {
+                            return row.funds_should_settled_total;
+                        }
+                        var $revenue = parseFloat(row.delivery_quantity * row.cooperative_unit_price);
+                        var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
+                        return parseFloat($revenue - $funds_bad_debt_total);
+                    }
+                },
+                {
                     "title": "渠道佣金",
                     "data": "channel_commission",
                     "className": "text-center",
@@ -341,100 +391,50 @@
                         return '<b class="text-green">'+$profit+'</b>';
                     }
                 },
-                {
-                    "title": "坏账",
-                    "data": "funds_bad_debt_total",
-                    "className": "text-center",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-row-index',iRow);
-
-                        $(nTd).attr('data-id',row.id).attr('data-name','坏账');
-                        $(nTd).attr('data-key','funds_bad_debt_total').attr('data-value',data);
-
-                        if(row.id == "统计") $(nTd).addClass('_bold').addClass('text-red');
-                        else
-                        {
-                            $(nTd).addClass('modal-show-for-field-set');
-
-                            $(nTd).attr('data-column-type','text');
-                            $(nTd).attr('data-column-name','坏账');
-
-                            if(data) $(nTd).attr('data-operate-type','edit');
-                            else $(nTd).attr('data-operate-type','add');
-                        }
-                    },
-                    render: function(data, type, row, meta) {
-                        return parseFloat(data);
-                    }
-                },
-                {
-                    "title": "应收款",
-                    "data": "funds_should_settled_total",
-                    "className": "text-center",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','应收款');
-                        $(nTd).attr('data-key','funds_should_settled_total').attr('data-value',data);
-
-                        if(row.id == "统计") $(nTd).addClass('_bold').addClass('text-red');
-                    },
-                    render: function(data, type, row, meta) {
-                        if(row.id == "统计")
-                        {
-                            return row.funds_should_settled_total;
-                        }
-                        var $revenue = parseFloat(row.delivery_quantity * row.cooperative_unit_price);
-                        var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
-                        return parseFloat($revenue - $funds_bad_debt_total);
-                    }
-                },
-                {
-                    "title": "已结算",
-                    "data": "funds_already_settled_total",
-                    "className": "text-center",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','已结算');
-                        $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
-
-                        if(row.id == "统计")  $(nTd).addClass('_bold').addClass('text-red');
-                    },
-                    render: function(data, type, row, meta) {
-                        return parseFloat(data);
-                    }
-                },
-                {
-                    "title": "待结算",
-                    "data": "funds_already_settled_total",
-                    "className": "text-center",
-                    "width": "80px",
-                    "orderable": false,
-                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).attr('data-id',row.id).attr('data-name','待结算');
-                        $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
-
-                        if(row.id == "统计")  $(nTd).addClass('_bold').addClass('text-red');
-                    },
-                    render: function(data, type, row, meta) {
-                        if(row.id == "统计")
-                        {
-                            return row.to_be_settled;
-                        }
-                        var $revenue = parseFloat(row.delivery_quantity * row.cooperative_unit_price);
-                        var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
-                        var $funds_already_settled_total = parseFloat(row.funds_already_settled_total);
-                        var $to_be_settled = parseFloat($revenue - $funds_bad_debt_total - $funds_already_settled_total);
-                        if($to_be_settled > 0)
-                        {
-                            return '<b class="text-red">'+$to_be_settled+'</b>';
-                        }
-                        else return $to_be_settled;
-                    }
-                },
+                // {
+                //     "title": "已结算",
+                //     "data": "funds_already_settled_total",
+                //     "className": "text-center",
+                //     "width": "80px",
+                //     "orderable": false,
+                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                //         $(nTd).attr('data-id',row.id).attr('data-name','已结算');
+                //         $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
+                //
+                //         if(row.id == "统计")  $(nTd).addClass('_bold').addClass('text-red');
+                //     },
+                //     render: function(data, type, row, meta) {
+                //         return parseFloat(data);
+                //     }
+                // },
+                // {
+                //     "title": "待结算",
+                //     "data": "funds_already_settled_total",
+                //     "className": "text-center",
+                //     "width": "80px",
+                //     "orderable": false,
+                //     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                //         $(nTd).attr('data-id',row.id).attr('data-name','待结算');
+                //         $(nTd).attr('data-key','funds_already_settled_total').attr('data-value',data);
+                //
+                //         if(row.id == "统计")  $(nTd).addClass('_bold').addClass('text-red');
+                //     },
+                //     render: function(data, type, row, meta) {
+                //         if(row.id == "统计")
+                //         {
+                //             return row.to_be_settled;
+                //         }
+                //         var $revenue = parseFloat(row.delivery_quantity * row.cooperative_unit_price);
+                //         var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
+                //         var $funds_already_settled_total = parseFloat(row.funds_already_settled_total);
+                //         var $to_be_settled = parseFloat($revenue - $funds_bad_debt_total - $funds_already_settled_total);
+                //         if($to_be_settled > 0)
+                //         {
+                //             return '<b class="text-red">'+$to_be_settled+'</b>';
+                //         }
+                //         else return $to_be_settled;
+                //     }
+                // },
                 {
                     "title": "备注",
                     "data": "remark",

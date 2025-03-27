@@ -30,7 +30,7 @@
 {{--            <input type="text" class="search-filter form-filter filter-keyup" name="daily-id" placeholder="ID">--}}
 
             {{--选择项目--}}
-            <select class="search-filter form-filter filter-xxl select2-project-c" multiple data-item-category="1" name="daily-project[]">
+            <select class="search-filter form-filter filter-xxl select2-project-c" data-item-category="1" multiple name="daily-project[]">
                 <option value="-1">选择项目</option>
             </select>
 

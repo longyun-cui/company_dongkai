@@ -222,7 +222,7 @@
                     </a>
                 </li>
 
-                {{--项目列表--}}
+                {{--对账系统--}}
                 @if(in_array($me->user_type,[0,1,9,11]) && $me->client_er->is_reconciliation == 1)
                 <li class="dropdown- notifications-alert">
                     <!-- Menu toggle button -->

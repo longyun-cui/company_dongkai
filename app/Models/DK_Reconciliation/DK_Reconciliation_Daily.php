@@ -17,9 +17,16 @@ class DK_Reconciliation_Daily extends Model
         'owner_id', 'creator_id', 'verifier_id', 'inspector_id', 'updater_id', 'publisher_id', 'completer_id', 'user_id', 'belong_id', 'source_id', 'object_id', 'p_id', 'parent_id',
         'created_type',
         'order_category', 'order_type', 'order_quality',
-        'org_id', 'admin_id',
+        'org_id',
+        'admin_id',
+        'menu_id',
+        'item_id',
+
+        'company_id',
+        'channel_id',
+        'business_id',
+
         'client_id',
-        'item_id', 'menu_id',
 
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'tag', 'custom', 'custom2', 'custom3',
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src',

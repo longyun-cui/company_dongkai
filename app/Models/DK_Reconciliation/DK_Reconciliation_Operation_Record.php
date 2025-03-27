@@ -39,6 +39,10 @@ class DK_Reconciliation_Operation_Record extends Model
         'menu_id',
         'item_id',
 
+        'company_id',
+        'channel_id',
+        'business_id',
+
         'client_id',
         'client_staff_id',
         'project_id',

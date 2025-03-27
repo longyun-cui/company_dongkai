@@ -16,11 +16,19 @@ class DK_Reconciliation_Project extends Model
         'item_id', 'menu_id',
         'name', 'title', 'subtitle', 'description', 'content', 'remark', 'custom', 'custom2', 'custom3',
         'is_distributive',
+
+        'company_id',
+        'channel_id',
+        'business_id',
+
         'client_id',
+
         'inspector_id',
 
         'cooperative_unit_price',
-        'funds_recharge_total',
+        'funds_revenue_total',
+        'funds_consumption_total',
+        'funds_bad_debt_total',
         'funds_consumption_total',
 
         'link_url', 'cover_pic', 'attachment_name', 'attachment_src', 'tag',
