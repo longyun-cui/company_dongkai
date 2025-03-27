@@ -57,7 +57,8 @@ class DK_Reconciliation_Project extends Model
     // 创作者
     function creator()
     {
-        return $this->belongsTo('App\Models\DK_Client\DK_Client_User','creator_id','id');
+//        return $this->belongsTo('App\Models\DK_Client\DK_Client_User','creator_id','id');
+        return $this->belongsTo('App\Models\DK\DK_Company','creator_id','id');
     }
     // 创作者
     function updater()

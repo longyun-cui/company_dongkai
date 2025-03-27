@@ -165,8 +165,8 @@ class DKAgencyReconciliationRepository {
 //        }
 
         $list = $query->orderBy('id','desc')->get()->toArray();
-        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
-        array_unshift($list,$unSpecified);
+//        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+//        array_unshift($list,$unSpecified);
         $unSpecified = ['id'=>'-1','text'=>'选择项目'];
         array_unshift($list,$unSpecified);
         return $list;
@@ -188,7 +188,7 @@ class DKAgencyReconciliationRepository {
         $query = DK_Reconciliation_Project::select('*')
             ->withTrashed()
             ->with([
-                'creator'=>function($query) { $query->select(['id','username']); }
+                'creator'=>function($query) { $query->select(['id','name']); }
             ])
             ->where('company_id',$me->id);
 
@@ -1483,7 +1483,7 @@ class DKAgencyReconciliationRepository {
         $query = DK_Reconciliation_Daily::select('*')
             ->withTrashed()
             ->with([
-                'creator'=>function($query) { $query->select(['id','username']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
                 'project_er'=>function($query) { $query->select(['id','name']); }
             ])
             ->where('company_id',$me->id);
@@ -1791,10 +1791,9 @@ class DKAgencyReconciliationRepository {
             ->withTrashed()
             ->with([
                 'delivery_er',
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
-                'deleter_er'=>function($query) { $query->select(['id','username','true_name']); },
-                'authenticator_er'=>function($query) { $query->select(['id','username','true_name']); },
-                'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); }
+                'creator'=>function($query) { $query->select(['id','name']); },
+                'deleter_er'=>function($query) { $query->select(['id','name']); },
+                'authenticator_er'=>function($query) { $query->select(['id','name','true_name']); }
             ])
             ->where('company_id',$me->id)
             ->when(in_array($me->user_type,[81,84]), function ($query) use ($me) {
@@ -2188,7 +2187,7 @@ class DKAgencyReconciliationRepository {
         $id  = $post_data["id"];
         $query = DK_Reconciliation_Operation_Record::select('*')
             ->with([
-                'creator'=>function($query) { $query->select(['id','username','true_name']); },
+                'creator'=>function($query) { $query->select(['id','name']); },
             ])
             ->where(['item_id'=>$id])
             ->when(($post_data['item_category'] == 'reconciliation-project'), function ($query) use ($id) {

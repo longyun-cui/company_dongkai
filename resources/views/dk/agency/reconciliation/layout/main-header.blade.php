@@ -33,74 +33,6 @@
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
 
-                <!-- Add Menu -->
-                <li class="dropdown tasks-menu add-menu _none">
-                    <!-- Menu toggle button -->
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-
-                        {{--部门管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                        <li class="header">部门</li>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                        <li class="header">
-                            <a href="{{ url('/department/department-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加部门
-                            </a>
-                        </li>
-                        @endif
-
-
-                        {{--员工管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,81]))
-                            <li class="header">员工</li>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,11,81]))
-                        <li class="header">
-                            <a href="{{ url('/user/staff-create') }}">
-                                <i class="fa fa-plus text-red"></i> 添加员工
-                            </a>
-                        </li>
-                        @endif
-
-
-                        {{--业务管理--}}
-                        @if(in_array($me->user_type,[0,1,9,11,84,88]))
-                        <li class="header">业务</li>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,11]))
-                        <li class="header">
-                            <a href="{{ url('/item/project-create') }}">
-                                <i class="fa fa-plus text-yellow"></i> 添加项目
-                            </a>
-                        </li>
-                        @endif
-
-                        @if(in_array($me->user_type,[0,1,9,84,88]))
-                        <li class="header">
-                            <a href="{{ url('/item/order-create') }}">
-                                <i class="fa fa-plus text-yellow"></i> 添加工单
-                            </a>
-                        </li>
-                        @endif
-
-                        @if(env('APP_ENV') == 'local' && in_array($me->user_type,[0,1,9]))
-                        <li class="header">
-                            <a href="{{ url('/item/order-import') }}">
-                                <i class="fa fa-file-excel-o text-yellow"></i> 导入工单
-                            </a>
-                        </li>
-                        @endif
-
-                        <li class="footer"><a href="#">See All Messages</a></li>
-                    </ul>
-                </li>
 
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu _none">
@@ -234,7 +166,7 @@
                             <img src="/AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                         @endif
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">{{ $me->username or '' }}</span>
+                        <span class="hidden-xs">{{ $me->name or '' }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->
@@ -246,7 +178,7 @@
                             @endif
 
                             <p>
-                                {{ $me->username or '' }} - Web Developer
+                                {{ $me->name or '' }} - Web Developer
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>
