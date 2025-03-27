@@ -69,10 +69,10 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        // $(nTd).addClass('_bold');
+                        if(row.id == "统计") $(nTd).addClass('_bold').addClass('text-red');
                     },
                     render: function(data, type, row, meta) {
-                        return row.date_day;
+                        return data;
                     }
                 },
                 {
@@ -82,7 +82,7 @@
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
-                        $(nTd).addClass('_bold');
+                        if(row.id == "统计") $(nTd).addClass('_bold').addClass('text-red');
                     },
                     render: function(data, type, row, meta) {
                         if(row.delivery_count) return row.delivery_count;

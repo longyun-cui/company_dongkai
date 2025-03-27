@@ -493,7 +493,7 @@ class DKAgencyRepository {
         }
 
 
-        $total = $query->count();
+//        $total = $query->count();
 
         $draw  = isset($post_data['draw'])  ? $post_data['draw']  : 1;
         $skip  = isset($post_data['start'])  ? $post_data['start']  : 0;
@@ -515,10 +515,20 @@ class DKAgencyRepository {
         else $list = $query->skip($skip)->take($limit)->get();
 //        dd($list->toArray());
 
+        $total = $list->count();
+
+
+        $total_data = [];
+        $total_data['id'] = '统计';
+        $total_data['date_day'] = '统计';
+        $total_data['delivery_count'] = 0;
 
         foreach($list as $k => $v)
         {
+            $total_data['delivery_count'] += $v->delivery_count;
         }
+        $total_data['date_day'] = '总计（'.$total.'）天';
+        $list[] = $total_data;
 
         return datatable_response($list, $draw, $total);
     }
