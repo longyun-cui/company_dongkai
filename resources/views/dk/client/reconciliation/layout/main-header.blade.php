@@ -2,11 +2,11 @@
 <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{url('/')}}" class="logo">
+    <a href="{{url('/reconciliation')}}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>客</b></span>
+        <span class="logo-mini"><b>对账</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>客户系统</b></span>
+        <span class="logo-lg"><b>对账系统</b></span>
     </a>
 
     <!-- Header Navbar -->
@@ -222,16 +222,6 @@
                     </a>
                 </li>
 
-                {{--项目列表--}}
-                @if(in_array($me->user_type,[0,1,9,11]) && $me->client_er->is_reconciliation == 1)
-                <li class="dropdown- notifications-alert">
-                    <!-- Menu toggle button -->
-                    <a target="_blank" href="{{ url('/reconciliation') }}">
-                        <i class="fa fa-bar-chart text-yellow"></i> <span>对账系统</span>
-                        <span class="label label-danger notification-dom" style="width:16px;border-radius:50%;color:#dd4b39 !important;display: none;">•</span>
-                    </a>
-                </li>
-                @endif
 
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">

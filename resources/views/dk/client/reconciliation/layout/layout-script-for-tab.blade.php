@@ -198,43 +198,18 @@
                 if($id == "datatable-list")
                 {
                 }
-                else if($id == "datatable-delivery-list")
+                else if($id == "datatable-reconciliation-project-list")
                 {
-                    Datatable_for_DeliveryList('#'+$config.id);
+                    Datatable_for_Reconciliation_Project_List('#'+$config.id);
                 }
-                else if($id == "datatable-delivery-daily")
+                else if($id == "datatable-reconciliation-daily-list")
                 {
-                    Datatable_for_DeliveryDaily('#'+$config.id, $config.chart_id);
-                }
-                else if($id == "datatable-department-list")
-                {
-                    Datatable_for_DepartmentList('#'+$config.id);
-                }
-                else if($id == "datatable-staff-list")
-                {
-                    Datatable_for_StaffList('#'+$config.id);
-                }
-                else if($id == "datatable-contact-list")
-                {
-                    console.log('#'+$config.id);
-                    Datatable_for_ContactList('#'+$config.id);
+                    Datatable_for_Reconciliation_Daily_List('#'+$config.id);
                 }
                 else if($id == "datatable-trade-list")
                 {
                     console.log('#'+$config.id);
-                    Datatable_for_Trade_List('#'+$config.id);
-                }
-                else if($id == "datatable-finance-daily")
-                {
-                    Datatable_for_FinanceDaily('#'+$config.id, $config.chart_id);
-                }
-                else if($id == "datatable-statistic-staff-rank")
-                {
-                    Datatable_for_Statistic_Staff_Rank('#'+$config.id);
-                }
-                else if($id == "datatable-branch-project-list")
-                {
-                    Datatable_for_Branch_Project_List('#'+$config.id);
+                    Datatable_for_Reconciliation_Trade_List('#'+$config.id);
                 }
             }
 
@@ -245,29 +220,29 @@
 
 
         // 通用标签控制逻辑
-        $(".wrapper").on('click', ".staff-control", function() {
+        $(".wrapper").on('click', ".project-control", function() {
 
             const $that = $(this);
             const $id = $that.data('id');
             const $title = $that.data('title');
-            const $staff_daily_id = 'staff-daily-' + $id;
-            const $datatable_id = 'datatable-staff-daily-' + $id;
-            const $datatable_clone_object = 'statistic-staff-daily-clone';
-            const $datatable_target = $staff_daily_id;
-            const $chart_id = "eChart-staff-daily-" + $id;
+            const $project_daily_id = 'project-daily-' + $id;
+            const $datatable_id = 'datatable-project-daily-' + $id;
+            const $datatable_clone_object = 'project-statistic-daily-clone';
+            const $datatable_target = $project_daily_id;
+            const $chart_id = "eChart-project-daily-" + $id;
 
             // $(".nav-header-title").html($btn.data('title'));
 
             const $config = {
                 type: $that.data('type'),
                 unique: 'y',
-                id: $staff_daily_id,
+                id: $project_daily_id,
                 title: $that.data('title'),
                 content: $that.data('content') || '默认内容'
             };
 
-            const $tabLink = $('a[href="#'+ $staff_daily_id +'"]');
-            const $tabPane = $('#' + $staff_daily_id);
+            const $tabLink = $('a[href="#'+ $project_daily_id +'"]');
+            const $tabPane = $('#' + $project_daily_id);
 
             if($tabPane.length)
             {
@@ -281,7 +256,7 @@
                 console.log('不存在！');
                 createTab($config);
                 // 激活新标签页
-                $('a[href="#' + $staff_daily_id + '"]').tab('show');
+                $('a[href="#' + $project_daily_id + '"]').tab('show');
             }
 
 
@@ -305,33 +280,35 @@
                 $clone.removeClass($datatable_clone_object);
                 $clone.addClass('datatable-wrapper');
                 $clone.find('table').attr('id',$datatable_id);
-                $clone.find('input[name="statistic-staff-daily-staff-id"]').val($id);
+                $clone.find('input[name="project-daily-project-id"]').val($id);
                 $clone.find('.eChart').attr('id',$chart_id);
 
-                $('#'+$staff_daily_id).prepend($clone);
-                $('#'+$staff_daily_id).find('.select2-box-c').select2({
+                $('#'+$project_daily_id).prepend($clone);
+                $('#'+$project_daily_id).find('.select2-box-c').select2({
                     theme: 'classic'
                 });
-                $('#'+$staff_daily_id).find('.time_picker-c').datetimepicker({
+                $('#'+$project_daily_id).find('.time_picker-c').datetimepicker({
                     locale: moment.locale('zh-cn'),
                     format: "YYYY-MM-DD HH:mm",
                     ignoreReadonly: true
                 });
-                $('#'+$staff_daily_id).find('.date_picker-c').datetimepicker({
+                $('#'+$project_daily_id).find('.date_picker-c').datetimepicker({
                     locale: moment.locale('zh-cn'),
                     format: "YYYY-MM-DD",
                     ignoreReadonly: true
                 });
-                $('#'+$staff_daily_id).find('.month_picker-c').datetimepicker({
+                $('#'+$project_daily_id).find('.month_picker-c').datetimepicker({
                     locale: moment.locale('zh-cn'),
                     format: "YYYY-MM",
                     ignoreReadonly: true
                 });
 
-                Datatable_for_Statistic_Staff_Daily('#'+$datatable_id,$chart_id);
+                Datatable_for_Reconciliation_Project_Statistic_Daily('#'+$datatable_id,$chart_id);
             }
 
         });
+
+
 
 
     });
