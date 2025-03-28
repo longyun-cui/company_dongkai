@@ -31,7 +31,7 @@
                         <a href="javascript:void(0);">
                             总充值
                             <span class="pull-right">
-                                <text class="text-blue font-20px">{{ $project->project_sum_for_recharge or 0 }}</text> 元
+                                <text class="text-blue font-20px">{{ format_number($project->project_sum_for_recharge - 0) }}</text> 元
                             </span>
                         </a>
                     </li>
@@ -39,7 +39,7 @@
                         <a href="javascript:void(0);">
                             总余额
                             <span class="pull-right">
-                                <text class="text-blue font-20px">{{ $project->project_sum_for_recharge - $project->project_sum_for_consumption }}</text> 元
+                                <text class="text-blue font-20px">{{ format_number($project->project_sum_for_recharge - $project->project_sum_for_consumption) }}</text> 元
                             </span>
                         </a>
                     </li>
@@ -63,7 +63,7 @@
                         <a href="javascript:void(0);">
                             总营收
                             <span class="pull-right">
-                                <text class="text-blue font-20px">{{ $project->project_sum_for_revenue or 0 }}</text> 元
+                                <text class="text-blue font-20px">{{ format_number($project->project_sum_for_revenue - 0) }}</text> 元
                             </span>
                         </a>
                     </li>
@@ -71,7 +71,7 @@
                         <a href="javascript:void(0);">
                             总坏账
                             <span class="pull-right">
-                                <text class="text-blue font-20px">{{ $project->project_sum_for_bad_debt or 0 }}</text> 元
+                                <text class="text-blue font-20px">{{ format_number($project->project_sum_for_bad_debt - 0) }}</text> 元
                             </span>
                         </a>
                     </li>
@@ -79,7 +79,7 @@
                         <a href="javascript:void(0);">
                             总消费
                             <span class="pull-right">
-                                <text class="text-blue font-20px">{{ $project->project_sum_for_consumption or 0 }}</text> 元
+                                <text class="text-blue font-20px">{{ format_number($project->project_sum_for_consumption - 0) }}</text> 元
                             </span>
                         </a>
                     </li>
@@ -87,7 +87,7 @@
                         <a href="javascript:void(0);">
                             总佣金
                             <span class="pull-right">
-                                <text class="text-blue font-20px">{{ $project->project_sum_for_channel_commission or 0 }}</text> 元
+                                <text class="text-blue font-20px">{{ format_number($project->project_sum_for_channel_commission - 0) }}</text> 元
                             </span>
                         </a>
                     </li>
@@ -95,7 +95,7 @@
                         <a href="javascript:void(0);">
                             总成本
                             <span class="pull-right">
-                                <text class="text-blue font-20px">{{ $project->project_sum_for_daily_cost_total or 0 }}</text> 元
+                                <text class="text-blue font-20px">{{ format_number($project->project_sum_for_daily_cost_total - 0) }}</text> 元
                             </span>
                         </a>
                     </li>
@@ -103,7 +103,7 @@
                         <a href="javascript:void(0);">
                             总利润
                             <span class="pull-right">
-                                <text class="text-blue font-20px">{{ $project->project_sum_for_consumption - $project->project_sum_for_channel_commission - $project->project_sum_for_daily_cost_total }}</text> 元
+                                <text class="text-blue font-20px">{{ format_number($project->project_sum_for_consumption - $project->project_sum_for_channel_commission - $project->project_sum_for_daily_cost_total) }}</text> 元
                             </span>
                         </a>
                     </li>
