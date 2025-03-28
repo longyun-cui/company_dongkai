@@ -37,6 +37,30 @@
                     </li>
                     <li class="">
                         <a href="javascript:void(0);">
+                            总余额
+                            <span class="pull-right">
+                                <text class="text-blue font-20px">{{ $project->project_sum_for_recharge - $project->project_sum_for_consumption }}</text> 元
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 col-md-3">
+        <div class="box box-warning box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title comprehensive-month-title">财务统计</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <ul class="nav nav-stacked">
+                    <li class="">
+                        <a href="javascript:void(0);">
                             总营收
                             <span class="pull-right">
                                 <text class="text-blue font-20px">{{ $project->project_sum_for_revenue or 0 }}</text> 元

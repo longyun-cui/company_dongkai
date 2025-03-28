@@ -111,7 +111,6 @@ class DKAgencyReconciliationRepository {
                 "))
             ->where('company_id',$me->id)
             ->first();
-        $query_project->profit = $query_project->funds_consumption_total - $query_project->channel_commission_total - $query_project->daily_cost_total;
         $view_data['project'] = $query_project;
 
         // 交付统计
