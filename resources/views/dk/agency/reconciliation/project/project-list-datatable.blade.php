@@ -319,7 +319,7 @@
                         $(nTd).attr('data-key','profit').attr('data-value',data);
                     },
                     render: function(data, type, row, meta) {
-                        var $profit = parseFloat(row.funds_consumption_total - row.channel_commission_total - row.daily_cost_total);
+                        var $profit = parseFloat(parseFloat(row.funds_consumption_total - row.channel_commission_total - row.daily_cost_total).toFixed(2));
                         if($profit > 0) return '<b class="text-green">'+$profit+'</b>';
                         else return '<b class="text-red">'+$profit+'</b>';
 
