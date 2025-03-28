@@ -37,9 +37,49 @@
                     </li>
                     <li class="">
                         <a href="javascript:void(0);">
+                            总营收
+                            <span class="pull-right">
+                                <text class="text-blue font-20px">{{ $project->project_sum_for_revenue or 0 }}</text> 元
+                            </span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="javascript:void(0);">
+                            总坏账
+                            <span class="pull-right">
+                                <text class="text-blue font-20px">{{ $project->project_sum_for_bad_debt or 0 }}</text> 元
+                            </span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="javascript:void(0);">
                             总消费
                             <span class="pull-right">
                                 <text class="text-blue font-20px">{{ $project->project_sum_for_consumption or 0 }}</text> 元
+                            </span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="javascript:void(0);">
+                            总佣金
+                            <span class="pull-right">
+                                <text class="text-blue font-20px">{{ $project->project_sum_for_channel_commission or 0 }}</text> 元
+                            </span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="javascript:void(0);">
+                            总成本
+                            <span class="pull-right">
+                                <text class="text-blue font-20px">{{ $project->project_sum_for_daily_cost_total or 0 }}</text> 元
+                            </span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="javascript:void(0);">
+                            总利润
+                            <span class="pull-right">
+                                <text class="text-blue font-20px">{{ $project->project_sum_for_consumption - $project->project_sum_for_channel_commission - $project->project_sum_for_daily_cost_total }}</text> 元
                             </span>
                         </a>
                     </li>

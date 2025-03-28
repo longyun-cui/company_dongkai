@@ -103,10 +103,15 @@ class DKAgencyReconciliationRepository {
                     count(*) as project_count_for_all,
                     count(IF(item_status = 1, TRUE, NULL)) as project_count_for_enable,
                     sum(funds_recharge_total) as project_sum_for_recharge,
-                    sum(funds_consumption_total) as project_sum_for_consumption
+                    sum(funds_revenue_total) as project_sum_for_revenue,
+                    sum(funds_bad_debt_total) as project_sum_for_bad_debt,
+                    sum(funds_consumption_total) as project_sum_for_consumption,
+                    sum(channel_commission_total) as project_sum_for_channel_commission,
+                    sum(daily_cost_total) as project_sum_for_daily_cost_total
                 "))
             ->where('company_id',$me->id)
             ->first();
+        $query_project->profit = $query_project->funds_consumption_total - $query_project->channel_commission_total - $query_project->daily_cost_total;
         $view_data['project'] = $query_project;
 
         // 交付统计
