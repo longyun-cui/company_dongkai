@@ -303,8 +303,9 @@
                             return row.funds_should_settled_total;
                         }
                         var $revenue = parseFloat(row.delivery_quantity * row.cooperative_unit_price);
-                        var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
-                        return parseFloat($revenue - $funds_bad_debt_total);
+                        var $bad_debt = parseFloat(row.funds_bad_debt_total);
+                        var $should_settled = parseFloat($revenue - $bad_debt).toFixed(2);
+                        return parseFloat($should_settled);
                     }
                 },
                 {
@@ -333,7 +334,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        return parseFloat(data);
+                        return parseFloat(parseFloat(data).toFixed(2));
                     }
                 },
                 {
