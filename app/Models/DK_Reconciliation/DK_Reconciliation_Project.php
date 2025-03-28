@@ -113,56 +113,11 @@ class DK_Reconciliation_Project extends Model
 
 
 
-    // 驾驶员
-    function driver_er()
+    // 每日结算
+    function daily_list()
     {
-        return $this->belongsTo('App\Models\DK\YH_Driver','driver_id','id');
+        return $this->hasMany('App\Models\DK_Reconciliation\DK_Reconciliation_Daily','project_id','id');
     }
-
-
-
-
-    // 车辆订单
-    function car_order_list()
-    {
-        return $this->hasMany('App\Models\DK\YH_Order','car_id','id');
-    }
-    // 车挂订单
-    function trailer_order_list()
-    {
-        return $this->hasMany('App\Models\DK\YH_Order','trailer_id','id');
-    }
-    // 车辆订单【当前】
-    function car_order_list_for_current()
-    {
-        return $this->hasMany('App\Models\DK\YH_Order','car_id','id');
-    }
-    // 车挂订单【当前】
-    function trailer_order_list_for_current()
-    {
-        return $this->hasMany('App\Models\DK\YH_Order','trailer_id','id');
-    }
-    // 车辆订单【已完成】
-    function car_order_list_for_completed()
-    {
-        return $this->hasMany('App\Models\DK\YH_Order','car_id','id');
-    }
-    // 车挂订单【已完成】
-    function trailer_order_list_for_completed()
-    {
-        return $this->hasMany('App\Models\DK\YH_Order','trailer_id','id');
-    }
-    // 车辆订单【未来】
-    function car_order_list_for_future()
-    {
-        return $this->hasMany('App\Models\DK\YH_Order','car_id','id');
-    }
-    // 车挂订单【未来】
-    function trailer_order_list_for_future()
-    {
-        return $this->hasMany('App\Models\DK\YH_Order','trailer_id','id');
-    }
-
 
 
 

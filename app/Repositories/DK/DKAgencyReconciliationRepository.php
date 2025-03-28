@@ -1375,9 +1375,18 @@ class DKAgencyReconciliationRepository {
         $return['text'] = $column_value;
 
 
-        if(in_array($column_key,["delivery_quantity","cooperative_unit_price","funds_bad_debt_total"]))
+//        if(in_array($column_key,["delivery_quantity","cooperative_unit_price","funds_bad_debt_total"]))
+//        {
+//            $consumption_before = (($item->delivery_quantity * $item->cooperative_unit_price) - $item->funds_bad_debt_total);
+//        }
+
+        if(in_array($column_key,["delivery_quantity","cooperative_unit_price","funds_bad_debt_total","channel_commission","daily_cost"]))
         {
+            $revenue_before = ($item->delivery_quantity * $item->cooperative_unit_price);
             $consumption_before = (($item->delivery_quantity * $item->cooperative_unit_price) - $item->funds_bad_debt_total);
+            $bad_debt_before = $item->funds_bad_debt_total;
+            $channel_commission_before = $item->channel_commission;
+            $daily_cost_before = $item->daily_cost;
         }
 
 
@@ -1399,16 +1408,62 @@ class DKAgencyReconciliationRepository {
             else
             {
 
-                if(in_array($column_key,["delivery_quantity","cooperative_unit_price","funds_bad_debt_total"]))
+//                if(in_array($column_key,["delivery_quantity","cooperative_unit_price","funds_bad_debt_total"]))
+//                {
+//                    $consumption_after = (($item->delivery_quantity * $item->cooperative_unit_price) - $item->funds_bad_debt_total);
+//
+//                    $project = DK_Reconciliation_Project::withTrashed()->lockForUpdate()->find($project_id);
+//                    $project->timestamps = false;
+//                    $project->funds_consumption_total = ($project->funds_consumption_total - $consumption_before + $consumption_after);
+//                    $bool_p = $project->save();
+//                    if(!$bool_p) throw new Exception("DK_Reconciliation_Project--update--fail");
+//                }
+
+
+                if(in_array($column_key,["delivery_quantity","cooperative_unit_price","funds_bad_debt_total","channel_commission","daily_cost"]))
                 {
+                    $revenue_after = ($item->delivery_quantity * $item->cooperative_unit_price);
                     $consumption_after = (($item->delivery_quantity * $item->cooperative_unit_price) - $item->funds_bad_debt_total);
+                    $bad_debt_after = $item->funds_bad_debt_total;
+                    $channel_commission_after = $item->channel_commission;
+                    $daily_cost_after = $item->daily_cost;
 
                     $project = DK_Reconciliation_Project::withTrashed()->lockForUpdate()->find($project_id);
                     $project->timestamps = false;
-                    $project->funds_consumption_total = ($project->funds_consumption_total - $consumption_before + $consumption_after);
+//                    $project->funds_revenue_total = ($project->funds_revenue_total - $revenue_before + $revenue_after);
+//                    $project->funds_consumption_total = ($project->funds_consumption_total - $consumption_before + $consumption_after);
+//                    $project->funds_bad_debt_total = ($project->funds_bad_debt_total - $bad_debt_before + $bad_debt_after);
+//                    $project->channel_commission_total = ($project->channel_commission_total - $channel_commission_before + $channel_commission_after);
+//                    $project->daily_cost_total = ($project->daily_cost_total - $daily_cost_before + $daily_cost_after);
+                    if($column_key == "delivery_quantity")
+                    {
+                        $project->funds_revenue_total = ($project->funds_revenue_total - $revenue_before + $revenue_after);
+                        $project->funds_consumption_total = ($project->funds_consumption_total - $consumption_before + $consumption_after);
+                    }
+                    else if($column_key == "cooperative_unit_price")
+                    {
+                        $project->funds_revenue_total = ($project->funds_revenue_total - $revenue_before + $revenue_after);
+                        $project->funds_consumption_total = ($project->funds_consumption_total - $consumption_before + $consumption_after);
+                    }
+                    else if($column_key == "funds_bad_debt_total")
+                    {
+                        $project->funds_consumption_total = ($project->funds_consumption_total - $consumption_before + $consumption_after);
+                        $project->funds_bad_debt_total = ($project->funds_bad_debt_total - $bad_debt_before + $bad_debt_after);
+                    }
+                    else if($column_key == "channel_commission")
+                    {
+                        $project->channel_commission_total = ($project->channel_commission_total - $channel_commission_before + $channel_commission_after);
+                    }
+                    else if($column_key == "daily_cost")
+                    {
+                        $project->daily_cost_total = ($project->daily_cost_total - $daily_cost_before + $daily_cost_after);
+                    }
                     $bool_p = $project->save();
                     if(!$bool_p) throw new Exception("DK_Reconciliation_Project--update--fail");
                 }
+
+
+
 
                 $return['item'] = $item;
 
@@ -1599,20 +1654,23 @@ class DKAgencyReconciliationRepository {
         foreach ($list as $k => $v)
         {
             $revenue = ($v->delivery_quantity * $v->cooperative_unit_price);
-            $profit = $revenue - $v->channel_commission - $v->daily_cost;
+            $bad_debt = $v->funds_bad_debt_total;
+            $profit = $revenue - $bad_debt - $v->channel_commission - $v->daily_cost;
             $list[$k]['revenue'] = $revenue;
             $list[$k]['profit'] = $profit;
             $funds_should_settled_total = $revenue - $v->funds_bad_debt_total;
             $list[$k]['funds_should_settled_total'] = $funds_should_settled_total;
 
-            $total_data['revenue'] += $revenue;
-            $total_data['profit'] += $profit;
+
             $total_data['delivery_quantity'] += $v->delivery_quantity;
             $total_data['funds_bad_debt_total'] += $v->funds_bad_debt_total;
             $total_data['funds_should_settled_total'] += $funds_should_settled_total;
             $total_data['funds_already_settled_total'] += $v->funds_already_settled_total;
             $total_data['channel_commission'] += $v->channel_commission;
             $total_data['daily_cost'] += $v->daily_cost;
+
+            $total_data['revenue'] += $revenue;
+            $total_data['profit'] += $profit;
             $to_be_settled = $funds_should_settled_total - $v->funds_already_settled_total;
             $total_data['to_be_settled'] += $to_be_settled;
         }
@@ -1741,7 +1799,10 @@ class DKAgencyReconciliationRepository {
             {
                 $project = DK_Reconciliation_Project::withTrashed()->lockForUpdate()->find($project_id);
                 $project->timestamps = false;
+                $project->funds_revenue_total += ($post_data['delivery_quantity'] * $project->cooperative_unit_price);
                 $project->funds_consumption_total += ($post_data['delivery_quantity'] * $project->cooperative_unit_price);
+                $project->channel_commission_total += ($post_data['channel_commission']);
+                $project->daily_cost_total += ($post_data['daily_cost']);
                 $bool_p = $project->save();
                 if(!$bool_p) throw new Exception("DK_Reconciliation_Project--update--fail");
             }

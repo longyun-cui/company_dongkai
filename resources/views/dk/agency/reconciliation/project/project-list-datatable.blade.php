@@ -68,7 +68,7 @@
                 {
                     "title": "操作",
                     "data": 'id',
-                    "width": "120px",
+                    "width": "160px",
                     "orderable": false,
                     render: function(data, type, row, meta) {
 
@@ -220,17 +220,45 @@
                     }
                 },
                 {
-                    "title": "累计消费",
-                    "data": "funds_consumption_total",
+                    "title": "累计营收",
+                    "data": "funds_revenue_total",
                     "className": "text-center",
                     "width": "80px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','累计消费');
+                        $(nTd).attr('data-key','funds_revenue_total').attr('data-value',data);
+                    },
+                    render: function(data, type, row, meta) {
+                        return parseFloat(parseFloat(data).toFixed(2));
+                    }
+                },
+                {
+                    "title": "总坏账",
+                    "data": "funds_bad_debt_total",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','总坏账');
+                        $(nTd).attr('data-key','funds_bad_debt_total').attr('data-value',data);
+                    },
+                    render: function(data, type, row, meta) {
+                        return parseFloat(parseFloat(data).toFixed(2));
+                    }
+                },
+                {
+                    "title": "实际消费",
+                    "data": "funds_consumption_total",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','实际消费');
                         $(nTd).attr('data-key','funds_consumption_total').attr('data-value',data);
                     },
                     render: function(data, type, row, meta) {
-                        return parseFloat(data);
+                        return parseFloat(parseFloat(data).toFixed(2));
                     }
                 },
                 {
@@ -247,6 +275,53 @@
                         var $balance = parseFloat(row.funds_recharge_total - row.funds_consumption_total);
                         if($balance > 500) return $balance;
                         else return '<b class="text-red">'+$balance+'</b>';
+
+                    }
+                },
+                {
+                    "title": "总佣金",
+                    "data": "channel_commission_total",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','渠道佣金');
+                        $(nTd).attr('data-key','channel_commission_total').attr('data-value',data);
+                    },
+                    render: function(data, type, row, meta) {
+                        return parseFloat(parseFloat(data).toFixed(2));
+
+                    }
+                },
+                {
+                    "title": "总成本",
+                    "data": "daily_cost_total",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','成本');
+                        $(nTd).attr('data-key','daily_cost_total').attr('data-value',data);
+                    },
+                    render: function(data, type, row, meta) {
+                        return parseFloat(parseFloat(data).toFixed(2));
+
+                    }
+                },
+                {
+                    "title": "利润",
+                    "data": "id",
+                    "className": "text-center",
+                    "width": "80px",
+                    "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','利润');
+                        $(nTd).attr('data-key','profit').attr('data-value',data);
+                    },
+                    render: function(data, type, row, meta) {
+                        var $profit = parseFloat(row.funds_consumption_total - row.channel_commission_total - row.daily_cost_total);
+                        if($profit > 0) return '<b class="text-green">'+$profit+'</b>';
+                        else return '<b class="text-red">'+$profit+'</b>';
 
                     }
                 },
