@@ -127,8 +127,8 @@
                     "title": "项目",
                     "data": "project_id",
                     "className": "text-center",
-                    "width": "100px",
-                    "orderable": true,
+                    "width": "160px",
+                    "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
@@ -180,7 +180,7 @@
                     "title": "交付量",
                     "data": "delivery_quantity",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-row-index',iRow);
@@ -209,7 +209,7 @@
                     "title": "合作单价",
                     "data": "cooperative_unit_price",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-row-index',iRow);
@@ -241,7 +241,7 @@
                     "title": "营收",
                     "data": "id",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','营收');
@@ -261,7 +261,7 @@
                     "title": "坏账",
                     "data": "funds_bad_debt_total",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-row-index',iRow);
@@ -289,7 +289,7 @@
                     "title": "应收款",
                     "data": "funds_should_settled_total",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','应收款');
@@ -312,7 +312,7 @@
                     "title": "渠道佣金",
                     "data": "channel_commission",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-row-index',iRow);
@@ -341,7 +341,7 @@
                     "title": "成本",
                     "data": "daily_cost",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-row-index',iRow);
@@ -371,7 +371,7 @@
                     "title": "利润",
                     "data": "id",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','利润');

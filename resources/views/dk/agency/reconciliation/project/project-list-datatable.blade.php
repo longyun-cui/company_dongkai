@@ -168,8 +168,8 @@
                     "title": "项目名称",
                     "data": "name",
                     "className": "text-center",
-                    "width": "120px",
-                    "orderable": true,
+                    "width": "160px",
+                    "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
                         {
@@ -195,7 +195,7 @@
                     "title": "合作单价",
                     "data": "cooperative_unit_price",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','合作单价');
@@ -209,7 +209,7 @@
                     "title": "累计充值",
                     "data": "funds_recharge_total",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','累计充值');
@@ -223,7 +223,7 @@
                     "title": "累计营收",
                     "data": "funds_revenue_total",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','累计消费');
@@ -237,7 +237,7 @@
                     "title": "总坏账",
                     "data": "funds_bad_debt_total",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','总坏账');
@@ -251,7 +251,7 @@
                     "title": "实际消费",
                     "data": "funds_consumption_total",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','实际消费');
@@ -265,7 +265,7 @@
                     "title": "余额",
                     "data": "id",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','余额');
@@ -282,7 +282,7 @@
                     "title": "总佣金",
                     "data": "channel_commission_total",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','渠道佣金');
@@ -297,7 +297,7 @@
                     "title": "总成本",
                     "data": "daily_cost_total",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','成本');
@@ -312,7 +312,7 @@
                     "title": "利润",
                     "data": "id",
                     "className": "text-center",
-                    "width": "80px",
+                    "width": "60px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).attr('data-id',row.id).attr('data-name','利润');
@@ -329,7 +329,7 @@
                     "title": "备注",
                     "data": "remark",
                     "className": "text-center",
-                    "width": "160px",
+                    "width": "120px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
