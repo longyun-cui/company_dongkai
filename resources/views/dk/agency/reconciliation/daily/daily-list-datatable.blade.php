@@ -388,7 +388,8 @@
                         var $daily_cost = parseFloat(row.daily_cost);
                         var $funds_bad_debt_total = parseFloat(row.funds_bad_debt_total);
                         var $profit = parseFloat(parseFloat($revenue - $channel_commission - $daily_cost - $funds_bad_debt_total).toFixed(2));
-                        return '<b class="text-green">'+$profit+'</b>';
+                        if($profit > 0) return '<b class="text-green">'+$profit+'</b>';
+                        else return '<b class="text-red">'+$profit+'</b>';
                     }
                 },
                 // {
