@@ -136,7 +136,7 @@
                         if(row.date_day == "统计") $(nTd).addClass('_bold').addClass('text-red');
                     },
                     render: function(data, type, row, meta) {
-                        return parseFloat(data);
+                        return parseFloat(parseFloat(data).toFixed(2));
                     }
                 },
                 {
@@ -149,7 +149,7 @@
                         if(row.date_day == "统计") $(nTd).addClass('_bold').addClass('text-red');
                     },
                     render: function(data, type, row, meta) {
-                        return parseFloat(data);
+                        return parseFloat(parseFloat(data).toFixed(2));
                     }
                 },
                 {
@@ -162,7 +162,7 @@
                         if(row.date_day == "统计") $(nTd).addClass('_bold').addClass('text-red');
                     },
                     render: function(data, type, row, meta) {
-                        return parseFloat(data);
+                        return parseFloat(parseFloat(data).toFixed(2));
                     }
                 },
                 // {
