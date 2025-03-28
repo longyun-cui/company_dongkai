@@ -363,7 +363,7 @@
                         }
                     },
                     render: function(data, type, row, meta) {
-                        return parseFloat(data);
+                        return parseFloat(parseFloat(data).toFixed(2));
                     }
                 },
                 {
@@ -381,7 +381,7 @@
                     render: function(data, type, row, meta) {
                         if(row.id == "统计")
                         {
-                            return row.profit;
+                            return parseFloat(row.profit.toFixed(2));
                         }
                         var $revenue = parseFloat(row.delivery_quantity * row.cooperative_unit_price);
                         var $channel_commission = parseFloat(row.channel_commission);
