@@ -4043,8 +4043,9 @@ class DKAdminRepository {
                 'creator'=>function($query) { $query->select(['id','username']); }
             ]);
 
-        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
+//        if(!empty($post_data['name'])) $query->where('name', 'like', "%{$post_data['name']}%");
         if(!empty($post_data['title'])) $query->where('title', 'like', "%{$post_data['title']}%");
+        if(!empty($post_data['name'])) $query->where('district_city', 'like', "%{$post_data['name']}%");
 
         // 状态 [|]
         if(!empty($post_data['district_status']))
