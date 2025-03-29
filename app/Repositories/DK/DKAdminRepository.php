@@ -11643,7 +11643,7 @@ class DKAdminRepository {
         // 工单
         $query = DK_Order::select('*')
             ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
-            ->where('dk_admin_order.item_category',1)
+//            ->where('dk_admin_order.item_category',1)
             ->with([
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
