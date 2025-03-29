@@ -11641,7 +11641,7 @@ class DKAdminRepository {
 
 
         // 工单
-        $query = DK_Order::select('dk_admin_order.*','dk_pivot_client_delivery.client_id','dk_pivot_client_delivery.project_id')
+        $query = DK_Order::select('*')
             ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
 //            ->where('dk_admin_order.item_category',1)
             ->with([
