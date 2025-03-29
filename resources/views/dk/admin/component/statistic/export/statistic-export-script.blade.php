@@ -60,8 +60,8 @@
             if($('input[name="delivery-export-date"]').val())  $obj.date = $('input[name="delivery-export-date"]').val();
             if($('input[name="delivery-export-start"]').val())  $obj.order_start = $('input[name="delivery-export-start"]').val();
             if($('input[name="delivery-export-ended"]').val())  $obj.order_ended = $('input[name="delivery-export-ended"]').val();
-            if($('select[name="delivery-order-client"]').val() > 0)  $obj.client = $('select[name="delivery-order-client"]').val();
-            if($('select[name="delivery-order-project"]').val() > 0)  $obj.project = $('select[name="delivery-order-project"]').val();
+            if($('select[name="delivery-export-client"]').val() > 0)  $obj.client = $('select[name="delivery-export-client"]').val();
+            if($('select[name="delivery-export-project"]').val() > 0)  $obj.project = $('select[name="delivery-export-project"]').val();
 
 
             var $url = url_build('/v1/operate/statistic/delivery-export',$obj);

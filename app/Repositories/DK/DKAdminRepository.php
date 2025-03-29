@@ -11536,6 +11536,7 @@ class DKAdminRepository {
         $record_column_type = null;
         $record_before = '';
         $record_after = '';
+        $record_data_title = '';
 
         $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
         if($export_type == "month")
@@ -11601,11 +11602,18 @@ class DKAdminRepository {
         $project_id = 0;
 
         // 客户
+        $client_title = '';
         if(!empty($post_data['client']))
         {
             if(!in_array($post_data['client'],[-1,0,'-1','0']))
             {
                 $client_id = $post_data['client'];
+                $client_er = DK_Client::find($client_id);
+                if($client_er)
+                {
+                    $client_title = '【'.$client_er->username.'】';
+                    $record_data_title = $client_er->username;
+                }
             }
         }
 
@@ -11852,7 +11860,7 @@ class DKAdminRepository {
         }
 
 
-        $title = '【交付】'.date('Ymd.His').$project_title.$month_title.$time_title;
+        $title = '【交付】'.date('Ymd.His').$project_title.$client_title.$month_title.$time_title;
 
         $file = Excel::create($title, function($excel) use($cellData) {
             $excel->sheet('交付工单', function($sheet) use($cellData) {
