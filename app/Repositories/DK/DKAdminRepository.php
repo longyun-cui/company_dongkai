@@ -11641,9 +11641,9 @@ class DKAdminRepository {
 
 
         // 工单
-        $query = DK_Order::select('dk_admin_order.*','dk_pivot_client_delivery.client_id','dk_pivot_client_delivery.project_id')
+        $query = DK_Order::select('*')
             ->join('dk_pivot_client_delivery', 'dk_admin_order.id', '=', 'dk_pivot_client_delivery.order_id')
-//            ->where('dk_admin_order.item_category',1)
+            ->where('dk_admin_order.item_category',1)
             ->with([
                 'client_er'=>function($query) { $query->select('id','username','true_name'); },
                 'creator'=>function($query) { $query->select('id','name','true_name'); },
@@ -11682,6 +11682,7 @@ class DKAdminRepository {
 
         if($client_id) $query->where('dk_pivot_client_delivery.client_id',$client_id);
         if($project_id) $query->where('dk_pivot_client_delivery.project_id',$project_id);
+
 
         $data = $query->orderBy('dk_pivot_client_delivery.id','desc')->get();
         $data = $data->toArray();
@@ -13193,6 +13194,7 @@ class DKAdminRepository {
         $record_column_type = null;
         $record_before = '';
         $record_after = '';
+        $record_data_title = '';
 
         $export_type = isset($post_data['export_type']) ? $post_data['export_type']  : '';
         if($export_type == "month")
@@ -13261,12 +13263,20 @@ class DKAdminRepository {
         $staff_id = 0;
         $project_id = 0;
 
+
         // 客户
+        $client_title = '';
         if(!empty($post_data['client']))
         {
             if(!in_array($post_data['client'],[-1,0,'-1','0']))
             {
                 $client_id = $post_data['client'];
+                $client_er = DK_Client::find($client_id);
+                if($client_er)
+                {
+                    $client_title = '【'.$client_er->username.'】';
+                    $record_data_title = $client_er->username;
+                }
             }
         }
 
@@ -13355,8 +13365,9 @@ class DKAdminRepository {
         }
 
 
-        if($client_id) $query->where('client_id',$client_id);
-        if($project_id) $query->where('project_id',$project_id);
+        if($client_id) $query->where('dk_pivot_client_delivery.client_id',$client_id);
+        if($project_id) $query->where('dk_pivot_client_delivery.project_id',$project_id);
+
 
         $data = $query->orderBy('dk_pivot_client_delivery.id','desc')->get();
         $data = $data->toArray();
@@ -13539,7 +13550,7 @@ class DKAdminRepository {
         }
 
 
-        $title = '【工单】'.date('Ymd.His').$project_title.$month_title.$time_title;
+        $title = '【工单】'.date('Ymd.His').$client_title.$project_title.$month_title.$time_title;
 
         $file = Excel::create($title, function($excel) use($cellData) {
             $excel->sheet('全部工单', function($sheet) use($cellData) {
