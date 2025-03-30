@@ -2992,13 +2992,13 @@ class DKAdminRepository {
             if($is_username_exist) return response_error([],"该客户名已存在，不能修改成此客户名！");
 
             // 客户管理员是否存在
-            $client_staff = DK_Client_User::where('id', $client->admin_id)->first();
+            $client_staff = DK_Client_User::where('id', $client->client_admin_id)->first();
             if($client_staff)
             {
                 // 客户管理员存在
 
                 // 判断电话是否重复
-                $is_mobile_exist = DK_Client_User::select('id')->where('id','<>',$client->admin_id)->where('mobile',$post_data["client_admin_mobile"])->count();
+                $is_mobile_exist = DK_Client_User::select('id')->where('id','<>',$client->client_admin_id)->where('mobile',$post_data["client_admin_mobile"])->count();
                 if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
 
                 $client_staff_data["username"] = $post_data["client_admin_name"];
