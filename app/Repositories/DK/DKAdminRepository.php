@@ -2998,11 +2998,14 @@ class DKAdminRepository {
                 // 客户管理员存在
 
                 // 判断电话是否重复
-                $is_mobile_exist = DK_Client_User::select('id')->where('id','<>',$client->client_admin_id)->where('mobile',$post_data["client_admin_mobile"])->count();
-                if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
+                if($client_staff != $post_data["client_admin_mobile"])
+                {
+                    $is_mobile_exist = DK_Client_User::select('id')->where('id','<>',$client->client_admin_id)->where('mobile',$post_data["client_admin_mobile"])->count();
+                    if($is_mobile_exist) return response_error([],"该电话已存在，不能修改成此电话！");
 
+                    $client_staff_data["mobile"] = $post_data["client_admin_mobile"];
+                }
                 $client_staff_data["username"] = $post_data["client_admin_name"];
-                $client_staff_data["mobile"] = $post_data["client_admin_mobile"];
             }
             else
             {
