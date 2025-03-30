@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <form action="" method="post" class="form-horizontal form-bordered " id="form-for-delivery-follow-create">
+            <form action="" method="post" class="form-horizontal form-bordered">
                 <div class="box-body">
 
 
@@ -502,7 +502,7 @@
                     </div>
                     {{--交易日期--}}
                     <div class="form-group">
-                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 交易时间</label>
+                        <label class="control-label col-md-2"><sup class="text-red">*</sup> 成交时间</label>
                         <div class="col-md-8 ">
                             <input type="text" class="form-control form-filter time_picker" name="transaction-datetime" readonly="readonly" />
                         </div>
@@ -514,13 +514,13 @@
                             <input type="text" class="form-control" name="transaction-title" placeholder="输入品牌" value="" list="_transaction_title">
                         </div>
                     </div>
-                    <datalist id="_transaction_title">
-                        <option value="爱马仕" />
-                        <option value="香奈儿" />
-                        <option value="LV" />
-                        <option value="迪奥" />
-                        <option value="其他" />
-                    </datalist>
+{{--                    <datalist id="_transaction_title">--}}
+{{--                        <option value="爱马仕" />--}}
+{{--                        <option value="香奈儿" />--}}
+{{--                        <option value="LV" />--}}
+{{--                        <option value="迪奥" />--}}
+{{--                        <option value="其他" />--}}
+{{--                    </datalist>--}}
                     {{--数量--}}
                     <div class="form-group">
                         <label class="control-label col-md-2"><sup class="text-red">*</sup> 数量</label>

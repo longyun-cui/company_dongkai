@@ -106,7 +106,7 @@
 
 
     <div class="col-md-12 datatable-body">
-        <div class="tableArea full">
+        <div class="tableArea table-dental full-">
             <table class='table table-striped table-bordered table-hover order-column'>
                 <thead>
                 </thead>

@@ -859,6 +859,7 @@
                 url: "{{ url('/v1/operate/delivery/item-follow-save') }}",
                 type: "post",
                 dataType: "json",
+                // data: { _token: $('meta[name="_token"]').attr('content') },
                 // target: "#div2",
                 // clearForm: true,
                 // restForm: true,
@@ -916,7 +917,7 @@
             $datatable_wrapper.find('tr').removeClass('operating');
             $row.addClass('operating');
 
-            form_reset('#form-for-delivery-follow-create');
+            form_reset('#form-for-delivery-trade-create');
 
             var $modal = $('#modal-for-delivery-trade-create');
             $modal.find('.id-title').html('【'+$id+'】');

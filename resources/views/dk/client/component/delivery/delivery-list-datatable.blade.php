@@ -70,7 +70,7 @@
                 }
             ],
             "fixedColumns": {
-                "leftColumns": "@if($is_mobile_equipment) 1 @else 6 @endif",
+                "leftColumns": "@if($is_mobile_equipment) 1 @else 3 @endif",
                 "rightColumns": "@if($is_mobile_equipment) 0 @else 1 @endif"
             },
             "columns": [
@@ -105,7 +105,7 @@
                     "title": "操作",
                     "data": 'id',
                     "className": "",
-                    "width": "120px",
+                    "width": "240px",
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         if(row.is_completed != 1 && row.item_status != 97)
@@ -119,13 +119,20 @@
                     render: function(data, type, row, meta) {
 
                         var $html_edit = '';
-                        var $html_follow = '<a class="btn btn-xs bg-default item-modal-show-for-follow" data-id="'+data+'">客户跟进</a>';
                         var $html_quality = '<a class="btn btn-xs bg-default item-quality-evaluate-submit" data-id="'+data+'">质量评价</a>';
+                        var $html_update = '<a class="btn btn-xs bg-default item-modal-show-for-customer-update" data-id="'+data+'">更新</a>';
+                        var $html_come = '<a class="btn btn-xs bg-default item-modal-show-for-come-update" data-id="'+data+'">上门</a>';
+                        var $html_trade = '<a class="btn btn-xs bg-default item-modal-show-for-trade-create" data-id="'+data+'">成交</a>';
+                        var $html_follow = '<a class="btn btn-xs bg-default item-modal-show-for-follow-create" data-id="'+data+'">跟进</a>';
+                        var $html_follow_record = '<a class="btn btn-xs bg-default item-modal-show-for-follow-record" data-id="'+data+'">记录</a>';
 
 
                         var $html =
-                            // $html_follow+
                             $html_quality+
+                            $html_come+
+                            $html_trade+
+                            $html_follow+
+                            $html_follow_record+
                             // $html_record+
                             '';
                         return $html;
@@ -418,6 +425,81 @@
                             else return '--';
                         }
                         else return '--';
+                    }
+                },
+                {
+                    "title": "上门状态",
+                    "data": "is_come",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data == 0) return '<small class="btn-xs btn-info">否</small>';
+                        if(data == 9) return '<small class="btn-xs btn-warning">预约中</small>';
+                        if(data == 11) return '<small class="btn-xs btn-success">已上门</small>';
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "上门时间",
+                    "data": "come_datetime",
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        if(data)
+                        {
+                            let d = new Date(data);
+                            let year = d.getFullYear();
+                            let month = ('0' + (d.getMonth() + 1)).slice(-2); // 月份是从0开始的
+                            let day = ('0' + d.getDate()).slice(-2);
+                            let hours = ('0' + d.getHours()).slice(-2);
+                            let minutes = ('0' + d.getMinutes()).slice(-2);
+                            let seconds = ('0' + d.getSeconds()).slice(-2);
+
+                            return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
+                        }
+                        else return '--';
+                    }
+                },
+                {
+                    "title": "成交次数",
+                    "data": "transaction_num",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "成交总数",
+                    "data": "transaction_count",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "成交总额",
+                    "data": "transaction_amount",
+                    "className": "",
+                    "width": "60px",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
+                    "title": "最新跟进说明",
+                    "data": "follow_latest_description",
+                    "className": "",
+                    "width": "",
+                    "orderable": false,
+                    render: function(data, type, row, meta) {
+                        return data;
                     }
                 },
                 {

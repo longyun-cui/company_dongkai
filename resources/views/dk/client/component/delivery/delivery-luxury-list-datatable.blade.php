@@ -494,21 +494,21 @@
                         else return "--";
                     }
                 },
-                {
-                    "title": "录音地址",
-                    "data": "order_id",
-                    "className": "",
-                    "width": "80px",
-                    "orderable": false,
-                    render: function(data, type, row, meta) {
-                        if(row.order_er)
-                        {
-                            if(row.order_er.recording_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
-                            else return "--";
-                        }
-                        else return "--";
-                    }
-                },
+                // {
+                //     "title": "录音地址",
+                //     "data": "order_id",
+                //     "className": "",
+                //     "width": "80px",
+                //     "orderable": false,
+                //     render: function(data, type, row, meta) {
+                //         if(row.order_er)
+                //         {
+                //             if(row.order_er.recording_address) return '<a target="_blank" href="'+row.order_er.recording_address+'">录音地址</a>';
+                //             else return "--";
+                //         }
+                //         else return "--";
+                //     }
+                // },
             ],
             "drawCallback": function (settings) {
 
