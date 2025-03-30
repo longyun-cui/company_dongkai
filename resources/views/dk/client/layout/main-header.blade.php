@@ -248,7 +248,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->
-                        <li class="user-header">
+                        <li class="user-header" data-id="{{ $me->id or '0' }}" data-client-id="{{ $me->client_id or '0' }}">
                             @if(!empty($me->portrait_img))
                                 <img src="{{ url(env('DOMAIN_CDN').'/'.$me->portrait_img) }}" class="user-image" alt="User">
                             @else
@@ -256,8 +256,8 @@
                             @endif
 
                             <p>
-                                {{ $me->username or '' }} - Web Developer
-                                <small>Member since Nov. 2012</small>
+                                {{ $me->client_er->username or '' }}
+                                <small>{{ $me->username or '' }}</small>
                             </p>
                         </li>
                         <!-- Menu Body -->
