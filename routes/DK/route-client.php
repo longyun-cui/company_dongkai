@@ -186,6 +186,14 @@ Route::group(['middleware' => ['dk.client.staff.login']], function () {
 
 
 
+    Route::match(['get','post'], '/v1/operate/statistic/statistic-export-for-delivery-by-ids', $controller.'@v1_operate_statistic_export_for_delivery_by_ids');
+
+
+
+
+
+
+
 
 
 

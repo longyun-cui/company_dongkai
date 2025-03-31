@@ -76,7 +76,8 @@
             // console.log($ids);
 
             var $item_category = $that.data('item-category');
-            var $url = url_build('/statistic/statistic-export-for-order-by-ids?item_category='+$item_category+'&ids='+$ids);
+            // var $url = url_build('/statistic/statistic-export-for-order-by-ids?item_category='+$item_category+'&ids='+$ids);
+            var $url = url_build('/v1/operate/statistic/statistic-export-for-delivery-by-ids?item_category='+$item_category+'&ids='+$ids);
             window.open($url);
 
 
