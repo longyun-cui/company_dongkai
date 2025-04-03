@@ -2826,7 +2826,7 @@ class DKClientRepository {
                     }
                     else
                     {
-                        return response_fail([],'推送数据失败！');
+                        return response_fail(['data'=>$push_result],'推送数据失败！');
                     }
                 }
                 curl_close($push_ch);
