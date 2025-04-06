@@ -35,8 +35,11 @@
                     d.remark = $tableSearch.find('input[name="delivery-remark"]').val();
                     d.description = $tableSearch.find('input[name="delivery-description"]').val();
                     d.department_district = $tableSearch.find('select[name="delivery-department-district[]"]').val();
+
+                    d.staff = $tableSearch.find('select[name="delivery-staff"]').val();
                     d.client = $tableSearch.find('select[name="delivery-client"]').val();
                     d.project = $tableSearch.find('select[name="delivery-project"]').val();
+
                     d.status = $tableSearch.find('select[name="delivery-status"]').val();
                     d.delivery_type = $tableSearch.find('select[name="delivery-delivery-type"]').val();
                     d.order_type = $tableSearch.find('select[name="delivery-type"]').val();
@@ -47,6 +50,8 @@
                     d.exported_status = $('select[name="delivery-exported-status"]').val();
                     d.assign_status = $('select[name="delivery-assign-status"]').val();
                     d.is_api_pushed = $('select[name="delivery-is-api-pushed"]').val();
+
+                    d.quality = $('select[name="delivery-quality"]').val();
 
                     d.delivered_status = $tableSearch.find('select[name="delivery-delivered-status"]').val();
                     d.delivered_result = $tableSearch.find('select[name="delivery-delivered-result[]"]').val();
@@ -126,7 +131,6 @@
                         var $html_follow = '<a class="btn btn-xs bg-default item-modal-show-for-follow-create" data-id="'+data+'">跟进</a>';
                         var $html_follow_record = '<a class="btn btn-xs bg-default item-modal-show-for-follow-record" data-id="'+data+'">记录</a>';
 
-
                         var $html =
                             $html_quality+
                             $html_come+
@@ -136,7 +140,6 @@
                             // $html_record+
                             '';
                         return $html;
-
                     }
                 },
                 @if($me->client_er->is_api_scrm == 1)

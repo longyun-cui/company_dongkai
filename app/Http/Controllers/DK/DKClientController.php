@@ -749,6 +749,11 @@ class DKClientController extends Controller
      * 用户基本信息
      */
     // SELECT2
+    public function operate_select2_city()
+    {
+        return $this->repo->operate_select2_city(request()->all());
+    }
+    // SELECT2
     public function operate_select2_district()
     {
         return $this->repo->operate_select2_district(request()->all());

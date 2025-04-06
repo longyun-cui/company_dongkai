@@ -587,14 +587,26 @@ class DKClientRepository {
 
         if(!empty($post_data['assign'])) $query->where('delivered_date', $post_data['assign']);
 
+        if(!empty($post_data['quality'])) $query->where('order_quality', $post_data['quality']);
 
 
-        // 交付客户
+
+        // 客户
         if(isset($post_data['client']))
         {
             if(!in_array($post_data['client'],[-1,'-1']))
             {
                 $query->where('client_id', $post_data['client']);
+            }
+        }
+
+
+        //  员工
+        if(isset($post_data['staff']))
+        {
+            if(!in_array($post_data['staff'],[-1,0,'-1','0']))
+            {
+                $query->where('client_staff_id', $post_data['staff']);
             }
         }
 
@@ -684,6 +696,16 @@ class DKClientRepository {
         }
 
 
+        // 区域
+        if(isset($post_data['city']))
+        {
+            if(count($post_data['city']) > 0)
+            {
+                $query->whereHas('order_er', function($query) use($post_data) {
+                    $query->whereIn('location_city',$post_data['city']);
+                });
+            }
+        }
         // 区域
         if(isset($post_data['district']))
         {
@@ -5647,6 +5669,36 @@ class DKClientRepository {
      * select2
      */
     //
+    public function operate_select2_city($post_data)
+    {
+        if(empty($post_data['keyword']))
+        {
+            $query = DK_District::select('id','district_city as text')
+                ->where(['district_status'=>1]);
+        }
+        else
+        {
+            $keyword = "%{$post_data['keyword']}%";
+            $query = DK_District::select('id','district_city as text')
+                ->where('district_city','like',"%$keyword%")
+                ->where(['district_status'=>1]);
+        }
+
+        $list = $query->orderBy('id','desc')->get()->toArray();
+        foreach ($list as $k => $v)
+        {
+            $list[$k]['id'] = $v['text'];
+        }
+
+        $unSpecified = ['id'=>0,'text'=>'[未指定]'];
+        array_unshift($list,$unSpecified);
+        $unSpecified = ['id'=>-1,'text'=>'选择城市 '];
+        array_unshift($list,$unSpecified);
+//        dd($list);
+
+        return $list;
+    }
+    //
     public function operate_select2_district($post_data)
     {
         if(empty($post_data['keyword']))
@@ -5697,7 +5749,6 @@ class DKClientRepository {
             return array_values($district_filter);
         }
         else return $district_array;
-
 
     }
 

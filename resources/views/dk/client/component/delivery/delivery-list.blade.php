@@ -13,6 +13,10 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="delivery-client-phone" placeholder="客户电话" value="" />
 
 
+            <select class="search-filter form-filter filter-xl select2-box-c- select2-city-c" name="delivery-city[]" multiple="multiple">
+                <option value="-1">全部区域</option>
+            </select>
+
             <select class="search-filter form-filter filter-xl select2-box-c- select2-district-c" name="delivery-district[]" multiple="multiple">
                 <option value="-1">全部区域</option>
             </select>
@@ -26,11 +30,30 @@
                 </select>
             @endif
 
+
+            <select class="search-filter form-filter" name="delivery-quality">
+                <option value="">选择质量</option>
+                <option value="有效">有效</option>
+                <option value="无效">无效</option>
+                <option value="重单">重单</option>
+                <option value="无法联系">无法联系</option>
+            </select>
+
+
             <select class="search-filter form-filter" name="delivery-assign-status">
                 <option value="-1">分配状态</option>
                 <option value="0">待分配</option>
                 <option value="1">已分配</option>
             </select>
+
+
+            <select class="search-filter form-filter filter-lg select2-box-c" name="delivery-staff">
+                <option value="-1">选择员工</option>
+                @foreach($staff_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->username }}</option>
+                @endforeach
+            </select>
+
 
             <select class="search-filter form-filter" name="delivery-client-type">
                 <option value="-1">患者类型</option>
