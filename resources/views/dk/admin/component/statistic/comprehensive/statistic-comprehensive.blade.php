@@ -62,7 +62,7 @@
             </button>
 
 
-            <button type="button" class="btn btn-success btn-filter filter-submit-c">
+            <button type="button" class="btn btn-success btn-filter filter-submit-c" data-submit-default="default">
                 <i class="fa fa-search"></i> 全部查询
             </button>
 
@@ -70,11 +70,11 @@
                 <i class="fa fa-remove"></i> 清空
             </button>
 
-            <button type="button" class="btn btn-default btn-filter filter-refresh-c">
+            <button type="button" class="btn btn-default btn-filter filter-refresh-c _none">
                 <i class="fa fa-circle-o-notch"></i> 刷新
             </button>
 
-            <button type="button" class="btn btn-default btn-filter filter-cancel-c">
+            <button type="button" class="btn btn-default btn-filter filter-cancel-c _none">
                 <i class="fa fa-undo"></i> 重置
             </button>
 

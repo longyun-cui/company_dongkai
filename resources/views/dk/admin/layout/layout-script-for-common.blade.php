@@ -48,7 +48,7 @@
             $search_wrapper.find('select.form-filter-c option').prop("selected", false);
             $search_wrapper.find('select.form-filter-c').find('option:eq(0)').prop('selected', true);
 
-            $search_wrapper.find(".filter-submit-c").click();
+            $search_wrapper.find(".filter-submit-c[data-submit-default=default]").click();
         });
         // 【通用【清空重选】
         $(".main-content").on('click', ".filter-empty-c", function() {

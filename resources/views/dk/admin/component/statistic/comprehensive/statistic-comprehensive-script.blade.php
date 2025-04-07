@@ -463,6 +463,7 @@
     function statistic_get_data_for_comprehensive(target)
     {
 
+        console.log(target);
         var $target = $(target);
 
         //

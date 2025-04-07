@@ -1364,7 +1364,7 @@ class DKAdminRepository {
             'true_name.required' => '请输入用户名！',
             'mobile.required' => '请输入电话！',
 //            'mobile.unique' => '电话已存在！',
-//            'api_staffNo.required' => '请输入坐席用户ID！',
+//            'api_staffNo.required' => '请输入外呼系统坐席ID！',
 //            'api_staffNo.numeric' => '坐席用户ID必须为数字！',
 //            'api_staffNo.min' => '坐席用户ID必须为数字，并且不小于0！',
         ];
@@ -1386,6 +1386,8 @@ class DKAdminRepository {
         $operate_type = $operate["type"];
         $operate_id = $operate['id'];
 
+
+        $post_data['api_staffNo']  = isset($post_data['api_staffNo'])  ? $post_data['api_staffNo'] : 0;
 
         $this->get_me();
         $me = $this->me;
@@ -8158,7 +8160,7 @@ class DKAdminRepository {
 
 
         $query_order = DK_Order::select('id','item_category')->where('is_published',1);
-        $query_delivery = DK_Pivot_Client_Delivery::select('id');
+        $query_delivery = DK_Pivot_Client_Delivery::select('id','order_category');
 
 
         if($me->user_type == 41)
@@ -8208,9 +8210,10 @@ class DKAdminRepository {
 //        }
         if(!empty($post_data['department_district']))
         {
-            if(count($post_data['department_district']))
+            $department_district_array = array_diff($post_data['department_district'], [-1,0,'-1','0']);
+            if(count($department_district_array))
             {
-                $query_order->whereIn('department_district_id', $post_data['department_district']);
+                $query_order->whereIn('department_district_id', $department_district_array);
             }
         }
 
@@ -8274,9 +8277,10 @@ class DKAdminRepository {
 
 
         // 工单统计
-        $query_order_of_all = (clone $query_order)
+        $query_order = (clone $query_order)
             ->whereIn('created_type',[1,99])
-            ->select(DB::raw("
+//            ->select('item_category')
+            ->addSelect(DB::raw("
                     count(*) as order_count_for_published,
                     
                     count(IF(inspected_status <> 0, TRUE, NULL)) as order_count_for_inspected_all,
@@ -8294,51 +8298,10 @@ class DKAdminRepository {
                 "))
             ->groupBy('item_category')
             ->get();
-        dd($query_order_of_all->toArray());
-
-        $order_for_all = $query_order_of_all[0]->order_count_for_all;
-        $order_of_all_for_unpublished = $query_order_of_all[0]->order_count_for_unpublished;
-        $order_of_all_for_published = $query_order_of_all[0]->order_count_for_published;
-
-        $return_data['order_for_all'] = $order_of_all_for_all;
-        $return_data['order_of_all_for_unpublished'] = $order_of_all_for_unpublished;
-        $return_data['order_of_all_for_published'] = $order_of_all_for_published;
+        dd($query_order->toArray());
 
 
-        $order_for_inspected_all = $query_order_of_all[0]->order_count_for_inspected_all;
-        $order_for_inspected_accepted = $query_order_of_all[0]->order_count_for_inspected_accepted;
-        $order_for_inspected_accepted_inside = $query_order_of_all[0]->order_count_for_inspected_accepted_inside;
-        $order_of_all_for_inspected_refused = $query_order_of_all[0]->order_count_for_inspected_refused;
-        $order_of_all_for_inspected_repeated = $query_order_of_all[0]->order_count_for_inspected_repeated;
 
-        $return_data['order_of_all_for_inspected_all'] = $order_of_all_for_inspected_all;
-        $return_data['order_of_all_for_inspected_accepted'] = $order_of_all_for_inspected_accepted;
-        $return_data['order_of_all_for_inspected_accepted_inside'] = $order_of_all_for_inspected_accepted_inside;
-        $return_data['order_of_all_for_inspected_refused'] = $order_of_all_for_inspected_refused;
-        $return_data['order_of_all_for_inspected_repeated'] = $order_of_all_for_inspected_repeated;
-
-
-        $order_of_all_for_delivered_all = $query_order_of_all[0]->order_count_for_delivered_all;
-        $order_of_all_for_delivered_completed = $query_order_of_all[0]->order_count_for_delivered_completed;
-        $order_of_all_for_delivered_inside = $query_order_of_all[0]->order_count_for_delivered_inside;
-        $order_of_all_for_delivered_tomorrow = $query_order_of_all[0]->order_count_for_delivered_tomorrow;
-        $order_of_all_for_delivered_repeated = $query_order_of_all[0]->order_count_for_delivered_repeated;
-        $order_of_all_for_delivered_rejected = $query_order_of_all[0]->order_count_for_delivered_rejected;
-        $order_of_all_for_delivered_effective = $order_of_all_for_delivered_completed + $order_of_all_for_delivered_tomorrow + $order_of_all_for_delivered_inside;
-        if($order_of_all_for_all)
-        {
-            $order_of_all_for_delivered_effective_rate = round(($order_of_all_for_delivered_effective * 100 / $order_of_all_for_all),2);
-        }
-        else $order_of_all_for_delivered_effective_rate = 0;
-
-        $return_data['order_of_all_for_delivered_all'] = $order_of_all_for_delivered_all;
-        $return_data['order_of_all_for_delivered_completed'] = $order_of_all_for_delivered_completed;
-        $return_data['order_of_all_for_delivered_inside'] = $order_of_all_for_delivered_inside;
-        $return_data['order_of_all_for_delivered_tomorrow'] = $order_of_all_for_delivered_tomorrow;
-        $return_data['order_of_all_for_delivered_repeated'] = $order_of_all_for_delivered_repeated;
-        $return_data['order_of_all_for_delivered_rejected'] = $order_of_all_for_delivered_rejected;
-        $return_data['order_of_all_for_delivered_effective'] = $order_of_all_for_delivered_effective;
-        $return_data['order_of_all_for_delivered_effective_rate'] = $order_of_all_for_delivered_effective_rate;
 
 
         $query_delivered_of_all = (clone $query_order)
