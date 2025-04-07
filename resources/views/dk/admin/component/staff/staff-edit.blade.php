@@ -180,9 +180,9 @@
 {{--                    </div>--}}
 {{--                </div>--}}
                 <div class="form-group">
-                    <label class="control-label col-md-2">外呼系统坐席ID</label>
+                    <label class="control-label col-md-2"><sup class="text-red">*</sup> 外呼系统坐席ID</label>
                     <div class="col-md-8 ">
-                        <input type="text" class="form-control" name="api_staffNo" placeholder="API坐席ID" value="">
+                        <input type="text" class="form-control" name="api_staffNo" placeholder="API坐席ID，没有添0" value="">
                     </div>
                 </div>
                 {{--描述--}}
