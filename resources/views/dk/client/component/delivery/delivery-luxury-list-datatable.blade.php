@@ -485,6 +485,27 @@
                     "className": "",
                     "width": "80px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).addClass('modal-show-for-item-detail');
+                        $(nTd).attr('data-order-category','31');
+                        $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
+                        $(nTd).attr('data-key','description').attr('data-value',row.order_er.description);
+                        if(row.order_er.recording_address_list)
+                        {
+                            var $recording_address = row.order_er.recording_address_list;
+                            if($recording_address)
+                            {
+                                var $recording_list = JSON.parse($recording_address);
+                                var $recording_list_html = '';
+                                $.each($recording_list, function(index, value)
+                                {
+                                    var $audio_html = '<audio controls controlsList="nodownload" style="width:480px;height:40px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                    $recording_list_html += $audio_html;
+                                });
+                                $(nTd).attr('data-recording-address',$recording_list_html);
+                            }
+                        }
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er)
                         {

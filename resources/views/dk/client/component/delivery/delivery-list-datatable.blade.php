@@ -513,6 +513,7 @@
                     "orderable": false,
                     "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
                         $(nTd).addClass('modal-show-for-item-detail');
+                        $(nTd).attr('data-order-category','1');
                         $(nTd).attr('data-id',row.id).attr('data-name','通话小结');
                         $(nTd).attr('data-key','description').attr('data-value',row.order_er.description);
                         if(row.order_er.recording_address_list)
@@ -530,8 +531,6 @@
                                 $(nTd).attr('data-recording-address',$recording_list_html);
                             }
                         }
-
-
                     },
                     render: function(data, type, row, meta) {
                         if(row.order_er)

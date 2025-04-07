@@ -461,6 +461,7 @@
         // 【通用】显示详情
         $(".main-content").on('dblclick', ".modal-show-for-item-detail", function() {
             var $that = $(this);
+            var $order_category = $(this).data('order-category');
             var $id = $(this).data('id');
             var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
@@ -483,6 +484,31 @@
             $modal.find('.delivery-description-box').html($row.find('[data-key="description"]').data('value'));
             $modal.find('.delivery-recording-address-box').html('');
             $modal.find('.delivery-recording-address-box').html($row.find('[data-key="description"]').data('recording-address'));
+
+            if($order_category == 1)
+            {
+                $modal.find('.aesthetic-show').hide();
+                $modal.find('.luxury-show').hide();
+                $modal.find('.dental-show').show();
+            }
+            if($order_category == 11)
+            {
+                $modal.find('.dental-show').hide();
+                $modal.find('.luxury-show').hide();
+                $modal.find('.aesthetic-show').show();
+            }
+            if($order_category == 31)
+            {
+                $modal.find('.dental-show').hide();
+                $modal.find('.aesthetic-show').hide();
+                $modal.find('.luxury-show').show();
+            }
+            else
+            {
+                $modal.find('.dental-show').hide();
+                $modal.find('.aesthetic-show').hide();
+                $modal.find('.luxury-show').hide();
+            }
 
             $modal.modal('show');
         });

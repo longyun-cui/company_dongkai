@@ -46,14 +46,14 @@
                         </div>
                     </div>
                     {{--意向--}}
-                    <div class="form-group">
+                    <div class="form-group dental-show">
                         <label class="control-label col-md-2">意向</label>
                         <div class="col-md-8 ">
                             <span class="delivery-client-intention-box"></span>
                         </div>
                     </div>
                     {{--牙齿数量--}}
-                    <div class="form-group">
+                    <div class="form-group dental-show">
                         <label class="control-label col-md-2">牙齿数量</label>
                         <div class="col-md-8 ">
                             <span class="delivery-teeth-count-box"></span>
