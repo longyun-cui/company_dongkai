@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\DK;
 
 use App\Models\DK\DK_Company;
+use App\Models\DK\DK_Department;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -76,8 +77,41 @@ class DKAdminController extends Controller
             $mobile = request()->get('mobile');
             $admin = DK_User::whereMobile($mobile)->first();
 
+
+
             if($admin)
             {
+                $department_district_id = $admin->department_district_id;
+                $department_group_id = $admin->department_group_id;
+
+                if($department_district_id > 0)
+                {
+                    $department_district = DK_Department::find($department_district_id);
+                    if($department_district)
+                    {
+                        if($department_district->item_status != 1)
+                        {
+                            return response_error([],'员工所属团队已禁用！');
+                        }
+                    }
+                    else return response_error([],'员工所属团队不存在！');
+                }
+
+
+                if($department_group_id > 0)
+                {
+                    $department_group = DK_Department::find($department_group_id);
+                    if($department_group)
+                    {
+                        if($department_group->item_status != 1)
+                        {
+                            return response_error([],'员工所属小组已禁用！');
+                        }
+                    }
+                    else return response_error([],'员工所属小组不存在！');
+                }
+
+
                 if($admin->user_status == 1)
                 {
 
