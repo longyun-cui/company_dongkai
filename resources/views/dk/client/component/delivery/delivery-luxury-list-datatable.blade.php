@@ -246,7 +246,20 @@
                     }
                 },
                 {
-                    "title": "交付时间",
+                    "title": "提单坐席",
+                    "data": 'id',
+                    "className": "",
+                    "width": "120px",
+                    "orderable": false,
+                    "orderSequence": ["desc", "asc"],
+                    render: function(data, type, row, meta) {
+//                            return data;
+                        if(!row.order_er) return '';
+                        return row.order_er.creator.username;
+                    }
+                },
+                {
+                    "title": "提单时间",
                     "data": 'created_at',
                     "className": "",
                     "width": "120px",
@@ -254,8 +267,8 @@
                     "orderSequence": ["desc", "asc"],
                     render: function(data, type, row, meta) {
 //                            return data;
-                        if(!data) return '';
-                        var $date = new Date(data*1000);
+                        if(!row.order_er) return '';
+                        var $date = new Date(row.order_er.published_at*1000);
                         var $year = $date.getFullYear();
                         var $month = ('00'+($date.getMonth()+1)).slice(-2);
                         var $day = ('00'+($date.getDate())).slice(-2);
@@ -369,6 +382,10 @@
                     "className": "",
                     "width": "120px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','所在城市');
+                        $(nTd).attr('data-key','location').attr('data-value','');
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er)
                         {

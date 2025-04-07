@@ -3723,7 +3723,9 @@ class DKClientRepository {
         $query = DK_Pivot_Client_Delivery::select('*')
             ->where('client_id',$me->client_id)
             ->with([
-                'order_er',
+                'order_er'=>function($query) {
+                    $query->with(['creator'=>function($query) { $query->select('id','username'); }]);
+                },
                 'client_staff_er'=>function($query) { $query->select(['id','username','true_name']); },
                 'client_contact_er'=>function($query) { $query->select(['id','name']); }
             ])
