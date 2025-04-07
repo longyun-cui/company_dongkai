@@ -193,10 +193,17 @@ class DKAdminController extends Controller
     // 退出
     public function logout()
     {
-        Auth::guard('yh_admin')->user()->admin_token = '';
-        Auth::guard('yh_admin')->user()->save();
-        Auth::guard('yh_admin')->logout();
-        return redirect('/login');
+        if(!Auth::guard('yh_admin')->check()) // 未登录
+        {
+            return redirect('/login');
+        }
+        else
+        {
+            Auth::guard('yh_admin')->user()->admin_token = '';
+            Auth::guard('yh_admin')->user()->save();
+            Auth::guard('yh_admin')->logout();
+            return redirect('/login');
+        }
     }
 
     // 退出

@@ -93,7 +93,7 @@
                     else
                     {
                         layer.msg(data.msg);
-                        location.href = "/my-account/my-profile-info-index";
+                        location.href = "/";
                     }
                 }
             };

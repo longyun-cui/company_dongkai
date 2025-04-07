@@ -672,7 +672,8 @@
                             @endif
 
                             <p>
-                                {{ $me->username or '' }} - Web Developer
+                                {{ $me->username or '' }} <br>
+                                Web Developer
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>
@@ -694,7 +695,21 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="{{ url('/my-account/my-profile-info-index') }}" class="btn btn-default btn-flat">个人资料</a>
+
+                                {{--<a href="{{ url('/my-account/my-profile-info-index') }}" class="btn btn-default btn-flat">个人资料</a>--}}
+                                <a href="{{ url('/my-account/my-password-change') }}" class="btn btn-default btn-flat">修改密码</a>
+
+{{--                                <a class="btn btn-default btn-flat tab-control"--}}
+{{--                                   data-type="create"--}}
+{{--                                   data-unique="y"--}}
+{{--                                   data-id="my-profile-info-index"--}}
+{{--                                   data-title='个人资料'--}}
+{{--                                   data-content=''--}}
+{{--                                >--}}
+{{--                                    <i class="fa fa-user text-red _none"></i>--}}
+{{--                                    <span>修改密码</span>--}}
+{{--                                </a>--}}
+
                             </div>
                             <div class="pull-right">
                                 <a href="{{ url('/logout') }}" class="btn btn-default btn-flat">退出</a>
