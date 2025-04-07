@@ -3772,6 +3772,26 @@ class DKClientRepository {
         }
 
         // 上门状态
+        if(isset($post_data['is_wx']))
+        {
+            if(in_array($post_data['is_wx'],[0,1]))
+            {
+                if($post_data['is_wx'] == 0) $query->where('client_contact_id', 0);
+                else if($post_data['is_wx'] == 1) $query->where('client_contact_id', '>', 0);
+            }
+        }
+
+        // 联系渠道
+        if(isset($post_data['contact']))
+        {
+            if(count($post_data['contact']) > 0)
+            {
+                $query->whereIn('client_contact_id',$post_data['contact']);
+            }
+        }
+
+
+        // 上门状态
         if(isset($post_data['is_come']))
         {
             if(!in_array($post_data['is_come'],[-1,'-1']))
@@ -3862,14 +3882,23 @@ class DKClientRepository {
 
 
         // 区域
+        if(isset($post_data['city']))
+        {
+            if(count($post_data['city']) > 0)
+            {
+                $query->whereHas('order_er', function($query) use($post_data) {
+                    $query->whereIn('location_city',$post_data['city']);
+                });
+            }
+        }
+        // 区域
         if(isset($post_data['district']))
         {
             if(count($post_data['district']) > 0)
             {
                 $query->whereHas('order_er', function($query) use($post_data) {
                     $query->whereIn('location_district',$post_data['district']);
-                }
-                );
+                });
             }
         }
 

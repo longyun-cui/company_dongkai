@@ -62,6 +62,9 @@
                     d.city = $('select[name="delivery-city[]"]').val();
                     d.district = $('select[name="delivery-district[]"]').val();
 
+                    d.is_wx = $('select[name="delivery-is-wx"]').val();
+                    d.contact = $('select[name="delivery-contact[]"]').val();
+
                 },
             },
             "columnDefs": [

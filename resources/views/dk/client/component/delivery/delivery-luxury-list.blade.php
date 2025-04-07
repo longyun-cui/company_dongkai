@@ -13,6 +13,10 @@
             <input type="text" class="search-filter form-filter filter-keyup" name="delivery-client-phone" placeholder="客户电话" value="" />
 
 
+            <select class="search-filter form-filter filter-xl select2-box-c- select2-city-c" name="delivery-city[]" multiple="multiple">
+                <option value="-1">全部区域</option>
+            </select>
+
             <select class="search-filter form-filter filter-xl select2-box-c- select2-district-c" name="delivery-district[]" multiple="multiple">
                 <option value="-1">全部区域</option>
             </select>
@@ -26,6 +30,15 @@
                 </select>
             @endif
 
+
+            <select class="search-filter form-filter" name="delivery-quality">
+                <option value="">选择质量</option>
+                <option value="有效">有效</option>
+                <option value="无效">无效</option>
+                <option value="重单">重单</option>
+                <option value="无法联系">无法联系</option>
+            </select>
+
             @if(in_array($me->user_type, [0,1,9,11,19]))
             <select class="search-filter form-filter" name="delivery-assign-status">
                 <option value="-1">分配状态</option>
@@ -33,6 +46,25 @@
                 <option value="1">已分配</option>
             </select>
             @endif
+
+
+            <select class="search-filter form-filter filter-lg select2-box-c" name="delivery-staff">
+                <option value="-1">选择员工</option>
+                @foreach($staff_list as $v)
+                    <option value="{{ $v->id }}">{{ $v->username }}</option>
+                @endforeach
+            </select>
+
+
+            <select class="search-filter form-filter" name="delivery-is-wx">
+                <option value="-1">是否加微全部</option>
+                <option value="1">已加微信</option>
+                <option value="0">未加</option>
+            </select>
+
+            <select class="search-filter form-filter filter-xl select2-box-c- select2-contact-c" name="delivery-contact[]" multiple="multiple">
+                <option value="-1">联系渠道</option>
+            </select>
 
 
             <select class="search-filter form-filter" name="delivery-is-come">
