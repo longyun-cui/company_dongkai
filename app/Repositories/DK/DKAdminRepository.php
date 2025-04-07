@@ -729,6 +729,7 @@ class DKAdminRepository {
         if(in_array($me->user_type,[41,81]))
         {
             $query->where('superior_department_id',$me->department_district_id);
+            $query->whereNotIn('superior_department_id', [-1,0]);
         }
 
         if(!empty($post_data['id'])) $query->where('id', $post_data['id']);

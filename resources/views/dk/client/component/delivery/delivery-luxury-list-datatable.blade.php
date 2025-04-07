@@ -278,6 +278,10 @@
                     "className": "",
                     "width": "80px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','客户姓名');
+                        $(nTd).attr('data-key','client_name').attr('data-value',data);
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er) return row.order_er.client_name;
                         return "--";
@@ -289,6 +293,10 @@
                     "className": "",
                     "width": "100px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','客户电话');
+                        $(nTd).attr('data-key','client_phone').attr('data-value',data);
+                    },
                     render: function(data, type, row, meta) {
                         return data;
                     }
@@ -299,6 +307,10 @@
                     "className": "",
                     "width": "100px",
                     "orderable": false,
+                    "fnCreatedCell": function (nTd, data, row, iRow, iCol) {
+                        $(nTd).attr('data-id',row.id).attr('data-name','微信号');
+                        $(nTd).attr('data-key','client_wx').attr('data-value',data);
+                    },
                     render: function(data, type, row, meta) {
                         if(row.order_er) return row.order_er.wx_id;
                         return "--";
