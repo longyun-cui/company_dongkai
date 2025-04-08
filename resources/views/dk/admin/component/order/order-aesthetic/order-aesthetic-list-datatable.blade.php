@@ -705,11 +705,11 @@
                             $(nTd).attr('data-row-index',iRow);
 
                             $(nTd).addClass('modal-show-for-field-set');
-                            $(nTd).attr('data-id',row.id).attr('data-name','患者类型');
-                            $(nTd).attr('data-key','client_type').attr('data-value',data);
+                            $(nTd).attr('data-id',row.id).attr('data-name','品类');
+                            $(nTd).attr('data-key','field_1').attr('data-value',data);
 
                             $(nTd).attr('data-column-type','select');
-                            $(nTd).attr('data-column-name','患者类型');
+                            $(nTd).attr('data-column-name','品类');
 
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');

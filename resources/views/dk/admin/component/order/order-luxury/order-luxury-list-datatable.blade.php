@@ -1045,7 +1045,10 @@
                             try
                             {
                                 var $recording_list = JSON.parse(data);
-                                return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                                // return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                                var $recording_download = '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载</a>';
+                                var $recording_get = '<a class="btn btn-xs item-get-recording-list-submit" data-id="'+row.id+'">获取</a>';
+                                return $recording_get + $recording_download;
                             }
                             catch(e)
                             {

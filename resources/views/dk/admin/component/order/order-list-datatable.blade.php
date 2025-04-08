@@ -1004,6 +1004,22 @@
 
                             if(data) $(nTd).attr('data-operate-type','edit');
                             else $(nTd).attr('data-operate-type','add');
+
+                            if(row.recording_address_list)
+                            {
+                                var $recording_address = row.recording_address_list;
+                                if($recording_address)
+                                {
+                                    var $recording_list = JSON.parse($recording_address);
+                                    var $recording_list_html = '';
+                                    $.each($recording_list, function(index, value)
+                                    {
+                                        var $audio_html = '<audio controls controlsList="nodownload" style="width:480px;height:40px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                        $recording_list_html += $audio_html;
+                                    });
+                                    $(nTd).attr('data-recording-address',$recording_list_html);
+                                }
+                            }
                         }
                     },
                     render: function(data, type, row, meta) {
@@ -1116,7 +1132,10 @@
                             try
                             {
                                 var $recording_list = JSON.parse(data);
-                                return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                                // return '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载录音</a>';
+                                var $recording_download = '<a class="btn btn-xs item-download-recording-list-submit" data-id="'+row.id+'">下载</a>';
+                                var $recording_get = '<a class="btn btn-xs item-get-recording-list-submit" data-id="'+row.id+'">获取</a>';
+                                return $recording_get + $recording_download;
                             }
                             catch(e)
                             {

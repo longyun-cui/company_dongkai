@@ -73,7 +73,7 @@
 
 {{--显示-审核信息--}}
 <div class="modal fade modal-main-body" id="modal-body-for-detail-inspected">
-    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:64px;margin-bottom:64px;background:#fff;">
+    <div class="col-md-8 col-md-offset-2" id="" style="margin-top:32px;margin-bottom:32px;background:#fff;">
 
         <div class="box- box-info- form-container">
 
@@ -151,6 +151,14 @@
                         <label class="control-label col-md-2">通话小结</label>
                         <div class="col-md-8 control-label" style="text-align:left;">
                             <span class="item-detail-text"></span>
+                        </div>
+                    </div>
+                    {{--录音--}}
+                    <div class="form-group item-detail-recording">
+                        <label class="control-label col-md-2">通话录音</label>
+                        <div class="col-md-8 control-label" style="text-align:left;">
+                            <span class="item-detail-text"></span>
+                            <span class="">获取</span>
                         </div>
                     </div>
                     {{--审核结果--}}

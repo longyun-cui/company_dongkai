@@ -5723,6 +5723,7 @@ class DKAdminRepository {
             $is_repeat = DK_Pivot_Client_Delivery::where(['project_id'=>$project_id,'client_phone'=>(int)$client_phone])->count("*");
         }
 
+        $time = time();
         $date = date("Y-m-d");
 
         // 启动数据库事务
@@ -5733,6 +5734,68 @@ class DKAdminRepository {
             {
                 $item->inspected_status = 9;
             }
+
+
+            // 二奢直接交付
+            if($item->item_category == 99 && false)
+            {
+                $inspected_result = '通过';
+                $delivered_result = '已交付';
+
+                // 审核
+                $item->inspector_id = 0;
+                $item->inspected_status = 1;
+                $item->inspected_result = $inspected_result;
+                $item->inspected_at = $time;
+                $item->inspected_date = $date;
+
+
+                $project = DK_Project::find($item->project_id);
+                if($project->client_id != 0)
+                {
+                    $delivered_client_id = $project->client_id;
+                    $client = DK_Client::find($delivered_client_id);
+                    if(!$client) return response_error([],"客户不存在！");
+                }
+                else $delivered_client_id = 0;
+
+                $delivered_project_id = $item->project_id;
+
+
+                // 交付
+                $item->is_distributive_condition = 0;
+                $item->client_id = $delivered_client_id;
+                $item->deliverer_id = 0;
+                $item->delivered_status = 1;
+                $item->delivered_result = $delivered_result;
+                $item->delivered_at = $time;
+                $item->delivered_date = $date;
+
+
+                $pivot_delivery = new DK_Pivot_Client_Delivery;
+                if($client)
+                {
+                    $pivot_delivery_data["company_id"] = $client->company_id;
+                    $pivot_delivery_data["channel_id"] = $client->channel_id;
+                    $pivot_delivery_data["business_id"] = $client->business_id;
+                }
+                $pivot_delivery_data["order_category"] = $item->item_category;
+                $pivot_delivery_data["pivot_type"] = 95;
+                $pivot_delivery_data["project_id"] = $delivered_project_id;
+                $pivot_delivery_data["client_id"] = $delivered_client_id;
+                $pivot_delivery_data["original_project_id"] = $item->project_id;
+                $pivot_delivery_data["order_id"] = $item->id;
+                $pivot_delivery_data["client_type"] = $item->client_type;
+                $pivot_delivery_data["client_phone"] = $item->client_phone;
+                $pivot_delivery_data["delivered_result"] = '已交付';
+                $pivot_delivery_data["delivered_date"] = $date;
+                $pivot_delivery_data["creator_id"] = $me->id;
+
+                $bool_0 = $pivot_delivery->fill($pivot_delivery_data)->save();
+                if(!$bool_0) throw new Exception("DK_Pivot_Client_Delivery--insert--fail");
+
+            }
+
 
             $item->is_repeat = $is_repeat;
             $item->is_published = 1;
@@ -13894,10 +13957,9 @@ class DKAdminRepository {
 //            $cellData[$k]['channel_source'] = $v['channel_source'];
 
 
-            if($v['field_1'] == 1) $cellData[$k]['field_1'] = "鞋帽服装";
-            else if($v['field_1'] == 2) $cellData[$k]['field_1'] = "包";
-            else if($v['field_1'] == 3) $cellData[$k]['field_1'] = "手表";
-            else if($v['field_1'] == 4) $cellData[$k]['field_1'] = "珠宝";
+            if($v['field_1'] == 1) $cellData[$k]['field_1'] = "脸部";
+            else if($v['field_1'] == 21) $cellData[$k]['field_1'] = "植发";
+            else if($v['field_1'] == 31) $cellData[$k]['field_1'] = "身体";
             else if($v['field_1'] == 99) $cellData[$k]['field_1'] = "其他";
             else $cellData[$k]['field_1'] = "未选择";
 

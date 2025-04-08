@@ -325,6 +325,9 @@
             $modal.find('.item-detail-city-district .item-detail-text').html($row.find('td[data-key=location_city]').html());
             $modal.find('.item-detail-teeth-count .item-detail-text').html($row.find('td[data-key=teeth_count]').html());
             $modal.find('.item-detail-description .item-detail-text').html($row.find('td[data-key=description]').attr('data-value'));
+            $modal.find('.item-detail-recording .item-detail-text').html('');
+            $modal.find('.item-detail-recording .item-detail-text').html($row.find('[data-key="description"]').attr('data-recording-address'));
+
 
             var $inspected_result = $row.find('td[data-key=inspected_result]').attr('data-value');
             // console.log($inspected_result);
