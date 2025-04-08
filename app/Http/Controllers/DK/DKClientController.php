@@ -695,7 +695,7 @@ class DKClientController extends Controller
         }
         else if($item_category == 11)
         {
-            return $this->repo->v1_operate_statistic_export_for_delivery_luxury_by_ids(request()->all());
+            return $this->repo->v1_operate_statistic_export_for_delivery_aesthetic_by_ids(request()->all());
         }
         else if($item_category == 31)
         {

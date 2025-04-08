@@ -57,9 +57,9 @@
 
 
             <select class="search-filter form-filter" name="delivery-is-wx">
-                <option value="-1">是否加微全部</option>
-                <option value="1">已加微信</option>
-                <option value="0">未加</option>
+                <option value="-1">是否+V</option>
+                <option value="1">是</option>
+                <option value="0">否</option>
             </select>
 
             <select class="search-filter form-filter filter-xl select2-box-c- select2-contact-c" name="delivery-contact[]" multiple="multiple">
