@@ -67,6 +67,95 @@
                                 $recording_list_html += $audio_html;
                             });
                             $row.find('[data-key="recording_address_play"]').html($recording_list_html);
+                            $row.find('[data-key="description"]').attr('data-recording-address',$recording_list_html);
+                        }
+
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.log('fail');
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    layer.msg('服务器错误！');
+
+                })
+                .always(function(jqXHR, textStatus) {
+                    console.log('always');
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
+                    layer.closeAll('loading');
+                });
+
+        });
+
+
+        // 【获取录音】
+        $(".main-content").on('click', ".item-inspected-get-recording-list-submit", function() {
+            var $that = $(this);
+            var $modal_wrapper = $that.closest('.modal-wrapper');
+            var $id = $modal_wrapper.find('input[name="detail-inspected-order-id"]').val();
+            var $row = $('tr.operating');
+            console.log($id);
+            // return false;
+
+
+            var $index = layer.load(1, {
+                shade: [0.3, '#fff'],
+                content: '<span class="loadtip">耐心等待中</span>',
+                success: function (layer) {
+                    layer.find('.layui-layer-content').css({
+                        'padding-top': '40px',
+                        'width': '100px',
+                    });
+                    layer.find('.loadtip').css({
+                        'font-size':'20px',
+                        'margin-left':'-18px'
+                    });
+                }
+            });
+
+            $.post(
+                "{{ url('/v1/operate/order/item-get-api-call-record') }}",
+                {
+                    _token: $('meta[name="_token"]').attr('content'),
+                    operate: "item-get-api-call-record",
+                    item_id: $id
+                },
+                'json'
+            )
+                .done(function($response) {
+
+                    layer.closeAll('loading');
+                    console.log('done');
+                    $response = JSON.parse($response);
+                    if(!$response.success)
+                    {
+                        if($response.msg) layer.msg($response.msg);
+                    }
+                    else
+                    {
+                        layer.msg("请求成功！");
+                        // console.log(JSON.parse($response.data));
+
+                        console.log($response.data.data);
+                        var $item = $response.data.data;
+                        if($item.recording_address_list)
+                        {
+                            // var $html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+$item.recording_address+'" type="audio/mpeg"></audio>'
+                            // $row.find('[data-key="recording_address_play"]').html($html);
+
+                            var $recording_list = JSON.parse($item.recording_address_list);
+                            var $recording_list_html = '';
+                            $.each($recording_list, function(index, value)
+                            {
+
+                                var $audio_html = '<audio controls controlsList="nodownload" style="width:380px;height:20px;"><source src="'+value+'" type="audio/mpeg"></audio><br>'
+                                $recording_list_html += $audio_html;
+                            });
+                            $modal_wrapper.find('.item-detail-recording .item-detail-text').html($recording_list_html);
+                            $row.find('[data-key="recording_address_play"]').html($recording_list_html);
+                            $row.find('[data-key="description"]').attr('data-recording-address',$recording_list_html);
                         }
 
                     }
@@ -219,6 +308,8 @@
         });
 
 
+
+
         // 【编辑】
         $(".main-content").on('click', ".item-create-show", function() {
             var $that = $(this);
@@ -301,6 +392,7 @@
         // 【获取】内容详情-审核
         $(".main-content").on('click', ".item-modal-show-for-detail-inspected", function() {
             var $that = $(this);
+            var $row = $that.parents('tr');
             var $datatable_wrapper = $that.closest('.datatable-wrapper');
             var $item_category = $datatable_wrapper.data('datatable-item-category');
             var $table_id = $datatable_wrapper.find('table').filter('[id][id!=""]').attr("id");
@@ -309,6 +401,11 @@
             var $row = $that.parents('tr');
             $table.find('tr').removeClass('inspecting');
             $row.addClass('inspecting');
+
+            $('.datatable-wrapper').removeClass('operating');
+            $datatable_wrapper.addClass('operating');
+            $datatable_wrapper.find('tr').removeClass('operating');
+            $row.addClass('operating');
 
             $('input[name="detail-inspected-order-id"]').val($that.attr('data-id'));
             $('.info-detail-title').html($that.attr('data-id'));
