@@ -693,7 +693,7 @@
                             }
                             else
                             {
-                                layer.msg("发布成功！");
+                                layer.msg(data.msg);
                                 // $('#datatable-for-order-list').DataTable().ajax.reload(null,false);
                                 $table.DataTable().ajax.reload(null,false);
                             }

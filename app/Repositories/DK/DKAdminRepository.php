@@ -5822,7 +5822,46 @@ class DKAdminRepository {
             }
 
             DB::commit();
-            return response_success([]);
+
+
+            if($item->api_is_pushed == 0)
+            {
+                $push_data["item"] = "补牙";
+                $push_data["name"] = $item->client_name;
+                $push_data["phone"] = $item->client_phone;
+                $push_data["intention"] = $item->client_intention;
+                $push_data["city"] = $item->location_city;
+                $push_data["area"] = $item->location_district;
+                $push_data["toothcount"] = $item->teeth_count;
+                $push_data["addvx"] = (($item->is_wx) ? '是' : '否');
+                $push_data["vxaccount"] = (($item->wx_id) ? $item->wx_id : '');
+                $push_data["source"] = $item->channel_source;
+                $push_data["description"] = $item->description;
+
+                $request_result = $this->operate_api_push_order($push_data);
+
+                if($request_result['success'])
+                {
+                    $result = json_decode($request_result['result']);
+                    if($result->code == 0)
+                    {
+                        $item->api_is_pushed = 1;
+                        $item->save();
+                        return response_success([],"发布成功，推送成功!");
+                    }
+                    else
+                    {
+                        return response_error([],"发布成功，推送返回失败!");
+                    }
+                }
+                else
+                {
+                    return response_error([],"发布成功，接口推送失败!");
+                }
+            }
+
+
+            return response_success([],"发布成功!");
         }
         catch (Exception $e)
         {
@@ -25685,8 +25724,47 @@ EOF;
                 if(!$bool_1) throw new Exception("insert--record--fail");
             }
 
-            DB::commit();
-            return response_success([]);
+            dd($item->api_is_pushed);
+
+
+            if($item->api_is_pushed == 0)
+            {
+                $push_data["item"] = "补牙";
+                $push_data["name"] = $item->client_name;
+                $push_data["phone"] = $item->client_phone;
+                $push_data["intention"] = $item->client_intention;
+                $push_data["city"] = $item->location_city;
+                $push_data["area"] = $item->location_district;
+                $push_data["toothcount"] = $item->teeth_count;
+                $push_data["addvx"] = (($item->is_wx) ? '是' : '否');
+                $push_data["vxaccount"] = (($item->wx_id) ? $item->wx_id : '');
+                $push_data["source"] = $item->channel_source;
+                $push_data["description"] = $item->description;
+
+                $request_result = $this->operate_api_push_order($push_data);
+
+                if($request_result['success'])
+                {
+                    $result = json_decode($request_result['result']);
+                    if($result->code == 0)
+                    {
+                        $item->api_is_pushed = 1;
+                        $item->save();
+                        return response_success([],"发布成功，推送成功!");
+                    }
+                    else
+                    {
+                        return response_error([],"发布成功，推送返回失败!");
+                    }
+                }
+                else
+                {
+                    return response_error([],"发布成功，接口推送失败!");
+                }
+            }
+
+
+            return response_success([],"发布成功!");
         }
         catch (Exception $e)
         {
