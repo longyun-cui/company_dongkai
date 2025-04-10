@@ -15,6 +15,8 @@ Route::match(['get','post'], 'logout_without_token', $controller.'@logout_withou
 
 
 Route::match(['get','post'], '/data/voice_record', $controller.'@view_data_voice_record');
+Route::match(['get','post'], '/data/order-detail', $controller.'@view_data_of_order_detail');
+Route::match(['get','post'], '/data/delivery-detail', $controller.'@view_data_of_delivery_detail');
 
 
 /*

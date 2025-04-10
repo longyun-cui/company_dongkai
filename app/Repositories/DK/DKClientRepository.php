@@ -389,6 +389,114 @@ class DKClientRepository {
     }
 
 
+    public function view_data_of_order_detail($post_data)
+    {
+        $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.data.delivery-detail';
+
+        $order_id  = isset($post_data['order_id']) ? medsci_decode($post_data['order_id'],'2024') : 0;
+        if(!$order_id)
+        {
+            $view_data['data'] = null;
+            $view_data['error'] = '参数1有误！';
+            return view($view_blade)->with($view_data);
+        }
+
+        $phone  = isset($post_data['phone']) ? $post_data['phone']  : 0;
+        if(!$phone)
+        {
+            $view_data['data'] = null;
+            $view_data['error'] = '参数2有误！';
+            return view($view_blade)->with($view_data);
+        }
+
+        $order = DK_Order::select(['id','client_name','client_phone','wx_id','location_city','location_district','description','recording_address_list'])->find($order_id);
+        if($order)
+        {
+            if($order->client_phone == $phone)
+            {
+                if($order->recording_address_list)
+                {
+                    $recording_list = json_decode($order->recording_address_list);
+                    $order->recording_list = $recording_list;
+                    $view_data['recording_list'] = $recording_list;
+                }
+                $view_data['data'] = $order;
+                return view($view_blade)->with($view_data);
+            }
+            else
+            {
+                $view_data['data'] = null;
+                $view_data['error'] = '电话有误！';
+                return view($view_blade)->with($view_data);
+            }
+        }
+        else
+        {
+            $view_data['data'] = null;
+            $view_data['error'] = '交付有误！';
+            return view($view_blade)->with($view_data);
+        }
+    }
+
+
+    public function view_data_of_delivery_detail($post_data)
+    {
+        $view_blade = env('TEMPLATE_DK_CLIENT').'entrance.data.delivery-detail';
+
+        $delivery_id  = isset($post_data['delivery_id']) ? $post_data['delivery_id']  : 0;
+        if(!$delivery_id)
+        {
+            $view_data['data'] = null;
+            $view_data['error'] = '参数1有误！';
+            return view($view_blade)->with($view_data);
+        }
+
+        $phone  = isset($post_data['phone']) ? $post_data['phone']  : 0;
+        if(!$phone)
+        {
+            $view_data['data'] = null;
+            $view_data['error'] = '参数2有误！';
+            return view($view_blade)->with($view_data);
+        }
+
+        $delivery = DK_Pivot_Client_Delivery::with([
+            'order_er'=>function($query) {
+                $query->select(['id','client_name','client_phone','wx_id','location_city','location_district','description','recording_address_list']);
+        }
+        ])->find($delivery_id);
+        if($delivery)
+        {
+            if($delivery->client_phone == $phone)
+            {
+                if($delivery->order_er)
+                {
+                    $order = $delivery->order_er;
+                    if($order->recording_address_list)
+                    {
+                        $recording_list = json_decode($order->recording_address_list);
+                        $order->recording_list = $recording_list;
+                        $view_data['recording_list'] = $recording_list;
+                    }
+                    $view_data['data'] = $order;
+                    return view($view_blade)->with($view_data);
+                }
+            }
+            else
+            {
+                $view_data['data'] = null;
+                $view_data['error'] = '电话有误！';
+                return view($view_blade)->with($view_data);
+            }
+        }
+        else
+        {
+            $view_data['data'] = null;
+            $view_data['error'] = '交付有误！';
+            return view($view_blade)->with($view_data);
+        }
+    }
+
+
 
     // 【交付管理】返回-列表-数据
     public function query_last_delivery()
@@ -892,7 +1000,16 @@ class DKClientRepository {
             $cellData[$k]['teeth_count'] = $v['order_er']['teeth_count'];
 
             $cellData[$k]['description'] = $v['order_er']['description'];
-            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+
+//            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+            if(!empty($v['order_er']['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['order_id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -5294,7 +5411,15 @@ class DKClientRepository {
             $cellData[$k]['follow_latest_description'] = $v['follow_latest_description'];
 
             $cellData[$k]['description'] = $v['order_er']['description'];
-            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+//            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+            if(!empty($v['order_er']['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['order_id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -5381,10 +5506,6 @@ class DKClientRepository {
             });
         })->export('xls');
 
-
-
-
-
     }
     // 【数据导出】工单
     public function v1_operate_statistic_export_for_delivery_aesthetic_by_ids($post_data)
@@ -5452,7 +5573,15 @@ class DKClientRepository {
 //            $cellData[$k]['teeth_count'] = $v['order_er']['teeth_count'];
 
             $cellData[$k]['description'] = $v['order_er']['description'];
-            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+//            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+            if(!empty($v['order_er']['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['order_id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -5535,10 +5664,6 @@ class DKClientRepository {
             });
         })->export('xls');
 
-
-
-
-
     }
     // 【数据导出】工单
     public function v1_operate_statistic_export_for_delivery_luxury_by_ids($post_data)
@@ -5607,7 +5732,15 @@ class DKClientRepository {
 //            $cellData[$k]['teeth_count'] = $v['order_er']['teeth_count'];
 
             $cellData[$k]['description'] = $v['order_er']['description'];
-            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+//            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+            if(!empty($v['order_er']['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['order_id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -5689,10 +5822,6 @@ class DKClientRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
 
@@ -15765,7 +15894,15 @@ class DKClientRepository {
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             $cellData[$k]['description'] = $v['description'];
-            $cellData[$k]['recording_address'] = $v['recording_address'];
+//            $cellData[$k]['recording_address'] = $v['recording_address'];
+            if(!empty($v['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -15950,7 +16087,15 @@ class DKClientRepository {
             $cellData[$k]['teeth_count'] = $v['order_er']['teeth_count'];
 
             $cellData[$k]['description'] = $v['order_er']['description'];
-            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+//            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+            if(!empty($v['order_er']['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['order_id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -16033,10 +16178,6 @@ class DKClientRepository {
             });
         })->export('xls');
 
-
-
-
-
     }
     // 【数据导出】工单
     public function operate_statistic_export_for_order_luxury_by_ids($post_data)
@@ -16105,7 +16246,15 @@ class DKClientRepository {
 //            $cellData[$k]['teeth_count'] = $v['order_er']['teeth_count'];
 
             $cellData[$k]['description'] = $v['order_er']['description'];
-            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+//            $cellData[$k]['recording_address'] = $v['order_er']['recording_address'];
+            if(!empty($v['order_er']['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['order_id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -16188,10 +16337,6 @@ class DKClientRepository {
             });
         })->export('xls');
 
-
-
-
-
     }
     // 【数据导出】工单
     public function operate_statistic_export_for_order_by_order_ids($post_data)
@@ -16256,7 +16401,15 @@ class DKClientRepository {
             $cellData[$k]['teeth_count'] = $v['teeth_count'];
 
             $cellData[$k]['description'] = $v['description'];
-            $cellData[$k]['recording_address'] = $v['recording_address'];
+//            $cellData[$k]['recording_address'] = $v['recording_address'];
+            if(!empty($v['recording_address_list']))
+            {
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
+            }
+            else
+            {
+                $cellData[$k]['recording_address'] = '';
+            }
 
             // 是否重复
 //            if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';

@@ -10,7 +10,7 @@
         <link rel="icon" sizes="16x16 32x32 64x64" href="{{ env('FAVICON_DK_CLIENT') }}">
         <link rel="icon" type="image/png" sizes="196x196" href="{{ env('FAVICON_DK_CLIENT') }}">
 
-        <title>Laravel</title>
+        <title>FNJ</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -51,7 +51,7 @@
             }
 
             .title {
-                font-size: 84px;
+                font-size: 40px;
             }
 
             .links > a {
@@ -72,11 +72,37 @@
     <body>
         <div class="flex-center position-ref full-height">
 
+            @if(!empty($data))
             <div class="content">
                 <div class="title m-b-md">
-                    <audio controls controlsList="nodownload" style="width:480px;height:80px;">
-                        <source src="{{ $record_file_address or '' }}" type="audio/mpeg">
-                    </audio>
+                    <span>{{ $data->client_name or '' }}</span>
+                </div>
+                <div class="title m-b-md">
+                    <span>{{ $data->client_phone or '' }}</span>
+                </div>
+                <div class="title m-b-md">
+                    <span>{{ $data->wx_id or '' }}</span>
+                </div>
+                <div class="title m-b-md">
+                    <span>{{ $data->location_city or '' }} - {{ $data->location_district or '' }}</span>
+                </div>
+                <div class="title m-b-md">
+                    <span>{{ $data->description or '' }}</span>
+                </div>
+                <div class="title m-b-md">
+                    @if(!empty($recording_list) && count($recording_list) > 0)
+                    @foreach($recording_list as $recording)
+                        <audio controls controlsList="nodownload" style="width:480px;height:80px;">
+                            <source src="{{ $recording or '' }}" type="audio/mpeg">
+                        </audio>
+                    @endforeach
+                    @endif
+                </div>
+            </div>
+            @endif
+            <div class="content">
+                <div class="title m-b-md">
+                    <span>{{ $error or '' }}</span>
                 </div>
             </div>
         </div>

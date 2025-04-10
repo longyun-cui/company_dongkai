@@ -11453,36 +11453,44 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
 
 
@@ -11610,10 +11618,6 @@ class DKAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
     // 【数据-导出】交付
@@ -11839,36 +11843,44 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
 
 
@@ -11996,10 +12008,6 @@ class DKAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
 
@@ -12265,36 +12273,44 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
 
 
@@ -12422,10 +12438,6 @@ class DKAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
     // 【数据-导出】交付
@@ -12679,36 +12691,44 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
 
 
@@ -12836,10 +12856,6 @@ class DKAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
 
@@ -13112,36 +13128,44 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
 
 
@@ -13269,10 +13293,6 @@ class DKAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
     // 【数据-导出】交付
@@ -13528,36 +13548,44 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
 
 
@@ -13686,10 +13714,6 @@ class DKAdminRepository {
             });
         })->export('xls');
 
-
-
-
-
     }
 
 
@@ -13795,37 +13819,46 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
+
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -13918,10 +13951,6 @@ class DKAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
     // 【数据-导出】工单
@@ -14030,37 +14059,46 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
+
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -14153,10 +14191,6 @@ class DKAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
     // 【数据-导出】工单
@@ -14266,37 +14300,46 @@ class DKAdminRepository {
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
+
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -14389,10 +14432,6 @@ class DKAdminRepository {
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
 
@@ -35236,36 +35275,44 @@ EOF;
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
 
 
@@ -35394,10 +35441,6 @@ EOF;
             });
         })->export('xls');
 
-
-
-
-
     }
     // 【数据导出】工单
     public function operate_statistic_export_for_order_by_ids($post_data)
@@ -35500,37 +35543,46 @@ EOF;
             $cellData[$k]['description'] = $v['description'];
 
             // 录音
-            if($v['recording_address_list'])
+//            if($v['recording_address_list'])
+//            {
+//                $recording_address_list_text = "";
+//                $recording_address_list = json_decode($v['recording_address_list']);
+//                if(count($recording_address_list) > 0)
+//                {
+//                    foreach($recording_address_list as $key => $recording)
+//                    {
+////                        $recording_address_list_text .= $recording."\r\n";
+//                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
+//                    }
+//                }
+//                else
+//                {
+//                    if($v['call_record_id'] > 0)
+//                    {
+//                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                    }
+//                    else $recording_address_list_text = $v['recording_address'];
+//                }
+//                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
+//
+//            }
+//            else
+//            {
+//                if($v['call_record_id'] > 0)
+//                {
+//                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
+//                }
+//                else $cellData[$k]['recording_address'] = $v['recording_address'];
+//            }
+            if(!empty($v['recording_address_list']))
             {
-                $recording_address_list_text = "";
-                $recording_address_list = json_decode($v['recording_address_list']);
-                if(count($recording_address_list) > 0)
-                {
-                    foreach($recording_address_list as $key => $recording)
-                    {
-//                        $recording_address_list_text .= $recording."\r\n";
-                        $recording_address_list_text .= env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $key."\r\n";
-                    }
-                }
-                else
-                {
-                    if($v['call_record_id'] > 0)
-                    {
-                        $recording_address_list_text = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                    }
-                    else $recording_address_list_text = $v['recording_address'];
-                }
-                $cellData[$k]['recording_address'] = rtrim($recording_address_list_text);
-
+                $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/order-detail?order_id='.medsci_encode($v['id'],'2024').'&phone='.$v['client_phone'];
             }
             else
             {
-                if($v['call_record_id'] > 0)
-                {
-                    $cellData[$k]['recording_address'] = env('DOMAIN_DK_CLIENT').'/data/voice_record?record_id=' . $v['call_record_id'];
-                }
-                else $cellData[$k]['recording_address'] = $v['recording_address'];
+                $cellData[$k]['recording_address'] = '';
             }
+
 
             // 是否重复
             if($v['is_repeat'] >= 1) $cellData[$k]['is_repeat'] = '是';
@@ -35623,10 +35675,6 @@ EOF;
                 $sheet->freezeFirstRow();
             });
         })->export('xls');
-
-
-
-
 
     }
 

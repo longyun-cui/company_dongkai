@@ -142,10 +142,20 @@ class DKClientController extends Controller
 
 
 
-    // 返回主页视图
+    // 录音
     public function view_data_voice_record()
     {
         return $this->repo->view_data_voice_record(request()->all());
+    }
+    // 录音
+    public function view_data_of_order_detail()
+    {
+        return $this->repo->view_data_of_order_detail(request()->all());
+    }
+    // 录音
+    public function view_data_of_delivery_detail()
+    {
+        return $this->repo->view_data_of_delivery_detail(request()->all());
     }
 
 
