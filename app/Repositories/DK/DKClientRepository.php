@@ -2629,7 +2629,7 @@ class DKClientRepository {
         $me = $this->me;
 
         // 判断用户操作权限
-        if(!in_array($me->user_type,[0,1,9,11])) return response_error([],"你没有操作权限！");
+        if(!in_array($me->user_type,[0,1,9,11,84])) return response_error([],"你没有操作权限！");
 //        if(in_array($me->user_type,[71,87]) && $item->creator_id != $me->id) return response_error([],"该内容不是你的，你不能操作！");
 
         // 判断操作参数是否合法
@@ -3738,7 +3738,7 @@ class DKClientRepository {
             ->when($me->company_category == 21, function ($query) use ($me) {
                 return $query->where('business_id', $me->id);
             })
-            ->when(in_array($me->user_type,[81,84]), function ($query) use ($me) {
+            ->when((in_array($me->user_type,[81,84]) && $me->client_er->user_category != 31), function ($query) use ($me) {
                 $staff_list = DK_Client_User::select('id')->where('department_id',$me->department_id)->get()->pluck('id')->toArray();
                 return $query->whereIn('client_staff_id', $staff_list);
             })

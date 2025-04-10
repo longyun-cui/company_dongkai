@@ -155,7 +155,7 @@
     </div>
 
 
-    @if(in_array($me->user_type, [0,1,9,11,19]))
+    @if(in_array($me->user_type, [0,1,9,11,19,84]))
     <div class="col-md-12 datatable-search-row">
 
         <div class=" pull-left">
@@ -173,9 +173,11 @@
             {{--<button type="button" onclick="" class="btn btn-default btn-filter"><i class="fa fa-trash-o"></i> 批量删除</button>--}}
 
 
+            @if(in_array($me->user_type, [0,1,9,11,19]))
             <button class="btn btn-default btn-filter bulk-submit-for-export" data-item-category="31">
                 <i class="fa fa-download"></i> 批量导出
             </button>
+            @endif
 
 
             @if($me->client_er->is_api_scrm == 1)
@@ -200,6 +202,7 @@
 
 
 
+            @if(in_array($me->user_type, [0,1,9,11,19,84]))
             <select class="search-filter form-filter filter-lg select2-box-c" name="bulk-operate-staff-id">
                 <option value="-1">选择员工</option>
                 @foreach($staff_list as $v)
@@ -210,6 +213,7 @@
             <button class="btn btn-default btn-filter bulk-submit-for-assign-staff">
                 <i class="fa fa-check"></i> 批量分配
             </button>
+            @endif
 
         </div>
 

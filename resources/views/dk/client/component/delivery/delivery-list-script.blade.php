@@ -196,7 +196,7 @@
             var $staff_id = $staff.val();
 
 
-            layer.msg('确定"批量导出"么', {
+            layer.msg('确定"批量分派员工"么', {
                 time: 0
                 ,btn: ['确定', '取消']
                 ,yes: function(index){
